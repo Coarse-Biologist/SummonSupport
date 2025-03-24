@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      p_GreenSprayerBackpack_0: 2798313856218936834
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
