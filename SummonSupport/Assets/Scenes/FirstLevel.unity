@@ -309,6 +309,7 @@ GameObject:
   - component: {fileID: 531289689}
   - component: {fileID: 531289687}
   - component: {fileID: 531289690}
+  - component: {fileID: 531289691}
   m_Layer: 0
   m_Name: TestPlayer lol
   m_TagString: Player
@@ -563,6 +564,31 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
   m_Radius: 0.24
+--- !u!114 &531289691
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 531289680}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dda5930f3a340364ba258d28c1238f3f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Name: 
+  Description: 
+  BattleCries:
+  - Argh!
+  - Roof
+  - I'm coming for you...
+  - Incoming
+  MaxHP: 0
+  CurrentHP: 0
+  MaxPower: 0
+  CurrentPower: 0
+  Abilties: []
+  Speed: 0
 --- !u!1 &924534606
 GameObject:
   m_ObjectHideFlags: 0

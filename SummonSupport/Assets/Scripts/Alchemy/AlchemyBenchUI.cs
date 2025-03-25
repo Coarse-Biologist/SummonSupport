@@ -6,7 +6,7 @@ using Alchemy;
 
 public class AlchemyBenchUI : MonoBehaviour
 {
-
+    #region Class Variables
     [SerializeField] UIDocument ui;
     private VisualElement root;
     private VisualElement interactWindow;
@@ -17,9 +17,8 @@ public class AlchemyBenchUI : MonoBehaviour
     public UnityEvent playerUsingUI;
     private Dictionary<AlchemyLoot, int> selectedIngredients = new Dictionary<AlchemyLoot, int>();
 
+    #endregion
 
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         root = ui.rootVisualElement;
@@ -30,9 +29,8 @@ public class AlchemyBenchUI : MonoBehaviour
         interactLabel = interactWindow.Q<Label>("InteractLabel");
         interactWindow.style.display = DisplayStyle.None;
         craftingUI.style.display = DisplayStyle.None;
-
-
     }
+    #region Trigger effects
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.gameObject.CompareTag("Player"))
@@ -40,22 +38,14 @@ public class AlchemyBenchUI : MonoBehaviour
             interactWindow.style.display = DisplayStyle.Flex;
             interactLabel.text = "Press Tab to Interact";
         }
-        //if (Input.GetKeyDown(KeyCode.Tab))
-        //{
-        //    Debug.Log("Tab key pressed!");
-        //    InteractWithWorkBench();
-        //    PlayerUsingUI();
-        //}
     }
     private void OnTriggerStay2D(Collider2D other)
     {
         if (Input.GetKey(KeyCode.Tab))
-
         {
             InteractWithWorkBench();
             PlayerUsingUI();
         }
-        //else Debug.Log("player is not pressing tab");
     }
     private void OnTriggerExit2D(Collider2D other)
     {
@@ -66,6 +56,9 @@ public class AlchemyBenchUI : MonoBehaviour
         }
     }
 
+    #endregion
+
+    #region begin and end workbench use
     private void PlayerUsingUI()
     {
         playerUsingUI?.Invoke();
@@ -73,7 +66,7 @@ public class AlchemyBenchUI : MonoBehaviour
     private void InteractWithWorkBench()
     {
         PlayerUsingUI();
-        craftingUI.style.display = DisplayStyle.Flex;
+        ShowUI(craftingUI);
         Button craftButton = craftingUI.Q<Button>("CraftButton");
         Button upgradeButton = craftingUI.Q<Button>("UpgradeButton");
         Button recycleButton = craftingUI.Q<Button>("RecycleButton");
@@ -87,10 +80,13 @@ public class AlchemyBenchUI : MonoBehaviour
     }
     private void QuitAlchemyUI()
     {
-        craftingUI.style.display = DisplayStyle.None;
+        HideUI(craftingUI);
         PlayerUsingUI();
     }
 
+    #endregion
+
+    #region Buttons Clicked
     private void ShowCraftingOptions()
     {
         instructions.text = "Combine Cores, Ether and Body Parts to make mions.";
@@ -126,7 +122,19 @@ public class AlchemyBenchUI : MonoBehaviour
         }
     }
 
-    //Button backButton = new Button { text = "Back" };
-    //backButton.RegisterCallback<ClickEvent>(a => instructions.text = "");
+    #endregion
+
+    #region Flex /Hide UI
+
+    private void HideUI(VisualElement element)
+    {
+        element.style.display = DisplayStyle.None;
+    }
+    private void ShowUI(VisualElement element)
+    {
+        element.style.display = DisplayStyle.Flex;
+    }
+
+    #endregion
 
 }

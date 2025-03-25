@@ -65,17 +65,6 @@ namespace Alchemy
         }
         #endregion
 
-        #region Calculate Alchemy Results
-
-        public static Dictionary<string, int> CalculateCraftingResults(Dictionary<AlchemyLoot, int> combinedIngredients)
-        {
-            List<string> theKeys = combinedIngredients.ToDictionary(kvp => kvp.Key.ToString(), kvp => kvp.Value).Keys.ToList();
-
-            return new Dictionary<string, int>(); // this will be changed to contain a function for calculating minion  stats as a result of combined ingredients. until LivingBeing Stats scripts and the children classes minion stats and enemy stats are made, a string return and dummy function are a thorn in our souls <3
-        }
-
-
-        #endregion
     }
 
     //public enum 
