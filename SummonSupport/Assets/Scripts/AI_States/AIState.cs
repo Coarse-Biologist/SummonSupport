@@ -4,6 +4,5 @@ using UnityEngine;
 
 public abstract class AIState : MonoBehaviour
 {
-    public GameObject detectedTargetObject;
     public abstract AIState RunCurrentState();
 }

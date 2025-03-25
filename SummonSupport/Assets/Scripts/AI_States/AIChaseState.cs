@@ -6,21 +6,25 @@ using System.Collections;
 public class AIChaseState : AIState
 {
     private AIStateHandler stateHandler;
-    private GameObject targetEntity;
+    private AIPeacefulState peaceState;
+    public GameObject targetEntity { private set; get; }
     private bool targetIsInRange;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         stateHandler = gameObject.GetComponent<AIStateHandler>();
-        targetEntity = stateHandler.peaceState.detectedTargetObject;
+        peaceState = gameObject.GetComponent<AIPeacefulState>();
     }
 
     public override AIState RunCurrentState()
     {
-        targetEntity = stateHandler.peaceState.detectedTargetObject;
-        //NavMeshAgent agent = GetComponentInParent<NavMeshAgent>();
+        Debug.Log("Running chase state");
 
-        //agent.SetDestination(targetEntity.transform.position);
+        targetEntity = peaceState.detectedTargetObject;
+
+        transform.position = Vector3.Lerp(transform.position, targetEntity.transform.position, 2);
+
         transform.LookAt(targetEntity.transform);
 
         Rigidbody target = targetEntity.GetComponent<Rigidbody>();
@@ -38,7 +42,7 @@ public class AIChaseState : AIState
     {
         Vector3 direction = targetEntity.transform.position - transform.position;
 
-        if (direction.sqrMagnitude <= 10)//AbilityHandler.GetLongestRangeAbility(gameObject))
+        if (direction.sqrMagnitude <= 50)//AbilityHandler.GetLongestRangeAbility(gameObject))
         {
             targetIsInRange = true;
         }
