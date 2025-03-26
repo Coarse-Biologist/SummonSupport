@@ -45,6 +45,8 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnDisable()
     {
+        alchemyBench.playerUsingUI.RemoveListener(ToggleLockedInUI);
+
         inputActions.Player.Move.performed -= OnMove;
         inputActions.Player.Move.canceled -= OnMove;
 

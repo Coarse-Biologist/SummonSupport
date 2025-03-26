@@ -14,62 +14,64 @@ public class AIChaseState : AIState
     private LivingBeing statScript;
 
 
+
     void Start()
     {
         stateHandler = gameObject.GetComponent<AIStateHandler>();
         peaceState = gameObject.GetComponent<AIPeacefulState>();
-        targetEntity = peaceState.detectedTargetObject;
+        //targetEntity = peaceState.detectedTargetObject;
 
         rb = gameObject.GetComponent<Rigidbody2D>();
         statScript = stateHandler.livingBeing;
+        //Debug.Log($"stat script = {statScript}");
+    }
+
+    public void SetTargetEntity(GameObject target)
+    {
+        targetEntity = target;
     }
 
     public override AIState RunCurrentState()
     {
-
         Debug.Log("Running chase state");
+        Vector2 targetLoc = targetEntity.transform.position;
+
+        Chase(targetLoc);
+
+        LookAtTarget(targetLoc);
+
+        return this;
+
+        //bool targetIsInRange = CheckInRange(target);
+        //
+        //if (targetIsInRange)
+        //{
+        //    return this; //gameObject.GetComponent<AIAttackState>();
+        //}
+        //else return this;
+    }
+
+    public bool CheckInRange()
+    {
         Rigidbody2D target = targetEntity.GetComponent<Rigidbody2D>();
 
-        Chase(target.gameObject);
-
-
-        LookAtTarget(target.gameObject);
-
-        bool targetIsInRange = CheckInRange(target);
-
-        if (targetIsInRange)
-        {
-            return gameObject.GetComponent<AIAttackState>();
-        }
-        else return this;
-    }
-
-    public bool CheckInRange(Rigidbody2D target)
-    {
         Vector3 direction = target.transform.position - transform.position;
 
-        if (direction.sqrMagnitude <= 50)//AbilityHandler.GetLongestRangeAbility(gameObject))
-        {
-            targetIsInRange = true;
-        }
-        else targetIsInRange = false;
-
-        return targetIsInRange;
+        return direction.sqrMagnitude <= 50;//AbilityHandler.GetLongestRangeAbility
 
     }
-    public void LookAtTarget(GameObject target)
+    public void LookAtTarget(Vector2 targetLoc)
     {
-        Vector2 direction = target.transform.position - transform.position;
-        transform.up = direction;
-        Debug.DrawRay(transform.position, direction.normalized * direction.magnitude, Color.red);
+        transform.up = targetLoc;
+        Debug.DrawRay(transform.position, targetLoc.normalized * targetLoc.magnitude, Color.red);
     }
 
-    public void Chase(GameObject target)
+    public void Chase(Vector2 targetLoc)
     {
+        Vector2 currentLoc = new Vector2(transform.position.x, transform.position.y);
+        Vector2 direction = targetLoc - currentLoc;
+        if (direction.sqrMagnitude > 30 || Vector2.Distance(transform.position, stateHandler.lastSeenLoc) < 0.5f) rb.linearVelocity = Time.fixedDeltaTime * (targetLoc - currentLoc) * statScript.Speed;
+        else rb.linearVelocity = new Vector2(0, 0);
 
-        Vector2 targetLoc = target.transform.position;
-        Vector2 currentLoc = new Vector2(transform.position.x, transform.position.x);
-
-        rb.linearVelocity = (targetLoc - currentLoc) * 5 * Time.fixedDeltaTime;
     }
 }
