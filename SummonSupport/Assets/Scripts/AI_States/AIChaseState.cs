@@ -1,6 +1,7 @@
 using Unity.VisualScripting;
 using UnityEngine;
 using System.Collections;
+using UnityEngine.InputSystem.LowLevel;
 
 
 public class AIChaseState : AIState
@@ -9,38 +10,43 @@ public class AIChaseState : AIState
     private AIPeacefulState peaceState;
     public GameObject targetEntity { private set; get; }
     private bool targetIsInRange;
+    private Rigidbody2D rb;
+    private LivingBeing statScript;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+
     void Start()
     {
         stateHandler = gameObject.GetComponent<AIStateHandler>();
         peaceState = gameObject.GetComponent<AIPeacefulState>();
+        targetEntity = peaceState.detectedTargetObject;
+
+        rb = gameObject.GetComponent<Rigidbody2D>();
+        statScript = stateHandler.livingBeing;
     }
 
     public override AIState RunCurrentState()
     {
+
         Debug.Log("Running chase state");
+        Rigidbody2D target = targetEntity.GetComponent<Rigidbody2D>();
 
-        targetEntity = peaceState.detectedTargetObject;
+        Chase(target.gameObject);
 
-        transform.position = Vector3.Lerp(transform.position, targetEntity.transform.position, 2);
 
-        transform.LookAt(targetEntity.transform);
-
-        Rigidbody target = targetEntity.GetComponent<Rigidbody>();
+        LookAtTarget(target.gameObject);
 
         bool targetIsInRange = CheckInRange(target);
 
         if (targetIsInRange)
         {
-            return this;
+            return gameObject.GetComponent<AIAttackState>();
         }
-        return this;
+        else return this;
     }
 
-    public bool CheckInRange(Rigidbody target)
+    public bool CheckInRange(Rigidbody2D target)
     {
-        Vector3 direction = targetEntity.transform.position - transform.position;
+        Vector3 direction = target.transform.position - transform.position;
 
         if (direction.sqrMagnitude <= 50)//AbilityHandler.GetLongestRangeAbility(gameObject))
         {
@@ -50,5 +56,20 @@ public class AIChaseState : AIState
 
         return targetIsInRange;
 
+    }
+    public void LookAtTarget(GameObject target)
+    {
+        Vector2 direction = target.transform.position - transform.position;
+        transform.up = direction;
+        Debug.DrawRay(transform.position, direction.normalized * direction.magnitude, Color.red);
+    }
+
+    public void Chase(GameObject target)
+    {
+
+        Vector2 targetLoc = target.transform.position;
+        Vector2 currentLoc = new Vector2(transform.position.x, transform.position.x);
+
+        rb.linearVelocity = (targetLoc - currentLoc) * 5 * Time.fixedDeltaTime;
     }
 }

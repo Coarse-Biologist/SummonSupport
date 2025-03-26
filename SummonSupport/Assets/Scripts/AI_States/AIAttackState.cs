@@ -1,16 +1,24 @@
 using UnityEngine;
 
-public class AIAttackState : MonoBehaviour
+public class AIAttackState : AIState
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    private AIStateHandler stateHandler;
+    private AIChaseState chaseState;
+    private AIPeacefulState peaceState;
+
+    public void Start()
     {
-        
+        stateHandler = GetComponent<AIStateHandler>();
+        chaseState = GetComponent<AIChaseState>();
+        peaceState = GetComponent<AIPeacefulState>();
+
     }
 
-    // Update is called once per frame
-    void Update()
+    public override AIState RunCurrentState()
     {
-        
+        chaseState.LookAtTarget(chaseState.targetEntity);
+        chaseState.Chase(chaseState.targetEntity);
+        Debug.Log("I am using abilities to attack people and stuff");
+        return stateHandler.chaseState;
     }
 }

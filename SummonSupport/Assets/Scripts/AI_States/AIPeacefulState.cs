@@ -5,7 +5,6 @@ public class AIPeacefulState : AIState
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     public GameObject detectedTargetObject;
-
     private bool canSeeTarget;
     private AIStateHandler stateHandler;
 
@@ -18,9 +17,7 @@ public class AIPeacefulState : AIState
 
     private IEnumerator FOVRoutine()
     {
-
         WaitForSeconds wait = new WaitForSeconds(0.2f);
-
         while (true)
         {
             yield return wait;
@@ -28,69 +25,69 @@ public class AIPeacefulState : AIState
         }
     }
 
-    private void FieldOfViewCheck()
+    public bool FieldOfViewCheck()
     {
-        //Debug.Log("Checking field of view");
+        bool visionBlocked = true;
+        GameObject target = CheckAnyThingInRange();
+        if (target != null)
+        {
+            visionBlocked = CheckVisionBlocked(target);
+        }
+        Debug.Log($"visionBlocked blocked = {visionBlocked}, target = {target!}");
+        if (!visionBlocked && target != null)
+        {
+            canSeeTarget = true;
+            return true;
+        }
+        else return false;
+    }
 
+    public GameObject CheckAnyThingInRange()
+    {
         Collider2D[] rangeChecks = Physics2D.OverlapAreaAll(transform.position,
-    new Vector2(transform.position.x + 50, transform.position.y + 50),
-    stateHandler.targetMask);
-
-
+            new Vector2(transform.position.x + stateHandler.DetectionRadius, transform.position.y + stateHandler.DetectionRadius),
+            stateHandler.targetMask); // contains lists of all objects in the area?
         if (rangeChecks.Length != 0)
         {
-            //Debug.Log("More than 0 objects were dans ma regarde");
-            Transform target = rangeChecks[0].transform;
-            Vector3 directionToTarget = (target.position - transform.position).normalized;
+            GameObject detectedObject = rangeChecks[0].transform.gameObject;
 
-            if (Vector3.Angle(transform.forward, directionToTarget) < stateHandler.AngleOfSight / 2)
+            if (gameObject.CompareTag("Minion")) // if attached to minion 
             {
-                //Debug.Log("something is in my line of sight");
-                float distanceToTarget = Vector3.Distance(transform.position, target.position);
-
-                if (!Physics2D.Raycast(transform.position, directionToTarget, distanceToTarget, stateHandler.obstructionMask))
+                if (detectedObject.CompareTag("Enemy")) // if detecting an enemy
                 {
-                    //Debug.Log("nothing is blocking my line of sight");
-
-                    if (target.CompareTag("Player"))
-                    {
-                        //Debug.Log($"tag =  {target.tag} detected");
-                        canSeeTarget = true;
-                        detectedTargetObject = target.gameObject;
-                    }
-
+                    return detectedObject; // return the enemy
                 }
-                else
-                {
-                    //Debug.Log("something is blocking my line of sight");
-                    canSeeTarget = false;
-                }
-
             }
-            else
+            if (gameObject.CompareTag("Enemy"))
             {
-                canSeeTarget = false;
-                //Debug.Log(" the thing is out of my line of sight");
+                Debug.Log("I am indeed an enemy");
+                if (detectedObject.CompareTag("Player") || detectedObject.CompareTag("Minion"))
+                {
+                    return detectedObject;
+                }
+                else return null;
             }
-
+            else return null;
         }
-        else if (canSeeTarget)
-        {
-            //Debug.Log("no more than 0 objects were dans ma regarde");
-
-            canSeeTarget = false;
-        }
-
+        else return null;
     }
+
+    public bool CheckVisionBlocked(GameObject target)
+    {
+        Vector2 directionToTarget = target.transform.position;
+        float distanceToTarget = Vector2.Distance(transform.position, directionToTarget);
+        Debug.DrawLine(transform.position, directionToTarget);
+
+        return Physics2D.Raycast(transform.position, directionToTarget, distanceToTarget, stateHandler.obstructionMask);
+    }
+
 
     public override AIState RunCurrentState()
     {
-        Debug.Log("running peaceful state");
-
+        //Debug.Log("running peaceful state");
         if (canSeeTarget)
         {
-            Debug.Log("Requesting use of chase");
-
+            //Debug.Log("Requesting use of chase")
             return gameObject.GetComponent<AIChaseState>();
         }
         return this;

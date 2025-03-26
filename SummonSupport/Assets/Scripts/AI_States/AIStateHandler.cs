@@ -16,6 +16,7 @@ public class AIStateHandler : MonoBehaviour
     [SerializeField] public AIState peaceState { private set; get; }
     [SerializeField] public AIState chaseState { private set; get; }
     [SerializeField] public AIState attackState { private set; get; }
+    [SerializeField] public LivingBeing livingBeing { private set; get; }
 
     public void Start()
     {
@@ -23,6 +24,8 @@ public class AIStateHandler : MonoBehaviour
         if (this.gameObject.CompareTag("Minion")) targetMask = LayerMask.GetMask("Enemy");
         else targetMask = LayerMask.GetMask("Summon", "Player");
         currentState = GetComponentInChildren<AIPeacefulState>();
+        livingBeing = GetComponent<LivingBeing>();
+        Debug.Log($"here is the living being script: {livingBeing}");
     }
 
     void Update()
@@ -33,7 +36,7 @@ public class AIStateHandler : MonoBehaviour
     private void RunStateMachine()
     {
         AIState nextState = currentState?.RunCurrentState();
-        Debug.Log($"current state = {currentState}. next state = {nextState}");
+        //Debug.Log($"current state = {currentState}. next state = {nextState}");
         if (nextState != null)
         {
             //switch to nextAIState
