@@ -15,7 +15,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float dashBoost = 10f;
     [SerializeField] float dashCoolDown = 1f;
     [SerializeField] float dashDuration = .1f;
-
+    private Rigidbody2D rb;
     private bool dashing = false;
     private bool canDash = true;
     private bool lockedInUI = false;
@@ -25,6 +25,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Awake()
     {
+        rb = GetComponent<Rigidbody2D>();
         mainCamera = Camera.main;
         inputActions = new PlayerInputActions();
     }
@@ -89,7 +90,8 @@ public class PlayerMovement : MonoBehaviour
         if (dashing) calculatedSpeed = speed + dashBoost;
         else calculatedSpeed = speed;
         Vector3 moveDirection = new Vector3(moveInput.x, moveInput.y, 0).normalized;
-        transform.position += moveDirection * calculatedSpeed * Time.deltaTime;
+        //transform.position += moveDirection * calculatedSpeed * Time.deltaTime;
+        rb.linearVelocity = moveDirection * calculatedSpeed * 10 * Time.fixedDeltaTime;
     }
     #endregion
 
