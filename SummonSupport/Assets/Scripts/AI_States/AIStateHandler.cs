@@ -30,7 +30,7 @@ public class AIStateHandler : MonoBehaviour
         else targetMask = LayerMask.GetMask("Summon", "Player");
         currentState = GetComponentInChildren<AIPeacefulState>();
         livingBeing = GetComponent<LivingBeing>();
-        Debug.Log($"here is the living being script: {livingBeing}");
+        //Debug.Log($"here is the living being script: {livingBeing}");
     }
 
     void Update()

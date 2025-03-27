@@ -28,6 +28,7 @@ public class PlayerMovement : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         mainCamera = Camera.main;
         inputActions = new PlayerInputActions();
+
     }
     #region Enable and Disable event subscriptions
     private void OnEnable()

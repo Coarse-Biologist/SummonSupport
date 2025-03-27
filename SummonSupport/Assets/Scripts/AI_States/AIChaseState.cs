@@ -33,7 +33,7 @@ public class AIChaseState : AIState
 
     public override AIState RunCurrentState()
     {
-        Debug.Log("Running chase state");
+        //Debug.Log("Running chase state");
         Vector2 targetLoc = targetEntity.transform.position;
 
         Chase(targetLoc);

@@ -29,7 +29,7 @@ public class AIAttackState : AIState
         {
             chaseState.LookAtTarget(stateHandler.lastSeenLoc);
             chaseState.Chase(stateHandler.lastSeenLoc);
-            Debug.Log("I am using abilities to attack people and stuff");
+            //Debug.Log("I am using abilities to attack people and stuff");
             return this;//stateHandler.chaseState;
         }
     }

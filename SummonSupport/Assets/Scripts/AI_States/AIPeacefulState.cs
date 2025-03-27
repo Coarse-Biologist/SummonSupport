@@ -37,7 +37,7 @@ public class AIPeacefulState : AIState
         }
         if (!visionBlocked && target != null)
         {
-            Debug.Log($"I can see the target at {target.transform.position}");
+            //Debug.Log($"I can see the target at {target.transform.position}");
             canSeeTarget = true;
             return true;
         }
