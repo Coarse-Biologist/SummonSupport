@@ -9,9 +9,7 @@ public class GameMaster : MonoBehaviour
     {
         Logging.CurrentLogLevel = loggingLevel;
         Logging.Info("CurrentLogLevel: " + loggingLevel);
-        abilityHandler = GameObject.FindGameObjectWithTag("Player").GetComponent<AbilityHandler>();
-        abilityHandler.SelectAbilities();
-        
+        abilityHandler = GameObject.FindGameObjectWithTag("Player").GetComponent<AbilityHandler>();        
     }
 
     void Update()
