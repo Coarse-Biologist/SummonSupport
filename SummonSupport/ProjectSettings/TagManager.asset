@@ -4,19 +4,20 @@
 TagManager:
   serializedVersion: 3
   tags:
-  - Summon
   - Enemy
+  - Minion
+  - Obstruction
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Player
   - Water
   - UI
-  - 
-  - 
-  - 
-  - 
+  - Enemy
+  - Minion
+  - Obstruction
+  - Map
   - 
   - 
   - 
@@ -42,6 +43,9 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Obstacle
+    uniqueID: 2308195683
     locked: 0
   - name: player
     uniqueID: 2425651459
