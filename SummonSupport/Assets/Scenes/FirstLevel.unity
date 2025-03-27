@@ -6592,9 +6592,9 @@ GameObject:
   - component: {fileID: 2139597167}
   - component: {fileID: 2139597166}
   - component: {fileID: 2139597165}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Obstruction
-  m_TagString: Untagged
+  m_TagString: Obstruction
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -8221,7 +8221,7 @@ PrefabInstance:
     - target: {fileID: 4139226132603179242, guid: 2e9e6d4beecaf1a49b78f33f4cfb351c,
         type: 3}
       propertyPath: Speed
-      value: 10
+      value: 40
       objectReference: {fileID: 0}
     - target: {fileID: 5425751847151216936, guid: 2e9e6d4beecaf1a49b78f33f4cfb351c,
         type: 3}
@@ -8231,12 +8231,12 @@ PrefabInstance:
     - target: {fileID: 6387536958279419505, guid: 2e9e6d4beecaf1a49b78f33f4cfb351c,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.62
+      value: 10.96
       objectReference: {fileID: 0}
     - target: {fileID: 6387536958279419505, guid: 2e9e6d4beecaf1a49b78f33f4cfb351c,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -2.7
+      value: 2.35
       objectReference: {fileID: 0}
     - target: {fileID: 6387536958279419505, guid: 2e9e6d4beecaf1a49b78f33f4cfb351c,
         type: 3}

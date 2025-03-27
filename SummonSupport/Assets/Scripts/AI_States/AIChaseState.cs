@@ -35,11 +35,19 @@ public class AIChaseState : AIState
     {
         //Debug.Log("Running chase state");
         Vector2 targetLoc = targetEntity.transform.position;
+        if (peaceState.FieldOfViewCheck() == true)
+        {
+            Chase(targetLoc);
 
-        Chase(targetLoc);
+            LookAtTarget(targetLoc);
+        }
+        else
+        {
+            Chase(stateHandler.lastSeenLoc);
 
-        LookAtTarget(targetLoc);
-
+            LookAtTarget(stateHandler.lastSeenLoc);
+            //return peaceState;
+        }
         return this;
 
         //bool targetIsInRange = CheckInRange(target);
@@ -66,12 +74,37 @@ public class AIChaseState : AIState
         Debug.DrawRay(transform.position, targetLoc.normalized * targetLoc.magnitude, Color.red);
     }
 
+
     public void Chase(Vector2 targetLoc)
     {
         Vector2 currentLoc = new Vector2(transform.position.x, transform.position.y);
         Vector2 direction = targetLoc - currentLoc;
-        if (direction.sqrMagnitude > 30 || Vector2.Distance(transform.position, stateHandler.lastSeenLoc) < 0.5f) rb.linearVelocity = Time.fixedDeltaTime * (targetLoc - currentLoc) * statScript.Speed;
+        if (direction.sqrMagnitude > 10 || peaceState.CheckVisionBlocked(targetEntity)) rb.linearVelocity = Time.fixedDeltaTime * (targetLoc - currentLoc) * statScript.Speed;
         else rb.linearVelocity = new Vector2(0, 0);
 
     }
+
+
 }
+
+
+
+
+
+//public void Chase(Vector2 targetLoc)
+//    {
+//        Vector2 currentLoc = new Vector2(transform.position.x, transform.position.y);
+//        Vector2 direction = targetLoc - currentLoc;
+//        if (direction.sqrMagnitude > 10 || peaceState.CheckVisionBlocked(targetEntity))
+//        {
+//            if (peaceState.CheckVisionBlocked(targetEntity, 10))
+//                targetLoc = peaceState.RotatePoint(targetLoc, transform.position, -1);
+//            if (peaceState.CheckVisionBlocked(targetEntity, -10))
+//                targetLoc = peaceState.RotatePoint(targetLoc, transform.position, 1);
+//
+//            rb.linearVelocity = Time.fixedDeltaTime * (targetLoc - currentLoc) * statScript.Speed;
+//        }
+//        else rb.linearVelocity = new Vector2(0, 0);
+//
+//    }
+//|| Vector2.Distance(transform.position, stateHandler.lastSeenLoc) < 0.5f
