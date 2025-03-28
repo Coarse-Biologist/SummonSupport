@@ -1,3 +1,4 @@
+#region Imports
 using UnityEngine;
 using System.Collections.Generic;
 using Alchemy;
@@ -6,12 +7,18 @@ using UnityEngine.Events;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using System;
-
+#endregion
 public static class AlchemyHandler
 {
+    #region Class Variables
     public static string minionPrefabAddress;
     public static GameObject craftedMinion;
+    public static GameObject minionPrefab;
     public static UnityEvent<GameObject> requestInstantiation;
+
+    #endregion
+
+    #region Crafting Minion
     public static string CalculateCraftingResults(Dictionary<AlchemyLoot, int> combinedIngredients, List<Elements> elementList)
     {
         int healthUpgrade = 0;
@@ -19,9 +26,9 @@ public static class AlchemyHandler
         int elementUpgrade = 0;
         string results = $"Combining these ingredients will resulted in a minion with {healthUpgrade} additional health, {powerUpgrade} additional power and {elementUpgrade} additional elemental affinity for each selected Element!";
 
-        if (craftedMinion != null)
+        if (minionPrefab != null)
         {
-            MinionStats stats = craftedMinion.GetComponent<MinionStats>();
+            MinionStats stats = minionPrefab.GetComponent<MinionStats>();
             foreach (KeyValuePair<AlchemyLoot, int> kvp in combinedIngredients)
             {
                 switch (kvp.Key)
@@ -72,18 +79,31 @@ public static class AlchemyHandler
                         break;
                 }
             }
+            RequestSpawnObject(craftedMinion);
         }
         else Logging.Error("Crafted Minion is null, was he loaded promtly or correctly?");
         return results;
     }
 
+    #endregion
+
+    #region Invoke Unity Event
+    private static void RequestSpawnObject(GameObject minion)
+    {
+        requestInstantiation?.Invoke(minion);
+    }
+
+    #endregion
+
+    #region Load Prefab
     public static void LoadMinionPrefab(string address)
     {
         Addressables.LoadAssetAsync<GameObject>("Assets/Prefabs/AIPrefab/EnemyPrefab.prefabAssets/Prefabs/AIPrefab/EnemyPrefab.prefab").Completed += handle =>
             {
                 if (handle.Status == AsyncOperationStatus.Succeeded)
                 {
-                    GameObject craftedMinion = handle.Result;
+                    craftedMinion = handle.Result;
+                    minionPrefab = handle.Result;
 
                     Debug.Log($"Loaded: {address}");
                 }
@@ -92,4 +112,6 @@ public static class AlchemyHandler
             Debug.LogError($"Failed to load ScriptableObject at address: {address}");
         }
     }
+
+    #endregion
 }
