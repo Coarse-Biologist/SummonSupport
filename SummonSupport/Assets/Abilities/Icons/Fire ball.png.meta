@@ -1,10 +1,22 @@
 fileFormatVersion: 2
-guid: 62999b25b99b12a4698f190556976384
+guid: c3bce2abce0ec0e47ba9c908fd690f04
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 9188066350859966438
-    second: AlchemyBench_0
+      213: 8095344145157262792
+    second: Fire ball_0
+  - first:
+      213: -2000906179738283219
+    second: Fire ball_1
+  - first:
+      213: 8932699284071036850
+    second: Fire ball_2
+  - first:
+      213: 4492211290006931402
+    second: Fire ball_3
+  - first:
+      213: -6752392894342036056
+    second: Fire ball_4
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,13 +112,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: AlchemyBench_0
+      name: Fire ball_0
       rect:
         serializedVersion: 2
-        x: 23
-        y: 41
-        width: 254
-        height: 149
+        x: 0
+        y: 223
+        width: 33
+        height: 33
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +127,96 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 6e75ab76aa1928f70800000000000000
-      internalID: 9188066350859966438
+      spriteID: 8cd03aaeb90785070800000000000000
+      internalID: 8095344145157262792
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fire ball_1
+      rect:
+        serializedVersion: 2
+        x: 223
+        y: 223
+        width: 33
+        height: 33
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d23d0d74e6a5b34e0800000000000000
+      internalID: -2000906179738283219
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fire ball_2
+      rect:
+        serializedVersion: 2
+        x: 39
+        y: 47
+        width: 217
+        height: 146
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2b7b070eba257fb70800000000000000
+      internalID: 8932699284071036850
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fire ball_3
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 33
+        height: 33
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ac7ccd41e5a875e30800000000000000
+      internalID: 4492211290006931402
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fire ball_4
+      rect:
+        serializedVersion: 2
+        x: 223
+        y: 0
+        width: 33
+        height: 33
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8a50fd4307eaa42a0800000000000000
+      internalID: -6752392894342036056
       vertices: []
       indices: 
       edges: []
@@ -135,11 +235,11 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-<<<<<<<< HEAD:SummonSupport/Assets/PixelArt/AlchemyBenches/AlchemyBench.png.meta
-      AlchemyBench_0: 9188066350859966438
-========
-      Fire Elemental_0: 3087402528269344191
->>>>>>>> origin/Jo/Ability/test:SummonSupport/Assets/Textures/Fire Elemental.png.meta
+      Fire ball_0: 8095344145157262792
+      Fire ball_1: -2000906179738283219
+      Fire ball_2: 8932699284071036850
+      Fire ball_3: 4492211290006931402
+      Fire ball_4: -6752392894342036056
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

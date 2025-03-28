@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 62999b25b99b12a4698f190556976384
+guid: a8f668ec9ce97d44fbb9d63d73cb2648
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 9188066350859966438
-    second: AlchemyBench_0
+      213: 3837697726249093711
+    second: Fire ball projectile 2_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,13 +100,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: AlchemyBench_0
+      name: Fire ball projectile 2_0
       rect:
         serializedVersion: 2
-        x: 23
-        y: 41
-        width: 254
-        height: 149
+        x: 15
+        y: 31
+        width: 497
+        height: 450
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 6e75ab76aa1928f70800000000000000
-      internalID: 9188066350859966438
+      spriteID: f4ac660cfbd324530800000000000000
+      internalID: 3837697726249093711
       vertices: []
       indices: 
       edges: []
@@ -135,11 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-<<<<<<<< HEAD:SummonSupport/Assets/PixelArt/AlchemyBenches/AlchemyBench.png.meta
-      AlchemyBench_0: 9188066350859966438
-========
-      Fire Elemental_0: 3087402528269344191
->>>>>>>> origin/Jo/Ability/test:SummonSupport/Assets/Textures/Fire Elemental.png.meta
+      Fire ball projectile 2_0: 3837697726249093711
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
