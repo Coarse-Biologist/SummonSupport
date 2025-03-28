@@ -38,6 +38,32 @@ public abstract class LivingBeing : MonoBehaviour
     // placeholder while we see what form the abilities will take
     [SerializeField] public float Speed;
 
+    #region Stat Upgrades
+
+    public void ChangeMaxHP(int amount)
+    {
+        MaxHP += amount;
+    }
+    public void ChangeMaxPower(int amount)
+    {
+        MaxPower += amount;
+    }
+    public void ChangeSpeed(int amount)
+    {
+        Speed += amount;
+    }
+    public void LearnBattleCry(string newBattleCry)
+    {
+        if (!BattleCries.Contains(newBattleCry)) BattleCries.Add(newBattleCry);
+    }
+
+    public void GainAffinity(Elements element, int amount)
+    {
+        Affinities[element] += amount;
+    }
+
+
+    #endregion
 
     void Start()
     {

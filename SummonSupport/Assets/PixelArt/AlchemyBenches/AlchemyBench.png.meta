@@ -135,11 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-<<<<<<<< HEAD:SummonSupport/Assets/PixelArt/AlchemyBenches/AlchemyBench.png.meta
       AlchemyBench_0: 9188066350859966438
-========
-      Fire Elemental_0: 3087402528269344191
->>>>>>>> origin/Jo/Ability/test:SummonSupport/Assets/Textures/Fire Elemental.png.meta
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
