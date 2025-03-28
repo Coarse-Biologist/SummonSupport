@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Fire ball projectile 2_0: 3837697726249093711
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

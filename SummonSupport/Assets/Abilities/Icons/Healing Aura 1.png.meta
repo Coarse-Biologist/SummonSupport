@@ -434,7 +434,20 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Healing Aura 1_0: 1732517510684274213
+      Healing Aura 1_1: 2857799226751664712
+      Healing Aura 1_10: -3827193332121291555
+      Healing Aura 1_11: -6444904862490129482
+      Healing Aura 1_12: -3892472430283862181
+      Healing Aura 1_2: -3638654326244191711
+      Healing Aura 1_3: -7661459763340978962
+      Healing Aura 1_4: 1894199082010746208
+      Healing Aura 1_5: 2348531929273519986
+      Healing Aura 1_6: -725707790951026138
+      Healing Aura 1_7: 6549853690787677525
+      Healing Aura 1_8: -5869233658022280663
+      Healing Aura 1_9: -4945113267294835044
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
