@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Events;
 
 
 public class PlayerMovement : MonoBehaviour
@@ -8,25 +9,31 @@ public class PlayerMovement : MonoBehaviour
     private Vector2 moveInput;
     public Camera mainCamera;
     [SerializeField] private PlayerInputActions inputActions;
+    [SerializeField] private AlchemyBenchUI alchemyBench;
     private Vector2 lookInput;
     [SerializeField] float speed = 5f;
-    [SerializeField] float dashBoost = 5f;
+    [SerializeField] float dashBoost = 10f;
     [SerializeField] float dashCoolDown = 1f;
-    [SerializeField] float dashDuration = .5f;
-
+    [SerializeField] float dashDuration = .1f;
+    private Rigidbody2D rb;
     private bool dashing = false;
     private bool canDash = true;
+    private bool lockedInUI = false;
+    private bool lockToggleable = true;
 
     #endregion
 
     private void Awake()
     {
+        rb = GetComponent<Rigidbody2D>();
         mainCamera = Camera.main;
         inputActions = new PlayerInputActions();
+
     }
     #region Enable and Disable event subscriptions
     private void OnEnable()
     {
+        alchemyBench.playerUsingUI.AddListener(ToggleLockedInUI);
         inputActions.Player.Enable();
 
         inputActions.Player.Move.performed += OnMove;
@@ -39,6 +46,8 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnDisable()
     {
+        alchemyBench.playerUsingUI.RemoveListener(ToggleLockedInUI);
+
         inputActions.Player.Move.performed -= OnMove;
         inputActions.Player.Move.canceled -= OnMove;
 
@@ -54,9 +63,13 @@ public class PlayerMovement : MonoBehaviour
     #region Dash logic
     private void OnDash(InputAction.CallbackContext context)
     {
-        if (canDash) dashing = true;
-        Invoke("ReturnToNormalSpeed", dashDuration);
-        Invoke("ReadyDash", dashCoolDown);
+        if (canDash)
+        {
+            canDash = false;
+            dashing = true;
+            Invoke("ReturnToNormalSpeed", dashDuration);
+            Invoke("ReadyDash", dashCoolDown);
+        }
     }
 
     private void ReadyDash()
@@ -80,7 +93,8 @@ public class PlayerMovement : MonoBehaviour
         if (dashing) calculatedSpeed = speed + dashBoost;
         else calculatedSpeed = speed;
         Vector3 moveDirection = new Vector3(moveInput.x, moveInput.y, 0).normalized;
-        transform.position += moveDirection * calculatedSpeed * Time.deltaTime;
+        //transform.position += moveDirection * calculatedSpeed * Time.deltaTime;
+        rb.linearVelocity = moveDirection * calculatedSpeed * 10 * Time.fixedDeltaTime;
     }
     #endregion
 
@@ -99,13 +113,34 @@ public class PlayerMovement : MonoBehaviour
         return transform.rotation;
     }
     #endregion
+    #region using UI
+    public void ToggleLockedInUI()
+    {
+        if (lockToggleable)
+        {
+            if (!lockedInUI)
+            {
+                lockToggleable = false;
+                Invoke("AllowLockToggle", 1f);
+                lockedInUI = true;
+            }
+            else lockedInUI = false;
+        }
+
+    }
+    private void AllowLockToggle()
+    {
+        lockToggleable = true;
+    }
+    #endregion
 
     private void Update()
     {
-        HandleMove();
+        if (!lockedInUI)
+        {
+            HandleMove();
 
-        HandleLook();
-
-
+            HandleLook();
+        }
     }
 }
