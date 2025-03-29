@@ -3,6 +3,8 @@ using UnityEngine.UIElements;
 using UnityEngine.Events;
 using System.Collections.Generic;
 using Alchemy;
+using System;
+using System.Linq;
 
 public class AlchemyBenchUI : MonoBehaviour
 {
@@ -13,10 +15,11 @@ public class AlchemyBenchUI : MonoBehaviour
     private Label interactLabel;
     private VisualElement craftingUI;
     private VisualElement craftandUpgrade;
+    private VisualElement elementSelection;
     private Label instructions;
     public UnityEvent playerUsingUI;
     private Dictionary<AlchemyLoot, int> selectedIngredients = new Dictionary<AlchemyLoot, int>();
-
+    private List<Elements> selectedElements = new List<Elements>();
     private AlchemyHandler alchemyHandler;
 
     #endregion
@@ -32,6 +35,7 @@ public class AlchemyBenchUI : MonoBehaviour
         craftandUpgrade = craftingUI.Q<VisualElement>("CraftandUpgrade");
         instructions = craftandUpgrade.Q<Label>("Instructions");
         interactLabel = interactWindow.Q<Label>("InteractLabel");
+        elementSelection = craftingUI.Q<VisualElement>("ElementSelection");
         interactWindow.style.display = DisplayStyle.None;
         craftingUI.style.display = DisplayStyle.None;
     }
@@ -101,15 +105,32 @@ public class AlchemyBenchUI : MonoBehaviour
             {
                 Button ingredientButton = new Button { text = $"{kvp.Key} : {kvp.Value}" }; // Set name of buttons
                 craftandUpgrade.Add(ingredientButton); // add button to container
-                ingredientButton.style.width = Length.Percent(20); // limit size of payment
-                ingredientButton.style.height = Length.Percent(5);
+                SetButtonSize(ingredientButton, 20, 5);
                 ingredientButton.RegisterCallback<ClickEvent>(e => AddIngredientToSelection(kvp.Key)); // add event for button
             }
         }
+        ShowElementToggles(elementSelection);
         Button confirmButton = new Button { text = "Confirm Selection" };
         craftandUpgrade.Add(confirmButton);
-        confirmButton.RegisterCallback<ClickEvent>(e => alchemyHandler.CalculateCraftingResults(selectedIngredients, new List<Elements> { Elements.Cold }));
+        SetButtonSize(confirmButton, 20, 5);
+        confirmButton.RegisterCallback<ClickEvent>(e => alchemyHandler.CalculateCraftingResults(selectedIngredients, selectedElements));
 
+    }
+    private void ShowElementToggles(VisualElement panel)
+    {
+        List<Elements> elementsList = Enum.GetValues(typeof(Elements)).Cast<Elements>().ToList();
+
+        foreach (Elements element in elementsList)
+        {
+            Toggle elementToggle = new Toggle { text = element.ToString() };
+            panel.Add(elementToggle);
+            elementToggle.RegisterCallback<ClickEvent>(e => ToggleSelectedElement(element));
+        }
+    }
+    private void SetButtonSize(Button button, int width, int height)
+    {
+        button.style.width = Length.Percent(width); // limit size of payment
+        button.style.height = Length.Percent(height);
     }
     private void ShowUpgradeOptions()
     {
@@ -118,6 +139,11 @@ public class AlchemyBenchUI : MonoBehaviour
     private void ShowRecycleOptions()
     {
         instructions.text = "Which Minion would you like to recycle for components?";
+    }
+    private void ToggleSelectedElement(Elements element)
+    {
+        if (!selectedElements.Contains(element)) selectedElements.Add(element);
+        else selectedElements.Remove(element);
     }
     private void AddIngredientToSelection(AlchemyLoot ingredient)
     {

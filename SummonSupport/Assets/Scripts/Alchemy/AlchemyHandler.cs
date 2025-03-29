@@ -62,6 +62,8 @@ public class AlchemyHandler : MonoBehaviour
                         {
                             stats.GainAffinity(element, 10 / elementList.Count);
                             elementUpgrade += 10 / elementList.Count;
+                            Logging.Info($"Ether of type {element} used");
+
                         }
                         break;
                     case AlchemyLoot.PureEther:
@@ -69,6 +71,7 @@ public class AlchemyHandler : MonoBehaviour
                         {
                             stats.GainAffinity(element, 30 / elementList.Count);
                             elementUpgrade += 30 / elementList.Count;
+                            Logging.Info($"Ether of type {element} used");
                         }
                         break;
                     case AlchemyLoot.IntenseEther:
@@ -76,6 +79,8 @@ public class AlchemyHandler : MonoBehaviour
                         {
                             stats.GainAffinity(element, 60 / elementList.Count);
                             elementUpgrade += 60 / elementList.Count;
+                            Logging.Info($"Ether of type {element} used");
+
                         }
                         break;
                     default:

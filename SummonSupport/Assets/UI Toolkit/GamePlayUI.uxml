@@ -35,7 +35,8 @@
             <ui:Button text="Leave Alchemy Bench" name="QuitButton" style="width: 40%; height: 7%;" />
             <ui:VisualElement name="CraftandUpgrade" style="flex-grow: 1; flex-wrap: wrap; border-top-width: 2px; border-right-width: 2px; border-bottom-width: 2px; border-left-width: 2px; border-top-left-radius: 10px; border-top-right-radius: 10px; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px; border-left-color: rgba(0, 111, 5, 0); border-right-color: rgba(0, 111, 5, 0); border-top-color: rgba(0, 111, 5, 0); border-bottom-color: rgba(0, 111, 5, 0); bottom: 0;">
                 <ui:Label text="Crafting/upgrading lebel&#10;" name="Instructions" style="flex-wrap: wrap;" />
-                <ui:VisualElement name="AlchemyInventory" style="flex-grow: 1; position: absolute; width: 50%; height: 85%; top: 15%;" />
+                <ui:VisualElement name="AlchemyInventory" style="flex-grow: 1; position: absolute; width: 50%; height: 85%; top: 15%; flex-wrap: wrap;" />
+                <ui:VisualElement name="ElementSelection" style="flex-grow: 1; position: absolute; width: 50%; height: 85%; top: 15%; flex-wrap: wrap; right: 0%;" />
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>
