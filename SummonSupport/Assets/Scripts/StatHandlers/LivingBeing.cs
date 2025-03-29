@@ -16,6 +16,7 @@ public abstract class LivingBeing : MonoBehaviour
     [SerializeField] public int CurrentPower;
 
     [Header("Other")]
+    public int XPonDeath = 3;
     public Dictionary<Elements, int> Affinities { private set; get; } = new Dictionary<Elements, int>
             {
                 { Elements.Cold, 0 },
@@ -37,6 +38,7 @@ public abstract class LivingBeing : MonoBehaviour
     [SerializeField] public List<string> Abilties = new List<string>();
     // placeholder while we see what form the abilities will take
     [SerializeField] public float Speed;
+    [SerializeField] public float Mass = 1;
 
     #region Stat Upgrades
 
@@ -47,6 +49,13 @@ public abstract class LivingBeing : MonoBehaviour
     public void ChangeMaxPower(int amount)
     {
         MaxPower += amount;
+        Logging.Info($"power increased by {amount}");
+        GetComponent<Rigidbody2D>().linearVelocity = new Vector2(3, 3);
+    }
+    public void Gainmass(float massGain)
+    {
+        Mass += massGain;
+        GetComponent<Rigidbody2D>().mass += massGain;
     }
     public void ChangeSpeed(int amount)
     {
@@ -67,7 +76,7 @@ public abstract class LivingBeing : MonoBehaviour
 
     void Start()
     {
-
+        GetComponent<Rigidbody2D>().mass = Mass;
     }
     void FixedUpdate()
     {

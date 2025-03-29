@@ -8,19 +8,21 @@ using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using System;
 #endregion
-public static class AlchemyHandler
+public class AlchemyHandler : MonoBehaviour
 {
     #region Class Variables
-    public static string minionPrefabAddress;
-    public static GameObject craftedMinion;
-    public static GameObject minionPrefab;
-    public static UnityEvent<GameObject> requestInstantiation;
+    public string minionPrefabAddress { private set; get; } = "Assets/Prefabs/AIPrefab/MinionPrefab2.prefab";
+    private GameObject craftedMinion;
+    public GameObject minionPrefab;
+    public UnityEvent<GameObject> requestInstantiation = new UnityEvent<GameObject>();
+    public List<GameObject> activeMinions = new List<GameObject>();
 
     #endregion
 
     #region Crafting Minion
-    public static string CalculateCraftingResults(Dictionary<AlchemyLoot, int> combinedIngredients, List<Elements> elementList)
+    public string CalculateCraftingResults(Dictionary<AlchemyLoot, int> combinedIngredients, List<Elements> elementList)
     {
+        craftedMinion = Instantiate(minionPrefab, new Vector2(transform.position.x, transform.position.y), Quaternion.identity);
         int healthUpgrade = 0;
         int powerUpgrade = 0;
         int elementUpgrade = 0;
@@ -28,7 +30,8 @@ public static class AlchemyHandler
 
         if (minionPrefab != null)
         {
-            MinionStats stats = minionPrefab.GetComponent<MinionStats>();
+            MinionStats stats = craftedMinion.GetComponent<MinionStats>();
+
             foreach (KeyValuePair<AlchemyLoot, int> kvp in combinedIngredients)
             {
                 switch (kvp.Key)
@@ -79,16 +82,24 @@ public static class AlchemyHandler
                         break;
                 }
             }
-            RequestSpawnObject(craftedMinion);
+            AddActiveMinion(craftedMinion);
         }
         else Logging.Error("Crafted Minion is null, was he loaded promtly or correctly?");
         return results;
     }
 
+
+    #endregion
+
+    #region set Class Variable functions
+    private void AddActiveMinion(GameObject minion)
+    {
+        if (!activeMinions.Contains(minion)) activeMinions.Add(minion);
+    }
     #endregion
 
     #region Invoke Unity Event
-    private static void RequestSpawnObject(GameObject minion)
+    private void RequestSpawnObject(GameObject minion)
     {
         requestInstantiation?.Invoke(minion);
     }
@@ -96,9 +107,9 @@ public static class AlchemyHandler
     #endregion
 
     #region Load Prefab
-    public static void LoadMinionPrefab(string address)
+    public void LoadMinionPrefab(string address)
     {
-        Addressables.LoadAssetAsync<GameObject>("Assets/Prefabs/AIPrefab/EnemyPrefab.prefabAssets/Prefabs/AIPrefab/EnemyPrefab.prefab").Completed += handle =>
+        Addressables.LoadAssetAsync<GameObject>(address).Completed += handle =>
             {
                 if (handle.Status == AsyncOperationStatus.Succeeded)
                 {
@@ -107,10 +118,8 @@ public static class AlchemyHandler
 
                     Debug.Log($"Loaded: {address}");
                 }
+                else Debug.Log($"address {address} failed to Load");
             };
-        {
-            Debug.LogError($"Failed to load ScriptableObject at address: {address}");
-        }
     }
 
     #endregion

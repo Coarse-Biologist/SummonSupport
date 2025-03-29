@@ -6,18 +6,33 @@ using UnityEngine;
 public class SpawnHandler : MonoBehaviour
 {
     #region Class Variables
-    private Vector2 WorkBenchLoc;
+    private Vector2 WorkBenchLoc = new Vector2(0, 0);
+    private AlchemyHandler alchemyHandler;
+
+    #endregion
+    #region SetUp
+    void Awake()
+    {
+
+        if (GameObject.FindWithTag("AlchemyBench") != null)
+        {
+            WorkBenchLoc = GameObject.FindWithTag("AlchemyBench").transform.position;
+            alchemyHandler = GameObject.FindWithTag("AlchemyBench").GetComponent<AlchemyHandler>();
+        }
+        else Logging.Error("Spawn Handler script is trying to get access to a tag which is not attached to the workbench, or there is no workbench");
+
+    }
 
     #endregion
 
     #region  Enable Disable Event Listeners
     void OnEnable()
     {
-        AlchemyHandler.requestInstantiation.AddListener(SpawnMinionAtWorkBench);
+        alchemyHandler.requestInstantiation.AddListener(SpawnMinionAtWorkBench);
     }
     void OnDisable()
     {
-        AlchemyHandler.requestInstantiation.RemoveListener(SpawnMinionAtWorkBench);
+        alchemyHandler.requestInstantiation.RemoveListener(SpawnMinionAtWorkBench);
     }
 
     #endregion
@@ -31,12 +46,6 @@ public class SpawnHandler : MonoBehaviour
 
     #endregion
 
-    #region SetUp
-    void Start()
-    {
-        WorkBenchLoc = GameObject.FindWithTag("AlchemyBench").transform.position;
-    }
 
-    #endregion
 
 }

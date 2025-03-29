@@ -17,8 +17,13 @@ public class AlchemyBenchUI : MonoBehaviour
     public UnityEvent playerUsingUI;
     private Dictionary<AlchemyLoot, int> selectedIngredients = new Dictionary<AlchemyLoot, int>();
 
-    #endregion
+    private AlchemyHandler alchemyHandler;
 
+    #endregion
+    void Awake()
+    {
+        alchemyHandler = GetComponent<AlchemyHandler>();
+    }
     void Start()
     {
         root = ui.rootVisualElement;
@@ -89,19 +94,22 @@ public class AlchemyBenchUI : MonoBehaviour
     #region Buttons Clicked
     private void ShowCraftingOptions()
     {
-        instructions.text = "Combine Cores, Ether and Body Parts to make mions.";
+        instructions.text = "Combine Cores, Ether and Body Parts to make minons of selected Elemental Affinity";
         foreach (KeyValuePair<AlchemyLoot, int> kvp in AlchemyInventory.ingredients)
         {
             if (kvp.Value != 0)
             {
                 Button ingredientButton = new Button { text = $"{kvp.Key} : {kvp.Value}" }; // Set name of buttons
                 craftandUpgrade.Add(ingredientButton); // add button to container
-                ingredientButton.style.width = Length.Percent(15); // limit size of payment
+                ingredientButton.style.width = Length.Percent(20); // limit size of payment
                 ingredientButton.style.height = Length.Percent(5);
                 ingredientButton.RegisterCallback<ClickEvent>(e => AddIngredientToSelection(kvp.Key)); // add event for button
-
             }
         }
+        Button confirmButton = new Button { text = "Confirm Selection" };
+        craftandUpgrade.Add(confirmButton);
+        confirmButton.RegisterCallback<ClickEvent>(e => alchemyHandler.CalculateCraftingResults(selectedIngredients, new List<Elements> { Elements.Cold }));
+
     }
     private void ShowUpgradeOptions()
     {
@@ -113,13 +121,17 @@ public class AlchemyBenchUI : MonoBehaviour
     }
     private void AddIngredientToSelection(AlchemyLoot ingredient)
     {
+
         if (selectedIngredients.TryGetValue(ingredient, out int amountSelected)) // if the key exists
         {
-            if (amountSelected <= AlchemyInventory.ingredients[ingredient]) //if not already equal or more have been selected
+            if (amountSelected < AlchemyInventory.ingredients[ingredient]) //if not already equal or more have been selected
             {
                 selectedIngredients[ingredient]++;
+                Logging.Info($"{ingredient} is being added to the selectedIngredietns list. Currrent value = {selectedIngredients[ingredient]}");
             }
+            Logging.Info($"the current amount selected({amountSelected}) is already equal to the total you have available");
         }
+        else selectedIngredients.Add(ingredient, 1);
     }
 
     #endregion
