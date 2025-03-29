@@ -8,6 +8,7 @@ public class MinionStats : LivingBeing
     [SerializeField] List<AlchemyLoot> Loot = new List<AlchemyLoot>();
 
 
+
     void Start()
     {
 

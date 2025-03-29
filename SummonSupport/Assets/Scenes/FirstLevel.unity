@@ -8582,6 +8582,21 @@ PrefabInstance:
       propertyPath: MaxPower
       value: 10
       objectReference: {fileID: 0}
+    - target: {fileID: 4880665334659135905, guid: 683a49fc796b0374dad199178e70ee42,
+        type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4880665334659135905, guid: 683a49fc796b0374dad199178e70ee42,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4880665334659135905, guid: 683a49fc796b0374dad199178e70ee42,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5084060229410023299, guid: 683a49fc796b0374dad199178e70ee42,
         type: 3}
       propertyPath: m_Name

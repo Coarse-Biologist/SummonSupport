@@ -1,3 +1,5 @@
+#region Imports
+
 using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEngine.Events;
@@ -6,9 +8,13 @@ using Alchemy;
 using System;
 using System.Linq;
 
+#endregion
+
 public class AlchemyBenchUI : MonoBehaviour
 {
     #region Class Variables
+
+    #region Constants
     [SerializeField] UIDocument ui;
     private VisualElement root;
     private VisualElement interactWindow;
@@ -18,11 +24,19 @@ public class AlchemyBenchUI : MonoBehaviour
     private VisualElement elementSelection;
     private Label instructions;
     public UnityEvent playerUsingUI;
-    private Dictionary<AlchemyLoot, int> selectedIngredients = new Dictionary<AlchemyLoot, int>();
-    private List<Elements> selectedElements = new List<Elements>();
     private AlchemyHandler alchemyHandler;
 
     #endregion
+
+    #region Runtime Variables
+    private Dictionary<AlchemyLoot, int> selectedIngredients = new Dictionary<AlchemyLoot, int>();
+    private List<Elements> selectedElements = new List<Elements>();
+
+    #endregion
+
+    #endregion
+
+    #region Setup
     void Awake()
     {
         alchemyHandler = GetComponent<AlchemyHandler>();
@@ -39,6 +53,8 @@ public class AlchemyBenchUI : MonoBehaviour
         interactWindow.style.display = DisplayStyle.None;
         craftingUI.style.display = DisplayStyle.None;
     }
+    #endregion
+
     #region Trigger effects
     private void OnTriggerEnter2D(Collider2D other)
     {
@@ -67,7 +83,7 @@ public class AlchemyBenchUI : MonoBehaviour
 
     #endregion
 
-    #region begin and end workbench use
+    #region Begin and end workbench use
     private void PlayerUsingUI()
     {
         playerUsingUI?.Invoke();
@@ -82,7 +98,7 @@ public class AlchemyBenchUI : MonoBehaviour
         Button quitButton = craftingUI.Q<Button>("QuitButton");
 
         craftButton.RegisterCallback<ClickEvent>(e => ShowCraftingOptions());
-        upgradeButton.RegisterCallback<ClickEvent>(e => ShowUpgradeOptions());
+        upgradeButton.RegisterCallback<ClickEvent>(e => ShowUpgradeInfo());
         recycleButton.RegisterCallback<ClickEvent>(e => ShowRecycleOptions());
         quitButton.RegisterCallback<ClickEvent>(e => QuitAlchemyUI());
 
@@ -95,24 +111,52 @@ public class AlchemyBenchUI : MonoBehaviour
 
     #endregion
 
-    #region Buttons Clicked
+    #region Show Info in instructions panel
+    private void ShowUpgradeInfo()
+    {
+        instructions.text = "Which Minion would you like to upgrade?";
+    }
+    private void ShowRecycleOptions()
+    {
+        instructions.text = "Which Minion would you like to recycle for components?";
+    }
+    private void ShowCraftingInfo()
+    {
+        if (selectedIngredients.Keys.Count == 0)
+            instructions.text = "Combine Cores, Ether and Body Parts to make minons of selected Elemental Affinity";
+        else
+        {
+            string ingredientInfo = "Selected Ingredients: ";
+
+            foreach (KeyValuePair<AlchemyLoot, int> kvp in selectedIngredients)
+            {
+                ingredientInfo += $"{kvp.Key}: {kvp.Value}. ";
+            }
+            instructions.text = ingredientInfo;
+        }
+    }
+
+    #endregion
+
+    #region Crafting and Upgrading 
     private void ShowCraftingOptions()
     {
-        instructions.text = "Combine Cores, Ether and Body Parts to make minons of selected Elemental Affinity";
+        ShowCraftingInfo();
         foreach (KeyValuePair<AlchemyLoot, int> kvp in AlchemyInventory.ingredients)
         {
             if (kvp.Value != 0)
             {
-                Button ingredientButton = new Button { text = $"{kvp.Key} : {kvp.Value}" }; // Set name of buttons
-                craftandUpgrade.Add(ingredientButton); // add button to container
-                SetButtonSize(ingredientButton, 20, 5);
-                ingredientButton.RegisterCallback<ClickEvent>(e => AddIngredientToSelection(kvp.Key)); // add event for button
+                Button ingredientButton = AddButtonToPanel($"{kvp.Key} : {kvp.Value}", craftandUpgrade, 20, 5);
+                ingredientButton.RegisterCallback<ClickEvent>(e => AddIngredientToSelection(kvp.Key));
+                ingredientButton.RegisterCallback<ClickEvent>(e => ShowCraftingInfo());
             }
         }
         ShowElementToggles(elementSelection);
-        Button confirmButton = new Button { text = "Confirm Selection" };
-        craftandUpgrade.Add(confirmButton);
-        SetButtonSize(confirmButton, 20, 5);
+        Button clearButton = AddButtonToPanel("Clear Selection", craftandUpgrade, 20, 5);
+        clearButton.RegisterCallback<ClickEvent>(e => ClearCraftingSelection());
+        clearButton.RegisterCallback<ClickEvent>(e => ShowCraftingInfo());
+
+        Button confirmButton = AddButtonToPanel("Confirm", craftandUpgrade, 20, 5);
         confirmButton.RegisterCallback<ClickEvent>(e => alchemyHandler.CalculateCraftingResults(selectedIngredients, selectedElements));
 
     }
@@ -127,18 +171,10 @@ public class AlchemyBenchUI : MonoBehaviour
             elementToggle.RegisterCallback<ClickEvent>(e => ToggleSelectedElement(element));
         }
     }
-    private void SetButtonSize(Button button, int width, int height)
+    private void ClearCraftingSelection()
     {
-        button.style.width = Length.Percent(width); // limit size of payment
-        button.style.height = Length.Percent(height);
-    }
-    private void ShowUpgradeOptions()
-    {
-        instructions.text = "Which Minion would you like to upgrade?";
-    }
-    private void ShowRecycleOptions()
-    {
-        instructions.text = "Which Minion would you like to recycle for components?";
+        selectedElements = new List<Elements>();
+        selectedIngredients = new Dictionary<AlchemyLoot, int>();
     }
     private void ToggleSelectedElement(Elements element)
     {
@@ -162,6 +198,20 @@ public class AlchemyBenchUI : MonoBehaviour
 
     #endregion
 
+    #region General UI functions
+    private Button AddButtonToPanel(string buttonText, VisualElement panel, int width, int height)
+    {
+        Button button = new Button { text = buttonText };
+        panel.Add(button);
+        SetButtonSize(button, width, height);
+        return button;
+    }
+    private void SetButtonSize(Button button, int width, int height)
+    {
+        button.style.width = Length.Percent(width); // limit size of payment
+        button.style.height = Length.Percent(height);
+    }
+
     #region Flex /Hide UI
 
     private void HideUI(VisualElement element)
@@ -174,5 +224,5 @@ public class AlchemyBenchUI : MonoBehaviour
     }
 
     #endregion
-
+    #endregion
 }
