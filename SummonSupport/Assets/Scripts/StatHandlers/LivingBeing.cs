@@ -40,6 +40,10 @@ public abstract class LivingBeing : MonoBehaviour
     [SerializeField] public float Speed;
     [SerializeField] public float Mass = 1;
 
+    private float[] rgbaValues = new float[4] { 0f, 0f, 0f, 0f };
+    private SpriteRenderer spriteRenderer;
+
+
     #region Stat Upgrades
 
     public void ChangeMaxHP(int amount)
@@ -74,9 +78,21 @@ public abstract class LivingBeing : MonoBehaviour
 
     #endregion
 
-    void Start()
+    #region Affinity handling
+    public void SetColor(float[] rgbaValues)
+    {
+        float r = rgbaValues[0];
+        float g = rgbaValues[1];
+        float b = rgbaValues[2];
+        float a = rgbaValues[3];
+        spriteRenderer.color = new Color(r, g, b, a);
+    }
+
+    #endregion
+    void Awake()
     {
         GetComponent<Rigidbody2D>().mass = Mass;
+        spriteRenderer = GetComponentInChildren<SpriteRenderer>();
     }
     void FixedUpdate()
     {

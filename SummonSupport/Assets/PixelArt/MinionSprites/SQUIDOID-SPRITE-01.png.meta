@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      SQUIDOID-SPRITE-01_0: -6217672664812710865
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
