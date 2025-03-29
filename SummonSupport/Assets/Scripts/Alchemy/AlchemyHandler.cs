@@ -22,76 +22,82 @@ public class AlchemyHandler : MonoBehaviour
     #region Crafting Minion
     public string CalculateCraftingResults(Dictionary<AlchemyLoot, int> combinedIngredients, List<Elements> elementList)
     {
-        craftedMinion = Instantiate(minionPrefab, new Vector2(transform.position.x, transform.position.y), Quaternion.identity);
-        int healthUpgrade = 0;
-        int powerUpgrade = 0;
-        int elementUpgrade = 0;
-        string results = $"Combining these ingredients will resulted in a minion with {healthUpgrade} additional health, {powerUpgrade} additional power and {elementUpgrade} additional elemental affinity for each selected Element!";
-
-        if (minionPrefab != null)
+        if (combinedIngredients.Keys.Count > 0)
         {
-            MinionStats stats = craftedMinion.GetComponent<MinionStats>();
+            int healthUpgrade = 0;
+            int powerUpgrade = 0;
+            int elementUpgrade = 0;
+            string results = $"Combining these ingredients will resulted in a minion with {healthUpgrade} additional health, {powerUpgrade} additional power and {elementUpgrade} additional elemental affinity for each selected Element!";
 
-            foreach (KeyValuePair<AlchemyLoot, int> kvp in combinedIngredients)
+            if (minionPrefab != null)
             {
-                switch (kvp.Key)
+
+                craftedMinion = Instantiate(minionPrefab, new Vector2(transform.position.x, transform.position.y), Quaternion.identity);
+
+                MinionStats stats = craftedMinion.GetComponent<MinionStats>();
+
+                foreach (KeyValuePair<AlchemyLoot, int> kvp in combinedIngredients)
                 {
-                    case AlchemyLoot.WretchedOrgans:
-                        stats.ChangeMaxHP(5);
-                        healthUpgrade += 5; break;
-                    case AlchemyLoot.FunctionalOrgans:
-                        stats.ChangeMaxHP(10);
-                        healthUpgrade += 10; break;
-                    case AlchemyLoot.HulkingOrgans:
-                        stats.ChangeMaxHP(20);
-                        healthUpgrade += 20; break;
-                    case AlchemyLoot.BrokenCores:
-                        stats.ChangeMaxPower(5);
-                        powerUpgrade += 5; break;
-                    case AlchemyLoot.WorkingCore:
-                        stats.ChangeMaxPower(10);
-                        powerUpgrade += 10; break;
-                    case AlchemyLoot.PowerfulCore:
-                        stats.ChangeMaxPower(20);
-                        powerUpgrade += 20; break;
-                    case AlchemyLoot.HulkingCore:
-                        stats.ChangeMaxPower(30);
-                        powerUpgrade += 30; break;
-                    case AlchemyLoot.FaintEther:
-                        foreach (Elements element in elementList)
-                        {
-                            stats.GainAffinity(element, 10 / elementList.Count);
-                            elementUpgrade += 10 / elementList.Count;
-                            Logging.Info($"Ether of type {element} used");
+                    switch (kvp.Key)
+                    {
+                        case AlchemyLoot.WretchedOrgans:
+                            stats.ChangeMaxHP(5);
+                            healthUpgrade += 5; break;
+                        case AlchemyLoot.FunctionalOrgans:
+                            stats.ChangeMaxHP(10);
+                            healthUpgrade += 10; break;
+                        case AlchemyLoot.HulkingOrgans:
+                            stats.ChangeMaxHP(20);
+                            healthUpgrade += 20; break;
+                        case AlchemyLoot.BrokenCores:
+                            stats.ChangeMaxPower(5);
+                            powerUpgrade += 5; break;
+                        case AlchemyLoot.WorkingCore:
+                            stats.ChangeMaxPower(10);
+                            powerUpgrade += 10; break;
+                        case AlchemyLoot.PowerfulCore:
+                            stats.ChangeMaxPower(20);
+                            powerUpgrade += 20; break;
+                        case AlchemyLoot.HulkingCore:
+                            stats.ChangeMaxPower(30);
+                            powerUpgrade += 30; break;
+                        case AlchemyLoot.FaintEther:
+                            foreach (Elements element in elementList)
+                            {
+                                stats.GainAffinity(element, 10 / elementList.Count);
+                                elementUpgrade += 10 / elementList.Count;
+                                Logging.Info($"Ether of type {element} used");
 
-                        }
-                        break;
-                    case AlchemyLoot.PureEther:
-                        foreach (Elements element in elementList)
-                        {
-                            stats.GainAffinity(element, 30 / elementList.Count);
-                            elementUpgrade += 30 / elementList.Count;
-                            Logging.Info($"Ether of type {element} used");
-                        }
-                        break;
-                    case AlchemyLoot.IntenseEther:
-                        foreach (Elements element in elementList)
-                        {
-                            stats.GainAffinity(element, 60 / elementList.Count);
-                            elementUpgrade += 60 / elementList.Count;
-                            Logging.Info($"Ether of type {element} used");
+                            }
+                            break;
+                        case AlchemyLoot.PureEther:
+                            foreach (Elements element in elementList)
+                            {
+                                stats.GainAffinity(element, 30 / elementList.Count);
+                                elementUpgrade += 30 / elementList.Count;
+                                Logging.Info($"Ether of type {element} used");
+                            }
+                            break;
+                        case AlchemyLoot.IntenseEther:
+                            foreach (Elements element in elementList)
+                            {
+                                stats.GainAffinity(element, 60 / elementList.Count);
+                                elementUpgrade += 60 / elementList.Count;
+                                Logging.Info($"Ether of type {element} used");
 
-                        }
-                        break;
-                    default:
-                        break;
+                            }
+                            break;
+                        default:
+                            break;
+                    }
                 }
+                AddActiveMinion(craftedMinion);
+                stats.SetColor(new float[4] { .3f, 0f, .3f, 1f }); //.2f, .2f, 0f, .5f
             }
-            AddActiveMinion(craftedMinion);
-            stats.SetColor(new float[4] { .3f, 0f, .3f, 1f }); //.2f, .2f, 0f, .5f
+            else Logging.Error("Crafted Minion is null, was he loaded promtly or correctly?");
+            return results;
         }
-        else Logging.Error("Crafted Minion is null, was he loaded promtly or correctly?");
-        return results;
+        else return "Selected Ingredients and element to use for crafting!";
     }
 
 
