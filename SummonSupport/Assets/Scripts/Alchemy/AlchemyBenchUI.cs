@@ -135,6 +135,12 @@ public class AlchemyBenchUI : MonoBehaviour
             instructions.text = ingredientInfo;
         }
     }
+    private void ShowCraftingResults()
+    {
+        string results = alchemyHandler.CalculateCraftingResults(selectedIngredients, selectedElements);
+
+        instructions.text = results;
+    }
 
     #endregion
 
@@ -157,7 +163,8 @@ public class AlchemyBenchUI : MonoBehaviour
         clearButton.RegisterCallback<ClickEvent>(e => ShowCraftingInfo());
 
         Button confirmButton = AddButtonToPanel("Confirm", craftandUpgrade, 20, 5);
-        confirmButton.RegisterCallback<ClickEvent>(e => alchemyHandler.CalculateCraftingResults(selectedIngredients, selectedElements));
+        confirmButton.RegisterCallback<ClickEvent>(e => ShowCraftingResults());
+        confirmButton.RegisterCallback<ClickEvent>(e => ShowCraftingInfo());
 
     }
     private void ShowElementToggles(VisualElement panel)
@@ -222,6 +229,7 @@ public class AlchemyBenchUI : MonoBehaviour
     {
         element.style.display = DisplayStyle.Flex;
     }
+    //TODO: clear panel / visual element 
 
     #endregion
     #endregion
