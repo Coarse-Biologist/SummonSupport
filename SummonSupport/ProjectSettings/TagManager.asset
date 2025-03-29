@@ -7,6 +7,7 @@ TagManager:
   - Enemy
   - Minion
   - Obstruction
+  - AlchemyBench
   layers:
   - Default
   - TransparentFX

@@ -11,27 +11,27 @@ public class AbilityHandler : MonoBehaviour
     private PlayerInputActions inputActions;
     [SerializeField] List<Ability> abilities;
 
-    private void Awake()
-    {
-        inputActions = new PlayerInputActions();
-        abilities ??= new List<Ability>();
-        
-    }
-
-    private void OnEnable()
-    {
-        inputActions.Player.Ability1.performed += OnAbility1;
-        inputActions.Player.Ability2.performed += OnAbility2;
-        inputActions.Enable();
-    }
-
-    private void OnDisable()
-    {
-        inputActions.Player.Ability1.performed -= OnAbility1;
-        inputActions.Player.Ability2.performed -= OnAbility2;
-        inputActions.Disable();
-    }
-
+    //private void Awake()
+    //{
+    //    inputActions = new PlayerInputActions();
+    //    abilities ??= new List<Ability>();
+    //    
+    //}
+    //
+    //private void OnEnable()
+    //{
+    //    inputActions.Player.Ability1.performed += OnAbility1;
+    //    inputActions.Player.Ability2.performed += OnAbility2;
+    //    inputActions.Enable();
+    //}
+    //
+    //private void OnDisable()
+    //{
+    //    inputActions.Player.Ability1.performed -= OnAbility1;
+    //    inputActions.Player.Ability2.performed -= OnAbility2;
+    //    inputActions.Disable();
+    //}
+    //
     private void OnAbility1(InputAction.CallbackContext context)
     {
         if (abilities.Count > 0)
@@ -52,7 +52,7 @@ public class AbilityHandler : MonoBehaviour
         switch (ability)
         {
             case ProjectileAbility projectile:
-                Logging.Info("Cast Ability is a projectile: " + abilities[0].name);    
+                Logging.Info("Cast Ability is a projectile: " + abilities[0].name);
                 HandleProjectile(projectile);
                 break;
 
@@ -62,7 +62,7 @@ public class AbilityHandler : MonoBehaviour
     }
 
     void HandleProjectile(ProjectileAbility ability)
-    {  
+    {
         GameObject projectile = Instantiate(ability.Projectile, transform.position, Quaternion.identity);
         Rigidbody2D rb = projectile.GetComponent<Rigidbody2D>();
         rb.linearVelocity = transform.right * ability.Speed;

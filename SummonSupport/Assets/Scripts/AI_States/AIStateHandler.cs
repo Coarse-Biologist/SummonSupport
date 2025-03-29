@@ -28,9 +28,11 @@ public class AIStateHandler : MonoBehaviour
         obstructionMask = LayerMask.GetMask("Obstruction");
         if (gameObject.CompareTag("Minion")) targetMask = LayerMask.GetMask("Enemy");
         else targetMask = LayerMask.GetMask("Summon", "Player");
+
+        Debug.Log($"setting target mask for {gameObject.GetComponent<LivingBeing>().Name} to {targetMask}");
+
         currentState = GetComponentInChildren<AIPeacefulState>();
         livingBeing = GetComponent<LivingBeing>();
-        //Debug.Log($"here is the living being script: {livingBeing}");
     }
 
     void Update()

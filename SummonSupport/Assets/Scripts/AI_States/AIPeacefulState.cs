@@ -92,8 +92,6 @@ public class AIPeacefulState : AIState
     }
 
 
-
-
     public override AIState RunCurrentState()
     {
         //Debug.Log("running peaceful state");

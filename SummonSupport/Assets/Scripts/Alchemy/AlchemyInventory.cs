@@ -16,9 +16,9 @@ namespace Alchemy
             { AlchemyLoot.WorkingCore, 1 },
             { AlchemyLoot.PowerfulCore, 0 },
             { AlchemyLoot.HulkingCore, 0 },
-            { AlchemyLoot.FaintEther, 0 },
-            { AlchemyLoot.PureEther, 0 },
-            { AlchemyLoot.IntenseEther, 0 }
+            { AlchemyLoot.FaintEther, 1 },
+            { AlchemyLoot.PureEther, 2 },
+            { AlchemyLoot.IntenseEther, 1 }
             };
 
         public static Dictionary<Elements, int> knowledgeDict = new Dictionary<Elements, int>

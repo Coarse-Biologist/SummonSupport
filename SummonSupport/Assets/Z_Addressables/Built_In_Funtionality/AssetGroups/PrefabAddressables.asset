@@ -20,6 +20,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 683a49fc796b0374dad199178e70ee42
+    m_Address: Assets/Prefabs/AIPrefab/MinionPrefab2.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: ecec97c89ee9bf34f83fcc630e389d11, type: 2}
   m_SchemaSet:
