@@ -92,7 +92,10 @@ public class AlchemyHandler : MonoBehaviour
                     }
                 }
                 AddActiveMinion(craftedMinion);
-                stats.SetColor(new float[4] { .3f, 0f, .3f, 1f }); //.2f, .2f, 0f, .5f
+                if (stats.Affinities[Elements.Cold] > 0)
+                {
+                    stats.SetColor(new float[4] { .0f, 0f, 1f, 1f }); //.2f, .2f, 0f, .5f
+                }
             }
             else Logging.Error("Crafted Minion is null, was he loaded promtly or correctly?");
             return results;

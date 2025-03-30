@@ -81,7 +81,6 @@ public class AIChaseState : AIState
         Vector2 direction = targetLoc - currentLoc;
         if (direction.sqrMagnitude > 10 || peaceState.CheckVisionBlocked(targetEntity)) rb.linearVelocity = Time.fixedDeltaTime * (targetLoc - currentLoc) * statScript.Speed;
         else rb.linearVelocity = new Vector2(0, 0);
-
     }
 
 
