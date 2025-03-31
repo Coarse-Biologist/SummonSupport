@@ -8,30 +8,30 @@ using UnityEditor.Callbacks;
 
 public class AbilityHandler : MonoBehaviour
 {
-    private PlayerInputActions inputActions;
     [SerializeField] List<Ability> abilities;
+    PlayerInputActions inputActions;
 
-    //private void Awake()
-    //{
-    //    inputActions = new PlayerInputActions();
-    //    abilities ??= new List<Ability>();
-    //    
-    //}
-    //
-    //private void OnEnable()
-    //{
-    //    inputActions.Player.Ability1.performed += OnAbility1;
-    //    inputActions.Player.Ability2.performed += OnAbility2;
-    //    inputActions.Enable();
-    //}
-    //
-    //private void OnDisable()
-    //{
-    //    inputActions.Player.Ability1.performed -= OnAbility1;
-    //    inputActions.Player.Ability2.performed -= OnAbility2;
-    //    inputActions.Disable();
-    //}
-    //
+    private void Awake()
+    {
+        inputActions = new PlayerInputActions();
+        abilities ??= new List<Ability>();
+        
+    }
+    
+    private void OnEnable()
+    {
+        inputActions.Player.Ability1.performed += OnAbility1;
+        inputActions.Player.Ability2.performed += OnAbility2;
+        inputActions.Enable();
+    }
+    
+    private void OnDisable()
+    {
+        inputActions.Player.Ability1.performed -= OnAbility1;
+        inputActions.Player.Ability2.performed -= OnAbility2;
+        inputActions.Disable();
+    }
+    
     private void OnAbility1(InputAction.CallbackContext context)
     {
         if (abilities.Count > 0)
@@ -60,14 +60,9 @@ public class AbilityHandler : MonoBehaviour
                 break;
         }
     }
-
     void HandleProjectile(ProjectileAbility ability)
     {
-        GameObject projectile = Instantiate(ability.Projectile, transform.position, Quaternion.identity);
-        Rigidbody2D rb = projectile.GetComponent<Rigidbody2D>();
-        rb.linearVelocity = transform.right * ability.Speed;
-        Destroy(projectile, ability.Lifetime);
-
+        ability.Activate(gameObject);
     }
 }
 
