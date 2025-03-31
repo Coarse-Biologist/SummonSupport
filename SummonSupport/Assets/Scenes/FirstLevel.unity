@@ -627,8 +627,21 @@ MonoBehaviour:
     type: 3}
   requestInstantiation:
     m_PersistentCalls:
-      m_Calls: []
-  activeMinions: []
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: 
+        m_MethodName: 
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 1
+  activeMinions:
+  - {fileID: 1957334805}
 --- !u!1 &1708952192
 GameObject:
   m_ObjectHideFlags: 0
@@ -6617,6 +6630,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99d4ca7f9f44bfe48bd661eedb5bce23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1957334805 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4709292885025742429, guid: 92bce7f3a3d5b5e41b7b4c0606159b86,
+    type: 3}
+  m_PrefabInstance: {fileID: 3735932498894050928}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2094528598 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5425751847151216936, guid: 2e9e6d4beecaf1a49b78f33f4cfb351c,
@@ -8516,6 +8535,16 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: 265d2196a4dc4d347bf0f1d275f43d44,
         type: 2}
+    - target: {fileID: 2918865458453648418, guid: c7837ff0da5abc24bbbd2fee9f125d7d,
+        type: 3}
+      propertyPath: speed
+      value: 0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 2918865458453648418, guid: c7837ff0da5abc24bbbd2fee9f125d7d,
+        type: 3}
+      propertyPath: dashBoost
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2918865458453648418, guid: c7837ff0da5abc24bbbd2fee9f125d7d,
         type: 3}
       propertyPath: mainCamera

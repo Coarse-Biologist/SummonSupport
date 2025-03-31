@@ -94,7 +94,7 @@ public class PlayerMovement : MonoBehaviour
         else calculatedSpeed = speed;
         Vector3 moveDirection = new Vector3(moveInput.x, moveInput.y, 0).normalized;
         //transform.position += moveDirection * calculatedSpeed * Time.deltaTime;
-        rb.linearVelocity = moveDirection * calculatedSpeed * 10 * Time.fixedDeltaTime;
+        rb.linearVelocity = moveDirection * calculatedSpeed * 10;
     }
     #endregion
 

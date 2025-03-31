@@ -126,6 +126,7 @@ public class AlchemyBenchUI : MonoBehaviour
     private void ShowUpgradeInfo()
     {
         instructions.text = "Which Minion would you like to upgrade?";
+        ShowUpgradableMinions();
     }
 
     private void ShowRecycleOptions()
@@ -158,34 +159,13 @@ public class AlchemyBenchUI : MonoBehaviour
     #endregion
 
     #region Crafting and Upgrading 
-    private void ShowCraftingOptions2()
+    private void ShowUpgradableMinions()
     {
-        ShowUI(craftandUpgrade);
-        ClearPanel(alchemyInventory);
-        ClearPanel(elementSelection);
-        if (!crafting)
+        alchemyInventory.Clear();
+        Logging.Info($"Number of active minions = {alchemyHandler.activeMinions.Count}");
+        foreach (GameObject minion in alchemyHandler.activeMinions)
         {
-            crafting = true;
-
-            ShowCraftingInfo();
-            foreach (KeyValuePair<AlchemyLoot, int> kvp in AlchemyInventory.ingredients)
-            {
-                if (kvp.Value != 0)
-                {
-                    Button ingredientButton = AddButtonToPanel($"{kvp.Key} : {kvp.Value}", alchemyInventory, 20, 5);
-                    ingredientButton.RegisterCallback<ClickEvent>(e => AddIngredientToSelection(kvp.Key));
-                    ingredientButton.RegisterCallback<ClickEvent>(e => ShowCraftingInfo());
-                    ingredientButton.RegisterCallback<ClickEvent>(e => DecrementIngredientButton(ingredientButton));
-                }
-            }
-            ShowElementToggles(elementSelection);
-            Button clearButton = AddButtonToPanel("Clear Selection", confirmClear, 20, 5);
-            clearButton.RegisterCallback<ClickEvent>(e => ClearCraftingSelection());
-            clearButton.RegisterCallback<ClickEvent>(e => ShowCraftingInfo());
-
-            Button confirmButton = AddButtonToPanel("Confirm", craftingUI, 20, 5);
-            confirmButton.RegisterCallback<ClickEvent>(e => Craft());
-            confirmButton.RegisterCallback<ClickEvent>(e => ShowCraftingInfo());
+            AddButtonToPanel($"Upgrade {minion.GetComponent<LivingBeing>().Name}", alchemyInventory, 45, 5);
         }
     }
     private void ShowCraftingOptions()
@@ -198,12 +178,12 @@ public class AlchemyBenchUI : MonoBehaviour
         SpawnIngredientButtons();
         ShowElementToggles(elementSelection);
 
-        Button clearButton = AddButtonToPanel("Clear Selection", confirmClear, 20, 5);
+        Button clearButton = AddButtonToPanel("Clear Selection", confirmClear, 35, 5);
         clearButton.RegisterCallback<ClickEvent>(e => ClearCraftingSelection());
         clearButton.RegisterCallback<ClickEvent>(e => ShowCraftingInfo());
         clearButton.RegisterCallback<ClickEvent>(e => SpawnIngredientButtons());
 
-        Button confirmButton = AddButtonToPanel("Confirm", confirmClear, 20, 5);
+        Button confirmButton = AddButtonToPanel("Confirm", confirmClear, 35, 5);
         confirmButton.RegisterCallback<ClickEvent>(e => Craft());
         confirmButton.RegisterCallback<ClickEvent>(e => ShowCraftingInfo());
 
@@ -215,7 +195,7 @@ public class AlchemyBenchUI : MonoBehaviour
         {
             if (kvp.Value != 0)
             {
-                Button ingredientButton = AddButtonToPanel($"{kvp.Key} : {kvp.Value}", alchemyInventory, 20, 5);
+                Button ingredientButton = AddButtonToPanel($"{kvp.Key} : {kvp.Value}", alchemyInventory, 40, 5);
                 ingredientButton.RegisterCallback<ClickEvent>(e => AddIngredientToSelection(kvp.Key));
                 ingredientButton.RegisterCallback<ClickEvent>(e => ShowCraftingInfo());
                 ingredientButton.RegisterCallback<ClickEvent>(e => DecrementIngredientButton(ingredientButton));

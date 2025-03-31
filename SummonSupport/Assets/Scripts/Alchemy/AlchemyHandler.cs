@@ -15,7 +15,7 @@ public class AlchemyHandler : MonoBehaviour
     private GameObject craftedMinion;
     public GameObject minionPrefab;
     public UnityEvent<GameObject> requestInstantiation = new UnityEvent<GameObject>();
-    public List<GameObject> activeMinions = new List<GameObject>();
+    [SerializeField] public List<GameObject> activeMinions = new List<GameObject>();
 
     #endregion
 
