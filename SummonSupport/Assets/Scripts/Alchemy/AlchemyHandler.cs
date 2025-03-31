@@ -29,17 +29,8 @@ public class AlchemyHandler : MonoBehaviour
             {
                 craftedMinion = Instantiate(minionPrefab, new Vector2(transform.position.x, transform.position.y), Quaternion.identity);
 
-                MinionStats stats = craftedMinion.GetComponent<MinionStats>();
-
-                foreach (KeyValuePair<AlchemyLoot, int> kvp in combinedIngredients)
-                {
-                    if (kvp.Key.ToString().Contains("Organs")) HandleOrganUse(stats, kvp.Key);
-                    if (kvp.Key.ToString().Contains("Cores")) HandleCoreUse(stats, kvp.Key);
-                    if (kvp.Key.ToString().Contains("Ether")) HandleEtherUse(stats, kvp.Key, elementList);
-                }
+                UpgradeMinion(craftedMinion, combinedIngredients, elementList);
                 AddActiveMinion(craftedMinion);
-                stats.RestoreResources();
-                stats.AlterColorByAffinity();
             }
             else Logging.Error("Crafted Minion is null, was he loaded promtly or correctly?");
         }
@@ -117,6 +108,21 @@ public class AlchemyHandler : MonoBehaviour
         return elementUpgrade;
     }
 
+
+
+    public void UpgradeMinion(GameObject minion, Dictionary<AlchemyLoot, int> ingredients, List<Elements> elementList)
+    {
+        MinionStats stats = minion.GetComponent<MinionStats>();
+
+        foreach (KeyValuePair<AlchemyLoot, int> kvp in ingredients)
+        {
+            if (kvp.Key.ToString().Contains("Organs")) HandleOrganUse(stats, kvp.Key);
+            if (kvp.Key.ToString().Contains("Cores")) HandleCoreUse(stats, kvp.Key);
+            if (kvp.Key.ToString().Contains("Ether")) HandleEtherUse(stats, kvp.Key, elementList);
+        }
+        stats.RestoreResources();
+        stats.AlterColorByAffinity();
+    }
 
     #endregion
 

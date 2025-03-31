@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Awakened_Snowman_0: 7551833480356951093
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

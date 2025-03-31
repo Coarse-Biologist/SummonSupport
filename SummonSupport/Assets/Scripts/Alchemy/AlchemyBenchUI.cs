@@ -35,6 +35,7 @@ public class AlchemyBenchUI : MonoBehaviour
     #region Runtime Variables
     private Dictionary<AlchemyLoot, int> selectedIngredients = new Dictionary<AlchemyLoot, int>();
     private List<Elements> selectedElements = new List<Elements>();
+    private GameObject minionToUpgrade;
 
     private bool crafting = false;
     private bool upgrading = false;
@@ -109,7 +110,7 @@ public class AlchemyBenchUI : MonoBehaviour
         Button quitButton = craftingUI.Q<Button>("QuitButton");
 
         craftButton.RegisterCallback<ClickEvent>(e => ShowCraftingOptions());
-        upgradeButton.RegisterCallback<ClickEvent>(e => ShowUpgradeInfo());
+        upgradeButton.RegisterCallback<ClickEvent>(e => HandleUpgradeDisplay());
         recycleButton.RegisterCallback<ClickEvent>(e => ShowRecycleOptions());
         quitButton.RegisterCallback<ClickEvent>(e => QuitAlchemyUI());
 
@@ -125,8 +126,18 @@ public class AlchemyBenchUI : MonoBehaviour
     #region Show Info in instructions panel
     private void ShowUpgradeInfo()
     {
-        instructions.text = "Which Minion would you like to upgrade?";
-        ShowUpgradableMinions();
+        if (selectedIngredients.Keys.Count == 0)
+            instructions.text = "Which Minion would you like to upgrade?";
+        else
+        {
+            string ingredientInfo = "Selected Ingredients: ";
+
+            foreach (KeyValuePair<AlchemyLoot, int> kvp in selectedIngredients)
+            {
+                ingredientInfo += $"{kvp.Key}: {kvp.Value}. ";
+            }
+            instructions.text = ingredientInfo;
+        }
     }
 
     private void ShowRecycleOptions()
@@ -148,6 +159,51 @@ public class AlchemyBenchUI : MonoBehaviour
             instructions.text = ingredientInfo;
         }
     }
+
+
+    #endregion
+
+    #region Upgrading 
+    private void HandleUpgradeDisplay()
+    {
+        confirmClear.Clear();
+        alchemyInventory.Clear();
+        elementSelection.Clear();
+        ShowUpgradableMinions();
+        ShowUpgradeInfo();
+        Button confirmButton = AddButtonToPanel("Confirm", confirmClear, 50, 5);
+        Button clearButton = AddButtonToPanel("Clear Selection", confirmClear, 50, 5);
+        confirmButton.RegisterCallback<ClickEvent>(e => HandleUpgradeMinion(minionToUpgrade));
+        clearButton.RegisterCallback<ClickEvent>(e => ClearCraftingSelection());
+        clearButton.RegisterCallback<ClickEvent>(e => HandleUpgradeDisplay());
+    }
+    private void HandleUpgradeMinion(GameObject minionToUpgrade)
+    {
+        alchemyHandler.UpgradeMinion(minionToUpgrade, selectedIngredients, selectedElements);
+        AlchemyInventory.ExpendIngredients(selectedIngredients);
+        ClearCraftingSelection();
+        HandleUpgradeDisplay();
+    }
+    private void ShowUpgradableMinions()
+    {
+        Logging.Info($"Number of active minions = {alchemyHandler.activeMinions.Count}");
+        foreach (GameObject minion in alchemyHandler.activeMinions)
+        {
+            Button minionButton = AddButtonToPanel($"Upgrade {minion.GetComponent<LivingBeing>().Name}", alchemyInventory, 45, 5);
+            minionButton.RegisterCallback<ClickEvent>(e => SetMinionToUpgrade(minion));
+        }
+    }
+    private void SetMinionToUpgrade(GameObject minion)
+    {
+        minionToUpgrade = minion;
+        instructions.text = $"Select ingredients and element with which to upgrade {minion.GetComponent<LivingBeing>().Name}.";
+        SpawnIngredientButtons();
+        ShowElementToggles(elementSelection);
+    }
+    #endregion
+
+    #region Crafting
+
     private void Craft()
     {
         AlchemyInventory.ExpendIngredients(selectedIngredients);
@@ -155,22 +211,10 @@ public class AlchemyBenchUI : MonoBehaviour
         ClearCraftingSelection();
         //instructions.text = results;
     }
-
-    #endregion
-
-    #region Crafting and Upgrading 
-    private void ShowUpgradableMinions()
-    {
-        alchemyInventory.Clear();
-        Logging.Info($"Number of active minions = {alchemyHandler.activeMinions.Count}");
-        foreach (GameObject minion in alchemyHandler.activeMinions)
-        {
-            AddButtonToPanel($"Upgrade {minion.GetComponent<LivingBeing>().Name}", alchemyInventory, 45, 5);
-        }
-    }
     private void ShowCraftingOptions()
     {
         ShowUI(confirmClear);
+        confirmClear.Clear();
         alchemyInventory.Clear();
         elementSelection.Clear();
 
