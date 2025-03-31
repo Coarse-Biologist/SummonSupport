@@ -29,6 +29,10 @@ public class PlayerUIHandler : MonoBehaviour
         minionHPBars.Add(minionHP);
         return minionHP;
     }
+    private ProgressBar GetMinionsHPBar(GameObject minion)
+    {
+        return null;
+    }
 
     public void AlterSummonHP(ProgressBar minionHPbar, int value)
     {
