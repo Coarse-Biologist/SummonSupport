@@ -1,5 +1,5 @@
 using UnityEngine;
-
+using System.Diagnostics;
 public static class Logging
 {
     public enum LogLevel { None, Error, Warning, Info, Verbose }
@@ -10,7 +10,10 @@ public static class Logging
     {
         if (level <= CurrentLogLevel)
         {
-            Debug.Log($"[{level}] {message}");
+            StackTrace stackTrace = new StackTrace(1, true);
+            StackFrame frame = stackTrace.GetFrame(0);
+            string callerInfo = frame != null ? $"{frame.GetFileName()}:{frame.GetFileLineNumber()}" : "Unknown";
+            UnityEngine.Debug.Log($"[{level}] {message}\n{callerInfo}");
         }
     }
     public static void Error(string message)

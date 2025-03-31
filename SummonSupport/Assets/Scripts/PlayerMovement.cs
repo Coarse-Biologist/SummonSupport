@@ -33,7 +33,7 @@ public class PlayerMovement : MonoBehaviour
     #region Enable and Disable event subscriptions
     private void OnEnable()
     {
-        alchemyBench.playerUsingUI.AddListener(ToggleLockedInUI);
+        // alchemyBench.playerUsingUI.AddListener(ToggleLockedInUI);
         inputActions.Player.Enable();
 
         inputActions.Player.Move.performed += OnMove;
@@ -46,7 +46,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnDisable()
     {
-        alchemyBench.playerUsingUI.RemoveListener(ToggleLockedInUI);
+        // alchemyBench.playerUsingUI.RemoveListener(ToggleLockedInUI);
 
         inputActions.Player.Move.performed -= OnMove;
         inputActions.Player.Move.canceled -= OnMove;
