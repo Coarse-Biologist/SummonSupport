@@ -137,9 +137,9 @@ public class AlchemyBenchUI : MonoBehaviour
     }
     private void ShowCraftingResults()
     {
-        string results = alchemyHandler.CalculateCraftingResults(selectedIngredients, selectedElements);
+        alchemyHandler.HandleCraftingResults(selectedIngredients, selectedElements);
 
-        instructions.text = results;
+        //instructions.text = results;
     }
 
     #endregion
@@ -147,6 +147,7 @@ public class AlchemyBenchUI : MonoBehaviour
     #region Crafting and Upgrading 
     private void ShowCraftingOptions()
     {
+        //ClearPanel(craftandUpgrade);
         ShowCraftingInfo();
         foreach (KeyValuePair<AlchemyLoot, int> kvp in AlchemyInventory.ingredients)
         {
@@ -165,6 +166,7 @@ public class AlchemyBenchUI : MonoBehaviour
         Button confirmButton = AddButtonToPanel("Confirm", craftandUpgrade, 20, 5);
         confirmButton.RegisterCallback<ClickEvent>(e => ShowCraftingResults());
         confirmButton.RegisterCallback<ClickEvent>(e => ShowCraftingInfo());
+        confirmButton.RegisterCallback<ClickEvent>(e => ClearPanel(craftandUpgrade));
 
     }
     private void ShowElementToggles(VisualElement panel)
@@ -228,6 +230,11 @@ public class AlchemyBenchUI : MonoBehaviour
     private void ShowUI(VisualElement element)
     {
         element.style.display = DisplayStyle.Flex;
+    }
+
+    private void ClearPanel(VisualElement panel)
+    {
+        panel.Clear();
     }
     //TODO: clear panel / visual element 
 

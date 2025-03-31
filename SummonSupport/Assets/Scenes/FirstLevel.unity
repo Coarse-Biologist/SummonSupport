@@ -8205,6 +8205,16 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4100082497577376607, guid: 92bce7f3a3d5b5e41b7b4c0606159b86,
+        type: 3}
+      propertyPath: Cold
+      value: 200
+      objectReference: {fileID: 0}
+    - target: {fileID: 4100082497577376607, guid: 92bce7f3a3d5b5e41b7b4c0606159b86,
+        type: 3}
+      propertyPath: Water
+      value: 50
+      objectReference: {fileID: 0}
     - target: {fileID: 4709292885025742429, guid: 92bce7f3a3d5b5e41b7b4c0606159b86,
         type: 3}
       propertyPath: m_Name
