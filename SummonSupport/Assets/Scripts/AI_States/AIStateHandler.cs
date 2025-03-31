@@ -15,12 +15,14 @@ public class AIStateHandler : MonoBehaviour
     private AIState currentState;
     [SerializeField] public AIState peaceState { private set; get; }
     [SerializeField] public AIState chaseState { private set; get; }
-    [SerializeField] public AIState attackState { private set; get; }
+    [SerializeField] public AIState obedienceState { private set; get; }
     [SerializeField] public LivingBeing livingBeing { private set; get; }
 
     public Vector2 lastSeenLoc;
 
     private Vector2 startLocation;
+    private bool hasCommand = false;
+
 
     public void Awake()
     {
@@ -37,17 +39,22 @@ public class AIStateHandler : MonoBehaviour
 
     void Update()
     {
+
         RunStateMachine();
     }
 
     private void RunStateMachine()
     {
-        AIState nextState = currentState?.RunCurrentState();
-        //Debug.Log($"current state = {currentState}. next state = {nextState}");
-        if (nextState != null)
+        if (gameObject.CompareTag("Minion") && GetComponent<MinionStats>().CurrentCommand == MinionCommands.None)
         {
-            SwitchToNextState(nextState);
+            AIState nextState = currentState?.RunCurrentState();
+            //Debug.Log($"current state = {currentState}. next state = {nextState}");
+            if (nextState != null)
+            {
+                SwitchToNextState(nextState);
+            }
         }
+        else SwitchToNextState(obedienceState);
     }
 
     private void SwitchToNextState(AIState nextState)
