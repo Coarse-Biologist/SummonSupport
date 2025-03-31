@@ -53,6 +53,13 @@ namespace Alchemy
         {
             ingredients[ingredient] += amount;
         }
+        public static void ExpendIngredients(Dictionary<AlchemyLoot, int> usedIngredients)
+        {
+            foreach (KeyValuePair<AlchemyLoot, int> kvp in usedIngredients)
+            {
+                if (ingredients[kvp.Key] > 0) AlterIngredientNum(kvp.Key,  - kvp.Value);
+            }
+        }
         #endregion
 
         #region Check dict values
@@ -66,9 +73,6 @@ namespace Alchemy
         #endregion
 
     }
-
-    //public enum 
-
 
     public enum AlchemyLoot
     {

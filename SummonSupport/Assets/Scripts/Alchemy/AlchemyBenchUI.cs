@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using Alchemy;
 using System;
 using System.Linq;
+using System.Text.RegularExpressions;
+
 
 #endregion
 
@@ -20,8 +22,10 @@ public class AlchemyBenchUI : MonoBehaviour
     private VisualElement interactWindow;
     private Label interactLabel;
     private VisualElement craftingUI;
+    private VisualElement confirmClear;
     private VisualElement craftandUpgrade;
     private VisualElement elementSelection;
+    private VisualElement alchemyInventory;
     private Label instructions;
     public UnityEvent playerUsingUI;
     private AlchemyHandler alchemyHandler;
@@ -31,6 +35,11 @@ public class AlchemyBenchUI : MonoBehaviour
     #region Runtime Variables
     private Dictionary<AlchemyLoot, int> selectedIngredients = new Dictionary<AlchemyLoot, int>();
     private List<Elements> selectedElements = new List<Elements>();
+
+    private bool crafting = false;
+    private bool upgrading = false;
+    private bool recycling = false;
+    private bool elementsGenerated = false;
 
     #endregion
 
@@ -47,6 +56,8 @@ public class AlchemyBenchUI : MonoBehaviour
         interactWindow = root.Q<VisualElement>("Interact");
         craftingUI = root.Q<VisualElement>("CraftingUI");
         craftandUpgrade = craftingUI.Q<VisualElement>("CraftandUpgrade");
+        confirmClear = craftingUI.Q<VisualElement>("ConfirmClear");
+        alchemyInventory = craftandUpgrade.Q<VisualElement>("AlchemyInventory");
         instructions = craftandUpgrade.Q<Label>("Instructions");
         interactLabel = interactWindow.Q<Label>("InteractLabel");
         elementSelection = craftingUI.Q<VisualElement>("ElementSelection");
@@ -116,6 +127,7 @@ public class AlchemyBenchUI : MonoBehaviour
     {
         instructions.text = "Which Minion would you like to upgrade?";
     }
+
     private void ShowRecycleOptions()
     {
         instructions.text = "Which Minion would you like to recycle for components?";
@@ -135,51 +147,109 @@ public class AlchemyBenchUI : MonoBehaviour
             instructions.text = ingredientInfo;
         }
     }
-    private void ShowCraftingResults()
+    private void Craft()
     {
+        AlchemyInventory.ExpendIngredients(selectedIngredients);
         alchemyHandler.HandleCraftingResults(selectedIngredients, selectedElements);
-
+        ClearCraftingSelection();
         //instructions.text = results;
     }
 
     #endregion
 
     #region Crafting and Upgrading 
+    private void ShowCraftingOptions2()
+    {
+        ShowUI(craftandUpgrade);
+        ClearPanel(alchemyInventory);
+        ClearPanel(elementSelection);
+        if (!crafting)
+        {
+            crafting = true;
+
+            ShowCraftingInfo();
+            foreach (KeyValuePair<AlchemyLoot, int> kvp in AlchemyInventory.ingredients)
+            {
+                if (kvp.Value != 0)
+                {
+                    Button ingredientButton = AddButtonToPanel($"{kvp.Key} : {kvp.Value}", alchemyInventory, 20, 5);
+                    ingredientButton.RegisterCallback<ClickEvent>(e => AddIngredientToSelection(kvp.Key));
+                    ingredientButton.RegisterCallback<ClickEvent>(e => ShowCraftingInfo());
+                    ingredientButton.RegisterCallback<ClickEvent>(e => DecrementIngredientButton(ingredientButton));
+                }
+            }
+            ShowElementToggles(elementSelection);
+            Button clearButton = AddButtonToPanel("Clear Selection", confirmClear, 20, 5);
+            clearButton.RegisterCallback<ClickEvent>(e => ClearCraftingSelection());
+            clearButton.RegisterCallback<ClickEvent>(e => ShowCraftingInfo());
+
+            Button confirmButton = AddButtonToPanel("Confirm", craftingUI, 20, 5);
+            confirmButton.RegisterCallback<ClickEvent>(e => Craft());
+            confirmButton.RegisterCallback<ClickEvent>(e => ShowCraftingInfo());
+        }
+    }
     private void ShowCraftingOptions()
     {
-        //ClearPanel(craftandUpgrade);
+        ShowUI(confirmClear);
+        alchemyInventory.Clear();
+        elementSelection.Clear();
+
         ShowCraftingInfo();
+        SpawnIngredientButtons();
+        ShowElementToggles(elementSelection);
+
+        Button clearButton = AddButtonToPanel("Clear Selection", confirmClear, 20, 5);
+        clearButton.RegisterCallback<ClickEvent>(e => ClearCraftingSelection());
+        clearButton.RegisterCallback<ClickEvent>(e => ShowCraftingInfo());
+        clearButton.RegisterCallback<ClickEvent>(e => SpawnIngredientButtons());
+
+        Button confirmButton = AddButtonToPanel("Confirm", confirmClear, 20, 5);
+        confirmButton.RegisterCallback<ClickEvent>(e => Craft());
+        confirmButton.RegisterCallback<ClickEvent>(e => ShowCraftingInfo());
+
+    }
+    private void SpawnIngredientButtons()
+    {
+        alchemyInventory.Clear();
         foreach (KeyValuePair<AlchemyLoot, int> kvp in AlchemyInventory.ingredients)
         {
             if (kvp.Value != 0)
             {
-                Button ingredientButton = AddButtonToPanel($"{kvp.Key} : {kvp.Value}", craftandUpgrade, 20, 5);
+                Button ingredientButton = AddButtonToPanel($"{kvp.Key} : {kvp.Value}", alchemyInventory, 20, 5);
                 ingredientButton.RegisterCallback<ClickEvent>(e => AddIngredientToSelection(kvp.Key));
                 ingredientButton.RegisterCallback<ClickEvent>(e => ShowCraftingInfo());
+                ingredientButton.RegisterCallback<ClickEvent>(e => DecrementIngredientButton(ingredientButton));
             }
         }
-        ShowElementToggles(elementSelection);
-        Button clearButton = AddButtonToPanel("Clear Selection", craftandUpgrade, 20, 5);
-        clearButton.RegisterCallback<ClickEvent>(e => ClearCraftingSelection());
-        clearButton.RegisterCallback<ClickEvent>(e => ShowCraftingInfo());
+    }
 
-        Button confirmButton = AddButtonToPanel("Confirm", craftandUpgrade, 20, 5);
-        confirmButton.RegisterCallback<ClickEvent>(e => ShowCraftingResults());
-        confirmButton.RegisterCallback<ClickEvent>(e => ShowCraftingInfo());
-        confirmButton.RegisterCallback<ClickEvent>(e => ClearPanel(craftandUpgrade));
-
+    private void DecrementIngredientButton(Button ingredientButton)
+    {
+        if (ingredientButton.text.Contains("1")) alchemyInventory.Remove(ingredientButton);
+        else
+            ingredientButton.text = Regex.Replace(ingredientButton.text, @"\d+", match =>
+            {
+                int number = int.Parse(match.Value); // Convert found number to int
+                return (number - 1).ToString(); // Decrement and replace
+            });
     }
     private void ShowElementToggles(VisualElement panel)
     {
-        List<Elements> elementsList = Enum.GetValues(typeof(Elements)).Cast<Elements>().ToList();
-
-        foreach (Elements element in elementsList)
+        ShowUI(panel);
+        if (!elementsGenerated)
         {
-            Toggle elementToggle = new Toggle { text = element.ToString() };
-            panel.Add(elementToggle);
-            elementToggle.RegisterCallback<ClickEvent>(e => ToggleSelectedElement(element));
+            elementsGenerated = true;
+            List<Elements> elementsList = Enum.GetValues(typeof(Elements)).Cast<Elements>().ToList();
+            foreach (Elements element in elementsList)
+            {
+                Toggle elementToggle = new Toggle { text = element.ToString() };
+                panel.Add(elementToggle);
+                elementToggle.RegisterCallback<ClickEvent>(e => ToggleSelectedElement(element));
+            }
         }
+
     }
+
     private void ClearCraftingSelection()
     {
         selectedElements = new List<Elements>();
@@ -234,7 +304,16 @@ public class AlchemyBenchUI : MonoBehaviour
 
     private void ClearPanel(VisualElement panel)
     {
-        panel.Clear();
+        List<VisualElement> toRemove = new List<VisualElement>();
+
+        foreach (var child in panel.Children())
+        {
+            toRemove.Add(child);
+        }
+        foreach (var child in toRemove)
+        {
+            panel.Remove(child);
+        }
     }
     //TODO: clear panel / visual element 
 

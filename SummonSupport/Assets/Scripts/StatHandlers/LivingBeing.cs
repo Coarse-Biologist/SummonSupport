@@ -78,13 +78,21 @@ public abstract class LivingBeing : MonoBehaviour
         if (!BattleCries.Contains(newBattleCry)) BattleCries.Add(newBattleCry);
     }
 
+    #endregion
+
+    #region Resource Control
+
+    public void RestoreResources()
+    {
+        CurrentHP = MaxHP;
+        CurrentPower = MaxPower;
+    }
+
+    #endregion
     public void GainAffinity(Elements element, int amount)
     {
         Affinities[element].Set(amount + Affinities[element].Get());
     }
-
-
-    #endregion
 
     #region Affinity handling
     public void SetColor(float[] rgbaValues)
@@ -95,8 +103,6 @@ public abstract class LivingBeing : MonoBehaviour
         float a = rgbaValues[3];
         spriteRenderer.color = new Color(r, g, b, a);
     }
-
-
 
     public void AlterColorByAffinity()
     {
@@ -117,14 +123,25 @@ public abstract class LivingBeing : MonoBehaviour
             {
                 SetColor(new float[4] { 0.9f, 0.7f, 0.0f, 1.0f });
             }
-            if (str.Contains("Light") || str.Contains("Radiation"))
+            if (str.Contains("Light") || str.Contains("Electricity"))
             {
                 SetColor(new float[4] { 0.85f, 0.85f, 0.0f, 1.0f });
+            }
+            if (str.Contains("Heat") || str.Contains("Radiation"))
+            {
+                SetColor(new float[4] { 1f, 0f, 0.0f, 1.0f });
+            }
+            if (str.Contains("Psychic") || str.Contains("Poison"))
+            {
+                SetColor(new float[4] { 0.5f, 0f, .5f, 1.0f });
+            }
+            if (str.Contains("Fungi") || str.Contains("Earth"))
+            {
+                SetColor(new float[4] { .4f, 0.4f, .4f, 1.0f });
             }
         }
         else Logging.Info($"{strongestElement} has less than 50");
     }
-
 
     public void SetAffinityDict()
     {
