@@ -12,7 +12,10 @@ public class MinionStats : LivingBeing
 
     new public void AlterHP(int value)
     {
-        CurrentHP -= value;
+        CurrentHP += value;
+        if (CurrentHP <= 0) isDead = true;
+        if (CurrentHP > MaxHP) CurrentHP = MaxHP;
+
         ED.hpChanged?.Invoke(gameObject);
     }
     public void SetCommand(MinionCommands command)

@@ -40,6 +40,7 @@ public abstract class LivingBeing : MonoBehaviour
 
     [Header("Other")]
     public int XP_OnDeath = 3;
+    protected bool isDead = false;
 
 
     public Dictionary<Elements, (Func<int> Get, Action<int> Set)> Affinities { private set; get; } = new Dictionary<Elements, (Func<int> Get, Action<int> Set)>();

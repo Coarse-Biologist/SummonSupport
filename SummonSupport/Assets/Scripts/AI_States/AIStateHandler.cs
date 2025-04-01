@@ -21,7 +21,6 @@ public class AIStateHandler : MonoBehaviour
     public Vector2 lastSeenLoc;
 
     private Vector2 startLocation;
-    private bool hasCommand = false;
 
 
     public void Awake()
@@ -32,20 +31,19 @@ public class AIStateHandler : MonoBehaviour
         else targetMask = LayerMask.GetMask("Summon", "Player");
 
         Debug.Log($"setting target mask for {gameObject.GetComponent<LivingBeing>().Name} to {targetMask}");
-
         currentState = GetComponentInChildren<AIPeacefulState>();
         livingBeing = GetComponent<LivingBeing>();
     }
 
     void Update()
     {
-
         RunStateMachine();
     }
 
     private void RunStateMachine()
     {
-        if (gameObject.CompareTag("Minion") && GetComponent<MinionStats>().CurrentCommand == MinionCommands.None)
+        //gameObject.CompareTag("Minion") && 
+        if (GetComponent<MinionStats>().CurrentCommand == MinionCommands.None)
         {
             AIState nextState = currentState?.RunCurrentState();
             //Debug.Log($"current state = {currentState}. next state = {nextState}");
