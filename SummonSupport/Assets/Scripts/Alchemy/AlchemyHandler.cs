@@ -16,6 +16,7 @@ public class AlchemyHandler : MonoBehaviour
     public GameObject minionPrefab;
     public UnityEvent<GameObject> requestInstantiation = new UnityEvent<GameObject>();
     [SerializeField] public List<GameObject> activeMinions = new List<GameObject>();
+    public UnityEvent<GameObject> newMinionAdded;
 
     #endregion
 
@@ -129,7 +130,11 @@ public class AlchemyHandler : MonoBehaviour
     #region set Class Variable functions
     private void AddActiveMinion(GameObject minion)
     {
-        if (!activeMinions.Contains(minion)) activeMinions.Add(minion);
+        if (!activeMinions.Contains(minion))
+        {
+            activeMinions.Add(minion);
+            newMinionAdded?.Invoke(minion);
+        }
     }
     #endregion
 

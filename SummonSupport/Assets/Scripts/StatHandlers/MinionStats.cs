@@ -9,21 +9,21 @@ public class MinionStats : LivingBeing
 
     [SerializeField] public MinionCommands CurrentCommand = MinionCommands.None;
 
+    private EventDeclarer ED;
 
-
-    void Start()
+    new public void AlterHP(int value)
     {
-
+        CurrentHP -= value;
+        ED.hpChanged?.Invoke(gameObject);
     }
-
-    void Update()
-    {
-
-    }
-
     public void SetCommand(MinionCommands command)
     {
         CurrentCommand = command;
+    }
+    void Awake()
+    {
+        ED = FindFirstObjectByType<EventDeclarer>();
+
     }
 }
 

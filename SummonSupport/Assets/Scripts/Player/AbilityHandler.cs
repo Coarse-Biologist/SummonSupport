@@ -1,37 +1,40 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections.Generic;
+
 using NUnit.Framework.Interfaces;
 using UnityEngine.UIElements;
 using UnityEditor.Callbacks;
-// using UnityEngine.Events;
+using UnityEngine.Events;
 
 public class AbilityHandler : MonoBehaviour
 {
     [SerializeField] List<Ability> abilities;
     PlayerInputActions inputActions;
+    public UnityEvent<GameObject> hpChanged;
+
 
     private void Awake()
     {
         inputActions = new PlayerInputActions();
         abilities ??= new List<Ability>();
-        
+
     }
-    
+
     private void OnEnable()
     {
         inputActions.Player.Ability1.performed += OnAbility1;
         inputActions.Player.Ability2.performed += OnAbility2;
         inputActions.Enable();
     }
-    
+
     private void OnDisable()
     {
         inputActions.Player.Ability1.performed -= OnAbility1;
         inputActions.Player.Ability2.performed -= OnAbility2;
         inputActions.Disable();
     }
-    
+
     private void OnAbility1(InputAction.CallbackContext context)
     {
         if (abilities.Count > 0)

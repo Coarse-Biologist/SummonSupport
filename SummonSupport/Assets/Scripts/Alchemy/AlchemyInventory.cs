@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
+
 namespace Alchemy
 {
     public static class AlchemyInventory
@@ -57,7 +58,7 @@ namespace Alchemy
         {
             foreach (KeyValuePair<AlchemyLoot, int> kvp in usedIngredients)
             {
-                if (ingredients[kvp.Key] > 0) AlterIngredientNum(kvp.Key,  - kvp.Value);
+                if (ingredients[kvp.Key] > 0) AlterIngredientNum(kvp.Key, -kvp.Value);
             }
         }
         #endregion

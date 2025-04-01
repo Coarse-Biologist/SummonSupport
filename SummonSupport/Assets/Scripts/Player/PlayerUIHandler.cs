@@ -1,41 +1,62 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
+using UnityEngine.Events;
 
 public class PlayerUIHandler : MonoBehaviour
 {
+
     [SerializeField] public UIDocument uiDoc;
     private VisualElement root;
     private VisualElement minionHPBars;
     private VisualElement playerUI;
 
-    [SerializeField] List<GameObject> minions = new List<GameObject>();
+    [SerializeField] public List<GameObject> minions;// = new List<GameObject>();
+    private Dictionary<GameObject, ProgressBar> minionHPDict;
+    private EventDeclarer DM;
+    private AlchemyHandler alchemyHandler;
 
     void Awake()
     {
+        DM = FindFirstObjectByType<EventDeclarer>();
+        alchemyHandler = FindFirstObjectByType<AlchemyHandler>();
         root = uiDoc.rootVisualElement;
         playerUI = root.Q<VisualElement>("MainUI");
         minionHPBars = playerUI.Q<VisualElement>("MinionBarSlots");
-        foreach (GameObject minion in minions)
-        {
-            AddMinionHP(minion);
-        }
     }
 
-    public ProgressBar AddMinionHP(GameObject minion)
+    void OnEnable()
     {
-        ProgressBar minionHP = minionHPBars.Q<ProgressBar>("MinionBar");
+        DM.hpChanged.AddListener(SetMinionHP);
+        alchemyHandler.newMinionAdded.AddListener(AddMinionHP);
+    }
+
+    void OnDisable()
+    {
+        DM.hpChanged.RemoveListener(SetMinionHP);
+        alchemyHandler.newMinionAdded.RemoveListener(AddMinionHP);
+
+    }
+
+    public void AddMinionHP(GameObject minion)
+    {
+        ProgressBar minionHP = new ProgressBar();
+        minionHPDict.TryAdd(minion, minionHP);
         minionHP.title = $"{minion.GetComponent<LivingBeing>().Name} HP";
         minionHPBars.Add(minionHP);
-        return minionHP;
+
     }
     private ProgressBar GetMinionsHPBar(GameObject minion)
     {
-        return null;
+        return minionHPDict[minion];
     }
 
-    public void AlterSummonHP(ProgressBar minionHPbar, int value)
+    public void SetMinionHP(GameObject minion)
     {
-        minionHPbar.value = minionHPbar.value += value;
+        ProgressBar hpBar = GetMinionsHPBar(minion);
+        if (hpBar != null)
+        {
+            hpBar.value = minion.GetComponent<LivingBeing>().CurrentHP;
+        }
     }
 }

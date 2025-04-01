@@ -3,9 +3,11 @@ using System.Linq;
 using Alchemy;
 using UnityEngine;
 using System;
+using UnityEngine.Events;
 
 public abstract class LivingBeing : MonoBehaviour
 {
+
     [Header("String Stats")]
     [SerializeField] public string Name;
     [SerializeField] public string Description;
@@ -88,10 +90,20 @@ public abstract class LivingBeing : MonoBehaviour
         CurrentPower = MaxPower;
     }
 
+    public void AlterHP(int amount)
+    {
+        CurrentHP -= amount;
+
+    }
+
     #endregion
     public void GainAffinity(Elements element, int amount)
     {
-        Affinities[element].Set(amount + Affinities[element].Get());
+        if (Affinities.TryGetValue(element, out (Func<int> Get, Action<int> Set) func))
+        {
+            Affinities[element].Set(amount + Affinities[element].Get());
+        }
+
     }
 
     #region Affinity handling
@@ -171,6 +183,7 @@ public abstract class LivingBeing : MonoBehaviour
         GetComponent<Rigidbody2D>().mass = Mass;
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         SetAffinityDict();
+
     }
     void FixedUpdate()
     {

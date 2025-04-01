@@ -623,8 +623,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 571486166f79d9c428d208f9cbf8aaae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minionPrefab: {fileID: 5084060229410023299, guid: 683a49fc796b0374dad199178e70ee42,
-    type: 3}
+  minionPrefab: {fileID: 0}
   requestInstantiation:
     m_PersistentCalls:
       m_Calls:
@@ -640,8 +639,10 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 1
-  activeMinions:
-  - {fileID: 1957334805}
+  activeMinions: []
+  newMinionAdded:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &1708952192
 GameObject:
   m_ObjectHideFlags: 0
@@ -6582,8 +6583,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1724141746}
-  - component: {fileID: 1724141745}
   - component: {fileID: 1724141747}
+  - component: {fileID: 1724141748}
   m_Layer: 0
   m_Name: LevelManagerObj
   m_TagString: Untagged
@@ -6591,18 +6592,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1724141745
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1724141744}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5df001490c3320840a09771ac4e1dd41, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &1724141746
 Transform:
   m_ObjectHideFlags: 0
@@ -6630,6 +6619,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99d4ca7f9f44bfe48bd661eedb5bce23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1724141748
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1724141744}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5df001490c3320840a09771ac4e1dd41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hpChanged:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &1957334805 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4709292885025742429, guid: 92bce7f3a3d5b5e41b7b4c0606159b86,
