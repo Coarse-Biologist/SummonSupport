@@ -9,7 +9,6 @@ public class MinionStats : LivingBeing
 
     [SerializeField] public MinionCommands CurrentCommand = MinionCommands.None;
 
-    private EventDeclarer ED;
 
     new public void AlterHP(int value)
     {
@@ -20,11 +19,7 @@ public class MinionStats : LivingBeing
     {
         CurrentCommand = command;
     }
-    void Awake()
-    {
-        ED = FindFirstObjectByType<EventDeclarer>();
 
-    }
 }
 
 

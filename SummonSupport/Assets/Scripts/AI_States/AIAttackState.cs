@@ -7,7 +7,7 @@ public class AIObedienceState : AIState
     private AIStateHandler stateHandler;
     private AIChaseState chaseState;
     private AIPeacefulState peaceState;
-    public Rigidbody2D rb;
+    private Rigidbody2D rb;
     private MinionCommands currentCommand;
 
 

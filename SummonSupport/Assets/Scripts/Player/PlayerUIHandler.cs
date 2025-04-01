@@ -12,7 +12,7 @@ public class PlayerUIHandler : MonoBehaviour
     private VisualElement playerUI;
 
     [SerializeField] public List<GameObject> minions;// = new List<GameObject>();
-    private Dictionary<GameObject, ProgressBar> minionHPDict;
+    private Dictionary<GameObject, ProgressBar> minionHPDict = new Dictionary<GameObject, ProgressBar>();
     private EventDeclarer DM;
     private AlchemyHandler alchemyHandler;
 

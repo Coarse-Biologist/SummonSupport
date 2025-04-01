@@ -623,7 +623,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 571486166f79d9c428d208f9cbf8aaae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minionPrefab: {fileID: 0}
+  minionPrefab: {fileID: 5084060229410023299, guid: 455de36b0d0adad488a1205a4108d4cd,
+    type: 3}
   requestInstantiation:
     m_PersistentCalls:
       m_Calls:

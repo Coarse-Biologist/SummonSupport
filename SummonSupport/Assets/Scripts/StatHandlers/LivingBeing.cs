@@ -3,7 +3,6 @@ using System.Linq;
 using Alchemy;
 using UnityEngine;
 using System;
-using UnityEngine.Events;
 
 public abstract class LivingBeing : MonoBehaviour
 {
@@ -52,6 +51,15 @@ public abstract class LivingBeing : MonoBehaviour
 
     private float[] rgbaValues = new float[4] { 0f, 0f, 0f, 0f };
     private SpriteRenderer spriteRenderer;
+    protected EventDeclarer ED;
+    void Awake()
+    {
+        GetComponent<Rigidbody2D>().mass = Mass;
+        spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+        SetAffinityDict();
+        Debug.Log($"{Affinities.Keys.Count}");
+        ED = FindFirstObjectByType<EventDeclarer>();
+    }
 
 
     #region Stat Upgrades
@@ -99,11 +107,11 @@ public abstract class LivingBeing : MonoBehaviour
     #endregion
     public void GainAffinity(Elements element, int amount)
     {
+        Logging.Info($"gain element function has been called");
         if (Affinities.TryGetValue(element, out (Func<int> Get, Action<int> Set) func))
         {
             Affinities[element].Set(amount + Affinities[element].Get());
         }
-
     }
 
     #region Affinity handling
@@ -118,6 +126,7 @@ public abstract class LivingBeing : MonoBehaviour
 
     public void AlterColorByAffinity()
     {
+        Debug.Log($"{Affinities.Keys.Count}");
         Elements strongestElement = Affinities.OrderByDescending(a => a.Value.Get()).First().Key;
 
         string str = strongestElement.ToString();
@@ -178,13 +187,7 @@ public abstract class LivingBeing : MonoBehaviour
     }
 
     #endregion
-    void Awake()
-    {
-        GetComponent<Rigidbody2D>().mass = Mass;
-        spriteRenderer = GetComponentInChildren<SpriteRenderer>();
-        SetAffinityDict();
 
-    }
     void FixedUpdate()
     {
 
