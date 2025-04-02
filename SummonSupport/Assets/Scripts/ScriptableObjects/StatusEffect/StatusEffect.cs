@@ -20,9 +20,8 @@ public class StatusEffect : ScriptableObject
     {
         LivingBeing livingBeing = target.GetComponent<LivingBeing>();
         if (livingBeing == null)
-            return;
-        
-        
+            return;        
+
         switch (Type)
         {
         case StatusEffectType.DrainRessourceOverTime:
@@ -38,21 +37,15 @@ public class StatusEffect : ScriptableObject
     }
 
     private IEnumerator DrainRessourceOverTime(LivingBeing target)
-{
-    // Berechne, wie oft die Tickrate während der Dauer ausgelöst werden soll
-    float timePassed = 0f;
-    
-    while (timePassed < Duration)
     {
-        // Führe den Schaden aus
-        Logging.Info("Attribute: " + Attribute + "\nValue: " + Value);
-        target.ChangeAttribute(Attribute, -Value);
+        float timePassed = 0f;
         
-        // Warten für die Tickrate (so oft wird die Funktion aufgerufen)
-        yield return new WaitForSeconds(TickRateSeconds);
-        
-        // Zeit fortschreiten lassen
-        timePassed += TickRateSeconds;
+        while (timePassed < Duration)
+        {
+            Logging.Info("Attribute: " + Attribute + "\nValue: " + Value);
+            target.ChangeAttribute(Attribute, -Value);
+            yield return new WaitForSeconds(TickRateSeconds);
+            timePassed += TickRateSeconds;
+        }
     }
-}
 }

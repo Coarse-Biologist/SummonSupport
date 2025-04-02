@@ -51,7 +51,6 @@ public abstract class LivingBeing : MonoBehaviour
         Setter
     }
 
-
     private float[] rgbaValues = new float[4] { 0f, 0f, 0f, 0f };
     private SpriteRenderer spriteRenderer;
 

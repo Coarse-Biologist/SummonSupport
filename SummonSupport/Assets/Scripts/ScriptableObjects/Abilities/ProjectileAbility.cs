@@ -20,7 +20,7 @@ public class ProjectileAbility : Ability
         Activate(user, spawnPoint, null);
     }
     public void Activate(GameObject user, GameObject spawnPoint, Transform direction = null)
-    {
+    { //TODO: clean up this mess .. 
     Logging.Info($"{user.name} casted a {Name}");
     GameObject projectile = Instantiate(Projectile, spawnPoint.transform.position, Quaternion.identity);
     Rigidbody2D rb = projectile.GetComponent<Rigidbody2D>();
