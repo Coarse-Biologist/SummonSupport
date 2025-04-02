@@ -233,10 +233,12 @@ MonoBehaviour:
   - Fire and brimstone!..
   - I'll kill your shining lights!
   - burning skin and bubbling knuckles!
-  MaxHP: 10
-  CurrentHP: 10
-  MaxPower: 10
-  CurrentPower: 10
+  <MaxHP>k__BackingField: 500
+  <TemporaryMaxHP>k__BackingField: 0
+  <CurrentHP>k__BackingField: 500
+  <MaxPower>k__BackingField: 200
+  <TemporaryMaxPower>k__BackingField: 0
+  <CurrentPower>k__BackingField: 200
   XPonDeath: 3
   Abilties: []
   Speed: 20

@@ -11,7 +11,7 @@ public class MinionStats : LivingBeing
 
     void Start()
     {
-
+        base.Start();
     }
 
     void Update()

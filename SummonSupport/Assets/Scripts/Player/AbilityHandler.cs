@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using NUnit.Framework.Interfaces;
 using UnityEngine.UIElements;
 using UnityEditor.Callbacks;
-// using UnityEngine.Events;
 
 public class AbilityHandler : MonoBehaviour
 {
@@ -13,38 +12,45 @@ public class AbilityHandler : MonoBehaviour
 
     private void Awake()
     {
-        inputActions = new PlayerInputActions();
-        abilities ??= new List<Ability>();
-        
+        inputActions ??= new PlayerInputActions();       
     }
     
     private void OnEnable()
     {
-        inputActions.Player.Ability1.performed += OnAbility1;
-        inputActions.Player.Ability2.performed += OnAbility2;
+        RegisterInputEvents(true);
         inputActions.Enable();
     }
-    
+
     private void OnDisable()
     {
-        inputActions.Player.Ability1.performed -= OnAbility1;
-        inputActions.Player.Ability2.performed -= OnAbility2;
+        RegisterInputEvents(false);
         inputActions.Disable();
     }
-    
-    private void OnAbility1(InputAction.CallbackContext context)
+
+    private void RegisterInputEvents(bool register)
     {
+        if (register)
+        {
+            foreach (var action in inputActions.Player.Get().actions)
+        {
+            if (action.name.StartsWith("Ability"))
+            {
+                action.performed += OnAbility;
+            }
+        }
+        }
+        else
+        {
+            inputActions.Player.Ability1.performed -= OnAbility;
+            inputActions.Player.Ability2.performed -= OnAbility;
+        }
+    }
+    private void OnAbility(InputAction.CallbackContext context)
+    {
+        
         if (abilities.Count > 0)
         {
             CastAbility(abilities[0]);
-        }
-    }
-
-    private void OnAbility2(InputAction.CallbackContext context)
-    {
-        if (abilities.Count > 1)
-        {
-            CastAbility(abilities[1]);
         }
     }
     void CastAbility(Ability ability)
@@ -62,7 +68,7 @@ public class AbilityHandler : MonoBehaviour
     }
     void HandleProjectile(ProjectileAbility ability)
     {
-        ability.Activate(gameObject);
+        ability.Activate(gameObject, gameObject);
     }
 }
 
