@@ -23,10 +23,10 @@ public abstract class LivingBeing : MonoBehaviour
     [field: SerializeField] public int CurrentPower { get; private set; }
 
     [Header("Resource Stats")]
-    [SerializeField] public int MaxHP;
-    [SerializeField] public int CurrentHP;
-    [SerializeField] public int MaxPower;
-    [SerializeField] public int CurrentPower;
+    //[SerializeField] public int CurrentHP;
+    //[SerializeField] public int MaxHP;
+    //[SerializeField] public int MaxPower;
+    //[SerializeField] public int CurrentPower;
 
     #region
 
@@ -81,11 +81,6 @@ public abstract class LivingBeing : MonoBehaviour
     Dictionary<AttributeType, Dictionary<AccessType, Delegate>> dictAttributes;
     #endregion
 
-    void Awake()
-    {
-        GetComponent<Rigidbody2D>().mass = Mass;
-        spriteRenderer = GetComponentInChildren<SpriteRenderer>();
-    }
 
     protected void Start()
     {
@@ -305,7 +300,6 @@ public abstract class LivingBeing : MonoBehaviour
             };
     }
 
-#endregion
 
     void FixedUpdate()
     {

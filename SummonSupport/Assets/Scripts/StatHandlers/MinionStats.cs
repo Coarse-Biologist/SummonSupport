@@ -14,15 +14,15 @@ public class MinionStats : LivingBeing
         base.Start();
     }
 
-    void Update()
+    //void Update()
     [SerializeField] public MinionCommands CurrentCommand { private set; get; } = MinionCommands.None;
 
 
     new public void AlterHP(int value)
     {
-        CurrentHP += value;
+        SetAttribute(AttributeType.CurrentHitpoints, value);
         if (CurrentHP <= 0) isDead = true;
-        if (CurrentHP > MaxHP) CurrentHP = MaxHP;
+        if (CurrentHP > MaxHP) SetAttribute(AttributeType.MaxHitpoints, value);
 
         ED.hpChanged?.Invoke(gameObject);
     }
