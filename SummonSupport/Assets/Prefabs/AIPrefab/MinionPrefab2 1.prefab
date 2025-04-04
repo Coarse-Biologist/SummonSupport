@@ -95,7 +95,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5cdca41656d1276448ea3b6c5545002f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rb: {fileID: 0}
+  currentCommand: 0
 --- !u!50 &4457003908298111917
 Rigidbody2D:
   serializedVersion: 5
@@ -145,9 +145,24 @@ MonoBehaviour:
   CurrentHP: 10
   MaxPower: 10
   CurrentPower: 10
-  XPonDeath: 3
+  Cold: 0
+  Water: 0
+  Earth: 0
+  Heat: 0
+  Air: 0
+  Electricity: 0
+  Poison: 0
+  Acid: 0
+  Bacteria: 0
+  Fungi: 0
+  Plant: 0
+  Virus: 0
+  Radiation: 0
+  Light: 0
+  Psychic: 0
+  XP_OnDeath: 3
   Abilties: []
-  Speed: 20
+  Speed: 0.4
   Mass: 1
   Loot: 
 --- !u!58 &5449713164746072181

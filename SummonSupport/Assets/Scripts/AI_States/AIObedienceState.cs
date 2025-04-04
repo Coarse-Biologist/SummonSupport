@@ -89,7 +89,7 @@ public class AIObedienceState : AIState
         if (direction.sqrMagnitude > 10)
         {
             Logging.Info($"Squaremagnitude of distance to target is still pretty far away i'll keep moving");
-            rb.linearVelocity = direction * stateHandler.livingBeing.Speed * 10 * Time.fixedDeltaTime;
+            rb.linearVelocity = direction * stateHandler.livingBeing.Speed;
             return States.Obedience;
         }
         else

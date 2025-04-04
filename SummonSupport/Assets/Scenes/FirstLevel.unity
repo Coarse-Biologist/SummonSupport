@@ -8237,6 +8237,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4100082497577376607, guid: 92bce7f3a3d5b5e41b7b4c0606159b86,
         type: 3}
+      propertyPath: Speed
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4100082497577376607, guid: 92bce7f3a3d5b5e41b7b4c0606159b86,
+        type: 3}
       propertyPath: Water
       value: 50
       objectReference: {fileID: 0}
@@ -8414,7 +8419,7 @@ PrefabInstance:
     - target: {fileID: 4139226132603179242, guid: 2e9e6d4beecaf1a49b78f33f4cfb351c,
         type: 3}
       propertyPath: Speed
-      value: 40
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5425751847151216936, guid: 2e9e6d4beecaf1a49b78f33f4cfb351c,
         type: 3}
