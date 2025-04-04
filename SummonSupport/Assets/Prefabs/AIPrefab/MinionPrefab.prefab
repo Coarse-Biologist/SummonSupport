@@ -214,6 +214,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5cdca41656d1276448ea3b6c5545002f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentCommand: 0
 --- !u!114 &1997056882071212926
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -236,11 +237,11 @@ MonoBehaviour:
   CurrentHP: 10
   MaxPower: 10
   CurrentPower: 10
-  Cold: 2
-  Water: 2
-  Earth: 2
-  Heat: 2
-  Air: 100
+  Cold: 0
+  Water: 0
+  Earth: 0
+  Heat: 0
+  Air: 0
   Electricity: 0
   Poison: 0
   Acid: 0
@@ -253,7 +254,6 @@ MonoBehaviour:
   Psychic: 0
   XP_OnDeath: 3
   Abilties: []
-  Speed: 20
+  Speed: 200
   Mass: 1
   Loot: 
-  CurrentCommand: 0

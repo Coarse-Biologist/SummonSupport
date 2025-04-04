@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 
 public class AIStateHandler : MonoBehaviour
 {
@@ -17,6 +18,8 @@ public class AIStateHandler : MonoBehaviour
     [SerializeField] public AIState chaseState { private set; get; }
     [SerializeField] public AIState obedienceState { private set; get; }
     [SerializeField] public LivingBeing livingBeing { private set; get; }
+    [SerializeField] public MinionStats minionStats { private set; get; }
+
 
     public Vector2 lastSeenLoc;
 
@@ -32,7 +35,10 @@ public class AIStateHandler : MonoBehaviour
 
         Debug.Log($"setting target mask for {gameObject.GetComponent<LivingBeing>().Name} to {targetMask}");
         currentState = GetComponentInChildren<AIPeacefulState>();
+        obedienceState = GetComponent<AIObedienceState>();
         livingBeing = GetComponent<LivingBeing>();
+        minionStats = GetComponent<MinionStats>();
+
     }
 
     void Update()
@@ -42,8 +48,10 @@ public class AIStateHandler : MonoBehaviour
 
     private void RunStateMachine()
     {
+        //Logging.Info($"Minion command state = {GetComponent<MinionStats>().CurrentCommand}");
+
         //gameObject.CompareTag("Minion") && 
-        if (GetComponent<MinionStats>().CurrentCommand == MinionCommands.None)
+        if (minionStats.CurrentCommand == MinionCommands.None)
         {
             AIState nextState = currentState?.RunCurrentState();
             //Debug.Log($"current state = {currentState}. next state = {nextState}");
@@ -51,8 +59,20 @@ public class AIStateHandler : MonoBehaviour
             {
                 SwitchToNextState(nextState);
             }
+            else Debug.Log("nextState state was null");
         }
-        else SwitchToNextState(obedienceState);
+        else
+        {
+            //Logging.Info($"Minion has a command to follow");
+            SwitchToNextState(obedienceState);
+            AIState nextState = obedienceState.RunCurrentState();
+            if (nextState != null)
+            {
+                SwitchToNextState(nextState);
+            }
+            else Debug.Log("next state was null");
+
+        }
     }
 
     private void SwitchToNextState(AIState nextState)

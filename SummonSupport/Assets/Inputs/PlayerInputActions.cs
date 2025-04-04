@@ -180,6 +180,15 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""CommandMinion"",
+                    ""type"": ""Button"",
+                    ""id"": ""383dc72a-6e30-4d8f-9c81-f0d595ae43e6"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -336,6 +345,17 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""action"": ""LookDirection"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5301ccad-eb5e-4305-ae51-387629f30c8f"",
+                    ""path"": ""<Mouse>/middleButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""CommandMinion"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -354,6 +374,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         m_Player_Ability5 = m_Player.FindAction("Ability5", throwIfNotFound: true);
         m_Player_Ability6 = m_Player.FindAction("Ability6", throwIfNotFound: true);
         m_Player_LookDirection = m_Player.FindAction("LookDirection", throwIfNotFound: true);
+        m_Player_CommandMinion = m_Player.FindAction("CommandMinion", throwIfNotFound: true);
     }
 
     ~@PlayerInputActions()
@@ -444,6 +465,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Ability5;
     private readonly InputAction m_Player_Ability6;
     private readonly InputAction m_Player_LookDirection;
+    private readonly InputAction m_Player_CommandMinion;
     /// <summary>
     /// Provides access to input actions defined in input action map "Player".
     /// </summary>
@@ -495,6 +517,10 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Player/LookDirection".
         /// </summary>
         public InputAction @LookDirection => m_Wrapper.m_Player_LookDirection;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/CommandMinion".
+        /// </summary>
+        public InputAction @CommandMinion => m_Wrapper.m_Player_CommandMinion;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -551,6 +577,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @LookDirection.started += instance.OnLookDirection;
             @LookDirection.performed += instance.OnLookDirection;
             @LookDirection.canceled += instance.OnLookDirection;
+            @CommandMinion.started += instance.OnCommandMinion;
+            @CommandMinion.performed += instance.OnCommandMinion;
+            @CommandMinion.canceled += instance.OnCommandMinion;
         }
 
         /// <summary>
@@ -592,6 +621,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @LookDirection.started -= instance.OnLookDirection;
             @LookDirection.performed -= instance.OnLookDirection;
             @LookDirection.canceled -= instance.OnLookDirection;
+            @CommandMinion.started -= instance.OnCommandMinion;
+            @CommandMinion.performed -= instance.OnCommandMinion;
+            @CommandMinion.canceled -= instance.OnCommandMinion;
         }
 
         /// <summary>
@@ -702,5 +734,12 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnLookDirection(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "CommandMinion" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnCommandMinion(InputAction.CallbackContext context);
     }
 }

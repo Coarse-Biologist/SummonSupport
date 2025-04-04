@@ -42,6 +42,8 @@ public class PlayerMovement : MonoBehaviour
         inputActions.Player.Dash.performed += OnDash;
 
         inputActions.Player.LookDirection.performed += OnLook;
+
+        inputActions.Player.CommandMinion.performed += SendMinionCommandContext;
     }
 
     private void OnDisable()
@@ -54,6 +56,8 @@ public class PlayerMovement : MonoBehaviour
         inputActions.Player.Dash.performed -= OnDash;
 
         inputActions.Player.LookDirection.performed -= OnLook;
+
+        inputActions.Player.CommandMinion.performed -= SendMinionCommandContext;
 
         inputActions.Player.Disable();
     }
@@ -132,6 +136,14 @@ public class PlayerMovement : MonoBehaviour
         lockToggleable = true;
     }
     #endregion
+
+    private void SendMinionCommandContext(InputAction.CallbackContext context)
+    {
+        Logging.Info("Send minion command func triggered");
+        Vector2 worldPosition = mainCamera.ScreenToWorldPoint(lookInput);
+        Debug.DrawLine(new Vector3(0, 0, 0), worldPosition, Color.green);
+        CommandMinion.HandleCommand(worldPosition);
+    }
 
     private void Update()
     {
