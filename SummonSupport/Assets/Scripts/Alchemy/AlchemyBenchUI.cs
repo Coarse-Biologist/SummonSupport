@@ -37,9 +37,9 @@ public class AlchemyBenchUI : MonoBehaviour
     private List<Elements> selectedElements = new List<Elements>();
     private GameObject minionToUpgrade;
 
-    private bool crafting = false;
-    private bool upgrading = false;
-    private bool recycling = false;
+    //private bool crafting = false;
+    //private bool upgrading = false;
+    //private bool recycling = false;
     private bool elementsGenerated = false;
 
     #endregion

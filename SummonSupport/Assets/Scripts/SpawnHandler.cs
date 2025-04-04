@@ -28,11 +28,13 @@ public class SpawnHandler : MonoBehaviour
     #region  Enable Disable Event Listeners
     void OnEnable()
     {
-        alchemyHandler.requestInstantiation.AddListener(SpawnMinionAtWorkBench);
+        if (alchemyHandler != null)
+            alchemyHandler.requestInstantiation.AddListener(SpawnMinionAtWorkBench);
     }
     void OnDisable()
     {
-        alchemyHandler.requestInstantiation.RemoveListener(SpawnMinionAtWorkBench);
+        if (alchemyHandler != null)
+            alchemyHandler.requestInstantiation.RemoveListener(SpawnMinionAtWorkBench);
     }
 
     #endregion
