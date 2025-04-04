@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 using Alchemy;
 using System;
 using UnityEngine;
-using System;
+using NUnit.Framework;
 
 public abstract class LivingBeing : MonoBehaviour
 {
@@ -54,7 +54,7 @@ public abstract class LivingBeing : MonoBehaviour
 
 
     public Dictionary<Elements, (Func<int> Get, Action<int> Set)> Affinities { private set; get; } = new Dictionary<Elements, (Func<int> Get, Action<int> Set)>();
-
+    public Dictionary<AttributeType, (Func<int> Get, Action<int> Set)> AttributesDict = new Dictionary<AttributeType, (Func<int> Get, Action<int> Set)>();
     [SerializeField] public List<string> Abilties = new List<string>();
     // placeholder while we see what form the abilities will take
     [SerializeField] public float Speed;
@@ -277,6 +277,54 @@ public abstract class LivingBeing : MonoBehaviour
         }
         else Logging.Info($"{strongestElement} has less than 50");
     }
+    public void SetAttributeDict()
+    {
+        AttributesDict = new Dictionary<AttributeType, (Func<int> Get, Action<int> Set)>
+            {
+                { AttributeType.MaxHitpoints, (() => MaxHP, v => MaxHP = v) },
+                { AttributeType.TemporaryMaxHitpoints, (() => TemporaryMaxHP, v => TemporaryMaxHP = v) },
+                { AttributeType.CurrentHitpoints, (() => CurrentHP, v => CurrentHP = v) },
+                { AttributeType.MaxPower, (() => MaxPower, v => MaxPower = v) },
+                { AttributeType.TemporaryMaxPower, (() => TemporaryMaxPower, v => TemporaryMaxPower = v) },
+                { AttributeType.CurrentPower, (() => CurrentPower, v => CurrentPower = v) },
+            };
+    }
+    public void SetAttribute_Method2(AttributeType attribute, int value)
+    {
+        if (AttributesDict != null && AttributesDict.ContainsKey(attribute))
+        {
+            AttributesDict[attribute].Set(value);
+        }
+    }
+    public void ChangeAttribute_method2(AttributeType attributeType, int value, ValueType valueType = ValueType.Flat)
+    {
+        Logging.Info("Change Attribute: " + attributeType);
+        Logging.Info("Dict: " + dictAttributes);
+        if (valueType == ValueType.Percentage)
+            value = Mathf.RoundToInt(GetAttribute_Method2(attributeType) * (1 + (value / 100f)));
+        else if (valueType == ValueType.Flat)
+            value = GetAttribute_Method2(attributeType) + value;
+        Logging.Info("Changed Value: " + value);
+
+        if (AttributesDict != null && AttributesDict.ContainsKey(attributeType))
+        {
+            AttributesDict[attributeType].Set(AttributesDict[attributeType].Get() + value);
+        }
+        else
+        {
+            throw new Exception("Attribute not found or invalid setter");
+        }
+    }
+    public int GetAttribute_Method2(AttributeType attribute)
+    {
+        if (AttributesDict != null && AttributesDict.ContainsKey(attribute))
+        {
+            return AttributesDict[attribute].Get();
+        }
+        throw new Exception("Attribute not found");
+
+    }
+
 
     public void SetAffinityDict()
     {

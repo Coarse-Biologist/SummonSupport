@@ -9,10 +9,10 @@ public class MinionStats : LivingBeing
 
 
 
-    void Start()
-    {
-        base.Start();
-    }
+    //void Start()
+    //{
+    //    base.Start();
+    //}
 
     //void Update()
     [SerializeField] public MinionCommands CurrentCommand { private set; get; } = MinionCommands.None;
