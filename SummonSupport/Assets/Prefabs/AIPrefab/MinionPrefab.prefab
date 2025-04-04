@@ -233,26 +233,13 @@ MonoBehaviour:
   - Fire and brimstone!..
   - I'll kill your shining lights!
   - burning skin and bubbling knuckles!
-  MaxHP: 10
-  CurrentHP: 10
-  MaxPower: 10
-  CurrentPower: 10
-  Cold: 0
-  Water: 0
-  Earth: 0
-  Heat: 0
-  Air: 0
-  Electricity: 0
-  Poison: 0
-  Acid: 0
-  Bacteria: 0
-  Fungi: 0
-  Plant: 0
-  Virus: 0
-  Radiation: 0
-  Light: 0
-  Psychic: 0
-  XP_OnDeath: 3
+  <MaxHP>k__BackingField: 500
+  <TemporaryMaxHP>k__BackingField: 0
+  <CurrentHP>k__BackingField: 500
+  <MaxPower>k__BackingField: 200
+  <TemporaryMaxPower>k__BackingField: 0
+  <CurrentPower>k__BackingField: 200
+  XPonDeath: 3
   Abilties: []
   Speed: 200
   Mass: 1

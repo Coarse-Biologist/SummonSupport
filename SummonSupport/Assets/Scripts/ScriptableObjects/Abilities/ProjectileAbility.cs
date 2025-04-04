@@ -12,16 +12,25 @@ public class ProjectileAbility : Ability
     [field: SerializeField] public PiercingBehaviour    PiercingMode        { get; protected set; } //Pass through, break on first hit, break on x hit, 
     [field: SerializeField] public OnEventDo            OnHit               { get; protected set; } // nothing, effect, cast, 
     [field: SerializeField] public OnEventDo            OnDestroy           { get; protected set; } // nothing, effect, cast, 
+    [field: SerializeField] public StatusEffect         StatusEffect        { get; protected set; } 
 
 
-    public override void Activate(GameObject user)
+    public override void Activate(GameObject user, GameObject spawnPoint)
     {
-        Logging.Info($"{user.name} casted a {Name}");
-        GameObject projectile = Instantiate(Projectile, user.transform.position, Quaternion.identity);
-        Rigidbody2D rb = projectile.GetComponent<Rigidbody2D>();
-        Projectile projectileScript = projectile.GetComponent<Projectile>();
-        projectileScript.avoid = user;
-        rb.linearVelocity = user.transform.right * Speed;
-        Destroy(projectile, Lifetime);
+        Activate(user, spawnPoint, null);
+    }
+    public void Activate(GameObject user, GameObject spawnPoint, Transform direction = null)
+    { //TODO: clean up this mess .. 
+    Logging.Info($"{user.name} casted a {Name}");
+    GameObject projectile = Instantiate(Projectile, spawnPoint.transform.position, Quaternion.identity);
+    Rigidbody2D rb = projectile.GetComponent<Rigidbody2D>();
+    Projectile projectileScript = projectile.GetComponent<Projectile>();
+    projectileScript.statusEffect = StatusEffect;
+    projectileScript.avoid = user;
+    Vector2 moveDirection = direction != null ? direction.right : spawnPoint.transform.right;
+    rb.linearVelocity = moveDirection * Speed;
+    float angle = Mathf.Atan2(moveDirection.y, moveDirection.x) * Mathf.Rad2Deg;
+    projectile.transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
+    Destroy(projectile, Lifetime);
     }
 }
