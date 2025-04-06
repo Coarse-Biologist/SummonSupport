@@ -218,6 +218,11 @@ public abstract class LivingBeing : MonoBehaviour
             throw new Exception("Attribute not found or invalid setter");
         }
     }
+    public void SetName(string newName)
+    {
+        Name = newName;
+    }
+
     public void ChangeAttribute(AttributeType attributeType, int value, ValueType valueType = ValueType.Flat)
     {
         Logging.Info("Change Attribute: " + attributeType);
@@ -244,6 +249,8 @@ public abstract class LivingBeing : MonoBehaviour
         Elements strongestElement = Affinities.OrderByDescending(a => a.Value.Get()).First().Key;
 
         string str = strongestElement.ToString();
+        string nameBase = "Elemental";
+        SetName(strongestElement.ToString() + nameBase);
         if (Affinities[strongestElement].Get() > 50)
         {
             if (str.Contains("Cold") || str.Contains("Water"))
@@ -252,6 +259,7 @@ public abstract class LivingBeing : MonoBehaviour
             }
             if (str.Contains("Plant") || str.Contains("Bacteria"))
             {
+
                 SetColor(new float[4] { 0f, 1f, 0f, 1f });
             }
             if (str.Contains("Virus") || str.Contains("Acid"))
