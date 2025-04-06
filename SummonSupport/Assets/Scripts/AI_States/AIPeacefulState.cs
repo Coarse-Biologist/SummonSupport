@@ -9,13 +9,17 @@ public class AIPeacefulState : AIState
     private bool canSeeTarget;
     private AIStateHandler stateHandler;
     private AIChaseState chaseState;
-    private AIFollowState followState;
+    private GameObject player;
+    private bool closeToPlayer = false;
+    private Rigidbody2D rb;
 
 
     void Start()
     {
+        player = GameObject.FindGameObjectWithTag("Player");
         stateHandler = gameObject.GetComponent<AIStateHandler>();
         chaseState = gameObject.GetComponent<AIChaseState>();
+        rb = GetComponent<Rigidbody2D>();
         StartCoroutine(FOVRoutine());
     }
 
@@ -99,37 +103,29 @@ public class AIPeacefulState : AIState
         //Debug.Log("running peaceful state");
         if (canSeeTarget)
         {
-            //Debug.Log("Requesting use of chase")
+            Debug.Log("Requesting chase state");
             return chaseState;
         }
-        return followState;
+        else
+        {
+            Vector2 currentLoc = new Vector2(transform.position.x, transform.position.y);
+            Vector2 playerPos = player.transform.position;
+            Vector2 direction = playerPos - currentLoc;
+            if (!closeToPlayer && CompareTag("Minion") && (direction.sqrMagnitude > 4))
+            {
+                GoToPlayer();
+            }
+            return this;
+        }
+    }
+
+    public void GoToPlayer()
+    {
+        Vector2 currentLoc = new Vector2(transform.position.x, transform.position.y);
+        Vector2 playerPos = player.transform.position;
+        Vector2 direction = playerPos - currentLoc;
+
+        rb.linearVelocity = direction * stateHandler.livingBeing.Speed;
+
     }
 }
-
-//
-//if (gameObject.CompareTag("Minion")) // if attached to minion 
-//{
-//    if (detectedObject.CompareTag("Enemy")) // if detecting an enemy
-//    {
-//        stateHandler.lastSeenLoc = detectedObject.transform.position;
-//        return detectedObject; // return the enemy
-//    }
-//}
-//if (gameObject.CompareTag("Enemy"))
-//{
-//    Debug.Log("I am indeed an enemy");
-//    if (detectedObject.CompareTag("Player") || detectedObject.CompareTag("Minion"))
-//    {
-//        Debug.Log($"player or mion detected at {detectedObject.transform.position}");
-//        stateHandler.lastSeenLoc = detectedObject.transform.position;
-//        return detectedObject;
-//    }
-//    else return null;
-//}
-//else
-//{
-//    Debug.Log($"detected Object not a player");
-//
-//    GetComponent<AIChaseState>().Chase(stateHandler.lastSeenLoc);
-//    return null;
-//}

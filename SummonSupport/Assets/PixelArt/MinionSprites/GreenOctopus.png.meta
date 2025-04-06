@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 0846fd144290b3641a9291e6589ddc1c
+guid: 70e11f33c22889646a9e219415ad3339
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 7551833480356951093
-    second: Awakened_Snowman_0
+      213: 2693342364107205432
+    second: GreenOctopus_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,13 +100,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Awakened_Snowman_0
+      name: GreenOctopus_0
       rect:
         serializedVersion: 2
         x: 0
-        y: 0
+        y: 7
         width: 63
-        height: 64
+        height: 57
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 534f39ff9808dc860800000000000000
-      internalID: 7551833480356951093
+      spriteID: 83bee173c9ca06520800000000000000
+      internalID: 2693342364107205432
       vertices: []
       indices: 
       edges: []
@@ -135,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Awakened_Snowman_0: 7551833480356951093
+      GreenOctopus_0: 2693342364107205432
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

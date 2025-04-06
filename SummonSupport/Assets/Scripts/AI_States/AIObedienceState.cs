@@ -29,7 +29,7 @@ public class AIObedienceState : AIState
     public override AIState RunCurrentState()
     {
         //Logging.Info($"Current state = obedience. command = {currentCommand}. state  = {state}");
-        currentCommand = GetComponent<MinionStats>().CurrentCommand;
+        currentCommand = minionStats.CurrentCommand;
         States state = ObeyCommand(currentCommand);
         Logging.Info($"Current state = {state}. command = {currentCommand}");
 

@@ -13,7 +13,7 @@ public class AIStateHandler : MonoBehaviour
     [SerializeField] public int Cowardice = 0; // At what HP percentage a summon may try to retreat
     public LayerMask targetMask { private set; get; }
     public LayerMask obstructionMask { private set; get; }
-    private AIState currentState;
+    public AIState currentState;
     [SerializeField] public AIState peaceState { private set; get; }
     [SerializeField] public AIState chaseState { private set; get; }
     [SerializeField] public AIState obedienceState { private set; get; }
@@ -39,8 +39,6 @@ public class AIStateHandler : MonoBehaviour
         obedienceState = GetComponent<AIObedienceState>();
         livingBeing = GetComponent<LivingBeing>();
         minionStats = GetComponent<MinionStats>();
-
-
     }
 
     void Update()
@@ -50,9 +48,7 @@ public class AIStateHandler : MonoBehaviour
 
     private void RunStateMachine()
     {
-        //Logging.Info($"Minion command state = {GetComponent<MinionStats>().CurrentCommand}");
 
-        //gameObject.CompareTag("Minion") && 
         if (minionStats.CurrentCommand == MinionCommands.None)
         {
             AIState nextState = currentState?.RunCurrentState();
