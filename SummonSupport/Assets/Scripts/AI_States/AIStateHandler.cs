@@ -19,6 +19,7 @@ public class AIStateHandler : MonoBehaviour
     [SerializeField] public AIState obedienceState { private set; get; }
     [SerializeField] public LivingBeing livingBeing { private set; get; }
     [SerializeField] public MinionStats minionStats { private set; get; }
+    [SerializeField] public GameObject player { protected set; get; }
 
 
     public Vector2 lastSeenLoc;
@@ -31,13 +32,14 @@ public class AIStateHandler : MonoBehaviour
         startLocation = transform.position;
         obstructionMask = LayerMask.GetMask("Obstruction");
         if (gameObject.CompareTag("Minion")) targetMask = LayerMask.GetMask("Enemy");
-        else targetMask = LayerMask.GetMask("Summon", "Player");
+        else targetMask = LayerMask.GetMask("Minion", "Player");
 
         Debug.Log($"setting target mask for {gameObject.GetComponent<LivingBeing>().Name} to {targetMask}");
         currentState = GetComponentInChildren<AIPeacefulState>();
         obedienceState = GetComponent<AIObedienceState>();
         livingBeing = GetComponent<LivingBeing>();
         minionStats = GetComponent<MinionStats>();
+
 
     }
 

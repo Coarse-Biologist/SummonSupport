@@ -9,6 +9,7 @@ public class AIPeacefulState : AIState
     private bool canSeeTarget;
     private AIStateHandler stateHandler;
     private AIChaseState chaseState;
+    private AIFollowState followState;
 
 
     void Start()
@@ -38,7 +39,6 @@ public class AIPeacefulState : AIState
         }
         if (!visionBlocked && target != null)
         {
-            //Debug.Log($"I can see the target at {target.transform.position}");
             stateHandler.lastSeenLoc = target.transform.position;
             canSeeTarget = true;
             return true;
@@ -102,7 +102,7 @@ public class AIPeacefulState : AIState
             //Debug.Log("Requesting use of chase")
             return chaseState;
         }
-        return this;
+        return followState;
     }
 }
 
