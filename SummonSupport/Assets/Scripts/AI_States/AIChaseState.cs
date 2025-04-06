@@ -8,6 +8,7 @@ public class AIChaseState : AIState
 {
     private AIStateHandler stateHandler;
     private AIPeacefulState peaceState;
+    private AIObedienceState obedienceState;
     public GameObject targetEntity { private set; get; }
     private bool targetIsInRange;
     private Rigidbody2D rb;
@@ -19,6 +20,7 @@ public class AIChaseState : AIState
     {
         stateHandler = gameObject.GetComponent<AIStateHandler>();
         peaceState = gameObject.GetComponent<AIPeacefulState>();
+        obedienceState = gameObject.GetComponent<AIObedienceState>();
         //targetEntity = peaceState.detectedTargetObject;
 
         rb = gameObject.GetComponent<Rigidbody2D>();
@@ -34,6 +36,7 @@ public class AIChaseState : AIState
     public override AIState RunCurrentState()
     {
         //Debug.Log("Running chase state");
+        if (stateHandler.minionStats.CurrentCommand == MinionCommands.FocusTarget) targetEntity = obedienceState.commandTarget;
         if (targetEntity != null)
         {
             Vector2 targetLoc = targetEntity.transform.position;

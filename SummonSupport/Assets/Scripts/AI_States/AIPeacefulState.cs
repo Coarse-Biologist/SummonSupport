@@ -58,23 +58,6 @@ public class AIPeacefulState : AIState
             chaseState.SetTargetEntity(detectedObject);
             return detectedObject;
         }
-        //if (rangeChecks.Length > 1)
-        //{
-        //    float shortestDistance = 9999999999;
-        //    GameObject closest = null; ;
-        //    foreach (Collider2D objCollider in rangeChecks)
-        //    {
-        //        if (objCollider == null) continue;
-        //
-        //        float distance = Vector2.Distance(transform.position, objCollider.transform.position);
-        //        if (distance < shortestDistance)
-        //        {
-        //            shortestDistance = distance;
-        //            closest = objCollider.gameObject;
-        //        }
-        //    }
-        //    return closest;
-        //}
         else
         {
             return null;

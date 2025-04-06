@@ -55,9 +55,9 @@ public class AIObedienceState : AIState
         {
             Logging.Info($"Command is to focus a target and command target is not null");
             chaseState.SetTargetEntity(commandTarget);
-            state = States.Chase;
-            minionStats.SetCommand(MinionCommands.None);
-            commandTarget = null;
+            state = GoToLocation();
+            //minionStats.SetCommand(MinionCommands.None);
+            //commandTarget = null;
         }
         else
         {
@@ -85,6 +85,7 @@ public class AIObedienceState : AIState
     {
         Logging.Info($"Going to location {commandLoc}!!!!!");
         Vector2 currentLoc = new Vector2(transform.position.x, transform.position.y);
+        if (currentCommand == MinionCommands.FocusTarget) commandLoc = commandTarget.transform.position;
         Vector2 direction = commandLoc - currentLoc;
         if (direction.sqrMagnitude > 4)
         {
@@ -96,11 +97,9 @@ public class AIObedienceState : AIState
         {
             Logging.Info($"Square magnitude of distance to target is Close enough! ");
             minionStats.SetCommand(MinionCommands.None);
-            chaseState.SetTargetEntity(null); // is this good?
-
-
+            if (currentCommand == MinionCommands.GoTo) chaseState.SetTargetEntity(null); // is this good?
             //commandLoc = new Vector2(0, 0);
-            return States.Peace; // Is this good?...
+            return States.Chase; // Is this good?...
         }
 
     }
