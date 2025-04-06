@@ -28,7 +28,7 @@ public static class Logging
 
     public static void Info(string message)
     {
-        Log(message, LogLevel.Error);
+        Log(message, LogLevel.Info);
     }
 
     public static void Verbose(string message)

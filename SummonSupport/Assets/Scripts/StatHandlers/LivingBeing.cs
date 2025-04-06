@@ -15,20 +15,14 @@ public abstract class LivingBeing : MonoBehaviour
     [SerializeField] public List<string> BattleCries;
 
     [Header("Attributes - Ressources")]
-    [field: SerializeField] public int MaxHP { get; private set; }
-    [field: SerializeField] public int TemporaryMaxHP { get; private set; }
-    [field: SerializeField] public int CurrentHP { get; private set; }
-    [field: SerializeField] public int MaxPower { get; private set; }
-    [field: SerializeField] public int TemporaryMaxPower { get; private set; }
-    [field: SerializeField] public int CurrentPower { get; private set; }
+    [field: SerializeField] public int MaxHP                { get; private set; }
+    [field: SerializeField] public int TemporaryMaxHP       { get; private set; }
+    [field: SerializeField] public int CurrentHP            { get; private set; }
+    [field: SerializeField] public int MaxPower             { get; private set; }
+    [field: SerializeField] public int TemporaryMaxPower    { get; private set; }
+    [field: SerializeField] public int CurrentPower         { get; private set; }
 
-    [Header("Resource Stats")]
-    //[SerializeField] public int CurrentHP;
-    //[SerializeField] public int MaxHP;
-    //[SerializeField] public int MaxPower;
-    //[SerializeField] public int CurrentPower;
-
-    #region
+    #region Affinity Stats
 
     [Header("Affinity Stats")]
     [SerializeField] protected int Cold = 0;
@@ -49,16 +43,15 @@ public abstract class LivingBeing : MonoBehaviour
     #endregion
 
     [Header("Other")]
+    public List<string> statusEffects = new List<string>();
     public int XP_OnDeath = 3;
     protected bool isDead = false;
-
-
-    public Dictionary<Elements, (Func<int> Get, Action<int> Set)> Affinities { private set; get; } = new Dictionary<Elements, (Func<int> Get, Action<int> Set)>();
-    public Dictionary<AttributeType, (Func<int> Get, Action<int> Set)> AttributesDict = new Dictionary<AttributeType, (Func<int> Get, Action<int> Set)>();
+    public Dictionary<Elements,         (Func<int> Get, Action<int> Set)> Affinities        { private set; get; }   = new Dictionary<Elements,      (Func<int> Get, Action<int> Set)>();
+    public Dictionary<AttributeType,    (Func<int> Get, Action<int> Set)> AttributesDict    { private set; get; }   = new Dictionary<AttributeType, (Func<int> Get, Action<int> Set)>();
     [SerializeField] public List<string> Abilties = new List<string>();
-    // placeholder while we see what form the abilities will take
     [SerializeField] public float Speed;
     [SerializeField] public float Mass = 1;
+
 
     private enum AccessType
     {
@@ -69,24 +62,19 @@ public abstract class LivingBeing : MonoBehaviour
     private float[] rgbaValues = new float[4] { 0f, 0f, 0f, 0f };
     private SpriteRenderer spriteRenderer;
     protected EventDeclarer ED;
-    void Awake()
+
+    protected void Awake()
     {
         GetComponent<Rigidbody2D>().mass = Mass;
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
-        SetAffinityDict();
-        Debug.Log($"{Affinities.Keys.Count}");
+        InitializeAttributeDict();
+        InitializeAffinityDict();
+        Logging.Info($"{Affinities.Keys.Count}");
         ED = FindFirstObjectByType<EventDeclarer>();
     }
 
     Dictionary<AttributeType, Dictionary<AccessType, Delegate>> dictAttributes;
     #endregion
-
-
-    protected void Start()
-    {
-        Logging.Info("Starting Living being");
-        InitializeAttributeDictionary();
-    }
 
     #region Stat Upgrades
 
@@ -127,7 +115,6 @@ public abstract class LivingBeing : MonoBehaviour
     public void AlterHP(int amount)
     {
         CurrentHP -= amount;
-
     }
 
     #endregion
@@ -166,81 +153,47 @@ public abstract class LivingBeing : MonoBehaviour
     #endregion
 
     #region Attribute Handling
-    void InitializeAttributeDictionary()
+
+    public int GetAttribute(AttributeType attribute)
     {
-        Logging.Info("Initializing Attribute Dictionary!");
-        dictAttributes = new Dictionary<AttributeType, Dictionary<AccessType, Delegate>>
+        if (AttributesDict != null && AttributesDict.ContainsKey(attribute))
         {
-            { AttributeType.MaxHitpoints, new Dictionary<AccessType, Delegate>
-                {
-                    { AccessType.Getter, new Func<int>  (()         => MaxHP) },
-                    { AccessType.Setter, new Action<int>((value)    => MaxHP = value) }
-                }
-            },
-            { AttributeType.CurrentHitpoints, new Dictionary<AccessType, Delegate>
-                {
-                    { AccessType.Getter, new Func<int>  (()         => CurrentHP) },
-                    { AccessType.Setter, new Action<int>((value)    => CurrentHP = value) }
-                }
-            },
-            { AttributeType.TemporaryMaxHitpoints, new Dictionary<AccessType, Delegate>
-                {
-                    { AccessType.Getter, new Func<int>  (()         => TemporaryMaxHP) },
-                    { AccessType.Setter, new Action<int>((value)    => TemporaryMaxHP = value) }
-                }
-            },
-            { AttributeType.MaxPower, new Dictionary<AccessType, Delegate>
-                {
-                    { AccessType.Getter, new Func<int>  (()         => MaxPower) },
-                    { AccessType.Setter, new Action<int>((value)    => MaxPower = value) }
-                }
-            }
-        };
-        Debug.Log("Attribute Dictionary Initialized!");
-    }
-    public int GetAttribute(AttributeType attributeType)
-    {
-        if (dictAttributes.ContainsKey(attributeType) && dictAttributes[attributeType][AccessType.Getter] is Func<int> getter)
-        {
-            return getter();
+            return AttributesDict[attribute].Get();
         }
         throw new Exception("Attribute not found");
+
     }
 
-    public void SetAttribute(AttributeType attributeType, int value)
+    public void SetAttribute(AttributeType attribute, int value)
     {
-        if (dictAttributes.ContainsKey(attributeType) && dictAttributes[attributeType][AccessType.Setter] is Action<int> setter)
+        if (AttributesDict != null && AttributesDict.ContainsKey(attribute))
         {
-            setter(value);
-        }
-        else
-        {
-            throw new Exception("Attribute not found or invalid setter");
+            AttributesDict[attribute].Set(value);
         }
     }
+
     public void ChangeAttribute(AttributeType attributeType, int value, ValueType valueType = ValueType.Flat)
     {
-        Logging.Info("Change Attribute: " + attributeType);
-        Logging.Info("Dict: " + dictAttributes);
         if (valueType == ValueType.Percentage)
             value = Mathf.RoundToInt(GetAttribute(attributeType) * (1 + (value / 100f)));
         else if (valueType == ValueType.Flat)
             value = GetAttribute(attributeType) + value;
-        Logging.Info("Changed Value: " + value);
 
-        if (dictAttributes.ContainsKey(attributeType) && dictAttributes[attributeType][AccessType.Setter] is Action<int> setter)
+        if (AttributesDict != null && AttributesDict.ContainsKey(attributeType))
         {
-            setter(value);
+            AttributesDict[attributeType].Set(value);
         }
         else
         {
             throw new Exception("Attribute not found or invalid setter");
         }
     }
+
     #endregion
+
     public void AlterColorByAffinity()
     {
-        Debug.Log($"{Affinities.Keys.Count}");
+        Logging.Info($"{Affinities.Keys.Count}");
         Elements strongestElement = Affinities.OrderByDescending(a => a.Value.Get()).First().Key;
 
         string str = strongestElement.ToString();
@@ -277,80 +230,39 @@ public abstract class LivingBeing : MonoBehaviour
         }
         else Logging.Info($"{strongestElement} has less than 50");
     }
-    public void SetAttributeDict()
+    
+    public void InitializeAttributeDict()
     {
         AttributesDict = new Dictionary<AttributeType, (Func<int> Get, Action<int> Set)>
             {
-                { AttributeType.MaxHitpoints, (() => MaxHP, v => MaxHP = v) },
-                { AttributeType.TemporaryMaxHitpoints, (() => TemporaryMaxHP, v => TemporaryMaxHP = v) },
-                { AttributeType.CurrentHitpoints, (() => CurrentHP, v => CurrentHP = v) },
-                { AttributeType.MaxPower, (() => MaxPower, v => MaxPower = v) },
-                { AttributeType.TemporaryMaxPower, (() => TemporaryMaxPower, v => TemporaryMaxPower = v) },
-                { AttributeType.CurrentPower, (() => CurrentPower, v => CurrentPower = v) },
+                { AttributeType.MaxHitpoints,           (() => MaxHP,               v => MaxHP = v) },
+                { AttributeType.TemporaryMaxHitpoints,  (() => TemporaryMaxHP,      v => TemporaryMaxHP = v) },
+                { AttributeType.CurrentHitpoints,       (() => CurrentHP,           v => CurrentHP = v) },
+                { AttributeType.MaxPower,               (() => MaxPower,            v => MaxPower = v) },
+                { AttributeType.TemporaryMaxPower,      (() => TemporaryMaxPower,   v => TemporaryMaxPower = v) },
+                { AttributeType.CurrentPower,           (() => CurrentPower,        v => CurrentPower = v) },
             };
     }
-    public void SetAttribute_Method2(AttributeType attribute, int value)
-    {
-        if (AttributesDict != null && AttributesDict.ContainsKey(attribute))
-        {
-            AttributesDict[attribute].Set(value);
-        }
-    }
-    public void ChangeAttribute_method2(AttributeType attributeType, int value, ValueType valueType = ValueType.Flat)
-    {
-        Logging.Info("Change Attribute: " + attributeType);
-        Logging.Info("Dict: " + dictAttributes);
-        if (valueType == ValueType.Percentage)
-            value = Mathf.RoundToInt(GetAttribute_Method2(attributeType) * (1 + (value / 100f)));
-        else if (valueType == ValueType.Flat)
-            value = GetAttribute_Method2(attributeType) + value;
-        Logging.Info("Changed Value: " + value);
 
-        if (AttributesDict != null && AttributesDict.ContainsKey(attributeType))
-        {
-            AttributesDict[attributeType].Set(AttributesDict[attributeType].Get() + value);
-        }
-        else
-        {
-            throw new Exception("Attribute not found or invalid setter");
-        }
-    }
-    public int GetAttribute_Method2(AttributeType attribute)
-    {
-        if (AttributesDict != null && AttributesDict.ContainsKey(attribute))
-        {
-            return AttributesDict[attribute].Get();
-        }
-        throw new Exception("Attribute not found");
-
-    }
-
-
-    public void SetAffinityDict()
+    public void InitializeAffinityDict()
     {
         Affinities = new Dictionary<Elements, (Func<int> Get, Action<int> Set)>
             {
-                { Elements.Cold, (() => Cold, v => Cold = v) },
-                { Elements.Water, (() => Water, v => Water = v) },
-                { Elements.Earth, (() => Earth, v => Earth = v) },
-                { Elements.Heat, (() => Heat, v => Heat = v) },
-                { Elements.Air, (() => Air, v => Air = v) },
-                { Elements.Electricity, (() => Electricity, v => Electricity = v) },
-                { Elements.Poison, (() => Poison, v => Poison = v) },
-                { Elements.Acid, (() => Acid, v => Acid = v) },
-                { Elements.Bacteria, (() => Bacteria, v => Bacteria = v) },
-                { Elements.Fungi, (() => Fungi, v => Fungi = v) },
-                { Elements.Plant, (() => Plant, v => Plant = v) },
-                { Elements.Virus, (() => Virus, v => Virus = v) },
-                { Elements.Radiation, (() => Radiation, v => Radiation = v) },
-                { Elements.Light, (() => Light, v => Light = v) },
-                { Elements.Psychic, (() => Psychic, v => Psychic = v) }
+                { Elements.Cold,            (() => Cold,            v => Cold = v) },
+                { Elements.Water,           (() => Water,           v => Water = v) },
+                { Elements.Earth,           (() => Earth,           v => Earth = v) },
+                { Elements.Heat,            (() => Heat,            v => Heat = v) },
+                { Elements.Air,             (() => Air,             v => Air = v) },
+                { Elements.Electricity,     (() => Electricity,     v => Electricity = v) },
+                { Elements.Poison,          (() => Poison,          v => Poison = v) },
+                { Elements.Acid,            (() => Acid,            v => Acid = v) },
+                { Elements.Bacteria,        (() => Bacteria,        v => Bacteria = v) },
+                { Elements.Fungi,           (() => Fungi,           v => Fungi = v) },
+                { Elements.Plant,           (() => Plant,           v => Plant = v) },
+                { Elements.Virus,           (() => Virus,           v => Virus = v) },
+                { Elements.Radiation,       (() => Radiation,       v => Radiation = v) },
+                { Elements.Light,           (() => Light,           v => Light = v) },
+                { Elements.Psychic,         (() => Psychic,         v => Psychic = v) }
             };
-    }
-
-
-    void FixedUpdate()
-    {
-
     }
 }

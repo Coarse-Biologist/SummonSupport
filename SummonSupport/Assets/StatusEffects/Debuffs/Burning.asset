@@ -13,9 +13,11 @@ MonoBehaviour:
   m_Name: Burning
   m_EditorClassIdentifier: 
   <EffectName>k__BackingField: Burning
+  <Icon>k__BackingField: {fileID: 3354988364425753930, guid: 69028352120a6f84391f160e8cd18d17,
+    type: 3}
   <Type>k__BackingField: 0
   <Ressource>k__BackingField: 0
-  <Attribute>k__BackingField: 0
+  <Attribute>k__BackingField: 10
   <Duration>k__BackingField: 4
   <TickRateSeconds>k__BackingField: 0.1
   <Value>k__BackingField: 1

@@ -1,8 +1,9 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-[CreateAssetMenu(fileName = "NewEffectCollection", menuName = "Status Effects/Effect Collection")]
+[CreateAssetMenu(fileName = "New Combined Status Effect", menuName = "Combined Status Effect")]
 public class StatusEffectCollection : ScriptableObject
 {
-    public List<StatusEffect> effects;
+    [SerializeField] public Sprite Icon;
+    [SerializeField] public List<StatusEffect> effects;
 }

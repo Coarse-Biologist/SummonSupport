@@ -7,7 +7,7 @@ public abstract class Ability : ScriptableObject
     [field: SerializeField]                             public Sprite           Icon                { get; protected set; }
     [field: SerializeField, Range(0, 50)]               public float            Cooldown            { get; protected set; }
     [field: SerializeField, Min(0)]                     public float            PowerCost           { get; protected set; }
-    [field: SerializeField, Min(0)]                     public StatusEffect[]   ApplyStatusEffect   { get; protected set; }
+    [field: SerializeField]                             public StatusEffect     StatusEffect        { get; protected set; } 
 
     public virtual void Activate(GameObject user){}
     public virtual void Activate(GameObject user, GameObject spawnPoint)

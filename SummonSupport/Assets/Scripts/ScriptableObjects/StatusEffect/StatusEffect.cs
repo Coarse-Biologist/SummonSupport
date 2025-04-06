@@ -1,14 +1,15 @@
 using Alchemy;
 using System.Collections;
 using UnityEngine;
+using System;
 
 [CreateAssetMenu(menuName = "Status Effect")]
 public class StatusEffect : ScriptableObject
 {   
     [field: Header("Status Effect")] 
     [field: SerializeField] public string                   EffectName              { get; protected set; } = "Undefined";
+    [field: SerializeField] public Sprite                   Icon                    { get; protected set; }
     [field: SerializeField] public StatusEffectType         Type                    { get; protected set; } = StatusEffectType.NoEffect;
-    [field: SerializeField] public RessourceType            Ressource               { get; protected set; } = RessourceType.None;
     [field: SerializeField] public AttributeType            Attribute               { get; protected set; } = AttributeType.None;
     [field: SerializeField] public float                    Duration                { get; protected set; } = 5f;
     [field: SerializeField] public float                    TickRateSeconds         { get; protected set; } = .1f;
@@ -24,28 +25,57 @@ public class StatusEffect : ScriptableObject
 
         switch (Type)
         {
-        case StatusEffectType.DrainRessourceOverTime:
-            CoroutineManager.Instance.StartCustomCoroutine(DrainRessourceOverTime(livingBeing));
+        case StatusEffectType.AttributeReductionOverTime:
+            CoroutineManager.Instance.StartCustomCoroutine(RepeatStatusEffect(livingBeing, -Value, AttributeChange));
+            break;
+        case StatusEffectType.AttributeIncreaseOverTime:
+            CoroutineManager.Instance.StartCustomCoroutine(RepeatStatusEffect(livingBeing, Value, AttributeChange));
             break;
         case StatusEffectType.AttributeReduction:
-            livingBeing.ChangeAttribute(Attribute, -Value, ValueType);
+            CoroutineManager.Instance.StartCustomCoroutine(HandleOnce(livingBeing, -Value, AttributeChange));
             break;
         case StatusEffectType.AttributeIncrease:
-            livingBeing.ChangeAttribute(Attribute, Value, ValueType);
+            CoroutineManager.Instance.StartCustomCoroutine(HandleOnce(livingBeing, Value, AttributeChange));
             break;
         }
     }
 
-    private IEnumerator DrainRessourceOverTime(LivingBeing target)
+    private IEnumerator HandleOnce(LivingBeing target, int value, Action<LivingBeing, int> action)
     {
-        float timePassed = 0f;
-        
-        while (timePassed < Duration)
+        target.statusEffects.Add(EffectName);
+        try
+        { 
+            action(target, value);
+            yield return new WaitForSeconds(Duration);
+        }
+        finally
         {
-            Logging.Info("Attribute: " + Attribute + "\nValue: " + Value);
-            target.ChangeAttribute(Attribute, -Value);
-            yield return new WaitForSeconds(TickRateSeconds);
-            timePassed += TickRateSeconds;
+            target.statusEffects.Remove(EffectName);
         }
     }
+    private IEnumerator RepeatStatusEffect(LivingBeing target, int value, Action<LivingBeing, int> action)
+    {
+        float timePassed = 0f;
+        target.statusEffects.Add(EffectName);
+        try
+        {
+            while (timePassed < Duration)
+            {   
+                action(target, value);
+                yield return new WaitForSeconds(TickRateSeconds);
+                timePassed += TickRateSeconds;
+            }
+        }
+        finally
+        {
+            target.statusEffects.Remove(EffectName);
+        }
+    }
+
+    private void AttributeChange(LivingBeing target, int value)
+    {
+        Logging.Info("Attribute: " + Attribute + "\nValue: " + Value);
+        target.ChangeAttribute(Attribute, value);
+    }
+
 }
