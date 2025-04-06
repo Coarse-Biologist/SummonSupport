@@ -8,13 +8,13 @@ public class MinionStats : LivingBeing
     [SerializeField] public List<AlchemyLoot> Loot { private set; get; } = new List<AlchemyLoot>();
 
 
-
     //void Start()
     //{
     //    base.Start();
     //}
 
     //void Update()
+
     [SerializeField] public MinionCommands CurrentCommand { private set; get; } = MinionCommands.None;
 
 
@@ -39,5 +39,6 @@ public enum MinionCommands
     None,
     GoTo,
     FocusTarget,
+    Interact,
 
 }

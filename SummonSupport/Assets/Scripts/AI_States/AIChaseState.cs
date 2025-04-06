@@ -34,21 +34,25 @@ public class AIChaseState : AIState
     public override AIState RunCurrentState()
     {
         //Debug.Log("Running chase state");
-        Vector2 targetLoc = targetEntity.transform.position;
-        if (peaceState.FieldOfViewCheck() == true)
+        if (targetEntity != null)
         {
-            Chase(targetLoc);
+            Vector2 targetLoc = targetEntity.transform.position;
+            if (peaceState.FieldOfViewCheck() == true)
+            {
+                Chase(targetLoc);
 
-            LookAtTarget(targetLoc);
-        }
-        else
-        {
-            Chase(stateHandler.lastSeenLoc);
+                LookAtTarget(targetLoc);
+            }
+            else
+            {
+                Chase(stateHandler.lastSeenLoc);
 
-            LookAtTarget(stateHandler.lastSeenLoc);
-            //return peaceState;
+                LookAtTarget(stateHandler.lastSeenLoc);
+                //return peaceState;
+            }
+            return this;
         }
-        return this;
+        else return peaceState;
 
         //bool targetIsInRange = CheckInRange(target);
         //

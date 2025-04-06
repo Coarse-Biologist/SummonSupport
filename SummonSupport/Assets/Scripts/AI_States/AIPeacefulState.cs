@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System;
 
 public class AIPeacefulState : AIState
 {
@@ -49,13 +50,31 @@ public class AIPeacefulState : AIState
     {
         //if (Vector3.Angle(transform.forward, directionToTarget) < angle / 2)
         Collider2D[] rangeChecks = Physics2D.OverlapCircleAll(transform.position, stateHandler.DetectionRadius, stateHandler.targetMask);
-
         if (rangeChecks.Length != 0)
         {
+            Debug.DrawRay(transform.position, rangeChecks[0].transform.position, Color.green, 2f);
+
             GameObject detectedObject = rangeChecks[0].transform.gameObject;
             chaseState.SetTargetEntity(detectedObject);
             return detectedObject;
         }
+        //if (rangeChecks.Length > 1)
+        //{
+        //    float shortestDistance = 9999999999;
+        //    GameObject closest = null; ;
+        //    foreach (Collider2D objCollider in rangeChecks)
+        //    {
+        //        if (objCollider == null) continue;
+        //
+        //        float distance = Vector2.Distance(transform.position, objCollider.transform.position);
+        //        if (distance < shortestDistance)
+        //        {
+        //            shortestDistance = distance;
+        //            closest = objCollider.gameObject;
+        //        }
+        //    }
+        //    return closest;
+        //}
         else
         {
             return null;

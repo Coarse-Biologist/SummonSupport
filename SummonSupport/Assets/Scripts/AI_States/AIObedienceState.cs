@@ -86,7 +86,7 @@ public class AIObedienceState : AIState
         Logging.Info($"Going to location {commandLoc}!!!!!");
         Vector2 currentLoc = new Vector2(transform.position.x, transform.position.y);
         Vector2 direction = commandLoc - currentLoc;
-        if (direction.sqrMagnitude > 10)
+        if (direction.sqrMagnitude > 4)
         {
             Logging.Info($"Squaremagnitude of distance to target is still pretty far away i'll keep moving");
             rb.linearVelocity = direction * stateHandler.livingBeing.Speed;
@@ -96,6 +96,9 @@ public class AIObedienceState : AIState
         {
             Logging.Info($"Square magnitude of distance to target is Close enough! ");
             minionStats.SetCommand(MinionCommands.None);
+            chaseState.SetTargetEntity(null); // is this good?
+
+
             //commandLoc = new Vector2(0, 0);
             return States.Peace; // Is this good?...
         }

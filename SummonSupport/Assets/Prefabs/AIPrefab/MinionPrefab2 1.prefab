@@ -52,7 +52,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   FollowRadius: 15
-  DetectionRadius: 500
+  DetectionRadius: 5
   AngleOfSight: 720
   InterestRadius: 500
   AttackSpeed: 1
@@ -141,10 +141,12 @@ MonoBehaviour:
   - Fire and brimstone!..
   - I'll kill your shining lights!
   - burning skin and bubbling knuckles!
-  MaxHP: 10
-  CurrentHP: 10
-  MaxPower: 10
-  CurrentPower: 10
+  <MaxHP>k__BackingField: 0
+  <TemporaryMaxHP>k__BackingField: 0
+  <CurrentHP>k__BackingField: 0
+  <MaxPower>k__BackingField: 0
+  <TemporaryMaxPower>k__BackingField: 0
+  <CurrentPower>k__BackingField: 0
   Cold: 0
   Water: 0
   Earth: 0
@@ -164,7 +166,6 @@ MonoBehaviour:
   Abilties: []
   Speed: 0.4
   Mass: 1
-  Loot: 
 --- !u!58 &5449713164746072181
 CircleCollider2D:
   m_ObjectHideFlags: 0
