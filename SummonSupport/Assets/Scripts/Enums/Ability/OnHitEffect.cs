@@ -4,6 +4,5 @@ public enum OnEventDo
 {
     Nothing,
     StatusEffect,
-    Ability,
-    DestroySelf,
+    Ability
 }

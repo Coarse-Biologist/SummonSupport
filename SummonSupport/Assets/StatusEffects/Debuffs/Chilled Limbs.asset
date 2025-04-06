@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: Chilled Limbs
   m_EditorClassIdentifier: 
   <EffectName>k__BackingField: Chilled Limbs
+  <Icon>k__BackingField: {fileID: 318035412960130792, guid: 7e7a6cf34b6f4af468fb8ece2d9e6438,
+    type: 3}
   <Type>k__BackingField: 2
   <Ressource>k__BackingField: 3
   <Attribute>k__BackingField: 3

@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d8ffc8b86ca65944bfeb077e60ed2a9, type: 3}
   m_Name: Frostbite
   m_EditorClassIdentifier: 
+  Icon: {fileID: -6815351484898106252, guid: 451da91f0ab8f7344a7072aedda23fdb, type: 3}
   effects:
   - {fileID: 11400000, guid: 84e50eaebc4a21f4fbc0ae6c56e66092, type: 2}
   - {fileID: 11400000, guid: 67ae7e1b52f51bf43b502e0dd516a9f2, type: 2}

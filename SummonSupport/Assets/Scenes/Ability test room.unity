@@ -492,6 +492,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1413116334}
   - component: {fileID: 1413116333}
+  - component: {fileID: 1413116335}
   m_Layer: 0
   m_Name: DungeonMaster
   m_TagString: Untagged
@@ -526,6 +527,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1413116335
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1413116332}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 821baeb5ed276414f997315693a73cd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  logLevel: 4
 --- !u!1 &1427198259 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6134914037041222888, guid: 5c2f586e1a28a3e4a9ad4d7d804cecab,
@@ -2410,12 +2424,12 @@ PrefabInstance:
     - target: {fileID: 6150396017969217355, guid: 683a49fc796b0374dad199178e70ee42,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 14.16
+      value: 14.05
       objectReference: {fileID: 0}
     - target: {fileID: 6150396017969217355, guid: 683a49fc796b0374dad199178e70ee42,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 5.44
+      value: 5.35
       objectReference: {fileID: 0}
     - target: {fileID: 6150396017969217355, guid: 683a49fc796b0374dad199178e70ee42,
         type: 3}
