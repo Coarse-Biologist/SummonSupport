@@ -7,6 +7,7 @@ using UnityEngine.Events;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using System;
+using Unity.VisualScripting;
 #endregion
 public class AlchemyHandler : MonoBehaviour
 {
@@ -32,11 +33,12 @@ public class AlchemyHandler : MonoBehaviour
 
                 UpgradeMinion(craftedMinion, combinedIngredients, elementList);
                 AddActiveMinion(craftedMinion);
+                int knowledgeGain = GainKnowledge(elementList, combinedIngredients);
+                Logging.Info($"You have just gained a total of {knowledgeGain} from alchemic work.");
             }
             else Logging.Error("Crafted Minion is null, was he loaded promtly or correctly?");
         }
     }
-
     private int HandleOrganUse(LivingBeing stats, AlchemyLoot organ)
     {
         int healthUpgrade = 0;
@@ -109,8 +111,6 @@ public class AlchemyHandler : MonoBehaviour
         return elementUpgrade;
     }
 
-
-
     public void UpgradeMinion(GameObject minion, Dictionary<AlchemyLoot, int> ingredients, List<Elements> elementList)
     {
         MinionStats stats = minion.GetComponent<MinionStats>();
@@ -139,13 +139,22 @@ public class AlchemyHandler : MonoBehaviour
     }
     #endregion
 
-    #region Invoke Unity Event
-    private void RequestSpawnObject(GameObject minion)
-    {
-        requestInstantiation?.Invoke(minion);
-    }
 
-    #endregion
+    private int GainKnowledge(List<Elements> elementsList, Dictionary<AlchemyLoot, int> combinedIngredients)
+    {
+        int total = 0;
+        foreach (KeyValuePair<AlchemyLoot, int> kvp in combinedIngredients)
+        {
+            int strengthAndAmount = AlchemyInventory.ingredientValues[kvp.Key] * kvp.Value; //multiply ingredient value by num used
+            strengthAndAmount += AlchemyInventory.KnownTools.Count;
+            total += strengthAndAmount;
+            foreach (Elements element in elementsList)
+            {
+                AlchemyInventory.IncemementElementalKnowledge(element, strengthAndAmount);
+            }
+        }
+        return total;
+    }
 
     #region Load Prefab
     public void LoadMinionPrefab(string address)
@@ -165,85 +174,3 @@ public class AlchemyHandler : MonoBehaviour
 
     #endregion
 }
-#region garbage?
-
-//public string CalculateCraftingResults(Dictionary<AlchemyLoot, int> combinedIngredients, List<Elements> elementList)
-//{
-//    if (combinedIngredients.Keys.Count > 0)
-//    {
-//        int healthUpgrade = 0;
-//        int powerUpgrade = 0;
-//        int elementUpgrade = 0;
-//        string results = $"Combining these ingredients will resulted in a minion with {healthUpgrade} additional health, {powerUpgrade} additional power and {elementUpgrade} additional elemental affinity for each selected Element!";
-//
-//        if (minionPrefab != null)
-//        {
-//
-//            craftedMinion = Instantiate(minionPrefab, new Vector2(transform.position.x, transform.position.y), Quaternion.identity);
-//
-//            MinionStats stats = craftedMinion.GetComponent<MinionStats>();
-//
-//            foreach (KeyValuePair<AlchemyLoot, int> kvp in combinedIngredients)
-//            {
-//                switch (kvp.Key)
-//                {
-//                    case AlchemyLoot.WretchedOrgans:
-//                        stats.ChangeMaxHP(5);
-//                        healthUpgrade += 5; break;
-//                    case AlchemyLoot.FunctionalOrgans:
-//                        stats.ChangeMaxHP(10);
-//                        healthUpgrade += 10; break;
-//                    case AlchemyLoot.HulkingOrgans:
-//                        stats.ChangeMaxHP(20);
-//                        healthUpgrade += 20; break;
-//                    case AlchemyLoot.BrokenCores:
-//                        stats.ChangeMaxPower(5);
-//                        powerUpgrade += 5; break;
-//                    case AlchemyLoot.WorkingCore:
-//                        stats.ChangeMaxPower(10);
-//                        powerUpgrade += 10; break;
-//                    case AlchemyLoot.PowerfulCore:
-//                        stats.ChangeMaxPower(20);
-//                        powerUpgrade += 20; break;
-//                    case AlchemyLoot.HulkingCore:
-//                        stats.ChangeMaxPower(30);
-//                        powerUpgrade += 30; break;
-//                    case AlchemyLoot.FaintEther:
-//                        foreach (Elements element in elementList)
-//                        {
-//                            stats.GainAffinity(element, 10 / elementList.Count);
-//                            elementUpgrade += 10 / elementList.Count;
-//                            Logging.Info($"Ether of type {element} used");
-//
-//                        }
-//                        break;
-//                    case AlchemyLoot.PureEther:
-//                        foreach (Elements element in elementList)
-//                        {
-//                            stats.GainAffinity(element, 30 / elementList.Count);
-//                            elementUpgrade += 30 / elementList.Count;
-//                            Logging.Info($"Ether of type {element} used");
-//                        }
-//                        break;
-//                    case AlchemyLoot.IntenseEther:
-//                        foreach (Elements element in elementList)
-//                        {
-//                            stats.GainAffinity(element, 60 / elementList.Count);
-//                            elementUpgrade += 60 / elementList.Count;
-//                            Logging.Info($"Ether of type {element} used");
-//
-//                        }
-//                        break;
-//                    default:
-//                        break;
-//                }
-//            }
-//            AddActiveMinion(craftedMinion);
-//
-//        }
-//        else Logging.Error("Crafted Minion is null, was he loaded promtly or correctly?");
-//        return results;
-//    }
-//    else return "Select Ingredients and element to use for crafting!";
-//}
-#endregion
