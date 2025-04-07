@@ -48,7 +48,7 @@ public abstract class LivingBeing : MonoBehaviour
     protected bool isDead = false;
     public Dictionary<Elements, (Func<int> Get, Action<int> Set)> Affinities { private set; get; } = new Dictionary<Elements, (Func<int> Get, Action<int> Set)>();
     public Dictionary<AttributeType, (Func<int> Get, Action<int> Set)> AttributesDict { private set; get; } = new Dictionary<AttributeType, (Func<int> Get, Action<int> Set)>();
-    [SerializeField] public List<string> Abilties = new List<string>();
+    [SerializeField] public List<Ability> Abilties = new List<Ability>();
     [SerializeField] public float Speed;
     [SerializeField] public float Mass = 1;
 
