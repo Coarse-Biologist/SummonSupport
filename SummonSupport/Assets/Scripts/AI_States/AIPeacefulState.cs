@@ -111,7 +111,7 @@ public class AIPeacefulState : AIState
             Vector2 currentLoc = new Vector2(transform.position.x, transform.position.y);
             Vector2 playerPos = player.transform.position;
             Vector2 direction = playerPos - currentLoc;
-            if (!closeToPlayer && CompareTag("Minion") && (direction.sqrMagnitude > 4))
+            if (!closeToPlayer && CompareTag("Minion") && (direction.sqrMagnitude > stateHandler.FollowRadius))
             {
                 GoToPlayer();
             }

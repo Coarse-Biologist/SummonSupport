@@ -14,18 +14,14 @@ public class AIChaseState : AIState
     private Rigidbody2D rb;
     private LivingBeing statScript;
 
-
-
     void Start()
     {
         stateHandler = gameObject.GetComponent<AIStateHandler>();
         peaceState = gameObject.GetComponent<AIPeacefulState>();
         obedienceState = gameObject.GetComponent<AIObedienceState>();
-        //targetEntity = peaceState.detectedTargetObject;
 
         rb = gameObject.GetComponent<Rigidbody2D>();
         statScript = stateHandler.livingBeing;
-        //Debug.Log($"stat script = {statScript}");
     }
 
     public void SetTargetEntity(GameObject target)
@@ -51,19 +47,10 @@ public class AIChaseState : AIState
                 Chase(stateHandler.lastSeenLoc);
 
                 LookAtTarget(stateHandler.lastSeenLoc);
-                //return peaceState;
             }
             return this;
         }
         else return peaceState;
-
-        //bool targetIsInRange = CheckInRange(target);
-        //
-        //if (targetIsInRange)
-        //{
-        //    return this; //gameObject.GetComponent<AIAttackState>();
-        //}
-        //else return this;
     }
 
     public bool CheckInRange()
@@ -72,7 +59,7 @@ public class AIChaseState : AIState
 
         Vector3 direction = target.transform.position - transform.position;
 
-        return direction.sqrMagnitude <= 50;//AbilityHandler.GetLongestRangeAbility
+        return direction.sqrMagnitude <= 50;
 
     }
     public void LookAtTarget(Vector2 targetLoc)
@@ -93,24 +80,3 @@ public class AIChaseState : AIState
 
 }
 
-
-
-
-
-//public void Chase(Vector2 targetLoc)
-//    {
-//        Vector2 currentLoc = new Vector2(transform.position.x, transform.position.y);
-//        Vector2 direction = targetLoc - currentLoc;
-//        if (direction.sqrMagnitude > 10 || peaceState.CheckVisionBlocked(targetEntity))
-//        {
-//            if (peaceState.CheckVisionBlocked(targetEntity, 10))
-//                targetLoc = peaceState.RotatePoint(targetLoc, transform.position, -1);
-//            if (peaceState.CheckVisionBlocked(targetEntity, -10))
-//                targetLoc = peaceState.RotatePoint(targetLoc, transform.position, 1);
-//
-//            rb.linearVelocity = Time.fixedDeltaTime * (targetLoc - currentLoc) * statScript.Speed;
-//        }
-//        else rb.linearVelocity = new Vector2(0, 0);
-//
-//    }
-//|| Vector2.Distance(transform.position, stateHandler.lastSeenLoc) < 0.5f
