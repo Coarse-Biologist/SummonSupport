@@ -100,7 +100,7 @@ GameObject:
   - component: {fileID: 2339808515288282819}
   - component: {fileID: 2507926237638401071}
   m_Layer: 0
-  m_Name: AlchemyMatPrefab
+  m_Name: WretchedOrganPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
