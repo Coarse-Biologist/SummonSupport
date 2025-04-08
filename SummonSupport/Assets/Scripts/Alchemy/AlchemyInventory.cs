@@ -66,7 +66,9 @@ namespace Alchemy
         }
         public static void AlterIngredientNum(AlchemyLoot ingredient, int amount)
         {
+            Logging.Info($"You have gained {amount} {ingredient}");
             ingredients[ingredient] += amount;
+
         }
         public static void ExpendIngredients(Dictionary<AlchemyLoot, int> usedIngredients)
         {
@@ -82,7 +84,7 @@ namespace Alchemy
                 Logging.Info($"{tool} gained!");
                 KnownTools.Add(tool);
             }
-            else throw new System.Exception($"The tool {tool} is already known");
+            else Logging.Error($"The tool {tool} is already known");
         }
         #endregion
 
