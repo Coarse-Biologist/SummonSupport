@@ -48,6 +48,7 @@ public abstract class LivingBeing : MonoBehaviour
     protected bool isDead = false;
     public Dictionary<Elements, (Func<int> Get, Action<int> Set)> Affinities { private set; get; } = new Dictionary<Elements, (Func<int> Get, Action<int> Set)>();
     public Dictionary<AttributeType, (Func<int> Get, Action<int> Set)> AttributesDict { private set; get; } = new Dictionary<AttributeType, (Func<int> Get, Action<int> Set)>();
+
     [SerializeField] public List<Ability> Abilties = new List<Ability>();
     [SerializeField] public float Speed;
     [SerializeField] public float Mass = 1;
@@ -58,9 +59,17 @@ public abstract class LivingBeing : MonoBehaviour
         Getter,
         Setter
     }
+    #region Color control
+    public Dictionary<RGBAEnum, (Func<float> Get, Action<float> Set)> ColorDict { private set; get; } = new Dictionary<RGBAEnum, (Func<float> Get, Action<float> Set)>();
+    private float redness;
+    private float greeness;
+    private float blueness;
+    private float alphaness;
+    //private float[] rgbaValues = new float[4] { redness, greeness, blueness, alphaness };
 
-    private float[] rgbaValues = new float[4] { 0f, 0f, 0f, 0f };
     private SpriteRenderer spriteRenderer;
+
+    #endregion
     protected EventDeclarer ED;
 
     protected void Awake()
@@ -69,6 +78,7 @@ public abstract class LivingBeing : MonoBehaviour
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         InitializeAttributeDict();
         InitializeAffinityDict();
+        InitializeColorDict();
         Logging.Info($"{Affinities.Keys.Count}");
         ED = FindFirstObjectByType<EventDeclarer>();
     }
@@ -194,7 +204,7 @@ public abstract class LivingBeing : MonoBehaviour
     }
 
     #endregion
-
+    #region color control
     public void AlterColorByAffinity()
     {
         Logging.Info($"{Affinities.Keys.Count}");
@@ -237,6 +247,29 @@ public abstract class LivingBeing : MonoBehaviour
         }
         else Logging.Info($"{strongestElement} has less than 50");
     }
+    public void SlideColor(RGBAEnum color, float range)
+    {
+        ColorDict[color].Set(range);
+        SetColor(new float[] { redness, greeness, blueness, alphaness });
+    }
+    public void InitializeColorDict()
+    {
+        ColorDict = new Dictionary<RGBAEnum, (Func<float> Get, Action<float> Set)>
+            {
+                { RGBAEnum.Red,           (() => redness,               v => redness = v) },
+                { RGBAEnum.Green,           (() => greeness,               v => greeness = v) },
+                { RGBAEnum.Blue,           (() => blueness,               v => blueness = v) },
+                { RGBAEnum.Alpha,           (() => alphaness,               v => alphaness = v) },
+            };
+    }
+    public enum RGBAEnum
+    {
+        Red,
+        Green,
+        Blue,
+        Alpha
+    }
+    #endregion
 
     public void InitializeAttributeDict()
     {
