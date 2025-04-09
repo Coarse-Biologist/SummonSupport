@@ -2628,7 +2628,7 @@ PrefabInstance:
     - target: {fileID: 1997056882071212926, guid: 683a49fc796b0374dad199178e70ee42,
         type: 3}
       propertyPath: <CurrentHP>k__BackingField
-      value: 40
+      value: 80
       objectReference: {fileID: 0}
     - target: {fileID: 2350739302314339231, guid: 683a49fc796b0374dad199178e70ee42,
         type: 3}
@@ -9160,7 +9160,8 @@ PrefabInstance:
         type: 3}
       propertyPath: ability
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 11400000, guid: 5605a5e8027c4e94691ae731bacfcb5a,
+        type: 2}
     - target: {fileID: 3823348289868228544, guid: 5c2f586e1a28a3e4a9ad4d7d804cecab,
         type: 3}
       propertyPath: rotationSpeed

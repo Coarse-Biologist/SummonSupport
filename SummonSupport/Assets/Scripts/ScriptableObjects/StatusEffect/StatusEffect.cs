@@ -6,16 +6,16 @@
     public class StatusEffectInstance
     {
         public StatusEffect effect;
-        public float remainingDuration;
+        public int ticksDone;
 
         public StatusEffectInstance(StatusEffect effect)
         {
             this.effect = effect;
-            remainingDuration = effect.Duration;
+            ticksDone = 0;
         }
         public void Renew()
         {
-            remainingDuration = effect.Duration;
+            ticksDone = 0;
         }
     }
 
@@ -90,16 +90,17 @@
         {
             StatusEffectInstance instance = new(this);
             target.activeStatusEffects.Add(EffectName, instance);
+            int totalTicks = Mathf.FloorToInt(Duration / TickRateSeconds);
             try
             {
-                while (instance.remainingDuration > 0f)
-                {   
-                    if (target == null) 
+                while (instance.ticksDone < totalTicks)
+                {
+                    if (target == null)
                         yield break; // In case the target died while this was still running. If target died => GameObject does not longer exist.
-
+                
                     action(target, value);
+                    instance.ticksDone++;
                     yield return new WaitForSeconds(TickRateSeconds);
-                    instance.remainingDuration -= TickRateSeconds;
                 }
             }
             finally
