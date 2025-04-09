@@ -27,10 +27,9 @@ public class TurretHandler : MonoBehaviour
             if (!hasTarget)
             {
                 hasTarget = true;
-                Logging.Verbose("Starts shooting" + other.gameObject.name);
+                Logging.Verbose("Starts shooting " + other.gameObject.name);
                 StartCoroutine(ShootLoop());
             }
-            Logging.Info("Minion added: " + other.gameObject.name);
 
         }
     }
@@ -46,8 +45,6 @@ public class TurretHandler : MonoBehaviour
                     Logging.Verbose("Stops shooting" + other.gameObject.name);
                     StopCoroutine(ShootLoop());
                 }
-                
-            Logging.Info("Minion removed: " + other.gameObject.name);
         }
     }
     
@@ -65,6 +62,7 @@ public class TurretHandler : MonoBehaviour
     }
     GameObject GetTarget()
     {
+        shootTargetIndexNext %= listTargets.Count;
         GameObject target = listTargets[shootTargetIndexNext];
         shootTargetIndexNext += 1;
         return target;
@@ -103,8 +101,8 @@ public class TurretHandler : MonoBehaviour
         
         if (ability is ProjectileAbility projectileAbility)
         {
-            Logging.Info($"Turret fires ability {ability.Name} at {target.name}");
             projectileAbility.Activate(gameObject, projectileSpawn, canon.transform);
+            Logging.Info($"Turret fires ability {ability.Name} at {target.name}");
         }
     }
 

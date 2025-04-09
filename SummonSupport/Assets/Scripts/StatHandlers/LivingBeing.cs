@@ -122,7 +122,7 @@ public abstract class LivingBeing : MonoBehaviour
         CurrentPower = MaxPower;
     }
 
-    public void AlterHP(int amount)
+    public void ReduceHP(int amount)
     {
         CurrentHP -= amount;
     }
@@ -200,6 +200,10 @@ public abstract class LivingBeing : MonoBehaviour
         else
         {
             throw new Exception("Attribute not found or invalid setter");
+        }
+        if (CurrentHP <= 0)
+        {
+            Die();
         }
     }
 
@@ -304,5 +308,10 @@ public abstract class LivingBeing : MonoBehaviour
                 { Elements.Light,           (() => Light,           v => Light = v) },
                 { Elements.Psychic,         (() => Psychic,         v => Psychic = v) }
             };
+    }
+    public void Die()
+    {
+        Logging.Info($"{gameObject.name} died");
+        Destroy(gameObject);
     }
 }

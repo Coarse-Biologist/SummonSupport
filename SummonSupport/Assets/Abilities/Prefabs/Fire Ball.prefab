@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: -9064724831577368548}
   m_Layer: 0
   m_Name: Fire Ball
-  m_TagString: Untagged
+  m_TagString: Projectile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -166,4 +166,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13400c3fa81f46549a3f6498c7d5e16e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  avoid: {fileID: 0}
+  ignoreGameObjects: []
+  ability: {fileID: 0}
+  inactive: 1
+  piercedAlready: 0
+  splitAlready: 0

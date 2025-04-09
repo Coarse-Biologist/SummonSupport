@@ -19,13 +19,17 @@ MonoBehaviour:
   <PowerCost>k__BackingField: 5
   <StatusEffect>k__BackingField: {fileID: 11400000, guid: 84e50eaebc4a21f4fbc0ae6c56e66092,
     type: 2}
+  <Attribute>k__BackingField: 0
+  <Value>k__BackingField: 10
+  <ElementType>k__BackingField: 4
   <Speed>k__BackingField: 5
   <Projectile>k__BackingField: {fileID: 1503869405188693834, guid: a9f50fbd26367e9409b49cb9300cd576,
     type: 3}
   <MaxRange>k__BackingField: 150
   <Lifetime>k__BackingField: 100
-  <PiercingMode>k__BackingField: 0
-  <MaxPierceTimes>k__BackingField: 0
-  <MaxSplitInto>k__BackingField: 0
-  <ListOnHitDo>k__BackingField: 
-  <ListOnDestroyDo>k__BackingField: 01000000
+  <PiercingMode>k__BackingField: 3
+  <MaxPierce>k__BackingField: 0
+  <MaxSplit>k__BackingField: 1
+  <SplitAngleOffset>k__BackingField: 45
+  <ListOnHitDo>k__BackingField: 0100000003000000
+  <ListOnDestroyDo>k__BackingField: 

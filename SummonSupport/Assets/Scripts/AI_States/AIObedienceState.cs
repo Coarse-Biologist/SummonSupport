@@ -17,7 +17,6 @@ public class AIObedienceState : AIState
 
     public void Awake()
     {
-        Debug.Log($"{this} exists");
         stateHandler = GetComponent<AIStateHandler>();
         chaseState = GetComponent<AIChaseState>();
         peaceState = GetComponent<AIPeacefulState>();

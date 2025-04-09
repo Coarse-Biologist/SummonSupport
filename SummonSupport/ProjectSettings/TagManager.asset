@@ -8,6 +8,7 @@ TagManager:
   - Minion
   - Obstruction
   - AlchemyBench
+  - Projectile
   layers:
   - Default
   - TransparentFX
