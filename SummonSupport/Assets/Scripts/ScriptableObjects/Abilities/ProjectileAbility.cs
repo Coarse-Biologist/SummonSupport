@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Abilities/Projectile Ability")]
@@ -11,8 +12,8 @@ public class ProjectileAbility : Ability
     [field: SerializeField] public PiercingBehaviour    PiercingMode        { get; protected set; } //Pass through, break on first hit, break on x hit,
     [field: SerializeField] public int                  MaxPierceTimes      { get; protected set; }
     [field: SerializeField] public int                  MaxSplitInto        { get; protected set; }
-    [field: SerializeField] public OnEventDo            OnHit               { get; protected set; } // nothing, effect, cast,
-    [field: SerializeField] public OnEventDo            OnDestroy           { get; protected set; } // nothing, effect, cast,
+    [field: SerializeField] public List<OnEventDo>      ListOnHitDo         { get; protected set; } // nothing, effect, cast,
+    [field: SerializeField] public List<OnEventDo>      ListOnDestroyDo     { get; protected set; } // nothing, effect, cast,
 
 
     public override void Activate(GameObject user, GameObject spawnPoint)

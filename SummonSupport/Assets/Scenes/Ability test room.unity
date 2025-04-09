@@ -275,10 +275,25 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2350739302314339231, guid: 683a49fc796b0374dad199178e70ee42,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2757895889382685492, guid: 683a49fc796b0374dad199178e70ee42,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5084060229410023299, guid: 683a49fc796b0374dad199178e70ee42,
         type: 3}
       propertyPath: m_Name
       value: MinionPrefab (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5791997556083245111, guid: 683a49fc796b0374dad199178e70ee42,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6150396017969217355, guid: 683a49fc796b0374dad199178e70ee42,
         type: 3}
@@ -329,6 +344,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 180
+      objectReference: {fileID: 0}
+    - target: {fileID: 6485561764074615491, guid: 683a49fc796b0374dad199178e70ee42,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2416,10 +2436,25 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2350739302314339231, guid: 683a49fc796b0374dad199178e70ee42,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2757895889382685492, guid: 683a49fc796b0374dad199178e70ee42,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5084060229410023299, guid: 683a49fc796b0374dad199178e70ee42,
         type: 3}
       propertyPath: m_Name
       value: MinionPrefab (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5791997556083245111, guid: 683a49fc796b0374dad199178e70ee42,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6150396017969217355, guid: 683a49fc796b0374dad199178e70ee42,
         type: 3}
@@ -2470,6 +2505,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 180
+      objectReference: {fileID: 0}
+    - target: {fileID: 6485561764074615491, guid: 683a49fc796b0374dad199178e70ee42,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -8782,10 +8822,25 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2350739302314339231, guid: 683a49fc796b0374dad199178e70ee42,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2757895889382685492, guid: 683a49fc796b0374dad199178e70ee42,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5084060229410023299, guid: 683a49fc796b0374dad199178e70ee42,
         type: 3}
       propertyPath: m_Name
       value: MinionPrefab
+      objectReference: {fileID: 0}
+    - target: {fileID: 5791997556083245111, guid: 683a49fc796b0374dad199178e70ee42,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6150396017969217355, guid: 683a49fc796b0374dad199178e70ee42,
         type: 3}
@@ -8836,6 +8891,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 180
+      objectReference: {fileID: 0}
+    - target: {fileID: 6485561764074615491, guid: 683a49fc796b0374dad199178e70ee42,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -8905,6 +8965,11 @@ PrefabInstance:
       propertyPath: canon
       value: 
       objectReference: {fileID: 1427198259}
+    - target: {fileID: 3823348289868228544, guid: 5c2f586e1a28a3e4a9ad4d7d804cecab,
+        type: 3}
+      propertyPath: rotationSpeed
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 3823348289868228544, guid: 5c2f586e1a28a3e4a9ad4d7d804cecab,
         type: 3}
       propertyPath: projectileSpawn

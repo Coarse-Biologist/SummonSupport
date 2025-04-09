@@ -32,13 +32,12 @@ public class Projectile : MonoBehaviour
             return;
         else if (other.gameObject.GetComponent<LivingBeing>() != null)
         {
-            HandleOnEventDo(ability.OnHit, other);
+            foreach(OnEventDo onHitDo in ability.ListOnHitDo)
+                HandleOnEventDo(onHitDo, other);
             HandlePiercingLogic(other);
         }
         else
-        {
             DestroyProjectile();
-        }
         Logging.Verbose($"projectile hit {other.name}");
     }
 
@@ -71,7 +70,11 @@ public class Projectile : MonoBehaviour
     void DestroyProjectile(Collider2D other = null)
     {
         if (other != null)
-            HandleOnEventDo(ability.OnDestroy, other);
+            {
+                foreach(OnEventDo onDestroyDo in ability.ListOnDestroyDo)
+                    HandleOnEventDo(onDestroyDo, other);
+                
+            }
         Destroy(gameObject);
     }
 
