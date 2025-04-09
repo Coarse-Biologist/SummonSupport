@@ -20,4 +20,5 @@ MonoBehaviour:
   XpReward: 0
   GoldReward: 0
   KnowlegdeReward: 0
-  NPC_Sprite: {fileID: 21300066, guid: 29c9cded5e558164aaf8c9bf08aa1510, type: 3}
+  NPC_Sprite: {fileID: -203661239432679192, guid: 234a4cc18a5cece4aad2957b211d73c7,
+    type: 3}

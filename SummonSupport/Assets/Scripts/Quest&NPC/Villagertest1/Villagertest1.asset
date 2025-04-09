@@ -14,5 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   NPC_ResponseDict:
   - {fileID: 11400000, guid: 290b54c458fa07b40953c56b92207209, type: 2}
+  - {fileID: 11400000, guid: 73a23b84d6548ae4e9fc0ae491ede0bb, type: 2}
+  - {fileID: 11400000, guid: 1c6e81d53fd275b4386f25bf2350a7eb, type: 2}
   playerResponseDict:
   - {fileID: 11400000, guid: 883233d0e06270848a1270e6bad686d0, type: 2}
+  - {fileID: 11400000, guid: 037108d1f93b3d24ab1662cf5d69495b, type: 2}

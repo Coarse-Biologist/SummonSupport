@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEditor.PackageManager.Requests;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,11 +9,12 @@ public class NPC_Handler : MonoBehaviour, I_Interactable
 {
     [SerializeField] NPC_SO npcData;
     [SerializeField] GameObject interactCanvas;
+    [SerializeField] public GameObject buttonPrefab;
+
     private GameObject canvasInstance;
     private TextMeshProUGUI dialogue;
     private List<GameObject> spawnedButtons = new List<GameObject>();
     private Transform buttonContainer;
-    private GameObject buttonPrefab;
     void Awake()
     {
         GetComponentInChildren<SpriteRenderer>().sprite = npcData.NPC_Sprite;
@@ -26,7 +28,7 @@ public class NPC_Handler : MonoBehaviour, I_Interactable
             canvasInstance = Instantiate(interactCanvas, transform.position, Quaternion.identity);
             dialogue = canvasInstance.GetComponentInChildren<TextMeshProUGUI>();
             buttonContainer = canvasInstance.GetComponentInChildren<VerticalLayoutGroup>().transform;
-            buttonPrefab = buttonContainer.GetComponentInChildren<Button>().gameObject;
+
         }
         else
         {
@@ -37,7 +39,7 @@ public class NPC_Handler : MonoBehaviour, I_Interactable
 
     public void HideInteractionOption()
     {
-
+        ClearButtons();
         dialogue.text = npcData.Goodbye;
         Invoke("HideandReset", 2f);
     }
@@ -72,6 +74,7 @@ public class NPC_Handler : MonoBehaviour, I_Interactable
             TextMeshProUGUI buttonText = newButton.GetComponentInChildren<TextMeshProUGUI>();
             Button myButton = newButton.GetComponent<Button>();
             myButton.onClick.AddListener(() => OnOptionSelected(label));
+
             if (buttonText != null)
             {
                 buttonText.text = label;
@@ -86,6 +89,7 @@ public class NPC_Handler : MonoBehaviour, I_Interactable
     }
     private void OnOptionSelected(string playerResponse)
     {
+        Logging.Info($"Option selected: {playerResponse}");
         string NPC_Words = npcData.Dialogue.GetNPCResponseToPlayer(playerResponse);
         SetNPC_Text(NPC_Words);
         List<string> playerResponses = npcData.Dialogue.GetPlayerResponses(NPC_Words);
