@@ -2,17 +2,21 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections.Generic;
 using UnityEngine.Events;
-
-using NUnit.Framework.Interfaces;
-using UnityEngine.UIElements;
-using UnityEditor.Callbacks;
-
 public class AbilityHandler : MonoBehaviour
 {
     [SerializeField] List<Ability> abilities;
     PlayerInputActions inputActions;
     public UnityEvent<GameObject> hpChanged;
-
+    private Dictionary<string, int> actionToIndex = new()
+    {
+        { "Ability1", 0 },
+        { "Ability2", 1 },
+        { "Ability3", 2 },
+        { "Ability4", 3 },
+        { "Ability5", 4 },
+        { "Ability6", 5 },
+        
+    };
 
     private void Awake()
     {
@@ -33,28 +37,22 @@ public class AbilityHandler : MonoBehaviour
 
     private void RegisterInputEvents(bool register)
     {
-        if (register)
+        foreach (var action in inputActions.Player.Get().actions)
         {
-            foreach (var action in inputActions.Player.Get().actions)
+            if (action.name.StartsWith("Ability"))
             {
-                if (action.name.StartsWith("Ability"))
-                {
+                if (register)
                     action.performed += OnAbility;
-                }
+                else
+                    action.performed -= OnAbility;
             }
-        }
-        else
-        {
-            inputActions.Player.Ability1.performed -= OnAbility;
-            inputActions.Player.Ability2.performed -= OnAbility;
-        }
+        }        
     }
     private void OnAbility(InputAction.CallbackContext context)
     {
-
-        if (abilities.Count > 0)
+        if (actionToIndex.TryGetValue(context.action.name, out int index) && index < abilities.Count)
         {
-            CastAbility(abilities[0]);
+            CastAbility(abilities[index]);
         }
     }
     void CastAbility(Ability ability)

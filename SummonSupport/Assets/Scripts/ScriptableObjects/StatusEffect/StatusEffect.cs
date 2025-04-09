@@ -3,6 +3,22 @@
     using UnityEngine;
     using System;
 
+    public class StatusEffectInstance
+    {
+        public StatusEffect effect;
+        public float remainingDuration;
+
+        public StatusEffectInstance(StatusEffect effect)
+        {
+            this.effect = effect;
+            remainingDuration = effect.Duration;
+        }
+        public void Renew()
+        {
+            remainingDuration = effect.Duration;
+        }
+    }
+
     [CreateAssetMenu(menuName = "Status Effects/Status Effect")]
     public class StatusEffect : ScriptableObject
     {   
@@ -16,13 +32,30 @@
         [field: SerializeField] public int                      Value                   { get; protected set; } = 1;
         [field: SerializeField] public ValueType                ValueType               { get; protected set; } = ValueType.Flat;
         [field: SerializeField] public Elements                 ElementType             { get; protected set; } = Elements.None;
+        private float runtimeDuration;
+        
 
         public void ApplyStatusEffect(GameObject target)
         {
-            LivingBeing livingBeing = target.GetComponent<LivingBeing>();
-            if (livingBeing == null)
-                return;        
+            if (!target.TryGetComponent(out LivingBeing livingBeing))
+                return;
+            if (RenewStatusEffect(livingBeing))
+                return;
 
+            ChooseRightCoroutineToApplyStatusEffect(livingBeing);
+        }
+        bool RenewStatusEffect(LivingBeing livingBeing)
+        {
+            if (livingBeing.activeStatusEffects.TryGetValue(EffectName, out StatusEffectInstance existingEffect))
+            {
+                existingEffect.Renew();
+                return true;
+            }
+            else
+                return false;
+        }
+        void ChooseRightCoroutineToApplyStatusEffect(LivingBeing livingBeing)
+        {
             switch (Type)
             {
             case StatusEffectType.AttributeReductionOverTime:
@@ -42,7 +75,7 @@
 
         private IEnumerator HandleOnce(LivingBeing target, int value, Action<LivingBeing, int> action)
         {
-            target.statusEffects.Add(EffectName);
+            target.activeStatusEffects.Add(EffectName, new StatusEffectInstance(this));
             try
             { 
                 action(target, value);
@@ -50,28 +83,29 @@
             }
             finally
             {
-                target.statusEffects.Remove(EffectName);
+                target.activeStatusEffects.Remove(EffectName);
             }
         }
         private IEnumerator RepeatStatusEffect(LivingBeing target, int value, Action<LivingBeing, int> action)
         {
-            float timePassed = 0f;
-            target.statusEffects.Add(EffectName);
+            StatusEffectInstance instance = new(this);
+            target.activeStatusEffects.Add(EffectName, instance);
             try
             {
-                while (timePassed < Duration)
+                while (instance.remainingDuration > 0f)
                 {   
-                    if (target == null) yield break; // In case the target died while this was still running. If target died => GameObject does not longer exist.
+                    if (target == null) 
+                        yield break; // In case the target died while this was still running. If target died => GameObject does not longer exist.
 
                     action(target, value);
                     yield return new WaitForSeconds(TickRateSeconds);
-                    timePassed += TickRateSeconds;
+                    instance.remainingDuration -= TickRateSeconds;
                 }
             }
             finally
             {
                 if (target != null) // Same thing here, make sure target is still alive if we want to access it.
-                    target.statusEffects.Remove(EffectName);
+                    target.activeStatusEffects.Remove(EffectName);
             }
         }
 

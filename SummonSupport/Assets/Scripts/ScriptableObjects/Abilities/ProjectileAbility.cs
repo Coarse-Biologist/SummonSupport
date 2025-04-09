@@ -10,8 +10,8 @@ public class ProjectileAbility : Ability
     [field: SerializeField] public float                MaxRange            { get; protected set; }
     [field: SerializeField] public float                Lifetime            { get; protected set; }
     [field: SerializeField] public OnHitBehaviour       PiercingMode        { get; protected set; } //Pass through, break on first hit, break on x hit,
-    [field: SerializeField] public int                  MaxPierce         { get; protected set; }
-    [field: SerializeField] public int                  MaxSplit          { get; protected set; }
+    [field: SerializeField] public int                  MaxPierce           { get; protected set; }
+    [field: SerializeField] public int                  MaxSplit            { get; protected set; }
     [field: SerializeField] public int                  SplitAngleOffset    { get; protected set; }
     [field: SerializeField] public List<OnEventDo>      ListOnHitDo         { get; protected set; } // nothing, effect, cast,
     [field: SerializeField] public List<OnEventDo>      ListOnDestroyDo     { get; protected set; } // nothing, effect, cast,
@@ -19,9 +19,9 @@ public class ProjectileAbility : Ability
 
     public override void Activate(GameObject user, GameObject spawnPoint)
     {
-        Activate(user, spawnPoint, null);
+        Activate(user, spawnPoint, spawnPoint.transform);
     }
-    public void Activate(GameObject user, GameObject spawnPoint, Transform direction = null)
+    public void Activate(GameObject user, GameObject spawnPoint, Transform direction)
     {
         //TODO: clean up this mess ..
         Logging.Info($"{user.name} casted a {Name}");

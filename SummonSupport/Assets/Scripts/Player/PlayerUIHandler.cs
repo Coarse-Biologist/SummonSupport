@@ -15,7 +15,6 @@ public class PlayerUIHandler : MonoBehaviour
     private Dictionary<GameObject, ProgressBar> minionHPDict = new Dictionary<GameObject, ProgressBar>();
     private EventDeclarer DM;
     private AlchemyHandler alchemyHandler;
-
     void Awake()
     {
         DM = FindFirstObjectByType<EventDeclarer>();
@@ -23,18 +22,21 @@ public class PlayerUIHandler : MonoBehaviour
         root = uiDoc.rootVisualElement;
         playerUI = root.Q<VisualElement>("MainUI");
         minionHPBars = playerUI.Q<VisualElement>("MinionBarSlots");
+        var craftingUI = root.Q<VisualElement>("CraftingUI");
+        if (craftingUI != null)
+            craftingUI.style.display = DisplayStyle.None;
     }
 
     void OnEnable()
     {
-        DM.hpChanged.AddListener(SetMinionHP);
-        alchemyHandler.newMinionAdded.AddListener(AddMinionHP);
+        //DM.hpChanged.AddListener(SetMinionHP);
+        //alchemyHandler.newMinionAdded.AddListener(AddMinionHP);
     }
 
     void OnDisable()
     {
-        DM.hpChanged.RemoveListener(SetMinionHP);
-        alchemyHandler.newMinionAdded.RemoveListener(AddMinionHP);
+        //DM.hpChanged.RemoveListener(SetMinionHP);
+        //alchemyHandler.newMinionAdded.RemoveListener(AddMinionHP);
 
     }
 

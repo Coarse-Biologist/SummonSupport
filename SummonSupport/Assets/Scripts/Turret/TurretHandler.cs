@@ -53,6 +53,8 @@ public class TurretHandler : MonoBehaviour
         while (true)
         {
             GameObject target = GetTarget();
+            if (target == null)
+                yield break;
             yield return StartCoroutine(AimAtTargetOverTime(target));
             ShootTarget(target);
             if (shootTargetIndexNext >= listTargets.Count)
@@ -62,6 +64,9 @@ public class TurretHandler : MonoBehaviour
     }
     GameObject GetTarget()
     {
+        if (listTargets.Count == 0) 
+            return null;
+
         shootTargetIndexNext %= listTargets.Count;
         GameObject target = listTargets[shootTargetIndexNext];
         shootTargetIndexNext += 1;

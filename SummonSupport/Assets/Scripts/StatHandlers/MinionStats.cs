@@ -8,7 +8,7 @@ public class MinionStats : LivingBeing
     [SerializeField] public List<AlchemyLoot> Loot { private set; get; } = new List<AlchemyLoot>();
     [SerializeField] public MinionCommands CurrentCommand { private set; get; } = MinionCommands.None;
 
-    new public void AlterHP(int value)
+    public void SetMinionHP(int value)
     {
         SetAttribute(AttributeType.CurrentHitpoints, value);
         if (CurrentHP <= 0) isDead = true;

@@ -43,13 +43,13 @@ public abstract class LivingBeing : MonoBehaviour
     #endregion
 
     [Header("Other")]
-    public List<string> statusEffects = new List<string>();
+    public Dictionary<string, StatusEffectInstance> activeStatusEffects = new();
     public int XP_OnDeath = 3;
     protected bool isDead = false;
     public Dictionary<Elements, (Func<int> Get, Action<int> Set)> Affinities { private set; get; } = new Dictionary<Elements, (Func<int> Get, Action<int> Set)>();
     public Dictionary<AttributeType, (Func<int> Get, Action<int> Set)> AttributesDict { private set; get; } = new Dictionary<AttributeType, (Func<int> Get, Action<int> Set)>();
 
-    [SerializeField] public List<Ability> Abilties = new List<Ability>();
+    [SerializeField] public List<Ability> Abilties = new();
     [SerializeField] public float Speed;
     [SerializeField] public float Mass = 1;
 
@@ -187,26 +187,25 @@ public abstract class LivingBeing : MonoBehaviour
     }
 
     public void ChangeAttribute(AttributeType attributeType, int value, ValueType valueType = ValueType.Flat)
-    {
-        if (valueType == ValueType.Percentage)
-            value = Mathf.RoundToInt(GetAttribute(attributeType) * (1 + (value / 100f)));
-        else if (valueType == ValueType.Flat)
-            value = GetAttribute(attributeType) + value;
-
-        if (AttributesDict != null && AttributesDict.ContainsKey(attributeType))
-        {
-            AttributesDict[attributeType].Set(value);
-        }
-        else
-        {
+    {   
+        if (AttributesDict == null || !AttributesDict.ContainsKey(attributeType))
             throw new Exception("Attribute not found or invalid setter");
-        }
+
+        int currentValue    = GetAttribute(attributeType);
+        int newValue        = CalculateNewValueByType(currentValue, value, valueType);
+        AttributesDict[attributeType].Set(newValue);
         if (CurrentHP <= 0)
-        {
             Die();
-        }
     }
 
+    int CalculateNewValueByType(int currentValue, int value, ValueType valueType)
+    {
+        if (valueType == ValueType.Percentage)
+            value = Mathf.RoundToInt(currentValue * (1 + (value / 100f)));
+        else // value type is flat
+            value = currentValue + value;
+        return value;
+    }
     #endregion
     #region color control
     public void AlterColorByAffinity()
@@ -225,7 +224,6 @@ public abstract class LivingBeing : MonoBehaviour
             }
             if (str.Contains("Plant") || str.Contains("Bacteria"))
             {
-
                 SetColor(new float[4] { 0f, 1f, 0f, 1f });
             }
             if (str.Contains("Virus") || str.Contains("Acid"))
@@ -275,7 +273,7 @@ public abstract class LivingBeing : MonoBehaviour
     }
     #endregion
 
-    public void InitializeAttributeDict()
+    void InitializeAttributeDict()
     {
         AttributesDict = new Dictionary<AttributeType, (Func<int> Get, Action<int> Set)>
             {
@@ -288,7 +286,7 @@ public abstract class LivingBeing : MonoBehaviour
             };
     }
 
-    public void InitializeAffinityDict()
+    void InitializeAffinityDict()
     {
         Affinities = new Dictionary<Elements, (Func<int> Get, Action<int> Set)>
             {
@@ -309,7 +307,7 @@ public abstract class LivingBeing : MonoBehaviour
                 { Elements.Psychic,         (() => Psychic,         v => Psychic = v) }
             };
     }
-    public void Die()
+    void Die()
     {
         Logging.Info($"{gameObject.name} died");
         Destroy(gameObject);
