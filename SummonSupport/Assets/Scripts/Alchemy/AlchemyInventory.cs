@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -20,6 +21,19 @@ namespace Alchemy
             { AlchemyLoot.FaintEther, 1 },
             { AlchemyLoot.PureEther, 2 },
             { AlchemyLoot.IntenseEther, 1 }
+            };
+        public static Dictionary<AlchemyLoot, int> ingredientValues { get; private set; } = new Dictionary<AlchemyLoot, int>
+        {
+            { AlchemyLoot.WretchedOrgans, 1 },
+            { AlchemyLoot.FunctionalOrgans, 2 },
+            { AlchemyLoot.HulkingOrgans, 4 },
+            { AlchemyLoot.BrokenCores, 1 },
+            { AlchemyLoot.WorkingCore, 2 },
+            { AlchemyLoot.PowerfulCore, 4 },
+            { AlchemyLoot.HulkingCore, 6 },
+            { AlchemyLoot.FaintEther, 1 },
+            { AlchemyLoot.PureEther, 2 },
+            { AlchemyLoot.IntenseEther, 4 }
             };
 
         public static Dictionary<Elements, int> knowledgeDict = new Dictionary<Elements, int>
@@ -52,7 +66,9 @@ namespace Alchemy
         }
         public static void AlterIngredientNum(AlchemyLoot ingredient, int amount)
         {
+            Logging.Info($"You have gained {amount} {ingredient}");
             ingredients[ingredient] += amount;
+
         }
         public static void ExpendIngredients(Dictionary<AlchemyLoot, int> usedIngredients)
         {
@@ -60,6 +76,15 @@ namespace Alchemy
             {
                 if (ingredients[kvp.Key] > 0) AlterIngredientNum(kvp.Key, -kvp.Value);
             }
+        }
+        public static void GainTool(AlchemyTools tool)
+        {
+            if (!KnownTools.Contains(tool))
+            {
+                Logging.Info($"{tool} gained!");
+                KnownTools.Add(tool);
+            }
+            else Logging.Error($"The tool {tool} is already known");
         }
         #endregion
 
@@ -72,6 +97,7 @@ namespace Alchemy
             return sufficient;
         }
         #endregion
+
 
     }
 

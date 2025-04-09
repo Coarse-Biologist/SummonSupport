@@ -5,7 +5,7 @@ using Unity.VisualScripting;
 
 public class AIStateHandler : MonoBehaviour
 {
-    [SerializeField] public int FollowRadius = 15; // The distance a summon follows behind a player
+    [SerializeField] public int FollowRadius = 5; // The distance a summon follows behind a player
     [SerializeField] public int DetectionRadius = 50; // the radius in which summons will recognize and try to chase or attack
     [SerializeField] public int AngleOfSight = 360;
     [SerializeField] public int InterestRadius = 80; // radius beyond which a summon will lose interest in attacking
