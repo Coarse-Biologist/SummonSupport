@@ -13,6 +13,9 @@ MonoBehaviour:
   m_Name: NPC_Test
   m_EditorClassIdentifier: 
   npc_Name: 0
+  Greeting: Oh?
+  Goodbye: Au revoir...
+  Dialogue: {fileID: 11400000, guid: 1036811e4b6e7d44a9acdf0048e48ebd, type: 2}
   GivesQuest: 0
   XpReward: 0
   GoldReward: 0
