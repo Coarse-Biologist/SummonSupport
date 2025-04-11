@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UIElements;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 
 public class NPC_UI_Handler : MonoBehaviour, I_Interactable
@@ -13,6 +14,7 @@ public class NPC_UI_Handler : MonoBehaviour, I_Interactable
     private VisualElement imageSlot;
     private Label npc_text;
     private VisualElement playerOptions;
+    [SerializeField] string interactString = "Tab to Interact";
 
 
     private List<Button> spawnedButtons = new List<Button>();
@@ -30,7 +32,7 @@ public class NPC_UI_Handler : MonoBehaviour, I_Interactable
     public void ShowInteractionOption()
     {
         ShowDialogueScreen();
-        SetNPC_Text("Tab to Interact");
+        SetNPC_Text(interactString);
         SetNPC_Image(npcData.NPC_Sprite);
     }
 
@@ -54,7 +56,9 @@ public class NPC_UI_Handler : MonoBehaviour, I_Interactable
         List<string> playerResponses = npcData.Dialogue.GetPlayerResponses(words);
         CreateButtons(playerResponses);
     }
+
     #region Show/Hide screen
+
     public void ShowDialogueScreen()
     {
         dialoguePanel.style.display = DisplayStyle.Flex;
@@ -64,12 +68,14 @@ public class NPC_UI_Handler : MonoBehaviour, I_Interactable
         dialoguePanel.style.display = DisplayStyle.None;
     }
     #endregion
+
     #region NPC image
 
     private void SetNPC_Image(Sprite npc_Sprite)
     {
         if (imageSlot != null && npc_Sprite != null) imageSlot.style.backgroundImage = new StyleBackground(npc_Sprite);
     }
+
     #endregion
 
     #region NPC dialogue
@@ -77,13 +83,26 @@ public class NPC_UI_Handler : MonoBehaviour, I_Interactable
 
     private void SetNPC_Text(string new_npc_text)
     {
-        if (npc_text != null) npc_text.text = $"{npcData.npc_Name} says: " + new_npc_text;
+        new_npc_text = ParseNPCString(new_npc_text);
+        if (npc_text != null && new_npc_text != interactString) npc_text.text = $"{npcData.npc_Name} says: " + new_npc_text;
+        else if (npc_text != null) npc_text.text = new_npc_text;
         else Logging.Error("Npc text label is null.");
     }
     private void ClearNPC_Text()
     {
         if (npc_text != null) npc_text.text = "";
         else Logging.Error("Npc text label is null.");
+    }
+
+    private string ParseNPCString(string npc_text_string) //#TODO  belongs elsewhere or shouldnt extist
+    {
+        string questPattern = @"/Quest/";
+        string XP_Pattern = @"/XP_Reward/";
+        string goldPattern = @"/GoldReward/";
+        if (Regex.Match(npc_text_string, questPattern).Success) npc_text_string = Regex.Replace(npc_text_string, questPattern, $"You have recieved the quest {npcData.GivesQuest}!");
+        if (Regex.Match(npc_text_string, XP_Pattern).Success) npc_text_string = Regex.Replace(npc_text_string, XP_Pattern, $"You have gained {npcData.XP_Reward}xp!");
+        if (Regex.Match(npc_text_string, goldPattern).Success) npc_text_string = Regex.Replace(npc_text_string, goldPattern, $"You have recieved {npcData.GoldReward} gold!");
+        return npc_text_string;
     }
     #endregion
 
