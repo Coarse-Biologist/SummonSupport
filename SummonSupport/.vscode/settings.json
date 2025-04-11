@@ -56,5 +56,9 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "SummonSupport.sln"
+    "dotnet.defaultSolution": "SummonSupport.sln",
+    "omnisharp.useModernNet": false,
+    "omnisharp.useGlobalMono": "always",
+    "omnisharp.enableRoslynAnalyzers": true,
+    "omnisharp.enableEditorConfigSupport": true
 }

@@ -1,5 +1,5 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
-    <ui:VisualElement name="MainUI" style="flex-grow: 1; bottom: 0%; right: 0; top: 0; left: 0;">
+    <ui:VisualElement name="MainUI" picking-mode="Ignore" style="flex-grow: 1; bottom: 0%; right: 0; top: 0; left: 0;">
         <ui:VisualElement name="AbilitySlotsL" style="flex-grow: 1; width: 17%; height: 15%; right: 0%; position: absolute; top: auto; bottom: 0%; flex-wrap: wrap; left: 32%; flex-direction: column-reverse;">
             <ui:Button text="1" name="Ability1" style="width: 30%; height: 30%;" />
             <ui:Button text="2" name="Ability2" style="width: 30%; height: 30%;" />
@@ -24,19 +24,24 @@
         <ui:VisualElement name="Interact" style="flex-grow: 1; top: 0%; position: absolute; right: 0%; bottom: 0%; left: 40%; flex-direction: column; width: 20%; height: 5%; align-items: center; align-self: center;">
             <ui:Label selectable="true" name="InteractLabel" style="-unity-font-definition: url(&quot;project://database/Assets/UI%20Toolkit/UnityThemes/UnityDefaultRuntimeTheme.tss?fileID=2230732570650464555&amp;guid=afa248b5ec2977e4bac9880336ecce84&amp;type=3#NotInter-Regular&quot;); flex-basis: auto;" />
         </ui:VisualElement>
+        <ui:VisualElement name="Dialogue" style="flex-grow: 1; top: 40%; bottom: auto; width: 100%; height: 30%; min-width: 100%; max-width: 100%; min-height: 0%; max-height: 30%;">
+            <ui:Label name="NPC_Text" style="-unity-font-style: bold; white-space: normal; height: 100%; top: 0%; bottom: 0%; left: 25%; right: 0%; width: 25%; min-width: 25%; min-height: 100%;" />
+            <ui:VisualElement name="ImageSlot" style="flex-grow: 1; width: 25%; height: 100%; min-height: 100%; min-width: 25%; top: 0; bottom: 0%; left: 0%; right: 0%; position: absolute;" />
+            <ui:VisualElement name="PlayerOptions" style="flex-grow: 1; top: 0%; left: 50%; right: 0%; bottom: 0%; width: 50%; min-width: 50%; max-width: 50%; height: 100%; min-height: 100%; max-height: 0%; position: absolute;" />
+        </ui:VisualElement>
     </ui:VisualElement>
     <ui:VisualElement name="CraftingUI" style="flex-grow: 1; position: absolute; top: 0%; left: 0%; right: 0%; bottom: 0%;">
         <ui:VisualElement name="MainCraftingOptions" style="flex-grow: 1; width: 80%; height: 80%; max-height: 50%; min-height: 80%; min-width: 80%; max-width: 50%; right: 0%; position: absolute;">
-            <ui:Button text="Craft" name="CraftButton" style="width: 40%; height: 7%;" />
-            <ui:Button text="Upgrade" name="UpgradeButton" style="width: 40%; height: 7%;" />
-            <ui:Button text="Recycle" name="RecycleButton" style="width: 40%; height: 7%;" />
-            <ui:Button text="Leave Alchemy Bench" name="QuitButton" style="width: 40%; height: 7%;" />
-            <ui:VisualElement name="CraftandUpgrade" style="flex-grow: 1; flex-wrap: wrap; border-top-width: 2px; border-right-width: 2px; border-bottom-width: 2px; border-left-width: 2px; border-top-left-radius: 10px; border-top-right-radius: 10px; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px; border-left-color: rgba(0, 111, 5, 0); border-right-color: rgba(0, 111, 5, 0); border-top-color: rgba(0, 111, 5, 0); border-bottom-color: rgba(0, 111, 5, 0); bottom: 0;">
-                <ui:Label text="Crafting/upgrading lebel&#10;" name="Instructions" style="flex-wrap: wrap; white-space: pre-wrap;" />
+            <ui:Button text="Craft" name="CraftButton" display-tooltip-when-elided="false" style="width: 40%; height: 7%; background-image: url(&quot;project://database/Assets/Prefabs/UIPrefabs/ButtonTexture.png?fileID=2800000&amp;guid=8e8a05eb003230e42a5034cd3a1eaabb&amp;type=3#ButtonTexture&quot;); -unity-background-image-tint-color: rgb(255, 255, 255); background-color: rgba(188, 188, 188, 0); border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; -unity-font-style: bold;" />
+            <ui:Button text="Upgrade" name="UpgradeButton" style="width: 40%; height: 7%; background-image: url(&quot;project://database/Assets/Prefabs/UIPrefabs/ButtonTexture.png?fileID=2800000&amp;guid=8e8a05eb003230e42a5034cd3a1eaabb&amp;type=3#ButtonTexture&quot;); background-color: rgba(188, 188, 188, 0); -unity-background-image-tint-color: rgb(255, 255, 255); border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; -unity-font-style: bold;" />
+            <ui:Button text="Recycle" name="RecycleButton" style="width: 40%; height: 7%; background-image: url(&quot;project://database/Assets/Prefabs/UIPrefabs/ButtonTexture.png?fileID=2800000&amp;guid=8e8a05eb003230e42a5034cd3a1eaabb&amp;type=3#ButtonTexture&quot;); background-color: rgba(188, 188, 188, 0); border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; -unity-font-style: bold;" />
+            <ui:Button text="Leave Alchemy Bench" name="QuitButton" style="width: 40%; height: 7%; background-image: url(&quot;project://database/Assets/Prefabs/UIPrefabs/ButtonTexture.png?fileID=2800000&amp;guid=8e8a05eb003230e42a5034cd3a1eaabb&amp;type=3#ButtonTexture&quot;); background-color: rgba(188, 188, 188, 0); border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; -unity-font-style: bold;" />
+            <ui:VisualElement name="CraftandUpgrade" style="flex-grow: 1; flex-wrap: wrap; border-top-width: 2px; border-right-width: 2px; border-bottom-width: 2px; border-left-width: 2px; border-top-left-radius: 100%; border-top-right-radius: 10px; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px; border-left-color: rgba(0, 111, 5, 0); border-right-color: rgba(0, 111, 5, 0); border-top-color: rgba(0, 111, 5, 0); border-bottom-color: rgba(0, 111, 5, 0); bottom: 0;">
+                <ui:Label text="Crafting/upgrading lebel&#10;" name="Instructions" style="flex-wrap: wrap; white-space: pre-wrap; -unity-font-style: bold;" />
                 <ui:VisualElement name="AlchemyInventory" style="flex-grow: 1; position: absolute; width: 50%; height: 85%; top: 15%; flex-wrap: wrap;" />
                 <ui:VisualElement name="ElementSelection" style="flex-grow: 1; position: absolute; width: 50%; height: 85%; top: 15%; flex-wrap: wrap; right: 0%;" />
             </ui:VisualElement>
-            <ui:VisualElement name="ConfirmClear" style="flex-grow: 1; right: 0%; position: absolute; width: 40%; height: 20%; flex-wrap: wrap;" />
+            <ui:VisualElement name="ConfirmClear" enabled="false" style="flex-grow: 1; right: 0%; position: absolute; width: 40%; height: 45%; flex-wrap: wrap;" />
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

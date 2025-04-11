@@ -12,12 +12,13 @@ using System.Text.RegularExpressions;
 
 #endregion
 
-public class AlchemyBenchUI : MonoBehaviour
+public class AlchemyBenchUI : MonoBehaviour, I_Interactable
 {
     #region Class Variables
 
     #region Constants
     [SerializeField] UIDocument ui;
+    [SerializeField] GameObject interactCanvas;
     private VisualElement root;
     private VisualElement interactWindow;
     private Label interactLabel;
@@ -36,6 +37,8 @@ public class AlchemyBenchUI : MonoBehaviour
     private Dictionary<AlchemyLoot, int> selectedIngredients = new Dictionary<AlchemyLoot, int>();
     private List<Elements> selectedElements = new List<Elements>();
     private GameObject minionToUpgrade;
+    private GameObject canvasInstance;
+
 
     //private bool crafting = false;
     //private bool upgrading = false;
@@ -68,29 +71,16 @@ public class AlchemyBenchUI : MonoBehaviour
     #endregion
 
     #region Trigger effects
-    private void OnTriggerEnter2D(Collider2D other)
+
+    public void ShowInteractionOption()
     {
-        if (other.gameObject.CompareTag("Player"))
-        {
-            interactWindow.style.display = DisplayStyle.Flex;
-            interactLabel.text = "Press Tab to Interact";
-        }
+        if (canvasInstance == null) canvasInstance = Instantiate(interactCanvas, transform.position, Quaternion.identity);
+        else canvasInstance.SetActive(true);
     }
-    private void OnTriggerStay2D(Collider2D other)
+
+    public void HideInteractionOption()
     {
-        if (Input.GetKey(KeyCode.Tab))
-        {
-            InteractWithWorkBench();
-            PlayerUsingUI();
-        }
-    }
-    private void OnTriggerExit2D(Collider2D other)
-    {
-        if (other.gameObject.CompareTag("Player"))
-        {
-            interactWindow.style.display = DisplayStyle.None;
-            craftingUI.style.display = DisplayStyle.None;
-        }
+        Destroy(canvasInstance);
     }
 
     #endregion
@@ -100,7 +90,7 @@ public class AlchemyBenchUI : MonoBehaviour
     {
         playerUsingUI?.Invoke();
     }
-    private void InteractWithWorkBench()
+    public void Interact()//WithWorkBench()
     {
         PlayerUsingUI();
         ShowUI(craftingUI);
