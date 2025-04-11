@@ -134,7 +134,7 @@ namespace Alchemy
         PhaseShiftMicroscope,
         TransmissionElectronMicroscrope,
         ScannningElectronMicroscrope,
-        NuclearMagneticResonanator,
+        NuclearMagneticResonator,
         MassSpectrometer,
         Chromatograph,
     }

@@ -28,11 +28,5 @@ public enum NPCName
     Screegler,
 }
 
-public enum QuestName
-{
-    None,
-    Quest1,
-    Quest2,
 
-}
 
