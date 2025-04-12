@@ -34,6 +34,8 @@ public class PlayerMovement : MonoBehaviour
     private void OnEnable()
     {
         if (alchemyBench != null) alchemyBench.playerUsingUI.AddListener(ToggleLockedInUI);
+        inputActions ??= new PlayerInputActions();
+
         inputActions.Player.Enable();
 
         inputActions.Player.Move.performed += OnMove;

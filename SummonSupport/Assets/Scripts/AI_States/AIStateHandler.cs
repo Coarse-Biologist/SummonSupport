@@ -34,7 +34,7 @@ public class AIStateHandler : MonoBehaviour
         if (gameObject.CompareTag("Minion")) targetMask = LayerMask.GetMask("Enemy");
         else targetMask = LayerMask.GetMask("Minion", "Player");
 
-        Debug.Log($"setting target mask for {gameObject.GetComponent<LivingBeing>().Name} to {targetMask}");
+        Logging.Info($"setting target mask for {gameObject.GetComponent<LivingBeing>().Name} to {targetMask}");
         currentState = GetComponentInChildren<AIPeacefulState>();
         obedienceState = GetComponent<AIObedienceState>();
         livingBeing = GetComponent<LivingBeing>();

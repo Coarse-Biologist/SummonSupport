@@ -33,6 +33,8 @@ public class AbilityHandler : MonoBehaviour
 
     private void RegisterInputEvents(bool register)
     {
+        inputActions ??= new PlayerInputActions();
+
         if (register)
         {
             foreach (var action in inputActions.Player.Get().actions)

@@ -8,6 +8,7 @@ using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using System;
 using Unity.VisualScripting;
+
 #endregion
 public class AlchemyHandler : MonoBehaviour
 {
@@ -18,8 +19,19 @@ public class AlchemyHandler : MonoBehaviour
     public UnityEvent<GameObject> requestInstantiation = new UnityEvent<GameObject>();
     [SerializeField] public List<GameObject> activeMinions = new List<GameObject>();
     public UnityEvent<GameObject> newMinionAdded;
+    public AlchemyHandler Instance;
 
     #endregion
+
+    public void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
+    }
 
     #region Crafting Minion
 

@@ -5,6 +5,7 @@ using System;
 
 public class Dialogue_SO : ScriptableObject
 {
+
     [SerializeField] public List<npc_key<string, List<string>>> npc_keys;
     [SerializeField] public List<player_key<string, string>> player_keys;
 
