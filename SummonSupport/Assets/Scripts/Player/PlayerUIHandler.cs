@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEngine.Events;
+using SummonSupportEvents;
 
 public class PlayerUIHandler : MonoBehaviour
 {
@@ -13,27 +14,27 @@ public class PlayerUIHandler : MonoBehaviour
 
     [SerializeField] public List<GameObject> minions;// = new List<GameObject>();
     private Dictionary<GameObject, ProgressBar> minionHPDict = new Dictionary<GameObject, ProgressBar>();
-    private EventDeclarer DM;
     private AlchemyHandler alchemyHandler;
+
 
     void Awake()
     {
-        DM = FindFirstObjectByType<EventDeclarer>();
         alchemyHandler = FindFirstObjectByType<AlchemyHandler>();
         root = uiDoc.rootVisualElement;
         playerUI = root.Q<VisualElement>("MainUI");
         minionHPBars = playerUI.Q<VisualElement>("MinionBarSlots");
+        //EventDeclarer.Initialize();
     }
 
     void OnEnable()
     {
-        DM.hpChanged.AddListener(SetMinionHP);
+        EventDeclarer.hpChanged.AddListener(SetMinionHP);
         alchemyHandler.newMinionAdded.AddListener(AddMinionHP);
     }
 
     void OnDisable()
     {
-        DM.hpChanged.RemoveListener(SetMinionHP);
+        EventDeclarer.hpChanged.RemoveListener(SetMinionHP);
         alchemyHandler.newMinionAdded.RemoveListener(AddMinionHP);
 
     }

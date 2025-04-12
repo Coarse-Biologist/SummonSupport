@@ -1,10 +1,14 @@
 using UnityEngine;
-
-[System.Serializable]
-public class RepeatableQuestDict
+namespace Quest
 {
-    [SerializeField] public RepeatableAccomplishments quest;
-    [SerializeField] public int reps;
+
+    [System.Serializable]
+    public class RepeatableQuestDict
+    {
+        [SerializeField] public RepeatableAccomplishments quest;
+        [SerializeField] public int reps;
+    }
+
 }
 
 

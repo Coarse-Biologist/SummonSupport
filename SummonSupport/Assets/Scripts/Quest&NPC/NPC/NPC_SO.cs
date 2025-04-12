@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using System;
 
+namespace Quest {
 [CreateAssetMenu(menuName = "NPC")]
 public class NPC_SO : ScriptableObject
 {
@@ -26,6 +27,7 @@ public enum NPCName
     BraveVillager,
     InjuredVillager,
     Screegler,
+}
 }
 
 

@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
-
+using Quest;    
 
 public class NPC_UI_Handler : MonoBehaviour, I_Interactable
 {
@@ -146,3 +146,4 @@ public class NPC_UI_Handler : MonoBehaviour, I_Interactable
     #endregion
 
 }
+
