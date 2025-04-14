@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fceeef8cfafe41444bf6aa890ebad1b7, type: 3}
+  m_Name: Aqua Regia
+  m_EditorClassIdentifier: 
+  <Name>k__BackingField: 
+  <Icon>k__BackingField: {fileID: 0}
+  <Cooldown>k__BackingField: 0
+  <PowerCost>k__BackingField: 0
+  <StatusEffect>k__BackingField: {fileID: 0}
+  <Attribute>k__BackingField: 10
+  <Value>k__BackingField: 0
+  <ElementType>k__BackingField: 0
+  <Speed>k__BackingField: 0
+  <Projectile>k__BackingField: {fileID: 0}
+  <MaxRange>k__BackingField: 0
+  <Lifetime>k__BackingField: 0
+  <PiercingMode>k__BackingField: 0
+  <MaxPierce>k__BackingField: 0
+  <MaxSplit>k__BackingField: 0
+  <SplitAngleOffset>k__BackingField: 0
+  <ListOnHitDo>k__BackingField: 
+  <ListOnDestroyDo>k__BackingField: 
