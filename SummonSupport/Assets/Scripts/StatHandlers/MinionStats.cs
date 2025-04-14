@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using Alchemy;
+using SummonSupportEvents;
 
 public class MinionStats : LivingBeing
 {
@@ -14,7 +15,7 @@ public class MinionStats : LivingBeing
         if (CurrentHP <= 0) isDead = true;
         if (CurrentHP > MaxHP) SetAttribute(AttributeType.MaxHitpoints, value);
 
-        ED.hpChanged?.Invoke(gameObject);
+        EventDeclarer.hpChanged?.Invoke(gameObject);
     }
     public void SetCommand(MinionCommands command)
     {

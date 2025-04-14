@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using System;
 
+namespace Quest {
 [CreateAssetMenu(menuName = "NPC")]
 public class NPC_SO : ScriptableObject
 {
@@ -10,11 +11,10 @@ public class NPC_SO : ScriptableObject
     [SerializeField] public string Goodbye = "Au revoir...";
     [SerializeField] public Dialogue_SO Dialogue;
     [SerializeField] public QuestName GivesQuest = QuestName.None;
-    [SerializeField] public int XpReward = 0;
+    [SerializeField] public int XP_Reward = 0;
     [SerializeField] public int GoldReward = 0;
     [SerializeField] public int KnowlegdeReward = 0;
     [SerializeField] public Sprite NPC_Sprite;
-
 
 }
 
@@ -28,12 +28,7 @@ public enum NPCName
     InjuredVillager,
     Screegler,
 }
-
-public enum QuestName
-{
-    None,
-    Quest1,
-    Quest2,
-
 }
+
+
 

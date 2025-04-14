@@ -4,8 +4,7 @@ using System.Runtime.InteropServices;
 using Alchemy;
 using System;
 using UnityEngine;
-using NUnit.Framework;
-
+using SummonSupportEvents;
 public abstract class LivingBeing : MonoBehaviour
 {
     #region declarations
@@ -70,7 +69,6 @@ public abstract class LivingBeing : MonoBehaviour
     private SpriteRenderer spriteRenderer;
 
     #endregion
-    protected EventDeclarer ED;
 
     protected void Awake()
     {
@@ -80,7 +78,6 @@ public abstract class LivingBeing : MonoBehaviour
         InitializeAffinityDict();
         InitializeColorDict();
         Logging.Info($"{Affinities.Keys.Count}");
-        ED = FindFirstObjectByType<EventDeclarer>();
     }
 
     Dictionary<AttributeType, Dictionary<AccessType, Delegate>> dictAttributes;
