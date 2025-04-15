@@ -8,6 +8,7 @@ public class PlayerMovement : MonoBehaviour
     #region class Variables
     private Vector2 moveInput;
     public Camera mainCamera;
+    private PlayerSpriteController spriteController;
     [SerializeField] private PlayerInputActions inputActions;
     [SerializeField] private AlchemyBenchUI alchemyBench;
     private Vector2 lookInput;
@@ -25,6 +26,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Awake()
     {
+        spriteController = GetComponent<PlayerSpriteController>();
         rb = GetComponent<Rigidbody2D>();
         mainCamera = Camera.main;
         inputActions = new PlayerInputActions();
@@ -101,6 +103,8 @@ public class PlayerMovement : MonoBehaviour
         //transform.position += moveDirection * calculatedSpeed * Time.deltaTime;
         rb.linearVelocity = moveDirection * calculatedSpeed * 10;
     }
+
+
     #endregion
 
     #region Look Direction
@@ -113,10 +117,12 @@ public class PlayerMovement : MonoBehaviour
         Vector2 worldPosition = mainCamera.ScreenToWorldPoint(lookInput);
         Vector2 direction = (worldPosition - (Vector2)transform.position).normalized;
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-        transform.rotation = Quaternion.Euler(0, 0, angle);
-
+        //transform.rotation = Quaternion.Euler(0, 0, angle);
+        spriteController.SetPlayerSprite(angle);
+    
         return transform.rotation;
     }
+    
     #endregion
     #region using UI
     public void ToggleLockedInUI()
