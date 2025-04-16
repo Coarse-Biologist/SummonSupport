@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: f8c00d6992192d244980066c27cabc0a
+guid: 0b90c4239dc7c8c4cbfd7db645024165
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 432458577209399645
-    second: downLeftSprite_0
+      213: -6138014068744602529
+    second: WitchDoctorBackLeft_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -37,7 +37,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -100,13 +100,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: downLeftSprite_0
+      name: WitchDoctorBackLeft_0
       rect:
         serializedVersion: 2
-        x: 1
-        y: 0
-        width: 62
-        height: 61
+        x: 4
+        y: 7
+        width: 55
+        height: 52
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: d5913a2e8c6600600800000000000000
-      internalID: 432458577209399645
+      spriteID: f5cb02e99b461daa0800000000000000
+      internalID: -6138014068744602529
       vertices: []
       indices: 
       edges: []
@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      WitchDoctorBackLeft_0: -6138014068744602529
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
