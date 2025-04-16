@@ -17,13 +17,16 @@ public class ProjectileAbility : Ability
     [field: SerializeField] public List<OnEventDo>      ListOnDestroyDo     { get; protected set; } // nothing, effect, cast,
 
 
-    public override void Activate(GameObject user, GameObject spawnPoint)
+    public override void Activate(GameObject user)
+    {
+        Activate(user, user);
+    }
+    public void Activate(GameObject user, GameObject spawnPoint)
     {
         Activate(user, spawnPoint, spawnPoint.transform);
     }
     public void Activate(GameObject user, GameObject spawnPoint, Transform direction)
     {
-        //TODO: clean up this mess ..
         Logging.Info($"{user.name} casted a {Name}");
         GameObject projectile = Instantiate(Projectile, spawnPoint.transform.position, Quaternion.identity);
         Projectile projectileScript = projectile.GetComponent<Projectile>();

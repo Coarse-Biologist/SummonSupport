@@ -11,6 +11,7 @@ public class PlayerMovement : MonoBehaviour
     private PlayerSpriteController spriteController;
     [SerializeField] private PlayerInputActions inputActions;
     [SerializeField] private AlchemyBenchUI alchemyBench;
+    [SerializeField] GameObject AbilityRotation;
     private Vector2 lookInput;
     [SerializeField] float speed = 5f;
     [SerializeField] float dashBoost = 10f;
@@ -117,7 +118,7 @@ public class PlayerMovement : MonoBehaviour
         Vector2 worldPosition = mainCamera.ScreenToWorldPoint(lookInput);
         Vector2 direction = (worldPosition - (Vector2)transform.position).normalized;
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-        //transform.rotation = Quaternion.Euler(0, 0, angle);
+        AbilityRotation.transform.rotation = Quaternion.Euler(0, 0, angle);
         spriteController.SetPlayerSprite(angle);
     
         return transform.rotation;

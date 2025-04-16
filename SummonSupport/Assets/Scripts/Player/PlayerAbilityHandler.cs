@@ -2,11 +2,11 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections.Generic;
 using UnityEngine.Events;
-public class AbilityHandler : MonoBehaviour
+
+public class PlayerAbilityHandler : AbilityHandler
 {
     [SerializeField] List<Ability> abilities;
     PlayerInputActions inputActions;
-    public UnityEvent<GameObject> hpChanged;
     private Dictionary<string, int> actionToIndex = new()
     {
         { "Ability1", 0 },
@@ -18,8 +18,9 @@ public class AbilityHandler : MonoBehaviour
         
     };
 
-    private void Awake()
+    private new void Awake()
     {
+        base.Awake(); 
         inputActions ??= new PlayerInputActions();
     }
 
@@ -50,27 +51,11 @@ public class AbilityHandler : MonoBehaviour
     }
     private void OnAbility(InputAction.CallbackContext context)
     {
+        Logging.Verbose($"{this.gameObject.name} used ability");
         if (actionToIndex.TryGetValue(context.action.name, out int index) && index < abilities.Count)
         {
+            Logging.Verbose($"{this.gameObject.name} used ability with index: {index}");
             CastAbility(abilities[index]);
         }
     }
-    void CastAbility(Ability ability)
-    {
-        switch (ability)
-        {
-            case ProjectileAbility projectile:
-                Logging.Info("Cast Ability is a projectile: " + abilities[0].name);
-                HandleProjectile(projectile);
-                break;
-
-            case ConjureAbility conjuration:
-                break;
-        }
-    }
-    void HandleProjectile(ProjectileAbility ability)
-    {
-        ability.Activate(gameObject, gameObject);
-    }
 }
-

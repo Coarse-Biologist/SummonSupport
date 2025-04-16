@@ -4,13 +4,13 @@ using System.Collections;
 using System.Collections.Generic;
 
 
-public class TurretHandler : MonoBehaviour
+public class TurretHandler : AbilityHandler
 {
     [SerializeField] Ability ability;
     [SerializeField] float cooldown         = 5f;
     [SerializeField] float rotationSpeed    = 5f;
-    [SerializeField] GameObject canon;
-    [SerializeField] GameObject projectileSpawn;
+    
+
     public List<GameObject> listTargets     = new List<GameObject>();
     public int shootTargetIndexNext;
     public bool hasTarget;
@@ -19,6 +19,7 @@ public class TurretHandler : MonoBehaviour
     {
         shootTargetIndexNext = 0;
     }
+
     void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Minion") && (!listTargets.Contains(other.gameObject)))
@@ -62,6 +63,7 @@ public class TurretHandler : MonoBehaviour
             yield return new WaitForSeconds(cooldown);
         }
     }
+
     GameObject GetTarget()
     {
         if (listTargets.Count == 0) 
@@ -72,6 +74,7 @@ public class TurretHandler : MonoBehaviour
         shootTargetIndexNext += 1;
         return target;
     }
+
     private IEnumerator AimAtTargetOverTime(GameObject target)
     {
         Vector3 direction = target.transform.position - transform.position;
@@ -79,17 +82,18 @@ public class TurretHandler : MonoBehaviour
         Quaternion targetRotation = Quaternion.Euler(0, 0, angle);
         
         float timeElapsed = 0f;
-        Quaternion startingRotation = canon.transform.rotation;
+        Quaternion startingRotation = abilityDirection.transform.rotation;
         
         while (timeElapsed < 1f)
         {
             timeElapsed += Time.deltaTime * rotationSpeed;
-            canon.transform.rotation = Quaternion.Slerp(startingRotation, targetRotation, timeElapsed);
+            abilityDirection.transform.rotation = Quaternion.Slerp(startingRotation, targetRotation, timeElapsed);
             yield return null;
         }
 
-        canon.transform.rotation = targetRotation;
+        abilityDirection.transform.rotation = targetRotation;
     }
+
     void ShootTarget(GameObject target)
     {
         if (ability == null)
@@ -104,12 +108,6 @@ public class TurretHandler : MonoBehaviour
             return;
         }
         
-        if (ability is ProjectileAbility projectileAbility)
-        {
-            projectileAbility.Activate(gameObject, projectileSpawn, canon.transform);
-            Logging.Info($"Turret fires ability {ability.Name} at {target.name}");
-        }
+        CastAbility(ability);
     }
-
-    
 }

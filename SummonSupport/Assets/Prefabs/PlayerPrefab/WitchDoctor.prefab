@@ -1,5 +1,40 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &8286176756961153444
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5939803872355912251}
+  m_Layer: 3
+  m_Name: AbilityDirection
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &5939803872355912251
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8286176756961153444}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3177527482266868917}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -2.29, y: 1.428}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1001 &8943877624272992215
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -14,6 +49,21 @@ PrefabInstance:
       value: 
       objectReference: {fileID: -5089674144711089733, guid: 01b5c1199a82069418d8510028c92073,
         type: 3}
+    - target: {fileID: 1544915785705677662, guid: c7837ff0da5abc24bbbd2fee9f125d7d,
+        type: 3}
+      propertyPath: m_ActionEvents.Array.size
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 1544915785705677662, guid: c7837ff0da5abc24bbbd2fee9f125d7d,
+        type: 3}
+      propertyPath: m_ActionEvents.Array.data[10].m_ActionId
+      value: 383dc72a-6e30-4d8f-9c81-f0d595ae43e6
+      objectReference: {fileID: 0}
+    - target: {fileID: 1544915785705677662, guid: c7837ff0da5abc24bbbd2fee9f125d7d,
+        type: 3}
+      propertyPath: m_ActionEvents.Array.data[10].m_ActionName
+      value: 'Player/CommandMinion[/Mouse/middleButton,/Keyboard/c]'
+      objectReference: {fileID: 0}
     - target: {fileID: 2543379374232598137, guid: c7837ff0da5abc24bbbd2fee9f125d7d,
         type: 3}
       propertyPath: abilities.Array.size
@@ -41,6 +91,11 @@ PrefabInstance:
       propertyPath: dashBoost
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2918865458453648418, guid: c7837ff0da5abc24bbbd2fee9f125d7d,
+        type: 3}
+      propertyPath: AbilityRotation
+      value: 
+      objectReference: {fileID: 8286176756961153444}
     - target: {fileID: 3253275221398107419, guid: c7837ff0da5abc24bbbd2fee9f125d7d,
         type: 3}
       propertyPath: m_Constraints
@@ -134,12 +189,12 @@ PrefabInstance:
     - target: {fileID: 5766807890242693986, guid: c7837ff0da5abc24bbbd2fee9f125d7d,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 1.1439328
+      value: 0.11
       objectReference: {fileID: 0}
     - target: {fileID: 5766807890242693986, guid: c7837ff0da5abc24bbbd2fee9f125d7d,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -2.333758
+      value: 0.02
       objectReference: {fileID: 0}
     - target: {fileID: 5766807890242693986, guid: c7837ff0da5abc24bbbd2fee9f125d7d,
         type: 3}
@@ -166,10 +221,19 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 2543379374232598137, guid: c7837ff0da5abc24bbbd2fee9f125d7d, type: 3}
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 5766807890242693986, guid: c7837ff0da5abc24bbbd2fee9f125d7d,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5939803872355912251}
     m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7656914775493373791, guid: c7837ff0da5abc24bbbd2fee9f125d7d,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8051226795772590237}
     - targetCorrespondingSourceObject: {fileID: 7656914775493373791, guid: c7837ff0da5abc24bbbd2fee9f125d7d,
         type: 3}
       insertIndex: -1
@@ -193,6 +257,24 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 8943877624272992215}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &8051226795772590237
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1611684191054059656}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1d757f5b75087c43b396ba3bf7177cc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  abilitySpawn: {fileID: 0}
+  abilityDirection: {fileID: 0}
+  abilities:
+  - {fileID: 11400000, guid: 5605a5e8027c4e94691ae731bacfcb5a, type: 2}
+  - {fileID: 11400000, guid: 265d2196a4dc4d347bf0f1d275f43d44, type: 2}
+  - {fileID: 11400000, guid: 4c3c5f9615adc0745ad7d2d7106f3cd8, type: 2}
 --- !u!114 &410154596452452254
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -262,3 +344,9 @@ MonoBehaviour:
     type: 3}
   leftUpSprite: {fileID: -6138014068744602529, guid: 0b90c4239dc7c8c4cbfd7db645024165,
     type: 3}
+--- !u!224 &3177527482266868917 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 5766807890242693986, guid: c7837ff0da5abc24bbbd2fee9f125d7d,
+    type: 3}
+  m_PrefabInstance: {fileID: 8943877624272992215}
+  m_PrefabAsset: {fileID: 0}

@@ -14,9 +14,5 @@ public abstract class Ability : ScriptableObject
     [field: SerializeField]                             public int              Value               { get; protected set; } = 0;
     [field: SerializeField]                             public Elements         ElementType         { get; protected set; } = Elements.None;
 
-    public virtual void Activate(GameObject user){}
-    public virtual void Activate(GameObject user, GameObject spawnPoint)
-    {
-        Activate(user);
-    }
+    public abstract void Activate(GameObject user);
 }
