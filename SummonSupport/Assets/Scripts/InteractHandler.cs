@@ -18,6 +18,11 @@ public class InteractHandler : MonoBehaviour
         {
             interactInterfaceInstance.Interact();
         }
+        else if (interactInterfaceInstance != null)
+        {
+            Logging.Info("Trying to call show interction function");
+            interactInterfaceInstance.ShowInteractionOption();
+        }
     }
     void OnTriggerExit2D(Collider2D collision)
     {

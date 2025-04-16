@@ -30,4 +30,5 @@ public class Dialogue_SO : ScriptableObject
         }
         return NPC_Words;
     }
+    
 }
