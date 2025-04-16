@@ -108,7 +108,7 @@ public class Projectile : MonoBehaviour
         }
         DestroyProjectile(other);
     }
-    void HandleOnEventDo(OnEventDo onEvent, Collider2D other)
+    void HandleOnEventDo(OnEventDo onEvent, Collider2D other) //TODO: This belongs in its own class!! Other Ability types will definitly use this!
     {
         Logging.Verbose($"HandleOnEventDo {onEvent} with {other.name}");
         switch (onEvent)

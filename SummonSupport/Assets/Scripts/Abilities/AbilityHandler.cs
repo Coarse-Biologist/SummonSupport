@@ -23,8 +23,9 @@ public class AbilityHandler : MonoBehaviour
                 HandleProjectile(projectile);
                 break;
 
-            case TargetMouseAbility pointAndClick:
+            case TargetMouseAbility pointAndClickAbility:
                 Logging.Verbose($"Cast Ability is a point and click ability: {ability.Name}");
+                HandlePointAndClick(pointAndClickAbility);
                 break;
         }
     }
@@ -32,6 +33,11 @@ public class AbilityHandler : MonoBehaviour
     {
         ability.Activate(gameObject, abilitySpawn, abilityDirection.transform);
         Logging.Verbose($"{gameObject.name} fires ability {ability.Name}");
+    }
+
+    void HandlePointAndClick(TargetMouseAbility ability)
+    {
+        ability.Activate(gameObject);
     }
 }
 
