@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 1fa869a53297f364d9094670009d0435
+guid: 225903307da0733439e4c62e7ccec783
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 2537882373423050008
-    second: Block_0
+      213: 7293634738902838161
+    second: BlockDoubleSaggyGrass4_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,7 +100,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Block_0
+      name: BlockDoubleSaggyGrass4_0
       rect:
         serializedVersion: 2
         x: 0
@@ -108,15 +108,15 @@ TextureImporter:
         width: 32
         height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 81d2b95829e583320800000000000000
-      internalID: 2537882373423050008
+      spriteID: 19ba0c5d622383560800000000000000
+      internalID: 7293634738902838161
       vertices: []
       indices: 
       edges: []
@@ -125,7 +125,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 6405a791192b57349933f365d4d00357
+    spriteID: 
     internalID: 0
     vertices: []
     indices: 
@@ -135,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Block_0: 2537882373423050008
+      BlockDoubleSaggyGrass4_0: 7293634738902838161
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
