@@ -24,15 +24,15 @@ MonoBehaviour:
     - Not right now
     - Ciao.
   player_keys:
-  - player_says: Sure...
-    npc_says: Excellent!
-  - player_says: Not right now
-    npc_says: Excellent!
-  - player_says: Ciao.
-    npc_says: ciao ciaoooo
-  - player_says: Hello.
-    npc_says: Would you like to buy some of my stuff?
-  - player_says: Howdy
-    npc_says: Would you like to buy some of my stuff?
-  - player_says: Gruessgott.
-    npc_says: Oh now, a foreigner?
+  - Key: 
+    Value: 
+    result: 0
+  - Key: Sure...
+    Value: Excellent!
+    result: 2
+  - Key: Hello.
+    Value: Would you like to buy some of my stuff?
+    result: 5
+  - Key: Howdy.
+    Value: Would you like to buy some of my stuff?
+    result: 3

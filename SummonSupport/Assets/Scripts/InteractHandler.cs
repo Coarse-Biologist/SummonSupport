@@ -7,7 +7,7 @@ public class InteractHandler : MonoBehaviour
         I_Interactable interactInterfaceInstance = collision.gameObject.GetComponent<I_Interactable>();
         if (interactInterfaceInstance != null)
         {
-            Logging.Info("Trying to call show interction function");
+            //Logging.Info("Trying to call show interction function");
             interactInterfaceInstance.ShowInteractionOption();
         }
     }
@@ -20,7 +20,7 @@ public class InteractHandler : MonoBehaviour
         }
         else if (interactInterfaceInstance != null)
         {
-            Logging.Info("Trying to call show interction function");
+            // Logging.Info("Trying to call show interction function");
             interactInterfaceInstance.ShowInteractionOption();
         }
     }

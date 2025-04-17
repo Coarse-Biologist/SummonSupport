@@ -87,6 +87,10 @@ public class NPC_UI_Handler : MonoBehaviour, I_Interactable
         else if (npc_text != null) npc_text.text = new_npc_text;
         else Logging.Error("Npc text label is null.");
     }
+    private void SetMetaInfo(string new_Info)
+    {
+
+    }
     private void ClearNPC_Text()
     {
         if (npc_text != null) npc_text.text = "";
@@ -126,11 +130,14 @@ public class NPC_UI_Handler : MonoBehaviour, I_Interactable
     }
     private void OnOptionSelected(string playerResponse)
     {
+
         Logging.Info($"Option selected: {playerResponse}");
         string NPC_Words = npcData.Dialogue.GetNPCResponseToPlayer(playerResponse);
+        NPC_Words = NPC_Words + npcData.GetResult(npcData.Dialogue.GetResult(playerResponse));
         SetNPC_Text(NPC_Words);
         List<string> playerResponses = npcData.Dialogue.GetPlayerResponses(NPC_Words);
         CreateButtons(playerResponses);
+
     }
     #endregion
 
