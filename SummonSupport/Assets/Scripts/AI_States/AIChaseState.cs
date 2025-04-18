@@ -1,7 +1,5 @@
 using Unity.VisualScripting;
 using UnityEngine;
-using System.Collections;
-using UnityEngine.InputSystem.LowLevel;
 
 
 public class AIChaseState : AIState
@@ -13,6 +11,8 @@ public class AIChaseState : AIState
     private bool targetIsInRange;
     private Rigidbody2D rb;
     private LivingBeing statScript;
+
+
 
     void Start()
     {
@@ -71,12 +71,14 @@ public class AIChaseState : AIState
 
     public void Chase(Vector2 targetLoc)
     {
+
         Vector2 currentLoc = new Vector2(transform.position.x, transform.position.y);
         Vector2 direction = targetLoc - currentLoc;
         if (direction.sqrMagnitude > 10 || peaceState.CheckVisionBlocked(targetEntity)) rb.linearVelocity = (targetLoc - currentLoc) * statScript.Speed;
         else rb.linearVelocity = new Vector2(0, 0);
     }
-
-
 }
+
+
+
 

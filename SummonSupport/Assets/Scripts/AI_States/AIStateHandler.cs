@@ -14,13 +14,13 @@ public class AIStateHandler : MonoBehaviour
     public LayerMask targetMask { private set; get; }
     public LayerMask obstructionMask { private set; get; }
     public AIState currentState;
+    [SerializeField] public AI_CC_State ccState;
     [SerializeField] public AIState peaceState { private set; get; }
     [SerializeField] public AIState chaseState { private set; get; }
     [SerializeField] public AIState obedienceState { private set; get; }
     [SerializeField] public LivingBeing livingBeing { private set; get; }
     [SerializeField] public MinionStats minionStats { private set; get; }
     [SerializeField] public GameObject player { protected set; get; }
-
 
     public Vector2 lastSeenLoc;
 
@@ -33,11 +33,12 @@ public class AIStateHandler : MonoBehaviour
         obstructionMask = LayerMask.GetMask("Obstruction");
         if (gameObject.CompareTag("Minion")) targetMask = LayerMask.GetMask("Enemy");
         else targetMask = LayerMask.GetMask("Minion", "Player");
-        
+
         currentState = GetComponentInChildren<AIPeacefulState>();
         obedienceState = GetComponent<AIObedienceState>();
         livingBeing = GetComponent<LivingBeing>();
         minionStats = GetComponent<MinionStats>();
+        ccState = GetComponent<AI_CC_State>();
     }
 
     void Update()
@@ -47,7 +48,7 @@ public class AIStateHandler : MonoBehaviour
 
     private void RunStateMachine()
     {
-
+        if (ccState != null && ccState.currentCCs.Count != 0) SwitchToNextState(ccState);
         if (minionStats.CurrentCommand == MinionCommands.None)
         {
             AIState nextState = currentState?.RunCurrentState();
@@ -76,6 +77,7 @@ public class AIStateHandler : MonoBehaviour
     {
         currentState = nextState;
     }
+
 }
 
 
