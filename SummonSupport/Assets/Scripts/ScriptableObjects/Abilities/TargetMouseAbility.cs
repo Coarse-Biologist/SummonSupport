@@ -56,7 +56,7 @@ public class TargetMouseAbility : Ability
                 case OnEventDo.CC:
                     AI_CC_State ccState = target.GetComponent<AI_CC_State>();
                     Logging.Info($"A CC ability has hit the target {target.name}");
-                    ccState.RecieveCC("KnockUp", user.transform.position);
+                    if(ccState != null) ccState.RecieveCC(CrowdControls.KnockInTheAir, user);
                     break;
 
             }
