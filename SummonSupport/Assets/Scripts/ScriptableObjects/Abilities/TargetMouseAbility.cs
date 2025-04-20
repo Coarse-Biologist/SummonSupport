@@ -58,7 +58,7 @@ public class TargetMouseAbility : Ability
                     Logging.Info($"A CC ability has hit the target {target.name}");
                     if(ccState != null) ccState.RecieveCC(CrowdControls.KnockInTheAir, user);
                     break;
-
+                    
             }
         }
     }

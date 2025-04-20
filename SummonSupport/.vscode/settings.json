@@ -60,5 +60,12 @@
     "omnisharp.useModernNet": false,
     "omnisharp.useGlobalMono": "always",
     "omnisharp.enableRoslynAnalyzers": true,
-    "omnisharp.enableEditorConfigSupport": true
+    "omnisharp.enableEditorConfigSupport": true,
+    // Add the dotnetAcquisitionExtension.existingDotnetPath setting here
+    "dotnetAcquisitionExtension.existingDotnetPath": [
+        {
+            "extensionId": "josetr.cmake-language-support-vscode",
+            "path": "dotnet"
+        }
+    ]
 }

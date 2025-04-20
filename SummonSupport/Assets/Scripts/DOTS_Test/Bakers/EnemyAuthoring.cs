@@ -4,23 +4,18 @@ using Unity.Transforms;
 using Unity.Mathematics;
 
 
-public class CubeAuthoring : MonoBehaviour
+public class EnemyAuthoring : MonoBehaviour
 {
     public float Speed = 1f;
 
-    class Baker : Baker<CubeAuthoring>
+    class Baker : Baker<EnemyAuthoring>
     {
-        public override void Bake(CubeAuthoring authoring)
+        public override void Bake(EnemyAuthoring authoring)
         {
 
             Debug.Log("Bake function is called");
             var entity = GetEntity(TransformUsageFlags.Dynamic);
-            AddComponent(entity, new LocalTransform
-            {
-                Position = authoring.transform.position,
-                Rotation = quaternion.identity,
-                Scale = 1f
-            });
+
             AddComponent(entity, new MoveUpComponent { Speed = authoring.Speed });
         }
 

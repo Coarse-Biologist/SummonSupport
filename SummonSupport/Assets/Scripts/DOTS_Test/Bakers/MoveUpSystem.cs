@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using Unity.Burst;
 using Unity.Entities;
 using Unity.Mathematics;
@@ -19,7 +20,8 @@ public partial struct MoveUpSystem : ISystem
 
         foreach (var (transform, move) in SystemAPI.Query<RefRW<LocalTransform>, RefRO<MoveUpComponent>>())
         {
-            transform.ValueRW.Position.y += move.ValueRO.Speed * deltaTime;
+            transform.ValueRW.Position.y += move.ValueRO.Speed * SystemAPI.Time.DeltaTime;
+
         }
     }
 }
