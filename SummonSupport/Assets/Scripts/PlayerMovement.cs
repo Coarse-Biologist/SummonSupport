@@ -1,6 +1,8 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Events;
+using Unity.Entities;
+using Unity.Collections;
 
 
 public class PlayerMovement : MonoBehaviour
@@ -100,9 +102,13 @@ public class PlayerMovement : MonoBehaviour
         float calculatedSpeed = 0f;
         if (dashing) calculatedSpeed = speed + dashBoost;
         else calculatedSpeed = speed;
+        //if (moveInput.x != 0 || moveInput.y != 0)
+        //{
         Vector3 moveDirection = new Vector3(moveInput.x, moveInput.y, 0).normalized;
-        //transform.position += moveDirection * calculatedSpeed * Time.deltaTime;
         rb.linearVelocity = moveDirection * calculatedSpeed * 10;
+
+        UpdatePositionForEntities();
+        //}
     }
 
 
@@ -120,10 +126,10 @@ public class PlayerMovement : MonoBehaviour
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
         AbilityRotation.transform.rotation = Quaternion.Euler(0, 0, angle);
         spriteController.SetPlayerSprite(angle);
-    
+
         return transform.rotation;
     }
-    
+
     #endregion
     #region using UI
     public void ToggleLockedInUI()
@@ -162,5 +168,20 @@ public class PlayerMovement : MonoBehaviour
 
             HandleLook();
         }
+    }
+
+    private void UpdatePositionForEntities()
+    {
+        EntityManager entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
+        EntityQuery entityQuery = new EntityQueryBuilder(Allocator.Temp).WithAll<SeesTargetComponent>().Build(entityManager);
+        NativeArray<Entity> entityArray = entityQuery.ToEntityArray(Allocator.Temp);
+        NativeArray<SeesTargetComponent> seesTargetCompArray = entityQuery.ToComponentDataArray<SeesTargetComponent>(Allocator.Temp);
+        for (int i = 0; i < seesTargetCompArray.Length; i++)
+        {
+            SeesTargetComponent seesTargetComponent = seesTargetCompArray[i];
+            seesTargetComponent.targetLocation = transform.position;
+            seesTargetCompArray[i] = seesTargetComponent;
+        }
+        entityQuery.CopyFromComponentDataArray(seesTargetCompArray);
     }
 }

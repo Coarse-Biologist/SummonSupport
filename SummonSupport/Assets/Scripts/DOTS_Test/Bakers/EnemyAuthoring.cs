@@ -6,7 +6,8 @@ using Unity.Mathematics;
 
 public class EnemyAuthoring : MonoBehaviour
 {
-    public float Speed = 1f;
+    public float Speed = 0f;
+    public Vector3 targetLocation;
 
     class Baker : Baker<EnemyAuthoring>
     {
@@ -16,7 +17,9 @@ public class EnemyAuthoring : MonoBehaviour
             Debug.Log("Bake function is called");
             var entity = GetEntity(TransformUsageFlags.Dynamic);
 
-            AddComponent(entity, new MoveUpComponent { Speed = authoring.Speed });
+            AddComponent(entity, new SpeedComponent { Speed = authoring.Speed });
+            AddComponent(entity, new SeesTargetComponent { targetLocation = authoring.targetLocation });
+
         }
 
     }
