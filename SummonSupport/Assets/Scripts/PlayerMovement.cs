@@ -102,13 +102,14 @@ public class PlayerMovement : MonoBehaviour
         float calculatedSpeed = 0f;
         if (dashing) calculatedSpeed = speed + dashBoost;
         else calculatedSpeed = speed;
-        //if (moveInput.x != 0 || moveInput.y != 0)
-        //{
+
         Vector3 moveDirection = new Vector3(moveInput.x, moveInput.y, 0).normalized;
         rb.linearVelocity = moveDirection * calculatedSpeed * 10;
 
-        UpdatePositionForEntities();
-        //}
+        if (moveInput.x != 0 || moveInput.y != 0)
+        {
+            UpdatePositionForEntities();
+        }
     }
 
 

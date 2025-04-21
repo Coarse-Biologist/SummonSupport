@@ -19,6 +19,7 @@ public class EnemyAuthoring : MonoBehaviour
 
             AddComponent(entity, new SpeedComponent { Speed = authoring.Speed });
             AddComponent(entity, new SeesTargetComponent { targetLocation = authoring.targetLocation });
+            //SetComponentEnabled<SeesTargetComponent>(entity, false);
 
         }
 
