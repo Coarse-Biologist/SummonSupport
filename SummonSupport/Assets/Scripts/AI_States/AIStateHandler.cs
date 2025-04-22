@@ -39,15 +39,14 @@ public class AIStateHandler : MonoBehaviour
         livingBeing = GetComponent<LivingBeing>();
         minionStats = GetComponent<MinionStats>();
         ccState = GetComponent<AI_CC_State>();
+        InvokeRepeating("RunStateMachine", 0f, 1f);
     }
 
-    void Update()
-    {
-        RunStateMachine();
-    }
+
 
     private void RunStateMachine()
     {
+        // Called in Awake by using "Invoke repeating"
         if (ccState != null && ccState.currentCCs.Count != 0) SwitchToNextState(ccState);
         if (minionStats.CurrentCommand == MinionCommands.None)
         {

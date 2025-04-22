@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 4457003908298111917}
   - component: {fileID: 6173072708952048909}
   - component: {fileID: 5449713164746072181}
+  - component: {fileID: 919777596954798988}
   m_Layer: 7
   m_Name: MinionPrefab2 1
   m_TagString: Minion
@@ -57,6 +58,8 @@ MonoBehaviour:
   InterestRadius: 500
   AttackSpeed: 1
   Cowardice: 0
+  currentState: {fileID: 0}
+  ccState: {fileID: 0}
   lastSeenLoc: {x: 0, y: 0}
 --- !u!114 &1748628830762966394
 MonoBehaviour:
@@ -202,6 +205,18 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
   m_Radius: 0.5
+--- !u!114 &919777596954798988
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7554373945403419730}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 901c24896fb42454c876f510561d7957, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7824187274753490669
 GameObject:
   m_ObjectHideFlags: 0

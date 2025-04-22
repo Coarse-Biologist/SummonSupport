@@ -106,10 +106,10 @@ public class PlayerMovement : MonoBehaviour
         Vector3 moveDirection = new Vector3(moveInput.x, moveInput.y, 0).normalized;
         rb.linearVelocity = moveDirection * calculatedSpeed * 10;
 
-        if (moveInput.x != 0 || moveInput.y != 0)
-        {
-            UpdatePositionForEntities();
-        }
+        //if (moveInput.x != 0 || moveInput.y != 0)
+        //{
+        //    UpdatePositionForEntities();
+        //}
     }
 
 

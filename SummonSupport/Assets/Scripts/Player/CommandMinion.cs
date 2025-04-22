@@ -13,23 +13,36 @@ public static class CommandMinion
     {
         if (selectedMinion != null)
         {
-            Collider2D[] hits = Physics2D.OverlapCircleAll(loc, 1, LayerMask.GetMask("Enemy"));
-            if (hits.Length > 0)
+            Collider2D[] enemyHits = Physics2D.OverlapCircleAll(loc, 1, LayerMask.GetMask("Enemy"));
+            if (enemyHits.Length > 0)
             {
-                Debug.DrawLine(new Vector3(0, 0, 0), loc, Color.red, 2);
-                obedienceState.SetCommandTarget(hits[0].gameObject);
-                stats.SetCommand(MinionCommands.FocusTarget);
-                Logging.Info($"{stats.Name} is seeking {obedienceState.commandTarget} at location {obedienceState.commandLoc}");
+                GameObject enemy = enemyHits[0].gameObject;
+
+                CommandMinionToAttack(enemy);
+            }
+
+            Collider2D[] interactHits = Physics2D.OverlapCircleAll(loc, 1);
+            Logging.Info($"{interactHits.Length} colliders in click area.");
+
+            if (interactHits.Length > 0)
+            {
+                Logging.Info("Sending minion to interact");
+
+                foreach (Collider2D collider in interactHits)
+                {
+                    I_Interactable interactable = collider.gameObject.GetComponent<I_Interactable>();
+                    if (interactable != null)
+                    {
+                        Logging.Info("There was indeed an interactable for the minion to interact with");
+                        SendMinionToInteract(loc);
+                    }
+                }
             }
             else
             {
-                obedienceState.SetCommandLoc(loc);
-                Debug.DrawLine(new Vector3(0, 0, 0), loc, Color.red, 2);
-                stats.SetCommand(MinionCommands.GoTo);
-                Logging.Info($"{stats.Name} is going to location {obedienceState.commandLoc}");
+                CommandMinionToGoToLoc(loc);
             }
         }
-
         else Logging.Error("You talking to yourself, Bud? no minion is selected!");
     }
 
@@ -41,9 +54,29 @@ public static class CommandMinion
             stats = selectedMinion.GetComponent<MinionStats>();
             obedienceState = selectedMinion.GetComponent<AIObedienceState>();
         }
-
-
         else Logging.Error("Oh, you want to control that nobody? Select an actual minion!");
+    }
+
+    private static void SendMinionToInteract(Vector2 loc)
+    {
+        selectedMinion.GetComponent<MinionInteractionHandler>().SetCommandToInteract(true);
+        obedienceState.SetCommandLoc(loc);
+        stats.SetCommand(MinionCommands.GoTo);
+        Logging.Info($"{stats.Name} is going to location {obedienceState.commandLoc} to interact");
+
+    }
+    public static void CommandMinionToGoToLoc(Vector2 loc)
+    {
+        obedienceState.SetCommandLoc(loc);
+        stats.SetCommand(MinionCommands.GoTo);
+        Logging.Info($"{stats.Name} is going to location {obedienceState.commandLoc}");
+    }
+
+    public static void CommandMinionToAttack(GameObject enemy)
+    {
+        obedienceState.SetCommandTarget(enemy);
+        stats.SetCommand(MinionCommands.FocusTarget);
+        Logging.Info($"{stats.Name} is seeking {obedienceState.commandTarget} at location {obedienceState.commandLoc}");
     }
 
 

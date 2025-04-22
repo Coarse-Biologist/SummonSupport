@@ -40,13 +40,13 @@ public class AIChaseState : AIState
             {
                 Chase(targetLoc);
 
-                LookAtTarget(targetLoc);
+                //LookAtTarget(targetLoc);
             }
             else
             {
                 Chase(stateHandler.lastSeenLoc);
 
-                LookAtTarget(stateHandler.lastSeenLoc);
+                //LookAtTarget(stateHandler.lastSeenLoc);
             }
             return this;
         }
