@@ -8,6 +8,7 @@ using Alchemy;
 using System;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Unity.VisualScripting;
 
 
 #endregion
@@ -18,10 +19,8 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
 
     #region Constants
     [SerializeField] UIDocument ui;
-    [SerializeField] GameObject interactCanvas;
     private VisualElement root;
     private VisualElement interactWindow;
-    private Label interactLabel;
     private VisualElement craftingUI;
     private VisualElement confirmClear;
     private VisualElement craftandUpgrade;
@@ -37,7 +36,6 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     private Dictionary<AlchemyLoot, int> selectedIngredients = new Dictionary<AlchemyLoot, int>();
     private List<Elements> selectedElements = new List<Elements>();
     private GameObject minionToUpgrade;
-    private GameObject canvasInstance;
 
 
     //private bool crafting = false;
@@ -63,7 +61,6 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
         confirmClear = craftingUI.Q<VisualElement>("ConfirmClear");
         alchemyInventory = craftandUpgrade.Q<VisualElement>("AlchemyInventory");
         instructions = craftandUpgrade.Q<Label>("Instructions");
-        interactLabel = interactWindow.Q<Label>("InteractLabel");
         elementSelection = craftingUI.Q<VisualElement>("ElementSelection");
         interactWindow.style.display = DisplayStyle.None;
         craftingUI.style.display = DisplayStyle.None;
@@ -74,13 +71,12 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
 
     public void ShowInteractionOption()
     {
-        if (canvasInstance == null) canvasInstance = Instantiate(interactCanvas, transform.position, Quaternion.identity);
-        else canvasInstance.SetActive(true);
+        InteractCanvasHandler.Instance.ShowInteractionOption(transform.position, "Tab to use alchemy bench  ");
     }
 
     public void HideInteractionOption()
     {
-        Destroy(canvasInstance);
+        InteractCanvasHandler.Instance.HideInteractionOption();
     }
 
     #endregion
@@ -92,6 +88,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     }
     public void Interact()//WithWorkBench()
     {
+        HideInteractionOption();
         PlayerUsingUI();
         ShowUI(craftingUI);
         Button craftButton = craftingUI.Q<Button>("CraftButton");

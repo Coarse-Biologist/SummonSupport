@@ -39,7 +39,7 @@ public class AIStateHandler : MonoBehaviour
         livingBeing = GetComponent<LivingBeing>();
         minionStats = GetComponent<MinionStats>();
         ccState = GetComponent<AI_CC_State>();
-        InvokeRepeating("RunStateMachine", 0f, 1f);
+        InvokeRepeating("RunStateMachine", 0f, .1f);
     }
 
 

@@ -135,16 +135,16 @@ public class PlayerMovement : MonoBehaviour
     #region using UI
     public void ToggleLockedInUI()
     {
-        if (lockToggleable)
-        {
-            if (!lockedInUI)
-            {
-                lockToggleable = false;
-                Invoke("AllowLockToggle", 1f);
-                lockedInUI = true;
-            }
-            else lockedInUI = false;
-        }
+        //if (lockToggleable)
+        //{
+        //    if (!lockedInUI)
+        //    {
+        //        lockToggleable = false;
+        //        Invoke("AllowLockToggle", 1f);
+        //        lockedInUI = true;
+        //    }
+        //    else lockedInUI = false;
+        //}
 
     }
     private void AllowLockToggle()
