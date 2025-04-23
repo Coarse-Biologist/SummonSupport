@@ -25,4 +25,12 @@ public class InteractCanvasHandler : MonoBehaviour
         Destroy(canvasInstance);
     }
 
+    public void SetTemporaryCanvasText(Transform transform, string temporaryText)
+    {
+        Canvas canvas = transform.GetComponent<Canvas>();
+        canvas.GetComponentInChildren<TextMeshProUGUI>().text = temporaryText;
+
+
+    }
+
 }

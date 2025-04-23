@@ -86,7 +86,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     {
         playerUsingUI?.Invoke();
     }
-    public void Interact()//WithWorkBench()
+    public void Interact(GameObject unnecessary)//WithWorkBench()
     {
         HideInteractionOption();
         PlayerUsingUI();

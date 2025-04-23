@@ -25,7 +25,7 @@ public class MinionInteractionHandler : MonoBehaviour
     private void InteractIfPossible(I_Interactable interactInterfaceInstance)
     {
         ShowInteractionAnimation();
-        interactInterfaceInstance.Interact();
+        interactInterfaceInstance.Interact(this.gameObject);
     }
 
     private void ShowInteractionAnimation()

@@ -42,7 +42,7 @@ public class NPC_UI_Handler : MonoBehaviour, I_Interactable
         npc_text.text = npcData.Goodbye;
         Invoke("HideDialogueScreen", 1f);
     }
-    public void Interact()
+    public void Interact(GameObject unused)
     {
         if (dialoguePanel != null)
         {
@@ -130,14 +130,12 @@ public class NPC_UI_Handler : MonoBehaviour, I_Interactable
     }
     private void OnOptionSelected(string playerResponse)
     {
-
         Logging.Info($"Option selected: {playerResponse}");
         string NPC_Words = npcData.Dialogue.GetNPCResponseToPlayer(playerResponse);
         NPC_Words = NPC_Words + npcData.GetResult(npcData.Dialogue.GetResult(playerResponse));
         SetNPC_Text(NPC_Words);
         List<string> playerResponses = npcData.Dialogue.GetPlayerResponses(NPC_Words);
         CreateButtons(playerResponses);
-
     }
     #endregion
 

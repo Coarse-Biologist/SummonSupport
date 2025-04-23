@@ -14,12 +14,12 @@ public abstract class LivingBeing : MonoBehaviour
     [SerializeField] public List<string> BattleCries;
 
     [Header("Attributes - Ressources")]
-    [field: SerializeField] public int MaxHP { get; private set; }
+    [field: SerializeField] public int MaxHP { get; private set; } = 100;
     [field: SerializeField] public int TemporaryMaxHP { get; private set; }
-    [field: SerializeField] public int CurrentHP { get; private set; }
-    [field: SerializeField] public int MaxPower { get; private set; }
+    [field: SerializeField] public int CurrentHP { get; private set; } = 100;
+    [field: SerializeField] public int MaxPower { get; private set; } = 100;
     [field: SerializeField] public int TemporaryMaxPower { get; private set; }
-    [field: SerializeField] public int CurrentPower { get; private set; }
+    [field: SerializeField] public int CurrentPower { get; private set; } = 100;
 
     #region Affinity Stats
 
@@ -184,12 +184,12 @@ public abstract class LivingBeing : MonoBehaviour
     }
 
     public void ChangeAttribute(AttributeType attributeType, int value, ValueType valueType = ValueType.Flat)
-    {   
+    {
         if (AttributesDict == null || !AttributesDict.ContainsKey(attributeType))
             throw new Exception("Attribute not found or invalid setter");
 
-        int currentValue    = GetAttribute(attributeType);
-        int newValue        = CalculateNewValueByType(currentValue, value, valueType);
+        int currentValue = GetAttribute(attributeType);
+        int newValue = CalculateNewValueByType(currentValue, value, valueType);
         AttributesDict[attributeType].Set(newValue);
         if (CurrentHP <= 0)
             Die();
