@@ -89,7 +89,7 @@ public class DoorHandler : MonoBehaviour, I_Interactable
         else
         {
             Logging.Info($"{livingBeing.name} did not have the required elemental affinity to open the door");
-            InteractCanvasHandler.Instance.ShowInteractionOption(transform.position, "Failed to ospen");
+            InteractCanvasHandler.Instance.ShowInteractionOption(transform.position, "Failed to open");
             return false;
         }
     }

@@ -22994,59 +22994,6 @@ Transform:
   - {fileID: 1724141746}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1095298619
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1095298621}
-  - component: {fileID: 1095298620}
-  m_Layer: 0
-  m_Name: Subscene
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1095298620
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1095298619}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 45a335734b1572644a6a5d09d87adc65, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _SceneAsset: {fileID: 102900000, guid: bc8e394d6db217b4b8faddd9bcd47e95, type: 3}
-  _HierarchyColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
-  AutoLoadScene: 1
-  _SceneGUID:
-    Value:
-      x: 3566463179
-      y: 1265707990
-      z: 2648551307
-      w: 1508330955
---- !u!4 &1095298621
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1095298619}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1199663823 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8286176756961153444, guid: f790f468129cff246b3f45d3392ec256,
@@ -55930,7 +55877,11 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1611684191054059656, guid: f790f468129cff246b3f45d3392ec256,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6924235483916417074}
   m_SourcePrefab: {fileID: 100100000, guid: f790f468129cff246b3f45d3392ec256, type: 3}
 --- !u!1001 &2065957233094523433
 PrefabInstance:
@@ -56532,6 +56483,46 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 1574084781706728001}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &6924235483916417074
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6924235483916417061}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48786c349691b5047845878d6c44a224, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Name: 
+  Description: 
+  BattleCries: []
+  <MaxHP>k__BackingField: 0
+  <TemporaryMaxHP>k__BackingField: 0
+  <CurrentHP>k__BackingField: 0
+  <MaxPower>k__BackingField: 0
+  <TemporaryMaxPower>k__BackingField: 0
+  <CurrentPower>k__BackingField: 0
+  Cold: 0
+  Water: 0
+  Earth: 0
+  Heat: 0
+  Air: 0
+  Electricity: 0
+  Poison: 0
+  Acid: 0
+  Bacteria: 0
+  Fungi: 0
+  Plant: 0
+  Virus: 0
+  Radiation: 0
+  Light: 0
+  Psychic: 0
+  XP_OnDeath: 3
+  Abilties: []
+  Speed: 0
+  Mass: 1
 --- !u!1001 &8114366664024104314
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -56725,4 +56716,3 @@ SceneRoots:
   - {fileID: 2090810946}
   - {fileID: 167269514}
   - {fileID: 363405996}
-  - {fileID: 1095298621}
