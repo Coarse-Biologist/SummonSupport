@@ -39,10 +39,6 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     private GameObject minionToUpgrade;
     private GameObject canvasInstance;
 
-
-    //private bool crafting = false;
-    //private bool upgrading = false;
-    //private bool recycling = false;
     private bool elementsGenerated = false;
 
     #endregion
@@ -148,6 +144,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
             }
             instructions.text = ingredientInfo;
         }
+        if (!CheckUsingCores()) instructions.text += $"You must have at least one core in order craft a minion, otherwise it is no more than a motionless husk!";
     }
 
 
@@ -193,13 +190,21 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     #endregion
 
     #region Crafting
+    private bool CheckUsingCores()
+    {
+        var ingredients = selectedIngredients.Keys;
+        if (ingredients.Contains(AlchemyLoot.BrokenCores) || ingredients.Contains(AlchemyLoot.PowerfulCore) || ingredients.Contains(AlchemyLoot.WorkingCore) || ingredients.Contains(AlchemyLoot.BrokenCores)) return true;
+        else return false;
+    }
 
     private void Craft()
     {
-        AlchemyInventory.ExpendIngredients(selectedIngredients);
-        alchemyHandler.HandleCraftingResults(selectedIngredients, selectedElements);
-        ClearCraftingSelection();
-        //instructions.text = results;
+        if (CheckUsingCores())
+        {
+            AlchemyInventory.ExpendIngredients(selectedIngredients);
+            alchemyHandler.HandleCraftingResults(selectedIngredients, selectedElements);
+            ClearCraftingSelection();
+        }
     }
     private void ShowCraftingOptions()
     {
@@ -221,6 +226,12 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
         confirmButton.RegisterCallback<ClickEvent>(e => Craft());
         confirmButton.RegisterCallback<ClickEvent>(e => ShowCraftingInfo());
 
+        confirmButton.style.backgroundColor = new Color(123, 100, 35, 100);
+        clearButton.style.backgroundColor = new Color(123, 100, 35, 100);
+
+
+
+
     }
     private void SpawnIngredientButtons()
     {
@@ -230,6 +241,8 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
             if (kvp.Value != 0)
             {
                 Button ingredientButton = AddButtonToPanel($"{kvp.Key} : {kvp.Value}", alchemyInventory, 40, 5);
+                ingredientButton.style.backgroundColor = new Color(123, 100, 35, 100);
+
                 ingredientButton.RegisterCallback<ClickEvent>(e => AddIngredientToSelection(kvp.Key));
                 ingredientButton.RegisterCallback<ClickEvent>(e => ShowCraftingInfo());
                 ingredientButton.RegisterCallback<ClickEvent>(e => DecrementIngredientButton(ingredientButton));
@@ -257,6 +270,8 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
             foreach (Elements element in elementsList)
             {
                 Toggle elementToggle = new Toggle { text = element.ToString() };
+                elementToggle.style.backgroundColor = Color.green;
+
                 panel.Add(elementToggle);
                 elementToggle.RegisterCallback<ClickEvent>(e => ToggleSelectedElement(element));
             }

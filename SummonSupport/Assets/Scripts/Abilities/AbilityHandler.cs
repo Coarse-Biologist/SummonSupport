@@ -11,11 +11,12 @@ public class AbilityHandler : MonoBehaviour
             abilitySpawn = gameObject;
         if (abilityDirection == null)
             abilityDirection = gameObject;
-        
+
     }
 
     protected void CastAbility(Ability ability)
     {
+        Logging.Info($"Trying to cast tge ability: {ability.name}");
         switch (ability)
         {
             case ProjectileAbility projectile:

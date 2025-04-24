@@ -17,6 +17,8 @@ public class InteractHandler : MonoBehaviour
         if (interactInterfaceInstance != null && Input.GetKey(KeyCode.Tab))
         {
             interactInterfaceInstance.Interact();
+            interactInterfaceInstance.HideInteractionOption();
+
         }
         else if (interactInterfaceInstance != null)
         {
