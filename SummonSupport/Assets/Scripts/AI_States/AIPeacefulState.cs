@@ -4,7 +4,6 @@ using System;
 
 public class AIPeacefulState : AIState
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     public GameObject detectedTargetObject;
     private bool canSeeTarget;
     private AIStateHandler stateHandler;
