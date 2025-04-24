@@ -28,14 +28,17 @@ public class PlayerUIHandler : MonoBehaviour
 
     void OnEnable()
     {
-        //DM.hpChanged.AddListener(SetMinionHP);
-        //alchemyHandler.newMinionAdded.AddListener(AddMinionHP);
+        EventDeclarer.hpChanged.AddListener(SetMinionHP);
+        alchemyHandler.newMinionAdded.AddListener(AddMinionHP);
+        EventDeclarer.minionDied.AddListener(RemoveMinionHP);
     }
 
     void OnDisable()
     {
-        //DM.hpChanged.RemoveListener(SetMinionHP);
-        //alchemyHandler.newMinionAdded.RemoveListener(AddMinionHP);
+        EventDeclarer.hpChanged.RemoveListener(SetMinionHP);
+        alchemyHandler.newMinionAdded.RemoveListener(AddMinionHP);
+        EventDeclarer.minionDied.RemoveListener(RemoveMinionHP);
+
 
     }
 
@@ -45,8 +48,18 @@ public class PlayerUIHandler : MonoBehaviour
         minionHPDict.TryAdd(minion, minionHP);
         minionHP.title = $"{minion.GetComponent<LivingBeing>().Name} HP";
         minionHPBars.Add(minionHP);
-
     }
+    public void RemoveMinionHP(GameObject minion)
+    {
+        ProgressBar minionHP = GetMinionsHPBar(minion);
+        if (minionHP != null)
+        {
+        minionHPDict.Remove(minion);
+        minionHPBars.Remove(minionHP);
+        }
+        else Logging.Error("You are trying to delete a none inion as though it were a minion");
+    }
+
     private ProgressBar GetMinionsHPBar(GameObject minion)
     {
         return minionHPDict[minion];

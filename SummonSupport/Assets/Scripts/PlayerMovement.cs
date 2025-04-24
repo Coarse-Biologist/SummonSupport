@@ -159,6 +159,7 @@ public class PlayerMovement : MonoBehaviour
         Vector2 worldPosition = mainCamera.ScreenToWorldPoint(lookInput);
         Debug.DrawLine(new Vector3(0, 0, 0), worldPosition, Color.green);
         CommandMinion.HandleCommand(worldPosition);
+        
     }
 
     private void Update()

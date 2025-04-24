@@ -177,6 +177,8 @@ public abstract class LivingBeing : MonoBehaviour
         {
             AttributesDict[attribute].Set(value);
         }
+        if(attribute == AttributeType.CurrentHitpoints) EventDeclarer.hpChanged?.Invoke(gameObject);
+
     }
     public void SetName(string newName)
     {
@@ -190,7 +192,10 @@ public abstract class LivingBeing : MonoBehaviour
 
         int currentValue = GetAttribute(attributeType);
         int newValue = CalculateNewValueByType(currentValue, value, valueType);
-        AttributesDict[attributeType].Set(newValue);
+        //AttributesDict[attributeType].Set(newValue); // jodis backwoods, hobo way 
+        SetAttribute(attributeType, newValue); // crews partial way
+        if(attributeType == AttributeType.CurrentHitpoints) EventDeclarer.hpChanged?.Invoke(gameObject);
+
         if (CurrentHP <= 0)
             Die();
     }
@@ -307,6 +312,7 @@ public abstract class LivingBeing : MonoBehaviour
     void Die()
     {
         Logging.Info($"{gameObject.name} died");
+        if(gameObject.GetComponent<MinionStats>() != null) EventDeclarer.minionDied?.Invoke(gameObject);
         Destroy(gameObject);
     }
 }

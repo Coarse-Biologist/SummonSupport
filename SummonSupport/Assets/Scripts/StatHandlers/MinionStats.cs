@@ -14,8 +14,6 @@ public class MinionStats : LivingBeing
         SetAttribute(AttributeType.CurrentHitpoints, value);
         if (CurrentHP <= 0) isDead = true;
         if (CurrentHP > MaxHP) SetAttribute(AttributeType.MaxHitpoints, value);
-
-        EventDeclarer.hpChanged?.Invoke(gameObject);
     }
     public void SetCommand(MinionCommands command)
     {
