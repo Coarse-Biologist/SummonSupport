@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 4457003908298111917}
   - component: {fileID: 6173072708952048909}
   - component: {fileID: 5449713164746072181}
+  - component: {fileID: 919777596954798988}
   m_Layer: 7
   m_Name: MinionPrefab2 1
   m_TagString: Minion
@@ -57,6 +58,8 @@ MonoBehaviour:
   InterestRadius: 500
   AttackSpeed: 1
   Cowardice: 0
+  currentState: {fileID: 0}
+  ccState: {fileID: 0}
   lastSeenLoc: {x: 0, y: 0}
 --- !u!114 &1748628830762966394
 MonoBehaviour:
@@ -141,12 +144,12 @@ MonoBehaviour:
   - Fire and brimstone!..
   - I'll kill your shining lights!
   - burning skin and bubbling knuckles!
-  <MaxHP>k__BackingField: 0
+  <MaxHP>k__BackingField: 100
   <TemporaryMaxHP>k__BackingField: 0
-  <CurrentHP>k__BackingField: 0
-  <MaxPower>k__BackingField: 0
+  <CurrentHP>k__BackingField: 100
+  <MaxPower>k__BackingField: 100
   <TemporaryMaxPower>k__BackingField: 0
-  <CurrentPower>k__BackingField: 0
+  <CurrentPower>k__BackingField: 100
   Cold: 0
   Water: 0
   Earth: 0
@@ -202,6 +205,18 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
   m_Radius: 0.5
+--- !u!114 &919777596954798988
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7554373945403419730}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 901c24896fb42454c876f510561d7957, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7824187274753490669
 GameObject:
   m_ObjectHideFlags: 0
@@ -229,7 +244,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 3, y: 3, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7806012110075860343}
@@ -278,7 +293,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 2
-  m_Sprite: {fileID: 3087402528269344191, guid: 87f6a320f677e0243ab358d677534a60,
+  m_Sprite: {fileID: 3377621350867381696, guid: c002845f16ff35141a25a180d4af881e,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0

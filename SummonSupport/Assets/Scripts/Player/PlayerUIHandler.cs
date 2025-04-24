@@ -28,25 +28,40 @@ public class PlayerUIHandler : MonoBehaviour
 
     void OnEnable()
     {
-        //DM.hpChanged.AddListener(SetMinionHP);
-        //alchemyHandler.newMinionAdded.AddListener(AddMinionHP);
+        EventDeclarer.hpChanged.AddListener(SetMinionHP);
+        alchemyHandler.newMinionAdded.AddListener(AddMinionHP);
+        EventDeclarer.minionDied.AddListener(RemoveMinionHP);
     }
 
     void OnDisable()
     {
-        //DM.hpChanged.RemoveListener(SetMinionHP);
-        //alchemyHandler.newMinionAdded.RemoveListener(AddMinionHP);
+        EventDeclarer.hpChanged.RemoveListener(SetMinionHP);
+        alchemyHandler.newMinionAdded.RemoveListener(AddMinionHP);
+        EventDeclarer.minionDied.RemoveListener(RemoveMinionHP);
+
 
     }
 
     public void AddMinionHP(GameObject minion)
     {
         ProgressBar minionHP = new ProgressBar();
+        int hp = minion.GetComponent<LivingBeing>().GetAttribute(AttributeType.CurrentHitpoints);
         minionHPDict.TryAdd(minion, minionHP);
-        minionHP.title = $"{minion.GetComponent<LivingBeing>().Name} HP";
+        minionHP.title = $"{minion.GetComponent<LivingBeing>().Name} HP: {hp}";
+        minionHP.highValue = hp;
         minionHPBars.Add(minionHP);
-
     }
+    public void RemoveMinionHP(GameObject minion)
+    {
+        ProgressBar minionHP = GetMinionsHPBar(minion);
+        if (minionHP != null)
+        {
+        minionHPDict.Remove(minion);
+        minionHPBars.Remove(minionHP);
+        }
+        else Logging.Error("You are trying to delete a none inion as though it were a minion");
+    }
+
     private ProgressBar GetMinionsHPBar(GameObject minion)
     {
         return minionHPDict[minion];
@@ -57,7 +72,10 @@ public class PlayerUIHandler : MonoBehaviour
         ProgressBar hpBar = GetMinionsHPBar(minion);
         if (hpBar != null)
         {
+            int hp = minion.GetComponent<LivingBeing>().GetAttribute(AttributeType.CurrentHitpoints);
             hpBar.value = minion.GetComponent<LivingBeing>().CurrentHP;
+            hpBar.title = $"{minion.GetComponent<LivingBeing>().Name} HP: {hp}";
+
         }
     }
 }
