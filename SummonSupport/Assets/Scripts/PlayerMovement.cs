@@ -12,7 +12,6 @@ public class PlayerMovement : MonoBehaviour
     public Camera mainCamera;
     private PlayerSpriteController spriteController;
     [SerializeField] private PlayerInputActions inputActions;
-    [SerializeField] private AlchemyBenchUI alchemyBench;
     [SerializeField] GameObject AbilityRotation;
     private Vector2 lookInput;
     [SerializeField] float speed = 5f;
@@ -38,7 +37,7 @@ public class PlayerMovement : MonoBehaviour
     #region Enable and Disable event subscriptions
     private void OnEnable()
     {
-        if (alchemyBench != null) alchemyBench.playerUsingUI.AddListener(ToggleLockedInUI);
+        //AlchemyBenchUI.Instance.playerUsingUI.AddListener(ToggleLockedInUI);
         inputActions ??= new PlayerInputActions();
 
         inputActions.Player.Enable();
@@ -55,7 +54,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnDisable()
     {
-        if (alchemyBench != null) alchemyBench.playerUsingUI.RemoveListener(ToggleLockedInUI);
+        //AlchemyBenchUI.Instance.playerUsingUI.RemoveListener(ToggleLockedInUI);
 
         inputActions.Player.Move.performed -= OnMove;
         inputActions.Player.Move.canceled -= OnMove;
@@ -159,7 +158,7 @@ public class PlayerMovement : MonoBehaviour
         Vector2 worldPosition = mainCamera.ScreenToWorldPoint(lookInput);
         Debug.DrawLine(new Vector3(0, 0, 0), worldPosition, Color.green);
         CommandMinion.HandleCommand(worldPosition);
-        
+
     }
 
     private void Update()

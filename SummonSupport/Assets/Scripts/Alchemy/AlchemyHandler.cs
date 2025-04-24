@@ -18,7 +18,7 @@ public class AlchemyHandler : MonoBehaviour
     public UnityEvent<GameObject> requestInstantiation = new UnityEvent<GameObject>();
     [SerializeField] public List<GameObject> activeMinions = new List<GameObject>();
     public UnityEvent<GameObject> newMinionAdded;
-    public AlchemyHandler Instance { get; private set; }
+    public static AlchemyHandler Instance { get; private set; }
 
     #endregion
 

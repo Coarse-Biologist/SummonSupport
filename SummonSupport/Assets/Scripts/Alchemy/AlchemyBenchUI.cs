@@ -15,6 +15,7 @@ using Unity.VisualScripting;
 
 public class AlchemyBenchUI : MonoBehaviour, I_Interactable
 {
+    public static AlchemyBenchUI Instance { get; private set; }
     #region Class Variables
 
     #region Constants
@@ -27,7 +28,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     private VisualElement elementSelection;
     private VisualElement alchemyInventory;
     private Label instructions;
-    public UnityEvent playerUsingUI;
+    public UnityEvent playerUsingUI = new UnityEvent();
     private AlchemyHandler alchemyHandler;
 
     #endregion
@@ -46,6 +47,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     #region Setup
     void Awake()
     {
+        Instance = this;
         alchemyHandler = GetComponent<AlchemyHandler>();
     }
     void Start()
