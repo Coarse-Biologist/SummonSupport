@@ -6,5 +6,6 @@ public enum OnEventDo
     Damage,
     Heal,
     StatusEffect,
-    Ability
+    Ability,
+    CC,
 }

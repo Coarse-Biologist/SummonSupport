@@ -1,35 +1,46 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class InteractHandler : MonoBehaviour
 {
+    private I_Interactable mostRecentInteractable;
+    private bool checkingForTab = false;
+
+
     void OnTriggerEnter2D(Collider2D collision)
     {
+        //InvokeRepeating("AttemptInteraction", 0f, .05f);
+        checkingForTab = true;
         I_Interactable interactInterfaceInstance = collision.gameObject.GetComponent<I_Interactable>();
         if (interactInterfaceInstance != null)
         {
-            //Logging.Info("Trying to call show interction function");
+            mostRecentInteractable = interactInterfaceInstance;
             interactInterfaceInstance.ShowInteractionOption();
         }
+
     }
-    void OnTriggerStay2D(Collider2D collision)
-    {
-        I_Interactable interactInterfaceInstance = collision.gameObject.GetComponent<I_Interactable>();
-        if (interactInterfaceInstance != null && Input.GetKey(KeyCode.Tab))
-        {
-            interactInterfaceInstance.Interact();
-        }
-        else if (interactInterfaceInstance != null)
-        {
-            // Logging.Info("Trying to call show interction function");
-            interactInterfaceInstance.ShowInteractionOption();
-        }
-    }
+
     void OnTriggerExit2D(Collider2D collision)
     {
+        checkingForTab = false;
+        //CancelInvoke("AttemptInteraction");
         I_Interactable interactInterfaceInstance = collision.gameObject.GetComponent<I_Interactable>();
+        mostRecentInteractable = null;
         if (interactInterfaceInstance != null)
         {
             interactInterfaceInstance.HideInteractionOption();
+        }
+    }
+
+    void FixedUpdate()
+    {
+        if(checkingForTab)
+        {
+        if (Input.GetKeyDown(KeyCode.Tab) && mostRecentInteractable != null)
+        {
+            Logging.Info("tab pressed");
+            mostRecentInteractable.Interact(this.gameObject);
+        }
         }
     }
 

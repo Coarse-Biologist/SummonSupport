@@ -14,9 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Name>k__BackingField: Flash Heal
   <Icon>k__BackingField: {fileID: 0}
-  <Cooldown>k__BackingField: 10
+  <Cooldown>k__BackingField: 1
   <PowerCost>k__BackingField: 15
   <StatusEffect>k__BackingField: {fileID: 0}
   <Attribute>k__BackingField: 0
   <Value>k__BackingField: 100
   <ElementType>k__BackingField: 0
+  <ListOnCastDo>k__BackingField: 05000000

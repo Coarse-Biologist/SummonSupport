@@ -5,5 +5,5 @@ public interface I_Interactable
     void ShowInteractionOption();
     void HideInteractionOption();
 
-    void Interact();
+    void Interact(GameObject interactor);
 }
