@@ -19,6 +19,10 @@ public class MinionStats : LivingBeing
     {
         CurrentCommand = command;
     }
+    void Start()
+    {
+        PlayerUIHandler.Instance.AddMinionHP(this.gameObject);
+    }
 
 }
 

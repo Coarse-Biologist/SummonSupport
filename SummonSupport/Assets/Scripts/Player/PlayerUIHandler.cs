@@ -6,7 +6,7 @@ using SummonSupportEvents;
 
 public class PlayerUIHandler : MonoBehaviour
 {
-
+    public static PlayerUIHandler Instance { get; private set; }
     [SerializeField] public UIDocument uiDoc;
     private VisualElement root;
     private VisualElement minionHPBars;
@@ -17,7 +17,11 @@ public class PlayerUIHandler : MonoBehaviour
     private AlchemyHandler alchemyHandler;
     void Awake()
     {
-        alchemyHandler = FindFirstObjectByType<AlchemyHandler>();
+        if (Instance == null)
+            Instance = this;
+        else
+            Destroy(gameObject);
+
         root = uiDoc.rootVisualElement;
         playerUI = root.Q<VisualElement>("MainUI");
         minionHPBars = playerUI.Q<VisualElement>("MinionBarSlots");
@@ -29,17 +33,17 @@ public class PlayerUIHandler : MonoBehaviour
     void OnEnable()
     {
         EventDeclarer.hpChanged.AddListener(SetMinionHP);
-        alchemyHandler.newMinionAdded.AddListener(AddMinionHP);
+        if (AlchemyHandler.Instance != null)
+            AlchemyHandler.Instance.newMinionAdded.AddListener(AddMinionHP);
         EventDeclarer.minionDied.AddListener(RemoveMinionHP);
     }
 
     void OnDisable()
     {
         EventDeclarer.hpChanged.RemoveListener(SetMinionHP);
-        alchemyHandler.newMinionAdded.RemoveListener(AddMinionHP);
+        if (AlchemyHandler.Instance != null)
+            AlchemyHandler.Instance.newMinionAdded.RemoveListener(AddMinionHP);
         EventDeclarer.minionDied.RemoveListener(RemoveMinionHP);
-
-
     }
 
     public void AddMinionHP(GameObject minion)
