@@ -32,15 +32,21 @@ public class InteractHandler : MonoBehaviour
         }
     }
 
+    void OnTriggerStay2D(Collider2D collision)
+    {
+        Logging.Info("you are in the collider");
+
+    }
+
     void FixedUpdate()
     {
-        if(checkingForTab)
+        if (checkingForTab)
         {
-        if (Input.GetKeyDown(KeyCode.Tab) && mostRecentInteractable != null)
-        {
-            Logging.Info("tab pressed");
-            mostRecentInteractable.Interact(this.gameObject);
-        }
+            if (Input.GetKeyDown(KeyCode.Tab) && mostRecentInteractable != null)
+            {
+                Logging.Info("tab pressed");
+                mostRecentInteractable.Interact(this.gameObject);
+            }
         }
     }
 

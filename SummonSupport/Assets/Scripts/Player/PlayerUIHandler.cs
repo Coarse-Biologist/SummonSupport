@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEngine.Events;
 using SummonSupportEvents;
+using Unity.VisualScripting;
 
 public class PlayerUIHandler : MonoBehaviour
 {
@@ -14,29 +15,34 @@ public class PlayerUIHandler : MonoBehaviour
 
     [SerializeField] public List<GameObject> minions;// = new List<GameObject>();
     private Dictionary<GameObject, ProgressBar> minionHPDict = new Dictionary<GameObject, ProgressBar>();
-    private AlchemyHandler alchemyHandler;
     void Awake()
     {
-        alchemyHandler = FindFirstObjectByType<AlchemyHandler>();
         root = uiDoc.rootVisualElement;
         playerUI = root.Q<VisualElement>("MainUI");
         minionHPBars = playerUI.Q<VisualElement>("MinionBarSlots");
         var craftingUI = root.Q<VisualElement>("CraftingUI");
         if (craftingUI != null)
             craftingUI.style.display = DisplayStyle.None;
+
     }
 
     void OnEnable()
     {
         EventDeclarer.hpChanged.AddListener(SetMinionHP);
-        alchemyHandler.newMinionAdded.AddListener(AddMinionHP);
+        if (AlchemyBenchUI.Instance != null)
+        {
+            AlchemyHandler.Instance.newMinionAdded.AddListener(AddMinionHP);
+        }
         EventDeclarer.minionDied.AddListener(RemoveMinionHP);
     }
 
     void OnDisable()
     {
         EventDeclarer.hpChanged.RemoveListener(SetMinionHP);
-        alchemyHandler.newMinionAdded.RemoveListener(AddMinionHP);
+        if (AlchemyBenchUI.Instance != null)
+        {
+            AlchemyHandler.Instance.newMinionAdded.RemoveListener(AddMinionHP);
+        }
         EventDeclarer.minionDied.RemoveListener(RemoveMinionHP);
 
 
@@ -56,8 +62,8 @@ public class PlayerUIHandler : MonoBehaviour
         ProgressBar minionHP = GetMinionsHPBar(minion);
         if (minionHP != null)
         {
-        minionHPDict.Remove(minion);
-        minionHPBars.Remove(minionHP);
+            minionHPDict.Remove(minion);
+            minionHPBars.Remove(minionHP);
         }
         else Logging.Error("You are trying to delete a none inion as though it were a minion");
     }

@@ -47,7 +47,13 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     #region Setup
     void Awake()
     {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
         Instance = this;
+
         alchemyHandler = GetComponent<AlchemyHandler>();
     }
     void Start()
