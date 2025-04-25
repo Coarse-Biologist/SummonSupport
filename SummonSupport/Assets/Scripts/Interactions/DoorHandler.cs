@@ -1,7 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
-using Alchemy;
 
 public class DoorHandler : MonoBehaviour, I_Interactable
 {

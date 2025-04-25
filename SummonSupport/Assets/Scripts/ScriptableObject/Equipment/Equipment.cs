@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 public class Item_SO: ScriptableObject, ILootInterface
 {
-    [SerializeField] private Rarity itemRarity = Rarity.Trash;
+    [SerializeField] private Rarity itemRarity = Rarity.Wretched;
     public Rarity ItemRarity => itemRarity;
     [SerializeField] private ItemType itemType = ItemType.Potion;
     public ItemType ItemType => itemType;

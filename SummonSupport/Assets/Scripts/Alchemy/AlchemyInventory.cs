@@ -4,12 +4,11 @@ using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace Alchemy
+
+public static class AlchemyInventory
 {
-    public static class AlchemyInventory
-    {
-        #region Class variables
-        public static Dictionary<AlchemyLoot, int> ingredients { get; private set; } = new Dictionary<AlchemyLoot, int>
+    #region Class variables
+    public static Dictionary<AlchemyLoot, int> ingredients { get; private set; } = new Dictionary<AlchemyLoot, int>
         {
             { AlchemyLoot.WretchedOrgans, 2 },
             { AlchemyLoot.FunctionalOrgans, 2 },
@@ -22,7 +21,7 @@ namespace Alchemy
             { AlchemyLoot.PureEther, 2 },
             { AlchemyLoot.IntenseEther, 1 }
             };
-        public static Dictionary<AlchemyLoot, int> ingredientValues { get; private set; } = new Dictionary<AlchemyLoot, int>
+    public static Dictionary<AlchemyLoot, int> ingredientValues { get; private set; } = new Dictionary<AlchemyLoot, int>
         {
             { AlchemyLoot.WretchedOrgans, 1 },
             { AlchemyLoot.FunctionalOrgans, 2 },
@@ -36,7 +35,7 @@ namespace Alchemy
             { AlchemyLoot.IntenseEther, 4 }
             };
 
-        public static Dictionary<Element, int> knowledgeDict = new Dictionary<Element, int>
+    public static Dictionary<Element, int> knowledgeDict = new Dictionary<Element, int>
             {
                 { Element.Cold, 0 },
                 { Element.Water, 0 },
@@ -55,51 +54,50 @@ namespace Alchemy
                 { Element.Psychic, 0 }
             };
 
-        public static List<AlchemyTool> KnownTools = new List<AlchemyTool>();
+    public static List<AlchemyTool> KnownTools = new List<AlchemyTool>();
 
-        #endregion
+    #endregion
 
-        #region Set Dict values
-        public static void IncemementElementalKnowledge(Element element, int amount)
-        {
-            knowledgeDict[element] += amount;
-        }
-        public static void AlterIngredientNum(AlchemyLoot ingredient, int amount)
-        {
-            Logging.Info($"You have gained {amount} {ingredient}");
-            ingredients[ingredient] += amount;
-
-        }
-        public static void ExpendIngredients(Dictionary<AlchemyLoot, int> usedIngredients)
-        {
-            foreach (KeyValuePair<AlchemyLoot, int> kvp in usedIngredients)
-            {
-                if (ingredients[kvp.Key] > 0) AlterIngredientNum(kvp.Key, -kvp.Value);
-            }
-        }
-        public static void GainTool(AlchemyTool tool)
-        {
-            if (!KnownTools.Contains(tool))
-            {
-                Logging.Info($"{tool} gained!");
-                KnownTools.Add(tool);
-            }
-            else Logging.Error($"The tool {tool} is already known");
-        }
-        #endregion
-
-        #region Check dict values
-        public static bool GetSufficentIngredients(AlchemyLoot ingredient, int amount)
-        {
-            bool sufficient = false;
-            if (ingredients[ingredient] >= amount) sufficient = true;
-
-            return sufficient;
-        }
-        #endregion
-
+    #region Set Dict values
+    public static void IncemementElementalKnowledge(Element element, int amount)
+    {
+        knowledgeDict[element] += amount;
+    }
+    public static void AlterIngredientNum(AlchemyLoot ingredient, int amount)
+    {
+        Logging.Info($"You have gained {amount} {ingredient}");
+        ingredients[ingredient] += amount;
 
     }
+    public static void ExpendIngredients(Dictionary<AlchemyLoot, int> usedIngredients)
+    {
+        foreach (KeyValuePair<AlchemyLoot, int> kvp in usedIngredients)
+        {
+            if (ingredients[kvp.Key] > 0) AlterIngredientNum(kvp.Key, -kvp.Value);
+        }
+    }
+    public static void GainTool(AlchemyTool tool)
+    {
+        if (!KnownTools.Contains(tool))
+        {
+            Logging.Info($"{tool} gained!");
+            KnownTools.Add(tool);
+        }
+        else Logging.Error($"The tool {tool} is already known");
+    }
+    #endregion
+
+    #region Check dict values
+    public static bool GetSufficentIngredients(AlchemyLoot ingredient, int amount)
+    {
+        bool sufficient = false;
+        if (ingredients[ingredient] >= amount) sufficient = true;
+
+        return sufficient;
+    }
+    #endregion
 
 
 }
+
+

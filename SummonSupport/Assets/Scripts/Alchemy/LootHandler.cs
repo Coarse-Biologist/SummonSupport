@@ -1,4 +1,3 @@
-using Alchemy;
 using UnityEngine;
 
 public class LootHandler : MonoBehaviour

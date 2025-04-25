@@ -1,5 +1,4 @@
 using UnityEngine;
-using Alchemy;
 
 public class LootableTool : MonoBehaviour, ILootInterface
 {
