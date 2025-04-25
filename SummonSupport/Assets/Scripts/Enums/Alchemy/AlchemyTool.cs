@@ -1,0 +1,23 @@
+public enum AlchemyTool
+    {
+        Beaker,
+        AccurateWeights,
+        Thermometer,
+        Barometer,
+        Pipette,
+        MicroPipette,
+        VolumetricFlask,
+        MagnifyingGlass,
+        ArcSpring,
+        Filter,
+        Centrifuge,
+        LightMicroscope,
+        CompoundMicroscope,
+        DarkFieldMicroscope,
+        PhaseShiftMicroscope,
+        TransmissionElectronMicroscrope,
+        ScannningElectronMicroscrope,
+        NuclearMagneticResonator,
+        MassSpectrometer,
+        Chromatograph,
+    }

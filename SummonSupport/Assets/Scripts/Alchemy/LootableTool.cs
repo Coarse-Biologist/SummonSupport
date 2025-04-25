@@ -3,7 +3,7 @@ using Alchemy;
 
 public class LootableTool : MonoBehaviour, ILootInterface
 {
-    [SerializeField] public AlchemyTools tool;
+    [SerializeField] public AlchemyTool tool;
 
     public void Loot()
     {

@@ -1,10 +1,11 @@
-using UnityEngine;
-
 public enum StatusEffectType
 {
+    None,
     AttributeReduction,
     AttributeReductionOverTime,
     AttributeIncrease,
     AttributeIncreaseOverTime,
-    NoEffect
+    NoEffect,
+    KnockInTheAir,
+    Stun,
 }

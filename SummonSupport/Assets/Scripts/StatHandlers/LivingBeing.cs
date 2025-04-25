@@ -45,7 +45,7 @@ public abstract class LivingBeing : MonoBehaviour
     public Dictionary<string, StatusEffectInstance> activeStatusEffects = new();
     public int XP_OnDeath = 3;
     protected bool isDead = false;
-    public Dictionary<Elements, (Func<int> Get, Action<int> Set)> Affinities { private set; get; } = new Dictionary<Elements, (Func<int> Get, Action<int> Set)>();
+    public Dictionary<Element, (Func<int> Get, Action<int> Set)> Affinities { private set; get; } = new Dictionary<Element, (Func<int> Get, Action<int> Set)>();
     public Dictionary<AttributeType, (Func<int> Get, Action<int> Set)> AttributesDict { private set; get; } = new Dictionary<AttributeType, (Func<int> Get, Action<int> Set)>();
 
     [SerializeField] public List<Ability> Abilties = new();
@@ -125,7 +125,7 @@ public abstract class LivingBeing : MonoBehaviour
     }
 
     #endregion
-    public void GainAffinity(Elements element, int amount)
+    public void GainAffinity(Element element, int amount)
     {
         Logging.Info($"gain element function has been called");
         if (Affinities.TryGetValue(element, out (Func<int> Get, Action<int> Set) func))
@@ -213,7 +213,7 @@ public abstract class LivingBeing : MonoBehaviour
     public void AlterColorByAffinity()
     {
         Logging.Info($"{Affinities.Keys.Count}");
-        Elements strongestElement = Affinities.OrderByDescending(a => a.Value.Get()).First().Key;
+        Element strongestElement = Affinities.OrderByDescending(a => a.Value.Get()).First().Key;
 
         string str = strongestElement.ToString();
         string nameBase = "Elemental";
@@ -290,23 +290,23 @@ public abstract class LivingBeing : MonoBehaviour
 
     void InitializeAffinityDict()
     {
-        Affinities = new Dictionary<Elements, (Func<int> Get, Action<int> Set)>
+        Affinities = new Dictionary<Element, (Func<int> Get, Action<int> Set)>
             {
-                { Elements.Cold,            (() => Cold,            v => Cold = v) },
-                { Elements.Water,           (() => Water,           v => Water = v) },
-                { Elements.Earth,           (() => Earth,           v => Earth = v) },
-                { Elements.Heat,            (() => Heat,            v => Heat = v) },
-                { Elements.Air,             (() => Air,             v => Air = v) },
-                { Elements.Electricity,     (() => Electricity,     v => Electricity = v) },
-                { Elements.Poison,          (() => Poison,          v => Poison = v) },
-                { Elements.Acid,            (() => Acid,            v => Acid = v) },
-                { Elements.Bacteria,        (() => Bacteria,        v => Bacteria = v) },
-                { Elements.Fungi,           (() => Fungi,           v => Fungi = v) },
-                { Elements.Plant,           (() => Plant,           v => Plant = v) },
-                { Elements.Virus,           (() => Virus,           v => Virus = v) },
-                { Elements.Radiation,       (() => Radiation,       v => Radiation = v) },
-                { Elements.Light,           (() => Light,           v => Light = v) },
-                { Elements.Psychic,         (() => Psychic,         v => Psychic = v) }
+                { Element.Cold,            (() => Cold,            v => Cold = v) },
+                { Element.Water,           (() => Water,           v => Water = v) },
+                { Element.Earth,           (() => Earth,           v => Earth = v) },
+                { Element.Heat,            (() => Heat,            v => Heat = v) },
+                { Element.Air,             (() => Air,             v => Air = v) },
+                { Element.Electricity,     (() => Electricity,     v => Electricity = v) },
+                { Element.Poison,          (() => Poison,          v => Poison = v) },
+                { Element.Acid,            (() => Acid,            v => Acid = v) },
+                { Element.Bacteria,        (() => Bacteria,        v => Bacteria = v) },
+                { Element.Fungi,           (() => Fungi,           v => Fungi = v) },
+                { Element.Plant,           (() => Plant,           v => Plant = v) },
+                { Element.Virus,           (() => Virus,           v => Virus = v) },
+                { Element.Radiation,       (() => Radiation,       v => Radiation = v) },
+                { Element.Light,           (() => Light,           v => Light = v) },
+                { Element.Psychic,         (() => Psychic,         v => Psychic = v) }
             };
     }
     void Die()

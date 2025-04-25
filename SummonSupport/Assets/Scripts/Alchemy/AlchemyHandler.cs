@@ -34,7 +34,7 @@ public class AlchemyHandler : MonoBehaviour
 
     #region Crafting Minion
 
-    public void HandleCraftingResults(Dictionary<AlchemyLoot, int> combinedIngredients, List<Elements> elementList)
+    public void HandleCraftingResults(Dictionary<AlchemyLoot, int> combinedIngredients, List<Element> elementList)
     {
         if (combinedIngredients.Keys.Count > 0)
         {
@@ -97,24 +97,24 @@ public class AlchemyHandler : MonoBehaviour
         }
         return powerUpgrade;
     }
-    private int HandleEtherUse(LivingBeing stats, AlchemyLoot ether, List<Elements> elementList)
+    private int HandleEtherUse(LivingBeing stats, AlchemyLoot ether, List<Element> elementList)
     {
         int elementUpgrade = 0;
         string etherString = ether.ToString();
         if (etherString.Contains("Faint"))
-            foreach (Elements element in elementList)
+            foreach (Element element in elementList)
             {
                 stats.GainAffinity(element, 10 / elementList.Count);
                 elementUpgrade += 10 / elementList.Count;
             }
         if (etherString.Contains("Pure"))
-            foreach (Elements element in elementList)
+            foreach (Element element in elementList)
             {
                 stats.GainAffinity(element, 30 / elementList.Count);
                 elementUpgrade += 30 / elementList.Count;
             }
         if (etherString.Contains("Intense"))
-            foreach (Elements element in elementList)
+            foreach (Element element in elementList)
             {
                 stats.GainAffinity(element, 60 / elementList.Count);
                 elementUpgrade += 60 / elementList.Count;
@@ -122,7 +122,7 @@ public class AlchemyHandler : MonoBehaviour
         return elementUpgrade;
     }
 
-    public void UpgradeMinion(GameObject minion, Dictionary<AlchemyLoot, int> ingredients, List<Elements> elementList)
+    public void UpgradeMinion(GameObject minion, Dictionary<AlchemyLoot, int> ingredients, List<Element> elementList)
     {
         MinionStats stats = minion.GetComponent<MinionStats>();
 
@@ -151,7 +151,7 @@ public class AlchemyHandler : MonoBehaviour
     #endregion
 
 
-    private int GainKnowledge(List<Elements> elementsList, Dictionary<AlchemyLoot, int> combinedIngredients)
+    private int GainKnowledge(List<Element> elementsList, Dictionary<AlchemyLoot, int> combinedIngredients)
     {
         int total = 0;
         foreach (KeyValuePair<AlchemyLoot, int> kvp in combinedIngredients)
@@ -159,7 +159,7 @@ public class AlchemyHandler : MonoBehaviour
             int strengthAndAmount = AlchemyInventory.ingredientValues[kvp.Key] * kvp.Value; //multiply ingredient value by num used
             strengthAndAmount += AlchemyInventory.KnownTools.Count;
             total += strengthAndAmount;
-            foreach (Elements element in elementsList)
+            foreach (Element element in elementsList)
             {
                 AlchemyInventory.IncemementElementalKnowledge(element, strengthAndAmount);
             }

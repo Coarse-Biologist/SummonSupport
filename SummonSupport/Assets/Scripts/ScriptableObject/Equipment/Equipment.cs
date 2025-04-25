@@ -1,0 +1,25 @@
+using UnityEngine;
+using System.Collections.Generic;
+
+public class Item_SO: ScriptableObject, ILootInterface
+{
+    [SerializeField] private Rarity itemRarity = Rarity.Trash;
+    public Rarity ItemRarity => itemRarity;
+    [SerializeField] private ItemType itemType = ItemType.Potion;
+    public ItemType ItemType => itemType;
+    [SerializeField] private int itemValue = 1;
+    public int ItemValue => itemValue;
+    [SerializeField] private ItemNameEnum itemEnum = ItemNameEnum.HealthPotion1;
+    public ItemNameEnum ItemEnum => itemEnum;
+    [SerializeField] private string itemName = "Item Name";
+    public string ItemName => itemName;
+    [SerializeField] private string itemDescription = "Item Description";
+    public string ItemDescription => itemDescription;
+    [SerializeField] private List<EquipmentSlot> equipmentSlot = new List<EquipmentSlot>();
+    public List<EquipmentSlot> EquipmentSlot => equipmentSlot;
+
+    public void Loot()
+    {
+        EquipmentHandler.AddItemToInventory(this);
+    }
+}

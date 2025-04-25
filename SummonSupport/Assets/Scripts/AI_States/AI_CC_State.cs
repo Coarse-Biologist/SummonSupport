@@ -10,7 +10,7 @@ public class AI_CC_State : AIState
 {
     private AIState peaceState;
     public bool sufferingCC = false;
-    public Dictionary<CrowdControls, GameObject> currentCCs = new Dictionary<CrowdControls, GameObject>();
+    public Dictionary<StatusEffectType, GameObject> currentCCs = new Dictionary<StatusEffectType, GameObject>();
     private Rigidbody2D rb;
 
     private float duration = 2f;
@@ -27,7 +27,7 @@ public class AI_CC_State : AIState
     {
         if (currentCCs.Keys.Count != 0)
         {
-            if (!beingKnockedInAir && currentCCs.TryGetValue(CrowdControls.KnockInTheAir, out GameObject caster)) StartCoroutine(KnockRoutine()); // will later have a switch for the different CCs
+            if (!beingKnockedInAir && currentCCs.TryGetValue(StatusEffectType.KnockInTheAir, out GameObject caster)) StartCoroutine(KnockRoutine()); // will later have a switch for the different CCs
             return this;
         }
         else
@@ -37,7 +37,7 @@ public class AI_CC_State : AIState
         }
     }
 
-    public void RecieveCC(CrowdControls CC, GameObject caster)
+    public void RecieveCC(StatusEffectType CC, GameObject caster)
     {
         currentCCs.TryAdd(CC, caster);
     }
@@ -46,7 +46,7 @@ public class AI_CC_State : AIState
     {
         Logging.Info("Knock in the air func is being called");
         beingKnockedInAir = true;
-        if(currentCCs.TryGetValue(CrowdControls.KnockInTheAir, out GameObject caster) && timeElapsed <= duration)
+        if(currentCCs.TryGetValue(StatusEffectType.KnockInTheAir, out GameObject caster) && timeElapsed <= duration)
             {
                 Logging.Info($"Time elapsed = {timeElapsed}. duration = {duration}");
                 rb.linearDamping = 40;
@@ -61,7 +61,7 @@ public class AI_CC_State : AIState
         {
             beingKnockedInAir = false;
             timeElapsed = 0f;
-            currentCCs.Remove(CrowdControls.KnockInTheAir);
+            currentCCs.Remove(StatusEffectType.KnockInTheAir);
             rb.linearDamping = 10;
             return false;
         }

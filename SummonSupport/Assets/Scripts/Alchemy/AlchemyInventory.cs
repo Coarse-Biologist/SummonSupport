@@ -36,31 +36,31 @@ namespace Alchemy
             { AlchemyLoot.IntenseEther, 4 }
             };
 
-        public static Dictionary<Elements, int> knowledgeDict = new Dictionary<Elements, int>
+        public static Dictionary<Element, int> knowledgeDict = new Dictionary<Element, int>
             {
-                { Elements.Cold, 0 },
-                { Elements.Water, 0 },
-                { Elements.Earth, 0 },
-                { Elements.Heat, 0 },
-                { Elements.Air, 0 },
-                { Elements.Electricity, 0 },
-                { Elements.Poison, 0 },
-                { Elements.Acid, 0 },
-                { Elements.Bacteria, 0 },
-                { Elements.Fungi, 0 },
-                { Elements.Plant, 0 },
-                { Elements.Virus, 0 },
-                { Elements.Radiation, 0 },
-                { Elements.Light, 0 },
-                { Elements.Psychic, 0 }
+                { Element.Cold, 0 },
+                { Element.Water, 0 },
+                { Element.Earth, 0 },
+                { Element.Heat, 0 },
+                { Element.Air, 0 },
+                { Element.Electricity, 0 },
+                { Element.Poison, 0 },
+                { Element.Acid, 0 },
+                { Element.Bacteria, 0 },
+                { Element.Fungi, 0 },
+                { Element.Plant, 0 },
+                { Element.Virus, 0 },
+                { Element.Radiation, 0 },
+                { Element.Light, 0 },
+                { Element.Psychic, 0 }
             };
 
-        public static List<AlchemyTools> KnownTools = new List<AlchemyTools>();
+        public static List<AlchemyTool> KnownTools = new List<AlchemyTool>();
 
         #endregion
 
         #region Set Dict values
-        public static void IncemementElementalKnowledge(Elements element, int amount)
+        public static void IncemementElementalKnowledge(Element element, int amount)
         {
             knowledgeDict[element] += amount;
         }
@@ -77,7 +77,7 @@ namespace Alchemy
                 if (ingredients[kvp.Key] > 0) AlterIngredientNum(kvp.Key, -kvp.Value);
             }
         }
-        public static void GainTool(AlchemyTools tool)
+        public static void GainTool(AlchemyTool tool)
         {
             if (!KnownTools.Contains(tool))
             {
@@ -101,62 +101,5 @@ namespace Alchemy
 
     }
 
-    public enum AlchemyLoot
-    {
-        WretchedOrgans,
-        FunctionalOrgans,
-        HulkingOrgans,
-        BrokenCores,
-        WorkingCore,
-        PowerfulCore,
-        HulkingCore,
-        FaintEther,
-        PureEther,
-        IntenseEther,
-    }
-
-    public enum AlchemyTools
-    {
-        Beaker,
-        AccurateWeights,
-        Thermometer,
-        Barometer,
-        Pipette,
-        MicroPipette,
-        VolumetricFlask,
-        MagnifyingGlass,
-        ArcSpring,
-        Filter,
-        Centrifuge,
-        LightMicroscope,
-        CompoundMicroscope,
-        DarkFieldMicroscope,
-        PhaseShiftMicroscope,
-        TransmissionElectronMicroscrope,
-        ScannningElectronMicroscrope,
-        NuclearMagneticResonator,
-        MassSpectrometer,
-        Chromatograph,
-    }
-
-    public enum Elements
-    {
-        None,
-        Cold,
-        Water,
-        Earth,
-        Heat,
-        Air,
-        Electricity,
-        Poison,
-        Acid,
-        Bacteria,
-        Fungi,
-        Plant,
-        Virus,
-        Radiation,
-        Light,
-        Psychic
-    }
 
 }

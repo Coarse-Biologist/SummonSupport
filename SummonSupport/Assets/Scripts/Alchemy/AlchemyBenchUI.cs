@@ -35,7 +35,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
 
     #region Runtime Variables
     private Dictionary<AlchemyLoot, int> selectedIngredients = new Dictionary<AlchemyLoot, int>();
-    private List<Elements> selectedElements = new List<Elements>();
+    private List<Element> selectedElements = new List<Element>();
     private GameObject minionToUpgrade;
 
     private bool elementsGenerated = false;
@@ -265,8 +265,8 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
         if (!elementsGenerated)
         {
             elementsGenerated = true;
-            List<Elements> elementsList = Enum.GetValues(typeof(Elements)).Cast<Elements>().ToList();
-            foreach (Elements element in elementsList)
+            List<Element> elementsList = Enum.GetValues(typeof(Element)).Cast<Element>().ToList();
+            foreach (Element element in elementsList)
             {
                 Toggle elementToggle = new Toggle { text = element.ToString() };
                 elementToggle.style.backgroundColor = Color.green;
@@ -280,10 +280,10 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
 
     private void ClearCraftingSelection()
     {
-        selectedElements = new List<Elements>();
+        selectedElements = new List<Element>();
         selectedIngredients = new Dictionary<AlchemyLoot, int>();
     }
-    private void ToggleSelectedElement(Elements element)
+    private void ToggleSelectedElement(Element element)
     {
         if (!selectedElements.Contains(element)) selectedElements.Add(element);
         else selectedElements.Remove(element);

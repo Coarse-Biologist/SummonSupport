@@ -13,7 +13,7 @@ public class DoorHandler : MonoBehaviour, I_Interactable
     private bool ready = true;
     [SerializeField] public bool Locked = false;
 
-    [SerializeField] public Elements elementalRequisite;
+    [SerializeField] public Element elementalRequisite;
     [SerializeField] public int difficulty = 1;
 
 
@@ -84,7 +84,7 @@ public class DoorHandler : MonoBehaviour, I_Interactable
 
     private bool HasElementalRequisite(LivingBeing livingBeing)
     {
-        if (elementalRequisite == Elements.None) return true;
+        if (elementalRequisite == Element.None) return true;
         if (livingBeing.Affinities[elementalRequisite].Get() > difficulty * 10) return true;
         else
         {

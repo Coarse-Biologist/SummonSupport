@@ -3,7 +3,7 @@ using UnityEngine;
 
 public interface I_Combatant
 {
-    void TakeDamage(Elements element, int value);
+    void TakeDamage(Element element, int value);
     void RecieveHeal(int value);
     void RecieveBuff(string buff);
     void RecieveDebuff(string debuff);

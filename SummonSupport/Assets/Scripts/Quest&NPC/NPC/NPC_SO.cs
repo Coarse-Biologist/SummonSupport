@@ -16,9 +16,9 @@ namespace Quest
         [SerializeField] public int XP_Reward = 0;
         [SerializeField] public int GoldReward = 0;
         [SerializeField] public int KnowlegdeReward = 0;
-        [SerializeField] public Elements ElementsLootReward = Elements.None;
+        [SerializeField] public Element ElementsLootReward = Element.None;
         [SerializeField] public AlchemyLoot AlchemyLootReward = AlchemyLoot.WretchedOrgans;
-        [SerializeField] public AlchemyTools AlchemyToolReward = AlchemyTools.Beaker;
+        [SerializeField] public AlchemyTool AlchemyToolReward = AlchemyTool.Beaker;
 
 
         [SerializeField] public Sprite NPC_Sprite;
