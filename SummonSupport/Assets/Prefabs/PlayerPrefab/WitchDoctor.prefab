@@ -44,6 +44,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3383896482568746463}
+  - component: {fileID: 4338009751320660347}
   - component: {fileID: 8448971370090431159}
   - component: {fileID: 5861436898903022836}
   - component: {fileID: 2016876094094107117}
@@ -83,6 +84,46 @@ RectTransform:
   m_AnchoredPosition: {x: 0.11, y: 0.02}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.4771803, y: 0.51515764}
+--- !u!114 &4338009751320660347
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7372807118684430242}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48786c349691b5047845878d6c44a224, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <Name>k__BackingField: Deku
+  <Description>k__BackingField: Player
+  <BattleCries>k__BackingField: []
+  <MaxHP>k__BackingField: 100
+  <TemporaryMaxHP>k__BackingField: 0
+  <CurrentHP>k__BackingField: 100
+  <MaxPower>k__BackingField: 100
+  <TemporaryMaxPower>k__BackingField: 0
+  <CurrentPower>k__BackingField: 100
+  <Cold>k__BackingField: 0
+  <Water>k__BackingField: 0
+  <Earth>k__BackingField: 0
+  <Heat>k__BackingField: 0
+  <Air>k__BackingField: 0
+  <Electricity>k__BackingField: 0
+  <Poison>k__BackingField: 0
+  <Acid>k__BackingField: 0
+  <Bacteria>k__BackingField: 0
+  <Fungi>k__BackingField: 0
+  <Plant>k__BackingField: 0
+  <Virus>k__BackingField: 0
+  <Radiation>k__BackingField: 0
+  <Light>k__BackingField: 0
+  <Psychic>k__BackingField: 0
+  <XP_OnDeath>k__BackingField: 3
+  <Abilties>k__BackingField: []
+  <Speed>k__BackingField: 0.6
+  <Mass>k__BackingField: 1
 --- !u!114 &8448971370090431159
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -172,7 +213,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mainCamera: {fileID: 0}
   AbilityRotation: {fileID: 311584313140301966}
-  speed: 0.6
+  movementSpeed: 0.6
   dashBoost: 1
   dashCoolDown: 1
   dashDuration: 0.1

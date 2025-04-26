@@ -16,7 +16,7 @@ MonoBehaviour:
   <Icon>k__BackingField: {fileID: 2533768351935005930, guid: c66617f566a22004a979ff1c163dee93,
     type: 3}
   <Type>k__BackingField: 1
-  <Attribute>k__BackingField: 1
+  <Attribute>k__BackingField: 2
   <Duration>k__BackingField: 15
   <TickRateSeconds>k__BackingField: 0
   <Value>k__BackingField: 10

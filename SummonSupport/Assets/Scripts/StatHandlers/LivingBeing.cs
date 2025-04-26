@@ -14,12 +14,12 @@ public abstract class LivingBeing : MonoBehaviour
     [field: SerializeField] public List<string> BattleCries { get; private set; }
 
     [Header("Attributes - Ressources")]
-    [field: SerializeField] public int MaxHP                { get; private set; } = 100;
-    [field: SerializeField] public int TemporaryMaxHP       { get; private set; }
-    [field: SerializeField] public int CurrentHP            { get; private set; } = 100;
-    [field: SerializeField] public int MaxPower             { get; private set; } = 100;
-    [field: SerializeField] public int TemporaryMaxPower    { get; private set; }
-    [field: SerializeField] public int CurrentPower         { get; private set; } = 100;
+    [field: SerializeField] public float MaxHP                { get; private set; } = 100;
+    [field: SerializeField] public float TemporaryMaxHP       { get; private set; }
+    [field: SerializeField] public float CurrentHP            { get; private set; } = 100;
+    [field: SerializeField] public float MaxPower             { get; private set; } = 100;
+    [field: SerializeField] public float TemporaryMaxPower    { get; private set; }
+    [field: SerializeField] public float CurrentPower         { get; private set; } = 100;
 
     [Header("Attributes - Regenerations")]
     //TODO:
@@ -27,31 +27,31 @@ public abstract class LivingBeing : MonoBehaviour
     #region Affinity Stats
 
     [Header("Affinity Stats")]
-    [field: SerializeField] protected int Cold          { get; private set; } = 0;
-    [field: SerializeField] protected int Water         { get; private set; } = 0;
-    [field: SerializeField] protected int Earth         { get; private set; } = 0;
-    [field: SerializeField] protected int Heat          { get; private set; } = 0;
-    [field: SerializeField] protected int Air           { get; private set; } = 0;
-    [field: SerializeField] protected int Electricity   { get; private set; } = 0;
-    [field: SerializeField] protected int Poison        { get; private set; } = 0;
-    [field: SerializeField] protected int Acid          { get; private set; } = 0;
-    [field: SerializeField] protected int Bacteria      { get; private set; } = 0;
-    [field: SerializeField] protected int Fungi         { get; private set; } = 0;
-    [field: SerializeField] protected int Plant         { get; private set; } = 0;
-    [field: SerializeField] protected int Virus         { get; private set; } = 0;
-    [field: SerializeField] protected int Radiation     { get; private set; } = 0;
-    [field: SerializeField] protected int Light         { get; private set; } = 0;
-    [field: SerializeField] protected int Psychic       { get; private set; } = 0;
+    [field: SerializeField] protected float Cold          { get; private set; } = 0;
+    [field: SerializeField] protected float Water         { get; private set; } = 0;
+    [field: SerializeField] protected float Earth         { get; private set; } = 0;
+    [field: SerializeField] protected float Heat          { get; private set; } = 0;
+    [field: SerializeField] protected float Air           { get; private set; } = 0;
+    [field: SerializeField] protected float Electricity   { get; private set; } = 0;
+    [field: SerializeField] protected float Poison        { get; private set; } = 0;
+    [field: SerializeField] protected float Acid          { get; private set; } = 0;
+    [field: SerializeField] protected float Bacteria      { get; private set; } = 0;
+    [field: SerializeField] protected float Fungi         { get; private set; } = 0;
+    [field: SerializeField] protected float Plant         { get; private set; } = 0;
+    [field: SerializeField] protected float Virus         { get; private set; } = 0;
+    [field: SerializeField] protected float Radiation     { get; private set; } = 0;
+    [field: SerializeField] protected float Light         { get; private set; } = 0;
+    [field: SerializeField] protected float Psychic       { get; private set; } = 0;
     #endregion Afinity Stats
 
     [Header("Other")]
-    [field: SerializeField] public int XP_OnDeath { get; private set; } = 3;
+    [field: SerializeField] public float XP_OnDeath { get; private set; } = 3;
     public Dictionary<string, StatusEffectInstance> activeStatusEffects = new();
-    public Dictionary<Element,          (Func<int> Get, Action<int> Set)> Affinities        { private set; get; } = new();
-    public Dictionary<AttributeType,    (Func<int> Get, Action<int> Set)> AttributesDict    { private set; get; } = new();
+    public Dictionary<Element,          (Func<float> Get, Action<float> Set)> Affinities        { private set; get; } = new();
+    public Dictionary<AttributeType,    (Func<float> Get, Action<float> Set)> AttributesDict    { private set; get; } = new();
 
     [field: SerializeField] public List<Ability> Abilties { get; private set; } = new();
-    [field: SerializeField] public int Speed { get; private set; } = 60;
+    [field: SerializeField] public float Speed { get; private set; } = 0.4f;
     [field: SerializeField] public float Mass  { get; private set; } = 1f;
 
     #endregion Declarations
@@ -80,11 +80,11 @@ public abstract class LivingBeing : MonoBehaviour
 
     #region Stat Upgrades
 
-    public void ChangeMaxHP(int amount)
+    public void ChangeMaxHP(float amount)
     {
         MaxHP += amount;
     }
-    public void ChangeMaxPower(int amount)
+    public void ChangeMaxPower(float amount)
     {
         MaxPower += amount;
         Logging.Info($"power increased by {amount}");
@@ -95,7 +95,7 @@ public abstract class LivingBeing : MonoBehaviour
         Mass += massGain;
         GetComponent<Rigidbody2D>().mass += massGain;
     }
-    public void ChangeSpeed(int amount)
+    public void ChangeSpeed(float amount)
     {
         Speed += amount;
     }
@@ -114,16 +114,16 @@ public abstract class LivingBeing : MonoBehaviour
         CurrentPower = MaxPower;
     }
 
-    public void ReduceHP(int amount)
+    public void ReduceHP(float amount)
     {
         CurrentHP -= amount;
     }
 
     #endregion
-    public void GainAffinity(Element element, int amount)
+    public void GainAffinity(Element element, float amount)
     {
         Logging.Info($"gain element function has been called");
-        if (Affinities.TryGetValue(element, out (Func<int> Get, Action<int> Set) func))
+        if (Affinities.TryGetValue(element, out (Func<float> Get, Action<float> Set) func))
         {
             Affinities[element].Set(amount + Affinities[element].Get());
         }
@@ -156,7 +156,7 @@ public abstract class LivingBeing : MonoBehaviour
 
     #region Attribute Handling
 
-    public int GetAttribute(AttributeType attribute)
+    public float GetAttribute(AttributeType attribute)
     {
         if (AttributesDict != null && AttributesDict.ContainsKey(attribute))
         {
@@ -166,7 +166,7 @@ public abstract class LivingBeing : MonoBehaviour
 
     }
 
-    public void SetAttribute(AttributeType attribute, int value)
+    public void SetAttribute(AttributeType attribute, float value)
     {
         if (AttributesDict != null && AttributesDict.ContainsKey(attribute))
             AttributesDict[attribute].Set(value);
@@ -180,34 +180,46 @@ public abstract class LivingBeing : MonoBehaviour
         Name = newName;
     }
 
-    public void ChangeAttribute(AttributeType attributeType, float value, ValueType valueType = ValueType.Flat)
+    public float ChangeAttribute(AttributeType attributeType, float value, ValueType valueType = ValueType.Flat)
     {
         if (AttributesDict == null || !AttributesDict.ContainsKey(attributeType))
             throw new Exception("Attribute not found or invalid setter");
 
-        int newValue = (int)Math.Round(value);
-        newValue = ChangeAttribute(attributeType, newValue, valueType);
-    }
-    public int ChangeAttribute(AttributeType attributeType, int value, ValueType valueType = ValueType.Flat)
-    {
-        if (AttributesDict == null || !AttributesDict.ContainsKey(attributeType))
-            throw new Exception("Attribute not found or invalid setter");
-
-        int currentValue = GetAttribute(attributeType);
-        int newValue = CalculateNewValueByType(currentValue, value, valueType);
+        float currentValue  = GetAttribute(attributeType);
+        float newValue      = CalculateNewValueByType(currentValue, value, valueType);
         SetAttribute(attributeType, newValue);
-        if (attributeType == AttributeType.CurrentHitpoints) 
-            EventDeclarer.hpChanged?.Invoke(gameObject);
+        HandleEventInvokes(attributeType, newValue);
 
-        if (CurrentHP <= 0)
+        if (IsDead())
             Die();
         return newValue;
     }
 
-    int CalculateNewValueByType(int currentValue, int value, ValueType valueType)
+    public bool IsDead()
+    {
+        return CurrentHP <= 0;
+    }
+
+    public void HandleEventInvokes(AttributeType attributeType, float newValue)
+    {
+        switch (attributeType)
+        {
+            case AttributeType.CurrentHitpoints: 
+                EventDeclarer.hpChanged?.Invoke(gameObject);
+                break;
+            case AttributeType.MovementSpeed:
+            case AttributeType.DashBoost:
+            case AttributeType.DashCooldown:
+            case AttributeType.DashDuration:
+                EventDeclarer.SpeedAttributeChanged.Invoke(attributeType, newValue);
+                break;
+        }
+    }
+
+    float CalculateNewValueByType(float currentValue, float value, ValueType valueType)
     {
         if (valueType == ValueType.Percentage)
-            value = Mathf.RoundToInt(currentValue * (1 + (value / 100f)));
+            value = currentValue * (1 + (value / 100f));
         else // value type is flat
             value = currentValue + value;
         return value;
@@ -281,7 +293,7 @@ public abstract class LivingBeing : MonoBehaviour
 
     void InitializeAttributeDict()
     {
-        AttributesDict = new Dictionary<AttributeType, (Func<int> Get, Action<int> Set)>
+        AttributesDict = new Dictionary<AttributeType, (Func<float> Get, Action<float> Set)>
             {
                 { AttributeType.MaxHitpoints,           (() => MaxHP,               v => MaxHP = v) },
                 { AttributeType.TemporaryMaxHitpoints,  (() => TemporaryMaxHP,      v => TemporaryMaxHP = v) },
@@ -294,7 +306,7 @@ public abstract class LivingBeing : MonoBehaviour
 
     void InitializeAffinityDict()
     {
-        Affinities = new Dictionary<Element, (Func<int> Get, Action<int> Set)>
+        Affinities = new Dictionary<Element, (Func<float> Get, Action<float> Set)>
             {
                 { Element.Cold,            (() => Cold,            v => Cold = v) },
                 { Element.Water,           (() => Water,           v => Water = v) },

@@ -79,28 +79,34 @@ public class StatusEffect : ScriptableObject
 
     private IEnumerator HandleOnce(LivingBeing target, int value, Action<LivingBeing, int> action)
     {
-        target.activeStatusEffects.Add(Name, new StatusEffectInstance(this));
         try
         {
-            action(target, value);
-            yield return new WaitForSeconds(Duration);
+            if (IsExisting(target))
+            {
+                target.activeStatusEffects.Add(Name, new StatusEffectInstance(this));
+                action(target, value);
+                yield return new WaitForSeconds(Duration);
+            }
         }
         finally
         {
-            action(target, -value);
-            target.activeStatusEffects.Remove(Name);
+            if (IsExisting(target)) 
+            {
+                action(target, -value);
+                target.activeStatusEffects.Remove(Name);
+            }
         }
     }
     private IEnumerator RepeatStatusEffect(LivingBeing target, int value, Action<LivingBeing, int> action)
     {
         StatusEffectInstance instance = new(this);
-        target.activeStatusEffects.Add(Name, instance);
         int totalTicks = Mathf.FloorToInt(Duration / TickRateSeconds);
+        target.activeStatusEffects.Add(Name, instance);
         try
         {
             while (instance.ticksDone < totalTicks)
             {
-                if (target == null) 
+                if (!IsExisting(target)) 
                     yield break; // In case the target died while this was still running. If target died => GameObject does not longer exist.
 
                 action(target, value);
@@ -110,7 +116,7 @@ public class StatusEffect : ScriptableObject
         }
         finally
         {
-            if (target != null) // Same thing here, make sure target is still alive if we want to access it.
+            if (IsExisting(target)) // Same thing here, make sure target is still alive if we want to access it.
                 target.activeStatusEffects.Remove(Name);
         }
     }
@@ -119,5 +125,10 @@ public class StatusEffect : ScriptableObject
     {
         Logging.Info("Attribute: " + Attribute + "\nValue: " + Value);
         target.ChangeAttribute(Attribute, value);
+    }
+
+    private bool IsExisting(LivingBeing livingBeing)
+    {
+        return livingBeing != null && livingBeing.gameObject != null && livingBeing.gameObject.activeInHierarchy == true;
     }
 }

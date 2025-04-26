@@ -49,7 +49,7 @@ public class PlayerUIHandler : MonoBehaviour
     public void AddMinionHP(GameObject minion)
     {
         ProgressBar minionHP = new ProgressBar();
-        int hp = minion.GetComponent<LivingBeing>().GetAttribute(AttributeType.CurrentHitpoints);
+        float hp = minion.GetComponent<LivingBeing>().GetAttribute(AttributeType.CurrentHitpoints);
         minionHPDict.TryAdd(minion, minionHP);
         minionHP.title = $"{minion.GetComponent<LivingBeing>().Name} HP: {hp}";
         minionHP.highValue = hp;
@@ -76,7 +76,7 @@ public class PlayerUIHandler : MonoBehaviour
         ProgressBar hpBar = GetMinionsHPBar(minion);
         if (hpBar != null)
         {
-            int hp = minion.GetComponent<LivingBeing>().GetAttribute(AttributeType.CurrentHitpoints);
+            float hp    = minion.GetComponent<LivingBeing>().GetAttribute(AttributeType.CurrentHitpoints);
             hpBar.value = minion.GetComponent<LivingBeing>().CurrentHP;
             hpBar.title = $"{minion.GetComponent<LivingBeing>().Name} HP: {hp}";
 

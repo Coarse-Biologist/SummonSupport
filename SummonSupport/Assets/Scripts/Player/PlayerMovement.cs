@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 using UnityEngine.InputSystem;
 using UnityEngine.Events;
 using Unity.Entities;
@@ -9,7 +10,6 @@ using SummonSupportEvents;
 public class PlayerMovement : MonoBehaviour
 {
     #region class Variables
-    float MOVEMENT_CONVERSION_FACTOR = 100f;    
     private Vector2 moveInput;
     public Camera mainCamera;
     private PlayerSpriteController spriteController;
@@ -39,24 +39,19 @@ public class PlayerMovement : MonoBehaviour
 
     void Start()
     {
-        movementSpeed = gameObject.GetComponent<PlayerStats>().Speed / MOVEMENT_CONVERSION_FACTOR;
+        movementSpeed = gameObject.GetComponent<PlayerStats>().Speed;
     }
     #region Enable and Disable event subscriptions
     private void OnEnable()
     {
         //AlchemyBenchUI.Instance.playerUsingUI.AddListener(ToggleLockedInUI);
         inputActions ??= new PlayerInputActions();
-        EventDeclarer.SpeedAttributeChanged.AddListener(SetSpeedAttribute);
-
+        EventDeclarer.SpeedAttributeChanged.AddListener(SetMovementAttribute);
         inputActions.Player.Enable();
-
-        inputActions.Player.Move.performed += OnMove;
-        inputActions.Player.Move.canceled += OnMove;
-
-        inputActions.Player.Dash.performed += OnDash;
-
+        inputActions.Player.Move.performed          += OnMove;
+        inputActions.Player.Move.canceled           += OnMove;
+        inputActions.Player.Dash.performed          += OnDash;
         inputActions.Player.LookDirection.performed += OnLook;
-
         inputActions.Player.CommandMinion.performed += SendMinionCommandContext;
     }
 
@@ -64,16 +59,12 @@ public class PlayerMovement : MonoBehaviour
     {
         //AlchemyBenchUI.Instance.playerUsingUI.RemoveListener(ToggleLockedInUI);
 
-        EventDeclarer.SpeedAttributeChanged.RemoveListener(SetSpeedAttribute);
-        inputActions.Player.Move.performed -= OnMove;
-        inputActions.Player.Move.canceled -= OnMove;
-
-        inputActions.Player.Dash.performed -= OnDash;
-
+        EventDeclarer.SpeedAttributeChanged.RemoveListener(SetMovementAttribute);
+        inputActions.Player.Move.performed          -= OnMove;
+        inputActions.Player.Move.canceled           -= OnMove;
+        inputActions.Player.Dash.performed          -= OnDash;
         inputActions.Player.LookDirection.performed -= OnLook;
-
         inputActions.Player.CommandMinion.performed -= SendMinionCommandContext;
-
         inputActions.Player.Disable();
     }
     #endregion
@@ -107,17 +98,14 @@ public class PlayerMovement : MonoBehaviour
     }
     private void HandleMove()
     {
-        float calculatedSpeed = 0f;
-        if (dashing) calculatedSpeed = movementSpeed + dashBoost;
-        else calculatedSpeed = movementSpeed;
+        float calculatedSpeed;
+        if (dashing) 
+            calculatedSpeed = movementSpeed + dashBoost;
+        else 
+            calculatedSpeed = movementSpeed;
 
-        Vector3 moveDirection = new Vector3(moveInput.x, moveInput.y, 0).normalized;
-        rb.linearVelocity = moveDirection * calculatedSpeed * 10;
-
-        //if (moveInput.x != 0 || moveInput.y != 0)
-        //{
-        //    UpdatePositionForEntities();
-        //}
+        Vector3 moveDirection   = new Vector3(moveInput.x, moveInput.y, 0).normalized;
+        rb.linearVelocity       = moveDirection * calculatedSpeed * 10;
     }
 
 
@@ -174,26 +162,22 @@ public class PlayerMovement : MonoBehaviour
         }
         entityQuery.CopyFromComponentDataArray(seesTargetCompArray);
     }
-
-    private void SetSpeedAttribute(AttributeType attribute, int value)
+ 
+    private void SetMovementAttribute(AttributeType attribute, float newValue)
     {
-        float newValue = value / MOVEMENT_CONVERSION_FACTOR;
-        switch (attribute) 
+        switch (attribute)
         {
             case AttributeType.MovementSpeed:
-                movementSpeed += newValue;
+                movementSpeed = newValue;
                 break;
             case AttributeType.DashBoost:
-                dashBoost += newValue;
+                dashBoost = newValue;
                 break;
             case AttributeType.DashCooldown:
-                dashCoolDown += newValue;
-                Logging.Info($"{attribute} increased by {value}. Current value  = {dashCoolDown}");
-
+                dashCoolDown = newValue;
                 break;
             case AttributeType.DashDuration:
-                dashDuration += newValue;
-                Logging.Info($"{attribute} increased by {value}. Current value  = {dashDuration}");
+                dashDuration = newValue;
                 break;
         }
     }
