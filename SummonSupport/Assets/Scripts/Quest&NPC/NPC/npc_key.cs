@@ -2,8 +2,8 @@ using UnityEngine;
 using System.Collections.Generic;
 
 [System.Serializable]
-public class npc_key<TKey, TValue>
+public class npc_key
 {
-    [SerializeField] public TKey Key;
-    [SerializeField] public TValue Value;
+    [SerializeField] public string Key;
+    [SerializeField] public List<string> Value;
 }

@@ -1,7 +1,6 @@
-using UnityEngine;
-
 public enum AttributeType
 {
+    None,
     CurrentHitpoints,
     MaxHitpoints,
     TemporaryMaxHitpoints,
@@ -9,8 +8,10 @@ public enum AttributeType
     MaxPower,
     TemporaryMaxPower,
     Affinity,
-    MovementSpeed,
     Weight,
     AttackSpeed,
-    None,
+    MovementSpeed,
+    DashBoost,
+    DashDuration,
+    DashCooldown,
 }

@@ -4,7 +4,7 @@ public class LootHandler : MonoBehaviour
 {
     void OnTriggerEnter2D(Collider2D collision)
     {
-        ILootInterface lootInterfaceInstance = collision.gameObject.GetComponent<ILootInterface>();
+        I_LootInterface lootInterfaceInstance = collision.gameObject.GetComponent<I_LootInterface>();
         if (lootInterfaceInstance != null)
         {
             lootInterfaceInstance.Loot();

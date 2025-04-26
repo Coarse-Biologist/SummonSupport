@@ -1,10 +1,11 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 [CreateAssetMenu(menuName = "Abilities/Target Mouse Ability")]
 public class TargetMouseAbility : Ability
 {
-    [field: Header("Projectile settings")]
+    [field: Header("settings")]
     [field: SerializeField] public List<OnEventDo> ListOnCastDo { get; protected set; }
     public override void Activate(GameObject user)
     {
@@ -16,13 +17,13 @@ public class TargetMouseAbility : Ability
             if (hit.collider.TryGetComponent<LivingBeing>(out var target))
             {
                 Debug.Log("Hit LivingBeing: " + target.Name);
-                Activate(user, target.gameObject);
+                ActivateAbility(target.gameObject, mousePos);
             }
             else Logging.Verbose($"{hit.collider.name} does not have the component living being!!!!");
         }
         else Logging.Verbose("Collider was null");
     }
-    public void Activate(GameObject user, GameObject target)
+    public void ActivateAbility(GameObject target, Vector2 mousePos)
     {
         Logging.Info($"Activated Ability {Name} on {target.name}");
         Logging.Verbose($"number of events to do: {ListOnCastDo.Count}");
@@ -49,16 +50,18 @@ public class TargetMouseAbility : Ability
                     else Logging.Error($"Attribute is : ({Attribute}) and Value = ({Value})");
                     break;
                 case OnEventDo.StatusEffect:
-                    Logging.Verbose($"Apply {StatusEffect.EffectName} to {target.gameObject.name}");
-                    if (StatusEffect != null)
-                        StatusEffect.ApplyStatusEffect(target.gameObject);
+                    foreach (StatusEffect statusEffect in StatusEffects)
+                    {
+                        Logging.Verbose($"Apply {statusEffect.Name} to {target.gameObject.name}");
+                        if (statusEffect != null)
+                            statusEffect.ApplyStatusEffect(target.gameObject, mousePos);
+                    }
                     break;
-                case OnEventDo.CC:
-                    AI_CC_State ccState = target.GetComponent<AI_CC_State>();
-                    Logging.Info($"A CC ability has hit the target {target.name}");
-                    if(ccState != null) ccState.RecieveCC(StatusEffectType.KnockInTheAir, user);
-                    break;
-                    
+                // case OnEventDo.CC:
+                    // AI_CC_State ccState = target.GetComponent<AI_CC_State>();
+                    // Logging.Info($"A CC ability has hit the target {target.name}");
+                    // if(ccState != null) ccState.RecieveCC(StatusEffectType.KnockInTheAir, user);
+                    // break;
             }
         }
     }

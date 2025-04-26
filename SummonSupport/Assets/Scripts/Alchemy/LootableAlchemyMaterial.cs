@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class LootableAlchemyMaterial : MonoBehaviour, ILootInterface
+public class LootableAlchemyMaterial : MonoBehaviour, I_LootInterface
 {
     [SerializeField] public AlchemyLoot alchemyMaterial;
 

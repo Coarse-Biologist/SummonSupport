@@ -10,16 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 20deeb31c91d6b14f8009947e6713b03, type: 3}
-  m_Name: Wounded
+  m_Name: Burning
   m_EditorClassIdentifier: 
-  <EffectName>k__BackingField: Wounded
-  <Icon>k__BackingField: {fileID: 2533768351935005930, guid: c66617f566a22004a979ff1c163dee93,
+  <Name>k__BackingField: Burning
+  <Icon>k__BackingField: {fileID: 3354988364425753930, guid: 69028352120a6f84391f160e8cd18d17,
     type: 3}
   <Type>k__BackingField: 2
-  <Ressource>k__BackingField: 3
   <Attribute>k__BackingField: 0
-  <Duration>k__BackingField: 15
-  <TickRateSeconds>k__BackingField: 0
-  <Value>k__BackingField: 1
-  <ValueType>k__BackingField: 1
-  <ElementType>k__BackingField: 3
+  <Duration>k__BackingField: 4
+  <TickRateSeconds>k__BackingField: 0.1
+  <Value>k__BackingField: 10
+  <ValueType>k__BackingField: 0
+  <ElementType>k__BackingField: 4

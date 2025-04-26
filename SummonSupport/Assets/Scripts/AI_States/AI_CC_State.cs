@@ -10,7 +10,7 @@ public class AI_CC_State : AIState
 {
     private AIState peaceState;
     public bool sufferingCC = false;
-    public Dictionary<StatusEffectType, GameObject> currentCCs = new Dictionary<StatusEffectType, GameObject>();
+    public Dictionary<StatusEffectType, Vector2> currentCCs = new Dictionary<StatusEffectType, Vector2>();
     private Rigidbody2D rb;
 
     private float duration = 2f;
@@ -27,7 +27,7 @@ public class AI_CC_State : AIState
     {
         if (currentCCs.Keys.Count != 0)
         {
-            if (!beingKnockedInAir && currentCCs.TryGetValue(StatusEffectType.KnockInTheAir, out GameObject caster)) StartCoroutine(KnockRoutine()); // will later have a switch for the different CCs
+            if (!beingKnockedInAir && currentCCs.TryGetValue(StatusEffectType.KnockInTheAir, out Vector2 source)) StartCoroutine(KnockRoutine()); // will later have a switch for the different CCs
             return this;
         }
         else
@@ -37,21 +37,21 @@ public class AI_CC_State : AIState
         }
     }
 
-    public void RecieveCC(StatusEffectType CC, GameObject caster)
+    public void RecieveCC(StatusEffectType CC, Vector2 sourcePosition)
     {
-        currentCCs.TryAdd(CC, caster);
+        currentCCs.TryAdd(CC, sourcePosition);
     }
 
     private bool KnockInTheAir()
     {
         Logging.Info("Knock in the air func is being called");
         beingKnockedInAir = true;
-        if(currentCCs.TryGetValue(StatusEffectType.KnockInTheAir, out GameObject caster) && timeElapsed <= duration)
+        if(currentCCs.TryGetValue(StatusEffectType.KnockInTheAir, out Vector2 sourcePosition) && timeElapsed <= duration)
             {
                 Logging.Info($"Time elapsed = {timeElapsed}. duration = {duration}");
                 rb.linearDamping = 40;
                 if (timeElapsed <= duration * .8)
-                    rb.AddForce(((Vector2)transform.position - (Vector2)caster.transform.position).normalized, ForceMode2D.Impulse);
+                    rb.AddForce(((Vector2)transform.position - sourcePosition).normalized, ForceMode2D.Impulse);
                 if (timeElapsed <= duration * .5)
                     rb.AddForce(new Vector2(0, 2f), ForceMode2D.Impulse);
                 if (timeElapsed > duration * .5 && timeElapsed <= .8 * duration) rb.AddForce(new Vector2(0, -2), ForceMode2D.Impulse);

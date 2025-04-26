@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public interface ILootInterface
+public interface I_LootInterface
 {
     void Loot();
 }

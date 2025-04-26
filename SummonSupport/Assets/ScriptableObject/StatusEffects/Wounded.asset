@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20deeb31c91d6b14f8009947e6713b03, type: 3}
+  m_Name: Wounded
+  m_EditorClassIdentifier: 
+  <Name>k__BackingField: Wounded
+  <Icon>k__BackingField: {fileID: 2533768351935005930, guid: c66617f566a22004a979ff1c163dee93,
+    type: 3}
+  <Type>k__BackingField: 1
+  <Attribute>k__BackingField: 1
+  <Duration>k__BackingField: 15
+  <TickRateSeconds>k__BackingField: 0
+  <Value>k__BackingField: 10
+  <ValueType>k__BackingField: 1
+  <ElementType>k__BackingField: 3

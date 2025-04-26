@@ -3,21 +3,23 @@ using UnityEngine.InputSystem;
 using UnityEngine.Events;
 using Unity.Entities;
 using Unity.Collections;
+using SummonSupportEvents;
 
 
 public class PlayerMovement : MonoBehaviour
 {
     #region class Variables
+    float MOVEMENT_CONVERSION_FACTOR = 100f;    
     private Vector2 moveInput;
     public Camera mainCamera;
     private PlayerSpriteController spriteController;
     [SerializeField] private PlayerInputActions inputActions;
     [SerializeField] GameObject AbilityRotation;
     private Vector2 lookInput;
-    [SerializeField] float speed = 5f;
-    [SerializeField] float dashBoost = 10f;
-    [SerializeField] float dashCoolDown = 1f;
-    [SerializeField] float dashDuration = .1f;
+    [SerializeField] float movementSpeed;
+    [SerializeField] float dashBoost        = 10f;
+    [SerializeField] float dashCoolDown     = 1f;
+    [SerializeField] float dashDuration     = .1f;
     private Rigidbody2D rb;
     private bool dashing = false;
     private bool canDash = true;
@@ -34,11 +36,17 @@ public class PlayerMovement : MonoBehaviour
         inputActions = new PlayerInputActions();
 
     }
+
+    void Start()
+    {
+        movementSpeed = gameObject.GetComponent<PlayerStats>().Speed / MOVEMENT_CONVERSION_FACTOR;
+    }
     #region Enable and Disable event subscriptions
     private void OnEnable()
     {
         //AlchemyBenchUI.Instance.playerUsingUI.AddListener(ToggleLockedInUI);
         inputActions ??= new PlayerInputActions();
+        EventDeclarer.SpeedAttributeChanged.AddListener(SetSpeedAttribute);
 
         inputActions.Player.Enable();
 
@@ -56,6 +64,7 @@ public class PlayerMovement : MonoBehaviour
     {
         //AlchemyBenchUI.Instance.playerUsingUI.RemoveListener(ToggleLockedInUI);
 
+        EventDeclarer.SpeedAttributeChanged.RemoveListener(SetSpeedAttribute);
         inputActions.Player.Move.performed -= OnMove;
         inputActions.Player.Move.canceled -= OnMove;
 
@@ -99,8 +108,8 @@ public class PlayerMovement : MonoBehaviour
     private void HandleMove()
     {
         float calculatedSpeed = 0f;
-        if (dashing) calculatedSpeed = speed + dashBoost;
-        else calculatedSpeed = speed;
+        if (dashing) calculatedSpeed = movementSpeed + dashBoost;
+        else calculatedSpeed = movementSpeed;
 
         Vector3 moveDirection = new Vector3(moveInput.x, moveInput.y, 0).normalized;
         rb.linearVelocity = moveDirection * calculatedSpeed * 10;
@@ -131,27 +140,7 @@ public class PlayerMovement : MonoBehaviour
     }
 
     #endregion
-    #region using UI
-    public void ToggleLockedInUI()
-    {
-        //if (lockToggleable)
-        //{
-        //    if (!lockedInUI)
-        //    {
-        //        lockToggleable = false;
-        //        Invoke("AllowLockToggle", 1f);
-        //        lockedInUI = true;
-        //    }
-        //    else lockedInUI = false;
-        //}
-
-    }
-    private void AllowLockToggle()
-    {
-        lockToggleable = true;
-    }
-    #endregion
-
+  
     private void SendMinionCommandContext(InputAction.CallbackContext context)
     {
         Logging.Info("Send minion command func triggered");
@@ -184,5 +173,28 @@ public class PlayerMovement : MonoBehaviour
             seesTargetCompArray[i] = seesTargetComponent;
         }
         entityQuery.CopyFromComponentDataArray(seesTargetCompArray);
+    }
+
+    private void SetSpeedAttribute(AttributeType attribute, int value)
+    {
+        float newValue = value / MOVEMENT_CONVERSION_FACTOR;
+        switch (attribute) 
+        {
+            case AttributeType.MovementSpeed:
+                movementSpeed += newValue;
+                break;
+            case AttributeType.DashBoost:
+                dashBoost += newValue;
+                break;
+            case AttributeType.DashCooldown:
+                dashCoolDown += newValue;
+                Logging.Info($"{attribute} increased by {value}. Current value  = {dashCoolDown}");
+
+                break;
+            case AttributeType.DashDuration:
+                dashDuration += newValue;
+                Logging.Info($"{attribute} increased by {value}. Current value  = {dashDuration}");
+                break;
+        }
     }
 }

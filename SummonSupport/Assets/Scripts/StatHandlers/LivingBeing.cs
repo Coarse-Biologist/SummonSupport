@@ -6,59 +6,58 @@ using UnityEngine;
 using SummonSupportEvents;
 public abstract class LivingBeing : MonoBehaviour
 {
-    #region declarations
+    #region Declarations
+
     [Header("String Stats")]
-    [SerializeField] public string Name;
-    [SerializeField] public string Description;
-    [SerializeField] public List<string> BattleCries;
+    [field: SerializeField] public string Name              { get; private set; }
+    [field: SerializeField] public string Description       { get; private set; }
+    [field: SerializeField] public List<string> BattleCries { get; private set; }
 
     [Header("Attributes - Ressources")]
-    [field: SerializeField] public int MaxHP { get; private set; } = 100;
-    [field: SerializeField] public int TemporaryMaxHP { get; private set; }
-    [field: SerializeField] public int CurrentHP { get; private set; } = 100;
-    [field: SerializeField] public int MaxPower { get; private set; } = 100;
-    [field: SerializeField] public int TemporaryMaxPower { get; private set; }
-    [field: SerializeField] public int CurrentPower { get; private set; } = 100;
+    [field: SerializeField] public int MaxHP                { get; private set; } = 100;
+    [field: SerializeField] public int TemporaryMaxHP       { get; private set; }
+    [field: SerializeField] public int CurrentHP            { get; private set; } = 100;
+    [field: SerializeField] public int MaxPower             { get; private set; } = 100;
+    [field: SerializeField] public int TemporaryMaxPower    { get; private set; }
+    [field: SerializeField] public int CurrentPower         { get; private set; } = 100;
+
+    [Header("Attributes - Regenerations")]
+    //TODO:
 
     #region Affinity Stats
 
     [Header("Affinity Stats")]
-    [SerializeField] protected int Cold = 0;
-    [SerializeField] protected int Water = 0;
-    [SerializeField] protected int Earth = 0;
-    [SerializeField] protected int Heat = 0;
-    [SerializeField] protected int Air = 0;
-    [SerializeField] protected int Electricity = 0;
-    [SerializeField] protected int Poison = 0;
-    [SerializeField] protected int Acid = 0;
-    [SerializeField] protected int Bacteria = 0;
-    [SerializeField] protected int Fungi = 0;
-    [SerializeField] protected int Plant = 0;
-    [SerializeField] protected int Virus = 0;
-    [SerializeField] protected int Radiation = 0;
-    [SerializeField] protected int Light = 0;
-    [SerializeField] protected int Psychic = 0;
-    #endregion
+    [field: SerializeField] protected int Cold          { get; private set; } = 0;
+    [field: SerializeField] protected int Water         { get; private set; } = 0;
+    [field: SerializeField] protected int Earth         { get; private set; } = 0;
+    [field: SerializeField] protected int Heat          { get; private set; } = 0;
+    [field: SerializeField] protected int Air           { get; private set; } = 0;
+    [field: SerializeField] protected int Electricity   { get; private set; } = 0;
+    [field: SerializeField] protected int Poison        { get; private set; } = 0;
+    [field: SerializeField] protected int Acid          { get; private set; } = 0;
+    [field: SerializeField] protected int Bacteria      { get; private set; } = 0;
+    [field: SerializeField] protected int Fungi         { get; private set; } = 0;
+    [field: SerializeField] protected int Plant         { get; private set; } = 0;
+    [field: SerializeField] protected int Virus         { get; private set; } = 0;
+    [field: SerializeField] protected int Radiation     { get; private set; } = 0;
+    [field: SerializeField] protected int Light         { get; private set; } = 0;
+    [field: SerializeField] protected int Psychic       { get; private set; } = 0;
+    #endregion Afinity Stats
 
     [Header("Other")]
+    [field: SerializeField] public int XP_OnDeath { get; private set; } = 3;
     public Dictionary<string, StatusEffectInstance> activeStatusEffects = new();
-    public int XP_OnDeath = 3;
-    protected bool isDead = false;
-    public Dictionary<Element, (Func<int> Get, Action<int> Set)> Affinities { private set; get; } = new Dictionary<Element, (Func<int> Get, Action<int> Set)>();
-    public Dictionary<AttributeType, (Func<int> Get, Action<int> Set)> AttributesDict { private set; get; } = new Dictionary<AttributeType, (Func<int> Get, Action<int> Set)>();
+    public Dictionary<Element,          (Func<int> Get, Action<int> Set)> Affinities        { private set; get; } = new();
+    public Dictionary<AttributeType,    (Func<int> Get, Action<int> Set)> AttributesDict    { private set; get; } = new();
 
-    [SerializeField] public List<Ability> Abilties = new();
-    [SerializeField] public float Speed;
-    [SerializeField] public float Mass = 1;
+    [field: SerializeField] public List<Ability> Abilties { get; private set; } = new();
+    [field: SerializeField] public int Speed { get; private set; } = 60;
+    [field: SerializeField] public float Mass  { get; private set; } = 1f;
 
+    #endregion Declarations
 
-    private enum AccessType
-    {
-        Getter,
-        Setter
-    }
     #region Color control
-    public Dictionary<RGBAEnum, (Func<float> Get, Action<float> Set)> ColorDict { private set; get; } = new Dictionary<RGBAEnum, (Func<float> Get, Action<float> Set)>();
+    public Dictionary<RGBAEnum, (Func<float> Get, Action<float> Set)> ColorDict { private set; get; } = new();
     private float redness;
     private float greeness;
     private float blueness;
@@ -77,10 +76,7 @@ public abstract class LivingBeing : MonoBehaviour
         InitializeAffinityDict();
         InitializeColorDict();
         Logging.Info($"{Affinities.Keys.Count}");
-    }
-
-    Dictionary<AttributeType, Dictionary<AccessType, Delegate>> dictAttributes;
-    #endregion
+    }   
 
     #region Stat Upgrades
 
@@ -173,10 +169,10 @@ public abstract class LivingBeing : MonoBehaviour
     public void SetAttribute(AttributeType attribute, int value)
     {
         if (AttributesDict != null && AttributesDict.ContainsKey(attribute))
-        {
             AttributesDict[attribute].Set(value);
-        }
-        if (attribute == AttributeType.CurrentHitpoints) EventDeclarer.hpChanged?.Invoke(gameObject);
+        
+        if (attribute == AttributeType.CurrentHitpoints) 
+            EventDeclarer.hpChanged?.Invoke(gameObject);
 
     }
     public void SetName(string newName)
@@ -184,19 +180,28 @@ public abstract class LivingBeing : MonoBehaviour
         Name = newName;
     }
 
-    public void ChangeAttribute(AttributeType attributeType, int value, ValueType valueType = ValueType.Flat)
+    public void ChangeAttribute(AttributeType attributeType, float value, ValueType valueType = ValueType.Flat)
+    {
+        if (AttributesDict == null || !AttributesDict.ContainsKey(attributeType))
+            throw new Exception("Attribute not found or invalid setter");
+
+        int newValue = (int)Math.Round(value);
+        newValue = ChangeAttribute(attributeType, newValue, valueType);
+    }
+    public int ChangeAttribute(AttributeType attributeType, int value, ValueType valueType = ValueType.Flat)
     {
         if (AttributesDict == null || !AttributesDict.ContainsKey(attributeType))
             throw new Exception("Attribute not found or invalid setter");
 
         int currentValue = GetAttribute(attributeType);
         int newValue = CalculateNewValueByType(currentValue, value, valueType);
-        //AttributesDict[attributeType].Set(newValue); // jodis backwoods, hobo way 
-        SetAttribute(attributeType, newValue); // crews partial way
-        if (attributeType == AttributeType.CurrentHitpoints) EventDeclarer.hpChanged?.Invoke(gameObject);
+        SetAttribute(attributeType, newValue);
+        if (attributeType == AttributeType.CurrentHitpoints) 
+            EventDeclarer.hpChanged?.Invoke(gameObject);
 
         if (CurrentHP <= 0)
             Die();
+        return newValue;
     }
 
     int CalculateNewValueByType(int currentValue, int value, ValueType valueType)
@@ -308,7 +313,7 @@ public abstract class LivingBeing : MonoBehaviour
                 { Element.Psychic,         (() => Psychic,         v => Psychic = v) }
             };
     }
-    void Die()
+    protected void Die()
     {
         Logging.Info($"{gameObject.name} died");
         if (gameObject.GetComponent<MinionStats>() != null) EventDeclarer.minionDied?.Invoke(gameObject);

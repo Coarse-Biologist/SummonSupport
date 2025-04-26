@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 1748628830762966394}
   - component: {fileID: 5944997523587190918}
   - component: {fileID: 6091027176054010582}
+  - component: {fileID: 1651059866243505545}
   - component: {fileID: 4457003908298111917}
   - component: {fileID: 6173072708952048909}
   - component: {fileID: 5449713164746072181}
@@ -99,6 +100,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentCommand: 0
+--- !u!114 &1651059866243505545
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7554373945403419730}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: adc4396e75b4f414a91319c54ecc0bc4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sufferingCC: 0
 --- !u!50 &4457003908298111917
 Rigidbody2D:
   serializedVersion: 5
@@ -144,9 +158,9 @@ MonoBehaviour:
   - Fire and brimstone!..
   - I'll kill your shining lights!
   - burning skin and bubbling knuckles!
-  <MaxHP>k__BackingField: 100
+  <MaxHP>k__BackingField: 10
   <TemporaryMaxHP>k__BackingField: 0
-  <CurrentHP>k__BackingField: 100
+  <CurrentHP>k__BackingField: 10
   <MaxPower>k__BackingField: 100
   <TemporaryMaxPower>k__BackingField: 0
   <CurrentPower>k__BackingField: 100

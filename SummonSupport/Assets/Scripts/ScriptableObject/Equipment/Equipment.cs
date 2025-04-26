@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-public class Item_SO: ScriptableObject, ILootInterface
+public class Item_SO: ScriptableObject, I_LootInterface
 {
     [SerializeField] private Rarity itemRarity = Rarity.Wretched;
     public Rarity ItemRarity => itemRarity;

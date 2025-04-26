@@ -127,12 +127,17 @@ public class Projectile : MonoBehaviour
                 }
                 break;
             case OnEventDo.Heal:
-                Logging.Verbose($"Heal {other.gameObject.name}");    
+                Logging.Verbose($"Heal {other.gameObject.name}");
                 break;
             case OnEventDo.StatusEffect:
-                Logging.Verbose($"Apply {ability.StatusEffect.EffectName} to {other.gameObject.name}");    
-                if (ability.StatusEffect != null)
-                    ability.StatusEffect.ApplyStatusEffect(other.gameObject);
+                if (ability.StatusEffects != null)
+                {
+                    foreach (StatusEffect statusEffect in ability.StatusEffects)
+                    {
+                        Logging.Verbose($"Apply {statusEffect.Name} to {other.gameObject.name}");    
+                        statusEffect.ApplyStatusEffect(other.gameObject, gameObject.transform.position);
+                    }
+                }
                 break;
         }
     }

@@ -22,7 +22,7 @@ public class StatusEffectInstance
 public class StatusEffect : ScriptableObject
 {
     [field: Header("Status Effect")]
-    [field: SerializeField] public string EffectName { get; protected set; } = "Undefined";
+    [field: SerializeField] public string Name { get; protected set; } = "Undefined";
     [field: SerializeField] public Sprite Icon { get; protected set; }
     [field: SerializeField] public StatusEffectType Type { get; protected set; } = StatusEffectType.NoEffect;
     [field: SerializeField] public AttributeType Attribute { get; protected set; } = AttributeType.None;
@@ -34,18 +34,18 @@ public class StatusEffect : ScriptableObject
     private float runtimeDuration;
 
 
-    public void ApplyStatusEffect(GameObject target)
+    public void ApplyStatusEffect(GameObject target, Vector2 sourcePosition)
     {
         if (!target.TryGetComponent(out LivingBeing livingBeing))
             return;
         if (RenewStatusEffect(livingBeing))
             return;
 
-        ChooseRightCoroutineToApplyStatusEffect(livingBeing);
+        ChooseRightCoroutineToApplyStatusEffect(livingBeing, sourcePosition);
     }
     bool RenewStatusEffect(LivingBeing livingBeing)
     {
-        if (livingBeing.activeStatusEffects.TryGetValue(EffectName, out StatusEffectInstance existingEffect))
+        if (livingBeing.activeStatusEffects.TryGetValue(Name, out StatusEffectInstance existingEffect))
         {
             existingEffect.Renew();
             return true;
@@ -53,7 +53,7 @@ public class StatusEffect : ScriptableObject
         else
             return false;
     }
-    void ChooseRightCoroutineToApplyStatusEffect(LivingBeing livingBeing)
+    void ChooseRightCoroutineToApplyStatusEffect(LivingBeing livingBeing, Vector2 sourcePosition)
     {
         switch (Type)
         {
@@ -69,12 +69,17 @@ public class StatusEffect : ScriptableObject
             case StatusEffectType.AttributeIncrease:
                 CoroutineManager.Instance.StartCustomCoroutine(HandleOnce(livingBeing, Value, AttributeChange));
                 break;
+            case StatusEffectType.KnockInTheAir:
+                AI_CC_State ccState = livingBeing.gameObject.GetComponent<AI_CC_State>();
+                Logging.Info($"A CC ability has hit the target {livingBeing.Name}");
+                if(ccState != null) ccState.RecieveCC(StatusEffectType.KnockInTheAir, sourcePosition);
+                break;
         }
     }
 
     private IEnumerator HandleOnce(LivingBeing target, int value, Action<LivingBeing, int> action)
     {
-        target.activeStatusEffects.Add(EffectName, new StatusEffectInstance(this));
+        target.activeStatusEffects.Add(Name, new StatusEffectInstance(this));
         try
         {
             action(target, value);
@@ -82,19 +87,20 @@ public class StatusEffect : ScriptableObject
         }
         finally
         {
-            target.activeStatusEffects.Remove(EffectName);
+            action(target, -value);
+            target.activeStatusEffects.Remove(Name);
         }
     }
     private IEnumerator RepeatStatusEffect(LivingBeing target, int value, Action<LivingBeing, int> action)
     {
         StatusEffectInstance instance = new(this);
-        target.activeStatusEffects.Add(EffectName, instance);
+        target.activeStatusEffects.Add(Name, instance);
         int totalTicks = Mathf.FloorToInt(Duration / TickRateSeconds);
         try
         {
             while (instance.ticksDone < totalTicks)
             {
-                if (target == null)
+                if (target == null) 
                     yield break; // In case the target died while this was still running. If target died => GameObject does not longer exist.
 
                 action(target, value);
@@ -105,7 +111,7 @@ public class StatusEffect : ScriptableObject
         finally
         {
             if (target != null) // Same thing here, make sure target is still alive if we want to access it.
-                target.activeStatusEffects.Remove(EffectName);
+                target.activeStatusEffects.Remove(Name);
         }
     }
 
@@ -114,5 +120,4 @@ public class StatusEffect : ScriptableObject
         Logging.Info("Attribute: " + Attribute + "\nValue: " + Value);
         target.ChangeAttribute(Attribute, value);
     }
-
 }

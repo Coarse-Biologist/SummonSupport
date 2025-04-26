@@ -8,12 +8,6 @@ public class MinionStats : LivingBeing
     [SerializeField] public List<AlchemyLoot> Loot { private set; get; } = new List<AlchemyLoot>();
     [SerializeField] public MinionCommands CurrentCommand { private set; get; } = MinionCommands.None;
 
-    public void SetMinionHP(int value)
-    {
-        SetAttribute(AttributeType.CurrentHitpoints, value);
-        if (CurrentHP <= 0) isDead = true;
-        if (CurrentHP > MaxHP) SetAttribute(AttributeType.MaxHitpoints, value);
-    }
     public void SetCommand(MinionCommands command)
     {
         CurrentCommand = command;

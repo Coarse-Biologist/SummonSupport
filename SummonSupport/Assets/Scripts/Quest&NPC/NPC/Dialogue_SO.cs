@@ -6,8 +6,8 @@ using System;
 public class Dialogue_SO : ScriptableObject
 {
 
-    [SerializeField] public List<npc_key<string, List<string>>> npc_keys;
-    [SerializeField] public List<player_key<string, string>> player_keys;
+    [SerializeField] public List<npc_key> npc_keys;
+    [SerializeField] public List<player_key> player_keys;
 
 
 
@@ -16,7 +16,7 @@ public class Dialogue_SO : ScriptableObject
     {
         List<string> playerResponses = new List<string>() { "..." };
 
-        foreach (npc_key<string, List<string>> entry in npc_keys)
+        foreach (npc_key entry in npc_keys)
         {
             if (entry.Key == NPC_Words) playerResponses = entry.Value;
         }
@@ -26,7 +26,7 @@ public class Dialogue_SO : ScriptableObject
     public string GetNPCResponseToPlayer(string playerWords)
     {
         string NPC_Words = "...";
-        foreach (player_key<string, string> entry in player_keys)
+        foreach (player_key entry in player_keys)
         {
             if (entry.Key == playerWords) NPC_Words = entry.Value;
         }
@@ -37,7 +37,7 @@ public class Dialogue_SO : ScriptableObject
     {
         Logging.Info(playerChoice + "get result func");
 
-        foreach (player_key<string, string> dict in player_keys)
+        foreach (player_key dict in player_keys)
         {
             if (playerChoice == dict.Key) return dict.result;
             else Logging.Info($"{playerChoice} is not equal to {dict.Key}");
