@@ -1,0 +1,46 @@
+.toggle {
+    -unity-background-image-tint-color: rgb(0, 146, 27);
+    background-color: rgb(3, 176, 0);
+}
+
+.toggle:hover {
+    -unity-background-image-tint-color: rgb(0, 151, 28);
+    background-color: rgb(2, 129, 0);
+    scale: 1.2 1.2;
+    transition-duration: 0.3s;
+}
+
+.buttonPrefab:hover {
+    transition-duration: 0.2s;
+    scale: 1.2 1.2;
+}
+
+.buttonPrefab:active {
+    transition-duration: 0.2s;
+    transition-timing-function: ease-in-out;
+    scale: 1.5 1.5;
+}
+
+.buttonPrefab {
+    background-color: rgb(4, 134, 0);
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    border-bottom-left-radius: 8px;
+    border-top-width: 2px;
+    border-right-width: 2px;
+    border-bottom-width: 2px;
+    border-left-width: 2px;
+    border-left-color: rgb(0, 116, 5);
+    border-right-color: rgb(0, 116, 5);
+    border-top-color: rgb(0, 116, 5);
+    border-bottom-color: rgb(0, 116, 5);
+}
+
+.toggle:active {
+    -unity-background-image-tint-color: rgb(0, 146, 27);
+    background-color: rgb(3, 176, 0);
+    transition-duration: 0.2s;
+    transition-timing-function: ease-in-out;
+    scale: 1.5 1;
+}

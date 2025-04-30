@@ -75,7 +75,6 @@ public abstract class LivingBeing : MonoBehaviour
         InitializeAttributeDict();
         InitializeAffinityDict();
         InitializeColorDict();
-        Logging.Info($"{Affinities.Keys.Count}");
     }   
 
     #region Stat Upgrades

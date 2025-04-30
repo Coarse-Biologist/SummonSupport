@@ -1,0 +1,83 @@
+.button {
+    background-color: rgb(0, 57, 0);
+    -unity-background-image-tint-color: rgb(0, 115, 18);
+    background-image: none;
+    border-left-color: rgb(0, 0, 0);
+    border-right-color: rgb(0, 0, 0);
+    border-top-color: rgb(0, 0, 0);
+    border-bottom-color: rgb(0, 0, 0);
+    color: rgb(0, 132, 0);
+    text-shadow: 0 0 0 rgba(0, 140, 3, 0);
+}
+
+.button:hover {
+    transform-origin: center 70%;
+    translate: 0 0;
+    scale: 1.2 1.2;
+    background-color: rgb(10, 125, 0);
+    -unity-background-image-tint-color: rgb(0, 101, 9);
+}
+
+.button:active {
+    transform-origin: center;
+    translate: 0 0;
+    scale: 1 1.2;
+    background-color: rgb(0, 113, 28);
+    -unity-background-image-tint-color: rgb(0, 102, 3);
+    rotate: 0;
+    transition-duration: 0.2s;
+    transition-timing-function: ease-in-out;
+}
+
+.toggle {
+}
+
+.toggle .unity-toggle__checkmark {
+    background-color: rgb(1, 120, 31);
+    border-radius: 6px;
+}
+
+.toggle:hover {
+    scale: 1.2 1.2;
+    transition-timing-function: ease;
+    transition-duration: 0.2s;
+}
+
+.toggle:active {
+    transition-duration: 0.2s;
+    scale: 1.5 1.5;
+    transition-timing-function: ease-in-out;
+}
+
+.buttonPrefab {
+    background-color: rgb(0, 63, 2);
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    border-bottom-left-radius: 8px;
+    border-left-color: rgba(0, 80, 2, 0);
+    border-right-color: rgba(0, 80, 2, 0);
+    border-top-color: rgba(0, 80, 2, 0);
+    border-bottom-color: rgba(0, 80, 2, 0);
+    text-shadow: 0 0 0 rgba(0, 134, 16, 0);
+}
+
+.buttonPrefab:hover {
+    scale: 1.2 1.2;
+    background-color: rgb(1, 145, 0);
+}
+
+.buttonPrefab:active {
+    background-color: rgb(0, 120, 3);
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    border-bottom-left-radius: 8px;
+    border-left-color: rgba(0, 80, 2, 0);
+    border-right-color: rgba(0, 80, 2, 0);
+    border-top-color: rgba(0, 80, 2, 0);
+    border-bottom-color: rgba(0, 80, 2, 0);
+    scale: 1.5 1;
+    transition-duration: 0.3s;
+    transition-timing-function: ease-in-out;
+}

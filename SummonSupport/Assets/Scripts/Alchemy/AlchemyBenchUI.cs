@@ -18,10 +18,19 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     #region Class Variables
 
     #region Constants
+
+    #region UI assets
+    [SerializeField] VisualTreeAsset UIPrefabAssets;
+    [SerializeField] Sprite alchemyBackground;
+
+    #endregion
+
+
     [SerializeField] UIDocument ui;
     private VisualElement root;
     private VisualElement interactWindow;
     private VisualElement craftingUI;
+    private VisualElement mainCraftingOptions;
     private VisualElement confirmClear;
     private VisualElement craftandUpgrade;
     private VisualElement elementSelection;
@@ -55,12 +64,15 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
         interactWindow = root.Q<VisualElement>("Interact");
         craftingUI = root.Q<VisualElement>("CraftingUI");
         craftandUpgrade = craftingUI.Q<VisualElement>("CraftandUpgrade");
+        mainCraftingOptions = craftingUI.Q<VisualElement>("MainCraftingOptions");
         confirmClear = craftingUI.Q<VisualElement>("ConfirmClear");
         alchemyInventory = craftandUpgrade.Q<VisualElement>("AlchemyInventory");
         instructions = craftandUpgrade.Q<Label>("Instructions");
         elementSelection = craftingUI.Q<VisualElement>("ElementSelection");
         interactWindow.style.display = DisplayStyle.None;
         craftingUI.style.display = DisplayStyle.None;
+
+        ShowBackground();
     }
     #endregion
 
@@ -126,6 +138,9 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
 
     private void ShowRecycleOptions()
     {
+        confirmClear.Clear();
+        alchemyInventory.Clear();
+        ClearElementSelection();
         instructions.text = "Which Minion would you like to recycle for components?";
     }
     private void ShowCraftingInfo()
@@ -153,7 +168,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     {
         confirmClear.Clear();
         alchemyInventory.Clear();
-        elementSelection.Clear();
+        ClearElementSelection();
         ShowUpgradableMinions();
         ShowUpgradeInfo();
         Button confirmButton = AddButtonToPanel("Confirm", confirmClear, 50, 5);
@@ -209,7 +224,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
         ShowUI(confirmClear);
         confirmClear.Clear();
         alchemyInventory.Clear();
-        elementSelection.Clear();
+        ClearElementSelection();
 
         ShowCraftingInfo();
         SpawnIngredientButtons();
@@ -224,8 +239,8 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
         confirmButton.RegisterCallback<ClickEvent>(e => Craft());
         confirmButton.RegisterCallback<ClickEvent>(e => ShowCraftingInfo());
 
-        confirmButton.style.backgroundColor = new Color(123, 100, 35, 100);
-        clearButton.style.backgroundColor = new Color(123, 100, 35, 100);
+        //confirmButton.style.backgroundColor = new Color(123, 100, 35, 100);
+        //clearButton.style.backgroundColor = new Color(123, 100, 35, 100);
 
 
 
@@ -239,7 +254,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
             if (kvp.Value != 0)
             {
                 Button ingredientButton = AddButtonToPanel($"{kvp.Key} : {kvp.Value}", alchemyInventory, 40, 5);
-                ingredientButton.style.backgroundColor = new Color(123, 100, 35, 100);
+                //ingredientButton.style.backgroundColor = new Color(123, 100, 35, 100);
 
                 ingredientButton.RegisterCallback<ClickEvent>(e => AddIngredientToSelection(kvp.Key));
                 ingredientButton.RegisterCallback<ClickEvent>(e => ShowCraftingInfo());
@@ -267,8 +282,10 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
             List<Element> elementsList = Enum.GetValues(typeof(Element)).Cast<Element>().ToList();
             foreach (Element element in elementsList)
             {
-                Toggle elementToggle = new Toggle { text = element.ToString() };
-                elementToggle.style.backgroundColor = Color.green;
+                TemplateContainer prefabContainer = UIPrefabAssets.Instantiate();
+                Toggle elementToggle = prefabContainer.Q<Toggle>("TogglePrefab");
+                elementToggle.text = element.ToString();
+                //elementToggle.style.backgroundColor = Color.green;
 
                 panel.Add(elementToggle);
                 elementToggle.RegisterCallback<ClickEvent>(e => ToggleSelectedElement(element));
@@ -307,18 +324,38 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     #region General UI functions
     private Button AddButtonToPanel(string buttonText, VisualElement panel, int width, int height)
     {
-        Button button = new Button { text = buttonText };
+        TemplateContainer prefabContainer = UIPrefabAssets.Instantiate();
+        Button button = prefabContainer.Q<Button>("ButtonPrefab");
+        button.text = buttonText;
+
         panel.Add(button);
+
         SetButtonSize(button, width, height);
         return button;
     }
     private void SetButtonSize(Button button, int width, int height)
     {
-        button.style.width = Length.Percent(width); // limit size of payment
+        button.style.width = Length.Percent(width);
         button.style.height = Length.Percent(height);
     }
 
     #region Flex /Hide UI
+    private void ClearElementSelection()
+    {
+        elementSelection.Clear();
+        elementsGenerated = false;
+    }
+
+    private void ShowBackground(bool show = false)
+    {
+        if (show)
+        {
+            mainCraftingOptions.style.backgroundImage = new StyleBackground(alchemyBackground.texture);
+        }
+
+    }
+
+
 
     private void HideUI(VisualElement element)
     {

@@ -1,0 +1,60 @@
+.healthbar {
+    
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
+    border-color: rgb(131, 0, 0);
+    border-style: solid;
+    color: white;
+    font-size: 14px;
+    unity-font-style: bold;
+}
+
+.powerbar {
+}
+
+.healthbar .unity-progress-bar__background {
+    background-color: rgb(0, 0, 0);
+    border-radius: 4px;
+    border-width: 1px;
+    border-color: rgb(0, 0, 0);
+    border-style: solid;
+}
+
+.healthbar .unity-progress-bar__progress {
+    background-color: rgb(131, 0, 0);
+}
+
+.powerbar {
+    
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-color: rgb(131, 0, 0);
+    border-style: solid;
+    color: white;
+    font-size: 14px;
+    unity-font-style: bold;
+}
+
+.powerbar {
+}
+
+.powerbar .unity-progress-bar__background {
+    background-color: rgb(0, 0, 0);
+    border-radius: 4px;
+    border-width: 1px;
+    border-color: rgb(0, 0, 0);
+    border-style: solid;
+}
+
+.powerbar .unity-progress-bar__progress {
+    background-color: rgb(38, 0, 91);
+}
+

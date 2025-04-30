@@ -1,0 +1,7 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/UI%20Toolkit/PrefabButtonPseudoClass.uss?fileID=7433441132597879392&amp;guid=db93ee07a299c3a4b9e214f66745a6a7&amp;type=3#PrefabButtonPseudoClass" />
+    <ui:VisualElement enabled="true" name="VisualElement" style="flex-grow: 1; opacity: 1; visibility: visible; display: flex;">
+        <ui:Toggle name="TogglePrefab" focusable="false" class="togglePrefab toggle" style="-unity-background-image-tint-color: rgb(23, 124, 0); background-color: rgb(0, 86, 1); border-left-color: rgb(0, 141, 9); border-right-color: rgb(0, 141, 9); border-top-color: rgb(0, 141, 9); border-bottom-color: rgb(0, 141, 9); color: rgb(0, 0, 0); background-image: none; background-size: 10% 100%; border-top-width: 2px; border-right-width: 2px; border-bottom-width: 2px; border-left-width: 2px; border-top-left-radius: 4px; border-top-right-radius: 4px; border-bottom-right-radius: 4px; border-bottom-left-radius: 4px;" />
+        <ui:Button text="Button" name="ButtonPrefab" class="buttonPrefab" />
+    </ui:VisualElement>
+</ui:UXML>

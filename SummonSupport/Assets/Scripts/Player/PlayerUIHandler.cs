@@ -28,6 +28,12 @@ public class PlayerUIHandler : MonoBehaviour
         var craftingUI = root.Q<VisualElement>("CraftingUI");
         if (craftingUI != null)
             craftingUI.style.display = DisplayStyle.None;
+
+        playerUI.SetEnabled(true);
+        craftingUI.SetEnabled(true);
+        playerUI.style.opacity = 100f;
+        craftingUI.style.opacity = 100f;
+
     }
 
     void OnEnable()
@@ -60,8 +66,8 @@ public class PlayerUIHandler : MonoBehaviour
         ProgressBar minionHP = GetMinionsHPBar(minion);
         if (minionHP != null)
         {
-        minionHPDict.Remove(minion);
-        minionHPBars.Remove(minionHP);
+            minionHPDict.Remove(minion);
+            minionHPBars.Remove(minionHP);
         }
         else Logging.Error("You are trying to delete a none inion as though it were a minion");
     }
@@ -76,7 +82,7 @@ public class PlayerUIHandler : MonoBehaviour
         ProgressBar hpBar = GetMinionsHPBar(minion);
         if (hpBar != null)
         {
-            float hp    = minion.GetComponent<LivingBeing>().GetAttribute(AttributeType.CurrentHitpoints);
+            float hp = minion.GetComponent<LivingBeing>().GetAttribute(AttributeType.CurrentHitpoints);
             hpBar.value = minion.GetComponent<LivingBeing>().CurrentHP;
             hpBar.title = $"{minion.GetComponent<LivingBeing>().Name} HP: {hp}";
 
