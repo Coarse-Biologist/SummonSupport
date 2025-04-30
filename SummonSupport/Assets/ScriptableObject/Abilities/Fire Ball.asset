@@ -22,7 +22,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 84e50eaebc4a21f4fbc0ae6c56e66092, type: 2}
   - {fileID: 11400000, guid: 6c1911e88b4453b47a1cb46f5c05bce5, type: 2}
   <Attribute>k__BackingField: 0
-  <Value>k__BackingField: 1
+  <Value>k__BackingField: -1
   <ElementType>k__BackingField: 4
   <Speed>k__BackingField: 5
   <Projectile>k__BackingField: {fileID: 1503869405188693834, guid: a9f50fbd26367e9409b49cb9300cd576,

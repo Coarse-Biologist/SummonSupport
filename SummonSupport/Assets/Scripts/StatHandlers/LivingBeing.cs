@@ -4,6 +4,7 @@ using System.Runtime.InteropServices;
 using System;
 using UnityEngine;
 using SummonSupportEvents;
+using Unity.Entities.UniversalDelegates;
 public abstract class LivingBeing : MonoBehaviour
 {
     #region Declarations
@@ -66,6 +67,8 @@ public abstract class LivingBeing : MonoBehaviour
 
     private SpriteRenderer spriteRenderer;
 
+    private I_HealthBar healthbarInterface;
+
     #endregion
 
     protected void Awake()
@@ -75,6 +78,7 @@ public abstract class LivingBeing : MonoBehaviour
         InitializeAttributeDict();
         InitializeAffinityDict();
         InitializeColorDict();
+        healthbarInterface = GetComponent<I_HealthBar>();
     }
 
     #region Stat Upgrades
@@ -161,8 +165,11 @@ public abstract class LivingBeing : MonoBehaviour
         {
             return AttributesDict[attribute].Get();
         }
-        throw new Exception("Attribute not found");
-
+        else
+        {
+            Logging.Info($"attribute {attribute} not found in attributes dict");
+            throw new Exception("Attribute not found");
+        }
     }
 
     public void SetAttribute(AttributeType attributeType, float value)
@@ -204,10 +211,20 @@ public abstract class LivingBeing : MonoBehaviour
             case AttributeType.CurrentHitpoints:
             case AttributeType.CurrentPower:
                 EventDeclarer.attributeChanged?.Invoke(this, attributeType);
+
+                if (healthbarInterface != null)
+                {
+                    healthbarInterface.SetHealthBarValue();
+                }
+                else Logging.Info($"{Name} has no healthbarinterface");
                 break;
             case AttributeType.MaxHitpoints:
             case AttributeType.MaxPower:
                 EventDeclarer.maxAttributeChanged?.Invoke();
+                if (healthbarInterface != null)
+                {
+                    healthbarInterface.SetHealthBarValue();
+                }
                 break;
 
             case AttributeType.MovementSpeed:

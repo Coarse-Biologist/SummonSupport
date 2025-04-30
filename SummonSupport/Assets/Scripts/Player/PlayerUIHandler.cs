@@ -30,12 +30,12 @@ public class PlayerUIHandler : MonoBehaviour
         else
             Destroy(gameObject);
 
-        root        = uiDoc.rootVisualElement;
-        playerUI    = root.Q<VisualElement>("MainUI");
+        root = uiDoc.rootVisualElement;
+        playerUI = root.Q<VisualElement>("MainUI");
 
         resourceBarsContainer = playerUI.Q<VisualElement>("ResourceBars");
         playerHealthBar = resourceBarsContainer.Q<ProgressBar>("HealthBar");
-        playerPowerBar  = resourceBarsContainer.Q<ProgressBar>("PowerBar");
+        playerPowerBar = resourceBarsContainer.Q<ProgressBar>("PowerBar");
 
 
         minionHPBars = playerUI.Q<VisualElement>("MinionBarSlots");
@@ -45,16 +45,16 @@ public class PlayerUIHandler : MonoBehaviour
 
         playerUI.SetEnabled(true);
         craftingUI.SetEnabled(true);
-        playerUI.style.opacity      = 100f;
-        craftingUI.style.opacity    = 100f;
-        playerStats                 = gameObject.GetComponent<LivingBeing>();
+        playerUI.style.opacity = 100f;
+        craftingUI.style.opacity = 100f;
+        playerStats = gameObject.GetComponent<LivingBeing>();
         UpdateMaxValueResourceBar();
     }
 
     void UpdateMaxValueResourceBar()
     {
-        playerHealthBar.highValue   = playerStats.GetAttribute(AttributeType.MaxHitpoints);
-        playerPowerBar.highValue    = playerStats.GetAttribute(AttributeType.MaxPower);
+        playerHealthBar.highValue = playerStats.GetAttribute(AttributeType.MaxHitpoints);
+        playerPowerBar.highValue = playerStats.GetAttribute(AttributeType.MaxPower);
     }
 
     void OnEnable()
@@ -102,29 +102,30 @@ public class PlayerUIHandler : MonoBehaviour
 
     public void UpdateResourceBar(LivingBeing livingBeing, AttributeType attributeType)
     {
-        if (livingBeing.gameObject.CompareTag("Enemy"))
-        {
-            Logging.Info("Enemy hp should be changed");
-        }
-        else if (livingBeing.gameObject.CompareTag("Player"))
+
+        if (livingBeing.gameObject.CompareTag("Player"))
         {
             SetPlayerAttribute(livingBeing, attributeType);
         }
         else if (livingBeing.gameObject.CompareTag("Minion"))
         {
-            ProgressBar hpBar = GetLivingBeingHPBar(livingBeing);
-            if (hpBar != null)
-            {
-                float hp = livingBeing.GetAttribute(AttributeType.CurrentHitpoints);
-                hpBar.value = livingBeing.CurrentHP;
-                hpBar.title = $"{livingBeing.Name} HP: {hp}";
-            }
+            SetMinionHealthBar(livingBeing);
+        }
+    }
+    private void SetMinionHealthBar(LivingBeing livingBeing)
+    {
+        ProgressBar hpBar = GetLivingBeingHPBar(livingBeing);
+        if (hpBar != null)
+        {
+            float hp = livingBeing.GetAttribute(AttributeType.CurrentHitpoints);
+            hpBar.value = livingBeing.CurrentHP;
+            hpBar.title = $"{livingBeing.Name} HP: {hp}";
         }
     }
 
     private void SetPlayerAttribute(LivingBeing livingBeing, AttributeType attributeType)
     {
-        
+
         if (attributeType == AttributeType.CurrentHitpoints)
             playerHealthBar.value = livingBeing.GetAttribute(attributeType);
         if (attributeType == AttributeType.CurrentPower)

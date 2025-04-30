@@ -17,9 +17,9 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] GameObject AbilityRotation;
     private Vector2 lookInput;
     [SerializeField] float movementSpeed;
-    [SerializeField] float dashBoost        = 10f;
-    [SerializeField] float dashCoolDown     = 1f;
-    [SerializeField] float dashDuration     = .1f;
+    [SerializeField] float dashBoost = 10f;
+    [SerializeField] float dashCoolDown = 1f;
+    [SerializeField] float dashDuration = .1f;
     private Rigidbody2D rb;
     private bool dashing = false;
     private bool canDash = true;
@@ -30,7 +30,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Awake()
     {
-        spriteController = GetComponent<PlayerSpriteController>();
+        spriteController = GetComponentInChildren<PlayerSpriteController>();
         rb = GetComponent<Rigidbody2D>();
         mainCamera = Camera.main;
         inputActions = new PlayerInputActions();
@@ -48,9 +48,9 @@ public class PlayerMovement : MonoBehaviour
         inputActions ??= new PlayerInputActions();
         EventDeclarer.SpeedAttributeChanged.AddListener(SetMovementAttribute);
         inputActions.Player.Enable();
-        inputActions.Player.Move.performed          += OnMove;
-        inputActions.Player.Move.canceled           += OnMove;
-        inputActions.Player.Dash.performed          += OnDash;
+        inputActions.Player.Move.performed += OnMove;
+        inputActions.Player.Move.canceled += OnMove;
+        inputActions.Player.Dash.performed += OnDash;
         inputActions.Player.LookDirection.performed += OnLook;
         inputActions.Player.CommandMinion.performed += SendMinionCommandContext;
     }
@@ -60,9 +60,9 @@ public class PlayerMovement : MonoBehaviour
         //AlchemyBenchUI.Instance.playerUsingUI.RemoveListener(ToggleLockedInUI);
 
         EventDeclarer.SpeedAttributeChanged.RemoveListener(SetMovementAttribute);
-        inputActions.Player.Move.performed          -= OnMove;
-        inputActions.Player.Move.canceled           -= OnMove;
-        inputActions.Player.Dash.performed          -= OnDash;
+        inputActions.Player.Move.performed -= OnMove;
+        inputActions.Player.Move.canceled -= OnMove;
+        inputActions.Player.Dash.performed -= OnDash;
         inputActions.Player.LookDirection.performed -= OnLook;
         inputActions.Player.CommandMinion.performed -= SendMinionCommandContext;
         inputActions.Player.Disable();
@@ -99,13 +99,13 @@ public class PlayerMovement : MonoBehaviour
     private void HandleMove()
     {
         float calculatedSpeed;
-        if (dashing) 
+        if (dashing)
             calculatedSpeed = movementSpeed + dashBoost;
-        else 
+        else
             calculatedSpeed = movementSpeed;
 
-        Vector3 moveDirection   = new Vector3(moveInput.x, moveInput.y, 0).normalized;
-        rb.linearVelocity       = moveDirection * calculatedSpeed * 10;
+        Vector3 moveDirection = new Vector3(moveInput.x, moveInput.y, 0).normalized;
+        rb.linearVelocity = moveDirection * calculatedSpeed * 10;
     }
 
 
@@ -128,7 +128,7 @@ public class PlayerMovement : MonoBehaviour
     }
 
     #endregion
-  
+
     private void SendMinionCommandContext(InputAction.CallbackContext context)
     {
         Logging.Info("Send minion command func triggered");
@@ -162,7 +162,7 @@ public class PlayerMovement : MonoBehaviour
         }
         entityQuery.CopyFromComponentDataArray(seesTargetCompArray);
     }
- 
+
     private void SetMovementAttribute(AttributeType attribute, float newValue)
     {
         switch (attribute)

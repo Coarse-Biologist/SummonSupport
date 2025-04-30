@@ -17,6 +17,7 @@ public class MinionStats : LivingBeing
         PlayerUIHandler.Instance.AddMinionHP(this);
     }
 
+
 }
 
 public enum MinionCommands
