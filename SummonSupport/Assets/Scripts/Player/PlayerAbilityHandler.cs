@@ -1,7 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections.Generic;
-using UnityEngine.Events;
 
 public class PlayerAbilityHandler : AbilityHandler
 {
@@ -51,11 +50,12 @@ public class PlayerAbilityHandler : AbilityHandler
     }
     private void OnAbility(InputAction.CallbackContext context)
     {
-        Logging.Verbose($"{this.gameObject.name} used ability");
+        Logging.Verbose($"{gameObject.name} used ability");
         if (actionToIndex.TryGetValue(context.action.name, out int index) && index < abilities.Count)
         {
-            Logging.Verbose($"{this.gameObject.name} used ability with index: {index}");
-            CastAbility(abilities[index]);
+            Ability ability = abilities[index];
+            Logging.Verbose($"{gameObject.name} used ability with index: {index}");
+            CastAbility(ability);
         }
     }
 }

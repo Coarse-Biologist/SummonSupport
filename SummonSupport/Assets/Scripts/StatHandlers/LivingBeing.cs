@@ -204,8 +204,12 @@ public abstract class LivingBeing : MonoBehaviour
             case AttributeType.CurrentHitpoints:
             case AttributeType.CurrentPower:
                 EventDeclarer.attributeChanged?.Invoke(this, attributeType);
-
                 break;
+            case AttributeType.MaxHitpoints:
+            case AttributeType.MaxPower:
+                EventDeclarer.maxAttributeChanged?.Invoke();
+                break;
+
             case AttributeType.MovementSpeed:
             case AttributeType.DashBoost:
             case AttributeType.DashCooldown:

@@ -9,6 +9,9 @@ public class PlayerUIHandler : MonoBehaviour
 {
     public static PlayerUIHandler Instance { get; private set; }
     [SerializeField] public UIDocument uiDoc;
+
+
+    LivingBeing playerStats;
     private VisualElement root;
     private VisualElement minionHPBars;
     private VisualElement playerUI;
@@ -27,12 +30,13 @@ public class PlayerUIHandler : MonoBehaviour
         else
             Destroy(gameObject);
 
-        root = uiDoc.rootVisualElement;
-        playerUI = root.Q<VisualElement>("MainUI");
+        root        = uiDoc.rootVisualElement;
+        playerUI    = root.Q<VisualElement>("MainUI");
 
         resourceBarsContainer = playerUI.Q<VisualElement>("ResourceBars");
         playerHealthBar = resourceBarsContainer.Q<ProgressBar>("HealthBar");
-        playerPowerBar = resourceBarsContainer.Q<ProgressBar>("PowerBar");
+        playerPowerBar  = resourceBarsContainer.Q<ProgressBar>("PowerBar");
+
 
         minionHPBars = playerUI.Q<VisualElement>("MinionBarSlots");
         var craftingUI = root.Q<VisualElement>("CraftingUI");
@@ -41,14 +45,22 @@ public class PlayerUIHandler : MonoBehaviour
 
         playerUI.SetEnabled(true);
         craftingUI.SetEnabled(true);
-        playerUI.style.opacity = 100f;
-        craftingUI.style.opacity = 100f;
+        playerUI.style.opacity      = 100f;
+        craftingUI.style.opacity    = 100f;
+        playerStats                 = gameObject.GetComponent<LivingBeing>();
+        UpdateMaxValueResourceBar();
+    }
 
+    void UpdateMaxValueResourceBar()
+    {
+        playerHealthBar.highValue   = playerStats.GetAttribute(AttributeType.MaxHitpoints);
+        playerPowerBar.highValue    = playerStats.GetAttribute(AttributeType.MaxPower);
     }
 
     void OnEnable()
     {
-        EventDeclarer.attributeChanged.AddListener(SetLivingBeingHP);
+        EventDeclarer.attributeChanged.AddListener(UpdateResourceBar);
+        EventDeclarer.maxAttributeChanged.AddListener(UpdateMaxValueResourceBar);
         if (AlchemyHandler.Instance != null)
             AlchemyHandler.Instance.newMinionAdded.AddListener(AddMinionHP);
         EventDeclarer.minionDied.AddListener(RemoveMinionHP);
@@ -56,7 +68,8 @@ public class PlayerUIHandler : MonoBehaviour
 
     void OnDisable()
     {
-        EventDeclarer.attributeChanged.RemoveListener(SetLivingBeingHP);
+        EventDeclarer.attributeChanged.RemoveListener(UpdateResourceBar);
+        EventDeclarer.maxAttributeChanged.RemoveListener(UpdateMaxValueResourceBar);
         if (AlchemyHandler.Instance != null)
             AlchemyHandler.Instance.newMinionAdded.RemoveListener(AddMinionHP);
         EventDeclarer.minionDied.RemoveListener(RemoveMinionHP);
@@ -87,7 +100,7 @@ public class PlayerUIHandler : MonoBehaviour
         return HPDict[minion];
     }
 
-    public void SetLivingBeingHP(LivingBeing livingBeing, AttributeType attributeType)
+    public void UpdateResourceBar(LivingBeing livingBeing, AttributeType attributeType)
     {
         if (livingBeing.gameObject.CompareTag("Enemy"))
         {
@@ -111,13 +124,10 @@ public class PlayerUIHandler : MonoBehaviour
 
     private void SetPlayerAttribute(LivingBeing livingBeing, AttributeType attributeType)
     {
+        
         if (attributeType == AttributeType.CurrentHitpoints)
-        {
             playerHealthBar.value = livingBeing.GetAttribute(attributeType);
-        }
         if (attributeType == AttributeType.CurrentPower)
-        {
-            playerPowerBar.value = livingBeing.GetAttribute(AttributeType.CurrentHitpoints);
-        }
+            playerPowerBar.value = livingBeing.GetAttribute(attributeType);
     }
 }
