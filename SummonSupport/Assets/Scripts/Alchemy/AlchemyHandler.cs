@@ -16,7 +16,7 @@ public class AlchemyHandler : MonoBehaviour
     public GameObject minionPrefab;
     public UnityEvent<GameObject> requestInstantiation = new UnityEvent<GameObject>();
     [SerializeField] public List<GameObject> activeMinions = new List<GameObject>();
-    public UnityEvent<GameObject> newMinionAdded;
+    public UnityEvent<LivingBeing> newMinionAdded;
     public static AlchemyHandler Instance { get; private set; }
 
     #endregion
@@ -140,11 +140,12 @@ public class AlchemyHandler : MonoBehaviour
     #region set Class Variable functions
     private void AddActiveMinion(GameObject minion)
     {
+        LivingBeing livingBeing = minion.GetComponent<LivingBeing>();
         if (!activeMinions.Contains(minion))
         {
             activeMinions.Add(minion);
             CommandMinion.SetSelectedMinion(minion); //Good idea?...
-            newMinionAdded?.Invoke(minion);
+            newMinionAdded?.Invoke(livingBeing);
         }
     }
     #endregion

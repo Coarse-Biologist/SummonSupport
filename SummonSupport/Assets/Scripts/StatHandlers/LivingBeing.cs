@@ -9,17 +9,17 @@ public abstract class LivingBeing : MonoBehaviour
     #region Declarations
 
     [Header("String Stats")]
-    [field: SerializeField] public string Name              { get; private set; }
-    [field: SerializeField] public string Description       { get; private set; }
+    [field: SerializeField] public string Name { get; private set; }
+    [field: SerializeField] public string Description { get; private set; }
     [field: SerializeField] public List<string> BattleCries { get; private set; }
 
     [Header("Attributes - Ressources")]
-    [field: SerializeField] public float MaxHP                { get; private set; } = 100;
-    [field: SerializeField] public float TemporaryMaxHP       { get; private set; }
-    [field: SerializeField] public float CurrentHP            { get; private set; } = 100;
-    [field: SerializeField] public float MaxPower             { get; private set; } = 100;
-    [field: SerializeField] public float TemporaryMaxPower    { get; private set; }
-    [field: SerializeField] public float CurrentPower         { get; private set; } = 100;
+    [field: SerializeField] public float MaxHP { get; private set; } = 100;
+    [field: SerializeField] public float TemporaryMaxHP { get; private set; }
+    [field: SerializeField] public float CurrentHP { get; private set; } = 100;
+    [field: SerializeField] public float MaxPower { get; private set; } = 100;
+    [field: SerializeField] public float TemporaryMaxPower { get; private set; }
+    [field: SerializeField] public float CurrentPower { get; private set; } = 100;
 
     [Header("Attributes - Regenerations")]
     //TODO:
@@ -27,32 +27,32 @@ public abstract class LivingBeing : MonoBehaviour
     #region Affinity Stats
 
     [Header("Affinity Stats")]
-    [field: SerializeField] protected float Cold          { get; private set; } = 0;
-    [field: SerializeField] protected float Water         { get; private set; } = 0;
-    [field: SerializeField] protected float Earth         { get; private set; } = 0;
-    [field: SerializeField] protected float Heat          { get; private set; } = 0;
-    [field: SerializeField] protected float Air           { get; private set; } = 0;
-    [field: SerializeField] protected float Electricity   { get; private set; } = 0;
-    [field: SerializeField] protected float Poison        { get; private set; } = 0;
-    [field: SerializeField] protected float Acid          { get; private set; } = 0;
-    [field: SerializeField] protected float Bacteria      { get; private set; } = 0;
-    [field: SerializeField] protected float Fungi         { get; private set; } = 0;
-    [field: SerializeField] protected float Plant         { get; private set; } = 0;
-    [field: SerializeField] protected float Virus         { get; private set; } = 0;
-    [field: SerializeField] protected float Radiation     { get; private set; } = 0;
-    [field: SerializeField] protected float Light         { get; private set; } = 0;
-    [field: SerializeField] protected float Psychic       { get; private set; } = 0;
+    [field: SerializeField] protected float Cold { get; private set; } = 0;
+    [field: SerializeField] protected float Water { get; private set; } = 0;
+    [field: SerializeField] protected float Earth { get; private set; } = 0;
+    [field: SerializeField] protected float Heat { get; private set; } = 0;
+    [field: SerializeField] protected float Air { get; private set; } = 0;
+    [field: SerializeField] protected float Electricity { get; private set; } = 0;
+    [field: SerializeField] protected float Poison { get; private set; } = 0;
+    [field: SerializeField] protected float Acid { get; private set; } = 0;
+    [field: SerializeField] protected float Bacteria { get; private set; } = 0;
+    [field: SerializeField] protected float Fungi { get; private set; } = 0;
+    [field: SerializeField] protected float Plant { get; private set; } = 0;
+    [field: SerializeField] protected float Virus { get; private set; } = 0;
+    [field: SerializeField] protected float Radiation { get; private set; } = 0;
+    [field: SerializeField] protected float Light { get; private set; } = 0;
+    [field: SerializeField] protected float Psychic { get; private set; } = 0;
     #endregion Afinity Stats
 
     [Header("Other")]
     [field: SerializeField] public float XP_OnDeath { get; private set; } = 3;
     public Dictionary<string, StatusEffectInstance> activeStatusEffects = new();
-    public Dictionary<Element,          (Func<float> Get, Action<float> Set)> Affinities        { private set; get; } = new();
-    public Dictionary<AttributeType,    (Func<float> Get, Action<float> Set)> AttributesDict    { private set; get; } = new();
+    public Dictionary<Element, (Func<float> Get, Action<float> Set)> Affinities { private set; get; } = new();
+    public Dictionary<AttributeType, (Func<float> Get, Action<float> Set)> AttributesDict { private set; get; } = new();
 
     [field: SerializeField] public List<Ability> Abilties { get; private set; } = new();
     [field: SerializeField] public float Speed { get; private set; } = 0.4f;
-    [field: SerializeField] public float Mass  { get; private set; } = 1f;
+    [field: SerializeField] public float Mass { get; private set; } = 1f;
 
     #endregion Declarations
 
@@ -75,7 +75,7 @@ public abstract class LivingBeing : MonoBehaviour
         InitializeAttributeDict();
         InitializeAffinityDict();
         InitializeColorDict();
-    }   
+    }
 
     #region Stat Upgrades
 
@@ -165,13 +165,12 @@ public abstract class LivingBeing : MonoBehaviour
 
     }
 
-    public void SetAttribute(AttributeType attribute, float value)
+    public void SetAttribute(AttributeType attributeType, float value)
     {
-        if (AttributesDict != null && AttributesDict.ContainsKey(attribute))
-            AttributesDict[attribute].Set(value);
-        
-        if (attribute == AttributeType.CurrentHitpoints) 
-            EventDeclarer.hpChanged?.Invoke(gameObject);
+        if (AttributesDict != null && AttributesDict.ContainsKey(attributeType))
+            AttributesDict[attributeType].Set(value);
+
+        HandleEventInvokes(attributeType, value);
 
     }
     public void SetName(string newName)
@@ -184,10 +183,9 @@ public abstract class LivingBeing : MonoBehaviour
         if (AttributesDict == null || !AttributesDict.ContainsKey(attributeType))
             throw new Exception("Attribute not found or invalid setter");
 
-        float currentValue  = GetAttribute(attributeType);
-        float newValue      = CalculateNewValueByType(currentValue, value, valueType);
+        float currentValue = GetAttribute(attributeType);
+        float newValue = CalculateNewValueByType(currentValue, value, valueType);
         SetAttribute(attributeType, newValue);
-        HandleEventInvokes(attributeType, newValue);
 
         if (IsDead())
             Die();
@@ -203,8 +201,10 @@ public abstract class LivingBeing : MonoBehaviour
     {
         switch (attributeType)
         {
-            case AttributeType.CurrentHitpoints: 
-                EventDeclarer.hpChanged?.Invoke(gameObject);
+            case AttributeType.CurrentHitpoints:
+            case AttributeType.CurrentPower:
+                EventDeclarer.attributeChanged?.Invoke(this, attributeType);
+
                 break;
             case AttributeType.MovementSpeed:
             case AttributeType.DashBoost:
@@ -327,7 +327,7 @@ public abstract class LivingBeing : MonoBehaviour
     protected void Die()
     {
         Logging.Info($"{gameObject.name} died");
-        if (gameObject.GetComponent<MinionStats>() != null) EventDeclarer.minionDied?.Invoke(gameObject);
+        if (gameObject.GetComponent<MinionStats>() != null) EventDeclarer.minionDied?.Invoke(this);
         Destroy(gameObject);
     }
 }

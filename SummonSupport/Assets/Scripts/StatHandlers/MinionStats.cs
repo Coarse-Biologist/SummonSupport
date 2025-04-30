@@ -14,7 +14,7 @@ public class MinionStats : LivingBeing
     }
     void Start()
     {
-        PlayerUIHandler.Instance.AddMinionHP(this.gameObject);
+        PlayerUIHandler.Instance.AddMinionHP(this);
     }
 
 }

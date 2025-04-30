@@ -6,11 +6,11 @@ namespace SummonSupportEvents
 {
     public static class EventDeclarer
     {
-        public static UnityEvent<GameObject> hpChanged                                      = new UnityEvent<GameObject>();
-        public static UnityEvent<RepeatableAccomplishments> RepeatableQuestCompleted        = new UnityEvent<RepeatableAccomplishments>();
-        public static UnityEvent EnemyDefeated                                              = new UnityEvent();
-        public static UnityEvent<GameObject> minionDied                                     = new UnityEvent<GameObject >();
-        public static UnityEvent<AttributeType, float> SpeedAttributeChanged                = new ();
+        public static UnityEvent<LivingBeing, AttributeType> attributeChanged = new UnityEvent<LivingBeing, AttributeType>();
+        public static UnityEvent<RepeatableAccomplishments> RepeatableQuestCompleted = new UnityEvent<RepeatableAccomplishments>();
+        public static UnityEvent EnemyDefeated = new UnityEvent();
+        public static UnityEvent<LivingBeing> minionDied = new UnityEvent<LivingBeing>();
+        public static UnityEvent<AttributeType, float> SpeedAttributeChanged = new();
 
 
         //static EventDeclarer()

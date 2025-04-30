@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEngine.Events;
 using SummonSupportEvents;
+using System;
 
 public class PlayerUIHandler : MonoBehaviour
 {
@@ -11,9 +12,13 @@ public class PlayerUIHandler : MonoBehaviour
     private VisualElement root;
     private VisualElement minionHPBars;
     private VisualElement playerUI;
+    private VisualElement resourceBarsContainer;
+    private ProgressBar playerHealthBar;
+    private ProgressBar playerPowerBar;
+
 
     [SerializeField] public List<GameObject> minions;// = new List<GameObject>();
-    private Dictionary<GameObject, ProgressBar> minionHPDict = new Dictionary<GameObject, ProgressBar>();
+    private Dictionary<LivingBeing, ProgressBar> HPDict = new Dictionary<LivingBeing, ProgressBar>();
     private AlchemyHandler alchemyHandler;
     void Awake()
     {
@@ -24,6 +29,11 @@ public class PlayerUIHandler : MonoBehaviour
 
         root = uiDoc.rootVisualElement;
         playerUI = root.Q<VisualElement>("MainUI");
+
+        resourceBarsContainer = playerUI.Q<VisualElement>("ResourceBars");
+        playerHealthBar = resourceBarsContainer.Q<ProgressBar>("HealthBar");
+        playerPowerBar = resourceBarsContainer.Q<ProgressBar>("PowerBar");
+
         minionHPBars = playerUI.Q<VisualElement>("MinionBarSlots");
         var craftingUI = root.Q<VisualElement>("CraftingUI");
         if (craftingUI != null)
@@ -38,7 +48,7 @@ public class PlayerUIHandler : MonoBehaviour
 
     void OnEnable()
     {
-        EventDeclarer.hpChanged.AddListener(SetMinionHP);
+        EventDeclarer.attributeChanged.AddListener(SetLivingBeingHP);
         if (AlchemyHandler.Instance != null)
             AlchemyHandler.Instance.newMinionAdded.AddListener(AddMinionHP);
         EventDeclarer.minionDied.AddListener(RemoveMinionHP);
@@ -46,46 +56,68 @@ public class PlayerUIHandler : MonoBehaviour
 
     void OnDisable()
     {
-        EventDeclarer.hpChanged.RemoveListener(SetMinionHP);
+        EventDeclarer.attributeChanged.RemoveListener(SetLivingBeingHP);
         if (AlchemyHandler.Instance != null)
             AlchemyHandler.Instance.newMinionAdded.RemoveListener(AddMinionHP);
         EventDeclarer.minionDied.RemoveListener(RemoveMinionHP);
     }
 
-    public void AddMinionHP(GameObject minion)
+    public void AddMinionHP(LivingBeing livingBeing)
     {
         ProgressBar minionHP = new ProgressBar();
-        float hp = minion.GetComponent<LivingBeing>().GetAttribute(AttributeType.CurrentHitpoints);
-        minionHPDict.TryAdd(minion, minionHP);
-        minionHP.title = $"{minion.GetComponent<LivingBeing>().Name} HP: {hp}";
+        float hp = livingBeing.GetAttribute(AttributeType.CurrentHitpoints);
+        HPDict.TryAdd(livingBeing, minionHP);
+        minionHP.title = $"{livingBeing.Name} HP: {hp}";
         minionHP.highValue = hp;
         minionHPBars.Add(minionHP);
     }
-    public void RemoveMinionHP(GameObject minion)
+    public void RemoveMinionHP(LivingBeing livingBeing)
     {
-        ProgressBar minionHP = GetMinionsHPBar(minion);
+        ProgressBar minionHP = GetLivingBeingHPBar(livingBeing);
         if (minionHP != null)
         {
-            minionHPDict.Remove(minion);
+            HPDict.Remove(livingBeing);
             minionHPBars.Remove(minionHP);
         }
         else Logging.Error("You are trying to delete a none inion as though it were a minion");
     }
 
-    private ProgressBar GetMinionsHPBar(GameObject minion)
+    private ProgressBar GetLivingBeingHPBar(LivingBeing minion)
     {
-        return minionHPDict[minion];
+        return HPDict[minion];
     }
 
-    public void SetMinionHP(GameObject minion)
+    public void SetLivingBeingHP(LivingBeing livingBeing, AttributeType attributeType)
     {
-        ProgressBar hpBar = GetMinionsHPBar(minion);
-        if (hpBar != null)
+        if (livingBeing.gameObject.CompareTag("Enemy"))
         {
-            float hp = minion.GetComponent<LivingBeing>().GetAttribute(AttributeType.CurrentHitpoints);
-            hpBar.value = minion.GetComponent<LivingBeing>().CurrentHP;
-            hpBar.title = $"{minion.GetComponent<LivingBeing>().Name} HP: {hp}";
+            Logging.Info("Enemy hp should be changed");
+        }
+        else if (livingBeing.gameObject.CompareTag("Player"))
+        {
+            SetPlayerAttribute(livingBeing, attributeType);
+        }
+        else if (livingBeing.gameObject.CompareTag("Minion"))
+        {
+            ProgressBar hpBar = GetLivingBeingHPBar(livingBeing);
+            if (hpBar != null)
+            {
+                float hp = livingBeing.GetAttribute(AttributeType.CurrentHitpoints);
+                hpBar.value = livingBeing.CurrentHP;
+                hpBar.title = $"{livingBeing.Name} HP: {hp}";
+            }
+        }
+    }
 
+    private void SetPlayerAttribute(LivingBeing livingBeing, AttributeType attributeType)
+    {
+        if (attributeType == AttributeType.CurrentHitpoints)
+        {
+            playerHealthBar.value = livingBeing.GetAttribute(attributeType);
+        }
+        if (attributeType == AttributeType.CurrentPower)
+        {
+            playerPowerBar.value = livingBeing.GetAttribute(AttributeType.CurrentHitpoints);
         }
     }
 }
