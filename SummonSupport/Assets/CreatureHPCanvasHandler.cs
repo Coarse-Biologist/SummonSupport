@@ -22,7 +22,6 @@ public class CreatureHPCanvasHandler : MonoBehaviour, I_HealthBar
     }
     public void SetHealthBarMaxValue(float value)
     {
-
         hpSlider.maxValue = value;
     }
 }
