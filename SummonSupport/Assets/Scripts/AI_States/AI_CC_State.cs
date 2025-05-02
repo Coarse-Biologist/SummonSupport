@@ -44,11 +44,9 @@ public class AI_CC_State : AIState
 
     private bool KnockInTheAir()
     {
-        Logging.Info("Knock in the air func is being called");
         beingKnockedInAir = true;
         if(currentCCs.TryGetValue(StatusEffectType.KnockInTheAir, out Vector2 sourcePosition) && timeElapsed <= duration)
             {
-                Logging.Info($"Time elapsed = {timeElapsed}. duration = {duration}");
                 rb.linearDamping = 40;
                 if (timeElapsed <= duration * .8)
                     rb.AddForce(((Vector2)transform.position - sourcePosition).normalized, ForceMode2D.Impulse);
@@ -68,11 +66,12 @@ public class AI_CC_State : AIState
     }
     private IEnumerator KnockRoutine()
     {
+        bool repeat = true;
         WaitForSeconds wait = new WaitForSeconds(0.1f);
-        while (true)
+        while (repeat)
         {
             yield return wait;
-            KnockInTheAir();
+            repeat = KnockInTheAir();
             timeElapsed += .1f;
         }
     }

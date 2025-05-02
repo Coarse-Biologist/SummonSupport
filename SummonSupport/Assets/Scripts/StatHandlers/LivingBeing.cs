@@ -180,16 +180,9 @@ public abstract class LivingBeing : MonoBehaviour
     public float GetAttribute(AttributeType attribute)
     {
         if (AttributesDict != null && AttributesDict.ContainsKey(attribute))
-        {
-            Logging.Info($"{Name} has {AttributesDict[attribute].Get()} {attribute}");
-
             return AttributesDict[attribute].Get();
-        }
         else
-        {
-            Logging.Info($"attribute {attribute} not found in attributes dict");
             throw new Exception("Attribute not found");
-        }
     }
 
     public void SetAttribute(AttributeType attributeType, float value)

@@ -1,12 +1,11 @@
-using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections.Generic;
 
 public class PlayerAbilityHandler : AbilityHandler
 {
-    [SerializeField] List<Ability> abilities;
+    
     PlayerInputActions inputActions;
-    private Dictionary<string, int> actionToIndex = new()
+    private Dictionary<string, int> inputActionToIndex = new()
     {
         { "Ability1", 0 },
         { "Ability2", 1 },
@@ -14,7 +13,6 @@ public class PlayerAbilityHandler : AbilityHandler
         { "Ability4", 3 },
         { "Ability5", 4 },
         { "Ability6", 5 },
-        
     };
 
     private new void Awake()
@@ -51,11 +49,10 @@ public class PlayerAbilityHandler : AbilityHandler
     private void OnAbility(InputAction.CallbackContext context)
     {
         Logging.Verbose($"{gameObject.name} used ability");
-        if (actionToIndex.TryGetValue(context.action.name, out int index) && index < abilities.Count)
+        if (inputActionToIndex.TryGetValue(context.action.name, out int index) && index < abilities.Count)
         {
-            Ability ability = abilities[index];
             Logging.Verbose($"{gameObject.name} used ability with index: {index}");
-            CastAbility(ability);
+            CastAbility(index);
         }
     }
 }

@@ -15,4 +15,6 @@ public abstract class Ability : ScriptableObject
     [field: SerializeField] public Element ElementType { get; protected set; } = Element.None;
 
     public abstract void Activate(GameObject user);
+    [field: SerializeField] public bool OnCooldown { get; set; } = false;
+
 }

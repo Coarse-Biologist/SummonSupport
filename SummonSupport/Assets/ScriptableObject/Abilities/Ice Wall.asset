@@ -12,11 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f72222c874821e41bccb5f49eee621c, type: 3}
   m_Name: Ice Wall
   m_EditorClassIdentifier: 
-  <AbilityName>k__BackingField: Ice Wall
+  <Name>k__BackingField: Ice Wall
   <Icon>k__BackingField: {fileID: -3500884675973611128, guid: d181781105797df4595eaa56fb20fb5b,
     type: 3}
-  <Cooldown>k__BackingField: 10.6
+  <Cooldown>k__BackingField: 4
   <PowerCost>k__BackingField: 20
+  <StatusEffects>k__BackingField: []
+  <Attribute>k__BackingField: 0
+  <Value>k__BackingField: 0
+  <ElementType>k__BackingField: 0
+  <OnCooldown>k__BackingField: 1
   <ObjectToSpawn>k__BackingField: {fileID: 626346471676512894, guid: 0426bd00677ff8c4d996ab592a456265,
     type: 3}
   <SpawnOffset>k__BackingField: {x: 1, y: 0}

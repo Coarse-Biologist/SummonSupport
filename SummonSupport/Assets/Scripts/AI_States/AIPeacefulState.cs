@@ -105,7 +105,7 @@ public class AIPeacefulState : AIState
             Debug.Log("Requesting chase state");
             return chaseState;
         }
-        else
+        else if (player)
         {
             Vector2 currentLoc = new Vector2(transform.position.x, transform.position.y);
             Vector2 playerPos = player.transform.position;
@@ -114,6 +114,10 @@ public class AIPeacefulState : AIState
             {
                 GoToPlayer();
             }
+            return this;
+        }
+        else
+        {
             return this;
         }
     }

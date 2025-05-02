@@ -6,12 +6,11 @@ using System.Collections.Generic;
 
 public class TurretHandler : AbilityHandler
 {
-    [SerializeField] Ability ability;
     [SerializeField] float cooldown         = 5f;
     [SerializeField] float rotationSpeed    = 5f;
     
 
-    public List<GameObject> listTargets     = new List<GameObject>();
+    public List<GameObject> listTargets = new List<GameObject>();
     public int shootTargetIndexNext;
     public bool hasTarget;
 
@@ -96,18 +95,12 @@ public class TurretHandler : AbilityHandler
 
     void ShootTarget(GameObject target)
     {
-        if (ability == null)
-        {
-            Logging.Warning("Turret has no ability");
+        if (abilities == null)
             return;
-        }
 
         if (listTargets.Count <= 0)
-        {
-            Logging.Warning("Turret has no target");
             return;
-        }
         
-        CastAbility(ability);
+        CastAbility(0);
     }
 }
