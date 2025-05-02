@@ -48,7 +48,7 @@ public class AIStateHandler : MonoBehaviour
     {
         // Called in Awake by using "Invoke repeating"
         if (ccState != null && ccState.currentCCs.Count != 0) SwitchToNextState(ccState);
-        if (minionStats.CurrentCommand == MinionCommands.None)
+        if (minionStats == null || minionStats.CurrentCommand == MinionCommands.None)
         {
             AIState nextState = currentState?.RunCurrentState();
             //Debug.Log($"current state = {currentState}. next state = {nextState}");

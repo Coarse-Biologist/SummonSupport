@@ -1,29 +1,31 @@
-using SummonSupportEvents;
-using Unity.Entities.UniversalDelegates;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class CreatureHPCanvasHandler : MonoBehaviour, I_HealthBar
 {
 
-    private LivingBeing livingBeing;
+    //private LivingBeing livingBeing;
     private Slider hpSlider;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+
+    void Awake()
     {
-        livingBeing = GetComponent<LivingBeing>();
+        //livingBeing = GetComponent<LivingBeing>();
         hpSlider = GetComponentInChildren<Slider>();
-        hpSlider.maxValue = livingBeing.GetAttribute(AttributeType.MaxHitpoints);
-        hpSlider.value = livingBeing.GetAttribute(AttributeType.CurrentHitpoints);
+        hpSlider.value = 200f;
+        hpSlider.maxValue = 200f;
+        Logging.Info($"I_HealthBar is awake");
     }
 
 
-    public void SetHealthBarValue()
+    public void SetHealthBarValue(float value)
     {
-        hpSlider.value = livingBeing.GetAttribute(AttributeType.CurrentHitpoints);
+        Logging.Info($"assigned value of hp =  {value}!!!!!!!!!!");
+        hpSlider.value = value;
     }
-    public void SetHealthBarMaxValue()
+    public void SetHealthBarMaxValue(float value)
     {
-        hpSlider.maxValue = livingBeing.GetAttribute(AttributeType.MaxHitpoints);
+        Logging.Info($"assigned value of  max hp =  {value}");
+
+        hpSlider.maxValue = value;
     }
 }

@@ -32,7 +32,7 @@ public class AIChaseState : AIState
     public override AIState RunCurrentState()
     {
         //Debug.Log("Running chase state");
-        if (stateHandler.minionStats.CurrentCommand == MinionCommands.FocusTarget) targetEntity = obedienceState.commandTarget;
+        if (stateHandler.minionStats != null && stateHandler.minionStats.CurrentCommand == MinionCommands.FocusTarget) targetEntity = obedienceState.commandTarget;
         if (targetEntity != null)
         {
             Vector2 targetLoc = targetEntity.transform.position;

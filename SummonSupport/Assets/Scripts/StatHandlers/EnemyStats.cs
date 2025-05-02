@@ -1,22 +1,16 @@
 using UnityEngine;
 using System.Collections.Generic;
-using SummonSupportEvents;
 
-public class MinionStats : LivingBeing
+public class EnemyStats : LivingBeing
 {
     [SerializeField] public Dictionary<string, int> SlottedAbilities { private set; get; } = new Dictionary<string, int>(); //This will store the slot in which an ability is contained. the string is a placeholder until we decide the object type of an ability
     [SerializeField] public List<AlchemyLoot> Loot { private set; get; } = new List<AlchemyLoot>();
-    [SerializeField] public MinionCommands CurrentCommand { private set; get; } = MinionCommands.None;
-    //private I_HealthBar healthbarInterface;
+
+    public MinionCommands CurrentCommand { get; private set; } = MinionCommands.None;
 
 
-    public void SetCommand(MinionCommands command)
-    {
-        CurrentCommand = command;
-    }
     void Start()
     {
-        PlayerUIHandler.Instance.AddMinionHP(this);
 
         healthbarInterface = GetComponent<I_HealthBar>();
 
@@ -25,15 +19,10 @@ public class MinionStats : LivingBeing
             healthbarInterface.SetHealthBarValue(GetAttribute(AttributeType.CurrentHitpoints));
             healthbarInterface.SetHealthBarMaxValue(GetAttribute(AttributeType.MaxHitpoints));
         }
+
+
     }
 
 
 }
 
-public enum MinionCommands
-{
-    None,
-    GoTo,
-    FocusTarget,
-    Interact,
-}

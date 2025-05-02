@@ -48,6 +48,9 @@ public class PlayerUIHandler : MonoBehaviour
         playerUI.style.opacity = 100f;
         craftingUI.style.opacity = 100f;
         playerStats = gameObject.GetComponent<LivingBeing>();
+    }
+    void Start()
+    {
         UpdateMaxValueResourceBar();
     }
 

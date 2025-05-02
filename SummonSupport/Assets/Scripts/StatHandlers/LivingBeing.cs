@@ -67,7 +67,7 @@ public abstract class LivingBeing : MonoBehaviour
 
     private SpriteRenderer spriteRenderer;
 
-    private I_HealthBar healthbarInterface;
+    [SerializeField] public I_HealthBar healthbarInterface;
 
     #endregion
 
@@ -80,6 +80,24 @@ public abstract class LivingBeing : MonoBehaviour
         InitializeColorDict();
         healthbarInterface = GetComponent<I_HealthBar>();
     }
+
+
+    void Start()
+    {
+        //healthbarInterface = GetComponent<I_HealthBar>();
+        //if (healthbarInterface == null) Logging.Info("health interface not found in start");
+        //else Logging.Info("healthbar interface found in start");
+        //
+        //if (healthbarInterface != null)
+        //{
+        //    Logging.Info("health bar interface  exists!!! Well done, start function!");
+        //    healthbarInterface.SetHealthBarValue(GetAttribute(AttributeType.CurrentHitpoints));
+        //    healthbarInterface.SetHealthBarMaxValue(GetAttribute(AttributeType.MaxHitpoints));
+        //}
+        //else Logging.Info("health bar interface doesnt exist!!! Good try, start function");
+
+    }
+
 
     #region Stat Upgrades
 
@@ -163,6 +181,8 @@ public abstract class LivingBeing : MonoBehaviour
     {
         if (AttributesDict != null && AttributesDict.ContainsKey(attribute))
         {
+            Logging.Info($"{Name} has {AttributesDict[attribute].Get()} {attribute}");
+
             return AttributesDict[attribute].Get();
         }
         else
@@ -214,16 +234,15 @@ public abstract class LivingBeing : MonoBehaviour
 
                 if (healthbarInterface != null)
                 {
-                    healthbarInterface.SetHealthBarValue();
+                    healthbarInterface.SetHealthBarValue(GetAttribute(AttributeType.CurrentHitpoints));
                 }
-                else Logging.Info($"{Name} has no healthbarinterface");
                 break;
             case AttributeType.MaxHitpoints:
             case AttributeType.MaxPower:
                 EventDeclarer.maxAttributeChanged?.Invoke();
                 if (healthbarInterface != null)
                 {
-                    healthbarInterface.SetHealthBarValue();
+                    healthbarInterface.SetHealthBarValue(GetAttribute(AttributeType.MaxHitpoints));
                 }
                 break;
 

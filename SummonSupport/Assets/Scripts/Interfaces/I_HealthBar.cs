@@ -2,6 +2,6 @@ using UnityEngine;
 
 public interface I_HealthBar
 {
-    public void SetHealthBarValue();
-    public void SetHealthBarMaxValue();
+    public void SetHealthBarValue(float value);
+    public void SetHealthBarMaxValue(float value);
 }
