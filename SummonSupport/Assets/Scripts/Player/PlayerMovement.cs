@@ -24,7 +24,6 @@ public class PlayerMovement : MonoBehaviour
     private bool dashing = false;
     private bool canDash = true;
     private bool lockedInUI = false;
-    private bool lockToggleable = true;
 
     #endregion
 

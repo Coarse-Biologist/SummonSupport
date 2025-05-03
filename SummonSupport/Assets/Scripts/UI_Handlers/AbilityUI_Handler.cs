@@ -74,7 +74,6 @@ public class AbilityUI_Handler : MonoBehaviour
         ProgressBarDict.Add(2, ProgressBarL2);
         ProgressBarDict.Add(3, ProgressBarL3);
         ProgressBarDict.Add(4, ProgressBarL4);
-        ProgressBarDict.Add(4, ProgressBarL4);
         ProgressBarDict.Add(5, ProgressBarL5);
         ProgressBarDict.Add(6, ProgressBarL6);
 
@@ -110,10 +109,13 @@ public class AbilityUI_Handler : MonoBehaviour
     private void AbilityUsed(int slotIndex)
     {
         ProgressBar abilityProgressBar = ProgressBarDict[slotIndex];
-        float cooldown = abilityProgressBarDict[slotIndex].Cooldown;
+        Ability ability = abilityProgressBarDict[slotIndex];
+        float cooldown = ability.Cooldown;
+        Logging.Info($"Ability {ability.name} with cooldown {cooldown} has been used.");
 
         abilityProgressBar.highValue = cooldown;
         abilityProgressBar.value = cooldown;
+
 
         StartCoroutine(DrainCooldown(slotIndex, cooldown));
     }

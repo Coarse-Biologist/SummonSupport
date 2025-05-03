@@ -27,7 +27,6 @@ public class ProjectileAbility : Ability
     }
     public void Activate(GameObject user, GameObject spawnPoint, Transform direction)
     {
-        Logging.Info($"{user.name} casted a {Name}");
         GameObject projectile = Instantiate(Projectile, spawnPoint.transform.position, Quaternion.identity);
         Projectile projectileScript = projectile.GetComponent<Projectile>();
         projectileScript.ability = this;

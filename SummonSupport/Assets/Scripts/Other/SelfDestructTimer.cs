@@ -15,6 +15,6 @@ public class SelfDestructTimer : MonoBehaviour
 
     public void StartTimer(float time)
     {
-        Logging.Info(time.ToString());
+        Logging.Info("Self destruct in" + time.ToString());
     }
 }

@@ -25,26 +25,30 @@ public class PlayerAbilityHandler : AbilityHandler
             index++;
         }
     }
+    void Start()
+    {
+        UpdateAbilities();
+    }
 
-    private new void Awake()
+    new void Awake()
     {
         base.Awake(); 
         inputActions ??= new PlayerInputActions();
     }
 
-    private void OnEnable()
+    void OnEnable()
     {
         RegisterInputEvents(true);
         inputActions.Enable();
     }
 
-    private void OnDisable()
+    void OnDisable()
     {
         RegisterInputEvents(false);
         inputActions.Disable();
     }
 
-    private void RegisterInputEvents(bool register)
+    void RegisterInputEvents(bool register)
     {
         foreach (var action in inputActions.Player.Get().actions)
         {
@@ -57,10 +61,13 @@ public class PlayerAbilityHandler : AbilityHandler
             }
         }        
     }
-    private void OnAbility(InputAction.CallbackContext context)
+    void OnAbility(InputAction.CallbackContext context)
     {
         if (inputActionToIndex.TryGetValue(context.action.name, out int index) && index < abilities.Count)
+        {
             CastAbility(index);
+            EventDeclarer.AbilityUsed?.Invoke(index);
+        }
         
     }
 }

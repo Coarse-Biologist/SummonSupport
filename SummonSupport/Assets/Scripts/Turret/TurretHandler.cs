@@ -29,7 +29,6 @@ public class TurretHandler : AbilityHandler
                 hasTarget = true;
                 StartCoroutine(ShootLoop());
             }
-
         }
     }
 
