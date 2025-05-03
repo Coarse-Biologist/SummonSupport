@@ -81,3 +81,16 @@
     transition-duration: 0.3s;
     transition-timing-function: ease-in-out;
 }
+
+.AbilityProgressbar {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    background-size: 10% 10%;
+    -unity-text-align: upper-left;
+    height: 40%;
+    width: 50%;
+    scale: 0.7 3;
+    rotate: -90deg;
+}
