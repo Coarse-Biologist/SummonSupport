@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using System.Collections.Generic;
+using Unity.Cinemachine;
 
 public class AbilityHandler : MonoBehaviour
 {
@@ -24,21 +25,21 @@ public class AbilityHandler : MonoBehaviour
         }
     }
 
-    protected void CastAbility(int abilityIndex)
+    protected void CastAbility(int abilityIndex, Vector2 targetPosition, Quaternion rotation)
     {
-        Ability ability = abilities[abilityIndex];
-
         if (abilitiesOnCooldown[abilityIndex])
             return;
+            
+        Ability ability = abilities[abilityIndex];
             
         if (!HasEnoughPower(ability.PowerCost))
             return;
 
-        HandleAbilityType(ability);
+        HandleAbilityType(ability, targetPosition, rotation);
         StartCoroutine(SetOnCooldown(abilityIndex));
     }   
 
-    void HandleAbilityType(Ability ability)
+    void HandleAbilityType(Ability ability, Vector2 targetPosition, Quaternion rotation)
     {
         switch (ability)
         {
@@ -51,7 +52,7 @@ public class AbilityHandler : MonoBehaviour
                 break;
             
             case ConjureAbility conjureAbility:
-                HandleConjureAbility(conjureAbility);
+                HandleConjureAbility(conjureAbility, targetPosition, rotation);
                 break;
         }
     }
@@ -78,9 +79,9 @@ public class AbilityHandler : MonoBehaviour
         ability.Activate(gameObject);
     }
 
-    void HandleConjureAbility(ConjureAbility ability)
+    void HandleConjureAbility(ConjureAbility ability, Vector2 targetPosition, Quaternion rotation)
     {
-        ability.Activate(gameObject);
+        ability.Activate(gameObject, targetPosition, rotation);
     }
 
 
