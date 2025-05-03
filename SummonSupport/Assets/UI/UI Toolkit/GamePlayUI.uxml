@@ -6,6 +6,9 @@
             <ui:ProgressBar value="45" title="1" name="AbilitySlotL1" class="AbilityProgressbar" style="color: rgb(255, 255, 255); scale: 1 1; flex-direction: column; -unity-text-align: lower-left; white-space: pre; rotate: 0; height: 30%;" />
             <ui:ProgressBar value="45" title="2" name="AbilitySlotL2" class="AbilityProgressbar" style="color: rgb(255, 255, 255); scale: 1 1; flex-direction: column; -unity-text-align: lower-left; white-space: pre; rotate: 0; height: 30%;" />
             <ui:ProgressBar value="45" title="3" name="AbilitySlotL3" class="AbilityProgressbar" style="color: rgb(255, 255, 255); scale: 1 1; flex-direction: column; -unity-text-align: lower-left; white-space: pre; rotate: 0; height: 30%;" />
+            <ui:ProgressBar value="45" title="q" name="AbilitySlotL4" class="AbilityProgressbar" style="color: rgb(255, 255, 255); scale: 1 1; flex-direction: column; -unity-text-align: lower-left; white-space: pre; rotate: 0; height: 30%;" />
+            <ui:ProgressBar value="45" title="e" name="AbilitySlotL5" class="AbilityProgressbar" style="color: rgb(255, 255, 255); scale: 1 1; flex-direction: column; -unity-text-align: lower-left; white-space: pre; rotate: 0; height: 30%;" />
+            <ui:ProgressBar value="45" title="f" name="AbilitySlotL6" class="AbilityProgressbar" style="color: rgb(255, 255, 255); scale: 1 1; flex-direction: column; -unity-text-align: lower-left; white-space: pre; rotate: 0; height: 30%;" />
         </ui:VisualElement>
         <ui:VisualElement name="AbilitySlotsR" style="flex-grow: 1; width: 15%; height: 15%; right: 30%; position: absolute; top: auto; bottom: 0%; flex-wrap: wrap; flex-direction: column-reverse;" />
         <ui:VisualElement name="MinionBarSlots" style="flex-grow: 1; bottom: 0; right: 0%; width: 25%; height: 20%; position: absolute; flex-wrap: wrap; align-content: flex-end; flex-direction: column-reverse;" />
