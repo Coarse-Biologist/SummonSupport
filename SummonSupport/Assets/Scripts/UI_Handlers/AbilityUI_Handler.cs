@@ -60,25 +60,23 @@ public class AbilityUI_Handler : MonoBehaviour
         VisualElement rightSlots = root.Q<VisualElement>("AbilitySlotsR");
 
 
-        ProgressBarL1 = leftSlots.Q<ProgressBar>("Ability1");
-        ProgressBarL2 = leftSlots.Q<ProgressBar>("Ability2");
-        ProgressBarL3 = leftSlots.Q<ProgressBar>("Ability3");
-        ProgressBarL4 = leftSlots.Q<ProgressBar>("Ability4");
-        ProgressBarL5 = leftSlots.Q<ProgressBar>("Ability5");
-        ProgressBarL6 = leftSlots.Q<ProgressBar>("Ability6");
+        ProgressBarL1 = leftSlots.Q<ProgressBar>("AbilitySlotL1");
+        ProgressBarL2 = leftSlots.Q<ProgressBar>("AbilitySlotL2");
+        ProgressBarL3 = leftSlots.Q<ProgressBar>("AbilitySlotL3");
+        ProgressBarL4 = leftSlots.Q<ProgressBar>("AbilitySlotL4");
+        ProgressBarL5 = leftSlots.Q<ProgressBar>("AbilitySlotL5");
+        ProgressBarL6 = leftSlots.Q<ProgressBar>("AbilitySlotL6");
     }
 
     private void InitializeProgressBarDict()
     {
-        ProgressBarDict.Add(1, ProgressBarL1);
-        ProgressBarDict.Add(2, ProgressBarL2);
-        ProgressBarDict.Add(3, ProgressBarL3);
-        ProgressBarDict.Add(4, ProgressBarL4);
-        ProgressBarDict.Add(5, ProgressBarL5);
-        ProgressBarDict.Add(6, ProgressBarL6);
-
+        ProgressBarDict.Add(0, ProgressBarL1);
+        ProgressBarDict.Add(1, ProgressBarL2);
+        ProgressBarDict.Add(2, ProgressBarL3);
+        ProgressBarDict.Add(3, ProgressBarL4);
+        ProgressBarDict.Add(4, ProgressBarL5);
+        ProgressBarDict.Add(5, ProgressBarL6);
     }
-
 
 
     private void Setup()
@@ -91,6 +89,8 @@ public class AbilityUI_Handler : MonoBehaviour
     #region Ability slot changed invoke response
     public void SetAbilitySlot(int slotIndex, Ability ability)
     {
+        Logging.Info($"slotIndex = {slotIndex}. Ability = {ability.name}.");
+
         if (slotIndex <= abilityProgressBarDict.Keys.Count)
             abilityProgressBarDict[slotIndex] = ability;
         SetAbilityIcon(slotIndex, ability);
@@ -100,8 +100,8 @@ public class AbilityUI_Handler : MonoBehaviour
     {
         if (ProgressBarDict.TryGetValue(slotIndex, out ProgressBar bar))
         {
-            VisualElement background = bar.Q("unity-progress-bar__background");
-            background.style.backgroundImage = new StyleBackground(ability.Icon);
+            //VisualElement background = bar.Q<VisualElement>("unity-progress-bar__background");
+            bar.style.backgroundImage = new StyleBackground(ability.Icon);
         }
     }
 
