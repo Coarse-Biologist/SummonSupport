@@ -85,6 +85,7 @@ public class PlayerUIHandler : MonoBehaviour
         HPDict.TryAdd(livingBeing, minionHP);
         minionHP.title = $"{livingBeing.Name} HP: {hp}";
         minionHP.highValue = hp;
+        if (minionHPBars == null) Logging.Error("minion HP visual element doesnt exist");
         minionHPBars.Add(minionHP);
     }
     public void RemoveMinionHP(LivingBeing livingBeing)
