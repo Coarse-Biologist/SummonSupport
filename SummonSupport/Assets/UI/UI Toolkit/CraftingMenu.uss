@@ -82,13 +82,15 @@
     transition-timing-function: ease-in-out;
 }
 
-AbilityProgressbar {
+.AbilityProgressbar {
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
     border-bottom-right-radius: 10px;
     border-bottom-left-radius: 10px;
     background-size: 10% 10%;
     -unity-text-align: upper-left;
-    height: 10%;
-    width: 60%;
+    height: 40%;
+    width: 50%;
+    scale: 0.7 3;
+    rotate: -90deg;
 }

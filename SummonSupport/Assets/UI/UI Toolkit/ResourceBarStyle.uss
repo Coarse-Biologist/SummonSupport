@@ -1,5 +1,4 @@
 .healthbar {
-    
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
     border-bottom-right-radius: 10px;
@@ -16,6 +15,7 @@
 }
 
 .powerbar {
+    color: rgb(21, 0, 255);
 }
 
 .healthbar .unity-progress-bar__background {
@@ -30,43 +30,33 @@
     background-color: rgb(131, 0, 0);
 }
 
-.powerbar {
-    
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
-    border-bottom-right-radius: 10px;
-    border-bottom-left-radius: 10px;
-    border-color: rgb(131, 0, 0);
-    border-style: solid;
-    color: white;
-    font-size: 14px;
-    unity-font-style: bold;
-}
-
-.powerbar {
-}
-
 .powerbar .unity-progress-bar__background {
     background-color: rgb(0, 0, 0);
     border-radius: 20px;
     border-width: 1px;
     border-color: rgb(0, 0, 0);
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+.powerbar .unity-progress-bar__text {
+    color: rgb(0, 121, 251);
 }
 
 .powerbar .unity-progress-bar__progress {
-    background-color: rgba(171, 0, 0, 0.58);
+    background-color: rgba(57, 0, 171, 0.73);
 }
-.AbilityProgressbar .unity-progress-bar__progress {
-    background-color: rgba(91, 0, 0, 0.36);
-        border-radius: 20px;
 
+.AbilityProgressbar .unity-progress-bar__progress {
+    background-color: rgb(134, 0, 0);
+    border-radius: 20px;
 }
+
+
 .AbilityProgressbar .unity-progress-bar__background {
     background-color: rgb(0, 0, 0);
     border-radius: 20px;
     border-width: 1px;
     border-color: rgb(0, 0, 0);
 }
-
-
-
