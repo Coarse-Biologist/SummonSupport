@@ -1,5 +1,6 @@
 using UnityEngine.InputSystem;
 using System.Collections.Generic;
+using SummonSupportEvents;
 
 public class PlayerAbilityHandler : AbilityHandler
 {
@@ -14,6 +15,16 @@ public class PlayerAbilityHandler : AbilityHandler
         { "Ability5", 4 },
         { "Ability6", 5 },
     };
+
+    public void UpdateAbilities()
+    {
+        int index = 0;
+        foreach(Ability ability in abilities)
+        {
+            EventDeclarer.SlotChanged.Invoke(index, ability);
+            index++;
+        }
+    }
 
     private new void Awake()
     {
