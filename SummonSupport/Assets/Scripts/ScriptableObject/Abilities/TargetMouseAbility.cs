@@ -57,11 +57,6 @@ public class TargetMouseAbility : Ability
                             statusEffect.ApplyStatusEffect(target.gameObject, mousePos);
                     }
                     break;
-                // case OnEventDo.CC:
-                    // AI_CC_State ccState = target.GetComponent<AI_CC_State>();
-                    // Logging.Info($"A CC ability has hit the target {target.name}");
-                    // if(ccState != null) ccState.RecieveCC(StatusEffectType.KnockInTheAir, user);
-                    // break;
             }
         }
     }

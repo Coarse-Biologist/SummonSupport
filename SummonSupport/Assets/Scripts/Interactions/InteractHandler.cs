@@ -38,7 +38,6 @@ public class InteractHandler : MonoBehaviour
         {
         if (Input.GetKeyDown(KeyCode.Tab) && mostRecentInteractable != null)
         {
-            Logging.Info("tab pressed");
             mostRecentInteractable.Interact(this.gameObject);
         }
         }

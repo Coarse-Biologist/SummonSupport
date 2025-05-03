@@ -95,7 +95,7 @@ public class PlayerUIHandler : MonoBehaviour
             HPDict.Remove(livingBeing);
             minionHPBars.Remove(minionHP);
         }
-        else Logging.Error("You are trying to delete a none inion as though it were a minion");
+
     }
 
     private ProgressBar GetLivingBeingHPBar(LivingBeing minion)

@@ -36,24 +36,17 @@ public class Projectile : MonoBehaviour
     void OnTriggerEnter2D(Collider2D other)
     {
         if (other.gameObject.CompareTag("Projectile") || ignoreGameObjects.Contains(other.gameObject))
-            {
-                Logging.Verbose($"{ability.Name} ignores {other.name}");
                 return;
-            }
+            
         else if (other.gameObject.GetComponent<LivingBeing>() != null)
         {
             foreach(OnEventDo onHitDo in ability.ListOnHitDo)
-                {
-                    Logging.Verbose($"apply {onHitDo} to {other.name}");
                     HandleOnEventDo(onHitDo, other);
-                }
             HandleOnHitBehaviour(other);
         }
         else
-        {
-            Logging.Verbose($"{ability.Name} hit {other.name} without any effect");
             DestroyProjectile();
-        }
+        
     }
 
     void HandleOnHitBehaviour(Collider2D other)
@@ -110,31 +103,25 @@ public class Projectile : MonoBehaviour
     }
     void HandleOnEventDo(OnEventDo onEvent, Collider2D other) //TODO: This belongs in its own class!! Other Ability types will definitly use this!
     {
-        Logging.Verbose($"HandleOnEventDo {onEvent} with {other.name}");
         switch (onEvent)
         {
             case OnEventDo.Nothing:
-                Logging.Verbose("Do nothing");    
                 break;
             case OnEventDo.Ability:
-                Logging.Verbose("Do Ability");    
                 break;
             case OnEventDo.Damage:
-                Logging.Verbose($"Do Damage to {other.gameObject.name}");
                 if (ability.Attribute != AttributeType.None && ability.Value != 0)
                 {
                     
                 }
                 break;
             case OnEventDo.Heal:
-                Logging.Verbose($"Heal {other.gameObject.name}");
                 break;
             case OnEventDo.StatusEffect:
                 if (ability.StatusEffects != null)
                 {
                     foreach (StatusEffect statusEffect in ability.StatusEffects)
                     {
-                        Logging.Verbose($"Apply {statusEffect.Name} to {other.gameObject.name}");    
                         statusEffect.ApplyStatusEffect(other.gameObject, gameObject.transform.position);
                     }
                 }

@@ -26,16 +26,12 @@ public static class CommandMinion
 
             if (interactHits.Length > 0)
             {
-                Logging.Info("Sending minion to interact");
-
                 foreach (Collider2D collider in interactHits)
                 {
                     I_Interactable interactable = collider.gameObject.GetComponent<I_Interactable>();
                     if (interactable != null)
-                    {
-                        Logging.Info("There was indeed an interactable for the minion to interact with");
                         SendMinionToInteract(loc);
-                    }
+                    
                 }
             }
             else

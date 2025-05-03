@@ -27,10 +27,8 @@ public class AIObedienceState : AIState
 
     public override AIState RunCurrentState()
     {
-        //Logging.Info($"Current state = obedience. command = {currentCommand}. state  = {state}");
         currentCommand = minionStats.CurrentCommand;
         States state = ObeyCommand(currentCommand);
-        //Logging.Info($"Current state = {state}. command = {currentCommand}");
 
         if (state == States.Obedience) return this;
         if (state == States.Peace) return peaceState;
@@ -41,32 +39,25 @@ public class AIObedienceState : AIState
 
     private States ObeyCommand(MinionCommands command)
     {
-        //Logging.Info($"Trying to obey command ({command})");
         States state = States.Obedience;
         if (command == MinionCommands.GoTo)
         {
             state = GoToLocation();
-            //Logging.Info($"REturning {state} after following the command {command}");
             return state;
         }
 
         if (command == MinionCommands.FocusTarget && commandTarget != null)
         {
-            //Logging.Info($"Command is to focus a target and command target is not null");
             chaseState.SetTargetEntity(commandTarget);
             state = GoToLocation();
-            //minionStats.SetCommand(MinionCommands.None);
-            //commandTarget = null;
         }
         else
         {
-            //Logging.Info($"Command {command} and command target {commandTarget}");
             currentCommand = MinionCommands.None;
             minionStats.SetCommand(MinionCommands.None);
 
             return States.Peace;
         }
-        //Logging.Info($"Returning state : {state}");
         return state;
 
 
@@ -82,22 +73,18 @@ public class AIObedienceState : AIState
 
     private States GoToLocation()
     {
-        //Logging.Info($"Going to location {commandLoc}!!!!!");
         Vector2 currentLoc = new Vector2(transform.position.x, transform.position.y);
         if (currentCommand == MinionCommands.FocusTarget) commandLoc = commandTarget.transform.position;
         Vector2 direction = commandLoc - currentLoc;
         if (direction.sqrMagnitude > 4)
         {
-            //Logging.Info($"Squaremagnitude of distance to target is still pretty far away i'll keep moving");
             rb.linearVelocity = direction * stateHandler.livingBeing.Speed;
             return States.Obedience;
         }
         else
         {
-            //Logging.Info($"Square magnitude of distance to target is Close enough! ");
             minionStats.SetCommand(MinionCommands.None);
             if (currentCommand == MinionCommands.GoTo) chaseState.SetTargetEntity(null); // is this good?
-            //commandLoc = new Vector2(0, 0);
             return States.Chase; // Is this good?...
         }
 

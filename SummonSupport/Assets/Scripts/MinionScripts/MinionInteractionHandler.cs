@@ -11,8 +11,6 @@ public class MinionInteractionHandler : MonoBehaviour
 
     public void OnTriggerEnter2D(Collider2D collision)
     {
-        Logging.Info($"Entered trigger of {collision.gameObject.name}");
-
         if (CommandedToInteract)
         {
             I_Interactable interactInterfaceInstance = collision.gameObject.GetComponent<I_Interactable>();

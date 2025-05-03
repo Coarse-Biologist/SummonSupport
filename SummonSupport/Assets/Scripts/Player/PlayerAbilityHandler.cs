@@ -59,11 +59,8 @@ public class PlayerAbilityHandler : AbilityHandler
     }
     private void OnAbility(InputAction.CallbackContext context)
     {
-        Logging.Verbose($"{gameObject.name} used ability");
         if (inputActionToIndex.TryGetValue(context.action.name, out int index) && index < abilities.Count)
-        {
-            Logging.Verbose($"{gameObject.name} used ability with index: {index}");
             CastAbility(index);
-        }
+        
     }
 }

@@ -25,10 +25,8 @@ public class DoorHandler : MonoBehaviour, I_Interactable
 
     public void Interact(GameObject interactor)
     {
-        Logging.Info("Interacting with door");
         LivingBeing livingBeing = interactor.GetComponent<LivingBeing>();
         if (livingBeing != null && HasElementalRequisite(livingBeing)) ToggleOpenDoor();
-        else Logging.Info($"living being = {livingBeing}");
     }
 
     public void ShowInteractionOption()
@@ -44,14 +42,11 @@ public class DoorHandler : MonoBehaviour, I_Interactable
     }
     private void ToggleOpenDoor()
     {
-        Logging.Info("Toggling open door");
-
         if (ready)
         {
             if (!Open)
             {
                 NotReadyToInteract();
-                Logging.Info("Door is now open");
                 Open = true;
                 minionsSpriteRenderer.sprite = OpenSprite;
                 Invoke("ReadyInteract", readyCooldownTime);
@@ -59,7 +54,6 @@ public class DoorHandler : MonoBehaviour, I_Interactable
             else
             {
                 NotReadyToInteract();
-                Logging.Info("Door is now closed");
                 Open = false;
                 minionsSpriteRenderer.sprite = ClosedSprite;
                 Invoke("ReadyInteract", readyCooldownTime);

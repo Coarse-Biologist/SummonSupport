@@ -186,7 +186,6 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     }
     private void ShowUpgradableMinions()
     {
-        Logging.Info($"Number of active minions = {alchemyHandler.activeMinions.Count}");
         foreach (GameObject minion in alchemyHandler.activeMinions)
         {
             Button minionButton = AddButtonToPanel($"Upgrade {minion.GetComponent<LivingBeing>().Name}", alchemyInventory, 45, 5);
@@ -310,11 +309,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
         if (selectedIngredients.TryGetValue(ingredient, out int amountSelected)) // if the key exists
         {
             if (amountSelected < AlchemyInventory.ingredients[ingredient]) //if not already equal or more have been selected
-            {
                 selectedIngredients[ingredient]++;
-                Logging.Info($"{ingredient} is being added to the selectedIngredietns list. Currrent value = {selectedIngredients[ingredient]}");
-            }
-            Logging.Info($"the current amount selected({amountSelected}) is already equal to the total you have available");
         }
         else selectedIngredients.Add(ingredient, 1);
     }

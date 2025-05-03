@@ -16,16 +16,5 @@ namespace SummonSupportEvents
         public static UnityEvent<int, Ability> SlotChanged = new();
         public static UnityEvent<int> AbilityUsed = new(); // int should be the index of the ability
 
-
-
-
-        //static EventDeclarer()
-        //{
-        //
-        //}
-        //public static void Initialize()
-        //{
-        //    Logging.Info("Event declarer is initialized");
-        //}
     }
 }

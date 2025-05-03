@@ -65,9 +65,7 @@ public static class AlchemyInventory
     }
     public static void AlterIngredientNum(AlchemyLoot ingredient, int amount)
     {
-        Logging.Info($"You have gained {amount} {ingredient}");
         ingredients[ingredient] += amount;
-
     }
     public static void ExpendIngredients(Dictionary<AlchemyLoot, int> usedIngredients)
     {
@@ -80,7 +78,6 @@ public static class AlchemyInventory
     {
         if (!KnownTools.Contains(tool))
         {
-            Logging.Info($"{tool} gained!");
             KnownTools.Add(tool);
         }
         else Logging.Error($"The tool {tool} is already known");

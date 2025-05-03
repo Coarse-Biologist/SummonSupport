@@ -27,7 +27,6 @@ public class TurretHandler : AbilityHandler
             if (!hasTarget)
             {
                 hasTarget = true;
-                Logging.Verbose("Starts shooting " + other.gameObject.name);
                 StartCoroutine(ShootLoop());
             }
 
@@ -42,7 +41,6 @@ public class TurretHandler : AbilityHandler
             if (hasTarget && listTargets.Count <= 0)
                 {
                     hasTarget = false;
-                    Logging.Verbose("Stops shooting" + other.gameObject.name);
                     StopCoroutine(ShootLoop());
                 }
         }

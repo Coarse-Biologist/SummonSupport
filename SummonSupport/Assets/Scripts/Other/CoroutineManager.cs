@@ -24,7 +24,6 @@ public class CoroutineManager : MonoBehaviour
             Logging.Warning("Routine is null!");
             return null;
         }
-        Logging.Info("Starting coroutine: " + routine);
         return StartCoroutine(routine);
     }
 }

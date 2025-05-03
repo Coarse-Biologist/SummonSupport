@@ -71,7 +71,6 @@ public class StatusEffect : ScriptableObject
                 break;
             case StatusEffectType.KnockInTheAir:
                 AI_CC_State ccState = livingBeing.gameObject.GetComponent<AI_CC_State>();
-                Logging.Info($"A CC ability has hit the target {livingBeing.Name}");
                 if(ccState != null) ccState.RecieveCC(StatusEffectType.KnockInTheAir, sourcePosition);
                 break;
         }
@@ -123,7 +122,6 @@ public class StatusEffect : ScriptableObject
 
     private void AttributeChange(LivingBeing target, int value)
     {
-        Logging.Info("Attribute: " + Attribute + "\nValue: " + Value);
         target.ChangeAttribute(Attribute, value);
     }
 

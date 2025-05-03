@@ -51,7 +51,6 @@ public class AIStateHandler : MonoBehaviour
         if (minionStats == null || minionStats.CurrentCommand == MinionCommands.None)
         {
             AIState nextState = currentState?.RunCurrentState();
-            //Debug.Log($"current state = {currentState}. next state = {nextState}");
             if (nextState != null)
             {
                 SwitchToNextState(nextState);
@@ -60,7 +59,6 @@ public class AIStateHandler : MonoBehaviour
         }
         else
         {
-            //Logging.Info($"Minion has a command to follow");
             SwitchToNextState(obedienceState);
             AIState nextState = obedienceState.RunCurrentState();
             if (nextState != null)

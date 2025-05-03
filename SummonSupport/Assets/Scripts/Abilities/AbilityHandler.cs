@@ -71,7 +71,6 @@ public class AbilityHandler : MonoBehaviour
     void HandleProjectile(ProjectileAbility ability)
     {
         ability.Activate(gameObject, abilitySpawn, abilityDirection.transform);
-        Logging.Verbose($"{gameObject.name} fires ability {ability.Name}");
     }
 
     void HandlePointAndClick(TargetMouseAbility ability)
@@ -90,13 +89,11 @@ public class AbilityHandler : MonoBehaviour
         Ability ability = abilities[abilityIndex];
         try
         {
-            Logging.Info("set cooldown for " + ability.Cooldown + " secods");
             abilitiesOnCooldown[abilityIndex] = true;
             yield return new WaitForSeconds(ability.Cooldown);
         }
         finally
         {
-            Logging.Verbose("cooldown over");
             abilitiesOnCooldown[abilityIndex] = false; 
         }
     }

@@ -22,7 +22,6 @@ foreach(EquipmentSlot slot in allItemSlots)
 public static void AddItemToInventory(Item_SO item)
 {
     if(item != null) ItemInventory.Add(item);
-    else Logging.Error("You tried to loot a null object. Clever?");
 }
 
 public static void EquipItem(Item_SO item)

@@ -80,25 +80,6 @@ public abstract class LivingBeing : MonoBehaviour
         InitializeColorDict();
         healthbarInterface = GetComponent<I_HealthBar>();
     }
-
-
-    void Start()
-    {
-        //healthbarInterface = GetComponent<I_HealthBar>();
-        //if (healthbarInterface == null) Logging.Info("health interface not found in start");
-        //else Logging.Info("healthbar interface found in start");
-        //
-        //if (healthbarInterface != null)
-        //{
-        //    Logging.Info("health bar interface  exists!!! Well done, start function!");
-        //    healthbarInterface.SetHealthBarValue(GetAttribute(AttributeType.CurrentHitpoints));
-        //    healthbarInterface.SetHealthBarMaxValue(GetAttribute(AttributeType.MaxHitpoints));
-        //}
-        //else Logging.Info("health bar interface doesnt exist!!! Good try, start function");
-
-    }
-
-
     #region Stat Upgrades
 
     public void ChangeMaxHP(float amount)
