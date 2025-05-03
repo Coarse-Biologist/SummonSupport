@@ -2,7 +2,7 @@
     <Style src="project://database/Assets/UI/UI%20Toolkit/CraftingMenu.uss?fileID=7433441132597879392&amp;guid=b25c9c022efd4f34d8e2c9c44bddba39&amp;type=3#CraftingMenu" />
     <Style src="project://database/Assets/UI/UI%20Toolkit/ResourceBarStyle.uss?fileID=7433441132597879392&amp;guid=9cc08f7b705c6694199f479c94b1c2b5&amp;type=3#ResourceBarStyle" />
     <ui:VisualElement name="MainUI" picking-mode="Ignore" enabled="true" style="flex-grow: 1; bottom: 0%; right: 0; top: 0; left: 0; opacity: 1;">
-        <ui:VisualElement name="AbilitySlotsL" style="flex-grow: 1; width: 35%; height: 15%; right: 0%; position: absolute; top: auto; bottom: 0%; flex-wrap: wrap; left: 32%; flex-direction: column-reverse; white-space: normal;">
+        <ui:VisualElement name="AbilitySlotsL" style="flex-grow: 1; width: 35%; height: 15%; right: 0%; position: absolute; top: auto; bottom: 0%; flex-wrap: wrap; left: 32%; flex-direction: column; white-space: normal;">
             <ui:ProgressBar value="45" title="1" name="AbilitySlotL1" class="AbilityProgressbar" style="color: rgb(255, 255, 255); scale: 1 1; flex-direction: column; -unity-text-align: lower-left; white-space: pre; rotate: 0; height: 30%;" />
             <ui:ProgressBar value="45" title="2" name="AbilitySlotL2" class="AbilityProgressbar" style="color: rgb(255, 255, 255); scale: 1 1; flex-direction: column; -unity-text-align: lower-left; white-space: pre; rotate: 0; height: 30%;" />
             <ui:ProgressBar value="45" title="3" name="AbilitySlotL3" class="AbilityProgressbar" style="color: rgb(255, 255, 255); scale: 1 1; flex-direction: column; -unity-text-align: lower-left; white-space: pre; rotate: 0; height: 30%;" />
