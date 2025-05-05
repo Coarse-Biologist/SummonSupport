@@ -11,7 +11,7 @@
     border-style: solid;
     color: white;
     font-size: 14px;
-    unity-font-style: bold;
+    font-style: bold;
 }
 
 .powerbar {
@@ -23,7 +23,6 @@
     border-radius: 4px;
     border-width: 1px;
     border-color: rgb(0, 0, 0);
-    border-style: solid;
 }
 
 .healthbar .unity-progress-bar__progress {
@@ -50,13 +49,13 @@
 
 .AbilityProgressbar .unity-progress-bar__progress {
     background-color: rgb(134, 0, 0);
-    border-radius: 20px;
+    border-radius: 4px;
 }
 
 
 .AbilityProgressbar .unity-progress-bar__background {
     background-color: rgb(0, 0, 0);
-    border-radius: 20px;
+    border-radius: 4px;
     border-width: 1px;
     border-color: rgb(0, 0, 0);
 }

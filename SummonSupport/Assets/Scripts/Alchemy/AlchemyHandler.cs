@@ -6,6 +6,7 @@ using UnityEngine.Events;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using System;
+using Unity.VisualScripting.Antlr3.Runtime.Misc;
 
 #endregion
 public class AlchemyHandler : MonoBehaviour
@@ -132,8 +133,26 @@ public class AlchemyHandler : MonoBehaviour
             if (kvp.Key.ToString().Contains("Ether")) HandleEtherUse(stats, kvp.Key, elementList);
         }
         stats.RestoreResources();
-        stats.AlterColorByAffinity();
+        AlterMinionByElement(minion);
+
     }
+    private void AlterMinionByElement(GameObject minion)
+    {
+        LivingBeing stats = minion.GetComponent<LivingBeing>();
+        MinionSpriteControl spriteControl = minion.GetComponentInChildren<MinionSpriteControl>();
+        Element strongestElement = stats.Affinities.OrderByDescending(a => a.Value.Get()).First().Key;
+        string nameModifier = "";
+
+        if (stats.Affinities[strongestElement].Get() > 50)
+        {
+            spriteControl.AlterColorByAffinity(strongestElement);
+            nameModifier = strongestElement.ToString();
+            stats.SetName(nameModifier + "Elemental");
+        }
+        else stats.SetName("Flesh Atronach");
+
+    }
+
 
     #endregion
 

@@ -252,6 +252,7 @@ GameObject:
   m_Component:
   - component: {fileID: 717634867459255289}
   - component: {fileID: 4755851978388305148}
+  - component: {fileID: 3619319668240375598}
   m_Layer: 7
   m_Name: EnemySprite
   m_TagString: Minion
@@ -330,6 +331,18 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &3619319668240375598
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1502490013454894205}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f6731d507dfb4641949539451f4bb76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &3601821627178992539
 PrefabInstance:
   m_ObjectHideFlags: 0
