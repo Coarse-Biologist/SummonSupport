@@ -132,6 +132,12 @@ PrefabInstance:
       propertyPath: uiDoc
       value: 
       objectReference: {fileID: 1708952193}
+    - target: {fileID: 2864372725038760086, guid: e4c43cb75dda4d3458057b35ce607d87,
+        type: 3}
+      propertyPath: UIPrefabAssets
+      value: 
+      objectReference: {fileID: 9197481963319205126, guid: c15b1de4ff1c07b46b4eb75eb86be33b,
+        type: 3}
     - target: {fileID: 3599053616304235129, guid: e4c43cb75dda4d3458057b35ce607d87,
         type: 3}
       propertyPath: m_Name

@@ -67,6 +67,8 @@ public abstract class LivingBeing : MonoBehaviour
         InitializeAffinityDict();
         healthbarInterface = GetComponent<I_HealthBar>();
     }
+
+
     #region Stat Upgrades
 
     public void ChangeMaxHP(float amount)
@@ -76,7 +78,6 @@ public abstract class LivingBeing : MonoBehaviour
     public void ChangeMaxPower(float amount)
     {
         MaxPower += amount;
-        Logging.Info($"power increased by {amount}");
         GetComponent<Rigidbody2D>().linearVelocity = new Vector2(3, 3);
     }
     public void Gainmass(float massGain)
@@ -111,7 +112,6 @@ public abstract class LivingBeing : MonoBehaviour
     #endregion
     public void GainAffinity(Element element, float amount)
     {
-        Logging.Info($"gain element function has been called");
         if (Affinities.TryGetValue(element, out (Func<float> Get, Action<float> Set) func))
         {
             Affinities[element].Set(amount + Affinities[element].Get());
