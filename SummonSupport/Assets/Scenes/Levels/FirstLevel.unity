@@ -127,11 +127,21 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2864372725038760086, guid: e4c43cb75dda4d3458057b35ce607d87,
+        type: 3}
+      propertyPath: uiDoc
+      value: 
+      objectReference: {fileID: 1708952193}
     - target: {fileID: 3599053616304235129, guid: e4c43cb75dda4d3458057b35ce607d87,
         type: 3}
       propertyPath: m_Name
       value: WitchDoctor
       objectReference: {fileID: 0}
+    - target: {fileID: 6899368701623627617, guid: e4c43cb75dda4d3458057b35ce607d87,
+        type: 3}
+      propertyPath: uiDoc
+      value: 
+      objectReference: {fileID: 1708952193}
     - target: {fileID: 7890902561961024021, guid: e4c43cb75dda4d3458057b35ce607d87,
         type: 3}
       propertyPath: m_Pivot.x
