@@ -141,11 +141,16 @@ public class AlchemyHandler : MonoBehaviour
         LivingBeing stats = minion.GetComponent<LivingBeing>();
         MinionSpriteControl spriteControl = minion.GetComponentInChildren<MinionSpriteControl>();
         Element strongestElement = stats.Affinities.OrderByDescending(a => a.Value.Get()).First().Key;
+        string nameModifier = "";
+
         if (stats.Affinities[strongestElement].Get() > 50)
+        {
             spriteControl.AlterColorByAffinity(strongestElement);
-        string str = strongestElement.ToString();
-        string nameBase = "Elemental";
-        stats.SetName(strongestElement.ToString() + nameBase);
+            nameModifier = strongestElement.ToString();
+            stats.SetName(nameModifier + "Elemental");
+        }
+        else stats.SetName("Flesh Atronach");
+
     }
 
 

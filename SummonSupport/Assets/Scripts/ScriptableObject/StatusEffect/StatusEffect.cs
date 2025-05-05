@@ -71,7 +71,7 @@ public class StatusEffect : ScriptableObject
                 break;
             case StatusEffectType.KnockInTheAir:
                 AI_CC_State ccState = livingBeing.gameObject.GetComponent<AI_CC_State>();
-                if(ccState != null) ccState.RecieveCC(StatusEffectType.KnockInTheAir, sourcePosition);
+                if (ccState != null) ccState.RecieveCC(StatusEffectType.KnockInTheAir, sourcePosition);
                 break;
         }
     }
@@ -89,7 +89,7 @@ public class StatusEffect : ScriptableObject
         }
         finally
         {
-            if (IsExisting(target)) 
+            if (IsExisting(target))
             {
                 action(target, -value);
                 target.activeStatusEffects.Remove(Name);
@@ -105,7 +105,7 @@ public class StatusEffect : ScriptableObject
         {
             while (instance.ticksDone < totalTicks)
             {
-                if (!IsExisting(target)) 
+                if (!IsExisting(target))
                     yield break; // In case the target died while this was still running. If target died => GameObject does not longer exist.
 
                 action(target, value);

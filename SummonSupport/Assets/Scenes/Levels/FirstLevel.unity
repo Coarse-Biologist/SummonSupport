@@ -71347,6 +71347,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1724141746}
   - component: {fileID: 1724141748}
+  - component: {fileID: 1724141749}
   m_Layer: 0
   m_Name: LevelManagerObj
   m_TagString: Untagged
@@ -71383,6 +71384,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interactCanvas: {fileID: 6566505710706975212, guid: b63aca48910e05045b02d555dea0ef42,
     type: 3}
+--- !u!114 &1724141749
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1724141744}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c4ceec57126fd54bab90c6f7c3758fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2088891798
 GameObject:
   m_ObjectHideFlags: 0
