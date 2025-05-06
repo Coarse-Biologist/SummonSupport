@@ -20,7 +20,7 @@ public class AIStateHandler : MonoBehaviour
     [SerializeField] public AIState obedienceState { private set; get; }
     [SerializeField] public LivingBeing livingBeing { private set; get; }
     [SerializeField] public MinionStats minionStats { private set; get; }
-    [SerializeField] public GameObject player { protected set; get; }
+    public GameObject player { protected set; get; }
 
     public Vector2 lastSeenLoc;
 
@@ -40,6 +40,10 @@ public class AIStateHandler : MonoBehaviour
         minionStats = GetComponent<MinionStats>();
         ccState = GetComponent<AI_CC_State>();
         InvokeRepeating("RunStateMachine", 0f, .1f);
+    }
+    void Start()
+    {
+        player = PlayerStats.Instance.gameObject;
     }
 
 

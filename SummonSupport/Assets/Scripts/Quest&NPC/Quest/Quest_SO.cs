@@ -23,7 +23,7 @@ namespace Quest
         [SerializeField] public int GoldReward = 1;
         [SerializeField] public int XP_Reward = 1;
         [SerializeField] public int KnowledgeReward = 0;
-        [SerializeField] public int ALchemyLootNum;
+        [SerializeField] public int AlchemyLootNum;
         [SerializeField] public List<Element> BenefittedElements; // in which elements is knowledge given?
 
         [Header("Alchemy values")]

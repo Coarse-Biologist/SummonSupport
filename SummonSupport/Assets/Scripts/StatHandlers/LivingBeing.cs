@@ -60,7 +60,7 @@ public abstract class LivingBeing : MonoBehaviour
     [SerializeField] public I_HealthBar healthbarInterface;
 
 
-    protected void Awake()
+    protected virtual void Awake()
     {
         GetComponent<Rigidbody2D>().mass = Mass;
         InitializeAttributeDict();

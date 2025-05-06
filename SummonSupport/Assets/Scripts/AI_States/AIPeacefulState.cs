@@ -15,7 +15,7 @@ public class AIPeacefulState : AIState
 
     void Start()
     {
-        player = GameObject.FindGameObjectWithTag("Player");
+        player = PlayerStats.Instance.gameObject;
         stateHandler = gameObject.GetComponent<AIStateHandler>();
         chaseState = gameObject.GetComponent<AIChaseState>();
         rb = GetComponent<Rigidbody2D>();

@@ -36,3 +36,15 @@ MonoBehaviour:
   - Key: Howdy.
     Value: Would you like to buy some of my stuff?
     result: 3
+  unlockableDialogueNPC:
+  - Key: Well done, you killed the goblin king!
+    Value:
+    - Give me my reward
+    - I couldnt have done it without my minion
+    - it wasnt easy
+  unlockableDialoguePlayer:
+  - Key: Howdy.
+    Value: Well done, you killed the goblin king!
+    result: 3
+  questToUnlockDialogue: {fileID: 11400000, guid: dc21ef7a537ac6a4f85a2b854c97365e,
+    type: 2}

@@ -7,30 +7,40 @@ using SummonSupportEvents;
 
 public class QuestHandler : MonoBehaviour
 {
+    public static QuestHandler Instance;
     public List<Quest_SO> CompletedQuests = new List<Quest_SO>();
     public List<BoolAccomplishments> CompletedBoolQuests;
     public List<Quest_SO> ActiveQuests = new List<Quest_SO>();
     public Dictionary<RepeatableAccomplishments, int> QuestRepTracker = new Dictionary<RepeatableAccomplishments, int>();
-    [SerializeField] public LivingBeing playerStats;
+    private PlayerStats playerStats;
 
     void Awake()
     {
+        Instance = this;
         QuestRepTracker.Add(RepeatableAccomplishments.DefeatEnemies, 0);
+    }
+    void Start()
+    {
+        playerStats = PlayerStats.Instance;
     }
 
     void OnEnable()
     {
         EventDeclarer.RepeatableQuestCompleted.AddListener(IncrementIntQuest);
         EventDeclarer.EnemyDefeated.AddListener(IncrementEnemyDefeated);
+        EventDeclarer.QuestStarted.AddListener(AddActiveQuest);
+        EventDeclarer.QuestCompleted.AddListener(HandleQuestCompleted);
+
+
     }
     void OnDisable()
     {
         EventDeclarer.RepeatableQuestCompleted.RemoveListener(IncrementIntQuest);
         EventDeclarer.EnemyDefeated.RemoveListener(IncrementEnemyDefeated);
+        EventDeclarer.QuestStarted.RemoveListener(AddActiveQuest);
+        EventDeclarer.QuestCompleted.RemoveListener(HandleQuestCompleted);
 
     }
-
-
 
     public bool CheckQuestCompletion(Quest_SO activeQuest)
     {
@@ -44,10 +54,17 @@ public class QuestHandler : MonoBehaviour
         }
         return complete;
     }
+
+    public void AddActiveQuest(Quest_SO quest)
+    {
+        if (!ActiveQuests.Contains(quest)) ActiveQuests.Add(quest);
+    }
+
     public void HandleQuestCompleted(Quest_SO quest)
     {
         if (ActiveQuests.Contains(quest)) ActiveQuests.Remove(quest);
         if (!CompletedQuests.Contains(quest)) CompletedQuests.Add(quest);
+        //EventDeclarer.QuestCompleted?.Invoke(quest);
         GrantCompletionRewards(quest);
     }
     public void GrantCompletionRewards(Quest_SO quest)
@@ -57,7 +74,7 @@ public class QuestHandler : MonoBehaviour
             AlchemyInventory.IncemementElementalKnowledge(quest.BenefittedElements[i], quest.KnowledgeReward);
         }
         AlchemyInventory.GainTool(quest.AlchemyToolReward);
-        AlchemyInventory.AlterIngredientNum(quest.AlchemyLootReward, quest.ALchemyLootNum);
+        AlchemyInventory.AlterIngredientNum(quest.AlchemyLootReward, quest.AlchemyLootNum);
     }
     public void IncrementIntQuest(RepeatableAccomplishments intQuest)
     {

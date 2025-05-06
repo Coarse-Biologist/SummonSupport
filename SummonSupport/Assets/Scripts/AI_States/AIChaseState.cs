@@ -21,7 +21,8 @@ public class AIChaseState : AIState
         obedienceState = gameObject.GetComponent<AIObedienceState>();
 
         rb = gameObject.GetComponent<Rigidbody2D>();
-        statScript = stateHandler.livingBeing;
+        statScript = PlayerStats.Instance;
+
     }
 
     public void SetTargetEntity(GameObject target)
