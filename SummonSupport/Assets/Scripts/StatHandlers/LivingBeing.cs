@@ -1,10 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System;
 using UnityEngine;
 using SummonSupportEvents;
-using Unity.Entities.UniversalDelegates;
 public abstract class LivingBeing : MonoBehaviour
 {
     #region Declarations
@@ -57,29 +55,20 @@ public abstract class LivingBeing : MonoBehaviour
 
     #endregion Declarations
 
-    #region Color control
-    public Dictionary<RGBAEnum, (Func<float> Get, Action<float> Set)> ColorDict { private set; get; } = new();
-    private float redness;
-    private float greeness;
-    private float blueness;
-    private float alphaness;
-    //private float[] rgbaValues = new float[4] { redness, greeness, blueness, alphaness };
 
-    private SpriteRenderer spriteRenderer;
 
     [SerializeField] public I_HealthBar healthbarInterface;
 
-    #endregion
 
-    protected void Awake()
+    protected virtual void Awake()
     {
         GetComponent<Rigidbody2D>().mass = Mass;
-        spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         InitializeAttributeDict();
         InitializeAffinityDict();
-        InitializeColorDict();
         healthbarInterface = GetComponent<I_HealthBar>();
     }
+
+
     #region Stat Upgrades
 
     public void ChangeMaxHP(float amount)
@@ -89,7 +78,6 @@ public abstract class LivingBeing : MonoBehaviour
     public void ChangeMaxPower(float amount)
     {
         MaxPower += amount;
-        Logging.Info($"power increased by {amount}");
         GetComponent<Rigidbody2D>().linearVelocity = new Vector2(3, 3);
     }
     public void Gainmass(float massGain)
@@ -124,7 +112,6 @@ public abstract class LivingBeing : MonoBehaviour
     #endregion
     public void GainAffinity(Element element, float amount)
     {
-        Logging.Info($"gain element function has been called");
         if (Affinities.TryGetValue(element, out (Func<float> Get, Action<float> Set) func))
         {
             Affinities[element].Set(amount + Affinities[element].Get());
@@ -132,14 +119,7 @@ public abstract class LivingBeing : MonoBehaviour
     }
 
     #region Affinity handling
-    public void SetColor(float[] rgbaValues)
-    {
-        float r = rgbaValues[0];
-        float g = rgbaValues[1];
-        float b = rgbaValues[2];
-        float a = rgbaValues[3];
-        spriteRenderer.color = new Color(r, g, b, a);
-    }
+
 
     #endregion
 
@@ -238,71 +218,7 @@ public abstract class LivingBeing : MonoBehaviour
         return value;
     }
     #endregion
-    #region color control
-    public void AlterColorByAffinity()
-    {
-        Logging.Info($"{Affinities.Keys.Count}");
-        Element strongestElement = Affinities.OrderByDescending(a => a.Value.Get()).First().Key;
 
-        string str = strongestElement.ToString();
-        string nameBase = "Elemental";
-        SetName(strongestElement.ToString() + nameBase);
-        if (Affinities[strongestElement].Get() > 50)
-        {
-            if (str.Contains("Cold") || str.Contains("Water"))
-            {
-                SetColor(new float[4] { 0f, 0f, 1f, 1f });
-            }
-            if (str.Contains("Plant") || str.Contains("Bacteria"))
-            {
-                SetColor(new float[4] { 0f, 1f, 0f, 1f });
-            }
-            if (str.Contains("Virus") || str.Contains("Acid"))
-            {
-                SetColor(new float[4] { 0.9f, 0.7f, 0.0f, 1.0f });
-            }
-            if (str.Contains("Light") || str.Contains("Electricity"))
-            {
-                SetColor(new float[4] { 0.85f, 0.85f, 0.0f, 1.0f });
-            }
-            if (str.Contains("Heat") || str.Contains("Radiation"))
-            {
-                SetColor(new float[4] { 1f, 0f, 0.0f, 1.0f });
-            }
-            if (str.Contains("Psychic") || str.Contains("Poison"))
-            {
-                SetColor(new float[4] { 0.5f, 0f, .5f, 1.0f });
-            }
-            if (str.Contains("Fungi") || str.Contains("Earth"))
-            {
-                SetColor(new float[4] { .4f, 0.4f, .4f, 1.0f });
-            }
-        }
-        else Logging.Info($"{strongestElement} has less than 50");
-    }
-    public void SlideColor(RGBAEnum color, float range)
-    {
-        ColorDict[color].Set(range);
-        SetColor(new float[] { redness, greeness, blueness, alphaness });
-    }
-    public void InitializeColorDict()
-    {
-        ColorDict = new Dictionary<RGBAEnum, (Func<float> Get, Action<float> Set)>
-            {
-                { RGBAEnum.Red,           (() => redness,               v => redness = v) },
-                { RGBAEnum.Green,           (() => greeness,               v => greeness = v) },
-                { RGBAEnum.Blue,           (() => blueness,               v => blueness = v) },
-                { RGBAEnum.Alpha,           (() => alphaness,               v => alphaness = v) },
-            };
-    }
-    public enum RGBAEnum
-    {
-        Red,
-        Green,
-        Blue,
-        Alpha
-    }
-    #endregion
 
     void InitializeAttributeDict()
     {

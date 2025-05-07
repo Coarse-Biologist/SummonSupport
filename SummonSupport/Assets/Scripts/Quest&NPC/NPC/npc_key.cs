@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using Quest;
 
 [System.Serializable]
 public class npc_key

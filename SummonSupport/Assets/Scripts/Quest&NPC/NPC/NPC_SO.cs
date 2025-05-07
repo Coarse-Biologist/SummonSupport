@@ -44,6 +44,10 @@ namespace Quest
                     return "";
             }
         }
+        public void UnlockDialogueOption()
+        {
+
+        }
 
     }
 

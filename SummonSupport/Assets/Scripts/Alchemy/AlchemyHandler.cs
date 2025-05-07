@@ -6,6 +6,8 @@ using UnityEngine.Events;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using System;
+using Unity.VisualScripting.Antlr3.Runtime.Misc;
+using SummonSupportEvents;
 
 #endregion
 public class AlchemyHandler : MonoBehaviour
@@ -44,6 +46,8 @@ public class AlchemyHandler : MonoBehaviour
                 UpgradeMinion(craftedMinion, combinedIngredients, elementList);
                 AddActiveMinion(craftedMinion);
                 int knowledgeGain = GainKnowledge(elementList, combinedIngredients);
+                EventDeclarer.RepeatableQuestCompleted?.Invoke(Quest.RepeatableAccomplishments.GainKnowledge, knowledgeGain);
+
                 Logging.Info($"You have just gained a total of {knowledgeGain} knowledge from alchemic work.");
             }
             else Logging.Error("Crafted Minion is null, was he loaded promtly or correctly?");
@@ -51,6 +55,10 @@ public class AlchemyHandler : MonoBehaviour
     }
     private int HandleOrganUse(LivingBeing stats, AlchemyLoot organ)
     {
+        Logging.Info($"{organ} used and is being handled.");
+
+        EventDeclarer.RepeatableQuestCompleted?.Invoke(Quest.RepeatableAccomplishments.UseOrgans, 1);
+
         int healthUpgrade = 0;
         string organString = organ.ToString();
         if (organString.Contains("Wretched"))
@@ -72,6 +80,8 @@ public class AlchemyHandler : MonoBehaviour
     }
     private int HandleCoreUse(LivingBeing stats, AlchemyLoot core)
     {
+        EventDeclarer.RepeatableQuestCompleted?.Invoke(Quest.RepeatableAccomplishments.UseCores, 1);
+
         int powerUpgrade = 0;
         string coreString = core.ToString();
         if (coreString.Contains("Broken"))
@@ -98,6 +108,8 @@ public class AlchemyHandler : MonoBehaviour
     }
     private int HandleEtherUse(LivingBeing stats, AlchemyLoot ether, List<Element> elementList)
     {
+        EventDeclarer.RepeatableQuestCompleted?.Invoke(Quest.RepeatableAccomplishments.UseEther, 1);
+
         int elementUpgrade = 0;
         string etherString = ether.ToString();
         if (etherString.Contains("Faint"))
@@ -132,8 +144,26 @@ public class AlchemyHandler : MonoBehaviour
             if (kvp.Key.ToString().Contains("Ether")) HandleEtherUse(stats, kvp.Key, elementList);
         }
         stats.RestoreResources();
-        stats.AlterColorByAffinity();
+        AlterMinionByElement(minion);
+
     }
+    private void AlterMinionByElement(GameObject minion)
+    {
+        LivingBeing stats = minion.GetComponent<LivingBeing>();
+        MinionSpriteControl spriteControl = minion.GetComponentInChildren<MinionSpriteControl>();
+        Element strongestElement = stats.Affinities.OrderByDescending(a => a.Value.Get()).First().Key;
+        string nameModifier = "";
+
+        if (stats.Affinities[strongestElement].Get() > 50)
+        {
+            spriteControl.AlterColorByAffinity(strongestElement);
+            nameModifier = strongestElement.ToString();
+            stats.SetName(nameModifier + "Elemental");
+        }
+        else stats.SetName("Flesh Atronach");
+
+    }
+
 
     #endregion
 

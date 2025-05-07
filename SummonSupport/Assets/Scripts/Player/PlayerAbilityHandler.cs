@@ -19,7 +19,7 @@ public class PlayerAbilityHandler : AbilityHandler
     public void UpdateAbilities()
     {
         int index = 0;
-        foreach(Ability ability in abilities)
+        foreach (Ability ability in abilities)
         {
             EventDeclarer.SlotChanged.Invoke(index, ability);
             index++;
@@ -33,7 +33,7 @@ public class PlayerAbilityHandler : AbilityHandler
 
     new void Awake()
     {
-        base.Awake(); 
+        base.Awake();
         inputActions ??= new PlayerInputActions();
     }
 
@@ -60,16 +60,17 @@ public class PlayerAbilityHandler : AbilityHandler
                 else
                     action.performed -= OnAbility;
             }
-        }        
+        }
     }
     void OnAbility(InputAction.CallbackContext context)
     {
         if (inputActionToIndex.TryGetValue(context.action.name, out int index) && index < abilities.Count)
         {
+            if (!abilitiesOnCooldown[index])
+                EventDeclarer.AbilityUsed?.Invoke(index);
+                
             CastAbility(index, GetMousePosition(), abilityDirection.transform.rotation);
-            EventDeclarer.AbilityUsed?.Invoke(index);
         }
-        
     }
 
     Vector2 GetMousePosition()

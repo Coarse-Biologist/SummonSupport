@@ -20,13 +20,13 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     #region Constants
 
     #region UI assets
-    [SerializeField] VisualTreeAsset UIPrefabAssets;
+    private VisualTreeAsset UIPrefabAssets;
     [SerializeField] Sprite alchemyBackground;
 
     #endregion
 
 
-    [SerializeField] UIDocument ui;
+    private UIDocument ui;
     private VisualElement root;
     private VisualElement interactWindow;
     private VisualElement craftingUI;
@@ -60,6 +60,9 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     }
     void Start()
     {
+
+        ui = UI_DocHandler.Instance.ui;
+        UIPrefabAssets = UI_DocHandler.Instance.UIPrefabAssets;
         root = ui.rootVisualElement;
         interactWindow = root.Q<VisualElement>("Interact");
         craftingUI = root.Q<VisualElement>("CraftingUI");

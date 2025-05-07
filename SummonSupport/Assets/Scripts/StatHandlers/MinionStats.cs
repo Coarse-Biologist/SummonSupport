@@ -22,9 +22,10 @@ public class MinionStats : LivingBeing
 
         if (healthbarInterface != null)
         {
-            healthbarInterface.SetHealthBarValue(GetAttribute(AttributeType.CurrentHitpoints));
             healthbarInterface.SetHealthBarMaxValue(GetAttribute(AttributeType.MaxHitpoints));
+            healthbarInterface.SetHealthBarValue(GetAttribute(AttributeType.CurrentHitpoints));
         }
+        else Logging.Info($"{Name} has no health interface yet");
     }
 
 

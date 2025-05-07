@@ -6,9 +6,11 @@ using Quest;
 
 public class NPC_UI_Handler : MonoBehaviour, I_Interactable
 {
-    [SerializeField] NPC_SO npcData;
-    [SerializeField] public UIDocument doc;
+    private UIDocument ui;
+    private VisualTreeAsset UIPrefabAssets;
     [SerializeField] public Sprite buttonImage;
+    private NPC_SO npcData;
+    private NPC_Handler npcHandler;
     private VisualElement root;
     private VisualElement dialoguePanel;
     private VisualElement imageSlot;
@@ -18,16 +20,21 @@ public class NPC_UI_Handler : MonoBehaviour, I_Interactable
 
 
     private List<Button> spawnedButtons = new List<Button>();
+    private NPC_Handler npcQuestProgress;
 
 
-    void Awake()
+    void Start()
     {
-        root = doc.rootVisualElement;
+        npcHandler = GetComponent<NPC_Handler>();
+        npcData = npcHandler.npcData;
+        npcQuestProgress = GetComponent<NPC_Handler>();
+        ui = UI_DocHandler.Instance.ui;
+        UIPrefabAssets = UI_DocHandler.Instance.UIPrefabAssets;
+        root = ui.rootVisualElement;
         dialoguePanel = root.Q<VisualElement>("Dialogue");
         imageSlot = dialoguePanel.Q<VisualElement>("ImageSlot"); // ????????????
         npc_text = root.Q<Label>("NPC_Text");
         playerOptions = root.Q<VisualElement>("PlayerOptions");
-
     }
     public void ShowInteractionOption()
     {
@@ -53,7 +60,7 @@ public class NPC_UI_Handler : MonoBehaviour, I_Interactable
 
     private void PresentResponseOptions(string words)
     {
-        List<string> playerResponses = npcData.Dialogue.GetPlayerResponses(words);
+        List<string> playerResponses = GetAllPlayerResponses(words);
         CreateButtons(playerResponses);
     }
 
@@ -106,12 +113,13 @@ public class NPC_UI_Handler : MonoBehaviour, I_Interactable
         ClearButtons();
         foreach (string label in labels)
         {
-            Button newButton = new Button { text = label };
+            TemplateContainer prefabContainer = UIPrefabAssets.Instantiate();
+            Button newButton = prefabContainer.Q<Button>("ButtonPrefab");
+            newButton.text = label;
             newButton.RegisterCallback<ClickEvent>(e => OnOptionSelected(label));
             spawnedButtons.Add(newButton);
             playerOptions.Add(newButton);
-            //newButton.style.backgroundImage = new StyleBackground(buttonImage);
-            //SetButtonSize(newButton, 5, 10);
+
         }
     }
     private void SetButtonSize(Button button, int width = 10, int height = 5)
@@ -131,11 +139,16 @@ public class NPC_UI_Handler : MonoBehaviour, I_Interactable
     private void OnOptionSelected(string playerResponse)
     {
         Logging.Info($"Option selected: {playerResponse}");
-        string NPC_Words = npcData.Dialogue.GetNPCResponseToPlayer(playerResponse);
-        NPC_Words = NPC_Words + npcData.GetResult(npcData.Dialogue.GetResult(playerResponse));
+        string NPC_Words = npcData.Dialogue.GetNPCResponseToPlayer(playerResponse, npcHandler.dialogueUnlocked);
         SetNPC_Text(NPC_Words);
-        List<string> playerResponses = npcData.Dialogue.GetPlayerResponses(NPC_Words);
+        List<string> playerResponses = GetAllPlayerResponses(NPC_Words);
         CreateButtons(playerResponses);
+    }
+
+    private List<string> GetAllPlayerResponses(string NPC_Words)
+    {
+        List<string> playerResponses = npcData.Dialogue.GetPlayerResponses(NPC_Words, npcHandler.dialogueUnlocked);
+        return playerResponses;
     }
     #endregion
 

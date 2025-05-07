@@ -8,7 +8,8 @@ using System;
 public class PlayerUIHandler : MonoBehaviour
 {
     public static PlayerUIHandler Instance { get; private set; }
-    [SerializeField] public UIDocument uiDoc;
+    private UIDocument uiDoc;
+    private VisualTreeAsset UIPrefabAssets;
 
 
     LivingBeing playerStats;
@@ -30,6 +31,20 @@ public class PlayerUIHandler : MonoBehaviour
         else
             Destroy(gameObject);
 
+
+    }
+    void Start()
+    {
+        SetUpUI();
+        UpdateMaxValueResourceBar();
+        UpdateResourceBar(playerStats, AttributeType.CurrentHitpoints);
+        UpdateResourceBar(playerStats, AttributeType.CurrentPower);
+
+    }
+    private void SetUpUI()
+    {
+        uiDoc = UI_DocHandler.Instance.ui;
+        UIPrefabAssets = UI_DocHandler.Instance.UIPrefabAssets;
         root = uiDoc.rootVisualElement;
         playerUI = root.Q<VisualElement>("MainUI");
 
@@ -43,15 +58,10 @@ public class PlayerUIHandler : MonoBehaviour
         if (craftingUI != null)
             craftingUI.style.display = DisplayStyle.None;
 
-        playerUI.SetEnabled(true);
-        craftingUI.SetEnabled(true);
+
         playerUI.style.opacity = 100f;
         craftingUI.style.opacity = 100f;
         playerStats = gameObject.GetComponent<LivingBeing>();
-    }
-    void Start()
-    {
-        UpdateMaxValueResourceBar();
     }
 
     void UpdateMaxValueResourceBar()
@@ -80,11 +90,16 @@ public class PlayerUIHandler : MonoBehaviour
 
     public void AddMinionHP(LivingBeing livingBeing)
     {
-        ProgressBar minionHP = new ProgressBar();
+        TemplateContainer prefabContainer = UIPrefabAssets.Instantiate();
+        ProgressBar minionHP = prefabContainer.Q<ProgressBar>("HealthbarPrefab");
+
+        if (minionHP == null) minionHP = new ProgressBar();
         float hp = livingBeing.GetAttribute(AttributeType.CurrentHitpoints);
         HPDict.TryAdd(livingBeing, minionHP);
         minionHP.title = $"{livingBeing.Name} HP: {hp}";
         minionHP.highValue = hp;
+        minionHP.value = hp;
+        if (minionHPBars == null) Logging.Error("minion HP visual element doesnt exist");
         minionHPBars.Add(minionHP);
     }
     public void RemoveMinionHP(LivingBeing livingBeing)
@@ -117,6 +132,7 @@ public class PlayerUIHandler : MonoBehaviour
     }
     private void SetMinionHealthBar(LivingBeing livingBeing)
     {
+
         ProgressBar hpBar = GetLivingBeingHPBar(livingBeing);
         if (hpBar != null)
         {
@@ -124,6 +140,8 @@ public class PlayerUIHandler : MonoBehaviour
             hpBar.value = livingBeing.CurrentHP;
             hpBar.title = $"{livingBeing.Name} HP: {hp}";
         }
+        else Logging.Info($"There was no hp bar for the living being {livingBeing.name}");
+
     }
 
     private void SetPlayerAttribute(LivingBeing livingBeing, AttributeType attributeType)
