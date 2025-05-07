@@ -129,11 +129,11 @@ public class PlayerUIHandler : MonoBehaviour
     public void UpdateResourceBar(LivingBeing livingBeing, AttributeType attributeType)
     {
 
-        if (livingBeing.gameObject.CompareTag("Player"))
+        if (livingBeing.CharacterTag == CharacterTag.Player)
         {
             SetPlayerAttribute(attributeType);
         }
-        else if (livingBeing.gameObject.CompareTag("Minion"))
+        else if (livingBeing.CharacterTag == CharacterTag.Minion)
         {
             SetMinionHealthBar(livingBeing);
         }

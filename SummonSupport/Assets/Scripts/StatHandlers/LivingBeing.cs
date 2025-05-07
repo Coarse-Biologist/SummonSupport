@@ -58,7 +58,7 @@ public abstract class LivingBeing : MonoBehaviour
 
 
 
-    [SerializeField] public I_ResourceBar healthbarInterface;
+    [SerializeField] public I_ResourceBar resourceBarInterface;
 
 
     protected virtual void Awake()
@@ -66,7 +66,7 @@ public abstract class LivingBeing : MonoBehaviour
         GetComponent<Rigidbody2D>().mass = Mass;
         InitializeAttributeDict();
         InitializeAffinityDict();
-        healthbarInterface = GetComponent<I_ResourceBar>();
+        resourceBarInterface = GetComponent<I_ResourceBar>();
     }
 
 
@@ -185,34 +185,28 @@ public abstract class LivingBeing : MonoBehaviour
         {
             case AttributeType.MaxHitpoints:
             case AttributeType.CurrentHitpoints:
-                EventDeclarer.attributeChanged?.Invoke(this, attributeType);
-
-                if (healthbarInterface != null)
+                if (CharacterTag != CharacterTag.Enemy)
                 {
-                    healthbarInterface.SetHealthBarValue(GetAttribute(attributeType));
+                    EventDeclarer.maxAttributeChanged?.Invoke(this, attributeType);
+                    EventDeclarer.attributeChanged?.Invoke(this, attributeType);
                 }
-                break;
-                EventDeclarer.maxAttributeChanged?.Invoke(this, attributeType);
-                EventDeclarer.attributeChanged?.Invoke(this, attributeType);
 
-                if (healthbarInterface != null)
-                {
-                    healthbarInterface.SetHealthBarMaxValue(GetAttribute(attributeType));
-                    healthbarInterface.SetHealthBarValue(GetAttribute(attributeType));
-                    healthbarInterface.SetHealthBarValue(GetAttribute(attributeType));
-                }
+                resourceBarInterface?.SetHealthBarMaxValue(GetAttribute(attributeType));
+                resourceBarInterface?.SetHealthBarValue(GetAttribute(attributeType));
+
                 break;
             case AttributeType.MaxPower:
             case AttributeType.CurrentPower:
-                EventDeclarer.attributeChanged?.Invoke(this, attributeType);
-
-                EventDeclarer.maxAttributeChanged?.Invoke(this, attributeType);
-                if (healthbarInterface != null)
+                if (CharacterTag != CharacterTag.Enemy)
                 {
-                    healthbarInterface.SetPowerBarValue(GetAttribute(attributeType));
-                    healthbarInterface.SetPowerBarMaxValue(GetAttribute(attributeType));
-
+                    EventDeclarer.maxAttributeChanged?.Invoke(this, attributeType);
+                    EventDeclarer.attributeChanged?.Invoke(this, attributeType);
                 }
+
+                resourceBarInterface?.SetPowerBarValue(GetAttribute(attributeType));
+                resourceBarInterface?.SetPowerBarMaxValue(GetAttribute(attributeType));
+
+
                 break;
 
             case AttributeType.MovementSpeed:
