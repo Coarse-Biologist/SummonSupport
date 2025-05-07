@@ -22,6 +22,10 @@ public abstract class LivingBeing : MonoBehaviour
     [field: SerializeField] public float CurrentPower { get; private set; } = 100;
 
     [Header("Attributes - Regenerations")]
+
+    [field: SerializeField] public float HealthRegeneration { get; private set; } = 1;
+    [field: SerializeField] public float PowerRegeneration { get; private set; } = 1;
+
     //TODO:
 
     #region Affinity Stats
@@ -67,7 +71,16 @@ public abstract class LivingBeing : MonoBehaviour
         InitializeAttributeDict();
         InitializeAffinityDict();
         resourceBarInterface = GetComponent<I_ResourceBar>();
+        InvokeRepeating("Regenerate", 0f, 1f);
     }
+    private void Regenerate()
+    {
+        if (GetAttribute(AttributeType.CurrentHitpoints) < GetAttribute(AttributeType.MaxHitpoints))
+            ChangeAttribute(AttributeType.CurrentHitpoints, HealthRegeneration);
+        if (GetAttribute(AttributeType.CurrentPower) < GetAttribute(AttributeType.MaxPower))
+            ChangeAttribute(AttributeType.CurrentPower, PowerRegeneration);
+    }
+
 
 
     #region Stat Upgrades
@@ -223,7 +236,7 @@ public abstract class LivingBeing : MonoBehaviour
         float newValue = valueType == ValueType.Percentage
         ? currentValue * (1 + value / 100f)
         : currentValue + value;
-        
+
         return HandleAttributeCap(attributeType, newValue, currentValue, value);
     }
 
@@ -234,7 +247,7 @@ public abstract class LivingBeing : MonoBehaviour
             case AttributeType.CurrentHitpoints:
                 newValue = ApplyCap(AttributeType.MaxHitpoints, AttributeType.Overshield, newValue, currentValue, delta);
                 break;
-            
+
             case AttributeType.CurrentPower:
                 newValue = ApplyCap(AttributeType.MaxPower, AttributeType.PowerSurge, newValue, currentValue, delta);
                 break;
@@ -244,21 +257,21 @@ public abstract class LivingBeing : MonoBehaviour
 
     float ApplyCap(AttributeType attributeTypeMax, AttributeType attributeTypeTempMax, float newValue, float currentValue, float delta)
     {
-        float max      = GetAttribute(attributeTypeMax);
-        float tempMax  = GetAttribute(attributeTypeTempMax);
+        float max = GetAttribute(attributeTypeMax);
+        float tempMax = GetAttribute(attributeTypeTempMax);
         if (newValue > max)
             return max;
 
-        if(delta < 0 && tempMax > 0)
+        if (delta < 0 && tempMax > 0)
         {
             if (tempMax + delta <= 0)
             {
                 SetAttribute(attributeTypeTempMax, 0);
                 return currentValue + tempMax + delta;
             }
-            else 
+            else
                 SetAttribute(attributeTypeTempMax, tempMax + delta);
-                return currentValue; 
+            return currentValue;
         }
         return newValue;
     }
