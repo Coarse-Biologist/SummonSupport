@@ -7,17 +7,18 @@ public abstract class LivingBeing : MonoBehaviour
 {
     #region Declarations
 
-    [Header("String Stats")]
-    [field: SerializeField] public string Name { get; private set; }
-    [field: SerializeField] public string Description { get; private set; }
-    [field: SerializeField] public List<string> BattleCries { get; private set; }
+    [Header("Birth certificate")]
+    [field: SerializeField] public string Name                  { get; private set; }
+    [field: SerializeField] public CharacterTag CharacterTag    { get; private set; }
+    [field: SerializeField] public string Description           { get; private set; }
+    [field: SerializeField] public List<string> BattleCries     { get; private set; }
 
     [Header("Attributes - Ressources")]
     [field: SerializeField] public float MaxHP { get; private set; } = 100;
-    [field: SerializeField] public float TemporaryMaxHP { get; private set; }
+    [field: SerializeField] public float Overshield { get; private set; }
     [field: SerializeField] public float CurrentHP { get; private set; } = 100;
     [field: SerializeField] public float MaxPower { get; private set; } = 100;
-    [field: SerializeField] public float TemporaryMaxPower { get; private set; }
+    [field: SerializeField] public float PowerSurge { get; private set; }
     [field: SerializeField] public float CurrentPower { get; private set; } = 100;
 
     [Header("Attributes - Regenerations")]
@@ -54,11 +55,7 @@ public abstract class LivingBeing : MonoBehaviour
     [field: SerializeField] public float Mass { get; private set; } = 1f;
 
     #endregion Declarations
-
-
-
     [SerializeField] public I_HealthBar healthbarInterface;
-
 
     protected virtual void Awake()
     {
@@ -183,21 +180,24 @@ public abstract class LivingBeing : MonoBehaviour
         switch (attributeType)
         {
             case AttributeType.CurrentHitpoints:
+                EventDeclarer.attributeChanged?.Invoke(this, attributeType);
+
+                if (healthbarInterface != null)
+                {
+                    healthbarInterface.SetHealthBarValue(GetAttribute(attributeType));
+                }
+                break;
             case AttributeType.CurrentPower:
                 EventDeclarer.attributeChanged?.Invoke(this, attributeType);
 
                 if (healthbarInterface != null)
                 {
-                    healthbarInterface.SetHealthBarValue(GetAttribute(AttributeType.CurrentHitpoints));
+                    healthbarInterface.SetHealthBarValue(GetAttribute(attributeType));
                 }
                 break;
             case AttributeType.MaxHitpoints:
             case AttributeType.MaxPower:
                 EventDeclarer.maxAttributeChanged?.Invoke();
-                if (healthbarInterface != null)
-                {
-                    healthbarInterface.SetHealthBarValue(GetAttribute(AttributeType.MaxHitpoints));
-                }
                 break;
 
             case AttributeType.MovementSpeed:
@@ -225,10 +225,10 @@ public abstract class LivingBeing : MonoBehaviour
         AttributesDict = new Dictionary<AttributeType, (Func<float> Get, Action<float> Set)>
             {
                 { AttributeType.MaxHitpoints,           (() => MaxHP,               v => MaxHP = v) },
-                { AttributeType.TemporaryMaxHitpoints,  (() => TemporaryMaxHP,      v => TemporaryMaxHP = v) },
+                { AttributeType.Overshield,             (() => Overshield,      v => Overshield = v) },
                 { AttributeType.CurrentHitpoints,       (() => CurrentHP,           v => CurrentHP = v) },
                 { AttributeType.MaxPower,               (() => MaxPower,            v => MaxPower = v) },
-                { AttributeType.TemporaryMaxPower,      (() => TemporaryMaxPower,   v => TemporaryMaxPower = v) },
+                { AttributeType.PowerSurge,             (() => PowerSurge,   v => PowerSurge = v) },
                 { AttributeType.CurrentPower,           (() => CurrentPower,        v => CurrentPower = v) },
             };
     }

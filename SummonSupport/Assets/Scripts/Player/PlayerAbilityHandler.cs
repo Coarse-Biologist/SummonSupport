@@ -72,7 +72,6 @@ public class PlayerAbilityHandler : AbilityHandler
             CastAbility(index, GetMousePosition(), abilityDirection.transform.rotation);
         }
     }
-
     Vector2 GetMousePosition()
     {
         return Camera.main.ScreenToWorldPoint(Input.mousePosition);

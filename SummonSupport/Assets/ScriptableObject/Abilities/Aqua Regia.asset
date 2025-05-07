@@ -16,10 +16,12 @@ MonoBehaviour:
   <Icon>k__BackingField: {fileID: 0}
   <Cooldown>k__BackingField: 0
   <PowerCost>k__BackingField: 0
-  <StatusEffect>k__BackingField: {fileID: 0}
+  <StatusEffects>k__BackingField: []
+  <ListUsableOn>k__BackingField: 01000000
   <Attribute>k__BackingField: 10
   <Value>k__BackingField: 0
   <ElementType>k__BackingField: 0
+  <OnCooldown>k__BackingField: 0
   <Speed>k__BackingField: 0
   <Projectile>k__BackingField: {fileID: 0}
   <MaxRange>k__BackingField: 0

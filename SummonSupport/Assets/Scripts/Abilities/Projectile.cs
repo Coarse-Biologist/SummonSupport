@@ -1,19 +1,18 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using Unity.VisualScripting;
-using UnityEditor.Rendering;
 using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
-    public List<GameObject> ignoreGameObjects = new List<GameObject>();
+    List<GameObject> ignoreGameObjects = new List<GameObject>();
     public ProjectileAbility ability;
     public int piercedAlready = 0;
     public int splitAlready = 0;
+    LivingBeing userLivingBeing = null;
 
     public void Shoot(GameObject user, GameObject spawnAt = null, Vector3 lookAt = default(Vector3))
-    {
+    {   
+        if (user.TryGetComponent(out LivingBeing livingBeing))
+            userLivingBeing = livingBeing;
         ignoreGameObjects.Add(user);
         SetProjectilePhysics(spawnAt, lookAt);
         Destroy(gameObject, ability.Lifetime); // TODO: change from lifetime to range
@@ -36,16 +35,20 @@ public class Projectile : MonoBehaviour
     void OnTriggerEnter2D(Collider2D other)
     {
         if (other.gameObject.CompareTag("Projectile") || ignoreGameObjects.Contains(other.gameObject))
-                return;
-            
-        else if (other.gameObject.GetComponent<LivingBeing>() != null)
+            return;
+        
+        if (!other.TryGetComponent(out LivingBeing otherLivingBeing))
         {
-            foreach(OnEventDo onHitDo in ability.ListOnHitDo)
-                    HandleOnEventDo(onHitDo, other);
-            HandleOnHitBehaviour(other);
-        }
-        else
             DestroyProjectile();
+            return;
+        }
+        
+        if (userLivingBeing && !ability.IsUsableOn(userLivingBeing.CharacterTag, otherLivingBeing.CharacterTag))
+            return;
+
+        foreach(OnEventDo onHitDo in ability.ListOnHitDo)
+            HandleOnEventDo(onHitDo, other);
+        HandleOnHitBehaviour(other);
         
     }
 
@@ -71,12 +74,10 @@ public class Projectile : MonoBehaviour
 
     void DestroyProjectile(Collider2D other = null)
     {
-        if (other != null)
-            {
-                foreach(OnEventDo onDestroyDo in ability.ListOnDestroyDo)
-                    HandleOnEventDo(onDestroyDo, other);
+        if (other)
+            foreach(OnEventDo onDestroyDo in ability.ListOnDestroyDo)
+                HandleOnEventDo(onDestroyDo, other);
                 
-            }
         Destroy(gameObject);
     }
     void SplitProjectile(Collider2D other)

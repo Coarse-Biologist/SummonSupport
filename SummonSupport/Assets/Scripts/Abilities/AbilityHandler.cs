@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using System.Collections.Generic;
-using Unity.Cinemachine;
+using System;
 
 public class AbilityHandler : MonoBehaviour
 {
@@ -10,6 +10,7 @@ public class AbilityHandler : MonoBehaviour
     [SerializeField] protected LivingBeing statsHandler;
     [SerializeField] protected List<Ability> abilities;
     [SerializeField] protected List<bool> abilitiesOnCooldown;
+
 
     protected virtual void Awake()
     {
@@ -35,26 +36,28 @@ public class AbilityHandler : MonoBehaviour
         if (!HasEnoughPower(ability.PowerCost))
             return;
 
-        HandleAbilityType(ability, targetPosition, rotation);
-        StartCoroutine(SetOnCooldown(abilityIndex));
+        if (HandleAbilityType(ability, targetPosition, rotation))
+            StartCoroutine(SetOnCooldown(abilityIndex)); 
     }   
 
-    void HandleAbilityType(Ability ability, Vector2 targetPosition, Quaternion rotation)
+    bool HandleAbilityType(Ability ability, Vector2 targetPosition, Quaternion rotation)
     {
+        bool usedAbility = false;
         switch (ability)
         {
             case ProjectileAbility projectile:
-                HandleProjectile(projectile);
+                usedAbility = HandleProjectile(projectile);
                 break;
 
             case TargetMouseAbility pointAndClickAbility:
-                HandlePointAndClick(pointAndClickAbility);
+                usedAbility = HandlePointAndClick(pointAndClickAbility);
                 break;
             
             case ConjureAbility conjureAbility:
-                HandleConjureAbility(conjureAbility, targetPosition, rotation);
+                usedAbility = HandleConjureAbility(conjureAbility, targetPosition, rotation);
                 break;
         }
+        return usedAbility;
     }
 
     bool HasEnoughPower(float powerCost)
@@ -69,19 +72,19 @@ public class AbilityHandler : MonoBehaviour
         return true;
     }
 
-    void HandleProjectile(ProjectileAbility ability)
+    bool HandleProjectile(ProjectileAbility ability)
     {
-        ability.Activate(gameObject, abilitySpawn, abilityDirection.transform);
+        return ability.Activate(gameObject, abilitySpawn, abilityDirection.transform);
     }
 
-    void HandlePointAndClick(TargetMouseAbility ability)
+    bool HandlePointAndClick(TargetMouseAbility ability)
     {
-        ability.Activate(gameObject);
+        return ability.Activate(gameObject);
     }
 
-    void HandleConjureAbility(ConjureAbility ability, Vector2 targetPosition, Quaternion rotation)
+    bool HandleConjureAbility(ConjureAbility ability, Vector2 targetPosition, Quaternion rotation)
     {
-        ability.Activate(gameObject, targetPosition, rotation);
+        return ability.Activate(gameObject, targetPosition, rotation);
     }
 
 

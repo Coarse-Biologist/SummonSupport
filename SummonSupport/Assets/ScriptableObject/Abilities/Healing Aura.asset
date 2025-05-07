@@ -12,8 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a284ac289eac5874ca5ee64e83ba096e, type: 3}
   m_Name: Healing Aura
   m_EditorClassIdentifier: 
-  <AbilityName>k__BackingField: 
+  <Name>k__BackingField: 
   <Icon>k__BackingField: {fileID: 0}
   <Cooldown>k__BackingField: 15
   <PowerCost>k__BackingField: 15
+  <StatusEffects>k__BackingField: []
+  <ListUsableOn>k__BackingField: 00000000
+  <Attribute>k__BackingField: 0
+  <Value>k__BackingField: 0
+  <ElementType>k__BackingField: 0
+  <OnCooldown>k__BackingField: 0
   <Uptime>k__BackingField: 10

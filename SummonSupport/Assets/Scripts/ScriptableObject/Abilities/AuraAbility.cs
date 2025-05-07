@@ -6,8 +6,9 @@ public class AuraAbility : Ability
     [field: SerializeField, Header("Aura settings"), Tooltip("time in [seconds]")]
     public float Uptime {get; protected set; }
 
-    public override void Activate(GameObject user)
+    public override bool Activate(GameObject user)
     {
         Logging.Info($"{user.name} applys aura");
+        return true;
     }
 }
