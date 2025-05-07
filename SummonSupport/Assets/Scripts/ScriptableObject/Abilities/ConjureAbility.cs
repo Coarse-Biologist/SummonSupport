@@ -6,6 +6,8 @@ public class ConjureAbility : Ability
     [field: Header("Conjure settings"), Tooltip("Ability prefab")]
     [field: SerializeField] public GameObject   ObjectToSpawn  { get; protected set; }
     [field: SerializeField] public Vector2      SpawnOffset    { get; protected set; }
+    [field: SerializeField] public float        RotationOffset { get; protected set; } = 0;
+
 
     [field: Tooltip("Activate this if ability should only last a specific amount of time")] 
     [field: SerializeField] public bool         IsDecaying     { get; protected set; }
@@ -14,19 +16,21 @@ public class ConjureAbility : Ability
     [field: SerializeField] public float        TimeAlive      { get; protected set; }
 
 
-    public override void Activate(GameObject user)
+    public override bool Activate(GameObject user)
     {
         Vector3 spawnPosition = user.transform.position + (Vector3)SpawnOffset;
         Quaternion rotation = user.transform.rotation;
-        Activate(user, spawnPosition, rotation);
+        return Activate(user, spawnPosition, rotation);
     }
 
-    public void Activate(GameObject user, Vector3 spawnPosition, Quaternion rotation)
+    public bool Activate(GameObject user, Vector3 spawnPosition, Quaternion rotation)
     {
-        GameObject spawnedObject = Instantiate(ObjectToSpawn, spawnPosition, rotation);
+        Quaternion newRotation = rotation * Quaternion.Euler(0, 0, RotationOffset);
+        GameObject spawnedObject = Instantiate(ObjectToSpawn, spawnPosition, newRotation);
 
         if (IsDecaying)
             AddDecayToObject(spawnedObject);
+        return true;
     }
 
     public void AddDecayToObject(GameObject spawnedObject)

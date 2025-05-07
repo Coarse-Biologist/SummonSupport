@@ -9,13 +9,13 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6683928398212683686}
+  - component: {fileID: 400707431327483376}
   - component: {fileID: 9145848355532623241}
   - component: {fileID: 3294670582543144582}
   - component: {fileID: 5060913453079462963}
   - component: {fileID: 2610693601905353752}
   - component: {fileID: 3430052999145556827}
   - component: {fileID: 8272282993633927976}
-  - component: {fileID: 400707431327483376}
   - component: {fileID: 4402697428807640596}
   - component: {fileID: 5811464033095562654}
   - component: {fileID: 9050172420336280654}
@@ -43,6 +43,47 @@ Transform:
   - {fileID: 2328576268698167125}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &400707431327483376
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 530800861541312882}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04d623608af057248be399759538630f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <Name>k__BackingField: Bob
+  <CharacterTag>k__BackingField: 1
+  <Description>k__BackingField: 
+  <BattleCries>k__BackingField: []
+  <MaxHP>k__BackingField: 200
+  <Overshield>k__BackingField: 0
+  <CurrentHP>k__BackingField: 200
+  <MaxPower>k__BackingField: 100
+  <PowerSurge>k__BackingField: 0
+  <CurrentPower>k__BackingField: 100
+  <Cold>k__BackingField: 0
+  <Water>k__BackingField: 0
+  <Earth>k__BackingField: 0
+  <Heat>k__BackingField: 0
+  <Air>k__BackingField: 0
+  <Electricity>k__BackingField: 0
+  <Poison>k__BackingField: 0
+  <Acid>k__BackingField: 0
+  <Bacteria>k__BackingField: 0
+  <Fungi>k__BackingField: 0
+  <Plant>k__BackingField: 0
+  <Virus>k__BackingField: 0
+  <Radiation>k__BackingField: 0
+  <Light>k__BackingField: 0
+  <Psychic>k__BackingField: 0
+  <XP_OnDeath>k__BackingField: 3
+  <Abilties>k__BackingField: []
+  <Speed>k__BackingField: 0.4
+  <Mass>k__BackingField: 1
 --- !u!114 &9145848355532623241
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -142,46 +183,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!114 &400707431327483376
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 530800861541312882}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 04d623608af057248be399759538630f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  <Name>k__BackingField: 
-  <Description>k__BackingField: 
-  <BattleCries>k__BackingField: []
-  <MaxHP>k__BackingField: 200
-  <TemporaryMaxHP>k__BackingField: 0
-  <CurrentHP>k__BackingField: 200
-  <MaxPower>k__BackingField: 100
-  <TemporaryMaxPower>k__BackingField: 0
-  <CurrentPower>k__BackingField: 100
-  <Cold>k__BackingField: 0
-  <Water>k__BackingField: 0
-  <Earth>k__BackingField: 0
-  <Heat>k__BackingField: 0
-  <Air>k__BackingField: 0
-  <Electricity>k__BackingField: 0
-  <Poison>k__BackingField: 0
-  <Acid>k__BackingField: 0
-  <Bacteria>k__BackingField: 0
-  <Fungi>k__BackingField: 0
-  <Plant>k__BackingField: 0
-  <Virus>k__BackingField: 0
-  <Radiation>k__BackingField: 0
-  <Light>k__BackingField: 0
-  <Psychic>k__BackingField: 0
-  <XP_OnDeath>k__BackingField: 3
-  <Abilties>k__BackingField: []
-  <Speed>k__BackingField: 0.4
-  <Mass>k__BackingField: 1
 --- !u!58 &4402697428807640596
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -216,8 +217,8 @@ CircleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
-  m_Radius: 0.5
+  m_Offset: {x: 0.00000044151588, y: 0.014998764}
+  m_Radius: 1.4449112
 --- !u!114 &5811464033095562654
 MonoBehaviour:
   m_ObjectHideFlags: 0

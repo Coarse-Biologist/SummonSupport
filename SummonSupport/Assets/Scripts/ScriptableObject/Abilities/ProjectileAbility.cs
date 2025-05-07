@@ -17,19 +17,20 @@ public class ProjectileAbility : Ability
     [field: SerializeField] public List<OnEventDo>      ListOnDestroyDo     { get; protected set; }
 
 
-    public override void Activate(GameObject user)
+    public override bool Activate(GameObject user)
     {
-        Activate(user, user);
+        return Activate(user, user);
     }
-    public void Activate(GameObject user, GameObject spawnPoint)
+    public bool Activate(GameObject user, GameObject spawnPoint)
     {
-        Activate(user, spawnPoint, spawnPoint.transform);
+        return Activate(user, spawnPoint, spawnPoint.transform);
     }
-    public void Activate(GameObject user, GameObject spawnPoint, Transform direction)
+    public bool Activate(GameObject user, GameObject spawnPoint, Transform direction)
     {
         GameObject projectile = Instantiate(Projectile, spawnPoint.transform.position, Quaternion.identity);
         Projectile projectileScript = projectile.GetComponent<Projectile>();
         projectileScript.ability = this;
         projectileScript.Shoot(user, spawnPoint, direction.right);
+        return true;
     }
 }

@@ -7,17 +7,18 @@ public abstract class LivingBeing : MonoBehaviour
 {
     #region Declarations
 
-    [Header("String Stats")]
-    [field: SerializeField] public string Name { get; private set; }
-    [field: SerializeField] public string Description { get; private set; }
-    [field: SerializeField] public List<string> BattleCries { get; private set; }
+    [Header("Birth certificate")]
+    [field: SerializeField] public string Name                  { get; private set; }
+    [field: SerializeField] public CharacterTag CharacterTag    { get; private set; }
+    [field: SerializeField] public string Description           { get; private set; }
+    [field: SerializeField] public List<string> BattleCries     { get; private set; }
 
     [Header("Attributes - Resources")]
     [field: SerializeField] public float MaxHP { get; private set; } = 100;
-    [field: SerializeField] public float TemporaryMaxHP { get; private set; }
+    [field: SerializeField] public float Overshield { get; private set; }
     [field: SerializeField] public float CurrentHP { get; private set; } = 100;
     [field: SerializeField] public float MaxPower { get; private set; } = 100;
-    [field: SerializeField] public float TemporaryMaxPower { get; private set; }
+    [field: SerializeField] public float PowerSurge { get; private set; }
     [field: SerializeField] public float CurrentPower { get; private set; } = 100;
 
     [Header("Attributes - Regenerations")]
@@ -54,11 +55,14 @@ public abstract class LivingBeing : MonoBehaviour
     [field: SerializeField] public float Mass { get; private set; } = 1f;
 
     #endregion Declarations
+<<<<<<< HEAD
 
 
 
     [SerializeField] public I_ResourceBar healthbarInterface;
-
+=======
+    [SerializeField] public I_HealthBar healthbarInterface;
+>>>>>>> 57f1c7eb1c8efc5fefaa20c1c2103ec06b316214
 
     protected virtual void Awake()
     {
@@ -184,16 +188,31 @@ public abstract class LivingBeing : MonoBehaviour
         {
             case AttributeType.MaxHitpoints:
             case AttributeType.CurrentHitpoints:
+<<<<<<< HEAD
                 EventDeclarer.maxAttributeChanged?.Invoke(this, attributeType);
+=======
                 EventDeclarer.attributeChanged?.Invoke(this, attributeType);
 
                 if (healthbarInterface != null)
                 {
+                    healthbarInterface.SetHealthBarValue(GetAttribute(attributeType));
+                }
+                break;
+            case AttributeType.CurrentPower:
+>>>>>>> 57f1c7eb1c8efc5fefaa20c1c2103ec06b316214
+                EventDeclarer.attributeChanged?.Invoke(this, attributeType);
+
+                if (healthbarInterface != null)
+                {
+<<<<<<< HEAD
                     healthbarInterface.SetHealthBarMaxValue(GetAttribute(attributeType));
+=======
+>>>>>>> 57f1c7eb1c8efc5fefaa20c1c2103ec06b316214
                     healthbarInterface.SetHealthBarValue(GetAttribute(attributeType));
                 }
                 break;
             case AttributeType.MaxPower:
+<<<<<<< HEAD
             case AttributeType.CurrentPower:
                 EventDeclarer.attributeChanged?.Invoke(this, attributeType);
 
@@ -204,6 +223,9 @@ public abstract class LivingBeing : MonoBehaviour
                     healthbarInterface.SetPowerBarMaxValue(GetAttribute(attributeType));
 
                 }
+=======
+                EventDeclarer.maxAttributeChanged?.Invoke();
+>>>>>>> 57f1c7eb1c8efc5fefaa20c1c2103ec06b316214
                 break;
 
             case AttributeType.MovementSpeed:
@@ -231,10 +253,10 @@ public abstract class LivingBeing : MonoBehaviour
         AttributesDict = new Dictionary<AttributeType, (Func<float> Get, Action<float> Set)>
             {
                 { AttributeType.MaxHitpoints,           (() => MaxHP,               v => MaxHP = v) },
-                { AttributeType.TemporaryMaxHitpoints,  (() => TemporaryMaxHP,      v => TemporaryMaxHP = v) },
+                { AttributeType.Overshield,             (() => Overshield,      v => Overshield = v) },
                 { AttributeType.CurrentHitpoints,       (() => CurrentHP,           v => CurrentHP = v) },
                 { AttributeType.MaxPower,               (() => MaxPower,            v => MaxPower = v) },
-                { AttributeType.TemporaryMaxPower,      (() => TemporaryMaxPower,   v => TemporaryMaxPower = v) },
+                { AttributeType.PowerSurge,             (() => PowerSurge,   v => PowerSurge = v) },
                 { AttributeType.CurrentPower,           (() => CurrentPower,        v => CurrentPower = v) },
             };
     }

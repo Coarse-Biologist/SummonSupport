@@ -16,7 +16,12 @@ MonoBehaviour:
   <Icon>k__BackingField: {fileID: 0}
   <Cooldown>k__BackingField: 0
   <PowerCost>k__BackingField: 0
-  <ApplyStatusEffect>k__BackingField: []
+  <StatusEffects>k__BackingField: []
+  <ListUsableOn>k__BackingField: 01000000
+  <Attribute>k__BackingField: 0
+  <Value>k__BackingField: 0
+  <ElementType>k__BackingField: 0
+  <OnCooldown>k__BackingField: 0
   <ObjectToSpawn>k__BackingField: {fileID: 0}
   <SpawnOffset>k__BackingField: {x: 0, y: 0}
   <IsDecaying>k__BackingField: 0

@@ -7,21 +7,22 @@ public class TargetMouseAbility : Ability
 {
     [field: Header("settings")]
     [field: SerializeField] public List<OnEventDo> ListOnCastDo { get; protected set; }
-    public override void Activate(GameObject user)
+    public override bool Activate(GameObject user)
     {
+        bool usedAbility = false;
         Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        RaycastHit2D hit = Physics2D.Raycast(mousePos, Vector2.zero);
+        int layerMask = ~LayerMask.GetMask("TriggerOnly"); // Alle außer "TriggerOnly"
+        RaycastHit2D hit = Physics2D.Raycast(mousePos, Vector2.zero, Mathf.Infinity, layerMask);
 
         if (hit.collider != null)
         {
             if (hit.collider.TryGetComponent<LivingBeing>(out var target))
             {
-                Debug.Log("Hit LivingBeing: " + target.Name);
                 ActivateAbility(target.gameObject, mousePos);
+                usedAbility = true;
             }
-            else Logging.Verbose($"{hit.collider.name} does not have the component living being!!!!");
         }
-        else Logging.Verbose("Collider was null");
+        return usedAbility;
     }
     public void ActivateAbility(GameObject target, Vector2 mousePos)
     {
