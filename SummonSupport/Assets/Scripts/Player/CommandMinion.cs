@@ -31,7 +31,7 @@ public static class CommandMinion
                     I_Interactable interactable = collider.gameObject.GetComponent<I_Interactable>();
                     if (interactable != null)
                         SendMinionToInteract(loc);
-                    
+
                 }
             }
             else
