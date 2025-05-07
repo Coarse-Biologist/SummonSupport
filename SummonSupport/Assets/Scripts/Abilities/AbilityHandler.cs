@@ -26,18 +26,24 @@ public class AbilityHandler : MonoBehaviour
         }
     }
 
-    protected void CastAbility(int abilityIndex, Vector2 targetPosition, Quaternion rotation)
+    protected bool CastAbility(int abilityIndex, Vector2 targetPosition, Quaternion rotation)
     {
         if (abilitiesOnCooldown[abilityIndex])
-            return;
+            return false;
             
         Ability ability = abilities[abilityIndex];
             
         if (!HasEnoughPower(ability.PowerCost))
-            return;
+            return false;
 
-        if (HandleAbilityType(ability, targetPosition, rotation))
-            StartCoroutine(SetOnCooldown(abilityIndex)); 
+        bool usedAbility = HandleAbilityType(ability, targetPosition, rotation);
+
+        if (!usedAbility)
+            return false;
+
+        StartCoroutine(SetOnCooldown(abilityIndex)); 
+        statsHandler?.ChangeAttribute(AttributeType.CurrentPower, -ability.PowerCost);
+        return true;
     }   
 
     bool HandleAbilityType(Ability ability, Vector2 targetPosition, Quaternion rotation)
@@ -62,14 +68,7 @@ public class AbilityHandler : MonoBehaviour
 
     bool HasEnoughPower(float powerCost)
     {
-        if (statsHandler)
-        {
-            if (powerCost > statsHandler.GetAttribute(AttributeType.CurrentPower))
-                return false; //Not enough power to use ability
-            else
-                statsHandler.ChangeAttribute(AttributeType.CurrentPower, -powerCost);
-        }
-        return true;
+        return !statsHandler || powerCost < statsHandler.GetAttribute(AttributeType.CurrentPower);
     }
 
     bool HandleProjectile(ProjectileAbility ability)

@@ -162,7 +162,7 @@ public abstract class LivingBeing : MonoBehaviour
             throw new Exception("Attribute not found or invalid setter");
 
         float currentValue = GetAttribute(attributeType);
-        float newValue = CalculateNewValueByType(currentValue, value, valueType);
+        float newValue = CalculateNewValueByType(currentValue, value, valueType, attributeType);
         SetAttribute(attributeType, newValue);
 
         if (IsDead())
@@ -181,19 +181,11 @@ public abstract class LivingBeing : MonoBehaviour
         {
             case AttributeType.CurrentHitpoints:
                 EventDeclarer.attributeChanged?.Invoke(this, attributeType);
-
-                if (healthbarInterface != null)
-                {
-                    healthbarInterface.SetHealthBarValue(GetAttribute(attributeType));
-                }
+                healthbarInterface?.SetHealthBarValue(GetAttribute(attributeType));
                 break;
             case AttributeType.CurrentPower:
                 EventDeclarer.attributeChanged?.Invoke(this, attributeType);
-
-                if (healthbarInterface != null)
-                {
-                    healthbarInterface.SetHealthBarValue(GetAttribute(attributeType));
-                }
+                healthbarInterface?.SetHealthBarValue(GetAttribute(attributeType));
                 break;
             case AttributeType.MaxHitpoints:
             case AttributeType.MaxPower:
@@ -209,13 +201,49 @@ public abstract class LivingBeing : MonoBehaviour
         }
     }
 
-    float CalculateNewValueByType(float currentValue, float value, ValueType valueType)
+    float CalculateNewValueByType(float currentValue, float value, ValueType valueType, AttributeType attributeType)
     {
-        if (valueType == ValueType.Percentage)
-            value = currentValue * (1 + (value / 100f));
-        else // value type is flat
-            value = currentValue + value;
-        return value;
+        float newValue = valueType == ValueType.Percentage
+        ? currentValue * (1 + value / 100f)
+        : currentValue + value;
+        
+        return HandleAttributeCap(attributeType, newValue, currentValue, value);
+    }
+
+    float HandleAttributeCap(AttributeType attributeType, float newValue, float currentValue, float delta)
+    {
+        switch (attributeType)
+        {
+            case AttributeType.CurrentHitpoints:
+                newValue = ApplyCap(AttributeType.MaxHitpoints, AttributeType.Overshield, newValue, currentValue, delta);
+                break;
+            
+            case AttributeType.CurrentPower:
+                newValue = ApplyCap(AttributeType.MaxPower, AttributeType.PowerSurge, newValue, currentValue, delta);
+                break;
+        }
+        return newValue;
+    }
+
+    float ApplyCap(AttributeType attributeTypeMax, AttributeType attributeTypeTempMax, float newValue, float currentValue, float delta)
+    {
+        float max      = GetAttribute(attributeTypeMax);
+        float tempMax  = GetAttribute(attributeTypeTempMax);
+        if (newValue > max)
+            return max;
+
+        if(delta < 0 && tempMax > 0)
+        {
+            if (tempMax + delta <= 0)
+            {
+                SetAttribute(attributeTypeTempMax, 0);
+                return currentValue + tempMax + delta;
+            }
+            else 
+                SetAttribute(attributeTypeTempMax, tempMax + delta);
+                return currentValue; 
+        }
+        return newValue;
     }
     #endregion
 

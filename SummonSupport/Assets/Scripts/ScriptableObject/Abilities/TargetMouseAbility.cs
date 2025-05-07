@@ -7,6 +7,7 @@ public class TargetMouseAbility : Ability
 {
     [field: Header("settings")]
     [field: SerializeField] public List<OnEventDo> ListOnCastDo { get; protected set; }
+
     public override bool Activate(GameObject user)
     {
         bool usedAbility = false;
@@ -15,50 +16,43 @@ public class TargetMouseAbility : Ability
         RaycastHit2D hit = Physics2D.Raycast(mousePos, Vector2.zero, Mathf.Infinity, layerMask);
 
         if (hit.collider != null)
-        {
             if (hit.collider.TryGetComponent<LivingBeing>(out var target))
-            {
-                ActivateAbility(target.gameObject, mousePos);
-                usedAbility = true;
-            }
-        }
+                usedAbility = ActivateAbility(user, target, mousePos);
+
         return usedAbility;
     }
-    public void ActivateAbility(GameObject target, Vector2 mousePos)
+    public bool ActivateAbility(GameObject user, LivingBeing targetLivingBeing, Vector2 mousePos)
     {
-        Logging.Info($"Activated Ability {Name} on {target.name}");
-        Logging.Verbose($"number of events to do: {ListOnCastDo.Count}");
+        if (user.TryGetComponent<LivingBeing>(out var userLivingBeing))
+            if (!IsUsableOn(userLivingBeing.CharacterTag, targetLivingBeing.CharacterTag))
+                return false; 
 
         foreach (OnEventDo onEventDo in ListOnCastDo)
-        {
-            Logging.Verbose($"{onEventDo}");
-            switch (onEventDo) //TODO: This has to be a class, just for testing purposes
+        { 
+            HandleEventType(onEventDo, targetLivingBeing, mousePos);
+        }
+        return true;
+    }
+
+    void HandleEventType(OnEventDo onEventDo, LivingBeing targetLivingBeing, Vector2 mousePos)
+    {
+        switch (onEventDo) //TODO: This has to be a class, just for testing purposes
             {
                 case OnEventDo.Damage:
-                    Logging.Verbose($"Do Damage to {target.gameObject.name}");
                     if (Attribute != AttributeType.None && Value != 0)
-                    {
-
-                    }
+                        targetLivingBeing.ChangeAttribute(AttributeType.CurrentHitpoints, -Value);
                     break;
                 case OnEventDo.Heal:
-                    Logging.Verbose($"Heal {target.gameObject.name}!!!!");
                     if (Attribute != AttributeType.None && Value != 0)
-                    {
-                        LivingBeing livingBeing = target.GetComponent<LivingBeing>();
-                        livingBeing.ChangeAttribute(AttributeType.CurrentHitpoints, Value);
-                    }
-                    else Logging.Error($"Attribute is : ({Attribute}) and Value = ({Value})");
+                        targetLivingBeing.ChangeAttribute(AttributeType.CurrentHitpoints, Value);
                     break;
                 case OnEventDo.StatusEffect:
                     foreach (StatusEffect statusEffect in StatusEffects)
                     {
-                        Logging.Verbose($"Apply {statusEffect.Name} to {target.gameObject.name}");
                         if (statusEffect != null)
-                            statusEffect.ApplyStatusEffect(target.gameObject, mousePos);
+                            statusEffect.ApplyStatusEffect(targetLivingBeing.gameObject, mousePos);
                     }
                     break;
             }
-        }
     }
 }

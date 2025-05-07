@@ -18,6 +18,7 @@ MonoBehaviour:
   <Cooldown>k__BackingField: 4
   <PowerCost>k__BackingField: 20
   <StatusEffects>k__BackingField: []
+  <ListUsableOn>k__BackingField: 
   <Attribute>k__BackingField: 0
   <Value>k__BackingField: 0
   <ElementType>k__BackingField: 0
@@ -25,5 +26,6 @@ MonoBehaviour:
   <ObjectToSpawn>k__BackingField: {fileID: 626346471676512894, guid: 0426bd00677ff8c4d996ab592a456265,
     type: 3}
   <SpawnOffset>k__BackingField: {x: 1, y: 0}
+  <RotationOffset>k__BackingField: 90
   <IsDecaying>k__BackingField: 1
   <TimeAlive>k__BackingField: 10

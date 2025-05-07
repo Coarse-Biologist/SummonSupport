@@ -67,9 +67,12 @@ public class PlayerAbilityHandler : AbilityHandler
         if (inputActionToIndex.TryGetValue(context.action.name, out int index) && index < abilities.Count)
         {
             if (!abilitiesOnCooldown[index])
-                EventDeclarer.AbilityUsed?.Invoke(index);
+            {
+                if (CastAbility(index, GetMousePosition(), abilityDirection.transform.rotation))
+                    EventDeclarer.AbilityUsed?.Invoke(index);
+
+            }
                 
-            CastAbility(index, GetMousePosition(), abilityDirection.transform.rotation);
         }
     }
     Vector2 GetMousePosition()
