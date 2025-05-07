@@ -30,17 +30,34 @@ public class PlayerUIHandler : MonoBehaviour
             Instance = this;
         else
             Destroy(gameObject);
-
-
     }
+
+    void OnEnable()
+    {
+        EventDeclarer.attributeChanged.AddListener(UpdateResourceBar);
+        EventDeclarer.maxAttributeChanged.AddListener(UpdateMaxValueResourceBar);
+        if (AlchemyHandler.Instance != null)
+            AlchemyHandler.Instance.newMinionAdded.AddListener(AddMinionHP);
+        EventDeclarer.minionDied.AddListener(RemoveMinionHP);
+    }
+
+    void OnDisable()
+    {
+        EventDeclarer.attributeChanged.RemoveListener(UpdateResourceBar);
+        EventDeclarer.maxAttributeChanged.RemoveListener(UpdateMaxValueResourceBar);
+        if (AlchemyHandler.Instance != null)
+            AlchemyHandler.Instance.newMinionAdded.RemoveListener(AddMinionHP);
+        EventDeclarer.minionDied.RemoveListener(RemoveMinionHP);
+    }
+
     void Start()
     {
         SetUpUI();
         UpdateMaxValueResourceBar();
         UpdateResourceBar(playerStats, AttributeType.CurrentHitpoints);
         UpdateResourceBar(playerStats, AttributeType.CurrentPower);
-
     }
+
     private void SetUpUI()
     {
         uiDoc = UI_DocHandler.Instance.ui;
@@ -70,23 +87,7 @@ public class PlayerUIHandler : MonoBehaviour
         playerPowerBar.highValue = playerStats.GetAttribute(AttributeType.MaxPower);
     }
 
-    void OnEnable()
-    {
-        EventDeclarer.attributeChanged.AddListener(UpdateResourceBar);
-        EventDeclarer.maxAttributeChanged.AddListener(UpdateMaxValueResourceBar);
-        if (AlchemyHandler.Instance != null)
-            AlchemyHandler.Instance.newMinionAdded.AddListener(AddMinionHP);
-        EventDeclarer.minionDied.AddListener(RemoveMinionHP);
-    }
-
-    void OnDisable()
-    {
-        EventDeclarer.attributeChanged.RemoveListener(UpdateResourceBar);
-        EventDeclarer.maxAttributeChanged.RemoveListener(UpdateMaxValueResourceBar);
-        if (AlchemyHandler.Instance != null)
-            AlchemyHandler.Instance.newMinionAdded.RemoveListener(AddMinionHP);
-        EventDeclarer.minionDied.RemoveListener(RemoveMinionHP);
-    }
+    
 
     public void AddMinionHP(LivingBeing livingBeing)
     {
