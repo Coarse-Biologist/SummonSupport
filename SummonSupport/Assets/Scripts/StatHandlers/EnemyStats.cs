@@ -12,14 +12,18 @@ public class EnemyStats : LivingBeing
     void Start()
     {
 
-        healthbarInterface = GetComponent<I_HealthBar>();
-
-        if (healthbarInterface != null)
-        {
-            healthbarInterface.SetHealthBarValue(GetAttribute(AttributeType.CurrentHitpoints));
-            healthbarInterface.SetHealthBarMaxValue(GetAttribute(AttributeType.MaxHitpoints));
-        }
-
+        //healthbarInterface = GetComponent<I_ResourceBar>();
+        //
+        //if (healthbarInterface != null)
+        //{
+        //    healthbarInterface.SetHealthBarValue(GetAttribute(AttributeType.CurrentHitpoints));
+        //    healthbarInterface.SetHealthBarMaxValue(GetAttribute(AttributeType.MaxHitpoints));
+        //    healthbarInterface.SetPowerBarValue(GetAttribute(AttributeType.CurrentPower));
+        //    healthbarInterface.SetPowerBarMaxValue(GetAttribute(AttributeType.MaxPower));
+        //    Logging.Info($"{GetAttribute(AttributeType.MaxPower)} = max power. {GetAttribute(AttributeType.CurrentPower)} = current power. {GetAttribute(AttributeType.MaxHitpoints)} = max hp. {GetAttribute(AttributeType.CurrentHitpoints)} = current hp");
+        //}
+        //else Logging.Info("healthbarInterface  doesnt exist");
+        //
 
     }
 

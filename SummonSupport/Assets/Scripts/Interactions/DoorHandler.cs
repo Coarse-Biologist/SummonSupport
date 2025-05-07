@@ -14,12 +14,14 @@ public class DoorHandler : MonoBehaviour, I_Interactable
 
     [SerializeField] public Element elementalRequisite;
     [SerializeField] public int difficulty = 1;
+    private EdgeCollider2D doorCollider;
 
 
 
     private SpriteRenderer minionsSpriteRenderer;
     public void Awake()
     {
+        doorCollider = GetComponent<EdgeCollider2D>();
         minionsSpriteRenderer = GetComponentInChildren<SpriteRenderer>();
     }
 
@@ -46,6 +48,8 @@ public class DoorHandler : MonoBehaviour, I_Interactable
         {
             if (!Open)
             {
+                doorCollider.enabled = false;
+
                 NotReadyToInteract();
                 Open = true;
                 minionsSpriteRenderer.sprite = OpenSprite;
@@ -53,6 +57,7 @@ public class DoorHandler : MonoBehaviour, I_Interactable
             }
             else
             {
+                doorCollider.enabled = true;
                 NotReadyToInteract();
                 Open = false;
                 minionsSpriteRenderer.sprite = ClosedSprite;

@@ -4,7 +4,7 @@ public enum EquipmentSlot
     Chest,
     Arms,
     LeftHand,
-    Righthand,
+    RightHand,
     TwoHand,
     Finger,
     Legs,

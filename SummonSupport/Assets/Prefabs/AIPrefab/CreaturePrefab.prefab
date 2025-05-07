@@ -18,6 +18,7 @@ GameObject:
   - component: {fileID: 8272282993633927976}
   - component: {fileID: 4402697428807640596}
   - component: {fileID: 9050172420336280654}
+  - component: {fileID: -2192539161432645077}
   m_Layer: 6
   m_Name: CreaturePrefab
   m_TagString: Enemy

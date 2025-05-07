@@ -8,12 +8,12 @@ public abstract class LivingBeing : MonoBehaviour
     #region Declarations
 
     [Header("Birth certificate")]
-    [field: SerializeField] public string Name                  { get; private set; }
-    [field: SerializeField] public CharacterTag CharacterTag    { get; private set; }
-    [field: SerializeField] public string Description           { get; private set; }
-    [field: SerializeField] public List<string> BattleCries     { get; private set; }
+    [field: SerializeField] public string Name { get; private set; }
+    [field: SerializeField] public CharacterTag CharacterTag { get; private set; }
+    [field: SerializeField] public string Description { get; private set; }
+    [field: SerializeField] public List<string> BattleCries { get; private set; }
 
-    [Header("Attributes - Ressources")]
+    [Header("Attributes - Resources")]
     [field: SerializeField] public float MaxHP { get; private set; } = 100;
     [field: SerializeField] public float Overshield { get; private set; }
     [field: SerializeField] public float CurrentHP { get; private set; } = 100;
@@ -55,14 +55,18 @@ public abstract class LivingBeing : MonoBehaviour
     [field: SerializeField] public float Mass { get; private set; } = 1f;
 
     #endregion Declarations
-    [SerializeField] public I_HealthBar healthbarInterface;
+
+
+
+    [SerializeField] public I_ResourceBar resourceBarInterface;
+
 
     protected virtual void Awake()
     {
         GetComponent<Rigidbody2D>().mass = Mass;
         InitializeAttributeDict();
         InitializeAffinityDict();
-        healthbarInterface = GetComponent<I_HealthBar>();
+        resourceBarInterface = GetComponent<I_ResourceBar>();
     }
 
 
@@ -179,17 +183,30 @@ public abstract class LivingBeing : MonoBehaviour
     {
         switch (attributeType)
         {
-            case AttributeType.CurrentHitpoints:
-                EventDeclarer.attributeChanged?.Invoke(this, attributeType);
-                healthbarInterface?.SetHealthBarValue(GetAttribute(attributeType));
-                break;
-            case AttributeType.CurrentPower:
-                EventDeclarer.attributeChanged?.Invoke(this, attributeType);
-                healthbarInterface?.SetHealthBarValue(GetAttribute(attributeType));
-                break;
             case AttributeType.MaxHitpoints:
+            case AttributeType.CurrentHitpoints:
+                if (CharacterTag != CharacterTag.Enemy)
+                {
+                    EventDeclarer.maxAttributeChanged?.Invoke(this, attributeType);
+                    EventDeclarer.attributeChanged?.Invoke(this, attributeType);
+                }
+
+                resourceBarInterface?.SetHealthBarMaxValue(GetAttribute(attributeType));
+                resourceBarInterface?.SetHealthBarValue(GetAttribute(attributeType));
+
+                break;
             case AttributeType.MaxPower:
-                EventDeclarer.maxAttributeChanged?.Invoke();
+            case AttributeType.CurrentPower:
+                if (CharacterTag != CharacterTag.Enemy)
+                {
+                    EventDeclarer.maxAttributeChanged?.Invoke(this, attributeType);
+                    EventDeclarer.attributeChanged?.Invoke(this, attributeType);
+                }
+
+                resourceBarInterface?.SetPowerBarValue(GetAttribute(attributeType));
+                resourceBarInterface?.SetPowerBarMaxValue(GetAttribute(attributeType));
+
+
                 break;
 
             case AttributeType.MovementSpeed:

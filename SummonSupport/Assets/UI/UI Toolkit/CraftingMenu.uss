@@ -94,3 +94,10 @@
     scale: 0.7 3;
     rotate: -90deg;
 }
+
+.Xpbar {
+    color: rgb(255, 247, 0);
+    width: 100%;
+    min-width: 100%;
+    max-width: 100%;
+}

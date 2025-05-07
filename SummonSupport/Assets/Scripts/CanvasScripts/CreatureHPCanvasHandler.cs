@@ -1,27 +1,51 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CreatureHPCanvasHandler : MonoBehaviour, I_HealthBar
+public class CreatureHPCanvasHandler : MonoBehaviour, I_ResourceBar
 {
 
-    //private LivingBeing livingBeing;
+    private LivingBeing livingBeing;
     private Slider hpSlider;
+    private Slider manaSlider;
 
     void Awake()
     {
-        //livingBeing = GetComponent<LivingBeing>();
-        hpSlider = GetComponentInChildren<Slider>();
-        hpSlider.value = 200f;
-        hpSlider.maxValue = 200f;
-    }
+        livingBeing = gameObject.GetComponent<LivingBeing>();
+        Slider[] sliders = GetComponentsInChildren<Slider>();
+        hpSlider = sliders[0];
+
+        manaSlider = sliders[1];
 
 
-    public void SetHealthBarValue(float value)
-    {
-        hpSlider.value = value;
+
+        Logging.Info($"{manaSlider} = mana slider. {hpSlider} = hpslider");
     }
-    public void SetHealthBarMaxValue(float value)
+
+    void Start()
     {
-        hpSlider.maxValue = value;
+        SetHealthBarMaxValue();
+        SetHealthBarValue();
+        SetPowerBarMaxValue();
+        SetPowerBarValue();
+    }
+    public void SetHealthBarValue(float value = 1)
+    {
+        //float hp = livingBeing.GetAttribute(AttributeType.CurrentHitpoints);
+        //Logging.Info($"Setting hp to {hp}");
+        hpSlider.value = livingBeing.GetAttribute(AttributeType.CurrentHitpoints);
+    }
+    public void SetHealthBarMaxValue(float value = 1)
+    {
+        hpSlider.maxValue = livingBeing.GetAttribute(AttributeType.MaxHitpoints);
+    }
+
+    public void SetPowerBarValue(float value = 1)
+    {
+        manaSlider.value = livingBeing.GetAttribute(AttributeType.CurrentPower);
+    }
+
+    public void SetPowerBarMaxValue(float value = 1)
+    {
+        manaSlider.maxValue = livingBeing.GetAttribute(AttributeType.MaxPower);
     }
 }
