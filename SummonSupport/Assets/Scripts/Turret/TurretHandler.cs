@@ -97,7 +97,6 @@ public class TurretHandler : AbilityHandler
 
         if (listTargets.Count <= 0)
             return;
-        
-        CastAbility(0);
+        CastAbility(0, target.transform.position, gameObject.transform.rotation);
     }
 }

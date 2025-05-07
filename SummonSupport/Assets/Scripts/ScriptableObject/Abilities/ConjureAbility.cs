@@ -1,20 +1,29 @@
 using UnityEngine;
-using System.Collections;
+
 [CreateAssetMenu(menuName = "Abilities/Conjure Ability")]
 public class ConjureAbility : Ability
 {
-    [field: SerializeField, Header("Conjure settings"), Tooltip("Ability prefab")]  
-    public GameObject   ObjectToSpawn  { get; protected set; }
-    [field: SerializeField]
-    public Vector2      SpawnOffset    { get; protected set; }
-    [field: SerializeField, Tooltip("Activate this if ability should only last a specific amount of time")] 
-    public bool         IsDecaying     { get; protected set; }
-    [field: SerializeField, Tooltip("in seconds")] public float        TimeAlive      { get; protected set; }
+    [field: Header("Conjure settings"), Tooltip("Ability prefab")]
+    [field: SerializeField] public GameObject   ObjectToSpawn  { get; protected set; }
+    [field: SerializeField] public Vector2      SpawnOffset    { get; protected set; }
+
+    [field: Tooltip("Activate this if ability should only last a specific amount of time")] 
+    [field: SerializeField] public bool         IsDecaying     { get; protected set; }
+
+    [field: Tooltip("in seconds")] 
+    [field: SerializeField] public float        TimeAlive      { get; protected set; }
+
 
     public override void Activate(GameObject user)
     {
         Vector3 spawnPosition = user.transform.position + (Vector3)SpawnOffset;
-        GameObject spawnedObject = Instantiate(ObjectToSpawn, spawnPosition, Quaternion.identity);
+        Quaternion rotation = user.transform.rotation;
+        Activate(user, spawnPosition, rotation);
+    }
+
+    public void Activate(GameObject user, Vector3 spawnPosition, Quaternion rotation)
+    {
+        GameObject spawnedObject = Instantiate(ObjectToSpawn, spawnPosition, rotation);
 
         if (IsDecaying)
             AddDecayToObject(spawnedObject);

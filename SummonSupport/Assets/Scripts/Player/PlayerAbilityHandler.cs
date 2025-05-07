@@ -1,10 +1,10 @@
 using UnityEngine.InputSystem;
 using System.Collections.Generic;
+using UnityEngine;
 using SummonSupportEvents;
 
 public class PlayerAbilityHandler : AbilityHandler
 {
-
     PlayerInputActions inputActions;
     private Dictionary<string, int> inputActionToIndex = new()
     {
@@ -28,6 +28,7 @@ public class PlayerAbilityHandler : AbilityHandler
     void Start()
     {
         UpdateAbilities();
+        // abilityRotation = gameObject.GetComponentInChildren<RectTransform>();
     }
 
     new void Awake()
@@ -67,10 +68,13 @@ public class PlayerAbilityHandler : AbilityHandler
         {
             if (!abilitiesOnCooldown[index])
                 EventDeclarer.AbilityUsed?.Invoke(index);
-
-            CastAbility(index);
-
+                
+            CastAbility(index, GetMousePosition(), abilityDirection.transform.rotation);
         }
+    }
 
+    Vector2 GetMousePosition()
+    {
+        return Camera.main.ScreenToWorldPoint(Input.mousePosition);
     }
 }
