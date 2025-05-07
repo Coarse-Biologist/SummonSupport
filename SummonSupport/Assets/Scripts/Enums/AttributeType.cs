@@ -14,4 +14,5 @@ public enum AttributeType
     DashBoost,
     DashDuration,
     DashCooldown,
+    CurrentXP,
 }

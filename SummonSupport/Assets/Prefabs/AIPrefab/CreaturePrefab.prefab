@@ -18,7 +18,7 @@ GameObject:
   - component: {fileID: 4402697428807640596}
   - component: {fileID: 9050172420336280654}
   - component: {fileID: -2192539161432645077}
-  m_Layer: 7
+  m_Layer: 6
   m_Name: CreaturePrefab
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -239,7 +239,7 @@ GameObject:
   m_Component:
   - component: {fileID: 717634867459255289}
   - component: {fileID: 4755851978388305148}
-  m_Layer: 7
+  m_Layer: 6
   m_Name: EnemySprite
   m_TagString: Minion
   m_Icon: {fileID: 0}
@@ -325,6 +325,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 6683928398212683686}
     m_Modifications:
+    - target: {fileID: 355763841674585372, guid: 684b4edd7bca68046be3b2e37d4a41b8,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 1273672520364090574, guid: 684b4edd7bca68046be3b2e37d4a41b8,
         type: 3}
       propertyPath: m_LocalScale.x
@@ -390,6 +395,21 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1841220976614889198, guid: 684b4edd7bca68046be3b2e37d4a41b8,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 4005615017468092538, guid: 684b4edd7bca68046be3b2e37d4a41b8,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 5091063711396319800, guid: 684b4edd7bca68046be3b2e37d4a41b8,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 5475539134505664418, guid: 684b4edd7bca68046be3b2e37d4a41b8,
         type: 3}
       propertyPath: m_Color.b
@@ -420,10 +440,20 @@ PrefabInstance:
       propertyPath: m_Name
       value: HP_Canvas
       objectReference: {fileID: 0}
+    - target: {fileID: 7067589349283284503, guid: 684b4edd7bca68046be3b2e37d4a41b8,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 8011221658953694246, guid: 684b4edd7bca68046be3b2e37d4a41b8,
         type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8240753097440007397, guid: 684b4edd7bca68046be3b2e37d4a41b8,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:

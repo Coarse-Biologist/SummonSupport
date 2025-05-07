@@ -12,12 +12,14 @@ public class EnemyStats : LivingBeing
     void Start()
     {
 
-        healthbarInterface = GetComponent<I_HealthBar>();
+        healthbarInterface = GetComponent<I_ResourceBar>();
 
         if (healthbarInterface != null)
         {
             healthbarInterface.SetHealthBarValue(GetAttribute(AttributeType.CurrentHitpoints));
             healthbarInterface.SetHealthBarMaxValue(GetAttribute(AttributeType.MaxHitpoints));
+            healthbarInterface.SetPowerBarValue(GetAttribute(AttributeType.CurrentPower));
+            healthbarInterface.SetPowerBarMaxValue(GetAttribute(AttributeType.MaxPower));
         }
 
 

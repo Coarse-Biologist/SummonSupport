@@ -91,6 +91,7 @@ public class QuestHandler : MonoBehaviour
         }
         AlchemyInventory.GainTool(quest.AlchemyToolReward);
         AlchemyInventory.AlterIngredientNum(quest.AlchemyLootReward, quest.AlchemyLootNum);
+        playerStats.GainXP(quest.XP_Reward);
     }
     public void IncrementIntQuest(RepeatableAccomplishments intQuest, int value = 1)
     {
@@ -108,7 +109,7 @@ public class QuestHandler : MonoBehaviour
             Logging.Info($"quest: {intQuest} increased by {value}. Current total num = {value}");
         }
     }
-    public void IncrementEnemyDefeated()
+    public void IncrementEnemyDefeated(GameObject gameObject)
     {
         QuestRepTracker[RepeatableAccomplishments.DefeatEnemies]++;
     }

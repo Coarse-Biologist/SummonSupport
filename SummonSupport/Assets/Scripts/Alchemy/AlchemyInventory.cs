@@ -10,16 +10,16 @@ public static class AlchemyInventory
     #region Class variables
     public static Dictionary<AlchemyLoot, int> ingredients { get; private set; } = new Dictionary<AlchemyLoot, int>
         {
-            { AlchemyLoot.WretchedOrgans, 2 },
-            { AlchemyLoot.FunctionalOrgans, 2 },
-            { AlchemyLoot.HulkingOrgans, 2 },
-            { AlchemyLoot.BrokenCores, 2 },
-            { AlchemyLoot.WorkingCore, 1 },
-            { AlchemyLoot.PowerfulCore, 0 },
-            { AlchemyLoot.HulkingCore, 0 },
-            { AlchemyLoot.FaintEther, 1 },
-            { AlchemyLoot.PureEther, 2 },
-            { AlchemyLoot.IntenseEther, 1 }
+            { AlchemyLoot.WretchedOrgans, 10 },
+            { AlchemyLoot.FunctionalOrgans, 10 },
+            { AlchemyLoot.HulkingOrgans, 10 },
+            { AlchemyLoot.BrokenCores, 10 },
+            { AlchemyLoot.WorkingCore, 10 },
+            { AlchemyLoot.PowerfulCore, 10 },
+            { AlchemyLoot.HulkingCore, 10 },
+            { AlchemyLoot.FaintEther, 10 },
+            { AlchemyLoot.PureEther, 10 },
+            { AlchemyLoot.IntenseEther,101 }
             };
     public static Dictionary<AlchemyLoot, int> ingredientValues { get; private set; } = new Dictionary<AlchemyLoot, int>
         {

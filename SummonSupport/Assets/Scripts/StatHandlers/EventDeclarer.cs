@@ -1,4 +1,5 @@
 using Quest;
+using UnityEngine;
 using UnityEngine.Events;
 
 namespace SummonSupportEvents
@@ -6,13 +7,13 @@ namespace SummonSupportEvents
     public static class EventDeclarer
     {
         public static UnityEvent<LivingBeing, AttributeType> attributeChanged = new UnityEvent<LivingBeing, AttributeType>();
-        public static UnityEvent maxAttributeChanged = new UnityEvent();
+        public static UnityEvent<LivingBeing, AttributeType> maxAttributeChanged = new();
 
         #region Quests
         public static UnityEvent<Quest_SO> QuestStarted = new();
         public static UnityEvent<Quest_SO> QuestCompleted = new();
         public static UnityEvent<RepeatableAccomplishments, int> RepeatableQuestCompleted = new UnityEvent<RepeatableAccomplishments, int>();
-        public static UnityEvent EnemyDefeated = new UnityEvent();
+        public static UnityEvent<GameObject> EnemyDefeated = new();
 
         #endregion
         public static UnityEvent<LivingBeing> minionDied = new UnityEvent<LivingBeing>();
