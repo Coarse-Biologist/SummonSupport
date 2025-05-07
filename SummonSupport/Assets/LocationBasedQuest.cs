@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class LocationBasedQuest : MonoBehaviour, IQuest
 {
-    [SerializeField] public Quest_SO quest;
+    [SerializeField] public Quest_SO completesQuest;
+    [SerializeField] public Quest_SO grantsQuest;
+
 
     void OnTriggerEnter2D(Collider2D collision)
     {
@@ -13,17 +15,19 @@ public class LocationBasedQuest : MonoBehaviour, IQuest
             Logging.Info("player in collider2d");
 
             CompleteQuest();
+            GrantQuest();
         }
     }
     public void CompleteQuest()
     {
-        EventDeclarer.QuestCompleted?.Invoke(quest);
+        if (completesQuest != null)
+            EventDeclarer.QuestCompleted?.Invoke(completesQuest);
     }
 
     public void GrantQuest()
     {
-        //throw new System.NotImplementedException();
+        if (grantsQuest != null)
+            EventDeclarer.QuestStarted?.Invoke(grantsQuest);
     }
-
 
 }

@@ -13,7 +13,7 @@ namespace SummonSupportEvents
         #region Quests
         public static UnityEvent<Quest_SO> QuestStarted = new();
         public static UnityEvent<Quest_SO> QuestCompleted = new();
-        public static UnityEvent<RepeatableAccomplishments> RepeatableQuestCompleted = new UnityEvent<RepeatableAccomplishments>();
+        public static UnityEvent<RepeatableAccomplishments, int> RepeatableQuestCompleted = new UnityEvent<RepeatableAccomplishments, int>();
         public static UnityEvent EnemyDefeated = new UnityEvent();
 
         #endregion

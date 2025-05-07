@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0bede6bd9288e574e953f4c1fbb2fde9, type: 3}
-  m_Name: Simpletestquest
+  m_Name: TestGrantsQuest
   m_EditorClassIdentifier: 
-  QuestName: 
-  QuestEnum: 1
+  QuestName: CrewsGrantedQuestTEst
+  QuestEnum: 2
   IntQuestReqs: []
   BoolQuestReqs: 
   PresentationString: 
@@ -25,4 +25,4 @@ MonoBehaviour:
   AlchemyLootNum: 0
   BenefittedElements: 
   AlchemyLootReward: 0
-  AlchemyToolReward: 0
+  AlchemyToolReward: 19

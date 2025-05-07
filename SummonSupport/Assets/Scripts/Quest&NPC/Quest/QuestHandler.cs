@@ -39,24 +39,40 @@ public class QuestHandler : MonoBehaviour
         EventDeclarer.EnemyDefeated.RemoveListener(IncrementEnemyDefeated);
         EventDeclarer.QuestStarted.RemoveListener(AddActiveQuest);
         EventDeclarer.QuestCompleted.RemoveListener(HandleQuestCompleted);
-
     }
 
     public bool CheckQuestCompletion(Quest_SO activeQuest)
     {
         Dictionary<RepeatableAccomplishments, int> goalReps = activeQuest.IntQuestReqs.ToDictionary(item => item.quest, item => item.reps);
-        if (goalReps.Keys.Count > QuestRepTracker.Keys.Count) return false;
+        if (goalReps.Keys.Count > QuestRepTracker.Keys.Count)
+        {
+            Logging.Info($"Dict<repeatable quests, completed repetitions>().keys was not to the quest {activeQuest.QuestName} number of required quests ");
+            return false;
+        }
+        else
+        {
+            Logging.Info($"Dict<repeatable quests, completed repetitions>().keys was equal to the quest {activeQuest.QuestName} number of required quests ");
+        }
         bool complete = true;
         foreach (KeyValuePair<RepeatableAccomplishments, int> kvp in goalReps)
         {
-            if (QuestRepTracker.TryGetValue(kvp.Key, out int reps) && reps >= kvp.Value) continue;
-            else return false;
+            if (QuestRepTracker.TryGetValue(kvp.Key, out int reps) && reps >= kvp.Value)
+            {
+                Logging.Info($"Repetitions of quest {kvp.Key} was {reps} which is >=  the quest number of required repetitions ({kvp.Value} ) ");
+                continue;
+            }
+            else
+            {
+                Logging.Info($"Repetitions of quest {kvp.Key} was {reps} which is <=  the quest number of required repetitions ({kvp.Value} ) ");
+                return false;
+            }
         }
         return complete;
     }
 
     public void AddActiveQuest(Quest_SO quest)
     {
+        Logging.Info($"Active quest added {quest.QuestName}");
         if (!ActiveQuests.Contains(quest)) ActiveQuests.Add(quest);
     }
 
@@ -76,10 +92,21 @@ public class QuestHandler : MonoBehaviour
         AlchemyInventory.GainTool(quest.AlchemyToolReward);
         AlchemyInventory.AlterIngredientNum(quest.AlchemyLootReward, quest.AlchemyLootNum);
     }
-    public void IncrementIntQuest(RepeatableAccomplishments intQuest)
+    public void IncrementIntQuest(RepeatableAccomplishments intQuest, int value = 1)
     {
-        if (QuestRepTracker.TryGetValue(intQuest, out int reps)) QuestRepTracker[intQuest] += 1;
-        else QuestRepTracker.Add(intQuest, 1);
+        Logging.Info($"Increment func called");
+
+        if (QuestRepTracker.TryGetValue(intQuest, out int reps))
+        {
+            QuestRepTracker[intQuest] += value;
+            Logging.Info($"quest: {intQuest} increased by {value} Current total num = {reps + value}");
+
+        }
+        else
+        {
+            QuestRepTracker.Add(intQuest, value);
+            Logging.Info($"quest: {intQuest} increased by {value}. Current total num = {value}");
+        }
     }
     public void IncrementEnemyDefeated()
     {

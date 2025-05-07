@@ -42,9 +42,17 @@ MonoBehaviour:
     - Give me my reward
     - I couldnt have done it without my minion
     - it wasnt easy
+  - Key: Damn Daniel, you went all the way to the corner of the map!
+    Value:
+    - Give me my reward
+    - I couldnt have done it without my minion
+    - it wasnt easy
   unlockableDialoguePlayer:
   - Key: Howdy.
     Value: Well done, you killed the goblin king!
+    result: 3
+  - Key: Hello.
+    Value: Damn Daniel, you went all the way to the corner of the map!
     result: 3
   questToUnlockDialogue: {fileID: 11400000, guid: dc21ef7a537ac6a4f85a2b854c97365e,
     type: 2}
