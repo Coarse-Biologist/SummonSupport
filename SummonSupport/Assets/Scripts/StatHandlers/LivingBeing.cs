@@ -48,6 +48,8 @@ public abstract class LivingBeing : MonoBehaviour
     [field: SerializeField] protected float Psychic { get; private set; } = 0;
     #endregion Afinity Stats
 
+    #region other data
+
     [Header("Other")]
     [field: SerializeField] public float XP_OnDeath { get; private set; } = 3;
     public Dictionary<string, StatusEffectInstance> activeStatusEffects = new();
@@ -58,12 +60,11 @@ public abstract class LivingBeing : MonoBehaviour
     [field: SerializeField] public float Speed { get; private set; } = 0.4f;
     [field: SerializeField] public float Mass { get; private set; } = 1f;
 
-    #endregion Declarations
+    private I_ResourceBar resourceBarInterface;
 
+    #endregion
 
-
-    [SerializeField] public I_ResourceBar resourceBarInterface;
-
+    #endregion
 
     protected virtual void Awake()
     {
@@ -71,44 +72,8 @@ public abstract class LivingBeing : MonoBehaviour
         InitializeAttributeDict();
         InitializeAffinityDict();
         resourceBarInterface = GetComponent<I_ResourceBar>();
-        InvokeRepeating("Regenerate", 0f, 1f);
+        InvokeRepeating("RegenerateMana", 0f, 1f);
     }
-    private void Regenerate()
-    {
-        if (GetAttribute(AttributeType.CurrentHitpoints) < GetAttribute(AttributeType.MaxHitpoints))
-            ChangeAttribute(AttributeType.CurrentHitpoints, HealthRegeneration);
-        if (GetAttribute(AttributeType.CurrentPower) < GetAttribute(AttributeType.MaxPower))
-            ChangeAttribute(AttributeType.CurrentPower, PowerRegeneration);
-    }
-
-
-
-    #region Stat Upgrades
-
-    public void ChangeMaxHP(float amount)
-    {
-        MaxHP += amount;
-    }
-    public void ChangeMaxPower(float amount)
-    {
-        MaxPower += amount;
-        GetComponent<Rigidbody2D>().linearVelocity = new Vector2(3, 3);
-    }
-    public void Gainmass(float massGain)
-    {
-        Mass += massGain;
-        GetComponent<Rigidbody2D>().mass += massGain;
-    }
-    public void ChangeSpeed(float amount)
-    {
-        Speed += amount;
-    }
-    public void LearnBattleCry(string newBattleCry)
-    {
-        if (!BattleCries.Contains(newBattleCry)) BattleCries.Add(newBattleCry);
-    }
-
-    #endregion
 
     #region Resource Control
 
@@ -118,12 +83,9 @@ public abstract class LivingBeing : MonoBehaviour
         CurrentPower = MaxPower;
     }
 
-    public void ReduceHP(float amount)
-    {
-        CurrentHP -= amount;
-    }
-
     #endregion
+
+    #region Affinity handling
     public void GainAffinity(Element element, float amount)
     {
         if (Affinities.TryGetValue(element, out (Func<float> Get, Action<float> Set) func))
@@ -131,10 +93,6 @@ public abstract class LivingBeing : MonoBehaviour
             Affinities[element].Set(amount + Affinities[element].Get());
         }
     }
-
-    #region Affinity handling
-
-
     #endregion
 
     #region Status effects handling
@@ -168,10 +126,6 @@ public abstract class LivingBeing : MonoBehaviour
         HandleEventInvokes(attributeType, value);
 
     }
-    public void SetName(string newName)
-    {
-        Name = newName;
-    }
 
     public float ChangeAttribute(AttributeType attributeType, float value, ValueType valueType = ValueType.Flat)
     {
@@ -182,14 +136,9 @@ public abstract class LivingBeing : MonoBehaviour
         float newValue = CalculateNewValueByType(currentValue, value, valueType, attributeType);
         SetAttribute(attributeType, newValue);
 
-        if (IsDead())
+        if (GetAttribute(AttributeType.CurrentHitpoints) <= 0)
             Die();
         return newValue;
-    }
-
-    public bool IsDead()
-    {
-        return CurrentHP <= 0;
     }
 
     public void HandleEventInvokes(AttributeType attributeType, float newValue)
@@ -277,6 +226,43 @@ public abstract class LivingBeing : MonoBehaviour
     }
     #endregion
 
+    #region Handle Mana Regeneration
+    private void RegenerateMana()
+    {
+        //if (GetAttribute(AttributeType.CurrentHitpoints) < GetAttribute(AttributeType.MaxHitpoints))
+        //    ChangeAttribute(AttributeType.CurrentHitpoints, HealthRegeneration);
+        int calculatedManaRegen = CalaculateManaRegen();
+        if (GetAttribute(AttributeType.CurrentPower) < GetAttribute(AttributeType.MaxPower))
+            ChangeAttribute(AttributeType.CurrentPower, calculatedManaRegen);
+    }
+    private int CalaculateManaRegen()
+    {
+        return (int)PowerRegeneration;
+    }
+    #endregion
+
+    #region Niche attribute changes
+    public void SetName(string newName)
+    {
+        Name = newName;
+    }
+    public void Gainmass(float massGain)
+    {
+        Mass += massGain;
+        GetComponent<Rigidbody2D>().mass += massGain;
+    }
+    public void ChangeSpeed(float amount)
+    {
+        Speed += amount;
+    }
+    public void LearnBattleCry(string newBattleCry)
+    {
+        if (!BattleCries.Contains(newBattleCry)) BattleCries.Add(newBattleCry);
+    }
+
+    #endregion
+
+    #region Dictionary Setup
 
     void InitializeAttributeDict()
     {
@@ -312,6 +298,8 @@ public abstract class LivingBeing : MonoBehaviour
                 { Element.Psychic,         (() => Psychic,         v => Psychic = v) }
             };
     }
+
+    #endregion
     protected void Die()
     {
         Logging.Info($"{gameObject.name} died");

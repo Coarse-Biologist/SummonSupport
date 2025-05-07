@@ -63,17 +63,17 @@ public class AlchemyHandler : MonoBehaviour
         string organString = organ.ToString();
         if (organString.Contains("Wretched"))
         {
-            stats.ChangeMaxHP(5);
+            stats.ChangeAttribute(AttributeType.MaxHitpoints, 5);
             healthUpgrade += 5;
         }
         if (organString.Contains("Functional"))
         {
-            stats.ChangeMaxHP(10);
+            stats.ChangeAttribute(AttributeType.MaxHitpoints, 10);
             healthUpgrade += 10;
         }
         if (organString.Contains("Hulking"))
         {
-            stats.ChangeMaxHP(20);
+            stats.ChangeAttribute(AttributeType.MaxHitpoints, 20);
             healthUpgrade += 20;
         }
         return healthUpgrade;
@@ -86,22 +86,22 @@ public class AlchemyHandler : MonoBehaviour
         string coreString = core.ToString();
         if (coreString.Contains("Broken"))
         {
-            stats.ChangeMaxPower(5);
+            stats.ChangeAttribute(AttributeType.MaxPower, 5);
             powerUpgrade += 5;
         }
         if (coreString.Contains("Functional"))
         {
-            stats.ChangeMaxPower(10);
+            stats.ChangeAttribute(AttributeType.MaxPower, 10);
             powerUpgrade += 10;
         }
         if (coreString.Contains("Powerful"))
         {
-            stats.ChangeMaxPower(20);
+            stats.ChangeAttribute(AttributeType.MaxPower, 20);
             powerUpgrade += 20;
         }
         if (coreString.Contains("Hulking"))
         {
-            stats.ChangeMaxPower(30);
+            stats.ChangeAttribute(AttributeType.MaxPower, 30);
             powerUpgrade += 30;
         }
         return powerUpgrade;
