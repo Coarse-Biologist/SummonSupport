@@ -15,12 +15,12 @@ MonoBehaviour:
   <Name>k__BackingField: Flash Heal
   <Icon>k__BackingField: {fileID: -5213843486968170516, guid: 71d4e6f2bf9eae84f9b9d55dc9f41410,
     type: 3}
-  <Cooldown>k__BackingField: 10
+  <Cooldown>k__BackingField: 3
   <PowerCost>k__BackingField: 15
   <StatusEffects>k__BackingField: []
   <ListUsableOn>k__BackingField: 00000000
-  <Attribute>k__BackingField: 0
-  <Value>k__BackingField: 100
-  <ElementType>k__BackingField: 0
+  <Attribute>k__BackingField: 1
+  <Value>k__BackingField: 25
+  <ElementType>k__BackingField: 2
   <OnCooldown>k__BackingField: 0
-  <ListOnCastDo>k__BackingField: 020000000100000003000000
+  <ListOnCastDo>k__BackingField: 02000000
