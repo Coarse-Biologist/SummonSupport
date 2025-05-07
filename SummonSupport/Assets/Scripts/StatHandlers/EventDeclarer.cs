@@ -9,8 +9,14 @@ namespace SummonSupportEvents
     {
         public static UnityEvent<LivingBeing, AttributeType> attributeChanged = new UnityEvent<LivingBeing, AttributeType>();
         public static UnityEvent maxAttributeChanged = new UnityEvent();
-        public static UnityEvent<RepeatableAccomplishments> RepeatableQuestCompleted = new UnityEvent<RepeatableAccomplishments>();
+
+        #region Quests
+        public static UnityEvent<Quest_SO> QuestStarted = new();
+        public static UnityEvent<Quest_SO> QuestCompleted = new();
+        public static UnityEvent<RepeatableAccomplishments, int> RepeatableQuestCompleted = new UnityEvent<RepeatableAccomplishments, int>();
         public static UnityEvent EnemyDefeated = new UnityEvent();
+
+        #endregion
         public static UnityEvent<LivingBeing> minionDied = new UnityEvent<LivingBeing>();
         public static UnityEvent<AttributeType, float> SpeedAttributeChanged = new();
         public static UnityEvent<int, Ability> SlotChanged = new();

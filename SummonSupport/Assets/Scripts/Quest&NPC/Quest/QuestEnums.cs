@@ -10,5 +10,13 @@ namespace Quest
     {
         DefeatEnemies,
         CraftMinions,
+        LootOrgans,
+        LootCores,
+        LootEther,
+        UseOrgans,
+        UseCores,
+        UseEther,
+        GainKnowledge,
+
     }
 }

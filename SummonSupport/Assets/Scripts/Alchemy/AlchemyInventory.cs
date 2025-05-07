@@ -63,15 +63,18 @@ public static class AlchemyInventory
     {
         knowledgeDict[element] += amount;
     }
-    public static void AlterIngredientNum(AlchemyLoot ingredient, int amount)
+    public static void AlterIngredientNum(List<AlchemyLoot> newIngredients, int amount)
     {
-        ingredients[ingredient] += amount;
+        foreach (AlchemyLoot ingredient in newIngredients)
+        {
+            ingredients[ingredient] += amount;
+        }
     }
     public static void ExpendIngredients(Dictionary<AlchemyLoot, int> usedIngredients)
     {
         foreach (KeyValuePair<AlchemyLoot, int> kvp in usedIngredients)
         {
-            if (ingredients[kvp.Key] > 0) AlterIngredientNum(kvp.Key, -kvp.Value);
+            if (ingredients[kvp.Key] > 0) AlterIngredientNum(new List<AlchemyLoot> { kvp.Key }, -kvp.Value);
         }
     }
     public static void GainTool(AlchemyTool tool)

@@ -8,8 +8,8 @@ using System;
 public class PlayerUIHandler : MonoBehaviour
 {
     public static PlayerUIHandler Instance { get; private set; }
-    [SerializeField] public UIDocument uiDoc;
-    [SerializeField] VisualTreeAsset UIPrefabAssets;
+    private UIDocument uiDoc;
+    private VisualTreeAsset UIPrefabAssets;
 
 
     LivingBeing playerStats;
@@ -31,6 +31,20 @@ public class PlayerUIHandler : MonoBehaviour
         else
             Destroy(gameObject);
 
+
+    }
+    void Start()
+    {
+        SetUpUI();
+        UpdateMaxValueResourceBar();
+        UpdateResourceBar(playerStats, AttributeType.CurrentHitpoints);
+        UpdateResourceBar(playerStats, AttributeType.CurrentPower);
+
+    }
+    private void SetUpUI()
+    {
+        uiDoc = UI_DocHandler.Instance.ui;
+        UIPrefabAssets = UI_DocHandler.Instance.UIPrefabAssets;
         root = uiDoc.rootVisualElement;
         playerUI = root.Q<VisualElement>("MainUI");
 
@@ -44,18 +58,10 @@ public class PlayerUIHandler : MonoBehaviour
         if (craftingUI != null)
             craftingUI.style.display = DisplayStyle.None;
 
-        playerUI.SetEnabled(true);
-        craftingUI.SetEnabled(true);
+
         playerUI.style.opacity = 100f;
         craftingUI.style.opacity = 100f;
         playerStats = gameObject.GetComponent<LivingBeing>();
-    }
-    void Start()
-    {
-        UpdateMaxValueResourceBar();
-        UpdateResourceBar(playerStats, AttributeType.CurrentHitpoints);
-        UpdateResourceBar(playerStats, AttributeType.CurrentPower);
-
     }
 
     void UpdateMaxValueResourceBar()

@@ -17,8 +17,11 @@ MonoBehaviour:
   Goodbye: Au revoir...
   Dialogue: {fileID: 11400000, guid: 1036811e4b6e7d44a9acdf0048e48ebd, type: 2}
   GivesQuest: 0
-  XpReward: 0
-  GoldReward: 0
-  KnowlegdeReward: 0
+  XP_Reward: 9
+  GoldReward: 8
+  KnowlegdeReward: 7
+  ElementsLootReward: 0
+  AlchemyLootReward: 0
+  AlchemyToolReward: 0
   NPC_Sprite: {fileID: -203661239432679192, guid: 234a4cc18a5cece4aad2957b211d73c7,
     type: 3}
