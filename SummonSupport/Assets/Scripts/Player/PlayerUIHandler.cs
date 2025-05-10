@@ -109,6 +109,7 @@ public class PlayerUIHandler : MonoBehaviour
         minionHP.value = hp;
         if (minionHPBars == null) Logging.Error("minion HP visual element doesnt exist");
         minionHPBars.Add(minionHP);
+        minionHP.RegisterCallback<ClickEvent>(evt => OnMinionSelect(livingBeing));
     }
     public void RemoveMinionHP(LivingBeing livingBeing)
     {
@@ -125,6 +126,13 @@ public class PlayerUIHandler : MonoBehaviour
     {
         return HPDict[minion];
     }
+    private void OnMinionSelect(LivingBeing livingBeing)
+    {
+        Logging.Info("Button clicked");
+        CommandMinion.SetSelectedMinion(livingBeing.gameObject);
+    }
+
+
 
     public void UpdateResourceBar(LivingBeing livingBeing, AttributeType attributeType)
     {

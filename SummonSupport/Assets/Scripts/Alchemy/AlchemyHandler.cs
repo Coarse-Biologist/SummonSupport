@@ -174,7 +174,7 @@ public class AlchemyHandler : MonoBehaviour
         if (!activeMinions.Contains(minion))
         {
             activeMinions.Add(minion);
-            CommandMinion.SetSelectedMinion(minion); //Good idea?...
+            //CommandMinion.SetSelectedMinion(minion); //Good idea?...
             newMinionAdded?.Invoke(livingBeing);
         }
     }
