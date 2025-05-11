@@ -128,7 +128,23 @@ public class PlayerUIHandler : MonoBehaviour
     }
     private void OnMinionSelect(LivingBeing livingBeing)
     {
-        Logging.Info("Button clicked");
+        ProgressBar minionHP = GetLivingBeingHPBar(livingBeing);
+        if (minionHP.style.borderBottomColor != Color.yellow)
+        {
+            minionHP.style.borderBottomColor = Color.yellow;
+            minionHP.style.borderRightColor = Color.yellow;
+            minionHP.style.borderLeftColor = Color.yellow;
+            minionHP.style.borderTopColor = Color.yellow;
+        }
+        else
+        {
+            minionHP.style.borderBottomColor = Color.clear;
+            minionHP.style.borderRightColor = Color.clear;
+            minionHP.style.borderLeftColor = Color.clear;
+            minionHP.style.borderTopColor = Color.clear;
+        }
+        //.ToggleInClassList("selected");
+        Logging.Info("Button Clicked");
         CommandMinion.SetSelectedMinion(livingBeing.gameObject);
     }
 
