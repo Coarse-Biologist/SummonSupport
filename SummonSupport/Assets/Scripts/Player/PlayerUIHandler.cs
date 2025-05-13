@@ -109,17 +109,17 @@ public class PlayerUIHandler : MonoBehaviour
         minionHP.value = hp;
         if (minionHPBars == null) Logging.Error("minion HP visual element doesnt exist");
         minionHPBars.Add(minionHP);
-        minionHP.RegisterCallback<ClickEvent>(evt => OnMinionHPSelect(evt, minionHP));
+        minionHP.RegisterCallback<ClickEvent>(evt => OnMinionSelect(minionHP));
     }
-    void OnMinionHPSelect(ClickEvent evt, ProgressBar minionHP)
-    {
-        Logging.Info($"MinionHP bar {minionHP} clicked");
-        //minionHP.AddToClassList("glow");
-        minionHP.style.borderLeftColor = Color.green;
-        MinionStats selectedMinion = GetLivingBeingHPBar(minionHP);
-        EventDeclarer.SetActiveMinion?.Invoke(selectedMinion);
-        CommandMinion.SetSelectedMinion(selectedMinion.gameObject);
-    }
+    //void OnMinionHPSelect(ClickEvent evt, ProgressBar minionHP)
+    //{
+    //    Logging.Info($"MinionHP bar {minionHP} clicked");
+    //    //minionHP.AddToClassList("glow");
+    //    minionHP.style.borderLeftColor = Color.green;
+    //    MinionStats selectedMinion = GetLivingBeingHPBar(minionHP);
+    //    EventDeclarer.SetActiveMinion?.Invoke(selectedMinion);
+    //    CommandMinion.SetSelectedMinion(selectedMinion.gameObject);
+    //}
 
     public void RemoveMinionHP(LivingBeing livingBeing)
     {
@@ -130,12 +130,15 @@ public class PlayerUIHandler : MonoBehaviour
             minionHPBars.Remove(minionHP);
         }
     }
-    private MinionStats GetLivingBeingHPBar(ProgressBar minionHP)
+    private LivingBeing GetLivingBeingFromHPBar(ProgressBar minionHP)
     {
-        MinionStats minion = null;
+        LivingBeing minion = null;
         foreach (KeyValuePair<LivingBeing, ProgressBar> kvp in HPDict)
             if (HPDict[kvp.Key] == minionHP)
+            {
+                minion = kvp.Key;
                 return minion;
+            }
         return minion;
     }
 
@@ -143,9 +146,9 @@ public class PlayerUIHandler : MonoBehaviour
     {
         return HPDict[minion];
     }
-    private void OnMinionSelect(LivingBeing livingBeing)
+    private void OnMinionSelect(ProgressBar minionHP)
     {
-        ProgressBar minionHP = GetLivingBeingHPBar(livingBeing);
+        LivingBeing minionStats = GetLivingBeingFromHPBar(minionHP);
         if (minionHP.style.borderBottomColor != Color.yellow)
         {
             minionHP.style.borderBottomColor = Color.yellow;
@@ -162,7 +165,7 @@ public class PlayerUIHandler : MonoBehaviour
         }
         //.ToggleInClassList("selected");
         Logging.Info("Button Clicked");
-        CommandMinion.SetSelectedMinion(livingBeing.gameObject);
+        CommandMinion.SetSelectedMinion(minionStats.gameObject);
     }
 
 
