@@ -109,7 +109,22 @@ public class PlayerUIHandler : MonoBehaviour
         minionHP.value = hp;
         if (minionHPBars == null) Logging.Error("minion HP visual element doesnt exist");
         minionHPBars.Add(minionHP);
+<<<<<<< Updated upstream
+        minionHP.RegisterCallback<ClickEvent>(evt => OnMinionSelect(livingBeing));
+=======
+        minionHP.RegisterCallback<ClickEvent>(evt => OnMinionHPSelect(evt, minionHP));
+>>>>>>> Stashed changes
     }
+    void OnMinionHPSelect(ClickEvent evt, ProgressBar minionHP)
+    {
+        Logging.Info($"MinionHP bar {minionHP} clicked");
+        //minionHP.AddToClassList("glow");
+        minionHP.style.borderLeftColor = Color.green;
+        MinionStats selectedMinion = GetLivingBeingHPBar(minionHP);
+        EventDeclarer.SetActiveMinion?.Invoke(selectedMinion);
+        CommandMinion.SetSelectedMinion(selectedMinion.gameObject);
+    }
+
     public void RemoveMinionHP(LivingBeing livingBeing)
     {
         ProgressBar minionHP = GetLivingBeingHPBar(livingBeing);
@@ -118,13 +133,46 @@ public class PlayerUIHandler : MonoBehaviour
             HPDict.Remove(livingBeing);
             minionHPBars.Remove(minionHP);
         }
-
     }
 
     private ProgressBar GetLivingBeingHPBar(LivingBeing minion)
     {
         return HPDict[minion];
     }
+<<<<<<< Updated upstream
+    private void OnMinionSelect(LivingBeing livingBeing)
+    {
+        ProgressBar minionHP = GetLivingBeingHPBar(livingBeing);
+        if (minionHP.style.borderBottomColor != Color.yellow)
+        {
+            minionHP.style.borderBottomColor = Color.yellow;
+            minionHP.style.borderRightColor = Color.yellow;
+            minionHP.style.borderLeftColor = Color.yellow;
+            minionHP.style.borderTopColor = Color.yellow;
+        }
+        else
+        {
+            minionHP.style.borderBottomColor = Color.clear;
+            minionHP.style.borderRightColor = Color.clear;
+            minionHP.style.borderLeftColor = Color.clear;
+            minionHP.style.borderTopColor = Color.clear;
+        }
+        //.ToggleInClassList("selected");
+        Logging.Info("Button Clicked");
+        CommandMinion.SetSelectedMinion(livingBeing.gameObject);
+    }
+
+
+=======
+    private MinionStats GetLivingBeingHPBar(ProgressBar minionHP)
+    {
+        MinionStats minion = null;
+        foreach (KeyValuePair<LivingBeing, ProgressBar> kvp in HPDict)
+            if (HPDict[kvp.Key] == minionHP)
+                return minion;
+        return minion;
+    }
+>>>>>>> Stashed changes
 
     public void UpdateResourceBar(LivingBeing livingBeing, AttributeType attributeType)
     {

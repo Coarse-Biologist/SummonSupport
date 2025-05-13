@@ -65,6 +65,8 @@ MonoBehaviour:
   <MaxPower>k__BackingField: 100
   <PowerSurge>k__BackingField: 0
   <CurrentPower>k__BackingField: 100
+  <HealthRegeneration>k__BackingField: 1
+  <PowerRegeneration>k__BackingField: 1
   <Cold>k__BackingField: 0
   <Water>k__BackingField: 0
   <Earth>k__BackingField: 0
@@ -317,8 +319,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -105541197
+  m_SortingLayer: 3
   m_SortingOrder: 2
   m_Sprite: {fileID: 3377621350867381696, guid: c002845f16ff35141a25a180d4af881e,
     type: 3}

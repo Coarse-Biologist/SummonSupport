@@ -241,12 +241,6 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
         confirmButton.RegisterCallback<ClickEvent>(e => Craft());
         confirmButton.RegisterCallback<ClickEvent>(e => ShowCraftingInfo());
 
-        //confirmButton.style.backgroundColor = new Color(123, 100, 35, 100);
-        //clearButton.style.backgroundColor = new Color(123, 100, 35, 100);
-
-
-
-
     }
     private void SpawnIngredientButtons()
     {
@@ -267,7 +261,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
 
     private void DecrementIngredientButton(Button ingredientButton)
     {
-        if (ingredientButton.text.Contains("1")) alchemyInventory.Remove(ingredientButton);
+        if (ingredientButton.text.EndsWith(": 1")) alchemyInventory.Remove(ingredientButton);
         else
             ingredientButton.text = Regex.Replace(ingredientButton.text, @"\d+", match =>
             {

@@ -28,6 +28,11 @@
 .healthbar .unity-progress-bar__progress {
     background-color: rgb(131, 0, 0);
 }
+.healthbar.glow {
+    border-color: yellow;
+    box-shadow: 0 0 10px yellow;
+}
+
 
 .powerbar .unity-progress-bar__background {
     background-color: rgb(0, 0, 0);

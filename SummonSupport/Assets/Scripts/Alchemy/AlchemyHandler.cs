@@ -46,7 +46,6 @@ public class AlchemyHandler : MonoBehaviour
                 UpgradeMinion(craftedMinion, combinedIngredients, elementList);
                 AddActiveMinion(craftedMinion);
                 int knowledgeGain = GainKnowledge(elementList, combinedIngredients);
-                EventDeclarer.RepeatableQuestCompleted?.Invoke(Quest.RepeatableAccomplishments.GainKnowledge, knowledgeGain);
 
                 Logging.Info($"You have just gained a total of {knowledgeGain} knowledge from alchemic work.");
             }
@@ -174,7 +173,7 @@ public class AlchemyHandler : MonoBehaviour
         if (!activeMinions.Contains(minion))
         {
             activeMinions.Add(minion);
-            CommandMinion.SetSelectedMinion(minion); //Good idea?...
+            //CommandMinion.SetSelectedMinion(minion); //Good idea?...
             newMinionAdded?.Invoke(livingBeing);
         }
     }
@@ -194,6 +193,8 @@ public class AlchemyHandler : MonoBehaviour
                 AlchemyInventory.IncemementElementalKnowledge(element, strengthAndAmount);
             }
         }
+        EventDeclarer.RepeatableQuestCompleted?.Invoke(Quest.RepeatableAccomplishments.GainKnowledge, total);
+
         return total;
     }
 

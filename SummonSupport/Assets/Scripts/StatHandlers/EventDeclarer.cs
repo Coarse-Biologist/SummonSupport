@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Quest;
 using UnityEngine;
 using UnityEngine.Events;
@@ -17,9 +18,16 @@ namespace SummonSupportEvents
 
         #endregion
         public static UnityEvent<LivingBeing> minionDied = new UnityEvent<LivingBeing>();
+<<<<<<< Updated upstream
+        public static UnityEvent<LivingBeing> SetActiveMinion = new();
+
+=======
+        public static UnityEvent<MinionStats> SetActiveMinion = new();
+>>>>>>> Stashed changes
         public static UnityEvent<AttributeType, float> SpeedAttributeChanged = new();
         public static UnityEvent<int, Ability> SlotChanged = new();
         public static UnityEvent<int> AbilityUsed = new(); // int should be the index of the ability
+        public static UnityEvent<Vector2> SpawnEnemies = new();
 
     }
 }

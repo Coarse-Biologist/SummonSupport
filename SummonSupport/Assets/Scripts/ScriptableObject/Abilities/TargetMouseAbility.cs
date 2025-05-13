@@ -12,8 +12,9 @@ public class TargetMouseAbility : Ability
     {
         bool usedAbility = false;
         Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        int layerMask = ~LayerMask.GetMask("TriggerOnly"); // Alle außer "TriggerOnly"
+        int layerMask = ~LayerMask.GetMask("TriggerOnly"); // Alle außer "TriggerOnly" 
         RaycastHit2D hit = Physics2D.Raycast(mousePos, Vector2.zero, Mathf.Infinity, layerMask);
+        //Collider2D[] rangeChecks = Physics2D.OverlapCircleAll(mousePos, 1, stateHandler.targetMask);
 
         if (hit.collider != null)
             if (hit.collider.TryGetComponent<LivingBeing>(out var target))
@@ -25,10 +26,10 @@ public class TargetMouseAbility : Ability
     {
         if (user.TryGetComponent<LivingBeing>(out var userLivingBeing))
             if (!IsUsableOn(userLivingBeing.CharacterTag, targetLivingBeing.CharacterTag))
-                return false; 
+                return false;
 
         foreach (OnEventDo onEventDo in ListOnCastDo)
-        { 
+        {
             HandleEventType(onEventDo, targetLivingBeing, mousePos);
         }
         return true;
@@ -37,22 +38,22 @@ public class TargetMouseAbility : Ability
     void HandleEventType(OnEventDo onEventDo, LivingBeing targetLivingBeing, Vector2 mousePos)
     {
         switch (onEventDo) //TODO: This has to be a class, just for testing purposes
-            {
-                case OnEventDo.Damage:
-                    if (Attribute != AttributeType.None && Value != 0)
-                        targetLivingBeing.ChangeAttribute(AttributeType.CurrentHitpoints, -Value);
-                    break;
-                case OnEventDo.Heal:
-                    if (Attribute != AttributeType.None && Value != 0)
-                        targetLivingBeing.ChangeAttribute(AttributeType.CurrentHitpoints, Value);
-                    break;
-                case OnEventDo.StatusEffect:
-                    foreach (StatusEffect statusEffect in StatusEffects)
-                    {
-                        if (statusEffect != null)
-                            statusEffect.ApplyStatusEffect(targetLivingBeing.gameObject, mousePos);
-                    }
-                    break;
-            }
+        {
+            case OnEventDo.Damage:
+                if (Attribute != AttributeType.None && Value != 0)
+                    targetLivingBeing.ChangeAttribute(AttributeType.CurrentHitpoints, -Value);
+                break;
+            case OnEventDo.Heal:
+                if (Attribute != AttributeType.None && Value != 0)
+                    targetLivingBeing.ChangeAttribute(AttributeType.CurrentHitpoints, Value);
+                break;
+            case OnEventDo.StatusEffect:
+                foreach (StatusEffect statusEffect in StatusEffects)
+                {
+                    if (statusEffect != null)
+                        statusEffect.ApplyStatusEffect(targetLivingBeing.gameObject, mousePos);
+                }
+                break;
+        }
     }
 }
