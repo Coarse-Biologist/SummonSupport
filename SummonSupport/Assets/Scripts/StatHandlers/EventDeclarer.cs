@@ -22,6 +22,7 @@ namespace SummonSupportEvents
         public static UnityEvent<AttributeType, float> SpeedAttributeChanged = new();
         public static UnityEvent<int, Ability> SlotChanged = new();
         public static UnityEvent<int> AbilityUsed = new(); // int should be the index of the ability
+        public static UnityEvent<Vector2> SpawnEnemies = new();
 
     }
 }

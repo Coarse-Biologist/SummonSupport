@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using SummonSupportEvents;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -11,28 +12,31 @@ public class EnemySpawnHandler : MonoBehaviour
     [SerializeField] LayerMask targetMask;
     [SerializeField] LayerMask avoidMask;
 
-    void Start()
+    void OnEnable()
     {
-        //SpawnEnemies();
+        EventDeclarer.SpawnEnemies.AddListener(SpawnEnemies);
+    }
+    void OnDisable()
+    {
+        EventDeclarer.SpawnEnemies.RemoveListener(SpawnEnemies);
     }
 
-    private void SpawnEnemies()
+    private void SpawnEnemies(Vector2 targetArea)
     {
-        List<Vector2> spawnLocs = GetSpawnLocations();
+        List<Vector2> spawnLocs = GetSpawnLocations(targetArea);
         foreach (Vector2 loc in spawnLocs)
         {
             Instantiate(enemyPrefab1, loc, Quaternion.identity);
         }
     }
 
-    private List<Vector2> GetSpawnLocations()
+    private List<Vector2> GetSpawnLocations(Vector2 targetCenter)
     {
         LayerMask finalMask = targetMask & ~avoidMask;
         Vector2 origin = Camera.main.transform.position;
         List<Vector2> spawnLocs = new List<Vector2>();
         int spawnLocFound = 0;
         int goalSpawnLoc = GetVariedSpawnNumber();
-        Vector2 playerLoc = PlayerStats.Instance.transform.position;
 
         int maxAttempts = 1000;
         int attempts = 0;
@@ -44,7 +48,7 @@ public class EnemySpawnHandler : MonoBehaviour
 
             Logging.Info($" x offset =  {xOffset}, y offset = {yOffset}");
 
-            Vector2 direction = new Vector2(playerLoc.x + xOffset, playerLoc.y + yOffset);
+            Vector2 direction = new Vector2(targetCenter.x + xOffset, targetCenter.y + yOffset);
             Logging.Info($" direction = {direction}");
             RaycastHit2D hit = Physics2D.Raycast(origin, direction, finalMask);
             if (hit)
