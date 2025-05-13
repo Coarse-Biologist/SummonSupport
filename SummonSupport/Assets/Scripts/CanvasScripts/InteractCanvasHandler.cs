@@ -1,6 +1,7 @@
 using UnityEngine;
 using TMPro;
 using UnityEngine.Events;
+using UnityEngine.Tilemaps;
 
 public class InteractCanvasHandler : MonoBehaviour
 {
