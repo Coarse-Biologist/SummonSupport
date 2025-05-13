@@ -12,7 +12,7 @@ public class TargetMouseAbility : Ability
     {
         bool usedAbility = false;
         Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        int layerMask = ~LayerMask.GetMask("TriggerOnly"); // Alle außer "TriggerOnly"
+        int layerMask = ~LayerMask.GetMask("Obstruction"); // Alle außer "Obstruction"
         RaycastHit2D hit = Physics2D.Raycast(mousePos, Vector2.zero, Mathf.Infinity, layerMask);
 
         if (hit.collider != null)

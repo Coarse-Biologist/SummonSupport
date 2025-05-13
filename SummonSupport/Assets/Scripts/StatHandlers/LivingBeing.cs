@@ -1,8 +1,9 @@
 using System.Collections.Generic;
-using System.Linq;
 using System;
 using UnityEngine;
+using System.Collections;
 using SummonSupportEvents;
+using UnityEditor.Build.Pipeline.Tasks;
 public abstract class LivingBeing : MonoBehaviour
 {
     #region Declarations
@@ -23,8 +24,16 @@ public abstract class LivingBeing : MonoBehaviour
 
     [Header("Attributes - Regenerations")]
 
-    [field: SerializeField] public float HealthRegeneration { get; private set; } = 1;
+    [field: SerializeField] public float TickRateRegenerationInSeconds { get; private set; } = .2f;
+    [field: SerializeField] public float HealthRegeneration { get; private set; } = 0;
     [field: SerializeField] public float PowerRegeneration { get; private set; } = 1;
+    [field: SerializeField] public float TotalHealthRegeneration { get; private set; } = 0;
+    [field: SerializeField] public float TotalPowerRegeneration { get; private set; } = 0;
+    [field: SerializeField] public int HealthRegenArrows { get; private set; } = 0;
+    [field: SerializeField] public int PowerRegenArrows { get; private set; } = 0;
+    [field: SerializeField] public float RegenCalcOffset { get; private set; } = .8f;
+    [field: SerializeField] public int MaxRegenArrows { get; private set; } = 6;
+
 
     //TODO:
 
@@ -72,9 +81,22 @@ public abstract class LivingBeing : MonoBehaviour
         InitializeAttributeDict();
         InitializeAffinityDict();
         resourceBarInterface = GetComponent<I_ResourceBar>();
-        InvokeRepeating("RegenerateMana", 0f, 1f);
+        
     }
 
+    protected virtual void Start()
+    {
+        InitializeRegenerationValues();
+        StartCoroutine(RegenerateRoutine(TickRateRegenerationInSeconds));
+    }
+
+    private void InitializeRegenerationValues()
+    {
+        TotalHealthRegeneration = HealthRegeneration;
+        TotalPowerRegeneration  = PowerRegeneration;
+    }
+
+    
     #region Resource Control
 
     public void RestoreResources()
@@ -124,7 +146,6 @@ public abstract class LivingBeing : MonoBehaviour
             AttributesDict[attributeType].Set(value);
 
         HandleEventInvokes(attributeType, value);
-
     }
 
     public float ChangeAttribute(AttributeType attributeType, float value, ValueType valueType = ValueType.Flat)
@@ -146,29 +167,27 @@ public abstract class LivingBeing : MonoBehaviour
         switch (attributeType)
         {
             case AttributeType.MaxHitpoints:
+                if (CharacterTag != CharacterTag.Enemy)
+                    EventDeclarer.maxAttributeChanged?.Invoke(this, attributeType);
+                resourceBarInterface?.SetHealthBarMaxValue(GetAttribute(attributeType));
+                break;
+
             case AttributeType.CurrentHitpoints:
                 if (CharacterTag != CharacterTag.Enemy)
-                {
-                    EventDeclarer.maxAttributeChanged?.Invoke(this, attributeType);
                     EventDeclarer.attributeChanged?.Invoke(this, attributeType);
-                }
-
-                resourceBarInterface?.SetHealthBarMaxValue(GetAttribute(attributeType));
                 resourceBarInterface?.SetHealthBarValue(GetAttribute(attributeType));
-
                 break;
+
             case AttributeType.MaxPower:
+                if (CharacterTag != CharacterTag.Enemy)
+                    EventDeclarer.maxAttributeChanged?.Invoke(this, attributeType);
+                resourceBarInterface?.SetPowerBarMaxValue(GetAttribute(attributeType));
+                break;
+
             case AttributeType.CurrentPower:
                 if (CharacterTag != CharacterTag.Enemy)
-                {
-                    EventDeclarer.maxAttributeChanged?.Invoke(this, attributeType);
                     EventDeclarer.attributeChanged?.Invoke(this, attributeType);
-                }
-
                 resourceBarInterface?.SetPowerBarValue(GetAttribute(attributeType));
-                resourceBarInterface?.SetPowerBarMaxValue(GetAttribute(attributeType));
-
-
                 break;
 
             case AttributeType.MovementSpeed:
@@ -226,18 +245,46 @@ public abstract class LivingBeing : MonoBehaviour
     }
     #endregion
 
-    #region Handle Mana Regeneration
-    private void RegenerateMana()
+    #region Handle Regeneration
+    private IEnumerator RegenerateRoutine(float tickRateSeconds)
     {
-        //if (GetAttribute(AttributeType.CurrentHitpoints) < GetAttribute(AttributeType.MaxHitpoints))
-        //    ChangeAttribute(AttributeType.CurrentHitpoints, HealthRegeneration);
-        int calculatedManaRegen = CalaculateManaRegen();
-        if (GetAttribute(AttributeType.CurrentPower) < GetAttribute(AttributeType.MaxPower))
-            ChangeAttribute(AttributeType.CurrentPower, calculatedManaRegen);
+        while (true)
+        {
+            float newHP = Mathf.Min(CurrentHP + TotalHealthRegeneration, MaxHP);
+            SetAttribute(AttributeType.CurrentHitpoints, newHP);
+            float newPower = Mathf.Min(CurrentPower + TotalPowerRegeneration, MaxPower);
+            SetAttribute(AttributeType.CurrentPower, newPower);      
+            yield return new WaitForSeconds(tickRateSeconds);
+        }
     }
-    private int CalaculateManaRegen()
+
+    public void ChangeRegeneration(AttributeType attributeType, float value)
     {
-        return (int)PowerRegeneration;
+        if (attributeType == AttributeType.CurrentHitpoints)
+        {
+            TotalHealthRegeneration += value;
+            HealthRegenArrows = GetRegenerationIndicatorAmount(MaxHP, TotalHealthRegeneration);
+        }
+        else if (attributeType == AttributeType.CurrentPower)
+        {
+            TotalPowerRegeneration += value;
+            PowerRegenArrows = GetRegenerationIndicatorAmount(MaxPower, TotalPowerRegeneration);
+        }
+    }
+
+    int GetRegenerationIndicatorAmount(float maxValue, float regeneration)
+    {
+        float regenerationIndicatorStep  = maxValue * (1 - RegenCalcOffset) / MaxRegenArrows; 
+        float arrows                    = regeneration / regenerationIndicatorStep;
+        float clampedArrows;
+        if (arrows > 0)
+            clampedArrows = Mathf.Clamp(arrows, 1f, MaxRegenArrows); // 0.1 arrows should be 1, 100 arrows schould be value of MaxRegenArrows
+        else if (arrows < 0)
+            clampedArrows = Mathf.Clamp(arrows, -MaxRegenArrows, -1f); // -0.1 arrows should be -1, -100 arrows schould be value of -MaxRegenArrows
+        else 
+            clampedArrows = 0;
+        int   roundedArrows             = Mathf.RoundToInt(clampedArrows);
+        return roundedArrows;
     }
     #endregion
 

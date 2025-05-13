@@ -13,24 +13,15 @@ public class MinionStats : LivingBeing
     {
         CurrentCommand = command;
     }
-    void Start()
+    protected override void Start()
     {
         StartCoroutine("LateStart");
-
-        //healthbarInterface = GetComponent<I_ResourceBar>();
-        //
-        //if (healthbarInterface != null)
-        //{
-        //    healthbarInterface.SetHealthBarValue(GetAttribute(AttributeType.CurrentHitpoints));
-        //    healthbarInterface.SetHealthBarMaxValue(GetAttribute(AttributeType.MaxHitpoints));
-        //    healthbarInterface.SetPowerBarValue(GetAttribute(AttributeType.CurrentPower));
-        //    healthbarInterface.SetPowerBarMaxValue(GetAttribute(AttributeType.MaxPower));
-        //}
     }
     IEnumerator LateStart()
     {
         yield return null; // wartet 1 Frame – nach allen Start()-Methoden
         PlayerUIHandler.Instance.AddMinionHP(this);
+        base.Start();
     }
 
 }

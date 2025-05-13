@@ -100,11 +100,16 @@ MonoBehaviour:
   <Description>k__BackingField: Witch Doktor
   <BattleCries>k__BackingField: []
   <MaxHP>k__BackingField: 100
-  <TemporaryMaxHP>k__BackingField: 0
+  <Overshield>k__BackingField: 0
   <CurrentHP>k__BackingField: 100
   <MaxPower>k__BackingField: 1000
-  <TemporaryMaxPower>k__BackingField: 0
+  <PowerSurge>k__BackingField: 0
   <CurrentPower>k__BackingField: 1000
+  <tickRateRegenerationInSeconds>k__BackingField: 0.2
+  <HealthRegeneration>k__BackingField: 0
+  <PowerRegeneration>k__BackingField: 1
+  <TotalHealthRegeneration>k__BackingField: 0
+  <TotalPowerRegeneration>k__BackingField: 0
   <Cold>k__BackingField: 0
   <Water>k__BackingField: 0
   <Earth>k__BackingField: 0
@@ -311,6 +316,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 5605a5e8027c4e94691ae731bacfcb5a, type: 2}
   - {fileID: 11400000, guid: 265d2196a4dc4d347bf0f1d275f43d44, type: 2}
   - {fileID: 11400000, guid: 4c3c5f9615adc0745ad7d2d7106f3cd8, type: 2}
+  - {fileID: 11400000, guid: a451f57a0774f5d4b9618dcb1f4b5103, type: 2}
   abilitiesOnCooldown: 
 --- !u!114 &2864372725038760086
 MonoBehaviour:
