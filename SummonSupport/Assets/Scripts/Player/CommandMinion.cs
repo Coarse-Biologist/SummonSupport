@@ -7,20 +7,11 @@ using UnityEngine.InputSystem;
 public static class CommandMinion
 {
 
-<<<<<<< Updated upstream
     public static List<GameObject> SelectedMinions { private set; get; } = new List<GameObject>();
 
     public static void HandleCommand(Vector2 loc)
     {
         if (SelectedMinions != null)
-=======
-    public static List<GameObject> selectedMinions { private set; get; } = null;
-    //public static MinionStats stats { private set; get; } = null;
-    //public static AIObedienceState obedienceState { private set; get; } = null;
-    public static void HandleCommand(Vector2 loc)
-    {
-        if (selectedMinions != null)
->>>>>>> Stashed changes
         {
             Collider2D[] enemyHits = Physics2D.OverlapCircleAll(loc, 1, LayerMask.GetMask("Enemy"));
             if (enemyHits.Length > 0)
@@ -54,15 +45,9 @@ public static class CommandMinion
     {
         if (minion != null)
         {
-<<<<<<< Updated upstream
             if (!SelectedMinions.Contains(minion))
                 SelectedMinions.Add(minion);
             else SelectedMinions.Remove(minion);
-=======
-            if (!selectedMinions.Contains(minion))
-                selectedMinions.Add(minion);
-            else selectedMinions.Remove(minion);
->>>>>>> Stashed changes
 
         }
         else Logging.Error("Oh, you want to control that nobody? Select an actual minion!");
@@ -70,11 +55,7 @@ public static class CommandMinion
 
     private static void SendMinionToInteract(Vector2 loc)
     {
-<<<<<<< Updated upstream
         foreach (GameObject minion in SelectedMinions)
-=======
-        foreach (GameObject minion in selectedMinions)
->>>>>>> Stashed changes
         {
             MinionStats stats = minion.GetComponent<MinionStats>();
             AIObedienceState obedienceState = minion.GetComponent<AIObedienceState>();
@@ -87,11 +68,7 @@ public static class CommandMinion
     }
     public static void CommandMinionToGoToLoc(Vector2 loc)
     {
-<<<<<<< Updated upstream
         foreach (GameObject minion in SelectedMinions)
-=======
-        foreach (GameObject minion in selectedMinions)
->>>>>>> Stashed changes
         {
             MinionStats stats = minion.GetComponent<MinionStats>();
             AIObedienceState obedienceState = minion.GetComponent<AIObedienceState>();
@@ -104,11 +81,7 @@ public static class CommandMinion
 
     public static void CommandMinionToAttack(GameObject enemy)
     {
-<<<<<<< Updated upstream
         foreach (GameObject minion in SelectedMinions)
-=======
-        foreach (GameObject minion in selectedMinions)
->>>>>>> Stashed changes
         {
             MinionStats stats = minion.GetComponent<MinionStats>();
             AIObedienceState obedienceState = minion.GetComponent<AIObedienceState>();

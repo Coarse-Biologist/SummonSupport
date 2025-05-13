@@ -109,11 +109,7 @@ public class PlayerUIHandler : MonoBehaviour
         minionHP.value = hp;
         if (minionHPBars == null) Logging.Error("minion HP visual element doesnt exist");
         minionHPBars.Add(minionHP);
-<<<<<<< Updated upstream
-        minionHP.RegisterCallback<ClickEvent>(evt => OnMinionSelect(livingBeing));
-=======
         minionHP.RegisterCallback<ClickEvent>(evt => OnMinionHPSelect(evt, minionHP));
->>>>>>> Stashed changes
     }
     void OnMinionHPSelect(ClickEvent evt, ProgressBar minionHP)
     {
@@ -134,12 +130,19 @@ public class PlayerUIHandler : MonoBehaviour
             minionHPBars.Remove(minionHP);
         }
     }
+    private MinionStats GetLivingBeingHPBar(ProgressBar minionHP)
+    {
+        MinionStats minion = null;
+        foreach (KeyValuePair<LivingBeing, ProgressBar> kvp in HPDict)
+            if (HPDict[kvp.Key] == minionHP)
+                return minion;
+        return minion;
+    }
 
     private ProgressBar GetLivingBeingHPBar(LivingBeing minion)
     {
         return HPDict[minion];
     }
-<<<<<<< Updated upstream
     private void OnMinionSelect(LivingBeing livingBeing)
     {
         ProgressBar minionHP = GetLivingBeingHPBar(livingBeing);
@@ -163,16 +166,6 @@ public class PlayerUIHandler : MonoBehaviour
     }
 
 
-=======
-    private MinionStats GetLivingBeingHPBar(ProgressBar minionHP)
-    {
-        MinionStats minion = null;
-        foreach (KeyValuePair<LivingBeing, ProgressBar> kvp in HPDict)
-            if (HPDict[kvp.Key] == minionHP)
-                return minion;
-        return minion;
-    }
->>>>>>> Stashed changes
 
     public void UpdateResourceBar(LivingBeing livingBeing, AttributeType attributeType)
     {
