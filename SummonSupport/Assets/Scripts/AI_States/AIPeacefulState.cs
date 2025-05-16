@@ -42,11 +42,17 @@ public class AIPeacefulState : AIState
         }
         if (!visionBlocked && target != null)
         {
+            Logging.Info($"target seen : {target}");
             stateHandler.lastSeenLoc = target.transform.position;
             canSeeTarget = true;
             return true;
         }
-        else return false;
+        else
+        {
+            Logging.Info($"No target seen");
+            canSeeTarget = false;
+            return false;
+        }
     }
 
     public GameObject CheckTargetInRange()
