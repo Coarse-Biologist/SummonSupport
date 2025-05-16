@@ -18,6 +18,7 @@ GameObject:
   - component: {fileID: 8272282993633927976}
   - component: {fileID: 4402697428807640596}
   - component: {fileID: 9050172420336280654}
+  - component: {fileID: 7837279254410864493}
   m_Layer: 6
   m_Name: CreaturePrefab
   m_TagString: Enemy
@@ -38,6 +39,7 @@ Transform:
   m_LocalScale: {x: 0.27, y: 0.32, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 3948863955107861711}
   - {fileID: 717634867459255289}
   - {fileID: 2328576268698167125}
   m_Father: {fileID: 0}
@@ -64,11 +66,15 @@ MonoBehaviour:
   <MaxPower>k__BackingField: 100
   <PowerSurge>k__BackingField: 0
   <CurrentPower>k__BackingField: 100
-  <tickRateRegenerationInSeconds>k__BackingField: 0.2
+  <TickRateRegenerationInSeconds>k__BackingField: 0.2
   <HealthRegeneration>k__BackingField: 0
   <PowerRegeneration>k__BackingField: 1
   <TotalHealthRegeneration>k__BackingField: 0
   <TotalPowerRegeneration>k__BackingField: 0
+  <HealthRegenArrows>k__BackingField: 0
+  <PowerRegenArrows>k__BackingField: 0
+  <RegenCalcOffset>k__BackingField: 0.8
+  <MaxRegenArrows>k__BackingField: 6
   <Cold>k__BackingField: 0
   <Water>k__BackingField: 0
   <Earth>k__BackingField: 0
@@ -134,6 +140,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44ab2ba03c11b4e42ab351bacab08390, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rotationObject: {fileID: 1688213642100582363}
 --- !u!114 &2610693601905353752
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -235,6 +242,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4cddb68e1da92324a873ad3ce098c4ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &7837279254410864493
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 530800861541312882}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b3038df873d7b648ae2dc7e3851cef6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  abilitySpawn: {fileID: 0}
+  abilityDirection: {fileID: 1688213642100582363}
+  statsHandler: {fileID: 0}
+  abilities: []
+  abilitiesOnCooldown: 
 --- !u!1 &1502490013454894205
 GameObject:
   m_ObjectHideFlags: 0
@@ -323,6 +347,37 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &1688213642100582363
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3948863955107861711}
+  m_Layer: 0
+  m_Name: rotationObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3948863955107861711
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1688213642100582363}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -7.708806, y: -0.28238147, z: -0.033714194}
+  m_LocalScale: {x: 3.7037034, y: 3.125, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6683928398212683686}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &3601821627178992539
 PrefabInstance:
   m_ObjectHideFlags: 0
