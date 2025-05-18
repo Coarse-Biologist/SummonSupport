@@ -7,6 +7,7 @@ public class player_key
     [SerializeField] public string Key;
     [SerializeField] public string Value;
     [SerializeField] public DialogueResult result;
+    [SerializeField] public AudioClip NPC_VoiceLine;
 
 
 }

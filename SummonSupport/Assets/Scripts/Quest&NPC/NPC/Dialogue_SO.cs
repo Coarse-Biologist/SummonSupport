@@ -63,6 +63,47 @@ public class Dialogue_SO : ScriptableObject
         return NPC_Words;
     }
 
+    public int GetIndexOfNPCResponse(string playerWords, bool dialogueUnlocked = false)
+    {
+        int responseIndex = 0;
+        int currentIndex = 0;
+        foreach (player_key entry in player_keys)
+        {
+            if (entry.Key == playerWords)
+            {
+                responseIndex = currentIndex;
+            }
+            else currentIndex ++;
+        }
+        if (dialogueUnlocked)
+        {
+            currentIndex = 0;
+            foreach (player_key entry in unlockableDialoguePlayer)
+            {
+                if (entry.Key == playerWords)
+                {
+                    responseIndex = currentIndex;
+                }
+                else currentIndex ++;
+            }
+        }
+        else Logging.Info($"while getting NPC response to player, dialogueUnlocked was FALSE.");
+
+        return responseIndex;
+    }
+    public string GetNPCResponsefromIndex(int index, bool dialogueUnlocked = false)
+    {
+        if(!dialogueUnlocked)
+            return player_keys[index].Value;
+            else return unlockableDialoguePlayer[index].Value; 
+    }
+    public AudioClip GetNPCVoiceLinefromIndex(int index, bool dialogueUnlocked = false)
+    {
+        if(!dialogueUnlocked)
+            return player_keys[index].NPC_VoiceLine;
+        else return unlockableDialoguePlayer[index].NPC_VoiceLine; 
+    }
+
     public DialogueResult GetResult(string playerChoice)
     {
         Logging.Info(playerChoice + "get result func");

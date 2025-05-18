@@ -27,15 +27,19 @@ MonoBehaviour:
   - Key: 
     Value: 
     result: 0
+    NPC_VoiceLine: {fileID: 0}
   - Key: Sure...
     Value: Excellent!
     result: 2
+    NPC_VoiceLine: {fileID: 8300000, guid: 7a01d1713cad5624e99a95c1945d6d73, type: 3}
   - Key: Hello.
     Value: Would you like to buy some of my stuff?
     result: 5
+    NPC_VoiceLine: {fileID: 8300000, guid: 8ea69552a9b40ec4db3a066e01bf0816, type: 3}
   - Key: Howdy.
     Value: Would you like to buy some of my stuff?
     result: 3
+    NPC_VoiceLine: {fileID: 8300000, guid: 99888e36c32ec1049a66329d10077a86, type: 3}
   unlockableDialogueNPC:
   - Key: Well done, you killed the goblin king!
     Value:
@@ -51,8 +55,10 @@ MonoBehaviour:
   - Key: Howdy.
     Value: Well done, you killed the goblin king!
     result: 3
+    NPC_VoiceLine: {fileID: 0}
   - Key: Hello.
     Value: Damn Daniel, you went all the way to the corner of the map!
     result: 3
+    NPC_VoiceLine: {fileID: 0}
   questToUnlockDialogue: {fileID: 11400000, guid: dc21ef7a537ac6a4f85a2b854c97365e,
     type: 2}
