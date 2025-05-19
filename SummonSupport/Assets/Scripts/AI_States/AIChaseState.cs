@@ -16,11 +16,14 @@ public class AIChaseState : AIState
     [SerializeField] GameObject rotationObject;
     private Coroutine attackCoroutine;
     private bool runningAttackLoop = false;
+    private CreatureSpriteController spriteController;
+    private WaitForSeconds attackSpeed = new WaitForSeconds(1);
 
 
 
     void Start()
     {
+        spriteController = GetComponentInChildren<CreatureSpriteController>();
         stateHandler = gameObject.GetComponent<AIStateHandler>();
         peaceState = gameObject.GetComponent<AIPeacefulState>();
         obedienceState = gameObject.GetComponent<AIObedienceState>();
@@ -88,6 +91,8 @@ public class AIChaseState : AIState
             float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
             rotationObject.transform.rotation = Quaternion.Euler(0, 0, angle);
             Debug.DrawRay(rotationObject.transform.position, targetLoc.normalized * targetLoc.magnitude, Color.red);
+            if (spriteController != null)
+                spriteController.SetSpriteDirection(angle);
         }
     }
 
@@ -105,7 +110,7 @@ public class AIChaseState : AIState
         runningAttackLoop = true;
         while (true)
         {
-            yield return new WaitForSeconds(1f);
+            yield return attackSpeed;
             abilityHandler.UseAbility(targetLoc);
         }
 

@@ -10,7 +10,7 @@ public class PlayerMovement : MonoBehaviour
     #region class Variables
     private Vector2 moveInput;
     public Camera mainCamera;
-    private PlayerSpriteController spriteController;
+    private CreatureSpriteController spriteController;
     [SerializeField] private PlayerInputActions inputActions;
     [SerializeField] GameObject AbilityRotation;
     private Vector2 lookInput;
@@ -27,7 +27,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Awake()
     {
-        spriteController = GetComponentInChildren<PlayerSpriteController>();
+        spriteController = GetComponentInChildren<CreatureSpriteController>();
         rb = GetComponent<Rigidbody2D>();
         mainCamera = Camera.main;
         inputActions = new PlayerInputActions();
@@ -119,7 +119,7 @@ public class PlayerMovement : MonoBehaviour
         Vector2 direction = (worldPosition - (Vector2)transform.position).normalized;
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
         AbilityRotation.transform.rotation = Quaternion.Euler(0, 0, angle);
-        spriteController.SetPlayerSprite(angle);
+        spriteController.SetSpriteDirection(angle);
 
         return transform.rotation;
     }

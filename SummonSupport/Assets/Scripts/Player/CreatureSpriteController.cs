@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PlayerSpriteController : MonoBehaviour
+public class CreatureSpriteController : MonoBehaviour
 {
     private SpriteRenderer sr;
     [SerializeField] private Sprite upSprite;
@@ -22,7 +22,7 @@ public class PlayerSpriteController : MonoBehaviour
         sr = GetComponent<SpriteRenderer>();
     }
 
-    public void SetPlayerSprite(float angle)
+    public void SetSpriteDirection(float angle)
     {
         if (angle >= -22.5f && angle < 22.5f) sr.sprite = rightSprite;
         else if (angle >= 22.5f && angle < 67.5f) sr.sprite = upRightSprite;
