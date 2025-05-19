@@ -101,10 +101,10 @@ public class NPC_UI_Handler : MonoBehaviour, I_Interactable
 
     private void SetNPC_Text(string new_npc_text)
     {
-        if (npc_text != null && new_npc_text != interactString) 
+        if (npc_text != null && new_npc_text != interactString)
             StartSlowTextCoroutine(new_npc_text);
         //
-         //npc_text.text = $"{npcData.npc_Name} says: " + new_npc_text;
+        //npc_text.text = $"{npcData.npc_Name} says: " + new_npc_text;
         else if (npc_text != null) npc_text.text = new_npc_text;
         else Logging.Error("Npc text label is null.");
     }
@@ -118,13 +118,13 @@ public class NPC_UI_Handler : MonoBehaviour, I_Interactable
     private IEnumerator SlowlySetText(string full_npc_text)
     {
 
-        while(true)
+        while (true)
         {
             string currentText = full_npc_text.Substring(0, textUpdateProgress + 1);
             yield return new WaitForSeconds(textUpdateSpeed);
             npc_text.text = $"{npcData.npc_Name}: " + currentText;
-            textUpdateProgress ++;
-            if(textUpdateProgress == full_npc_text.Length)
+            textUpdateProgress++;
+            if (textUpdateProgress == full_npc_text.Length)
                 StopCoroutine(textCoroutine);
         }
 
@@ -181,15 +181,14 @@ public class NPC_UI_Handler : MonoBehaviour, I_Interactable
     }
     private void OnOptionSelected(string playerResponse)
     {
-        Logging.Info($"Option selected: {playerResponse}");
-        //string NPC_Words = npcData.Dialogue.GetNPCResponseToPlayer(playerResponse, npcHandler.dialogueUnlocked);
-        int index = npcData.Dialogue.GetIndexOfNPCResponse(playerResponse, npcHandler.dialogueUnlocked);
-        string NPC_Words = npcData.Dialogue.GetNPCResponsefromIndex(index, npcHandler.dialogueUnlocked);
-        audioSource.clip = npcData.Dialogue.GetNPCVoiceLinefromIndex(index, npcHandler.dialogueUnlocked);
-        if(audioSource.clip != null)
+        Tuple<string, AudioClip> NPC_Words = npcData.Dialogue.GetNPCResponseToPlayer(playerResponse, npcHandler.dialogueUnlocked);
+        Logging.Info($"Option selected: {playerResponse}. npc RESPONSE = {NPC_Words.Item1}");
+
+        audioSource.clip = NPC_Words.Item2;
+        if (audioSource.clip != null)
             audioSource.Play();
-        SetNPC_Text(NPC_Words);
-        List<string> playerResponses = GetAllPlayerResponses(NPC_Words);
+        SetNPC_Text(NPC_Words.Item1);
+        List<string> playerResponses = GetAllPlayerResponses(NPC_Words.Item1);
         CreateButtons(playerResponses);
     }
 
