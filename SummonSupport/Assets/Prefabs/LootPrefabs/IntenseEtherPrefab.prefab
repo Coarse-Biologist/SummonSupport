@@ -171,6 +171,16 @@ PrefabInstance:
       propertyPath: InitialModule.startColor.maxColor.r
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6742410236881249116, guid: ccadb9a22aca1d44fa043afd297d3aab,
+        type: 3}
+      propertyPath: m_SortingLayer
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6742410236881249116, guid: ccadb9a22aca1d44fa043afd297d3aab,
+        type: 3}
+      propertyPath: m_SortingLayerID
+      value: -1869315837
+      objectReference: {fileID: 0}
     - target: {fileID: 8287487641396313460, guid: ccadb9a22aca1d44fa043afd297d3aab,
         type: 3}
       propertyPath: m_Name

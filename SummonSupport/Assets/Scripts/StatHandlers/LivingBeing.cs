@@ -23,7 +23,7 @@ public abstract class LivingBeing : MonoBehaviour
     [field: SerializeField] public float CurrentPower { get; private set; } = 100;
 
     [Header("Attributes - Regenerations")]
-
+    private WaitForSeconds regenTickRate;
     [field: SerializeField] public float TickRateRegenerationInSeconds { get; private set; } = .2f;
     [field: SerializeField] public float HealthRegeneration { get; private set; } = 0;
     [field: SerializeField] public float PowerRegeneration { get; private set; } = 1;
@@ -81,22 +81,23 @@ public abstract class LivingBeing : MonoBehaviour
         InitializeAttributeDict();
         InitializeAffinityDict();
         resourceBarInterface = GetComponent<I_ResourceBar>();
-        
+        regenTickRate = new WaitForSeconds(TickRateRegenerationInSeconds);
+
     }
 
     protected virtual void Start()
     {
         InitializeRegenerationValues();
-        StartCoroutine(RegenerateRoutine(TickRateRegenerationInSeconds));
+        StartCoroutine(RegenerateRoutine());
     }
 
     private void InitializeRegenerationValues()
     {
         TotalHealthRegeneration = HealthRegeneration;
-        TotalPowerRegeneration  = PowerRegeneration;
+        TotalPowerRegeneration = PowerRegeneration;
     }
 
-    
+
     #region Resource Control
 
     public void RestoreResources()
@@ -246,15 +247,15 @@ public abstract class LivingBeing : MonoBehaviour
     #endregion
 
     #region Handle Regeneration
-    private IEnumerator RegenerateRoutine(float tickRateSeconds)
+    private IEnumerator RegenerateRoutine()
     {
         while (true)
         {
             float newHP = Mathf.Min(CurrentHP + TotalHealthRegeneration, MaxHP);
             SetAttribute(AttributeType.CurrentHitpoints, newHP);
             float newPower = Mathf.Min(CurrentPower + TotalPowerRegeneration, MaxPower);
-            SetAttribute(AttributeType.CurrentPower, newPower);      
-            yield return new WaitForSeconds(tickRateSeconds);
+            SetAttribute(AttributeType.CurrentPower, newPower);
+            yield return regenTickRate;
         }
     }
 
@@ -274,16 +275,16 @@ public abstract class LivingBeing : MonoBehaviour
 
     int GetRegenerationIndicatorAmount(float maxValue, float regeneration)
     {
-        float regenerationIndicatorStep  = maxValue * (1 - RegenCalcOffset) / MaxRegenArrows; 
-        float arrows                    = regeneration / regenerationIndicatorStep;
+        float regenerationIndicatorStep = maxValue * (1 - RegenCalcOffset) / MaxRegenArrows;
+        float arrows = regeneration / regenerationIndicatorStep;
         float clampedArrows;
         if (arrows > 0)
             clampedArrows = Mathf.Clamp(arrows, 1f, MaxRegenArrows); // 0.1 arrows should be 1, 100 arrows schould be value of MaxRegenArrows
         else if (arrows < 0)
             clampedArrows = Mathf.Clamp(arrows, -MaxRegenArrows, -1f); // -0.1 arrows should be -1, -100 arrows schould be value of -MaxRegenArrows
-        else 
+        else
             clampedArrows = 0;
-        int   roundedArrows             = Mathf.RoundToInt(clampedArrows);
+        int roundedArrows = Mathf.RoundToInt(clampedArrows);
         return roundedArrows;
     }
     #endregion

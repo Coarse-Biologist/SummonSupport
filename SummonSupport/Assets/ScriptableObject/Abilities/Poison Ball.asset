@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fceeef8cfafe41444bf6aa890ebad1b7, type: 3}
+  m_Name: Poison Ball
+  m_EditorClassIdentifier: 
+  <Name>k__BackingField: Poison Ball
+  <Icon>k__BackingField: {fileID: 3837697726249093711, guid: a949de51ac63b994784528b4e06be2b5,
+    type: 3}
+  <Cooldown>k__BackingField: 2
+  <PowerCost>k__BackingField: 20
+  <StatusEffects>k__BackingField:
+  - {fileID: 11400000, guid: 6ef243f4fc8d3fc49a992694220d85ee, type: 2}
+  - {fileID: 11400000, guid: 84e50eaebc4a21f4fbc0ae6c56e66092, type: 2}
+  - {fileID: 11400000, guid: 6c1911e88b4453b47a1cb46f5c05bce5, type: 2}
+  <ListUsableOn>k__BackingField: 01000000
+  <Attribute>k__BackingField: 0
+  <Value>k__BackingField: -1
+  <ElementType>k__BackingField: 7
+  <OnCooldown>k__BackingField: 0
+  <Speed>k__BackingField: 5
+  <Projectile>k__BackingField: {fileID: 1503869405188693834, guid: 30fe2be61079af849a80347b1ee23f48,
+    type: 3}
+  <MaxRange>k__BackingField: 150
+  <Lifetime>k__BackingField: 100
+  <PiercingMode>k__BackingField: 3
+  <MaxPierce>k__BackingField: 0
+  <MaxSplit>k__BackingField: 1
+  <SplitAngleOffset>k__BackingField: 45
+  <ListOnHitDo>k__BackingField: 0200000003000000
+  <ListOnDestroyDo>k__BackingField: 03000000

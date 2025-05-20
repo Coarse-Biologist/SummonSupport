@@ -35,14 +35,16 @@ public class Dialogue_SO : ScriptableObject
         return playerResponses;
     }
 
-    public string GetNPCResponseToPlayer(string playerWords, bool dialogueUnlocked = false)
+    public Tuple<string, AudioClip> GetNPCResponseToPlayer(string playerWords, bool dialogueUnlocked = false)
     {
         string NPC_Words = "...";
+        AudioClip audioClip = null;
         foreach (player_key entry in player_keys)
         {
             if (entry.Key == playerWords)
             {
                 NPC_Words = entry.Value;
+                audioClip = entry.NPC_VoiceLine;
             }
         }
         if (dialogueUnlocked)
@@ -55,13 +57,15 @@ public class Dialogue_SO : ScriptableObject
                     Logging.Info($"{entry.Key} matches {playerWords}");
                     Logging.Info($"NPC words being set to {entry.Value}");
                     NPC_Words = entry.Value;
+                    audioClip = entry.NPC_VoiceLine;
                 }
             }
         }
         else Logging.Info($"while getting NPC response to player, dialogueUnlocked was FALSE.");
 
-        return NPC_Words;
+        return new Tuple<string, AudioClip>(NPC_Words, audioClip);
     }
+
 
     public DialogueResult GetResult(string playerChoice)
     {

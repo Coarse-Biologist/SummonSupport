@@ -1,4 +1,5 @@
 
+using Unity.Entities.UniversalDelegates;
 using UnityEngine;
 
 
@@ -12,7 +13,12 @@ public class CreatureAbilityHandler : AbilityHandler
 
     public void UseAbility(Vector2 targetLocation)
     {
-        CastAbility(0, targetLocation, abilityDirection.transform.rotation);
+        CastAbility(GetAbilityIndex(), targetLocation, abilityDirection.transform.rotation);
+    }
+
+    private int GetAbilityIndex()
+    {
+        return Random.Range(0, abilities.Count);
     }
 
 }

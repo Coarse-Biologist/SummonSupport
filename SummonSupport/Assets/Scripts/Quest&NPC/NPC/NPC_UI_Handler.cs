@@ -3,6 +3,9 @@ using UnityEngine.UIElements;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using Quest;
+using System.Collections;
+using System;
+
 
 public class NPC_UI_Handler : MonoBehaviour, I_Interactable
 {
@@ -21,6 +24,11 @@ public class NPC_UI_Handler : MonoBehaviour, I_Interactable
 
     private List<Button> spawnedButtons = new List<Button>();
     private NPC_Handler npcQuestProgress;
+    private AudioSource audioSource;
+
+    private int textUpdateProgress;
+    private float textUpdateSpeed = .1f;
+    private Coroutine textCoroutine;
 
 
     void Start()
@@ -35,6 +43,7 @@ public class NPC_UI_Handler : MonoBehaviour, I_Interactable
         imageSlot = dialoguePanel.Q<VisualElement>("ImageSlot"); // ????????????
         npc_text = root.Q<Label>("NPC_Text");
         playerOptions = root.Q<VisualElement>("PlayerOptions");
+        audioSource = GetComponent<AudioSource>();
     }
     public void ShowInteractionOption()
     {
@@ -46,14 +55,16 @@ public class NPC_UI_Handler : MonoBehaviour, I_Interactable
     public void HideInteractionOption()
     {
         ClearButtons();
-        npc_text.text = npcData.Goodbye;
+        //npc_text.text = 
+        StartSlowTextCoroutine(npcData.Goodbye);
         Invoke("HideDialogueScreen", 1f);
     }
     public void Interact(GameObject unused)
     {
         if (dialoguePanel != null)
         {
-            SetNPC_Text(npcData.Greeting);
+            //SetNPC_Text(npcData.Greeting);        
+            StartSlowTextCoroutine(npcData.Greeting);
             PresentResponseOptions(npcData.Greeting);
         }
     }
@@ -90,10 +101,40 @@ public class NPC_UI_Handler : MonoBehaviour, I_Interactable
 
     private void SetNPC_Text(string new_npc_text)
     {
-        if (npc_text != null && new_npc_text != interactString) npc_text.text = $"{npcData.npc_Name} says: " + new_npc_text;
+        if (npc_text != null && new_npc_text != interactString)
+            StartSlowTextCoroutine(new_npc_text);
+        //
+        //npc_text.text = $"{npcData.npc_Name} says: " + new_npc_text;
         else if (npc_text != null) npc_text.text = new_npc_text;
         else Logging.Error("Npc text label is null.");
     }
+
+    private void StartSlowTextCoroutine(string new_npc_text)
+    {
+        textUpdateProgress = 0;
+        textCoroutine = StartCoroutine(SlowlySetText(new_npc_text));
+    }
+
+    private IEnumerator SlowlySetText(string full_npc_text)
+    {
+
+        while (true)
+        {
+            string currentText = full_npc_text.Substring(0, textUpdateProgress + 1);
+            yield return new WaitForSeconds(textUpdateSpeed);
+            npc_text.text = $"{npcData.npc_Name}: " + currentText;
+            textUpdateProgress++;
+            if (textUpdateProgress == full_npc_text.Length)
+                StopCoroutine(textCoroutine);
+        }
+
+    }
+
+
+
+
+
+
     private void SetMetaInfo(string new_Info)
     {
 
@@ -119,6 +160,8 @@ public class NPC_UI_Handler : MonoBehaviour, I_Interactable
             newButton.RegisterCallback<ClickEvent>(e => OnOptionSelected(label));
             spawnedButtons.Add(newButton);
             playerOptions.Add(newButton);
+            newButton.style.width = Length.Percent(30);
+            newButton.style.height = Length.Percent(10);
 
         }
     }
@@ -138,10 +181,14 @@ public class NPC_UI_Handler : MonoBehaviour, I_Interactable
     }
     private void OnOptionSelected(string playerResponse)
     {
-        Logging.Info($"Option selected: {playerResponse}");
-        string NPC_Words = npcData.Dialogue.GetNPCResponseToPlayer(playerResponse, npcHandler.dialogueUnlocked);
-        SetNPC_Text(NPC_Words);
-        List<string> playerResponses = GetAllPlayerResponses(NPC_Words);
+        Tuple<string, AudioClip> NPC_Words = npcData.Dialogue.GetNPCResponseToPlayer(playerResponse, npcHandler.dialogueUnlocked);
+        Logging.Info($"Option selected: {playerResponse}. npc RESPONSE = {NPC_Words.Item1}");
+
+        audioSource.clip = NPC_Words.Item2;
+        if (audioSource.clip != null)
+            audioSource.Play();
+        SetNPC_Text(NPC_Words.Item1);
+        List<string> playerResponses = GetAllPlayerResponses(NPC_Words.Item1);
         CreateButtons(playerResponses);
     }
 
