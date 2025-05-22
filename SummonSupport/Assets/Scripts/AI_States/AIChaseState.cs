@@ -18,6 +18,7 @@ public class AIChaseState : AIState
     private bool runningAttackLoop = false;
     private CreatureSpriteController spriteController;
     private WaitForSeconds attackSpeed = new WaitForSeconds(1);
+    private float MovementSpeed;
 
 
 
@@ -29,8 +30,9 @@ public class AIChaseState : AIState
         obedienceState = gameObject.GetComponent<AIObedienceState>();
 
         rb = gameObject.GetComponent<Rigidbody2D>();
-        statScript = PlayerStats.Instance;
+        statScript = GetComponent<LivingBeing>();
         abilityHandler = GetComponent<CreatureAbilityHandler>();
+        MovementSpeed = statScript.GetAttribute(AttributeType.MovementSpeed);
     }
 
     public void SetTargetEntity(GameObject target)
@@ -80,7 +82,7 @@ public class AIChaseState : AIState
 
         Vector3 direction = target.transform.position - transform.position;
 
-        return direction.sqrMagnitude <= 50;
+        return direction.sqrMagnitude <= 150;
 
     }
     public void LookAtTarget(Vector2 targetLoc)
@@ -101,8 +103,29 @@ public class AIChaseState : AIState
     {
         Vector2 currentLoc = new Vector2(transform.position.x, transform.position.y);
         Vector2 direction = targetLoc - currentLoc;
-        if (direction.sqrMagnitude > 10 || peaceState.CheckVisionBlocked(targetEntity)) rb.linearVelocity = (targetLoc - currentLoc) * statScript.Speed;
-        else rb.linearVelocity = new Vector2(0, 0);
+        float distance = direction.sqrMagnitude;
+        bool isBoss = true;
+        if (distance > 10 || peaceState.CheckVisionBlocked(targetEntity))
+        {
+            if (!isBoss)
+            {
+                if (direction.sqrMagnitude > 10 || peaceState.CheckVisionBlocked(targetEntity)) rb.linearVelocity = (targetLoc - currentLoc) * MovementSpeed;
+                else rb.linearVelocity = new Vector2(0, 0);
+            }
+            else StrafeMovement(targetLoc, currentLoc, distance);
+        }
+    }
+    private void StrafeMovement(Vector2 targetLoc, Vector2 currentLoc, float distance)
+    {
+        float a = -60f * distance;
+        Vector2 offset = currentLoc - targetLoc;
+        float theta = Mathf.Atan2(offset.y, offset.x);
+
+        float dx = a * Mathf.Cos(theta) - a * theta * Mathf.Sin(theta);
+        float dy = a * Mathf.Sin(theta) + a * theta * Mathf.Cos(theta);
+
+        rb.linearVelocity = new Vector2(dx, dy).normalized * MovementSpeed;
+
     }
 
     private IEnumerator HandleAttack(Vector2 targetLoc)

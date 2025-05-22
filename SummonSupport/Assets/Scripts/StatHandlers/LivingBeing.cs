@@ -55,7 +55,16 @@ public abstract class LivingBeing : MonoBehaviour
     [field: SerializeField] protected float Radiation { get; private set; } = 0;
     [field: SerializeField] protected float Light { get; private set; } = 0;
     [field: SerializeField] protected float Psychic { get; private set; } = 0;
-    #endregion Afinity Stats
+    #endregion
+
+    #region Armor Stats
+    [field: SerializeField] protected float Piercing { get; private set; } = 0;
+    [field: SerializeField] protected float Bludgeoning { get; private set; } = 0;
+    [field: SerializeField] protected float Slashing { get; private set; } = 0;
+    public Dictionary<PhysicalType, (Func<float> Get, Action<float> Set)> PhysicalDict { private set; get; } = new();
+
+
+    #endregion
 
     #region other data
 
@@ -66,7 +75,7 @@ public abstract class LivingBeing : MonoBehaviour
     public Dictionary<AttributeType, (Func<float> Get, Action<float> Set)> AttributesDict { private set; get; } = new();
 
     [field: SerializeField] public List<Ability> Abilties { get; private set; } = new();
-    [field: SerializeField] public float Speed { get; private set; } = 0.4f;
+    [field: SerializeField] public float Speed { get; private set; } = 3f;
     [field: SerializeField] public float Mass { get; private set; } = 1f;
 
     private I_ResourceBar resourceBarInterface;
@@ -322,6 +331,7 @@ public abstract class LivingBeing : MonoBehaviour
                 { AttributeType.MaxPower,               (() => MaxPower,            v => MaxPower = v) },
                 { AttributeType.PowerSurge,             (() => PowerSurge,   v => PowerSurge = v) },
                 { AttributeType.CurrentPower,           (() => CurrentPower,        v => CurrentPower = v) },
+                { AttributeType.MovementSpeed,          (() => Speed,        v => Speed = v) },
             };
     }
 
@@ -344,6 +354,15 @@ public abstract class LivingBeing : MonoBehaviour
                 { Element.Radiation,       (() => Radiation,       v => Radiation = v) },
                 { Element.Light,           (() => Light,           v => Light = v) },
                 { Element.Psychic,         (() => Psychic,         v => Psychic = v) }
+            };
+    }
+    void InitializePhysicalDict()
+    {
+        PhysicalDict = new Dictionary<PhysicalType, (Func<float> Get, Action<float> Set)>
+            {
+                { PhysicalType.Piercing,       (() => Piercing,       v => Piercing = v) },
+                { PhysicalType.Bludgeoning,    (() => Bludgeoning,    v => Bludgeoning = v) },
+                { PhysicalType.Slashing,       (() => Slashing,        v => Slashing = v) }
             };
     }
 

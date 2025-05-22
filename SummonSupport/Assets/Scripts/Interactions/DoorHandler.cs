@@ -15,10 +15,11 @@ public class DoorHandler : MonoBehaviour, I_Interactable
     [SerializeField] public Element elementalRequisite;
     [SerializeField] public int difficulty = 1;
     private EdgeCollider2D doorCollider;
-
+    [field: SerializeField] public Transform DestinationDoor { get; protected set; }
 
 
     private SpriteRenderer minionsSpriteRenderer;
+
     public void Awake()
     {
         doorCollider = GetComponent<EdgeCollider2D>();
@@ -48,20 +49,11 @@ public class DoorHandler : MonoBehaviour, I_Interactable
         {
             if (!Open)
             {
-                doorCollider.enabled = false;
-
-                NotReadyToInteract();
-                Open = true;
-                minionsSpriteRenderer.sprite = OpenSprite;
-                Invoke("ReadyInteract", readyCooldownTime);
+                HandleOpen();
             }
             else
             {
-                doorCollider.enabled = true;
-                NotReadyToInteract();
-                Open = false;
-                minionsSpriteRenderer.sprite = ClosedSprite;
-                Invoke("ReadyInteract", readyCooldownTime);
+                HandleClose();
             }
         }
     }
@@ -73,6 +65,8 @@ public class DoorHandler : MonoBehaviour, I_Interactable
     private void NotReadyToInteract()
     {
         ready = false;
+        Invoke("ReadyInteract", readyCooldownTime);
+
     }
 
     private void SetLocked(bool isLocked)
@@ -90,6 +84,28 @@ public class DoorHandler : MonoBehaviour, I_Interactable
             InteractCanvasHandler.Instance.ShowInteractionOption(transform.position, "Failed to open");
             return false;
         }
+    }
+    void HandleOpen()
+    {
+        if (DestinationDoor != null)
+            PlayerStats.Instance.gameObject.transform.position = DestinationDoor.position;
+        if (OpenSprite != null)
+            minionsSpriteRenderer.sprite = OpenSprite;
+        if (doorCollider != null)
+            doorCollider.enabled = false;
+
+        NotReadyToInteract();
+        Open = true;
+    }
+
+    void HandleClose()
+    {
+        if (doorCollider != null)
+            doorCollider.enabled = true;
+        NotReadyToInteract();
+        Open = false;
+        if (ClosedSprite != null)
+            minionsSpriteRenderer.sprite = ClosedSprite;
     }
 
     private void RequestCanvasText(string temporaryText)

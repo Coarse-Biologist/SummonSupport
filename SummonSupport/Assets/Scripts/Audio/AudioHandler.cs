@@ -14,7 +14,7 @@ public class AudioHandler : MonoBehaviour
     {
         Instance = this;
         audioSource = GetComponent<AudioSource>();
-        SetMusicToIntensity(1.5f, LocationSong.level1);
+        //SetMusicToIntensity(1.5f, LocationSong.level1);
         audioSource.loop = true;
 
     }
