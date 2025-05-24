@@ -126,20 +126,6 @@ public abstract class LivingBeing : MonoBehaviour
         }
     }
     #endregion
-
-    #region Status effects handling
-    private System.Collections.IEnumerator ExecuteEverySecond(Action action, float duration)
-    {
-        float timePassed = 0f;
-        while (timePassed < duration)
-        {
-            action?.Invoke();
-            yield return new WaitForSeconds(1f);
-            timePassed += 1f;
-        }
-    }
-    #endregion
-
     #region Attribute Handling
 
     public float GetAttribute(AttributeType attribute)

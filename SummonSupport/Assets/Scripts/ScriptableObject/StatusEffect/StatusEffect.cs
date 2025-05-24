@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using System;
+using Unity.VisualScripting;
 
 public class StatusEffectInstance
 {
@@ -28,7 +29,7 @@ public class StatusEffect : ScriptableObject
     [field: SerializeField] public AttributeType Attribute { get; protected set; } = AttributeType.None;
     [field: SerializeField] public float Duration { get; protected set; } = 5f;
     [field: SerializeField] public float TickRateSeconds { get; protected set; } = .1f;
-    [field: SerializeField] public int Value { get; protected set; } = 1;
+    [field: SerializeField] public float Value { get; protected set; } = 1f;
     [field: SerializeField] public ValueType ValueType { get; protected set; } = ValueType.Flat;
     [field: SerializeField] public Element ElementType { get; protected set; } = Element.None;
     private float runtimeDuration;
@@ -38,10 +39,23 @@ public class StatusEffect : ScriptableObject
     {
         if (!target.TryGetComponent(out LivingBeing livingBeing))
             return;
+
+        ApplyStatusEffect(livingBeing, sourcePosition);
+    }
+    public void ApplyStatusEffect(LivingBeing livingBeing, Vector2 sourcePosition)
+    {
         if (RenewStatusEffect(livingBeing))
             return;
 
         ChooseRightCoroutineToApplyStatusEffect(livingBeing, sourcePosition);
+    }
+    public void ApplyStatusEffect(LivingBeing livingBeing)
+    {
+        ApplyEffect(livingBeing, Value, ChangeRegeneration);
+    }
+    public void RemoveStatusEffect(LivingBeing livingBeing)
+    {
+        RemoveEffect(livingBeing, -Value, ChangeRegeneration);
     }
     bool RenewStatusEffect(LivingBeing livingBeing)
     {
@@ -58,16 +72,16 @@ public class StatusEffect : ScriptableObject
         switch (Type)
         {
             case StatusEffectType.AttributeReductionOverTime:
-                CoroutineManager.Instance.StartCustomCoroutine(HandleOnce(livingBeing, -Value, ChangeRegeneration));
+                CoroutineManager.Instance.StartCustomCoroutine(ApplyForXSeconds(livingBeing, -Value, ChangeRegeneration));
                 break;
             case StatusEffectType.AttributeIncreaseOverTime:
-                CoroutineManager.Instance.StartCustomCoroutine(HandleOnce(livingBeing, Value, ChangeRegeneration));
+                CoroutineManager.Instance.StartCustomCoroutine(ApplyForXSeconds(livingBeing, Value, ChangeRegeneration));
                 break;
             case StatusEffectType.AttributeReduction:
-                CoroutineManager.Instance.StartCustomCoroutine(HandleOnce(livingBeing, -Value, ChangeAttribute));
+                CoroutineManager.Instance.StartCustomCoroutine(ApplyForXSeconds(livingBeing, -Value, ChangeAttribute));
                 break;
             case StatusEffectType.AttributeIncrease:
-                CoroutineManager.Instance.StartCustomCoroutine(HandleOnce(livingBeing, Value, ChangeAttribute));
+                CoroutineManager.Instance.StartCustomCoroutine(ApplyForXSeconds(livingBeing, Value, ChangeAttribute));
                 break;
             case StatusEffectType.KnockInTheAir:
                 AI_CC_State ccState = livingBeing.gameObject.GetComponent<AI_CC_State>();
@@ -75,8 +89,24 @@ public class StatusEffect : ScriptableObject
                 break;
         }
     }
+    private void ApplyEffect(LivingBeing target, float value, Action<LivingBeing, float> action)
+    {
+        if (!target) 
+            return;
 
-    private IEnumerator HandleOnce(LivingBeing target, float value, Action<LivingBeing, float> action)
+        StatusEffectInstance instance = new(this);
+        target.activeStatusEffects.Add(Name, instance);
+        action(target, value);
+    }
+    private void RemoveEffect(LivingBeing target, float value, Action<LivingBeing, float> action)
+    {
+        if (!target)
+            return;
+
+        target.activeStatusEffects.Remove(Name);
+        action(target, value);
+    }
+    private IEnumerator ApplyForXSeconds(LivingBeing target, float value, Action<LivingBeing, float> action)
     {
         try
         {
@@ -96,29 +126,6 @@ public class StatusEffect : ScriptableObject
             }
         }
     }
-    private IEnumerator RepeatStatusEffect(LivingBeing target, float value, Action<LivingBeing, float> action)
-    {
-        StatusEffectInstance instance = new(this);
-        int totalTicks = Mathf.FloorToInt(Duration / TickRateSeconds);
-        target.activeStatusEffects.Add(Name, instance);
-        try
-        {
-            while (instance.ticksDone < totalTicks)
-            {
-                if (!target)
-                    yield break; // In case the target died while this was still running. If target died => GameObject does not longer exist.
-
-                action(target, value);
-                instance.ticksDone++;
-                yield return new WaitForSeconds(TickRateSeconds);
-            }
-        }
-        finally
-        {
-            if (target) // Same thing here, make sure target is still alive if we want to access it.
-                target.activeStatusEffects.Remove(Name);
-        }
-    }
 
     private void ChangeAttribute(LivingBeing target, float value)
     {
@@ -128,10 +135,5 @@ public class StatusEffect : ScriptableObject
     private void ChangeRegeneration(LivingBeing target, float value)
     {
         target.ChangeRegeneration(Attribute, value);
-    }
-
-    private bool IsExisting(LivingBeing livingBeing)
-    {
-        return livingBeing != null && livingBeing.gameObject != null && livingBeing.gameObject.activeInHierarchy == true;
     }
 }

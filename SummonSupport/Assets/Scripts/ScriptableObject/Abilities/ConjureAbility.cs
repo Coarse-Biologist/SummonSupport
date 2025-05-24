@@ -30,6 +30,10 @@ public class ConjureAbility : Ability
 
         if (IsDecaying)
             AddDecayToObject(spawnedObject);
+
+        if (spawnedObject.TryGetComponent(out Aura aura))
+            aura.HandleInstanciation(user.GetComponent<LivingBeing>(), this);
+        
         return true;
     }
 
@@ -38,6 +42,4 @@ public class ConjureAbility : Ability
         SelfDestructTimer selfDestructTimer = spawnedObject.AddComponent<SelfDestructTimer>();
         selfDestructTimer.StartTimer(TimeAlive);
     }
-
-
 }
