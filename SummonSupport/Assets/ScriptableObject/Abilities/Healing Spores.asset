@@ -18,11 +18,11 @@ MonoBehaviour:
   <Cooldown>k__BackingField: 2
   <PowerCost>k__BackingField: 20
   <StatusEffects>k__BackingField:
-  - {fileID: 11400000, guid: b38d87f0dd3dc6646a96f8428c57744b, type: 2}
+  - {fileID: 11400000, guid: a727bff92124d8b408432be71c4103a6, type: 2}
   <ListUsableOn>k__BackingField: 00000000
-  <Attribute>k__BackingField: 1
-  <Value>k__BackingField: 5
-  <ElementType>k__BackingField: 7
+  <Attribute>k__BackingField: 0
+  <Value>k__BackingField: 1
+  <ElementType>k__BackingField: 10
   <OnCooldown>k__BackingField: 0
   <ObjectToSpawn>k__BackingField: {fileID: 3310388010863704727, guid: 9f5c5168238435b4785dfd1e83d2aacb,
     type: 3}

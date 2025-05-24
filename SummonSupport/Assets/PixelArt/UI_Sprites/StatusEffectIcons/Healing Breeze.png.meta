@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Healing Breeze_0: 7873078129644288730
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

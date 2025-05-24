@@ -248,6 +248,12 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9084318776697772798, guid: e4c43cb75dda4d3458057b35ce607d87,
+        type: 3}
+      propertyPath: 'abilities.Array.data[3]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 6d37a0724617e2244a87765939cde59b,
+        type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1053,7 +1059,7 @@ TilemapRenderer:
   m_SortOrder: 3
   m_Mode: 0
   m_DetectChunkCullingBounds: 0
-  m_MaskInteraction: 0
+  m_MaskInteraction: 2
 --- !u!1839735485 &663654674
 Tilemap:
   m_ObjectHideFlags: 0
