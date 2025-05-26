@@ -6,9 +6,9 @@
             <ui:ProgressBar value="0" title="1" name="AbilitySlotL1" class="AbilityProgressbar" style="color: rgb(255, 255, 255); scale: 1 1; flex-direction: column; -unity-text-align: lower-left; white-space: pre; rotate: 0; height: 30%; width: 30%;" />
             <ui:ProgressBar value="0" title="2" name="AbilitySlotL2" class="AbilityProgressbar" style="color: rgb(255, 255, 255); scale: 1 1; flex-direction: column; -unity-text-align: lower-left; white-space: pre; rotate: 0; height: 30%; width: 30%;" />
             <ui:ProgressBar value="0" title="3" name="AbilitySlotL3" class="AbilityProgressbar" style="color: rgb(255, 255, 255); scale: 1 1; flex-direction: column; -unity-text-align: lower-left; white-space: pre; rotate: 0; height: 30%; width: 30%;" />
-            <ui:ProgressBar value="0" title="q" name="AbilitySlotL4" class="AbilityProgressbar" style="color: rgb(255, 255, 255); scale: 1 1; flex-direction: column; -unity-text-align: lower-left; white-space: pre; rotate: 0; height: 30%; width: 30%;" />
-            <ui:ProgressBar value="0" title="e" name="AbilitySlotL5" class="AbilityProgressbar" style="color: rgb(255, 255, 255); scale: 1 1; flex-direction: column; -unity-text-align: lower-left; white-space: pre; rotate: 0; height: 30%; width: 30%;" />
-            <ui:ProgressBar value="0" title="f" name="AbilitySlotL6" class="AbilityProgressbar" style="color: rgb(255, 255, 255); scale: 1 1; flex-direction: column; -unity-text-align: lower-left; white-space: pre; rotate: 0; height: 30%; width: 30%;" />
+            <ui:ProgressBar value="0" title="4" name="AbilitySlotL4" class="AbilityProgressbar" style="color: rgb(255, 255, 255); scale: 1 1; flex-direction: column; -unity-text-align: lower-left; white-space: pre; rotate: 0; height: 30%; width: 30%;" />
+            <ui:ProgressBar value="0" title="5" name="AbilitySlotL5" class="AbilityProgressbar" style="color: rgb(255, 255, 255); scale: 1 1; flex-direction: column; -unity-text-align: lower-left; white-space: pre; rotate: 0; height: 30%; width: 30%;" />
+            <ui:ProgressBar value="0" title="6" name="AbilitySlotL6" class="AbilityProgressbar" style="color: rgb(255, 255, 255); scale: 1 1; flex-direction: column; -unity-text-align: lower-left; white-space: pre; rotate: 0; height: 30%; width: 30%;" />
         </ui:VisualElement>
         <ui:VisualElement name="AbilitySlotsR" style="flex-grow: 1; width: 15%; height: 15%; right: 30%; position: absolute; top: auto; bottom: 0%; flex-wrap: wrap; flex-direction: column-reverse;" />
         <ui:VisualElement name="MinionBarSlots" style="flex-grow: 1; bottom: 0; right: 0%; width: 25%; height: 20%; position: absolute; flex-wrap: wrap; align-content: flex-end; flex-direction: column-reverse;" />
@@ -21,8 +21,28 @@
             <ui:VisualElement name="PlayerOptions" style="flex-grow: 1; top: 0%; left: 50%; right: 0%; bottom: 0%; width: 50%; min-width: 50%; max-width: 50%; height: 100%; min-height: 100%; max-height: 0%; position: absolute;" />
         </ui:VisualElement>
         <ui:VisualElement name="ResourceBars" enabled="true" style="flex-grow: 1; width: 30%; height: 15%; top: 85%; bottom: 0; left: 0%; position: absolute; flex-wrap: wrap; align-items: stretch; align-self: center; flex-direction: column; align-content: stretch; justify-content: flex-start; background-color: rgba(255, 0, 0, 0); border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; flex-basis: 0%;">
-            <ui:ProgressBar value="22" name="HealthBar" class="healthbar" style="height: 10%;" />
-            <ui:ProgressBar value="44" name="PowerBar" class="powerbar" style="height: 10%;" />
+            <ui:ProgressBar value="22" name="HealthBar" class="healthbar" style="height: 10%;">
+                <ui:GroupBox name="ValueAndArrowsBox" style="position: absolute; width: 100%; height: 100%; flex-direction: row; align-items: center; justify-content: center; align-self: stretch;">
+                    <ui:GroupBox name="NegativeRegenBox" style="position: relative; left: auto; top: auto; bottom: auto; right: auto; width: 40%; height: 100%; flex-direction: row-reverse; align-items: center; justify-content: flex-start; align-self: center; align-content: center;">
+                        <ui:Label tabindex="0" name="ArrowLeft" style="position: relative; top: 0; left: 0; right: 0; bottom: 0; width: 16px; height: 16px; align-items: auto; background-image: url(&quot;project://database/Assets/PixelArt/UI_Sprites/Regeneration%20Arrows/Arrow%20Left%20Color.png?fileID=2800000&amp;guid=af33e8dc350fff54ab2c0f502f5ac718&amp;type=3#Arrow Left Color&quot;); flex-direction: row-reverse; flex-wrap: nowrap; align-content: auto;" />
+                    </ui:GroupBox>
+                    <ui:Label text="100" name="ResourceValue" style="-unity-text-align: middle-center; white-space: normal; text-overflow: clip; height: 10px; width: 46px;" />
+                    <ui:GroupBox name="PositiveRegenBox" style="position: relative; left: auto; top: auto; bottom: auto; right: auto; width: 40%; height: 100%; flex-direction: row-reverse; align-items: center; justify-content: flex-end; align-self: center; align-content: flex-start;">
+                        <ui:Label tabindex="0" name="ArrowRight" style="position: relative; top: 0; left: 0; right: 0; bottom: 0; width: 16px; height: 16px; align-items: stretch; background-image: url(&quot;project://database/Assets/PixelArt/UI_Sprites/Regeneration%20Arrows/Arrow%20Right%20Color.png?fileID=2800000&amp;guid=a524e91fae0d1544eab4866815d80e14&amp;type=3#Arrow Right Color&quot;);" />
+                    </ui:GroupBox>
+                </ui:GroupBox>
+            </ui:ProgressBar>
+            <ui:ProgressBar value="44" name="PowerBar" class="powerbar" style="height: 10%;">
+                <ui:GroupBox name="ValueAndArrowsBox" style="position: absolute; width: 100%; height: 100%; flex-direction: row; align-items: center; justify-content: center; align-self: stretch;">
+                    <ui:GroupBox name="NegativeRegenBox" style="position: relative; left: auto; top: auto; bottom: auto; right: auto; width: 40%; height: 100%; flex-direction: row-reverse; align-items: center; justify-content: flex-start; align-self: center; align-content: center;">
+                        <ui:Label tabindex="0" name="ArrowLeft" style="position: relative; top: 0; left: 0; right: 0; bottom: 0; width: 16px; height: 16px; align-items: auto; background-image: url(&quot;project://database/Assets/PixelArt/UI_Sprites/Regeneration%20Arrows/Arrow%20Left%20Color.png?fileID=2800000&amp;guid=af33e8dc350fff54ab2c0f502f5ac718&amp;type=3#Arrow Left Color&quot;); flex-direction: row-reverse; flex-wrap: nowrap; align-content: auto;" />
+                    </ui:GroupBox>
+                    <ui:Label text="100" name="ResourceValue" style="-unity-text-align: middle-center; white-space: normal; text-overflow: clip; color: rgb(255, 255, 255); height: 10px; width: 46px;" />
+                    <ui:GroupBox name="PositiveRegenBox" style="position: relative; left: auto; top: auto; bottom: auto; right: auto; width: 40%; height: 100%; flex-direction: row-reverse; align-items: center; justify-content: flex-end; align-self: center; align-content: flex-start;">
+                        <ui:Label tabindex="0" name="ArrowRight" style="position: relative; top: 0; left: 0; right: 0; bottom: 0; width: 16px; height: 16px; align-items: stretch; background-image: url(&quot;project://database/Assets/PixelArt/UI_Sprites/Regeneration%20Arrows/Arrow%20Right%20Color.png?fileID=2800000&amp;guid=a524e91fae0d1544eab4866815d80e14&amp;type=3#Arrow Right Color&quot;);" />
+                    </ui:GroupBox>
+                </ui:GroupBox>
+            </ui:ProgressBar>
             <ui:ProgressBar value="66" name="XP_Bar" class="Xpbar" style="height: 10%;" />
         </ui:VisualElement>
     </ui:VisualElement>
@@ -34,7 +54,7 @@
             <ui:Button text="Leave Alchemy Bench" name="QuitButton" class="button" style="width: 40%; height: 7%; background-image: none; background-color: rgb(0, 49, 2); border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; -unity-font-style: bold; border-top-left-radius: 10px; border-top-right-radius: 10px; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px; color: rgb(5, 118, 0);" />
             <ui:VisualElement name="CraftandUpgrade" style="flex-grow: 1; flex-wrap: wrap; border-top-width: 2px; border-right-width: 2px; border-bottom-width: 2px; border-left-width: 2px; border-top-left-radius: 100%; border-top-right-radius: 10px; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px; border-left-color: rgba(0, 111, 5, 0); border-right-color: rgba(0, 111, 5, 0); border-top-color: rgba(0, 111, 5, 0); border-bottom-color: rgba(0, 111, 5, 0); bottom: 0;">
                 <ui:Label name="Instructions" class="CraftButton" style="flex-wrap: wrap; white-space: pre-wrap; -unity-font-style: bold; text-shadow: 0 0 0 rgb(0, 0, 0);" />
-                <ui:VisualElement name="AlchemyInventory" style="flex-grow: 1; position: absolute; width: 50%; height: 85%; top: 15%; flex-wrap: wrap;" />
+                <ui:VisualElement name="AlchemyInventory" style="flex-grow: 1; position: absolute; width: 50%; height: 85%; top: 91px; flex-wrap: wrap; left: 1px;" />
                 <ui:VisualElement name="ElementSelection" style="flex-grow: 1; position: absolute; width: 50%; height: 85%; top: 15%; flex-wrap: wrap; right: 0%; border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0;" />
             </ui:VisualElement>
             <ui:VisualElement name="ConfirmClear" enabled="true" focusable="true" style="flex-grow: 1; right: 0%; position: absolute; width: 40%; height: 10px; flex-wrap: wrap;" />

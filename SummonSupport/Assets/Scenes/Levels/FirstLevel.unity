@@ -127,6 +127,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2376002305397545486, guid: e4c43cb75dda4d3458057b35ce607d87,
+        type: 3}
+      propertyPath: <RegenCalcOffset>k__BackingField
+      value: 0.99
+      objectReference: {fileID: 0}
     - target: {fileID: 2864372725038760086, guid: e4c43cb75dda4d3458057b35ce607d87,
         type: 3}
       propertyPath: uiDoc
@@ -293,6 +298,11 @@ PrefabInstance:
       propertyPath: <XP_OnDeath>k__BackingField
       value: 9
       objectReference: {fileID: 0}
+    - target: {fileID: -2192539161432645077, guid: 8b808af4814c9664e80e2e15555215fb,
+        type: 3}
+      propertyPath: <RegenCalcOffset>k__BackingField
+      value: 0.99
+      objectReference: {fileID: 0}
     - target: {fileID: 462445852388303841, guid: 8b808af4814c9664e80e2e15555215fb,
         type: 3}
       propertyPath: m_Layer
@@ -308,6 +318,11 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 6
       objectReference: {fileID: 0}
+    - target: {fileID: 530800861541312882, guid: 8b808af4814c9664e80e2e15555215fb,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1502490013454894205, guid: 8b808af4814c9664e80e2e15555215fb,
         type: 3}
       propertyPath: m_Layer
@@ -316,22 +331,22 @@ PrefabInstance:
     - target: {fileID: 2384500945729294893, guid: 8b808af4814c9664e80e2e15555215fb,
         type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2384500945729294893, guid: 8b808af4814c9664e80e2e15555215fb,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2740338916301067606, guid: 8b808af4814c9664e80e2e15555215fb,
         type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2740338916301067606, guid: 8b808af4814c9664e80e2e15555215fb,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2914225980592756085, guid: 8b808af4814c9664e80e2e15555215fb,
         type: 3}

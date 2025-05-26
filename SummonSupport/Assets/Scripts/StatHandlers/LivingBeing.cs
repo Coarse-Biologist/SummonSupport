@@ -31,7 +31,7 @@ public abstract class LivingBeing : MonoBehaviour
     [field: SerializeField] public float TotalPowerRegeneration { get; private set; } = 0;
     [field: SerializeField] public int HealthRegenArrows { get; private set; } = 0;
     [field: SerializeField] public int PowerRegenArrows { get; private set; } = 0;
-    [field: SerializeField] public float RegenCalcOffset { get; private set; } = .8f;
+    [field: SerializeField] public float RegenCalcOffset { get; private set; } = .99f;
     [field: SerializeField] public int MaxRegenArrows { get; private set; } = 6;
 
 
@@ -260,11 +260,13 @@ public abstract class LivingBeing : MonoBehaviour
         {
             TotalHealthRegeneration += value;
             HealthRegenArrows = GetRegenerationIndicatorAmount(MaxHP, TotalHealthRegeneration);
+            EventDeclarer.regenerationChanged.Invoke(this, attributeType);
         }
         else if (attributeType == AttributeType.CurrentPower)
         {
             TotalPowerRegeneration += value;
             PowerRegenArrows = GetRegenerationIndicatorAmount(MaxPower, TotalPowerRegeneration);
+            EventDeclarer.regenerationChanged.Invoke(this, attributeType);
         }
     }
 

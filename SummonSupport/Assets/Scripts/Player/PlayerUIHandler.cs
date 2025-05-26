@@ -4,28 +4,33 @@ using UnityEngine.UIElements;
 using UnityEngine.Events;
 using SummonSupportEvents;
 using System;
+using System.Text.RegularExpressions;
 
 public class PlayerUIHandler : MonoBehaviour
 {
     public static PlayerUIHandler Instance { get; private set; }
-    private UIDocument uiDoc;
-    private VisualTreeAsset UIPrefabAssets;
+    UIDocument uiDoc;
+    VisualTreeAsset UIPrefabAssets;
 
 
     PlayerStats playerStats;
-    private VisualElement root;
-    private VisualElement minionHPBars;
-    private VisualElement playerUI;
-    private VisualElement resourceBarsContainer;
-    private ProgressBar playerHealthBar;
-    private ProgressBar playerPowerBar;
-    private ProgressBar playerXP_Bar;
+    VisualElement root;
+    VisualElement minionHPBars;
+    VisualElement playerUI;
+    VisualElement resourceBarsContainer;
+    ProgressBar hpProgressBar;
+    GroupBox healthBarGroupBox;
+    GroupBox powerBarGroupBox;
+    ProgressBar powerProgressBar;
+    ProgressBar playerXP_Bar;
+    ResourceBar hpBar;
+    ResourceBar powerBar;
 
 
 
     [SerializeField] public List<GameObject> minions;// = new List<GameObject>();
-    private Dictionary<LivingBeing, ProgressBar> HPDict = new Dictionary<LivingBeing, ProgressBar>();
-    private AlchemyHandler alchemyHandler;
+    Dictionary<LivingBeing, ProgressBar> HPDict = new Dictionary<LivingBeing, ProgressBar>();
+    AlchemyHandler alchemyHandler;
     void Awake()
     {
         if (Instance == null)
@@ -37,6 +42,7 @@ public class PlayerUIHandler : MonoBehaviour
     void OnEnable()
     {
         EventDeclarer.attributeChanged.AddListener(UpdateResourceBar);
+        EventDeclarer.regenerationChanged.AddListener(UpdateRegenerationArrows);
         EventDeclarer.maxAttributeChanged.AddListener(UpdateMaxValueResourceBar);
         if (AlchemyHandler.Instance != null)
             AlchemyHandler.Instance.newMinionAdded.AddListener(AddMinionHP);
@@ -46,6 +52,7 @@ public class PlayerUIHandler : MonoBehaviour
     void OnDisable()
     {
         EventDeclarer.attributeChanged.RemoveListener(UpdateResourceBar);
+        EventDeclarer.regenerationChanged.RemoveListener(UpdateRegenerationArrows);
         EventDeclarer.maxAttributeChanged.RemoveListener(UpdateMaxValueResourceBar);
         if (AlchemyHandler.Instance != null)
             AlchemyHandler.Instance.newMinionAdded.RemoveListener(AddMinionHP);
@@ -56,6 +63,8 @@ public class PlayerUIHandler : MonoBehaviour
     {
         SetUpUI();
         UpdateMaxValueResourceBar(playerStats, AttributeType.CurrentHitpoints);
+        UpdateRegenerationArrows(playerStats, AttributeType.CurrentHitpoints);
+        UpdateRegenerationArrows(playerStats, AttributeType.CurrentPower);
         UpdateResourceBar(playerStats, AttributeType.CurrentHitpoints);
         UpdateResourceBar(playerStats, AttributeType.CurrentPower);
         UpdateResourceBar(playerStats, AttributeType.CurrentXP);
@@ -70,11 +79,10 @@ public class PlayerUIHandler : MonoBehaviour
         playerUI = root.Q<VisualElement>("MainUI");
 
         resourceBarsContainer = playerUI.Q<VisualElement>("ResourceBars");
-        playerHealthBar = resourceBarsContainer.Q<ProgressBar>("HealthBar");
-        playerPowerBar = resourceBarsContainer.Q<ProgressBar>("PowerBar");
+        hpProgressBar = resourceBarsContainer.Q<ProgressBar>("HealthBar");
+        powerProgressBar = resourceBarsContainer.Q<ProgressBar>("PowerBar");
         playerXP_Bar = resourceBarsContainer.Q<ProgressBar>("XP_Bar");
-
-
+        InitializeResourceBarElements();
 
         minionHPBars = playerUI.Q<VisualElement>("MinionBarSlots");
         var craftingUI = root.Q<VisualElement>("CraftingUI");
@@ -87,14 +95,18 @@ public class PlayerUIHandler : MonoBehaviour
         playerStats = PlayerStats.Instance;
     }
 
-    void UpdateMaxValueResourceBar(LivingBeing creature, AttributeType attributeType)
+    void InitializeResourceBarElements()
     {
-        playerHealthBar.highValue = playerStats.GetAttribute(AttributeType.MaxHitpoints);
-        playerPowerBar.highValue = playerStats.GetAttribute(AttributeType.MaxPower);
-        playerXP_Bar.highValue = playerStats.MaxXP;
+        hpBar       = new(hpProgressBar);
+        powerBar    = new(powerProgressBar);
     }
 
-
+    void UpdateMaxValueResourceBar(LivingBeing creature, AttributeType attributeType)
+    {
+        hpProgressBar.highValue = playerStats.GetAttribute(AttributeType.MaxHitpoints);
+        powerProgressBar.highValue = playerStats.GetAttribute(AttributeType.MaxPower);
+        playerXP_Bar.highValue = playerStats.MaxXP;
+    }
 
     public void AddMinionHP(LivingBeing livingBeing)
     {
@@ -168,8 +180,16 @@ public class PlayerUIHandler : MonoBehaviour
         CommandMinion.SetSelectedMinion(minionStats.gameObject);
     }
 
-
-
+    public void UpdateRegenerationArrows(LivingBeing livingBeing, AttributeType attributeType)
+    {
+        if (livingBeing.CharacterTag == CharacterTag.Player)
+        {
+            if (attributeType == AttributeType.CurrentHitpoints)
+                hpBar.SetArrows(livingBeing.HealthRegenArrows);
+            if (attributeType == AttributeType.CurrentPower)
+                powerBar.SetArrows(livingBeing.PowerRegenArrows);
+        }
+    }
     public void UpdateResourceBar(LivingBeing livingBeing, AttributeType attributeType)
     {
 
@@ -199,9 +219,17 @@ public class PlayerUIHandler : MonoBehaviour
     private void SetPlayerAttribute(AttributeType attributeType)
     {
         if (attributeType == AttributeType.CurrentHitpoints)
-            playerHealthBar.value = playerStats.GetAttribute(attributeType);
+        {
+            float value = playerStats.GetAttribute(attributeType);
+            hpProgressBar.value = value;
+            hpBar.SetValue(value);
+        }
         if (attributeType == AttributeType.CurrentPower)
-            playerPowerBar.value = playerStats.GetAttribute(attributeType);
+        {
+            float value = playerStats.GetAttribute(attributeType);
+            powerProgressBar.value = value;
+            powerBar.SetValue(value);
+        }
         if (attributeType == AttributeType.CurrentXP)
         {
             playerXP_Bar.value = playerStats.CurrentXP;
