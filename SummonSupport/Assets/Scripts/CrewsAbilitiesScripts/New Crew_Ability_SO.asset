@@ -16,5 +16,15 @@ MonoBehaviour:
   <Icon>k__BackingField: {fileID: 0}
   <Cooldown>k__BackingField: 0
   <PowerCost>k__BackingField: 0
-  <Heal>k__BackingField: []
-  <ListEffects>k__BackingField: []
+  <TargetTypeAndEffects>k__BackingField:
+  - <EffectDescription>k__BackingField: TEst ability Crewcrew
+    <TargetType>k__BackingField: 1
+    <Heal>k__BackingField: []
+    <HealOverTime>k__BackingField: []
+    <AttributeUp>k__BackingField: []
+    <AttributeDown>k__BackingField: []
+    <Damage>k__BackingField: []
+    <DamageOverTime>k__BackingField: []
+    <Projectile>k__BackingField:
+    - <Speed>k__BackingField: 10
+      <Range>k__BackingField: 10

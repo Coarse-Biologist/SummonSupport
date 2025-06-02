@@ -214,6 +214,7 @@ public abstract class LivingBeing : MonoBehaviour
         float newValue = valueType == ValueType.Percentage
         ? currentValue * (1 + value / 100f)
         : currentValue + value;
+        //DamageHandler.AdjustValue();
 
         return HandleAttributeCap(attributeType, newValue, currentValue, value);
     }
@@ -237,19 +238,19 @@ public abstract class LivingBeing : MonoBehaviour
     {
         float max = GetAttribute(attributeTypeMax);
         float tempMax = GetAttribute(attributeTypeTempMax);
-        if (newValue > max)
+        if (newValue > max) // if the newly calculated value (after recieving heal or damage) is greater than the  characters max
             return max;
 
-        if (delta < 0 && tempMax > 0)
+        if (delta < 0 && tempMax > 0) // if damage is being calculated and one has overshield
         {
-            if (tempMax + delta <= 0)
+            if (tempMax + delta <= 0) // if the damage is more than the shield
             {
-                SetAttribute(attributeTypeTempMax, 0);
-                return currentValue + tempMax + delta;
+                SetAttribute(attributeTypeTempMax, 0); // set overshield to 0
+                return currentValue + tempMax + delta; // return current health plus overshield value, minus damage value,
             }
             else
-                SetAttribute(attributeTypeTempMax, tempMax + delta);
-            return currentValue;
+                SetAttribute(attributeTypeTempMax, tempMax + delta); // otherwise lower overshield value by the damage
+            return currentValue; // return current health or mana
         }
         return newValue;
     }
