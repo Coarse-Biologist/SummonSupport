@@ -75,7 +75,7 @@ public static class CommandMinion
             obedienceState.SetCommandLoc(loc);
             stats.SetCommand(MinionCommands.GoTo);
             Logging.Info($"{stats.Name} is going to location {obedienceState.commandLoc}");
-            stats.ChangeAttribute(AttributeType.CurrentHitpoints, -10);
+            //stats.ChangeAttribute(AttributeType.CurrentHitpoints, -10);
         }
     }
 

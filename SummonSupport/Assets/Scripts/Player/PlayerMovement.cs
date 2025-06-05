@@ -3,6 +3,7 @@ using UnityEngine.InputSystem;
 using Unity.Entities;
 using Unity.Collections;
 using SummonSupportEvents;
+using Unity.Mathematics;
 
 
 public class PlayerMovement : MonoBehaviour
@@ -14,6 +15,9 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private PlayerInputActions inputActions;
     [SerializeField] GameObject AbilityRotation;
     private Vector2 lookInput;
+    private Vector2 worldPosition;
+    private Vector2 direction;
+    Vector3 moveDirection;
     [SerializeField] float movementSpeed;
     [SerializeField] float dashBoost = 10f;
     [SerializeField] float dashCoolDown = 1f;
@@ -22,6 +26,8 @@ public class PlayerMovement : MonoBehaviour
     private bool dashing = false;
     private bool canDash = true;
     private bool lockedInUI = false;
+    [SerializeField] public Crew_Ability_SO crewsAbility;
+    [SerializeField] public GameObject crewsProjectile;
 
     #endregion
 
@@ -101,7 +107,7 @@ public class PlayerMovement : MonoBehaviour
         else
             calculatedSpeed = movementSpeed;
 
-        Vector3 moveDirection = new Vector3(moveInput.x, moveInput.y, 0).normalized;
+        moveDirection = new Vector3(moveInput.x, moveInput.y, 0).normalized;
         rb.linearVelocity = moveDirection * calculatedSpeed * 10;
     }
 
@@ -115,8 +121,8 @@ public class PlayerMovement : MonoBehaviour
     }
     private Quaternion HandleLook()
     {
-        Vector2 worldPosition = mainCamera.ScreenToWorldPoint(lookInput);
-        Vector2 direction = (worldPosition - (Vector2)transform.position).normalized;
+        worldPosition = mainCamera.ScreenToWorldPoint(lookInput);
+        direction = (worldPosition - (Vector2)transform.position).normalized;
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
         AbilityRotation.transform.rotation = Quaternion.Euler(0, 0, angle);
         spriteController.SetSpriteDirection(angle);
@@ -128,9 +134,18 @@ public class PlayerMovement : MonoBehaviour
 
     private void SendMinionCommandContext(InputAction.CallbackContext context)
     {
-        Vector2 worldPosition = mainCamera.ScreenToWorldPoint(lookInput);
+        worldPosition = mainCamera.ScreenToWorldPoint(lookInput);
         Debug.DrawLine(new Vector3(0, 0, 0), worldPosition, Color.green);
         CommandMinion.HandleCommand(worldPosition);
+        if (crewsAbility != null)
+        {
+            GameObject projectileInstance = Instantiate(crewsProjectile, transform.position, Quaternion.identity);
+            Crew_ProjectileMono projectileScript = projectileInstance.GetComponent<Crew_ProjectileMono>();
+            Crew_EffectPackage projectilePackage = crewsAbility.TargetTypeAndEffects[0];
+            projectileScript.SetAbilityData(projectilePackage);
+            projectileScript.SetProjectilePhysics(worldPosition);
+        }
+
     }
 
     private void Update()

@@ -6,11 +6,13 @@ public static class DamageHandler
 
     private static float AdjustValue(Ability ability, LivingBeing caster, LivingBeing target)
     {
-        float value;
+        float value = ability.Value;
 
-        value = AdjustBasedOnAffinity(ability, caster, target);
-        value = AdjustBasedOnArmor(value, target);
-
+        if (value < 0) // if value is negative, and therefore a damage value
+        {
+            value = AdjustBasedOnAffinity(ability, caster, target);
+            value = AdjustBasedOnArmor(value, target);
+        }
         return value;
     }
     private static float AdjustBasedOnAffinity(Ability ability, LivingBeing caster, LivingBeing target)
@@ -21,11 +23,7 @@ public static class DamageHandler
         float relevantAffinity = target.Affinities[ability.ElementType].Get();
         if (relevantAffinity > 0)
         {
-            if (relevantAffinity > 100)
-                value = (float)Math.Abs(Math.Round(value * ((relevantAffinity - 100) / 100.0)));
-
-            if (relevantAffinity <= 100 && relevantAffinity > 0)
-                value = (float)Math.Round(value * 1.0 - (value * (relevantAffinity / 100)));
+            value += value * relevantAffinity / 100; //new value equals old value, plus old value times relevant affinity converted into percentage
         }
 
         return value;
@@ -38,15 +36,15 @@ public static class DamageHandler
         float relevantResistance = target.PhysicalDict[physical].Get();
         if (relevantResistance > 0)
         {
-            if (relevantResistance > 100)
-                value = (float)Math.Abs(Math.Round(value * ((relevantResistance - 100) / 100.0)));
-
-            if (relevantResistance <= 100 && relevantResistance > 0)
-                value = (float)Math.Round(value * 1.0 - (value * (relevantResistance / 100)));
+            value += value * relevantResistance / 100;
+            //new value equals old value, plus old value times relevant affinity converted into percentage
         }
 
         return value;
     }
-}
 
+
+
+
+}
 

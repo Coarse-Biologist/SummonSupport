@@ -30,8 +30,6 @@ public class CreatureHPCanvasHandler : MonoBehaviour, I_ResourceBar
     }
     public void SetHealthBarValue(float value = 1)
     {
-        //float hp = livingBeing.GetAttribute(AttributeType.CurrentHitpoints);
-        //Logging.Info($"Setting hp to {hp}");
         hpSlider.value = livingBeing.GetAttribute(AttributeType.CurrentHitpoints);
     }
     public void SetHealthBarMaxValue(float value = 1)
