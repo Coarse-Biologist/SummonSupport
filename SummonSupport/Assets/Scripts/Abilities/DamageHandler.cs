@@ -1,10 +1,49 @@
 using UnityEngine;
 using System;
+using Unity.VisualScripting;
 
 public static class DamageHandler
 {
 
-    private static float AdjustValue(Ability ability, LivingBeing caster, LivingBeing target)
+    // current limitations: only affects health and power.
+    // doesnt use or recognize percentage based damage
+
+    static void HandleApplyAttribute(LivingBeing target, AttributeType attributeType, float newValue)
+    {
+        switch (attributeType)
+        {
+            case AttributeType.CurrentHitpoints:
+                ApplyValue(target, AttributeType.MaxHitpoints, AttributeType.Overshield, newValue, target.GetAttribute(AttributeType.CurrentHitpoints));
+                break;
+
+            case AttributeType.CurrentPower:
+                ApplyValue(target, AttributeType.MaxPower, AttributeType.PowerSurge, newValue, target.GetAttribute(AttributeType.CurrentPower));
+                break;
+        }
+    }
+
+    public static void ApplyValue(LivingBeing target, AttributeType attributeTypeMax, AttributeType attributeTypeTempMax, float newValue, float currentValue)
+    {
+        float max = target.GetAttribute(attributeTypeMax);
+        float tempMax = target.GetAttribute(attributeTypeTempMax);
+        //if (newValue > max) // if the newly calculated value (after recieving heal or damage) is greater than the  characters max
+        //    return max;
+
+        if (newValue < 0 && tempMax > 0) // if damage is being calculated and one has overshield
+        {
+            if (tempMax + newValue <= 0) // if the damage is more than the shield
+            {
+                target.SetAttribute(attributeTypeTempMax, 0); // set overshield to 0
+            }
+            else
+                target.SetAttribute(attributeTypeTempMax, tempMax + newValue); // otherwise lower overshield value by the damage
+        }
+    }
+
+
+
+
+    private static float AdjustValue(Ability ability, LivingBeing target, LivingBeing caster = null)
     {
         float value = ability.Value;
 
@@ -12,9 +51,11 @@ public static class DamageHandler
         {
             value = AdjustBasedOnAffinity(ability, caster, target);
             value = AdjustBasedOnArmor(value, target);
+            HandleApplyAttribute(target, ability.Attribute, value);
         }
         return value;
     }
+
     private static float AdjustBasedOnAffinity(Ability ability, LivingBeing caster, LivingBeing target)
     {
         // change value based on Affinity;
