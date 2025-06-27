@@ -8,21 +8,52 @@ public static class DamageHandler
     // current limitations: only affects health and power.
     // doesnt use or recognize percentage based damage
 
-    static void HandleApplyAttribute(LivingBeing target, AttributeType attributeType, float newValue)
-    {
-        switch (attributeType)
-        {
-            case AttributeType.CurrentHitpoints:
-                ApplyValue(target, AttributeType.MaxHitpoints, AttributeType.Overshield, newValue, target.GetAttribute(AttributeType.CurrentHitpoints));
-                break;
 
-            case AttributeType.CurrentPower:
-                ApplyValue(target, AttributeType.MaxPower, AttributeType.PowerSurge, newValue, target.GetAttribute(AttributeType.CurrentPower));
-                break;
+
+    private static float AdjustValue(Ability ability, LivingBeing target, LivingBeing caster = null)
+    {
+        float value = ability.Value;
+
+        if (value < 0) // if value is negative, and therefore a damage value
+        {
+            value = AdjustBasedOnAffinity(ability, caster, target);
+            value = AdjustBasedOnArmor(value, target);
+            HandleApplyAttribute(target, ability.Attribute, value);
         }
+        return value;
     }
 
-    public static void ApplyValue(LivingBeing target, AttributeType attributeTypeMax, AttributeType attributeTypeTempMax, float newValue, float currentValue)
+
+    private static float AdjustBasedOnAffinity(Ability ability, LivingBeing caster, LivingBeing target)
+    {
+        // change value based on Affinity;
+        float value = ability.Value;
+        Element element = ability.ElementType;
+        float relevantAffinity = target.Affinities[ability.ElementType].Get();
+        if (relevantAffinity > 0)
+        {
+            value += value * relevantAffinity / 100; //new value equals old value, plus old value times relevant affinity converted into percentage
+        }
+
+        return value;
+    }
+
+    private static float AdjustBasedOnArmor(float value, LivingBeing target)
+    {
+        // change value based Physical Resistance;
+
+        PhysicalType physical = PhysicalType.Bludgeoning;
+        float relevantResistance = target.PhysicalDict[physical].Get();
+        if (relevantResistance > 0)
+        {
+            value += value * relevantResistance / 100;
+            //new value equals old value, plus old value times relevant affinity converted into percentage
+        }
+
+        return value;
+    }
+
+    public static void AdjustForOverValue(LivingBeing target, AttributeType attributeTypeTempMax, float newValue, float currentValue, AttributeType attributeTypeMax = AttributeType.Overshield)
     {
         float max = target.GetAttribute(attributeTypeMax);
         float tempMax = target.GetAttribute(attributeTypeTempMax);
@@ -40,49 +71,29 @@ public static class DamageHandler
         }
     }
 
-
-
-
-    private static float AdjustValue(Ability ability, LivingBeing target, LivingBeing caster = null)
+    static void HandleApplyAttribute(LivingBeing target, AttributeType attributeType, float newValue)
     {
-        float value = ability.Value;
-
-        if (value < 0) // if value is negative, and therefore a damage value
+        switch (attributeType)
         {
-            value = AdjustBasedOnAffinity(ability, caster, target);
-            value = AdjustBasedOnArmor(value, target);
-            HandleApplyAttribute(target, ability.Attribute, value);
+            case AttributeType.CurrentHitpoints:
+                AdjustForOverValue(target, AttributeType.MaxHitpoints, newValue, target.GetAttribute(AttributeType.CurrentHitpoints), AttributeType.Overshield);
+                break;
+
+            case AttributeType.CurrentPower:
+                AdjustForOverValue(target, AttributeType.MaxPower, newValue, target.GetAttribute(AttributeType.CurrentPower), AttributeType.Overshield);
+                break;
+
+            default:
+                ApplyNormalValue(target, attributeType, newValue);
+                break;
         }
-        return value;
     }
 
-    private static float AdjustBasedOnAffinity(Ability ability, LivingBeing caster, LivingBeing target)
+    private static void ApplyNormalValue(LivingBeing target, AttributeType attributeType, float newValue)
     {
-        // change value based on Affinity;
-        float value = ability.Value;
-        Element element = ability.ElementType;
-        float relevantAffinity = target.Affinities[ability.ElementType].Get();
-        if (relevantAffinity > 0)
-        {
-            value += value * relevantAffinity / 100; //new value equals old value, plus old value times relevant affinity converted into percentage
-        }
-
-        return value;
+        target.SetAttribute(attributeType, target.GetAttribute(attributeType) + newValue);
     }
-    private static float AdjustBasedOnArmor(float value, LivingBeing target)
-    {
-        // change value based Physical Resistance;
 
-        PhysicalType physical = PhysicalType.Bludgeoning;
-        float relevantResistance = target.PhysicalDict[physical].Get();
-        if (relevantResistance > 0)
-        {
-            value += value * relevantResistance / 100;
-            //new value equals old value, plus old value times relevant affinity converted into percentage
-        }
-
-        return value;
-    }
 
 
 
