@@ -89,6 +89,7 @@ public abstract class LivingBeing : MonoBehaviour
         GetComponent<Rigidbody2D>().mass = Mass;
         InitializeAttributeDict();
         InitializeAffinityDict();
+        InitializePhysicalDict();
         resourceBarInterface = GetComponent<I_ResourceBar>();
         regenTickRate = new WaitForSeconds(TickRateRegenerationInSeconds);
 

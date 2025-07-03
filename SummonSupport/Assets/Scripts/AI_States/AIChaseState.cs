@@ -49,7 +49,7 @@ public class AIChaseState : AIState
             Vector2 targetLoc = targetEntity.transform.position;
             if (peaceState.FieldOfViewCheck() == true)
             {
-                Logging.Info("I See the player!!!");
+                //Logging.Info("I See the player!!!");
                 Chase(targetLoc);
 
                 LookAtTarget(targetLoc);
@@ -58,7 +58,7 @@ public class AIChaseState : AIState
             }
             else
             {
-                Logging.Info("I  dont see the player");
+                //Logging.Info("I  dont see the player");
                 runningAttackLoop = false;
 
                 StopCoroutine(attackCoroutine);

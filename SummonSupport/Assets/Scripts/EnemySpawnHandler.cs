@@ -12,6 +12,11 @@ public class EnemySpawnHandler : MonoBehaviour
     [SerializeField] LayerMask targetMask;
     [SerializeField] LayerMask avoidMask;
 
+    void Awake()
+    {
+        Crew_AbilityObjectSpawner.LoadPrefab();
+    }
+
     void OnEnable()
     {
         EventDeclarer.SpawnEnemies.AddListener(SpawnEnemies);

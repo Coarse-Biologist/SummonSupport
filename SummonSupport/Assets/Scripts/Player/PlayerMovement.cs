@@ -139,11 +139,8 @@ public class PlayerMovement : MonoBehaviour
         CommandMinion.HandleCommand(worldPosition);
         if (crewsAbility != null)
         {
-            GameObject projectileInstance = Instantiate(crewsProjectile, transform.position, Quaternion.identity);
-            Crew_ProjectileMono projectileScript = projectileInstance.GetComponent<Crew_ProjectileMono>();
-            Crew_EffectPackage projectilePackage = crewsAbility.TargetTypeAndEffects[0];
-            projectileScript.SetAbilityData(projectilePackage);
-            projectileScript.SetProjectilePhysics(worldPosition);
+            GetComponent<AbilityUseHandler_1>().CheckSufficientResource(crewsAbility, worldPosition);
+
         }
 
     }
