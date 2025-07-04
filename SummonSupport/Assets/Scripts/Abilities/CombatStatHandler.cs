@@ -16,7 +16,7 @@ public static class CombatStatHandler
     {
         damageValue = AdjustBasedOnAffinity(element, -damageValue, caster, target);
         damageValue = AdjustBasedOnArmor(damageValue, target);
-        HandleApplyAttribute(target, AttributeType.CurrentHitpoints, damageValue);
+        AdjustForOverValue(target, AttributeType.Overshield, AttributeType.MaxHitpoints, AttributeType.CurrentHitpoints, damageValue);
 
         return damageValue;
     }
@@ -25,7 +25,7 @@ public static class CombatStatHandler
     {
         //value = AdjustBasedOnAffinity(effectPackage, caster, target);
         //value = AdjustBasedOnArmor(value, target);
-        HandleApplyAttribute(target, AttributeType.CurrentHitpoints, healValue);
+        AdjustForOverValue(target, AttributeType.Overshield, AttributeType.MaxHitpoints, AttributeType.CurrentHitpoints, healValue);
 
         return healValue;
     }
@@ -69,59 +69,60 @@ public static class CombatStatHandler
         return value;
     }
 
-    public static void AdjustForOverValue(LivingBeing target, AttributeType attributeTypeTempMax, float newValue, float currentValue, AttributeType attributeTypeMax = AttributeType.Overshield)
+    public static void AdjustForOverValue(LivingBeing target, AttributeType attributeTypeTempMax, AttributeType attributeTypeMax, AttributeType typeCurrentValue, float changeValue)
     {
         float max = target.GetAttribute(attributeTypeMax);
         float tempMax = target.GetAttribute(attributeTypeTempMax);
-        float currentHP = target.GetAttribute(AttributeType.CurrentHitpoints);
+        float currentValue = target.GetAttribute(typeCurrentValue);
+
         //if (newValue > max) // if the newly calculated value (after recieving heal or damage) is greater than the  characters max
         //    return max;
 
-        if (newValue < 0 && tempMax > 0) // if damage is being calculated and one has overshield
+        if (changeValue < 0 && tempMax > 0) // if damage is being calculated and one has overshield
         {
-            if (tempMax + newValue <= 0) // if the damage is more than the shield
+            if (tempMax + changeValue <= 0) // if the damage is more than the shield
             {
-                Logging.Info($"{target.name} has had {AttributeType.CurrentHitpoints} changed by {newValue}. option 1");
-                target.SetAttribute(AttributeType.CurrentHitpoints, currentHP + newValue);
+                Logging.Info($"{target.name} has had {AttributeType.CurrentHitpoints} changed by {changeValue}. option 1");
+                target.SetAttribute(AttributeType.CurrentHitpoints, currentValue + changeValue);
 
                 target.SetAttribute(attributeTypeTempMax, 0); // set overshield to 0
             }
             else
-                Logging.Info($"{target.name} has had {AttributeType.CurrentHitpoints} changed by {newValue}. option  2");
+                Logging.Info($"{target.name} has had {AttributeType.CurrentHitpoints} changed by {changeValue}. option  2");
 
-            target.SetAttribute(attributeTypeTempMax, tempMax + newValue); // otherwise lower overshield value by the damage
+            target.SetAttribute(attributeTypeTempMax, tempMax + changeValue); // otherwise lower overshield value by the damage
         }
         else
         {
-            if (newValue + currentHP > target.MaxHP)
+            if (changeValue + currentValue > max)
             {
-                Logging.Info($"{target.name} has had {AttributeType.CurrentHitpoints} changed by {newValue}. option 3");
-                target.SetAttribute(AttributeType.CurrentHitpoints, target.MaxHP);
+                Logging.Info($"{target.name} has had {AttributeType.CurrentHitpoints} changed by {changeValue}. option 3");
+                target.SetAttribute(AttributeType.CurrentHitpoints, max);
             }
 
             else
             {
-                target.SetAttribute(AttributeType.CurrentHitpoints, target.GetAttribute(AttributeType.CurrentHitpoints) + newValue);
-                Logging.Info($"{target.name} has had {AttributeType.CurrentHitpoints} changed by {newValue}. option 4");
+                target.SetAttribute(AttributeType.CurrentHitpoints, target.GetAttribute(AttributeType.CurrentHitpoints) + changeValue);
+                Logging.Info($"{target.name} has had {AttributeType.CurrentHitpoints} changed by {changeValue}. option 4");
 
             }
         }
     }
 
-    static void HandleApplyAttribute(LivingBeing target, AttributeType attributeType, float newValue)
+    static void HandleApplyAttribute(LivingBeing target, AttributeType attributeType, float changeValue)
     {
         switch (attributeType)
         {
             case AttributeType.CurrentHitpoints:
-                AdjustForOverValue(target, AttributeType.MaxHitpoints, newValue, target.GetAttribute(AttributeType.CurrentHitpoints), AttributeType.Overshield);
+                AdjustForOverValue(target, AttributeType.Overshield, AttributeType.MaxHitpoints, AttributeType.CurrentHitpoints, changeValue);
                 break;
 
             case AttributeType.CurrentPower:
-                AdjustForOverValue(target, AttributeType.MaxPower, newValue, target.GetAttribute(AttributeType.CurrentPower), AttributeType.Overshield);
+                AdjustForOverValue(target, AttributeType.PowerSurge, AttributeType.MaxPower, AttributeType.CurrentPower, changeValue);
                 break;
 
             default:
-                ApplyNormalValue(target, attributeType, newValue);
+                ApplyNormalValue(target, attributeType, changeValue);
                 break;
         }
     }
@@ -146,8 +147,9 @@ public static class CombatStatHandler
         target.StartCoroutine(ResetTempAttribute(target, attributeType, newValue, duration));
 
     }
-    private static IEnumerator ResetTempAttribute(LivingBeing target, AttributeType attributeType, float newValue, float duration)
+    private static IEnumerator ResetTempAttribute(LivingBeing target, AttributeType attributeType, float changeValue, float duration)
     {
+
         float elapsed = 0f;
 
         while (elapsed < duration)
@@ -156,21 +158,44 @@ public static class CombatStatHandler
             elapsed += 1f;
             Logging.Info($"waiting {elapsed}/{duration} seconds for temporary attribute to reset");
         }
-        ApplyNormalValue(target, attributeType, -newValue); // resets by adding the opposite of what was added before (which may have been negative)
+        ApplyNormalValue(target, attributeType, -changeValue); // resets by adding the opposite of what was added before (which may have been negative)
     }
 
 
 
-    public static IEnumerator ApplyAttributeRepeatedly(LivingBeing target, AttributeType attributeType, float newValue, float duration)
+    public static IEnumerator ApplyAttributeRepeatedly(LivingBeing target, AttributeType attributeType, float changeValue, float duration)
     {
+        AttributeType tempMax = AttributeType.None;
+        AttributeType max = AttributeType.None;
+        AttributeType current = AttributeType.None;
+
+
         float elapsed = 0f;
+        if (attributeType == AttributeType.CurrentHitpoints)
+        {
+            tempMax = AttributeType.Overshield;
+            max = AttributeType.MaxHitpoints;
+            current = AttributeType.CurrentHitpoints;
+        }
+        if (attributeType == AttributeType.CurrentPower)
+        {
+            tempMax = AttributeType.PowerSurge;
+            max = AttributeType.MaxPower;
+            current = AttributeType.CurrentPower;
+        }
 
         while (elapsed < duration)
         {
-            HandleApplyAttribute(target, attributeType, newValue);
+            if (tempMax != AttributeType.None)
+            {
+                ApplyNormalValue(target, attributeType, changeValue);
+            }
+            else
+                AdjustForOverValue(target, tempMax, max, current, changeValue);
+
             yield return tickRate;
             elapsed += 1f;
-            Logging.Info($"applying {elapsed}/{duration} ticks of {newValue} {attributeType}");
+            Logging.Info($"applying {elapsed}/{duration} ticks of {changeValue} {attributeType}");
 
         }
     }

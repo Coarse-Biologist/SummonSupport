@@ -17,9 +17,12 @@ public class AbilityUseHandler_1 : MonoBehaviour
     // called in player movement class when player presses ability button
     public void CheckSufficientResource(Crew_Ability_SO Ability, Vector2 Loc)
     {
+        float currentResource = casterStats.GetAttribute(Ability.CostType);
         Ability_SO = Ability;
-        if (casterStats != null && casterStats.GetAttribute(Ability.CostType) > Ability_SO.Cost) // add check for cooldowns
+        Logging.Info($"current resrource = {currentResource}. ability cost = {Ability_SO.Cost}");
+        if (casterStats != null && currentResource > Ability_SO.Cost) // add check for cooldowns
         {
+            casterStats.SetAttribute(Ability.CostType, currentResource - Ability_SO.Cost);
             MouseLoc = Loc;
             IterateAbilityEffects();
         }

@@ -1,8 +1,10 @@
 using Unity.VisualScripting;
 using UnityEngine;
+using System.Collections.Generic;
 
 public class Crew_AbilityMono : MonoBehaviour
 {
+    private List<GameObject> ignoreGameObjects = new List<GameObject>();
     public Crew_EffectPackage effectPackage;
 
     private Vector2 spawnLoc;
@@ -12,15 +14,18 @@ public class Crew_AbilityMono : MonoBehaviour
     public void Awake()
     {
         spawnLoc = (Vector2)transform.position;
+        Destroy(this.gameObject, 5f);
     }
+
 
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         LivingBeing targetStats = collision.gameObject.GetComponent<LivingBeing>();
-        Logging.Info($"Crews projectile mono words like a charm? {effectPackage.EffectDescription} = description");
-        if (targetStats != null)
+        //Logging.Info($"Crews projectile mono words like a charm? {effectPackage.EffectDescription} = description");
+        if (targetStats != null && !ignoreGameObjects.Contains(collision.gameObject))
         {
+            ignoreGameObjects.Add(collision.gameObject);
             AbilityUseHandler_1.HandleEffects(CasterStats, targetStats, effectPackage);
         }
     }

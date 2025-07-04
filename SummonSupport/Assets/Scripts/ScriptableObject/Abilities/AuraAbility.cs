@@ -4,11 +4,31 @@ using UnityEngine;
 public class AuraAbility : Ability
 {
     [field: SerializeField, Header("Aura settings"), Tooltip("time in [seconds]")]
-    public float Uptime {get; protected set; }
+    public float Uptime { get; protected set; }
+    [field: SerializeField] public GameObject AuraObject { get; protected set; }
+
+    public bool ActivateAura(GameObject caster, Vector2 TargetLoc)
+    {
+        RaycastHit2D hit = Physics2D.Raycast(TargetLoc, Vector2.zero);
+
+        if (hit.collider != null && hit.collider.GetComponent<MinionStats>() != null)
+        {
+            GameObject auraInstance = Instantiate(AuraObject, hit.collider.transform.position, Quaternion.identity, hit.collider.transform);
+            auraInstance.GetComponent<Aura>().SetAuraStats(hit.collider.gameObject, this);
+        }
+        else
+        {
+            GameObject auraInstance = Instantiate(AuraObject, caster.transform.position, Quaternion.identity, caster.transform);
+            auraInstance.GetComponent<Aura>().SetAuraStats(caster, this);
+        }
+
+
+        Logging.Info($"{caster.GetComponent<LivingBeing>().name} applys aura");
+        return true;
+    }
 
     public override bool Activate(GameObject user)
     {
-        Logging.Info($"{user.name} applys aura");
-        return true;
+        throw new System.NotImplementedException();
     }
 }

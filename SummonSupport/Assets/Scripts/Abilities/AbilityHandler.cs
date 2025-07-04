@@ -2,6 +2,7 @@ using System.Collections;
 using UnityEngine;
 using System.Collections.Generic;
 using System;
+using Unity.VisualScripting;
 
 public class AbilityHandler : MonoBehaviour
 {
@@ -30,9 +31,9 @@ public class AbilityHandler : MonoBehaviour
     {
         if (abilitiesOnCooldown[abilityIndex])
             return false;
-            
+
         Ability ability = abilities[abilityIndex];
-            
+
         if (!HasEnoughPower(ability.PowerCost))
             return false;
 
@@ -41,10 +42,10 @@ public class AbilityHandler : MonoBehaviour
         if (!usedAbility)
             return false;
 
-        StartCoroutine(SetOnCooldown(abilityIndex)); 
+        StartCoroutine(SetOnCooldown(abilityIndex));
         statsHandler?.ChangeAttribute(AttributeType.CurrentPower, -ability.PowerCost);
         return true;
-    }   
+    }
 
     bool HandleAbilityType(Ability ability, Vector2 targetPosition, Quaternion rotation)
     {
@@ -58,9 +59,12 @@ public class AbilityHandler : MonoBehaviour
             case TargetMouseAbility pointAndClickAbility:
                 usedAbility = HandlePointAndClick(pointAndClickAbility);
                 break;
-            
+
             case ConjureAbility conjureAbility:
                 usedAbility = HandleConjureAbility(conjureAbility, targetPosition, rotation);
+                break;
+            case AuraAbility auraAbility:
+                usedAbility = HandleAuraAbility(auraAbility, statsHandler, targetPosition);
                 break;
         }
         return usedAbility;
@@ -85,6 +89,11 @@ public class AbilityHandler : MonoBehaviour
     {
         return ability.Activate(gameObject, targetPosition, rotation);
     }
+    bool HandleAuraAbility(AuraAbility auraAbility, LivingBeing statsHandler, Vector2 targetLoc)
+    {
+
+        return auraAbility.ActivateAura(statsHandler.gameObject, targetLoc);
+    }
 
 
     private IEnumerator SetOnCooldown(int abilityIndex)
@@ -97,7 +106,7 @@ public class AbilityHandler : MonoBehaviour
         }
         finally
         {
-            abilitiesOnCooldown[abilityIndex] = false; 
+            abilitiesOnCooldown[abilityIndex] = false;
         }
     }
 }

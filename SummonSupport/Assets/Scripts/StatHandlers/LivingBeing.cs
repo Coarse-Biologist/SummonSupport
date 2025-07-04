@@ -74,7 +74,7 @@ public abstract class LivingBeing : MonoBehaviour
     public Dictionary<Element, (Func<float> Get, Action<float> Set)> Affinities { private set; get; } = new();
     public Dictionary<AttributeType, (Func<float> Get, Action<float> Set)> AttributesDict { private set; get; } = new();
 
-    [field: SerializeField] public List<Ability> Abilties { get; private set; } = new();
+    [field: SerializeField] public List<Crew_Ability_SO> Abilties { get; private set; } = new();
     [field: SerializeField] public float Speed { get; private set; } = 3f;
     [field: SerializeField] public float Mass { get; private set; } = 1f;
 
@@ -141,6 +141,8 @@ public abstract class LivingBeing : MonoBehaviour
     {
         if (AttributesDict != null && AttributesDict.ContainsKey(attributeType))
             AttributesDict[attributeType].Set(value);
+        if (attributeType == AttributeType.CurrentHitpoints && value <= 0)
+            Die();
 
         HandleEventInvokes(attributeType, value);
     }

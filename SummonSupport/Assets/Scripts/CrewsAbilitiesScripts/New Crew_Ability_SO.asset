@@ -15,8 +15,8 @@ MonoBehaviour:
   <Name>k__BackingField: OmniAbility-Crew
   <Icon>k__BackingField: {fileID: 0}
   <Cooldown>k__BackingField: 1
-  <CostType>k__BackingField: 1
-  <Cost>k__BackingField: 2
+  <CostType>k__BackingField: 4
+  <Cost>k__BackingField: 100
   <TargetTypeAndEffects>k__BackingField:
   - <EffectDescription>k__BackingField: Projectile 1
     <TargetType>k__BackingField: 1
@@ -29,9 +29,7 @@ MonoBehaviour:
       <Duration>k__BackingField: 0
     <AttributeUp>k__BackingField: []
     <AttributeDown>k__BackingField: []
-    <Damage>k__BackingField:
-    - <Value>k__BackingField: 100
-      <Element>k__BackingField: 14
+    <Damage>k__BackingField: []
     <DamageOverTime>k__BackingField:
     - <Value>k__BackingField: 5
       <Element>k__BackingField: 5

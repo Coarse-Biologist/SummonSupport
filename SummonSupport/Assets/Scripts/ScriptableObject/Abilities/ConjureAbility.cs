@@ -4,16 +4,16 @@ using UnityEngine;
 public class ConjureAbility : Ability
 {
     [field: Header("Conjure settings"), Tooltip("Ability prefab")]
-    [field: SerializeField] public GameObject   ObjectToSpawn  { get; protected set; }
-    [field: SerializeField] public Vector2      SpawnOffset    { get; protected set; }
-    [field: SerializeField] public float        RotationOffset { get; protected set; } = 0;
+    [field: SerializeField] public GameObject ObjectToSpawn { get; protected set; }
+    [field: SerializeField] public Vector2 SpawnOffset { get; protected set; }
+    [field: SerializeField] public float RotationOffset { get; protected set; } = 0;
 
 
-    [field: Tooltip("Activate this if ability should only last a specific amount of time")] 
-    [field: SerializeField] public bool         IsDecaying     { get; protected set; }
+    [field: Tooltip("Activate this if ability should only last a specific amount of time")]
+    [field: SerializeField] public bool IsDecaying { get; protected set; }
 
-    [field: Tooltip("in seconds")] 
-    [field: SerializeField] public float        TimeAlive      { get; protected set; }
+    [field: Tooltip("in seconds")]
+    [field: SerializeField] public float TimeAlive { get; protected set; }
 
 
     public override bool Activate(GameObject user)
@@ -33,7 +33,7 @@ public class ConjureAbility : Ability
 
         if (spawnedObject.TryGetComponent(out Aura aura))
             aura.HandleInstanciation(user.GetComponent<LivingBeing>(), this);
-        
+
         return true;
     }
 

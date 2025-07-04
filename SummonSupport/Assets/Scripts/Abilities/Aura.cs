@@ -3,7 +3,7 @@ using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class Aura: MonoBehaviour
+public class Aura : MonoBehaviour
 {
     LivingBeing caster;
     Ability ability;
@@ -11,12 +11,26 @@ public class Aura: MonoBehaviour
 
     public void HandleInstanciation(LivingBeing caster, Ability ability)
     {
+        Logging.Info($"this is being called somewhere?");
         this.caster = caster;
         this.ability = ability;
     }
+    public void SetAuraStats(GameObject caster, AuraAbility ability)
+    {
+        this.caster = caster.GetComponent<LivingBeing>();
+        this.ability = ability;
+        SetAuraTimer(ability.Uptime);
+    }
+
+    public void SetAuraTimer(float timeUp)
+    {
+        Destroy(gameObject, timeUp);
+    }
+
 
     void OnTriggerEnter2D(Collider2D other)
     {
+        Logging.Info($"{other.gameObject} has entered the bite zone");
         if (!other.gameObject.TryGetComponent(out LivingBeing otherLivingBeing))
             return;
 
@@ -46,7 +60,7 @@ public class Aura: MonoBehaviour
             return;
         foreach (StatusEffect statusEffect in ability.StatusEffects)
             statusEffect.RemoveStatusEffect(otherLivingBeing);
-        
+
     }
     void OnDestroy()
     {

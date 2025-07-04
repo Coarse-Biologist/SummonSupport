@@ -18,7 +18,7 @@ public class CreatureHPCanvasHandler : MonoBehaviour, I_ResourceBar
 
 
 
-        Logging.Info($"{manaSlider} = mana slider. {hpSlider} = hpslider");
+        //Logging.Info($"{manaSlider} = mana slider. {hpSlider} = hpslider");
     }
 
     void Start()
