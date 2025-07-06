@@ -25,5 +25,5 @@ MonoBehaviour:
   <ElementType>k__BackingField: 12
   <OnCooldown>k__BackingField: 0
   <Uptime>k__BackingField: 10
-  <AuraObject>k__BackingField: {fileID: 968252184129726560, guid: bc8366872ae84974e969b89dde807165,
+  <AuraObject>k__BackingField: {fileID: 1699087696372334086, guid: bc8366872ae84974e969b89dde807165,
     type: 3}

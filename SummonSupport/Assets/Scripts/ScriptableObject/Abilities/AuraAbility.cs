@@ -19,7 +19,10 @@ public class AuraAbility : Ability
         else
         {
             GameObject auraInstance = Instantiate(AuraObject, caster.transform.position, Quaternion.identity, caster.transform);
-            auraInstance.GetComponent<Aura>().SetAuraStats(caster, this);
+            Logging.Info($"aura instance = {auraInstance}");
+            Aura auraMonoScript = auraInstance.GetComponent<Aura>();
+            if (auraMonoScript != null) auraMonoScript.SetAuraStats(caster, this);
+            else Logging.Info($"auraMonoScript = {auraMonoScript}");
         }
 
 

@@ -20,6 +20,8 @@ public class Aura : MonoBehaviour
         this.caster = caster.GetComponent<LivingBeing>();
         this.ability = ability;
         SetAuraTimer(ability.Uptime);
+        transform.Rotate(new Vector3(-110f, 0, 0));
+
     }
 
     public void SetAuraTimer(float timeUp)
@@ -31,12 +33,10 @@ public class Aura : MonoBehaviour
     void OnTriggerEnter2D(Collider2D other)
     {
         Logging.Info($"{other.gameObject} has entered the bite zone");
-        if (!other.gameObject.TryGetComponent(out LivingBeing otherLivingBeing))
-            return;
+        if (other.gameObject.TryGetComponent(out LivingBeing otherLivingBeing))
 
-        RelationshipType relationship = RelationshipHandler.GetRelationshipType(caster.CharacterTag, otherLivingBeing.CharacterTag);
-        if (ability.ListUsableOn.Contains(relationship) && !listLivingBeingsInAura.Contains(otherLivingBeing))
-            AddAuraEffectToLivingBeing(otherLivingBeing);
+            if (ability.ListUsableOn.Contains(RelationshipHandler.GetRelationshipType(caster.CharacterTag, otherLivingBeing.CharacterTag)) && !listLivingBeingsInAura.Contains(otherLivingBeing))
+                AddAuraEffectToLivingBeing(otherLivingBeing);
     }
     void AddAuraEffectToLivingBeing(LivingBeing otherLivingBeing)
     {

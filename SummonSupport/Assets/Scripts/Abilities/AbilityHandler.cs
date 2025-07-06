@@ -91,7 +91,7 @@ public class AbilityHandler : MonoBehaviour
     }
     bool HandleAuraAbility(AuraAbility auraAbility, LivingBeing statsHandler, Vector2 targetLoc)
     {
-
+        Logging.Info($"stats handler = {statsHandler}");
         return auraAbility.ActivateAura(statsHandler.gameObject, targetLoc);
     }
 
