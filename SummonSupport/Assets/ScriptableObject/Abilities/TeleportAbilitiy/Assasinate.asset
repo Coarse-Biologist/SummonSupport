@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 17ba5c26a93ef3f4d8708059b97a420b, type: 3}
+  m_Name: Assasinate
+  m_EditorClassIdentifier: 
+  <Name>k__BackingField: Assassinate
+  <Icon>k__BackingField: {fileID: 544104916224676396, guid: 1999786300aba2a4ea58c6b2b395516e,
+    type: 3}
+  <Cooldown>k__BackingField: 7
+  <PowerCost>k__BackingField: 30
+  <StatusEffects>k__BackingField:
+  - {fileID: 11400000, guid: 6c1911e88b4453b47a1cb46f5c05bce5, type: 2}
+  <ListUsableOn>k__BackingField: 01000000
+  <Attribute>k__BackingField: 1
+  <Value>k__BackingField: 50
+  <ElementType>k__BackingField: 0
+  <PhysicalType>k__BackingField: 0
+  <OnCooldown>k__BackingField: 0
+  <Range>k__BackingField: 20
+  <ActivateOnUse>k__BackingField: []
+  <ActivateOnArrive>k__BackingField:
+  - {fileID: 11400000, guid: 946e5f54d23bbc24e9bf9696f3cf93c2, type: 2}

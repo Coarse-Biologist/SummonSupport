@@ -14,9 +14,12 @@ public abstract class Ability : ScriptableObject
     [field: SerializeField] public AttributeType Attribute { get; protected set; } = AttributeType.None;
     [field: SerializeField] public int Value { get; protected set; } = 0;
     [field: SerializeField] public Element ElementType { get; protected set; } = Element.None;
+    [field: SerializeField] public PhysicalType PhysicalType { get; private set; }
+
     [field: SerializeField] public bool OnCooldown { get; set; } = false;
 
     public abstract bool Activate(GameObject user);
+
 
     public bool IsUsableOn(CharacterTag user, CharacterTag target)
     {

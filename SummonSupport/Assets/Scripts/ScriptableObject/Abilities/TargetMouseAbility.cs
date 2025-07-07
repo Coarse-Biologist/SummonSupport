@@ -22,6 +22,8 @@ public class TargetMouseAbility : Ability
 
         return usedAbility;
     }
+
+
     public bool ActivateAbility(GameObject user, LivingBeing targetLivingBeing, Vector2 mousePos)
     {
         if (user.TryGetComponent<LivingBeing>(out var userLivingBeing))

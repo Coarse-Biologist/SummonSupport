@@ -7,9 +7,11 @@ public class AuraAbility : Ability
     public float Uptime { get; protected set; }
     [field: SerializeField] public GameObject AuraObject { get; protected set; }
 
-    public bool ActivateAura(GameObject caster, Vector2 TargetLoc)
+    public override bool Activate(GameObject caster)
     {
-        RaycastHit2D hit = Physics2D.Raycast(TargetLoc, Vector2.zero);
+        Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+
+        RaycastHit2D hit = Physics2D.Raycast(mousePos, Vector2.zero);
 
         if (hit.collider != null && hit.collider.GetComponent<MinionStats>() != null)
         {
@@ -28,10 +30,5 @@ public class AuraAbility : Ability
 
         Logging.Info($"{caster.GetComponent<LivingBeing>().name} applys aura");
         return true;
-    }
-
-    public override bool Activate(GameObject user)
-    {
-        throw new System.NotImplementedException();
     }
 }

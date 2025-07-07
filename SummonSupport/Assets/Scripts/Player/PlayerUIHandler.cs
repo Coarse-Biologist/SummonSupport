@@ -164,7 +164,7 @@ public class PlayerUIHandler : MonoBehaviour
             minionHP.style.borderTopColor = Color.clear;
         }
         //.ToggleInClassList("selected");
-        Logging.Info("Button Clicked");
+        //Logging.Info("Button Clicked");
         CommandMinion.SetSelectedMinion(minionStats.gameObject);
     }
 

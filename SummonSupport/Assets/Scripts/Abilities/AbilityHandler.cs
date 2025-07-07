@@ -64,7 +64,14 @@ public class AbilityHandler : MonoBehaviour
                 usedAbility = HandleConjureAbility(conjureAbility, targetPosition, rotation);
                 break;
             case AuraAbility auraAbility:
-                usedAbility = HandleAuraAbility(auraAbility, statsHandler, targetPosition);
+                usedAbility = HandleAuraAbility(auraAbility, statsHandler);
+                break;
+            case TeleportAbility teleportAbility:
+                Logging.Info($"handle ability type func will try to activate teleport ability");
+                usedAbility = teleportAbility.Activate(gameObject);
+                break;
+            case MeleeAbility meleeAbility:
+                usedAbility = meleeAbility.Activate(statsHandler.gameObject);
                 break;
         }
         return usedAbility;
@@ -89,10 +96,10 @@ public class AbilityHandler : MonoBehaviour
     {
         return ability.Activate(gameObject, targetPosition, rotation);
     }
-    bool HandleAuraAbility(AuraAbility auraAbility, LivingBeing statsHandler, Vector2 targetLoc)
+    bool HandleAuraAbility(AuraAbility auraAbility, LivingBeing statsHandler)
     {
         Logging.Info($"stats handler = {statsHandler}");
-        return auraAbility.ActivateAura(statsHandler.gameObject, targetLoc);
+        return auraAbility.Activate(statsHandler.gameObject);
     }
 
 

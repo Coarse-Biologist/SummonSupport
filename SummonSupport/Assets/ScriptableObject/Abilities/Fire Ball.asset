@@ -22,7 +22,8 @@ MonoBehaviour:
   <ListUsableOn>k__BackingField: 01000000
   <Attribute>k__BackingField: 0
   <Value>k__BackingField: 0
-  <ElementType>k__BackingField: 0
+  <ElementType>k__BackingField: 4
+  <PhysicalType>k__BackingField: 0
   <OnCooldown>k__BackingField: 0
   <Speed>k__BackingField: 5
   <Projectile>k__BackingField: {fileID: 1503869405188693834, guid: a9f50fbd26367e9409b49cb9300cd576,

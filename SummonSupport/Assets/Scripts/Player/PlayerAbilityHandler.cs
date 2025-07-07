@@ -19,10 +19,10 @@ public class PlayerAbilityHandler : AbilityHandler
     public void UpdateAbilities()
     {
         int index = 0;
-        Logging.Info($"Number of abilities one may potentially like to add: {abilities.Count}");
+        //Logging.Info($"Number of abilities one may potentially like to add: {abilities.Count}");
         foreach (Ability ability in abilities)
         {
-            Logging.Info($"Slotting {ability} with name {ability.Name} in UI");
+            // Logging.Info($"Slotting {ability} with name {ability.Name} in UI");
             EventDeclarer.SlotChanged.Invoke(index, ability);
             index++;
         }
