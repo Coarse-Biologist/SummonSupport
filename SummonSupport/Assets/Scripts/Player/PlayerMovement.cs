@@ -13,7 +13,7 @@ public class PlayerMovement : MonoBehaviour
     public Camera mainCamera;
     private CreatureSpriteController spriteController;
     [SerializeField] private PlayerInputActions inputActions;
-    [SerializeField] GameObject AbilityRotation;
+    [SerializeField] public GameObject AbilityRotation;
     private Vector2 lookInput;
     private Vector2 worldPosition;
     private Vector2 direction;
@@ -127,7 +127,25 @@ public class PlayerMovement : MonoBehaviour
         AbilityRotation.transform.rotation = Quaternion.Euler(0, 0, angle);
         spriteController.SetSpriteDirection(angle);
 
+        //DebugAbilityShape();
+
         return transform.rotation;
+    }
+    private void DebugAbilityShape()
+    {
+        Transform AR = AbilityRotation.transform;
+        Debug.DrawRay(AR.position, AR.up * 2, Color.black, .1f);
+
+        Debug.DrawRay(AR.position, -AR.up * 2, Color.black, .1f);
+
+        Debug.DrawRay(AR.position, AR.right * 2, Color.black, .1f);
+
+        Debug.DrawRay(AR.right * 2 + AR.position, AR.up * 2, Color.black, .1f);
+
+        Debug.DrawRay(AR.right * 2 + AR.position, -AR.up * 2, Color.black, .1f);
+        Debug.DrawRay(AR.up * 2 + AR.position, AR.right * 2, Color.black, .1f);
+
+        Debug.DrawRay(-AR.up * 2 + AR.position, AR.right * 2, Color.black, .1f);
     }
 
     #endregion

@@ -137,7 +137,7 @@ public class StatusEffect : ScriptableObject
 
     private void ChangeRegeneration(LivingBeing target, float value)
     {
-        Logging.Info($"{target.name} is having attribute changed due to {this} status effect with value of {Value}");
+        Logging.Info($"{target.name} is having regeneration changed due to {this} status effect with value of {Value}");
 
         target.ChangeRegeneration(Attribute, value);
     }

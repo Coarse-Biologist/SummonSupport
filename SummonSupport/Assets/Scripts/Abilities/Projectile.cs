@@ -4,19 +4,25 @@ using UnityEngine;
 public class Projectile : MonoBehaviour
 {
     List<GameObject> ignoreGameObjects = new List<GameObject>();
+    public GameObject SpawnEffectOnHit { get; set; }
+
     public ProjectileAbility ability;
     public int piercedAlready = 0;
     public int splitAlready = 0;
     LivingBeing userLivingBeing = null;
 
+
+
     public void Shoot(GameObject user, GameObject spawnAt = null, Vector3 lookAt = default(Vector3))
-    {   
+    {
         if (user.TryGetComponent(out LivingBeing livingBeing))
             userLivingBeing = livingBeing;
         ignoreGameObjects.Add(user);
         SetProjectilePhysics(spawnAt, lookAt);
         Destroy(gameObject, ability.Lifetime); // TODO: change from lifetime to range
     }
+
+
 
     void SetProjectilePhysics(GameObject spawnPoint)
     {
@@ -31,53 +37,68 @@ public class Projectile : MonoBehaviour
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
     }
+    public void SetEffects(GameObject effectOnHit)
+    {
+        SpawnEffectOnHit = effectOnHit;
+    }
+
+    private void SpawnEffect(LivingBeing targetLivingBeing)
+    {
+        GameObject instance;
+        if (SpawnEffectOnHit != null)
+        {
+            instance = Instantiate(ability.SpawnEffectOnHit, targetLivingBeing.transform.position, Quaternion.identity, targetLivingBeing.transform.transform);
+            Destroy(instance, 3f);
+        }
+    }
 
     void OnTriggerEnter2D(Collider2D other)
     {
         if (other.gameObject.CompareTag("Projectile") || ignoreGameObjects.Contains(other.gameObject))
             return;
-        
+
         if (!other.TryGetComponent(out LivingBeing otherLivingBeing))
         {
+            SpawnEffect(otherLivingBeing);
             DestroyProjectile();
             return;
         }
-        
+
         if (userLivingBeing && !ability.IsUsableOn(userLivingBeing.CharacterTag, otherLivingBeing.CharacterTag))
             return;
 
-        foreach(OnEventDo onHitDo in ability.ListOnHitDo)
+        foreach (OnEventDo onHitDo in ability.ListOnHitDo)
             HandleOnEventDo(onHitDo, other);
         HandleOnHitBehaviour(other);
-        
+
     }
 
     void HandleOnHitBehaviour(Collider2D other)
     {
         switch (ability.PiercingMode)
-            {
-                case OnHitBehaviour.Ricochet:
-                    break;
-                case OnHitBehaviour.Pierce:
-                    piercedAlready++;
-                    if (piercedAlready == ability.MaxPierce)
-                        DestroyProjectile(other);
-                    break;
-                case OnHitBehaviour.Split:
-                    SplitProjectile(other);
-                    break;
-                case OnHitBehaviour.Destroy:
+        {
+            case OnHitBehaviour.Ricochet:
+                break;
+            case OnHitBehaviour.Pierce:
+                piercedAlready++;
+                if (piercedAlready == ability.MaxPierce)
                     DestroyProjectile(other);
-                    break;
-            }
+                break;
+            case OnHitBehaviour.Split:
+                SplitProjectile(other);
+                break;
+            case OnHitBehaviour.Destroy:
+                DestroyProjectile(other);
+                break;
+        }
     }
 
     void DestroyProjectile(Collider2D other = null)
     {
         if (other)
-            foreach(OnEventDo onDestroyDo in ability.ListOnDestroyDo)
+            foreach (OnEventDo onDestroyDo in ability.ListOnDestroyDo)
                 HandleOnEventDo(onDestroyDo, other);
-                
+
         Destroy(gameObject);
     }
     void SplitProjectile(Collider2D other)
@@ -113,7 +134,8 @@ public class Projectile : MonoBehaviour
             case OnEventDo.Damage:
                 if (ability.Attribute != AttributeType.None && ability.Value != 0)
                 {
-                    
+                    LivingBeing targetStats = other.GetComponent<LivingBeing>();
+                    targetStats.ChangeAttribute(ability.Attribute, ability.Value);
                 }
                 break;
             case OnEventDo.Heal:
@@ -129,4 +151,6 @@ public class Projectile : MonoBehaviour
                 break;
         }
     }
+
+
 }

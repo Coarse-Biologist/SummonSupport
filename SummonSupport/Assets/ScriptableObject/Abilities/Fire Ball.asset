@@ -36,3 +36,5 @@ MonoBehaviour:
   <SplitAngleOffset>k__BackingField: 45
   <ListOnHitDo>k__BackingField: 03000000
   <ListOnDestroyDo>k__BackingField: 
+  <ProjectileParticleSystem>k__BackingField: {fileID: 5647196156128557912, guid: bd1d5a2cef288fb4c87f1f0c1f18d32e,
+    type: 3}

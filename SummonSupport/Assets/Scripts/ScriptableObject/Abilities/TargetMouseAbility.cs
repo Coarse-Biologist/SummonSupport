@@ -7,6 +7,8 @@ public class TargetMouseAbility : Ability
 {
     [field: Header("settings")]
     [field: SerializeField] public List<OnEventDo> ListOnCastDo { get; protected set; }
+    [field: SerializeField] public GameObject SpawnEffectOnHit { get; set; }
+
 
     public override bool Activate(GameObject user)
     {
@@ -18,7 +20,10 @@ public class TargetMouseAbility : Ability
 
         if (hit.collider != null)
             if (hit.collider.TryGetComponent<LivingBeing>(out var target))
+            {
                 usedAbility = ActivateAbility(user, target, mousePos);
+                SpawnEffect(target);
+            }
 
         return usedAbility;
     }
@@ -29,6 +34,8 @@ public class TargetMouseAbility : Ability
         if (user.TryGetComponent<LivingBeing>(out var userLivingBeing))
             if (!IsUsableOn(userLivingBeing.CharacterTag, targetLivingBeing.CharacterTag))
                 return false;
+
+        SpawnEffect(targetLivingBeing);
 
         foreach (OnEventDo onEventDo in ListOnCastDo)
         {
@@ -56,6 +63,16 @@ public class TargetMouseAbility : Ability
                         statusEffect.ApplyStatusEffect(targetLivingBeing.gameObject, mousePos);
                 }
                 break;
+        }
+    }
+
+    private void SpawnEffect(LivingBeing targetLivingBeing)
+    {
+        GameObject instance;
+        if (SpawnEffectOnHit != null)
+        {
+            instance = Instantiate(SpawnEffectOnHit, targetLivingBeing.transform.position, Quaternion.identity, targetLivingBeing.transform.transform);
+            Destroy(instance, 3f);
         }
     }
 }

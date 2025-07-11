@@ -23,12 +23,13 @@ public class TeleportAbility : Ability
                 target = hit.collider.gameObject;
                 Logging.Info($"using teleport ability inside of teleport activate on {target.name}");
                 TeleportToBeing(user, target);
+                return true;
             }
 
         }
         else Logging.Info($"there was NO hit collider");
 
-        return true;
+        return false;
     }
 
     private void TeleportToBeing(GameObject user, GameObject target)

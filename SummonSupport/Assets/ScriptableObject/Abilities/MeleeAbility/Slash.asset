@@ -14,14 +14,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Name>k__BackingField: Slash
   <Icon>k__BackingField: {fileID: 0}
-  <Cooldown>k__BackingField: 2
-  <PowerCost>k__BackingField: 10
+  <Cooldown>k__BackingField: 0
+  <PowerCost>k__BackingField: 5
   <StatusEffects>k__BackingField: []
-  <ListUsableOn>k__BackingField: 
+  <ListUsableOn>k__BackingField: 01000000
   <Attribute>k__BackingField: 1
-  <Value>k__BackingField: 50
+  <Value>k__BackingField: -35
   <ElementType>k__BackingField: 0
   <PhysicalType>k__BackingField: 3
   <OnCooldown>k__BackingField: 0
-  <Range>k__BackingField: 2
-  <Shape>k__BackingField: 1
+  <Range>k__BackingField: 10
+  <Angle>k__BackingField: 0
+  <Width>k__BackingField: 10
+  <Shape>k__BackingField: 2
+  <SpawnEffectOnHit>k__BackingField: {fileID: 4439306374306288678, guid: ad3ebfe5da0c21f43a7253ff8277fd9c,
+    type: 3}

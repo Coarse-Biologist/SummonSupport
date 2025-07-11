@@ -23,5 +23,8 @@ MonoBehaviour:
   <Attribute>k__BackingField: 1
   <Value>k__BackingField: 25
   <ElementType>k__BackingField: 2
+  <PhysicalType>k__BackingField: 0
   <OnCooldown>k__BackingField: 0
   <ListOnCastDo>k__BackingField: 0200000003000000
+  <SpawnEffectOnHit>k__BackingField: {fileID: 7418358774842603446, guid: bd97673f52127cb448b52fb00741f85b,
+    type: 3}

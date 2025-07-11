@@ -11,6 +11,7 @@ public static class CommandMinion
 
     public static void HandleCommand(Vector2 loc)
     {
+
         if (SelectedMinions != null)
         {
             Collider2D[] enemyHits = Physics2D.OverlapCircleAll(loc, 1, LayerMask.GetMask("Enemy"));
