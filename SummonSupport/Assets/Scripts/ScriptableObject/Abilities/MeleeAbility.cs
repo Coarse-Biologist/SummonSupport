@@ -19,18 +19,21 @@ public class MeleeAbility : Ability
 
     public override bool Activate(GameObject user)
     {
-        Collider2D[] hits = Physics2D.OverlapCircleAll(user.transform.position, Range * 10, LayerMask.GetMask("Enemy"));
+        Collider2D[] hits = Physics2D.OverlapCircleAll(user.transform.position, Range);
         bool activated = false;
         foreach (Collider2D collider in hits)
         {
-            if (VerifyActivate(collider, user))
+            if (collider != null && collider.gameObject != user)
             {
-                Logging.Info("verified and rarified");
-                collider.GetComponent<LivingBeing>().ChangeAttribute(Attribute, Value);
-                SpawnEffect(collider.GetComponent<LivingBeing>());
-                activated = true;
+                if (VerifyActivate(collider, user))
+                {
+                    Logging.Info("verified and rarified");
+                    collider.GetComponent<LivingBeing>().ChangeAttribute(Attribute, Value);
+                    SpawnEffect(collider.GetComponent<LivingBeing>());
+                    activated = true;
+                }
             }
-            Logging.Info("oof, return to the check stand for deportation");
+
         }
         return activated;
 
@@ -38,20 +41,38 @@ public class MeleeAbility : Ability
 
     private bool VerifyActivate(Collider2D collider, GameObject user)
     {
-        if (collider == null)
+        if (collider.GetComponent<LivingBeing>() == null)
+        {
+            //Logging.Info("oof, 1");
+
             return false;
+        }
+        //Logging.Info($"oof, user = {user} collider = {collider.gameObject}");
+
         if (!IsUsableOn(user.GetComponent<LivingBeing>().CharacterTag, collider.GetComponent<LivingBeing>().CharacterTag))
+        {
+            //Logging.Info($"oof, {user} could not use {this} on {collider.gameObject}");
+
             return false;
+        }
         if (VerifyWithinShape(user, collider))
+        {
+            //Logging.Info("yay, 3");
+
             return true;
+        }
         else
+        {
+            //Logging.Info("oof, 4");
+
             return false;
+        }
     }
 
     private bool VerifyWithinShape(GameObject user, Collider2D collider)
     {
 
-        Transform originTransform = user.GetComponent<PlayerMovement>().AbilityRotation.transform;
+        Transform originTransform = user.GetComponent<AbilityHandler>().abilityDirection.transform;
         //DebugAbilityShape(originTransform);
         Vector2 hitLocation = collider.transform.position;
         if ((hitLocation - (Vector2)originTransform.position).magnitude <= .2)

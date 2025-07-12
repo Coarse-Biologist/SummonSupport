@@ -21,6 +21,7 @@ public abstract class Ability : ScriptableObject
     public abstract bool Activate(GameObject user);
 
 
+
     public bool IsUsableOn(CharacterTag user, CharacterTag target)
     {
         RelationshipType relationship = RelationshipHandler.GetRelationshipType(user, target);

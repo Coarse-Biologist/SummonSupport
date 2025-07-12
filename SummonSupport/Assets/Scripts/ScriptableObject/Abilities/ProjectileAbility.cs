@@ -23,32 +23,39 @@ public class ProjectileAbility : Ability
 
     public override bool Activate(GameObject user)
     {
+        Logging.Info("activated projectile func 1");
         return Activate(user, user);
     }
     public bool Activate(GameObject user, GameObject spawnPoint)
     {
+        Logging.Info("activated projectile func 2");
+
         return Activate(user, spawnPoint, spawnPoint.transform);
     }
     public bool Activate(GameObject user, GameObject spawnPoint, Transform direction)
     {
-        GameObject projectile = Instantiate(Projectile, spawnPoint.transform.position, Quaternion.identity);
+        Logging.Info("activated projectile func 3");
+
+        GameObject projectile = Instantiate(Projectile, user.transform.position, Quaternion.identity);
         Projectile projectileScript = projectile.GetComponent<Projectile>();
-        SetEffects(projectileScript, user, spawnPoint);
+        SetEffects(projectileScript, user);
 
         projectileScript.ability = this;
+        Logging.Info($"direction.right = {direction.right}");
         projectileScript.Shoot(user, spawnPoint, direction.right);
         return true;
     }
 
 
-    private void SetEffects(Projectile projectile, GameObject user, GameObject spawnPoint)
+    private void SetEffects(Projectile projectile, GameObject user)
     {
         GameObject particleSystem;
 
         if (ProjectileParticleSystem != null)
         {
-            particleSystem = Instantiate(ProjectileParticleSystem, spawnPoint.transform.position, user.transform.rotation, projectile.transform);
-            Quaternion rotation = Quaternion.LookRotation(-spawnPoint.transform.right);
+            particleSystem = Instantiate(ProjectileParticleSystem, user.transform.position, Quaternion.identity, projectile.transform);
+            //Quaternion rotation = Quaternion.LookRotation(-direction);
+            Quaternion rotation = Quaternion.LookRotation(-user.transform.right);
             particleSystem.transform.rotation = rotation;
         }
 

@@ -52,7 +52,7 @@ public class StatusEffect : ScriptableObject
     public void ApplyStatusEffect(LivingBeing livingBeing)
     {
         ApplyEffect(livingBeing, Value, ChangeRegeneration);
-        Logging.Info($"{livingBeing.name} is being given {this} status effect with value of {Value}");
+        //Logging.Info($"{livingBeing.name} is being given {this} status effect with value of {Value}");
     }
     public void RemoveStatusEffect(LivingBeing livingBeing)
     {
@@ -130,14 +130,14 @@ public class StatusEffect : ScriptableObject
 
     private void ChangeAttribute(LivingBeing target, float value)
     {
-        Logging.Info($"{target.name} is having attribute changed due to {this} status effect with value of {Value}");
+        //Logging.Info($"{target.name} is having attribute changed due to {this} status effect with value of {Value}");
 
         target.ChangeAttribute(Attribute, value);
     }
 
     private void ChangeRegeneration(LivingBeing target, float value)
     {
-        Logging.Info($"{target.name} is having regeneration changed due to {this} status effect with value of {Value}");
+        //Logging.Info($"{target.name} is having regeneration changed due to {this} status effect with value of {Value}");
 
         target.ChangeRegeneration(Attribute, value);
     }

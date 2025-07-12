@@ -54,7 +54,7 @@ public class AIChaseState : AIState
 
                 LookAtTarget(targetLoc);
                 if (!runningAttackLoop)
-                    attackCoroutine = StartCoroutine(HandleAttack(targetLoc));
+                    attackCoroutine = StartCoroutine(HandleAttack(targetEntity));
             }
             else
             {
@@ -128,12 +128,14 @@ public class AIChaseState : AIState
 
     }
 
-    private IEnumerator HandleAttack(Vector2 targetLoc)
+    private IEnumerator HandleAttack(GameObject target)
     {
         runningAttackLoop = true;
         while (true)
         {
             yield return attackSpeed;
+            Vector2 targetLoc = target.transform.position;
+            Logging.Info($"target loc from ai chase state = {targetLoc}");
             abilityHandler.UseAbility(targetLoc);
         }
 

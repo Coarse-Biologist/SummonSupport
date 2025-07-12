@@ -15,9 +15,11 @@ public class Projectile : MonoBehaviour
 
     public void Shoot(GameObject user, GameObject spawnAt = null, Vector3 lookAt = default(Vector3))
     {
+
         if (user.TryGetComponent(out LivingBeing livingBeing))
             userLivingBeing = livingBeing;
         ignoreGameObjects.Add(user);
+        Logging.Info($"look at = {lookAt}. default = {default(Vector3)}");
         SetProjectilePhysics(spawnAt, lookAt);
         Destroy(gameObject, ability.Lifetime); // TODO: change from lifetime to range
     }
@@ -30,11 +32,14 @@ public class Projectile : MonoBehaviour
     }
     void SetProjectilePhysics(GameObject spawnPoint, Vector3 direction)
     {
+        Logging.Info($"direction = {direction}");
         if (direction == Vector3.zero)
             direction = spawnPoint.transform.right;
         Rigidbody2D rb = GetComponent<Rigidbody2D>();
         rb.linearVelocity = direction * ability.Speed;
+
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+
         transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
     }
     public void SetEffects(GameObject effectOnHit)

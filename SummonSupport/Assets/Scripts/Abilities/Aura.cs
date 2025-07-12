@@ -11,7 +11,6 @@ public class Aura : MonoBehaviour
 
     public void HandleInstanciation(LivingBeing caster, Ability ability)
     {
-        Logging.Info($"this is being called somewhere?");
         this.caster = caster;
         this.ability = ability;
     }
@@ -32,7 +31,7 @@ public class Aura : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        Logging.Info($"{other.gameObject} has entered the bite zone");
+        //        Logging.Info($"{other.gameObject} has entered the bite zone");
         if (other.gameObject.TryGetComponent(out LivingBeing otherLivingBeing))
 
             if (ability.ListUsableOn.Contains(RelationshipHandler.GetRelationshipType(caster.CharacterTag, otherLivingBeing.CharacterTag)) && !listLivingBeingsInAura.Contains(otherLivingBeing))

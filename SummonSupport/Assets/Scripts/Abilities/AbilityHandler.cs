@@ -7,7 +7,7 @@ using Unity.VisualScripting;
 public class AbilityHandler : MonoBehaviour
 {
     [SerializeField] protected GameObject abilitySpawn;
-    [SerializeField] protected GameObject abilityDirection;
+    [SerializeField] public GameObject abilityDirection { get; private set; }
     [SerializeField] protected LivingBeing statsHandler;
     [SerializeField] protected List<Ability> abilities;
     [SerializeField] protected List<bool> abilitiesOnCooldown;
@@ -17,10 +17,12 @@ public class AbilityHandler : MonoBehaviour
     {
         if (abilitySpawn == null)
             abilitySpawn = gameObject;
-        if (abilityDirection == null)
-            abilityDirection = gameObject;
+
         if (statsHandler == null)
             statsHandler = gameObject.GetComponent<LivingBeing>();
+        if (abilityDirection == null)
+            Logging.Info("Weel well well");
+        abilityDirection = gameObject.transform.GetChild(0).gameObject;
         foreach (Ability ablity in abilities)
         {
             abilitiesOnCooldown.Add(false);
@@ -29,6 +31,7 @@ public class AbilityHandler : MonoBehaviour
 
     protected bool CastAbility(int abilityIndex, Vector2 targetPosition, Quaternion rotation)
     {
+        Logging.Info($"target position = {targetPosition}");
         if (abilitiesOnCooldown[abilityIndex])
             return false;
 
@@ -67,8 +70,7 @@ public class AbilityHandler : MonoBehaviour
                 usedAbility = HandleAuraAbility(auraAbility, statsHandler);
                 break;
             case TeleportAbility teleportAbility:
-                Logging.Info($"handle ability type func will try to activate teleport ability");
-                usedAbility = teleportAbility.Activate(gameObject);
+                usedAbility = teleportAbility.Activate(gameObject, targetPosition);
                 break;
             case MeleeAbility meleeAbility:
                 usedAbility = meleeAbility.Activate(statsHandler.gameObject);
@@ -98,7 +100,6 @@ public class AbilityHandler : MonoBehaviour
     }
     bool HandleAuraAbility(AuraAbility auraAbility, LivingBeing statsHandler)
     {
-        Logging.Info($"stats handler = {statsHandler}");
         return auraAbility.Activate(statsHandler.gameObject);
     }
 
