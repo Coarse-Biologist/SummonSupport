@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -8,19 +9,28 @@ public class Aura : MonoBehaviour
     LivingBeing caster;
     Ability ability;
     List<LivingBeing> listLivingBeingsInAura = new();
+    private bool Active = false;
+
+
 
     public void HandleInstanciation(LivingBeing caster, Ability ability)
     {
         this.caster = caster;
         this.ability = ability;
+        Invoke("Activate", ability.ActivationTime);
     }
     public void SetAuraStats(GameObject caster, AuraAbility ability)
     {
         this.caster = caster.GetComponent<LivingBeing>();
         this.ability = ability;
         SetAuraTimer(ability.Uptime);
-        transform.Rotate(new Vector3(-110f, 0, 0));
+        //transform.Rotate(new Vector3(-110f, 0, 0));
 
+    }
+
+    private void Activate()
+    {
+        Active = true;
     }
 
     public void SetAuraTimer(float timeUp)
@@ -31,11 +41,17 @@ public class Aura : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        //        Logging.Info($"{other.gameObject} has entered the bite zone");
-        if (other.gameObject.TryGetComponent(out LivingBeing otherLivingBeing))
+        if (Active)
+        {
+            Logging.Info($"{other.gameObject} has entered the bite zone");
+            if (other.gameObject.TryGetComponent(out LivingBeing otherLivingBeing))
 
-            if (ability.ListUsableOn.Contains(RelationshipHandler.GetRelationshipType(caster.CharacterTag, otherLivingBeing.CharacterTag)) && !listLivingBeingsInAura.Contains(otherLivingBeing))
-                AddAuraEffectToLivingBeing(otherLivingBeing);
+                if (ability.ListUsableOn.Contains(RelationshipHandler.GetRelationshipType(caster.CharacterTag, otherLivingBeing.CharacterTag)) && !listLivingBeingsInAura.Contains(otherLivingBeing))
+                {
+                    AddAuraEffectToLivingBeing(otherLivingBeing);
+                    otherLivingBeing.ChangeAttribute(ability.Attribute, ability.Value);
+                }
+        }
     }
     void AddAuraEffectToLivingBeing(LivingBeing otherLivingBeing)
     {

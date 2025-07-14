@@ -21,8 +21,7 @@ public class AbilityHandler : MonoBehaviour
         if (statsHandler == null)
             statsHandler = gameObject.GetComponent<LivingBeing>();
         if (abilityDirection == null)
-            Logging.Info("Weel well well");
-        abilityDirection = gameObject.transform.GetChild(0).gameObject;
+            abilityDirection = gameObject.transform.GetChild(0).gameObject;
         foreach (Ability ablity in abilities)
         {
             abilitiesOnCooldown.Add(false);
@@ -31,7 +30,6 @@ public class AbilityHandler : MonoBehaviour
 
     protected bool CastAbility(int abilityIndex, Vector2 targetPosition, Quaternion rotation)
     {
-        Logging.Info($"target position = {targetPosition}");
         if (abilitiesOnCooldown[abilityIndex])
             return false;
 

@@ -7,6 +7,8 @@ public abstract class Ability : ScriptableObject
     [field: SerializeField] public string Name { get; protected set; }
     [field: SerializeField] public Sprite Icon { get; protected set; }
     [field: SerializeField, Range(0, 50)] public float Cooldown { get; protected set; }
+    [field: SerializeField] public float ActivationTime { get; protected set; } = 0f;
+
     [field: SerializeField, Min(0)] public float PowerCost { get; protected set; }
     [field: SerializeField] public List<StatusEffect> StatusEffects { get; protected set; }
     [field: SerializeField] public List<RelationshipType> ListUsableOn { get; protected set; }

@@ -141,10 +141,9 @@ public abstract class LivingBeing : MonoBehaviour
     {
         if (AttributesDict != null && AttributesDict.ContainsKey(attributeType))
             AttributesDict[attributeType].Set(value);
+        HandleEventInvokes(attributeType, value);
         if (attributeType == AttributeType.CurrentHitpoints && value <= 0)
             Die();
-
-        HandleEventInvokes(attributeType, value);
     }
 
     public float ChangeAttribute(AttributeType attributeType, float value, ValueType valueType = ValueType.Flat)

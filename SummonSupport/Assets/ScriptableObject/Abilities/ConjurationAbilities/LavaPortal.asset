@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f72222c874821e41bccb5f49eee621c, type: 3}
+  m_Name: LavaPortal
+  m_EditorClassIdentifier: 
+  <Name>k__BackingField: Lava Portal
+  <Icon>k__BackingField: {fileID: 8095344145157262792, guid: c3bce2abce0ec0e47ba9c908fd690f04,
+    type: 3}
+  <Cooldown>k__BackingField: 0.5
+  <ActivationTime>k__BackingField: 1
+  <PowerCost>k__BackingField: 1
+  <StatusEffects>k__BackingField: []
+  <ListUsableOn>k__BackingField: 01000000
+  <Attribute>k__BackingField: 1
+  <Value>k__BackingField: -100
+  <ElementType>k__BackingField: 4
+  <PhysicalType>k__BackingField: 0
+  <OnCooldown>k__BackingField: 0
+  <ObjectToSpawn>k__BackingField: {fileID: 6030475839939781346, guid: 67c953d8ecb373d4d9255c187ba5bef9,
+    type: 3}
+  <SpawnOffset>k__BackingField: {x: 0, y: 0}
+  <RotationOffset>k__BackingField: 0
+  <IsDecaying>k__BackingField: 1
+  <LeaveRotation>k__BackingField: 1
+  <TimeAlive>k__BackingField: 99
