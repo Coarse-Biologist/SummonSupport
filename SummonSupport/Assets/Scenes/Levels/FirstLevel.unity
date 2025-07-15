@@ -264,6 +264,36 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8482256717363850299, guid: e4c43cb75dda4d3458057b35ce607d87,
+        type: 3}
+      propertyPath: m_Pivot.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8482256717363850299, guid: e4c43cb75dda4d3458057b35ce607d87,
+        type: 3}
+      propertyPath: m_Pivot.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8482256717363850299, guid: e4c43cb75dda4d3458057b35ce607d87,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8482256717363850299, guid: e4c43cb75dda4d3458057b35ce607d87,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8482256717363850299, guid: e4c43cb75dda4d3458057b35ce607d87,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -2.29
+      objectReference: {fileID: 0}
+    - target: {fileID: 8482256717363850299, guid: e4c43cb75dda4d3458057b35ce607d87,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 1.51
+      objectReference: {fileID: 0}
     - target: {fileID: 9084318776697772798, guid: e4c43cb75dda4d3458057b35ce607d87,
         type: 3}
       propertyPath: abilitySpawn
@@ -308,6 +338,12 @@ PrefabInstance:
         type: 3}
       propertyPath: 'abilities.Array.data[5]'
       value: 
+      objectReference: {fileID: 11400000, guid: c465a9cc289a0f1428157a45a03a6425,
+        type: 2}
+    - target: {fileID: 9084318776697772798, guid: e4c43cb75dda4d3458057b35ce607d87,
+        type: 3}
+      propertyPath: 'abilities.Array.data[6]'
+      value: 
       objectReference: {fileID: 11400000, guid: 265d2196a4dc4d347bf0f1d275f43d44,
         type: 2}
     m_RemovedComponents: []
@@ -342,7 +378,7 @@ PrefabInstance:
     - target: {fileID: -2192539161432645077, guid: 8b808af4814c9664e80e2e15555215fb,
         type: 3}
       propertyPath: <MaxPower>k__BackingField
-      value: 100
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -2192539161432645077, guid: 8b808af4814c9664e80e2e15555215fb,
         type: 3}
@@ -357,7 +393,7 @@ PrefabInstance:
     - target: {fileID: -2192539161432645077, guid: 8b808af4814c9664e80e2e15555215fb,
         type: 3}
       propertyPath: <CurrentPower>k__BackingField
-      value: 100
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 462445852388303841, guid: 8b808af4814c9664e80e2e15555215fb,
         type: 3}
@@ -419,6 +455,21 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 6
       objectReference: {fileID: 0}
+    - target: {fileID: 3948863955107861711, guid: 8b808af4814c9664e80e2e15555215fb,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3948863955107861711, guid: 8b808af4814c9664e80e2e15555215fb,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3948863955107861711, guid: 8b808af4814c9664e80e2e15555215fb,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4755851978388305148, guid: 8b808af4814c9664e80e2e15555215fb,
         type: 3}
       propertyPath: m_Sprite
@@ -458,12 +509,12 @@ PrefabInstance:
     - target: {fileID: 6683928398212683686, guid: 8b808af4814c9664e80e2e15555215fb,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 10.736344
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6683928398212683686, guid: 8b808af4814c9664e80e2e15555215fb,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.590095
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6683928398212683686, guid: 8b808af4814c9664e80e2e15555215fb,
         type: 3}

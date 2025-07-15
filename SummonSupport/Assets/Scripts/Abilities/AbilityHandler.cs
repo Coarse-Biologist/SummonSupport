@@ -1,8 +1,6 @@
 using System.Collections;
 using UnityEngine;
 using System.Collections.Generic;
-using System;
-using Unity.VisualScripting;
 
 public class AbilityHandler : MonoBehaviour
 {
@@ -11,6 +9,9 @@ public class AbilityHandler : MonoBehaviour
     [SerializeField] protected LivingBeing statsHandler;
     [SerializeField] protected List<Ability> abilities;
     [SerializeField] protected List<bool> abilitiesOnCooldown;
+    private Dictionary<BeamAbility, GameObject> toggledAbilitiesDict = new();
+
+
 
 
     protected virtual void Awake()
@@ -73,9 +74,33 @@ public class AbilityHandler : MonoBehaviour
             case MeleeAbility meleeAbility:
                 usedAbility = meleeAbility.Activate(statsHandler.gameObject);
                 break;
+            case BeamAbility beamAbility:
+                usedAbility = HandleBeamAbility(beamAbility, statsHandler);
+                break;
         }
         return usedAbility;
     }
+    private bool HandleBeamAbility(BeamAbility beamAbility, LivingBeing statsHandler)
+    {
+        GameObject beamInstance = null;
+        // if this is currently active, i.e in the dictionary, delete the game object, for the ability should now be toggled off.
+        // if this is not active, i.e NOT in the dictionary, call the normal function.
+        if (toggledAbilitiesDict.TryGetValue(beamAbility, out GameObject activeAbility)) // if ability is among the 
+        {
+            toggledAbilitiesDict.Remove(beamAbility);
+            Destroy(activeAbility);
+            return false;
+        }
+        else
+        {
+            beamInstance = beamAbility.ToggleBeam(statsHandler.gameObject, abilityDirection.transform);
+            toggledAbilitiesDict.TryAdd(beamAbility, beamInstance);
+            return true;
+        }
+
+
+    }
+
 
     bool HasEnoughPower(float powerCost)
     {
@@ -117,3 +142,17 @@ public class AbilityHandler : MonoBehaviour
     }
 }
 
+
+
+
+
+//if (toggledAbilitiesDict.TryGetValue(beamAbility, out bool toggled)) // if ability is among the 
+//        {
+//            toggledAbilitiesDict[beamAbility] = !toggled;
+//            beamAbility.ToggleBeam(statsHandler.gameObject, !toggled);
+//        }
+//        else
+//        {
+//            toggledAbilitiesDict.TryAdd(beamAbility, true);
+//            beamAbility.ToggleBeam(beamAbility, statsHandler, true);
+//        }

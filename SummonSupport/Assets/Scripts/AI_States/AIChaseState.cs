@@ -135,7 +135,6 @@ public class AIChaseState : AIState
         {
             yield return attackSpeed;
             Vector2 targetLoc = target.transform.position;
-            Logging.Info($"target loc from ai chase state = {targetLoc}");
             abilityHandler.UseAbility(targetLoc);
         }
 
