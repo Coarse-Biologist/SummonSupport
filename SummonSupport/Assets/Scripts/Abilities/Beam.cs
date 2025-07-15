@@ -1,18 +1,21 @@
 using System;
-using Unity.VisualScripting;
+using System.Collections.Generic;
 using UnityEngine;
+using System.Collections;
 
 public class Beam : MonoBehaviour
 {
     private ParticleSystem ParticleSystem;
     private LivingBeing Caster;
 
-    private Ability Ability;
+    private BeamAbility Ability;
 
     private Transform abilityRotation;
+    private List<LivingBeing> AlreadyCollided = new();
 
     [field: SerializeField] public float Range { get; private set; }
-    private static readonly Quaternion Rotation90Z = Quaternion.Euler(0, 0, -90);
+
+    private float deletionDelay = 5f;
 
 
 
@@ -23,7 +26,16 @@ public class Beam : MonoBehaviour
 
     void OnParticleCollision(GameObject other)
     {
-        Debug.Log($"particle collided with {other.name}");
+        if (other.TryGetComponent(out LivingBeing statsHandler) && !AlreadyCollided.Contains(statsHandler))
+        {
+            Debug.Log($"particle collided with {statsHandler.Name}");
+            AlreadyCollided.Add(statsHandler);
+            GameObject hitEffect = Instantiate(Ability.SpawnEffectOnHit, other.transform.position, Quaternion.identity, other.transform);
+            Destroy(hitEffect, 5f);
+            StartCoroutine(DelayedDeletion(statsHandler));
+
+        }
+
     }
     void SetParticleSettings()
     {
@@ -34,17 +46,26 @@ public class Beam : MonoBehaviour
 
     }
 
-    public void SetAbilityAndCaster(LivingBeing caster, Ability ability, Transform rotationObject)
+    public void SetAbilityAndCaster(LivingBeing caster, BeamAbility ability, Transform rotationObject)
     {
         abilityRotation = rotationObject;
         Caster = caster;
         Ability = ability;
     }
+
     private void UpdateRotation()
     {
         Debug.Log("rotation func being called");
-        transform.rotation = abilityRotation.rotation * Rotation90Z;
+        transform.rotation = abilityRotation.rotation;// * Rotation90Z;
     }
+
+    private IEnumerator DelayedDeletion(LivingBeing collidedObject)
+    {
+        yield return deletionDelay;
+        AlreadyCollided.Remove(collidedObject);
+    }
+
+
 
 
 }

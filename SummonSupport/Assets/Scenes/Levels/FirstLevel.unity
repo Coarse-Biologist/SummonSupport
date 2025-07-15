@@ -59338,6 +59338,74 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 1969037213}
   m_SourcePrefab: {fileID: 100100000, guid: 099761e62ec659c4796d0dfa1695b8c0, type: 3}
+--- !u!1001 &8868004377520548622
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 61914605208394959, guid: 21ea27764e9da7e47bc6b73a8c662ca8,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.11579451
+      objectReference: {fileID: 0}
+    - target: {fileID: 61914605208394959, guid: 21ea27764e9da7e47bc6b73a8c662ca8,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.16633457
+      objectReference: {fileID: 0}
+    - target: {fileID: 61914605208394959, guid: 21ea27764e9da7e47bc6b73a8c662ca8,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 2.5720694
+      objectReference: {fileID: 0}
+    - target: {fileID: 61914605208394959, guid: 21ea27764e9da7e47bc6b73a8c662ca8,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 61914605208394959, guid: 21ea27764e9da7e47bc6b73a8c662ca8,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 61914605208394959, guid: 21ea27764e9da7e47bc6b73a8c662ca8,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 61914605208394959, guid: 21ea27764e9da7e47bc6b73a8c662ca8,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 61914605208394959, guid: 21ea27764e9da7e47bc6b73a8c662ca8,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 61914605208394959, guid: 21ea27764e9da7e47bc6b73a8c662ca8,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 61914605208394959, guid: 21ea27764e9da7e47bc6b73a8c662ca8,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3349317053817142625, guid: 21ea27764e9da7e47bc6b73a8c662ca8,
+        type: 3}
+      propertyPath: m_Name
+      value: BubblyFroth
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 21ea27764e9da7e47bc6b73a8c662ca8, type: 3}
 --- !u!1001 &8916488851168512466
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -59434,3 +59502,4 @@ SceneRoots:
   - {fileID: 80971592}
   - {fileID: 100897505}
   - {fileID: 2138439482}
+  - {fileID: 8868004377520548622}

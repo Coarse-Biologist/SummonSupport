@@ -83,22 +83,29 @@ public class AbilityHandler : MonoBehaviour
     private bool HandleBeamAbility(BeamAbility beamAbility, LivingBeing statsHandler)
     {
         GameObject beamInstance = null;
-        // if this is currently active, i.e in the dictionary, delete the game object, for the ability should now be toggled off.
-        // if this is not active, i.e NOT in the dictionary, call the normal function.
-        if (toggledAbilitiesDict.TryGetValue(beamAbility, out GameObject activeAbility)) // if ability is among the 
+
+        if (toggledAbilitiesDict.TryGetValue(beamAbility, out GameObject activeAbility))
         {
-            toggledAbilitiesDict.Remove(beamAbility);
-            Destroy(activeAbility);
+            StopToggledAbility(beamAbility, activeAbility);
+
             return false;
         }
         else
         {
             beamInstance = beamAbility.ToggleBeam(statsHandler.gameObject, abilityDirection.transform);
             toggledAbilitiesDict.TryAdd(beamAbility, beamInstance);
+            statsHandler.ChangeRegeneration(AttributeType.CurrentPower, -beamAbility.PowerCost);
+
+
             return true;
         }
 
-
+    }
+    private void StopToggledAbility(BeamAbility beamAbility, GameObject activeAbility)
+    {
+        statsHandler.ChangeRegeneration(AttributeType.CurrentPower, beamAbility.PowerCost);
+        toggledAbilitiesDict.Remove(beamAbility);
+        Destroy(activeAbility);
     }
 
 
@@ -140,19 +147,6 @@ public class AbilityHandler : MonoBehaviour
             abilitiesOnCooldown[abilityIndex] = false;
         }
     }
+
 }
 
-
-
-
-
-//if (toggledAbilitiesDict.TryGetValue(beamAbility, out bool toggled)) // if ability is among the 
-//        {
-//            toggledAbilitiesDict[beamAbility] = !toggled;
-//            beamAbility.ToggleBeam(statsHandler.gameObject, !toggled);
-//        }
-//        else
-//        {
-//            toggledAbilitiesDict.TryAdd(beamAbility, true);
-//            beamAbility.ToggleBeam(beamAbility, statsHandler, true);
-//        }

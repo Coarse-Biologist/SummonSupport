@@ -17,7 +17,7 @@ MonoBehaviour:
     type: 3}
   <Cooldown>k__BackingField: 0
   <ActivationTime>k__BackingField: 0
-  <PowerCost>k__BackingField: 2
+  <PowerCost>k__BackingField: 6
   <StatusEffects>k__BackingField: []
   <ListUsableOn>k__BackingField: 
   <Attribute>k__BackingField: 1
@@ -27,4 +27,5 @@ MonoBehaviour:
   <OnCooldown>k__BackingField: 0
   <BeamParticleSystem>k__BackingField: {fileID: 1626146829257602003, guid: fa7994c3213928c4c8dd583efc31deeb,
     type: 3}
-  <SpawnEffectOnHit>k__BackingField: {fileID: 0}
+  <SpawnEffectOnHit>k__BackingField: {fileID: 3349317053817142625, guid: 21ea27764e9da7e47bc6b73a8c662ca8,
+    type: 3}
