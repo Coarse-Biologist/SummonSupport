@@ -15,7 +15,8 @@ MonoBehaviour:
   <Name>k__BackingField: Assassinate
   <Icon>k__BackingField: {fileID: 544104916224676396, guid: 1999786300aba2a4ea58c6b2b395516e,
     type: 3}
-  <Cooldown>k__BackingField: 7
+  <Cooldown>k__BackingField: 6
+  <ActivationTime>k__BackingField: 0
   <PowerCost>k__BackingField: 30
   <StatusEffects>k__BackingField:
   - {fileID: 11400000, guid: 6c1911e88b4453b47a1cb46f5c05bce5, type: 2}
@@ -29,3 +30,6 @@ MonoBehaviour:
   <ActivateOnUse>k__BackingField: []
   <ActivateOnArrive>k__BackingField:
   - {fileID: 11400000, guid: 946e5f54d23bbc24e9bf9696f3cf93c2, type: 2}
+  <EffectOnActivate>k__BackingField: {fileID: 7070092032033159829, guid: 8c5912fef6503924483bcc35bc5bc08e,
+    type: 3}
+  <ActivationSpeed>k__BackingField: 0.8

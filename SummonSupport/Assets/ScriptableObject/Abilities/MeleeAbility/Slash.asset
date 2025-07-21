@@ -15,12 +15,14 @@ MonoBehaviour:
   <Name>k__BackingField: Slash
   <Icon>k__BackingField: {fileID: 0}
   <Cooldown>k__BackingField: 0
+  <ActivationTime>k__BackingField: 0
   <PowerCost>k__BackingField: 5
-  <StatusEffects>k__BackingField: []
+  <StatusEffects>k__BackingField:
+  - {fileID: 11400000, guid: 6c1911e88b4453b47a1cb46f5c05bce5, type: 2}
   <ListUsableOn>k__BackingField: 01000000
   <Attribute>k__BackingField: 1
-  <Value>k__BackingField: -35
-  <ElementType>k__BackingField: 0
+  <Value>k__BackingField: -100
+  <ElementType>k__BackingField: 4
   <PhysicalType>k__BackingField: 3
   <OnCooldown>k__BackingField: 0
   <Range>k__BackingField: 10
@@ -29,3 +31,6 @@ MonoBehaviour:
   <Shape>k__BackingField: 2
   <SpawnEffectOnHit>k__BackingField: {fileID: 4439306374306288678, guid: ad3ebfe5da0c21f43a7253ff8277fd9c,
     type: 3}
+  <MeleeParticleSystem>k__BackingField: {fileID: 3833596520723288618, guid: 63d70ca71f984254aa100f374d860057,
+    type: 3}
+  <ListOnHitDo>k__BackingField: 01000000

@@ -133,7 +133,6 @@ public class AbilityHandler : MonoBehaviour
         return auraAbility.Activate(statsHandler.gameObject);
     }
 
-
     private IEnumerator SetOnCooldown(int abilityIndex)
     {
         Ability ability = abilities[abilityIndex];

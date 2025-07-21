@@ -16,6 +16,8 @@ public class Beam : MonoBehaviour
     [field: SerializeField] public float Range { get; private set; }
 
     private float deletionDelay = 5f;
+    [field: SerializeField] float TickRate = .5f;
+    private bool onCoolDown = false;
 
 
 
@@ -28,14 +30,23 @@ public class Beam : MonoBehaviour
     {
         if (other.TryGetComponent(out LivingBeing statsHandler) && !AlreadyCollided.Contains(statsHandler))
         {
-            Debug.Log($"particle collided with {statsHandler.Name}");
-            AlreadyCollided.Add(statsHandler);
-            GameObject hitEffect = Instantiate(Ability.SpawnEffectOnHit, other.transform.position, Quaternion.identity, other.transform);
-            Destroy(hitEffect, 5f);
-            StartCoroutine(DelayedDeletion(statsHandler));
-
+            if (!onCoolDown)
+            {
+                onCoolDown = true;
+                Invoke("OffCoolDown", TickRate);
+                Debug.Log($"particle collided with {statsHandler.Name}");
+                AlreadyCollided.Add(statsHandler);
+                GameObject hitEffect = Instantiate(Ability.SpawnEffectOnHit, other.transform.position, Quaternion.identity, other.transform);
+                Destroy(hitEffect, 5f);
+                StartCoroutine(DelayedDeletion(statsHandler));
+                CombatStatHandler.AdjustDamageValue(Ability, statsHandler, Caster);
+            }
         }
+    }
 
+    private void OffCoolDown()
+    {
+        onCoolDown = false;
     }
     void SetParticleSettings()
     {

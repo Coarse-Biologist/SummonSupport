@@ -13,6 +13,7 @@ public class Projectile : MonoBehaviour
 
 
 
+
     public void Shoot(GameObject user, GameObject spawnAt = null, Vector3 lookAt = default(Vector3))
     {
 
@@ -71,12 +72,12 @@ public class Projectile : MonoBehaviour
             return;
 
         foreach (OnEventDo onHitDo in ability.ListOnHitDo)
-            HandleOnEventDo(onHitDo, other);
-        HandleOnHitBehaviour(other);
+            CombatStatHandler.HandleOnEventDo(ability, onHitDo, otherLivingBeing, userLivingBeing);
+        HandleOnHitBehaviour(otherLivingBeing);
 
     }
 
-    void HandleOnHitBehaviour(Collider2D other)
+    void HandleOnHitBehaviour(LivingBeing other)
     {
         switch (ability.PiercingMode)
         {
@@ -96,15 +97,15 @@ public class Projectile : MonoBehaviour
         }
     }
 
-    void DestroyProjectile(Collider2D other = null)
+    void DestroyProjectile(LivingBeing other = null)
     {
         if (other)
             foreach (OnEventDo onDestroyDo in ability.ListOnDestroyDo)
-                HandleOnEventDo(onDestroyDo, other);
+                CombatStatHandler.HandleOnEventDo(ability, onDestroyDo, other, userLivingBeing);
 
         Destroy(gameObject);
     }
-    void SplitProjectile(Collider2D other)
+    void SplitProjectile(LivingBeing other)
     {
         if (splitAlready >= ability.MaxSplit)
             DestroyProjectile(other);
@@ -126,34 +127,7 @@ public class Projectile : MonoBehaviour
         }
         DestroyProjectile(other);
     }
-    void HandleOnEventDo(OnEventDo onEvent, Collider2D other) //TODO: This belongs in its own class!! Other Ability types will definitly use this!
-    {
-        switch (onEvent)
-        {
-            case OnEventDo.Nothing:
-                break;
-            case OnEventDo.Ability:
-                break;
-            case OnEventDo.Damage:
-                if (ability.Attribute != AttributeType.None && ability.Value != 0)
-                {
-                    LivingBeing targetStats = other.GetComponent<LivingBeing>();
-                    targetStats.ChangeAttribute(ability.Attribute, ability.Value);
-                }
-                break;
-            case OnEventDo.Heal:
-                break;
-            case OnEventDo.StatusEffect:
-                if (ability.StatusEffects != null)
-                {
-                    foreach (StatusEffect statusEffect in ability.StatusEffects)
-                    {
-                        statusEffect.ApplyStatusEffect(other.gameObject, gameObject.transform.position);
-                    }
-                }
-                break;
-        }
-    }
+
 
 
 }

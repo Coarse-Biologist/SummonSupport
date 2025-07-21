@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System;
+using System.IO;
 
 [CreateAssetMenu(menuName = "Abilities/Melee Ability")]
 
@@ -13,14 +14,23 @@ public class MeleeAbility : Ability
 
     [field: SerializeField] public AreaOfEffectShape Shape { get; private set; }
     [field: SerializeField] public GameObject SpawnEffectOnHit { get; private set; }
+    [field: SerializeField] public GameObject MeleeParticleSystem { get; protected set; }
+    [field: SerializeField] public List<OnEventDo> ListOnHitDo { get; protected set; }
+
+    private Transform originTransform;
+
 
 
 
 
     public override bool Activate(GameObject user)
     {
+        if (originTransform == null)
+            originTransform = user.GetComponent<AbilityHandler>().abilityDirection.transform;
+
         Collider2D[] hits = Physics2D.OverlapCircleAll(user.transform.position, Range);
         bool activated = false;
+        SetEffects();
         foreach (Collider2D collider in hits)
         {
             if (collider != null && collider.gameObject != user)
@@ -28,8 +38,8 @@ public class MeleeAbility : Ability
                 if (VerifyActivate(collider, user))
                 {
                     Logging.Info("verified and rarified");
-                    collider.GetComponent<LivingBeing>().ChangeAttribute(Attribute, Value);
-                    SpawnEffect(collider.GetComponent<LivingBeing>());
+                    CombatStatHandler.HandleAllEvents(this, ListOnHitDo, user.GetComponent<LivingBeing>(), collider.GetComponent<LivingBeing>());
+                    SpawnHitEffect(collider.GetComponent<LivingBeing>());
                     activated = true;
                 }
             }
@@ -72,7 +82,6 @@ public class MeleeAbility : Ability
     private bool VerifyWithinShape(GameObject user, Collider2D collider)
     {
 
-        Transform originTransform = user.GetComponent<AbilityHandler>().abilityDirection.transform;
         //DebugAbilityShape(originTransform);
         Vector2 hitLocation = collider.transform.position;
         if ((hitLocation - (Vector2)originTransform.position).magnitude <= .2)
@@ -105,9 +114,7 @@ public class MeleeAbility : Ability
 
             if (isInside)
                 return true;
-
             else return false;
-
         }
         else return false;
     }
@@ -133,13 +140,27 @@ public class MeleeAbility : Ability
         Debug.DrawRay(-AR.up * Width + AR.position, AR.right * Range, Color.black, .8f); //left corner to top left corner
     }
 
-    private void SpawnEffect(LivingBeing targetLivingBeing)
+    private void SpawnHitEffect(LivingBeing targetLivingBeing)
     {
         GameObject instance;
         if (SpawnEffectOnHit != null)
         {
             instance = Instantiate(SpawnEffectOnHit, targetLivingBeing.transform.position, Quaternion.identity, targetLivingBeing.transform.transform);
             Destroy(instance, 3f);
+        }
+
+    }
+    private void SetEffects()
+    {
+        GameObject particleSystem;
+
+        if (MeleeParticleSystem != null)
+        {
+            particleSystem = Instantiate(MeleeParticleSystem, originTransform.transform.position, Quaternion.identity);
+            Quaternion rotation = Quaternion.LookRotation(originTransform.up, originTransform.right);
+            particleSystem.transform.rotation = rotation;
+            Destroy(particleSystem, 2f);
+
         }
 
     }

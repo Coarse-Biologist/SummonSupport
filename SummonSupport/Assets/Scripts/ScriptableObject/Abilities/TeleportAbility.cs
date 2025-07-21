@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
+using System.Collections;
+
 
 [CreateAssetMenu(menuName = "Abilities/Teleport Ability")]
 public class TeleportAbility : Ability
@@ -8,6 +10,13 @@ public class TeleportAbility : Ability
     [field: SerializeField] public float Range { get; private set; }
     [field: SerializeField] public List<Ability> ActivateOnUse { get; private set; }
     [field: SerializeField] public List<Ability> ActivateOnArrive { get; private set; }
+    [field: SerializeField] public GameObject EffectOnActivate { get; private set; }
+    [field: SerializeField] public float ActivationSpeed { get; private set; } = .3f;
+
+
+
+
+
 
 
     public bool Activate(GameObject user, Vector2 targetLocation)
@@ -22,7 +31,8 @@ public class TeleportAbility : Ability
             //Logging.Info($"there was a hit collider");
             if (IsUsableOn(user.GetComponent<LivingBeing>().CharacterTag, target.GetComponent<LivingBeing>().CharacterTag))
             {
-                TeleportToBeing(user, target);
+                CoroutineManager.Instance.StartCustomCoroutine(TeleportToBeing(user, target));
+
                 return true;
             }
             // else Logging.Info($"the ability wasnt useable on sucha  being");
@@ -38,8 +48,12 @@ public class TeleportAbility : Ability
         throw new System.NotImplementedException();
     }
 
-    private void TeleportToBeing(GameObject user, GameObject target)
+    public IEnumerator TeleportToBeing(GameObject user, GameObject target)
     {
+        Instantiate(EffectOnActivate, user.transform.position, Quaternion.identity, user.transform);
+
+        yield return new WaitForSeconds(ActivationSpeed);
+
         user.transform.position = target.transform.position;
 
         foreach (Ability ability in ActivateOnArrive)
@@ -51,8 +65,5 @@ public class TeleportAbility : Ability
             statusEffect.ApplyStatusEffect(target.GetComponent<LivingBeing>());
             //Logging.Info($"Adding {statusEffect} to {target.name}");
         }
-
     }
-
-
 }

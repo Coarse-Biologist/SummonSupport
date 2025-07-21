@@ -1,21 +1,59 @@
 using UnityEngine;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 
 
 public static class CombatStatHandler
 {
+    //public static CombatStatHandler Instance;
 
     // current limitations: only affects health and power.
     // doesnt use or recognize percentage based damage
     private static WaitForSeconds tickRate = new WaitForSeconds(1f);
 
-
-
-    public static float AdjustDamageValue(Element element, float damageValue, LivingBeing target, LivingBeing caster = null)
+    public static void HandleAllEvents(Ability ability, List<OnEventDo> eventList, LivingBeing caster, LivingBeing targetStats)
     {
-        damageValue = AdjustBasedOnAffinity(element, -damageValue, caster, target);
-        damageValue = AdjustBasedOnArmor(damageValue, target);
+        foreach (OnEventDo individualEvent in eventList)
+        {
+            HandleOnEventDo(ability, individualEvent, targetStats, caster);
+        }
+    }
+    public static void HandleOnEventDo(Ability ability, OnEventDo onEvent, LivingBeing targetStats, LivingBeing caster) //TODO: This belongs in its own class!! Other Ability types will definitly use this!
+    {
+        switch (onEvent)
+        {
+            case OnEventDo.Nothing:
+                break;
+            case OnEventDo.Ability:
+                break;
+            case OnEventDo.Damage:
+                if (ability.Attribute != AttributeType.None && ability.Value != 0)
+                {
+                    //targetStats.ChangeAttribute(ability.Attribute, ability.Value);
+                    AdjustDamageValue(ability, targetStats, caster);
+                }
+                break;
+            case OnEventDo.Heal:
+                AdjustHealValue(ability.Value, targetStats);
+                break;
+            case OnEventDo.StatusEffect:
+                if (ability.StatusEffects != null)
+                {
+                    foreach (StatusEffect statusEffect in ability.StatusEffects)
+                    {
+                        statusEffect.ApplyStatusEffect(targetStats.gameObject, caster);
+                    }
+                }
+                break;
+        }
+    }
+
+    public static float AdjustDamageValue(Ability ability, LivingBeing target, LivingBeing caster = null)
+    {
+        float damageValue = 0f;
+        if (ability.ElementType != Element.None) damageValue = AdjustBasedOnAffinity(ability.ElementType, ability.Value, caster, target);
+        if (ability.PhysicalType != PhysicalType.None) damageValue = AdjustBasedOnArmor(ability.PhysicalType, ability.Value, target);
         AdjustForOverValue(target, AttributeType.Overshield, AttributeType.MaxHitpoints, AttributeType.CurrentHitpoints, damageValue);
 
         return damageValue;
@@ -23,17 +61,23 @@ public static class CombatStatHandler
 
     public static float AdjustHealValue(float healValue, LivingBeing target, LivingBeing caster = null)
     {
-        //value = AdjustBasedOnAffinity(effectPackage, caster, target);
-        //value = AdjustBasedOnArmor(value, target);
         AdjustForOverValue(target, AttributeType.Overshield, AttributeType.MaxHitpoints, AttributeType.CurrentHitpoints, healValue);
 
         return healValue;
     }
-
-    public static float AdjustAndApplyDOT(Element element, float damageValue, float duration, LivingBeing target, LivingBeing caster = null)
+    public static float AdjustAndApplyTemp(Ability ability, float changeValue, float duration, LivingBeing target, LivingBeing caster = null)
     {
-        damageValue = AdjustBasedOnAffinity(element, -damageValue, caster, target);
-        damageValue = AdjustBasedOnArmor(damageValue, target);
+        changeValue = AdjustBasedOnAffinity(ability.ElementType, changeValue, caster, target);
+        changeValue = AdjustBasedOnArmor(ability.PhysicalType, changeValue, target);
+        ApplyTempValue(target, ability.Attribute, changeValue, duration);
+
+        return changeValue;
+    }
+
+    public static float AdjustAndApplyDOT(PhysicalType physical, Element element, float damageValue, float duration, LivingBeing target, LivingBeing caster = null)
+    {
+        damageValue = AdjustBasedOnAffinity(element, -damageValue, caster, target); // damage value is opposite?
+        damageValue = AdjustBasedOnArmor(physical, damageValue, target);
         HandleApplyDOT(target, AttributeType.CurrentHitpoints, damageValue, duration);
 
         return damageValue;
@@ -42,11 +86,12 @@ public static class CombatStatHandler
     private static float AdjustBasedOnAffinity(Element element, float damageValue, LivingBeing caster, LivingBeing target)
     {
         // change value based on Affinity;
+        Debug.Log($"element = {element}, damageValue = {damageValue}, target = {target}");
 
         float relevantAffinity = target.Affinities[element].Get();
         if (relevantAffinity > 0)
         {
-            damageValue += damageValue * relevantAffinity / 100; //new value equals old value, plus old value times relevant affinity converted into percentage
+            damageValue -= damageValue * relevantAffinity / 100; //new value equals old value, plus old value times relevant affinity converted into percentage
         }
 
         Logging.Info($"Based on affinity the damagebvalue has been changed to {damageValue}");
@@ -54,15 +99,14 @@ public static class CombatStatHandler
         return damageValue;
     }
 
-    private static float AdjustBasedOnArmor(float value, LivingBeing target)
+    private static float AdjustBasedOnArmor(PhysicalType physical, float value, LivingBeing target)
     {
         // change value based Physical Resistance;
 
-        PhysicalType physical = PhysicalType.Bludgeoning;
         float relevantResistance = target.PhysicalDict[physical].Get();
         if (relevantResistance > 0)
         {
-            value += value * relevantResistance / 100;
+            value -= value * relevantResistance / 100;
             //new value equals old value, plus old value times relevant affinity converted into percentage
         }
 
@@ -130,7 +174,6 @@ public static class CombatStatHandler
     private static void HandleApplyDOT(LivingBeing target, AttributeType attributeType, float newValue, float duration)
     {
         target.StartCoroutine(ApplyAttributeRepeatedly(target, attributeType, newValue, duration));
-
     }
 
     private static void ApplyNormalValue(LivingBeing target, AttributeType attributeType, float newValue)

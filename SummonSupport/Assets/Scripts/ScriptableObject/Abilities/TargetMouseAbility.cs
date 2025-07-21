@@ -60,7 +60,7 @@ public class TargetMouseAbility : Ability
                 foreach (StatusEffect statusEffect in StatusEffects)
                 {
                     if (statusEffect != null)
-                        statusEffect.ApplyStatusEffect(targetLivingBeing.gameObject, mousePos);
+                        statusEffect.ApplyStatusEffect(targetLivingBeing.gameObject, targetLivingBeing);
                 }
                 break;
         }

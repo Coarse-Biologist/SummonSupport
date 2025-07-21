@@ -35,19 +35,19 @@ public class StatusEffect : ScriptableObject
     private float runtimeDuration;
 
 
-    public void ApplyStatusEffect(GameObject target, Vector2 sourcePosition)
+    public void ApplyStatusEffect(GameObject target, LivingBeing caster)
     {
         if (!target.TryGetComponent(out LivingBeing livingBeing))
             return;
 
-        ApplyStatusEffect(livingBeing, sourcePosition);
+        ApplyStatusEffect(livingBeing, caster);
     }
-    public void ApplyStatusEffect(LivingBeing livingBeing, Vector2 sourcePosition)
+    public void ApplyStatusEffect(LivingBeing livingBeing, LivingBeing caster)
     {
         if (RenewStatusEffect(livingBeing))
             return;
 
-        ChooseRightCoroutineToApplyStatusEffect(livingBeing, sourcePosition);
+        ChooseRightCoroutineToApplyStatusEffect(livingBeing, caster);
     }
     public void ApplyStatusEffect(LivingBeing livingBeing)
     {
@@ -68,7 +68,7 @@ public class StatusEffect : ScriptableObject
         else
             return false;
     }
-    void ChooseRightCoroutineToApplyStatusEffect(LivingBeing livingBeing, Vector2 sourcePosition)
+    void ChooseRightCoroutineToApplyStatusEffect(LivingBeing livingBeing, LivingBeing caster)
     {
         switch (Type)
         {
@@ -86,7 +86,7 @@ public class StatusEffect : ScriptableObject
                 break;
             case StatusEffectType.KnockInTheAir:
                 AI_CC_State ccState = livingBeing.gameObject.GetComponent<AI_CC_State>();
-                if (ccState != null) ccState.RecieveCC(StatusEffectType.KnockInTheAir, sourcePosition);
+                if (ccState != null) ccState.RecieveCC(StatusEffectType.KnockInTheAir, caster);
                 break;
         }
     }
@@ -94,6 +94,12 @@ public class StatusEffect : ScriptableObject
     {
         if (!target)
             return;
+
+        //float relevantAffinity = target.Affinities[ElementType].Get();
+        //if (relevantAffinity > 0)
+        //{
+        //    value -= value * relevantAffinity / 100; //new value equals old value, plus old value times relevant affinity converted into percentage
+        //}
 
         StatusEffectInstance instance = new(this);
         target.activeStatusEffects.Add(Name, instance);

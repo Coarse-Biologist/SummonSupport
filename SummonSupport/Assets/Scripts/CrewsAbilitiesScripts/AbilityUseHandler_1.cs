@@ -81,11 +81,11 @@ public class AbilityUseHandler_1 : MonoBehaviour
             foreach (TempAttrDecrease_AT attr_Down in effectPackage.AttributeDown)
                 CombatStatHandler.ApplyTempValue(targetStats, attr_Down.AttributeType, -attr_Down.Value, attr_Down.Duration);
 
-            foreach (Damage_AT damage in effectPackage.Damage)
-                CombatStatHandler.AdjustDamageValue(damage.Element, damage.Value, targetStats, casterStats);
+            //foreach (Damage_AT damage in effectPackage.Damage)
+            //CombatStatHandler.AdjustDamageValue(damage.Element, damage.Value, targetStats, casterStats);
 
-            foreach (DamageoT_AT DOT in effectPackage.DamageOverTime)
-                CombatStatHandler.AdjustAndApplyDOT(DOT.Element, DOT.Value, DOT.Duration, targetStats, casterStats);
+            //foreach (DamageoT_AT DOT in effectPackage.DamageOverTime)
+            //CombatStatHandler.AdjustAndApplyDOT(DOT.PhysicalType, DOT.Element, DOT.Value, DOT.Duration, targetStats, casterStats);
         }
     }
 
