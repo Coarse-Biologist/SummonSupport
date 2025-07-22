@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: ae13db9ff440f164bbc12369b7893e16
+guid: f6dc088a5026d6c40925f91c7fedd8c6
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 383723084822489475
-    second: WaterStream2_0
+      213: -8098900419748400100
+    second: flowChart_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,13 +100,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: WaterStream2_0
+      name: flowChart_0
       rect:
         serializedVersion: 2
-        x: 1
+        x: 0
         y: 0
-        width: 31
-        height: 32
+        width: 1092
+        height: 605
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 38926f2dc12435500800000000000000
-      internalID: 383723084822489475
+      spriteID: c1472a16afcea9f80800000000000000
+      internalID: -8098900419748400100
       vertices: []
       indices: 
       edges: []
@@ -134,8 +134,7 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable:
-      WaterStream2_0: 383723084822489475
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
