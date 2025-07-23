@@ -7,7 +7,7 @@ public class AbilityHandler : MonoBehaviour
     [SerializeField] protected GameObject abilitySpawn;
     [SerializeField] public GameObject abilityDirection { get; private set; }
     [SerializeField] protected LivingBeing statsHandler;
-    [SerializeField] protected List<Ability> abilities;
+    [field: SerializeField] public List<Ability> Abilities { private set; get; }
     [SerializeField] protected List<bool> abilitiesOnCooldown;
     private Dictionary<BeamAbility, GameObject> toggledAbilitiesDict = new();
 
@@ -23,7 +23,7 @@ public class AbilityHandler : MonoBehaviour
             statsHandler = gameObject.GetComponent<LivingBeing>();
         if (abilityDirection == null)
             abilityDirection = gameObject.transform.GetChild(0).gameObject;
-        foreach (Ability ablity in abilities)
+        foreach (Ability ablity in Abilities)
         {
             abilitiesOnCooldown.Add(false);
         }
@@ -34,9 +34,9 @@ public class AbilityHandler : MonoBehaviour
         if (abilitiesOnCooldown[abilityIndex])
             return false;
 
-        Ability ability = abilities[abilityIndex];
+        Ability ability = Abilities[abilityIndex];
 
-        if (!HasEnoughPower(ability.PowerCost))
+        if (!HasEnoughPower(ability.Cost))
             return false;
 
         bool usedAbility = HandleAbilityType(ability, targetPosition, rotation);
@@ -45,7 +45,7 @@ public class AbilityHandler : MonoBehaviour
             return false;
 
         StartCoroutine(SetOnCooldown(abilityIndex));
-        statsHandler?.ChangeAttribute(AttributeType.CurrentPower, -ability.PowerCost);
+        statsHandler?.ChangeAttribute(AttributeType.CurrentPower, -ability.Cost);
         return true;
     }
 
@@ -94,7 +94,7 @@ public class AbilityHandler : MonoBehaviour
         {
             beamInstance = beamAbility.ToggleBeam(statsHandler.gameObject, abilityDirection.transform);
             toggledAbilitiesDict.TryAdd(beamAbility, beamInstance);
-            statsHandler.ChangeRegeneration(AttributeType.CurrentPower, -beamAbility.PowerCost);
+            statsHandler.ChangeRegeneration(beamAbility.CostType, -beamAbility.Cost);
 
 
             return true;
@@ -103,7 +103,7 @@ public class AbilityHandler : MonoBehaviour
     }
     private void StopToggledAbility(BeamAbility beamAbility, GameObject activeAbility)
     {
-        statsHandler.ChangeRegeneration(AttributeType.CurrentPower, beamAbility.PowerCost);
+        statsHandler.ChangeRegeneration(AttributeType.CurrentPower, beamAbility.Cost);
         toggledAbilitiesDict.Remove(beamAbility);
         Destroy(activeAbility);
     }
@@ -135,7 +135,7 @@ public class AbilityHandler : MonoBehaviour
 
     private IEnumerator SetOnCooldown(int abilityIndex)
     {
-        Ability ability = abilities[abilityIndex];
+        Ability ability = Abilities[abilityIndex];
         try
         {
             abilitiesOnCooldown[abilityIndex] = true;

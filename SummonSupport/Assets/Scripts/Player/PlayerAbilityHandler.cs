@@ -20,7 +20,7 @@ public class PlayerAbilityHandler : AbilityHandler
     {
         int index = 0;
         //Logging.Info($"Number of abilities one may potentially like to add: {abilities.Count}");
-        foreach (Ability ability in abilities)
+        foreach (Ability ability in Abilities)
         {
             // Logging.Info($"Slotting {ability} with name {ability.Name} in UI");
             EventDeclarer.SlotChanged.Invoke(index, ability);
@@ -66,7 +66,7 @@ public class PlayerAbilityHandler : AbilityHandler
     }
     void OnAbility(InputAction.CallbackContext context)
     {
-        if (inputActionToIndex.TryGetValue(context.action.name, out int index) && index < abilities.Count)
+        if (inputActionToIndex.TryGetValue(context.action.name, out int index) && index < Abilities.Count)
         {
             if (!abilitiesOnCooldown[index])
             {

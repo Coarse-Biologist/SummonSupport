@@ -68,13 +68,17 @@ public abstract class LivingBeing : MonoBehaviour
 
     #region other data
 
+
+
+
     [Header("Other")]
-    [field: SerializeField] public float XP_OnDeath { get; private set; } = 3;
-    public Dictionary<string, StatusEffectInstance> activeStatusEffects = new();
+    //public Dictionary<string, StatusEffectInstance> activeStatusEffects = new();
+    [field: SerializeField] public float XP_OnDeath { get; private set; } = 5f;
+
     public Dictionary<Element, (Func<float> Get, Action<float> Set)> Affinities { private set; get; } = new();
     public Dictionary<AttributeType, (Func<float> Get, Action<float> Set)> AttributesDict { private set; get; } = new();
 
-    [field: SerializeField] public List<Crew_Ability_SO> Abilties { get; private set; } = new();
+    //[field: SerializeField] public List<Crew_Ability_SO> Abilties { get; private set; } = new();
     [field: SerializeField] public float Speed { get; private set; } = 3f;
     [field: SerializeField] public float Mass { get; private set; } = 1f;
 

@@ -14,8 +14,6 @@ public class ProjectileAbility : Ability
     [field: SerializeField] public int MaxPierce { get; protected set; }
     [field: SerializeField] public int MaxSplit { get; protected set; }
     [field: SerializeField] public int SplitAngleOffset { get; protected set; }
-    [field: SerializeField] public List<OnEventDo> ListOnHitDo { get; protected set; }
-    [field: SerializeField] public List<OnEventDo> ListOnDestroyDo { get; protected set; }
     [field: SerializeField] public GameObject ProjectileParticleSystem { get; protected set; }
     public GameObject SpawnEffectOnHit { get; set; }
 
@@ -41,7 +39,6 @@ public class ProjectileAbility : Ability
         projectileScript.Shoot(user, spawnPoint, direction.right);
         return true;
     }
-
 
     private void SetEffects(Projectile projectile, GameObject user)
     {

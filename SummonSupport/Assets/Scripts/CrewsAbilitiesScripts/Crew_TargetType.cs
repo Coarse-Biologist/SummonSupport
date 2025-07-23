@@ -4,7 +4,6 @@ using UnityEngine;
 public enum Crew_TargetType
 {
     Self,
-    Projectile,
     OnTarget,
 }
 

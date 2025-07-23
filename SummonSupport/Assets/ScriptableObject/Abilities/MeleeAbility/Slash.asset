@@ -15,16 +15,28 @@ MonoBehaviour:
   <Name>k__BackingField: Slash
   <Icon>k__BackingField: {fileID: 0}
   <Cooldown>k__BackingField: 0
-  <ActivationTime>k__BackingField: 0
-  <PowerCost>k__BackingField: 5
-  <StatusEffects>k__BackingField:
-  - {fileID: 11400000, guid: 6c1911e88b4453b47a1cb46f5c05bce5, type: 2}
+  <CostType>k__BackingField: 0
+  <Cost>k__BackingField: 0
   <ListUsableOn>k__BackingField: 01000000
-  <Attribute>k__BackingField: 1
-  <Value>k__BackingField: -100
-  <ElementType>k__BackingField: 4
-  <PhysicalType>k__BackingField: 3
-  <OnCooldown>k__BackingField: 0
+  <TargetTypeAndEffects>k__BackingField:
+  - <EffectDescription>k__BackingField: Belly slash
+    <TargetType>k__BackingField: 1
+    <HasAoE>k__BackingField: 0
+    <Radius>k__BackingField: 0
+    <Heal>k__BackingField:
+      <Value>k__BackingField: 0
+    <HealOverTime>k__BackingField:
+      <Value>k__BackingField: 0
+      <Duration>k__BackingField: 0
+    <AttributeUp>k__BackingField: []
+    <AttributeDown>k__BackingField: []
+    <Damage>k__BackingField:
+    - <Value>k__BackingField: 50
+      <Element>k__BackingField: 0
+      <Physical>k__BackingField: 3
+    <DamageOverTime>k__BackingField: []
+    <EffectObject>k__BackingField: {fileID: 0}
+    <ParticleEffect>k__BackingField: {fileID: 0}
   <Range>k__BackingField: 10
   <Angle>k__BackingField: 0
   <Width>k__BackingField: 10
@@ -33,4 +45,3 @@ MonoBehaviour:
     type: 3}
   <MeleeParticleSystem>k__BackingField: {fileID: 3833596520723288618, guid: 63d70ca71f984254aa100f374d860057,
     type: 3}
-  <ListOnHitDo>k__BackingField: 01000000

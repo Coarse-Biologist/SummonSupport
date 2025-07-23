@@ -1,88 +1,112 @@
 using UnityEngine;
-using System;
 using System.Collections;
-using System.Collections.Generic;
-
+using System.Linq;
+using UnityEngine.AI;
 
 public static class CombatStatHandler
 {
     //public static CombatStatHandler Instance;
 
-    // current limitations: only affects health and power.
     // doesnt use or recognize percentage based damage
-    private static WaitForSeconds tickRate = new WaitForSeconds(1f);
+    private static float tickRateFloat = 1f;
+    private static WaitForSeconds tickRate = new WaitForSeconds(tickRateFloat);
 
-    public static void HandleAllEvents(Ability ability, List<OnEventDo> eventList, LivingBeing caster, LivingBeing targetStats)
+
+
+    public static void HandleEffectPackages(Ability ability, LivingBeing caster, LivingBeing target, bool forSelf = false)
     {
-        foreach (OnEventDo individualEvent in eventList)
+        Debug.Log($"{ability} effects are being processed. Caster = {caster}, target = {target}");
+        LivingBeing casterStats = caster.GetComponent<LivingBeing>();
+        LivingBeing targetStats = target.GetComponent<LivingBeing>();
+        LivingBeing theTarget = casterStats;
+        if (!forSelf) theTarget = targetStats;
+        Debug.Log($"the target of {ability} shall be {theTarget}");
+
+        foreach (Crew_EffectPackage package in ability.TargetTypeAndEffects)
         {
-            HandleOnEventDo(ability, individualEvent, targetStats, caster);
+
+            if (package.Heal.Value > 0) AdjustHealValue(package.Heal.Value, theTarget, casterStats);
+            if (package.HealOverTime.Value > 0) theTarget.StartCoroutine(ApplyAttributeRepeatedly(theTarget, AttributeType.CurrentHitpoints, package.HealOverTime.Value, package.HealOverTime.Duration));
+            if (package.Damage.Count > 0)
+            {
+                foreach (Damage_AT damage in package.Damage)
+                {
+                    AdjustDamageValue(damage, theTarget, casterStats);
+                }
+            }
+            if (package.DamageOverTime.Count > 0)
+            {
+                foreach (DamageoT_AT damage in package.DamageOverTime)
+                {
+                    AdjustAndApplyDOT(damage, theTarget, casterStats);
+                }
+            }
+            if (package.AttributeUp.Count > 0)
+            {
+                foreach (TempAttrIncrease_AT tempChange in package.AttributeUp)
+                {
+                    AdjustAndApplyTempChange(tempChange, theTarget, casterStats);
+                }
+            }
+            if (package.AttributeUp.Count > 0)
+            {
+                foreach (TempAttrDecrease_AT tempChange in package.AttributeDown)
+                {
+                    AdjustAndApplyTempChange(tempChange, theTarget, casterStats);
+                }
+            }
+
         }
     }
-    public static void HandleOnEventDo(Ability ability, OnEventDo onEvent, LivingBeing targetStats, LivingBeing caster) //TODO: This belongs in its own class!! Other Ability types will definitly use this!
-    {
-        switch (onEvent)
-        {
-            case OnEventDo.Nothing:
-                break;
-            case OnEventDo.Ability:
-                break;
-            case OnEventDo.Damage:
-                if (ability.Attribute != AttributeType.None && ability.Value != 0)
-                {
-                    //targetStats.ChangeAttribute(ability.Attribute, ability.Value);
-                    AdjustDamageValue(ability, targetStats, caster);
-                }
-                break;
-            case OnEventDo.Heal:
-                AdjustHealValue(ability.Value, targetStats);
-                break;
-            case OnEventDo.StatusEffect:
-                if (ability.StatusEffects != null)
-                {
-                    foreach (StatusEffect statusEffect in ability.StatusEffects)
-                    {
-                        statusEffect.ApplyStatusEffect(targetStats.gameObject, caster);
-                    }
-                }
-                break;
-        }
-    }
 
-    public static float AdjustDamageValue(Ability ability, LivingBeing target, LivingBeing caster = null)
+    #region Adjust and apply damage, heal, temo attributes and damage over times
+    public static float AdjustDamageValue(Damage_AT damage_AT, LivingBeing target, LivingBeing caster = null)
     {
         float damageValue = 0f;
-        if (ability.ElementType != Element.None) damageValue = AdjustBasedOnAffinity(ability.ElementType, ability.Value, caster, target);
-        if (ability.PhysicalType != PhysicalType.None) damageValue = AdjustBasedOnArmor(ability.PhysicalType, ability.Value, target);
-        AdjustForOverValue(target, AttributeType.Overshield, AttributeType.MaxHitpoints, AttributeType.CurrentHitpoints, damageValue);
+        if (damage_AT.Element != Element.None) damageValue = AdjustBasedOnAffinity(damage_AT.Element, damage_AT.Value, caster, target);
+        if (damage_AT.Physical != PhysicalType.None) damageValue = AdjustBasedOnArmor(damage_AT.Physical, damage_AT.Value, target);
+        AdjustForOverValue(target, AttributeType.Overshield, AttributeType.MaxHitpoints, AttributeType.CurrentHitpoints, -damageValue);
 
         return damageValue;
     }
-
     public static float AdjustHealValue(float healValue, LivingBeing target, LivingBeing caster = null)
     {
         AdjustForOverValue(target, AttributeType.Overshield, AttributeType.MaxHitpoints, AttributeType.CurrentHitpoints, healValue);
 
         return healValue;
     }
-    public static float AdjustAndApplyTemp(Ability ability, float changeValue, float duration, LivingBeing target, LivingBeing caster = null)
+    public static float AdjustAndApplyTempChange(TempAttrChange tempAttr, LivingBeing target, LivingBeing caster = null)
     {
-        changeValue = AdjustBasedOnAffinity(ability.ElementType, changeValue, caster, target);
-        changeValue = AdjustBasedOnArmor(ability.PhysicalType, changeValue, target);
-        ApplyTempValue(target, ability.Attribute, changeValue, duration);
+        float changeValue = tempAttr.Value;
+        float duration = tempAttr.Duration;
+        Element element = tempAttr.Element;
+        PhysicalType physical = tempAttr.Physical;
+        if (tempAttr is TempAttrDecrease_AT) changeValue = -changeValue; // set to negative if it decreases
+        if (tempAttr.AttributeType == AttributeType.CurrentHitpoints || tempAttr.AttributeType == AttributeType.MaxHitpoints)
+        {
+            if (element != Element.None) changeValue = AdjustBasedOnAffinity(element, changeValue, caster, target);
+            if (physical != PhysicalType.None) changeValue = AdjustBasedOnArmor(physical, changeValue, target);
+        }
+        ApplyTempValue(target, tempAttr.AttributeType, changeValue, duration);
+        target.StartCoroutine(ResetTempAttribute(target, tempAttr.AttributeType, -changeValue, duration)); //reset by using opposite
 
         return changeValue;
     }
-
-    public static float AdjustAndApplyDOT(PhysicalType physical, Element element, float damageValue, float duration, LivingBeing target, LivingBeing caster = null)
+    public static float AdjustAndApplyDOT(DamageoT_AT damageOT, LivingBeing target, LivingBeing caster = null)
     {
-        damageValue = AdjustBasedOnAffinity(element, -damageValue, caster, target); // damage value is opposite?
-        damageValue = AdjustBasedOnArmor(physical, damageValue, target);
+        float damageValue = -damageOT.Value;
+        float duration = damageOT.Duration;
+        Element element = damageOT.Element;
+        PhysicalType physical = damageOT.Physical;
+        if (damageOT.Element != Element.None) damageValue = AdjustBasedOnAffinity(element, damageValue, caster, target); // damage value is opposite?
+        if (damageOT.Physical != PhysicalType.None) damageValue = AdjustBasedOnArmor(physical, damageValue, target);
         HandleApplyDOT(target, AttributeType.CurrentHitpoints, damageValue, duration);
 
         return damageValue;
     }
+    #endregion
 
+    #region modify resistable damages
     private static float AdjustBasedOnAffinity(Element element, float damageValue, LivingBeing caster, LivingBeing target)
     {
         // change value based on Affinity;
@@ -153,30 +177,15 @@ public static class CombatStatHandler
         }
     }
 
-    static void HandleApplyAttribute(LivingBeing target, AttributeType attributeType, float changeValue)
-    {
-        switch (attributeType)
-        {
-            case AttributeType.CurrentHitpoints:
-                AdjustForOverValue(target, AttributeType.Overshield, AttributeType.MaxHitpoints, AttributeType.CurrentHitpoints, changeValue);
-                break;
-
-            case AttributeType.CurrentPower:
-                AdjustForOverValue(target, AttributeType.PowerSurge, AttributeType.MaxPower, AttributeType.CurrentPower, changeValue);
-                break;
-
-            default:
-                ApplyNormalValue(target, attributeType, changeValue);
-                break;
-        }
-    }
+    #endregion
 
     private static void HandleApplyDOT(LivingBeing target, AttributeType attributeType, float newValue, float duration)
     {
         target.StartCoroutine(ApplyAttributeRepeatedly(target, attributeType, newValue, duration));
     }
 
-    private static void ApplyNormalValue(LivingBeing target, AttributeType attributeType, float newValue)
+    #region apply already adjusted values, temporrily, repeatedly.
+    private static void ApplyValue(LivingBeing target, AttributeType attributeType, float newValue)
     {
         Logging.Info($"{target.name} has had {attributeType} changed by {newValue}");
         target.SetAttribute(attributeType, target.GetAttribute(attributeType) + newValue);
@@ -192,19 +201,15 @@ public static class CombatStatHandler
     }
     private static IEnumerator ResetTempAttribute(LivingBeing target, AttributeType attributeType, float changeValue, float duration)
     {
-
         float elapsed = 0f;
-
         while (elapsed < duration)
         {
             yield return tickRate;
-            elapsed += 1f;
+            elapsed += tickRateFloat;
             Logging.Info($"waiting {elapsed}/{duration} seconds for temporary attribute to reset");
         }
-        ApplyNormalValue(target, attributeType, -changeValue); // resets by adding the opposite of what was added before (which may have been negative)
+        ApplyValue(target, attributeType, -changeValue); // resets by adding the opposite of what was added before (which may have been negative)
     }
-
-
 
     public static IEnumerator ApplyAttributeRepeatedly(LivingBeing target, AttributeType attributeType, float changeValue, float duration)
     {
@@ -226,12 +231,11 @@ public static class CombatStatHandler
             max = AttributeType.MaxPower;
             current = AttributeType.CurrentPower;
         }
-
         while (elapsed < duration)
         {
             if (tempMax != AttributeType.None)
             {
-                ApplyNormalValue(target, attributeType, changeValue);
+                ApplyValue(target, attributeType, changeValue);
             }
             else
                 AdjustForOverValue(target, tempMax, max, current, changeValue);
@@ -239,12 +243,26 @@ public static class CombatStatHandler
             yield return tickRate;
             elapsed += 1f;
             Logging.Info($"applying {elapsed}/{duration} ticks of {changeValue} {attributeType}");
-
         }
     }
-
-
-
+    #endregion
 
 }
 
+
+//static void HandleApplyAttribute(LivingBeing target, AttributeType attributeType, float changeValue)
+//    switch (attributeType)
+//    {
+//        case AttributeType.CurrentHitpoints:
+//            AdjustForOverValue(target, AttributeType.Overshield, AttributeType.MaxHitpoints, AttributeType.CurrentHitpoints, changeValue);
+//            break;
+//
+//        case AttributeType.CurrentPower:
+//            AdjustForOverValue(target, AttributeType.PowerSurge, AttributeType.MaxPower, AttributeType.CurrentPower, changeValue);
+//            break;
+//
+//        default:
+//            ApplyNormalValue(target, attributeType, changeValue);
+//            break;
+//    }
+//}

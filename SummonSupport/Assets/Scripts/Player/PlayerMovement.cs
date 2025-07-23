@@ -26,8 +26,6 @@ public class PlayerMovement : MonoBehaviour
     private bool dashing = false;
     private bool canDash = true;
     private bool lockedInUI = false;
-    [SerializeField] public Crew_Ability_SO crewsAbility;
-    [SerializeField] public GameObject crewsProjectile;
 
     #endregion
 
@@ -155,11 +153,7 @@ public class PlayerMovement : MonoBehaviour
         worldPosition = mainCamera.ScreenToWorldPoint(lookInput);
         Debug.DrawLine(new Vector3(0, 0, 0), worldPosition, Color.green);
         CommandMinion.HandleCommand(worldPosition);
-        if (crewsAbility != null)
-        {
-            GetComponent<AbilityUseHandler_1>().CheckSufficientResource(crewsAbility, worldPosition);
 
-        }
 
     }
 

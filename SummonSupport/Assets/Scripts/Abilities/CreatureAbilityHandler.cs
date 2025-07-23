@@ -18,7 +18,7 @@ public class CreatureAbilityHandler : AbilityHandler
 
     private int GetAbilityIndex()
     {
-        return Random.Range(0, abilities.Count);
+        return Random.Range(0, Abilities.Count);
     }
 
 }

@@ -16,14 +16,49 @@ MonoBehaviour:
   <Icon>k__BackingField: {fileID: -8172051240425876022, guid: d46d43f87ef93d3448c986a15737f67a,
     type: 3}
   <Cooldown>k__BackingField: 1
-  <PowerCost>k__BackingField: 20
-  <StatusEffects>k__BackingField:
-  - {fileID: 11400000, guid: 1d77e9bb81e17e6489717c14375edf00, type: 2}
+  <CostType>k__BackingField: 0
+  <Cost>k__BackingField: 0
   <ListUsableOn>k__BackingField: 01000000
-  <Attribute>k__BackingField: 1
-  <Value>k__BackingField: 10
-  <ElementType>k__BackingField: 12
-  <OnCooldown>k__BackingField: 0
+  <TargetTypeAndEffects>k__BackingField:
+  - <EffectDescription>k__BackingField: heals self
+    <TargetType>k__BackingField: 0
+    <HasAoE>k__BackingField: 0
+    <Radius>k__BackingField: 0
+    <Heal>k__BackingField:
+      <Value>k__BackingField: 0
+    <HealOverTime>k__BackingField:
+      <Value>k__BackingField: 5
+      <Duration>k__BackingField: 5
+    <AttributeUp>k__BackingField:
+    - <AttributeType>k__BackingField: 2
+      <Value>k__BackingField: 50
+      <Duration>k__BackingField: 10
+      <Element>k__BackingField: 0
+      <Physical>k__BackingField: 0
+    <AttributeDown>k__BackingField: []
+    <Damage>k__BackingField: []
+    <DamageOverTime>k__BackingField: []
+    <EffectObject>k__BackingField: {fileID: 0}
+    <ParticleEffect>k__BackingField: {fileID: 0}
+  - <EffectDescription>k__BackingField: virulent cloud on enemies
+    <TargetType>k__BackingField: 1
+    <HasAoE>k__BackingField: 0
+    <Radius>k__BackingField: 0
+    <Heal>k__BackingField:
+      <Value>k__BackingField: 0
+    <HealOverTime>k__BackingField:
+      <Value>k__BackingField: 0
+      <Duration>k__BackingField: 0
+    <AttributeUp>k__BackingField: []
+    <AttributeDown>k__BackingField: []
+    <Damage>k__BackingField: []
+    <DamageOverTime>k__BackingField:
+    - <Value>k__BackingField: 4
+      <Element>k__BackingField: 12
+      <Physical>k__BackingField: 0
+      <Duration>k__BackingField: 10
+    <EffectObject>k__BackingField: {fileID: 0}
+    <ParticleEffect>k__BackingField: {fileID: 0}
   <Uptime>k__BackingField: 10
   <AuraObject>k__BackingField: {fileID: 1699087696372334086, guid: bc8366872ae84974e969b89dde807165,
     type: 3}

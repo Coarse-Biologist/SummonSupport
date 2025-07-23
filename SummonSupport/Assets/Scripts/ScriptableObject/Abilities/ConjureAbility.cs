@@ -7,6 +7,8 @@ public class ConjureAbility : Ability
     [field: SerializeField] public GameObject ObjectToSpawn { get; protected set; }
     [field: SerializeField] public Vector2 SpawnOffset { get; protected set; }
     [field: SerializeField] public float RotationOffset { get; protected set; } = 0;
+    [field: SerializeField] public float Radius = 2f;
+
 
 
     [field: Tooltip("Activate this if ability should only last a specific amount of time")]
@@ -33,16 +35,12 @@ public class ConjureAbility : Ability
         GameObject spawnedObject = Instantiate(ObjectToSpawn, spawnPosition, newRotation);
 
         if (IsDecaying)
-            Destroy(spawnedObject, TimeAlive); // the function "destroy" has an extra overload that specifies when the game object should be destroyed. i think using this overload can replace the "SelfDestructTimer" script
+            Destroy(spawnedObject, TimeAlive);
         if (spawnedObject.TryGetComponent(out Aura aura))
-            aura.HandleInstanciation(user.GetComponent<LivingBeing>(), this);
+            aura.HandleInstantiation(user.GetComponent<LivingBeing>(), this, Radius);
 
         return true;
     }
 
-    //public void AddDecayToObject(GameObject spawnedObject)
-    //{
-    //    SelfDestructTimer selfDestructTimer = spawnedObject.AddComponent<SelfDestructTimer>();
-    //    selfDestructTimer.StartTimer(TimeAlive);
-    //}
+
 }

@@ -3,14 +3,14 @@ using UnityEngine;
 
 public static class AI_AttackDecisionHandler
 {
-    public static List<Crew_Ability_SO> GetUsableAbilities(GameObject caster, GameObject target)
+    public static List<Ability> GetUsableAbilities(GameObject caster, GameObject target)
     {
-        List<Crew_Ability_SO> allCasterAbilities = caster.GetComponent<LivingBeing>().Abilties;
-        List<Crew_Ability_SO> usableAbilities = new List<Crew_Ability_SO>();
-        foreach (Crew_Ability_SO ability in allCasterAbilities)
+        List<Ability> allCasterAbilities = caster.GetComponent<AbilityHandler>().Abilities;
+        List<Ability> usableAbilities = new List<Ability>();
+        foreach (Ability ability in allCasterAbilities)
         {
 
         }
-        return new List<Crew_Ability_SO>();
+        return new List<Ability>();
     }
 }

@@ -16,7 +16,7 @@ public static class Crew_AbilityObjectSpawner
         Crew_AbilityMono abilityMonoScript = projectileInstance.GetComponent<Crew_AbilityMono>();
         abilityMonoScript.SetAbilityData(effectPackage);
         abilityMonoScript.SetProjectilePhysics(TargetLoc);
-        abilityMonoScript.SetSprite(effectPackage.EffectSprite);
+        //abilityMonoScript.SetSprite(effectPackage.EffectSprite);
         abilityMonoScript.SetCasterStats(CasterStats);
         if (effectPackage.HasAoE)
             abilityMonoScript.SetRadius(effectPackage.Radius);
@@ -30,7 +30,7 @@ public static class Crew_AbilityObjectSpawner
         Crew_AbilityMono abilityMonoScript = auraInstance.GetComponent<Crew_AbilityMono>();
 
         abilityMonoScript.SetAbilityData(effectPackage);
-        abilityMonoScript.SetSprite(effectPackage.EffectSprite);
+        //abilityMonoScript.SetSprite(effectPackage.EffectSprite);
         abilityMonoScript.SetRadius(effectPackage.Radius);
 
     }

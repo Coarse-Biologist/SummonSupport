@@ -13,10 +13,11 @@ public class Beam : MonoBehaviour
     private Transform abilityRotation;
     private List<LivingBeing> AlreadyCollided = new();
 
-    [field: SerializeField] public float Range { get; private set; }
+    private float Range = 5f;
 
     private float deletionDelay = 5f;
-    [field: SerializeField] float TickRate = .5f;
+    private float TickRate = .5f;
+
     private bool onCoolDown = false;
 
 
@@ -28,18 +29,18 @@ public class Beam : MonoBehaviour
 
     void OnParticleCollision(GameObject other)
     {
-        if (other.TryGetComponent(out LivingBeing statsHandler) && !AlreadyCollided.Contains(statsHandler))
+        if (other.TryGetComponent(out LivingBeing targetStatsHandler) && !AlreadyCollided.Contains(targetStatsHandler))
         {
             if (!onCoolDown)
             {
                 onCoolDown = true;
                 Invoke("OffCoolDown", TickRate);
-                Debug.Log($"particle collided with {statsHandler.Name}");
-                AlreadyCollided.Add(statsHandler);
+                Debug.Log($"particle collided with {targetStatsHandler.Name}");
+                AlreadyCollided.Add(targetStatsHandler);
                 GameObject hitEffect = Instantiate(Ability.SpawnEffectOnHit, other.transform.position, Quaternion.identity, other.transform);
                 Destroy(hitEffect, 5f);
-                StartCoroutine(DelayedDeletion(statsHandler));
-                CombatStatHandler.AdjustDamageValue(Ability, statsHandler, Caster);
+                StartCoroutine(DelayedDeletion(targetStatsHandler));
+                CombatStatHandler.HandleEffectPackages(Ability, Caster, targetStatsHandler, false);
             }
         }
     }
@@ -48,6 +49,7 @@ public class Beam : MonoBehaviour
     {
         onCoolDown = false;
     }
+
     void SetParticleSettings()
     {
         ParticleSystem = GetComponent<ParticleSystem>();
@@ -57,8 +59,10 @@ public class Beam : MonoBehaviour
 
     }
 
-    public void SetAbilityAndCaster(LivingBeing caster, BeamAbility ability, Transform rotationObject)
+    public void SetAbilitysettings(LivingBeing caster, BeamAbility ability, Transform rotationObject)
     {
+        TickRate = ability.TickRate;
+        Range = ability.Range;
         abilityRotation = rotationObject;
         Caster = caster;
         Ability = ability;

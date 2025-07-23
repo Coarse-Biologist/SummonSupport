@@ -16,16 +16,25 @@ MonoBehaviour:
   <Icon>k__BackingField: {fileID: 544104916224676396, guid: 1999786300aba2a4ea58c6b2b395516e,
     type: 3}
   <Cooldown>k__BackingField: 6
-  <ActivationTime>k__BackingField: 0
-  <PowerCost>k__BackingField: 30
-  <StatusEffects>k__BackingField:
-  - {fileID: 11400000, guid: 6c1911e88b4453b47a1cb46f5c05bce5, type: 2}
+  <CostType>k__BackingField: 0
+  <Cost>k__BackingField: 0
   <ListUsableOn>k__BackingField: 01000000
-  <Attribute>k__BackingField: 1
-  <Value>k__BackingField: 0
-  <ElementType>k__BackingField: 0
-  <PhysicalType>k__BackingField: 0
-  <OnCooldown>k__BackingField: 0
+  <TargetTypeAndEffects>k__BackingField:
+  - <EffectDescription>k__BackingField: heals
+    <TargetType>k__BackingField: 0
+    <HasAoE>k__BackingField: 0
+    <Radius>k__BackingField: 0
+    <Heal>k__BackingField:
+      <Value>k__BackingField: 40
+    <HealOverTime>k__BackingField:
+      <Value>k__BackingField: 0
+      <Duration>k__BackingField: 0
+    <AttributeUp>k__BackingField: []
+    <AttributeDown>k__BackingField: []
+    <Damage>k__BackingField: []
+    <DamageOverTime>k__BackingField: []
+    <EffectObject>k__BackingField: {fileID: 0}
+    <ParticleEffect>k__BackingField: {fileID: 0}
   <Range>k__BackingField: 20
   <ActivateOnUse>k__BackingField: []
   <ActivateOnArrive>k__BackingField:

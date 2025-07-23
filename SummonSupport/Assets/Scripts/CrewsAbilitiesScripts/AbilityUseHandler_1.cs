@@ -4,7 +4,7 @@ using UnityEngine.Rendering.Universal;
 
 public class AbilityUseHandler_1 : MonoBehaviour
 {
-    [field: SerializeField] public Crew_Ability_SO Ability_SO;
+    [field: SerializeField] public Ability Ability_SO;
 
     [field: SerializeField] public Vector2 MouseLoc;
     private static LivingBeing casterStats;
@@ -15,7 +15,7 @@ public class AbilityUseHandler_1 : MonoBehaviour
     }
 
     // called in player movement class when player presses ability button
-    public void CheckSufficientResource(Crew_Ability_SO Ability, Vector2 Loc)
+    public void CheckSufficientResource(Ability Ability, Vector2 Loc)
     {
         float currentResource = casterStats.GetAttribute(Ability.CostType);
         Ability_SO = Ability;
@@ -44,11 +44,11 @@ public class AbilityUseHandler_1 : MonoBehaviour
         switch (effectPackage.TargetType)
         {
 
-            case Crew_TargetType.Projectile:
-                Crew_AbilityObjectSpawner.SpawnProjectile(casterStats, effectPackage, transform.position, MouseLoc);
-                //Debug.Log("effect package contained a projectile ability!");
+            //case Crew_TargetType.Projectile:
+            //    Crew_AbilityObjectSpawner.SpawnProjectile(casterStats, effectPackage, transform.position, MouseLoc);
+            //    //Debug.Log("effect package contained a projectile ability!");
 
-                break;
+            //break;
             case Crew_TargetType.Self:
                 if (!effectPackage.HasAoE) HandleEffects(casterStats, casterStats, effectPackage);
                 else Crew_AbilityObjectSpawner.SpawnAura(effectPackage, casterStats);

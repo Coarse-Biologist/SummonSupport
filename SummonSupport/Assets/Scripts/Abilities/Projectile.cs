@@ -63,6 +63,7 @@ public class Projectile : MonoBehaviour
 
         if (!other.TryGetComponent(out LivingBeing otherLivingBeing))
         {
+
             SpawnEffect(otherLivingBeing);
             DestroyProjectile();
             return;
@@ -71,8 +72,7 @@ public class Projectile : MonoBehaviour
         if (userLivingBeing && !ability.IsUsableOn(userLivingBeing.CharacterTag, otherLivingBeing.CharacterTag))
             return;
 
-        foreach (OnEventDo onHitDo in ability.ListOnHitDo)
-            CombatStatHandler.HandleOnEventDo(ability, onHitDo, otherLivingBeing, userLivingBeing);
+        CombatStatHandler.HandleEffectPackages(ability, userLivingBeing, otherLivingBeing, false);
         HandleOnHitBehaviour(otherLivingBeing);
 
     }
@@ -99,9 +99,7 @@ public class Projectile : MonoBehaviour
 
     void DestroyProjectile(LivingBeing other = null)
     {
-        if (other)
-            foreach (OnEventDo onDestroyDo in ability.ListOnDestroyDo)
-                CombatStatHandler.HandleOnEventDo(ability, onDestroyDo, other, userLivingBeing);
+        //probably casue effects if hitting an acceptable enemy?
 
         Destroy(gameObject);
     }

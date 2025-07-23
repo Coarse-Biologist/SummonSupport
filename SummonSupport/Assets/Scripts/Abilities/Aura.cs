@@ -1,7 +1,5 @@
 using System.Collections.Generic;
-using System.ComponentModel.Design;
 using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class Aura : MonoBehaviour
@@ -9,15 +7,17 @@ public class Aura : MonoBehaviour
     LivingBeing caster;
     Ability ability;
     List<LivingBeing> listLivingBeingsInAura = new();
+    [SerializeField] public float ActivationTime { get; private set; } = .1f;
     private bool Active = false;
 
 
 
-    public void HandleInstanciation(LivingBeing caster, Ability ability)
+    public void HandleInstantiation(LivingBeing caster, Ability ability, float radius)
     {
+        GetComponent<CircleCollider2D>().radius = radius;
         this.caster = caster;
         this.ability = ability;
-        Invoke("Activate", ability.ActivationTime);
+        Invoke("Activate", ActivationTime);
     }
     public void SetAuraStats(GameObject caster, AuraAbility ability)
     {
@@ -48,40 +48,23 @@ public class Aura : MonoBehaviour
 
                 if (ability.ListUsableOn.Contains(RelationshipHandler.GetRelationshipType(caster.CharacterTag, otherLivingBeing.CharacterTag)) && !listLivingBeingsInAura.Contains(otherLivingBeing))
                 {
-                    AddAuraEffectToLivingBeing(otherLivingBeing);
-                    otherLivingBeing.ChangeAttribute(ability.Attribute, ability.Value);
+                    CombatStatHandler.HandleEffectPackages(ability, caster, otherLivingBeing, false);
                 }
         }
     }
-    void AddAuraEffectToLivingBeing(LivingBeing otherLivingBeing)
-    {
-        foreach (StatusEffect statusEffect in ability.StatusEffects)
-        {
-            if (otherLivingBeing.activeStatusEffects.ContainsKey(statusEffect.Name))
-                continue;
-            statusEffect.ApplyStatusEffect(otherLivingBeing);
-            listLivingBeingsInAura.Add(otherLivingBeing);
-        }
-    }
+
     void OnTriggerExit2D(Collider2D other)
     {
         LivingBeing otherLivingBeing = other.gameObject.GetComponent<LivingBeing>();
         if (listLivingBeingsInAura.Contains(otherLivingBeing))
-            RemoveAuraEffectFromLivingBeing(otherLivingBeing);
+        {         //possibly remove aura effect? 
+        }
     }
-    void RemoveAuraEffectFromLivingBeing(LivingBeing otherLivingBeing)
-    {
-        if (!listLivingBeingsInAura.Remove(otherLivingBeing))
-            return;
-        foreach (StatusEffect statusEffect in ability.StatusEffects)
-            statusEffect.RemoveStatusEffect(otherLivingBeing);
 
-    }
+
     void OnDestroy()
     {
-        foreach (LivingBeing livingBeing in listLivingBeingsInAura.ToList())
-            RemoveAuraEffectFromLivingBeing(livingBeing);
-        // Use ToList() to create a copy of the list, because 
-        // RemoveAuraEffectFromLivingBeing modifies the original list.
+        //foreach (LivingBeing livingBeing in listLivingBeingsInAura.ToList())
+        // remove status effects ?
     }
 }

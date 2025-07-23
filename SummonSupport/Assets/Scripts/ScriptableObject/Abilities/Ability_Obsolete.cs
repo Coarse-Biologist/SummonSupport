@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-public abstract class Ability : ScriptableObject
+public abstract class Ability_Obsolete : ScriptableObject
 {
     [field: Header("Ability settings")]
     [field: SerializeField] public string Name { get; protected set; }
@@ -10,7 +10,7 @@ public abstract class Ability : ScriptableObject
     [field: SerializeField] public float ActivationTime { get; protected set; } = 0f;
 
     [field: SerializeField, Min(0)] public float PowerCost { get; protected set; }
-    [field: SerializeField] public List<StatusEffect> StatusEffects { get; protected set; }
+    //[field: SerializeField] public List<StatusEffect> StatusEffects { get; protected set; }
     [field: SerializeField] public List<RelationshipType> ListUsableOn { get; protected set; }
     [field: Header("Change Attribute settings")]
     [field: SerializeField] public AttributeType Attribute { get; protected set; } = AttributeType.None;

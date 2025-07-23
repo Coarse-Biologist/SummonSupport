@@ -6,6 +6,7 @@ using System.Collections;
 [CreateAssetMenu(menuName = "Abilities/Teleport Ability")]
 public class TeleportAbility : Ability
 {
+    [Header("Teleport settings")]
 
     [field: SerializeField] public float Range { get; private set; }
     [field: SerializeField] public List<Ability> ActivateOnUse { get; private set; }
@@ -60,10 +61,11 @@ public class TeleportAbility : Ability
         {
             ability.Activate(user);
         }
-        foreach (StatusEffect statusEffect in StatusEffects)
-        {
-            statusEffect.ApplyStatusEffect(target.GetComponent<LivingBeing>());
-            //Logging.Info($"Adding {statusEffect} to {target.name}");
-        }
+
+        // handle effects and status effects in package
+        //foreach (Crew_EffectPackage statusEffect in StatusEffects)
+        //{
+        //    //apply status effects
+        //}
     }
 }

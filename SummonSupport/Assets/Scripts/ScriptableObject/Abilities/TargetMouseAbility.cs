@@ -6,7 +6,6 @@ using UnityEngine.InputSystem;
 public class TargetMouseAbility : Ability
 {
     [field: Header("settings")]
-    [field: SerializeField] public List<OnEventDo> ListOnCastDo { get; protected set; }
     [field: SerializeField] public GameObject SpawnEffectOnHit { get; set; }
 
 
@@ -37,34 +36,10 @@ public class TargetMouseAbility : Ability
 
         SpawnEffect(targetLivingBeing);
 
-        foreach (OnEventDo onEventDo in ListOnCastDo)
-        {
-            HandleEventType(onEventDo, targetLivingBeing, mousePos);
-        }
+        //cause all effects that should happen on successful hit
         return true;
     }
 
-    void HandleEventType(OnEventDo onEventDo, LivingBeing targetLivingBeing, Vector2 mousePos)
-    {
-        switch (onEventDo) //TODO: This has to be a class, just for testing purposes
-        {
-            case OnEventDo.Damage:
-                if (Attribute != AttributeType.None && Value != 0)
-                    targetLivingBeing.ChangeAttribute(AttributeType.CurrentHitpoints, -Value);
-                break;
-            case OnEventDo.Heal:
-                if (Attribute != AttributeType.None && Value != 0)
-                    targetLivingBeing.ChangeAttribute(AttributeType.CurrentHitpoints, Value);
-                break;
-            case OnEventDo.StatusEffect:
-                foreach (StatusEffect statusEffect in StatusEffects)
-                {
-                    if (statusEffect != null)
-                        statusEffect.ApplyStatusEffect(targetLivingBeing.gameObject, targetLivingBeing);
-                }
-                break;
-        }
-    }
 
     private void SpawnEffect(LivingBeing targetLivingBeing)
     {

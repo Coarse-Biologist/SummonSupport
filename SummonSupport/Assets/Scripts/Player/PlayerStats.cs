@@ -6,6 +6,8 @@ using UnityEngine;
 public class PlayerStats : LivingBeing
 {
     public static PlayerStats Instance;
+
+    [Header("Experience Info")]
     [SerializeField] public int CurrentLevel { private set; get; } = 0;
     [SerializeField] public float CurrentXP { private set; get; } = 0;
     [SerializeField] public float MaxXP { private set; get; } = 10;

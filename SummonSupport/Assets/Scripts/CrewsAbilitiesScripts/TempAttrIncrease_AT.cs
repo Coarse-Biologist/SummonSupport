@@ -1,12 +1,8 @@
 using UnityEngine;
 [System.Serializable]
 
-public class TempAttrIncrease_AT
+public class TempAttrIncrease_AT : TempAttrChange
 {
-    [field: SerializeField] public AttributeType AttributeType { get; private set; } = 0f;
-    [field: SerializeField] public float Value { get; private set; } = 0f;
-    [field: SerializeField] public float Duration { get; private set; } = 1f;
-
 
 }
 

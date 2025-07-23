@@ -4,6 +4,8 @@ public class Damage_AT
 {
     [field: SerializeField] public float Value { get; private set; } = 0f;
     [field: SerializeField] public Element Element { get; private set; } = Element.None;
+    [field: SerializeField] public PhysicalType Physical { get; private set; } = PhysicalType.None;
+
 }
 
 

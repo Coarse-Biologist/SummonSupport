@@ -59,7 +59,7 @@ public class Crew_AbilityMono : MonoBehaviour
         direction = direction.normalized;
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
         Rigidbody2D rb = GetComponent<Rigidbody2D>();
-        rb.linearVelocity = direction * effectPackage.Projectile.Speed;
+        //rb.linearVelocity = direction * effectPackage.Projectile.Speed;
         transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
     }
     #endregion

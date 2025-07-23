@@ -7,6 +7,7 @@ using System.IO;
 
 public class MeleeAbility : Ability
 {
+    [Header("Melee Ability settings")]
 
     [field: SerializeField] public float Range { get; private set; }
     [field: SerializeField] public float Angle { get; private set; }
@@ -15,7 +16,6 @@ public class MeleeAbility : Ability
     [field: SerializeField] public AreaOfEffectShape Shape { get; private set; }
     [field: SerializeField] public GameObject SpawnEffectOnHit { get; private set; }
     [field: SerializeField] public GameObject MeleeParticleSystem { get; protected set; }
-    [field: SerializeField] public List<OnEventDo> ListOnHitDo { get; protected set; }
 
     private Transform originTransform;
 
@@ -38,7 +38,7 @@ public class MeleeAbility : Ability
                 if (VerifyActivate(collider, user))
                 {
                     Logging.Info("verified and rarified");
-                    CombatStatHandler.HandleAllEvents(this, ListOnHitDo, user.GetComponent<LivingBeing>(), collider.GetComponent<LivingBeing>());
+                    CombatStatHandler.HandleEffectPackages(this, user.GetComponent<LivingBeing>(), collider.gameObject.GetComponent<LivingBeing>());
                     SpawnHitEffect(collider.GetComponent<LivingBeing>());
                     activated = true;
                 }
