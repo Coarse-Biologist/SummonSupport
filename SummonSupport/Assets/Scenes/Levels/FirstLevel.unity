@@ -127,6 +127,16 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2376002305397545486, guid: e4c43cb75dda4d3458057b35ce607d87,
+        type: 3}
+      propertyPath: <MaxHP>k__BackingField
+      value: 300
+      objectReference: {fileID: 0}
+    - target: {fileID: 2376002305397545486, guid: e4c43cb75dda4d3458057b35ce607d87,
+        type: 3}
+      propertyPath: <CurrentHP>k__BackingField
+      value: 300
+      objectReference: {fileID: 0}
     - target: {fileID: 2864372725038760086, guid: e4c43cb75dda4d3458057b35ce607d87,
         type: 3}
       propertyPath: uiDoc
@@ -147,6 +157,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: WitchDoctor
+      objectReference: {fileID: 0}
+    - target: {fileID: 3599053616304235129, guid: e4c43cb75dda4d3458057b35ce607d87,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4886425859411069616, guid: e4c43cb75dda4d3458057b35ce607d87,
         type: 3}
@@ -359,37 +374,37 @@ PrefabInstance:
     - target: {fileID: 9084318776697772798, guid: e4c43cb75dda4d3458057b35ce607d87,
         type: 3}
       propertyPath: <Abilities>k__BackingField.Array.size
-      value: 6
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 9084318776697772798, guid: e4c43cb75dda4d3458057b35ce607d87,
         type: 3}
       propertyPath: '<Abilities>k__BackingField.Array.data[0]'
       value: 
-      objectReference: {fileID: 11400000, guid: 5605a5e8027c4e94691ae731bacfcb5a,
+      objectReference: {fileID: 11400000, guid: 946e5f54d23bbc24e9bf9696f3cf93c2,
         type: 2}
     - target: {fileID: 9084318776697772798, guid: e4c43cb75dda4d3458057b35ce607d87,
         type: 3}
       propertyPath: '<Abilities>k__BackingField.Array.data[1]'
       value: 
-      objectReference: {fileID: 11400000, guid: 5e39961f19654e04bb7f41a70934544c,
+      objectReference: {fileID: 11400000, guid: 893aad7fae2993c4da43dc50c4147674,
         type: 2}
     - target: {fileID: 9084318776697772798, guid: e4c43cb75dda4d3458057b35ce607d87,
         type: 3}
       propertyPath: '<Abilities>k__BackingField.Array.data[2]'
       value: 
-      objectReference: {fileID: 11400000, guid: c465a9cc289a0f1428157a45a03a6425,
+      objectReference: {fileID: 11400000, guid: ef1f958feb55809438588f67d22120ae,
         type: 2}
     - target: {fileID: 9084318776697772798, guid: e4c43cb75dda4d3458057b35ce607d87,
         type: 3}
       propertyPath: '<Abilities>k__BackingField.Array.data[3]'
       value: 
-      objectReference: {fileID: 11400000, guid: ef1f958feb55809438588f67d22120ae,
+      objectReference: {fileID: 11400000, guid: c465a9cc289a0f1428157a45a03a6425,
         type: 2}
     - target: {fileID: 9084318776697772798, guid: e4c43cb75dda4d3458057b35ce607d87,
         type: 3}
       propertyPath: '<Abilities>k__BackingField.Array.data[4]'
       value: 
-      objectReference: {fileID: 11400000, guid: 893aad7fae2993c4da43dc50c4147674,
+      objectReference: {fileID: 11400000, guid: 5605a5e8027c4e94691ae731bacfcb5a,
         type: 2}
     - target: {fileID: 9084318776697772798, guid: e4c43cb75dda4d3458057b35ce607d87,
         type: 3}
@@ -434,7 +449,7 @@ PrefabInstance:
     - target: {fileID: -2192539161432645077, guid: 8b808af4814c9664e80e2e15555215fb,
         type: 3}
       propertyPath: <MaxPower>k__BackingField
-      value: 0
+      value: 200
       objectReference: {fileID: 0}
     - target: {fileID: -2192539161432645077, guid: 8b808af4814c9664e80e2e15555215fb,
         type: 3}
@@ -449,7 +464,7 @@ PrefabInstance:
     - target: {fileID: -2192539161432645077, guid: 8b808af4814c9664e80e2e15555215fb,
         type: 3}
       propertyPath: <CurrentPower>k__BackingField
-      value: 0
+      value: 200
       objectReference: {fileID: 0}
     - target: {fileID: 462445852388303841, guid: 8b808af4814c9664e80e2e15555215fb,
         type: 3}
@@ -469,7 +484,7 @@ PrefabInstance:
     - target: {fileID: 530800861541312882, guid: 8b808af4814c9664e80e2e15555215fb,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1502490013454894205, guid: 8b808af4814c9664e80e2e15555215fb,
         type: 3}
@@ -484,22 +499,22 @@ PrefabInstance:
     - target: {fileID: 2384500945729294893, guid: 8b808af4814c9664e80e2e15555215fb,
         type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2384500945729294893, guid: 8b808af4814c9664e80e2e15555215fb,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2740338916301067606, guid: 8b808af4814c9664e80e2e15555215fb,
         type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2740338916301067606, guid: 8b808af4814c9664e80e2e15555215fb,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2914225980592756085, guid: 8b808af4814c9664e80e2e15555215fb,
         type: 3}
@@ -661,20 +676,19 @@ PrefabInstance:
     - target: {fileID: 7837279254410864493, guid: 8b808af4814c9664e80e2e15555215fb,
         type: 3}
       propertyPath: <Abilities>k__BackingField.Array.size
-      value: 4
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7837279254410864493, guid: 8b808af4814c9664e80e2e15555215fb,
         type: 3}
       propertyPath: '<Abilities>k__BackingField.Array.data[0]'
       value: 
-      objectReference: {fileID: 11400000, guid: 996489c834f79a74fb51758838eabbcd,
+      objectReference: {fileID: 11400000, guid: 946e5f54d23bbc24e9bf9696f3cf93c2,
         type: 2}
     - target: {fileID: 7837279254410864493, guid: 8b808af4814c9664e80e2e15555215fb,
         type: 3}
       propertyPath: '<Abilities>k__BackingField.Array.data[1]'
       value: 
-      objectReference: {fileID: 11400000, guid: 5605a5e8027c4e94691ae731bacfcb5a,
-        type: 2}
+      objectReference: {fileID: 0}
     - target: {fileID: 7837279254410864493, guid: 8b808af4814c9664e80e2e15555215fb,
         type: 3}
       propertyPath: '<Abilities>k__BackingField.Array.data[2]'
@@ -58915,6 +58929,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Slash
       objectReference: {fileID: 0}
+    - target: {fileID: 3833596520723288618, guid: 63d70ca71f984254aa100f374d860057,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7789184395246032014, guid: 63d70ca71f984254aa100f374d860057,
         type: 3}
       propertyPath: m_LocalScale.x
@@ -59396,6 +59415,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: ImplodingCloud
       objectReference: {fileID: 0}
+    - target: {fileID: 7070092032033159829, guid: 8c5912fef6503924483bcc35bc5bc08e,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8828565916917984093, guid: 8c5912fef6503924483bcc35bc5bc08e,
         type: 3}
       propertyPath: m_LocalScale.x
@@ -59641,6 +59665,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: BubblyFroth
+      objectReference: {fileID: 0}
+    - target: {fileID: 3349317053817142625, guid: 21ea27764e9da7e47bc6b73a8c662ca8,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

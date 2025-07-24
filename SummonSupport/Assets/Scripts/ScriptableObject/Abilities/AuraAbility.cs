@@ -5,7 +5,11 @@ public class AuraAbility : Ability
 {
     [field: SerializeField, Header("Aura settings"), Tooltip("time in [seconds]")]
     public float Uptime { get; protected set; }
+    [field: SerializeField]
+    public float Radius { get; protected set; } = 1f;
+
     [field: SerializeField] public GameObject AuraObject { get; protected set; }
+    [field: SerializeField] public bool LeaveRotation { get; protected set; } = true;
 
     public override bool Activate(GameObject caster)
     {
@@ -13,17 +17,21 @@ public class AuraAbility : Ability
 
         RaycastHit2D hit = Physics2D.Raycast(mousePos, Vector2.zero);
 
-        if (hit.collider != null && hit.collider.GetComponent<MinionStats>() != null)
+        if (hit.collider != null && hit.collider.TryGetComponent<LivingBeing>(out LivingBeing livingBeing))
         {
+            Debug.Log("This happens! 5");
+
             GameObject auraInstance = Instantiate(AuraObject, hit.collider.transform.position, Quaternion.identity, hit.collider.transform);
-            auraInstance.GetComponent<Aura>().SetAuraStats(hit.collider.gameObject, this);
+            auraInstance.GetComponent<Aura>().SetAuraStats(livingBeing, this, Uptime);
         }
         else
         {
+            Debug.Log("This happens! 6s");
+
             GameObject auraInstance = Instantiate(AuraObject, caster.transform.position, Quaternion.identity, caster.transform);
             Logging.Info($"aura instance = {auraInstance}");
             Aura auraMonoScript = auraInstance.GetComponent<Aura>();
-            if (auraMonoScript != null) auraMonoScript.SetAuraStats(caster, this);
+            if (auraMonoScript != null) auraMonoScript.HandleInstantiation(caster.GetComponent<LivingBeing>(), this, Radius, Uptime);
             else Logging.Info($"auraMonoScript = {auraMonoScript}");
         }
 

@@ -24,35 +24,38 @@ public static class CombatStatHandler
 
         foreach (Crew_EffectPackage package in ability.TargetTypeAndEffects)
         {
+            if (forSelf && package.TargetType == Crew_TargetType.Self || !forSelf && package.TargetType == Crew_TargetType.OnTarget)
+            {
+                if (package.Heal.Value > 0) AdjustHealValue(package.Heal.Value, theTarget, casterStats);
+                if (package.HealOverTime.Value > 0) HandleApplyDOT(target, AttributeType.CurrentHitpoints, package.HealOverTime.Value, package.HealOverTime.Duration);
 
-            if (package.Heal.Value > 0) AdjustHealValue(package.Heal.Value, theTarget, casterStats);
-            if (package.HealOverTime.Value > 0) theTarget.StartCoroutine(ApplyAttributeRepeatedly(theTarget, AttributeType.CurrentHitpoints, package.HealOverTime.Value, package.HealOverTime.Duration));
-            if (package.Damage.Count > 0)
-            {
-                foreach (Damage_AT damage in package.Damage)
+                if (package.Damage.Count > 0)
                 {
-                    AdjustDamageValue(damage, theTarget, casterStats);
+                    foreach (Damage_AT damage in package.Damage)
+                    {
+                        AdjustDamageValue(damage, theTarget, casterStats);
+                    }
                 }
-            }
-            if (package.DamageOverTime.Count > 0)
-            {
-                foreach (DamageoT_AT damage in package.DamageOverTime)
+                if (package.DamageOverTime.Count > 0)
                 {
-                    AdjustAndApplyDOT(damage, theTarget, casterStats);
+                    foreach (DamageoT_AT damage in package.DamageOverTime)
+                    {
+                        AdjustAndApplyDOT(damage, theTarget, casterStats);
+                    }
                 }
-            }
-            if (package.AttributeUp.Count > 0)
-            {
-                foreach (TempAttrIncrease_AT tempChange in package.AttributeUp)
+                if (package.AttributeUp.Count > 0)
                 {
-                    AdjustAndApplyTempChange(tempChange, theTarget, casterStats);
+                    foreach (TempAttrIncrease_AT tempChange in package.AttributeUp)
+                    {
+                        AdjustAndApplyTempChange(tempChange, theTarget, casterStats);
+                    }
                 }
-            }
-            if (package.AttributeUp.Count > 0)
-            {
-                foreach (TempAttrDecrease_AT tempChange in package.AttributeDown)
+                if (package.AttributeDown.Count > 0)
                 {
-                    AdjustAndApplyTempChange(tempChange, theTarget, casterStats);
+                    foreach (TempAttrDecrease_AT tempChange in package.AttributeDown)
+                    {
+                        AdjustAndApplyTempChange(tempChange, theTarget, casterStats);
+                    }
                 }
             }
 
@@ -88,7 +91,7 @@ public static class CombatStatHandler
             if (physical != PhysicalType.None) changeValue = AdjustBasedOnArmor(physical, changeValue, target);
         }
         ApplyTempValue(target, tempAttr.AttributeType, changeValue, duration);
-        target.StartCoroutine(ResetTempAttribute(target, tempAttr.AttributeType, -changeValue, duration)); //reset by using opposite
+        //target.StartCoroutine(ResetTempAttribute(target, tempAttr.AttributeType, -changeValue, duration)); //reset by using opposite
 
         return changeValue;
     }
@@ -181,7 +184,21 @@ public static class CombatStatHandler
 
     private static void HandleApplyDOT(LivingBeing target, AttributeType attributeType, float newValue, float duration)
     {
-        target.StartCoroutine(ApplyAttributeRepeatedly(target, attributeType, newValue, duration));
+        Debug.Log($"Changing {target}s regen by {newValue}");
+        target.ChangeRegeneration(attributeType, newValue);
+        target.StartCoroutine(ResetRegeneration(target, attributeType, newValue, duration));
+    }
+    private static IEnumerator ResetRegeneration(LivingBeing target, AttributeType attributeType, float newValue, float duration)
+    {
+        WaitForSeconds OverTimeReset = new WaitForSeconds(duration);
+        float elapsed = 0f;
+        while (elapsed < duration)
+        {
+            yield return OverTimeReset;
+        }
+        target.ChangeRegeneration(attributeType, -newValue);
+
+
     }
 
     #region apply already adjusted values, temporrily, repeatedly.
@@ -211,40 +228,7 @@ public static class CombatStatHandler
         ApplyValue(target, attributeType, -changeValue); // resets by adding the opposite of what was added before (which may have been negative)
     }
 
-    public static IEnumerator ApplyAttributeRepeatedly(LivingBeing target, AttributeType attributeType, float changeValue, float duration)
-    {
-        AttributeType tempMax = AttributeType.None;
-        AttributeType max = AttributeType.None;
-        AttributeType current = AttributeType.None;
 
-
-        float elapsed = 0f;
-        if (attributeType == AttributeType.CurrentHitpoints)
-        {
-            tempMax = AttributeType.Overshield;
-            max = AttributeType.MaxHitpoints;
-            current = AttributeType.CurrentHitpoints;
-        }
-        if (attributeType == AttributeType.CurrentPower)
-        {
-            tempMax = AttributeType.PowerSurge;
-            max = AttributeType.MaxPower;
-            current = AttributeType.CurrentPower;
-        }
-        while (elapsed < duration)
-        {
-            if (tempMax != AttributeType.None)
-            {
-                ApplyValue(target, attributeType, changeValue);
-            }
-            else
-                AdjustForOverValue(target, tempMax, max, current, changeValue);
-
-            yield return tickRate;
-            elapsed += 1f;
-            Logging.Info($"applying {elapsed}/{duration} ticks of {changeValue} {attributeType}");
-        }
-    }
     #endregion
 
 }
@@ -264,5 +248,89 @@ public static class CombatStatHandler
 //        default:
 //            ApplyNormalValue(target, attributeType, changeValue);
 //            break;
+//    }
+//}
+
+
+
+
+// CalculateNewValueByType(float currentValue, float value, ValueType valueType, AttributeType attributeType)
+//{
+//    float newValue = valueType == ValueType.Percentage
+//    ? currentValue * (1 + value / 100f)
+//    : currentValue + value;
+//    //DamageHandler.AdjustValue();
+//
+//    return HandleAttributeCap(attributeType, newValue, currentValue, value);
+//}
+//
+//float HandleAttributeCap(AttributeType attributeType, float newValue, float currentValue, float delta)
+//{
+//    switch (attributeType)
+//    {
+//        case AttributeType.CurrentHitpoints:
+//            newValue = ApplyCap(AttributeType.MaxHitpoints, AttributeType.Overshield, newValue, currentValue, delta);
+//            break;
+//
+//        case AttributeType.CurrentPower:
+//            newValue = ApplyCap(AttributeType.MaxPower, AttributeType.PowerSurge, newValue, currentValue, delta);
+//            break;
+//    }
+//    return newValue;
+//}
+//
+//float ApplyCap(AttributeType attributeTypeMax, AttributeType attributeTypeTempMax, float newValue, float currentValue, float delta)
+//{
+//    float max = GetAttribute(attributeTypeMax);
+//    float tempMax = GetAttribute(attributeTypeTempMax);
+//    if (newValue > max) // if the newly calculated value (after recieving heal or damage) is greater than the  characters max
+//        return max;
+//
+//    if (delta < 0 && tempMax > 0) // if damage is being calculated and one has overshield
+//    {
+//        if (tempMax + delta <= 0) // if the damage is more than the shield
+//        {
+//            SetAttribute(attributeTypeTempMax, 0); // set overshield to 0
+//            return currentValue + tempMax + delta; // return current health plus overshield value, minus damage value,
+//        }
+//        else
+//            SetAttribute(attributeTypeTempMax, tempMax + delta); // otherwise lower overshield value by the damage
+//        return currentValue; // return current health or mana
+//    }
+//    return newValue;
+//}
+
+//publicic static IEnumerator ApplyAttributeRepeatedly(LivingBeing target, AttributeType attributeType, float changeValue, float duration)
+//{
+//    AttributeType tempMax = AttributeType.None;
+//    AttributeType max = AttributeType.None;
+//    AttributeType current = AttributeType.None;
+//
+//
+//    float elapsed = 0f;
+//    if (attributeType == AttributeType.CurrentHitpoints)
+//    {
+//        tempMax = AttributeType.Overshield;
+//        max = AttributeType.MaxHitpoints;
+//        current = AttributeType.CurrentHitpoints;
+//    }
+//    if (attributeType == AttributeType.CurrentPower)
+//    {
+//        tempMax = AttributeType.PowerSurge;
+//        max = AttributeType.MaxPower;
+//        current = AttributeType.CurrentPower;
+//    }
+//    while (elapsed < duration)
+//    {
+//        if (tempMax != AttributeType.None)
+//        {
+//            ApplyValue(target, attributeType, changeValue);
+//        }
+//        else
+//            AdjustForOverValue(target, tempMax, max, current, changeValue);
+//
+//        yield return tickRate;
+//        elapsed += 1f;
+//        Logging.Info($"applying {elapsed}/{duration} ticks of {changeValue} {attributeType}");
 //    }
 //}

@@ -92,7 +92,7 @@ public class AIChaseState : AIState
             Vector2 direction = (targetLoc - (Vector2)transform.position).normalized;
             float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
             rotationObject.transform.rotation = Quaternion.Euler(0, 0, angle);
-            Debug.DrawRay(rotationObject.transform.position, targetLoc.normalized * targetLoc.magnitude, Color.red);
+            //Debug.DrawRay(rotationObject.transform.position, targetLoc.normalized * targetLoc.magnitude, Color.red);
             if (spriteController != null)
                 spriteController.SetSpriteDirection(angle);
         }

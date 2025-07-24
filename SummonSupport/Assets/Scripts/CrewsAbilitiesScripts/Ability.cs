@@ -2,9 +2,8 @@ using System.Collections.Generic;
 using System;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Crews Abilities")]
 
-[System.Serializable]
+
 public abstract class Ability : ScriptableObject
 {
     [field: SerializeField] public string Name { get; protected set; }

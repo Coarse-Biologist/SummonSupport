@@ -12,18 +12,22 @@ public class Aura : MonoBehaviour
 
 
 
-    public void HandleInstantiation(LivingBeing caster, Ability ability, float radius)
+    public void HandleInstantiation(LivingBeing caster, Ability ability, float radius, float duration)
     {
         GetComponent<CircleCollider2D>().radius = radius;
+        Invoke("Activate", ActivationTime);
+        SetAuraStats(caster, ability, duration);
+        Debug.Log("This happens!");
+        CombatStatHandler.HandleEffectPackages(ability, caster, caster, true);
+
+
+
+    }
+    public void SetAuraStats(LivingBeing caster, Ability ability, float duration)
+    {
         this.caster = caster;
         this.ability = ability;
-        Invoke("Activate", ActivationTime);
-    }
-    public void SetAuraStats(GameObject caster, AuraAbility ability)
-    {
-        this.caster = caster.GetComponent<LivingBeing>();
-        this.ability = ability;
-        SetAuraTimer(ability.Uptime);
+        SetAuraTimer(duration);
         //transform.Rotate(new Vector3(-110f, 0, 0));
 
     }
@@ -41,15 +45,21 @@ public class Aura : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
+        Debug.Log("This happens! 8");
+
         if (Active)
         {
             Logging.Info($"{other.gameObject} has entered the bite zone");
             if (other.gameObject.TryGetComponent(out LivingBeing otherLivingBeing))
+            {
+                Debug.Log("This happens! 7");
 
                 if (ability.ListUsableOn.Contains(RelationshipHandler.GetRelationshipType(caster.CharacterTag, otherLivingBeing.CharacterTag)) && !listLivingBeingsInAura.Contains(otherLivingBeing))
                 {
                     CombatStatHandler.HandleEffectPackages(ability, caster, otherLivingBeing, false);
                 }
+            }
+            else Debug.Log($"other game object = {other.gameObject}");
         }
     }
 

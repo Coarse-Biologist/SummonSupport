@@ -26,18 +26,21 @@ public class MeleeAbility : Ability
     public override bool Activate(GameObject user)
     {
         if (originTransform == null)
+        {
             originTransform = user.GetComponent<AbilityHandler>().abilityDirection.transform;
+            //Debug.Log($"setting origin transform equal to that of mr {user.GetComponent<LivingBeing>().Name}");
+        }
 
         Collider2D[] hits = Physics2D.OverlapCircleAll(user.transform.position, Range);
         bool activated = false;
-        SetEffects();
         foreach (Collider2D collider in hits)
         {
             if (collider != null && collider.gameObject != user)
             {
                 if (VerifyActivate(collider, user))
                 {
-                    Logging.Info("verified and rarified");
+                    SetEffects(user);
+                    //Logging.Info("verified and rarified");
                     CombatStatHandler.HandleEffectPackages(this, user.GetComponent<LivingBeing>(), collider.gameObject.GetComponent<LivingBeing>());
                     SpawnHitEffect(collider.GetComponent<LivingBeing>());
                     activated = true;
@@ -57,7 +60,7 @@ public class MeleeAbility : Ability
 
             return false;
         }
-        //Logging.Info($"oof, user = {user} collider = {collider.gameObject}");
+        //Logging.Info($"User = {user} collider = {collider.gameObject}");
 
         if (!IsUsableOn(user.GetComponent<LivingBeing>().CharacterTag, collider.GetComponent<LivingBeing>().CharacterTag))
         {
@@ -65,6 +68,7 @@ public class MeleeAbility : Ability
 
             return false;
         }
+        else Debug.Log($"usable on {collider.gameObject}");
         if (VerifyWithinShape(user, collider))
         {
             //Logging.Info("yay, 3");
@@ -109,8 +113,7 @@ public class MeleeAbility : Ability
             float sideDistance = Vector2.Dot(toHit, side);       // Side offset (left/right)
 
             // Check if point is inside the rectangle
-            bool isInside = forwardDistance >= 0 && forwardDistance <= Range &&
-                            (Mathf.Abs(sideDistance) <= Width / 2f);
+            bool isInside = forwardDistance <= Range && (Mathf.Abs(sideDistance) <= Width / 2f); //forwardDistance >= 0 &&
 
             if (isInside)
                 return true;
@@ -125,19 +128,19 @@ public class MeleeAbility : Ability
     {
 
         Transform AR = AbilityRotation.transform;
-        Debug.DrawRay(AR.position, AR.up * Width, Color.black, .8f); // char to right corner
+        Debug.DrawRay(AR.position, AR.up * Width / 2, Color.black, .8f); // char to right corner
 
-        Debug.DrawRay(AR.position, -AR.up * Width, Color.black, .8f); // char to leftcorner
+        Debug.DrawRay(AR.position, -AR.up * Width / 2, Color.black, .8f); // char to leftcorner
 
-        Debug.DrawRay(AR.position, AR.right * Range, Color.black, .8f); // char to top center
+        Debug.DrawRay(AR.position, AR.right * Range / 2, Color.black, .8f); // char to top center
 
-        Debug.DrawRay(AR.right * Width + AR.position, AR.up * Range, Color.black, .8f); // top center to top right corner
+        Debug.DrawRay(AR.right * Width / 2 + AR.position, AR.up * Range, Color.black, .8f); // top center to top right corner
 
-        Debug.DrawRay(AR.right * Width + AR.position, -AR.up * Range, Color.black, .8f); // top center to top left corner
+        Debug.DrawRay(AR.right * Width / 2 + AR.position, -AR.up * Range, Color.black, .8f); // top center to top left corner
 
-        Debug.DrawRay(AR.up * Width + AR.position, AR.right * Range, Color.black, .8f); //right corner to top right corner
+        Debug.DrawRay(AR.up * Width / 2 + AR.position, AR.right * Range, Color.black, .8f); //right corner to top right corner
 
-        Debug.DrawRay(-AR.up * Width + AR.position, AR.right * Range, Color.black, .8f); //left corner to top left corner
+        Debug.DrawRay(-AR.up * Width / 2 + AR.position, AR.right * Range, Color.black, .8f); //left corner to top left corner
     }
 
     private void SpawnHitEffect(LivingBeing targetLivingBeing)
@@ -150,24 +153,21 @@ public class MeleeAbility : Ability
         }
 
     }
-    private void SetEffects()
+    private void SetEffects(GameObject caster)
     {
         GameObject particleSystem;
+        originTransform = caster.GetComponent<AbilityHandler>().abilityDirection.transform;
 
         if (MeleeParticleSystem != null)
         {
-            particleSystem = Instantiate(MeleeParticleSystem, originTransform.transform.position, Quaternion.identity);
-            Quaternion rotation = Quaternion.LookRotation(originTransform.up, originTransform.right);
-            particleSystem.transform.rotation = rotation;
+            particleSystem = Instantiate(MeleeParticleSystem, caster.transform.position, Quaternion.identity);
+            float angle = Mathf.Atan2(-originTransform.transform.up.y, -originTransform.transform.up.x) * Mathf.Rad2Deg;
+
+            particleSystem.transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
             Destroy(particleSystem, 2f);
 
         }
-
     }
-
-    // make perpendicular line to players left-to-right line -- check length
-    //make perpendicular line to playes bottom to top line -- check length
-
 
 }
 

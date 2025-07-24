@@ -71,8 +71,7 @@ public class AbilityUseHandler_1 : MonoBehaviour
                 CombatStatHandler.AdjustHealValue(effectPackage.Heal.Value, targetStats, casterStats);
 
             if (effectPackage.HealOverTime.Value > 0)
-                CombatStatHandler.ApplyAttributeRepeatedly(targetStats, AttributeType.CurrentHitpoints, effectPackage.HealOverTime.Value, effectPackage.HealOverTime.Duration);
-
+                Debug.Log("Nothing should be happening");
             foreach (TempAttrIncrease_AT attr_Up in effectPackage.AttributeUp)
                 CombatStatHandler.ApplyTempValue(targetStats, attr_Up.AttributeType, attr_Up.Value, attr_Up.Duration);
         }

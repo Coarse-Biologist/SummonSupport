@@ -42,6 +42,8 @@ public class PlayerAbilityHandler : AbilityHandler
     void OnEnable()
     {
         RegisterInputEvents(true);
+        inputActions ??= new PlayerInputActions();
+
         inputActions.Enable();
     }
 
@@ -55,6 +57,7 @@ public class PlayerAbilityHandler : AbilityHandler
     {
         foreach (var action in inputActions.Player.Get().actions)
         {
+
             if (action.name.StartsWith("Ability"))
             {
                 if (register)

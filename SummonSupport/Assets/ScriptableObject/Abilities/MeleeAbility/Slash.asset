@@ -37,9 +37,9 @@ MonoBehaviour:
     <DamageOverTime>k__BackingField: []
     <EffectObject>k__BackingField: {fileID: 0}
     <ParticleEffect>k__BackingField: {fileID: 0}
-  <Range>k__BackingField: 10
+  <Range>k__BackingField: 2
   <Angle>k__BackingField: 0
-  <Width>k__BackingField: 10
+  <Width>k__BackingField: 3
   <Shape>k__BackingField: 2
   <SpawnEffectOnHit>k__BackingField: {fileID: 4439306374306288678, guid: ad3ebfe5da0c21f43a7253ff8277fd9c,
     type: 3}

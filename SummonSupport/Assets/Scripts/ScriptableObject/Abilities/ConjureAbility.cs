@@ -7,7 +7,7 @@ public class ConjureAbility : Ability
     [field: SerializeField] public GameObject ObjectToSpawn { get; protected set; }
     [field: SerializeField] public Vector2 SpawnOffset { get; protected set; }
     [field: SerializeField] public float RotationOffset { get; protected set; } = 0;
-    [field: SerializeField] public float Radius = 2f;
+    [field: SerializeField] public float Radius = 1f;
 
 
 
@@ -29,6 +29,8 @@ public class ConjureAbility : Ability
 
     public bool Activate(GameObject user, Vector3 spawnPosition, Quaternion rotation)
     {
+        Debug.Log("This happens! 3");
+
         Quaternion newRotation = Quaternion.identity;
         if (!LeaveRotation)
             newRotation = rotation * Quaternion.Euler(0, 0, RotationOffset);
@@ -37,7 +39,8 @@ public class ConjureAbility : Ability
         if (IsDecaying)
             Destroy(spawnedObject, TimeAlive);
         if (spawnedObject.TryGetComponent(out Aura aura))
-            aura.HandleInstantiation(user.GetComponent<LivingBeing>(), this, Radius);
+            Debug.Log("This happens! 2");
+        aura.HandleInstantiation(user.GetComponent<LivingBeing>(), this, Radius, this.TimeAlive);
 
         return true;
     }

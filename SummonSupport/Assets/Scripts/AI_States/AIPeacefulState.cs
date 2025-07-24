@@ -1,10 +1,12 @@
 using UnityEngine;
 using System.Collections;
 using System;
+using System.Runtime.InteropServices;
 
 public class AIPeacefulState : AIState
 {
     public GameObject detectedTargetObject;
+    [field: SerializeField] WaitForSeconds FOVCheckFrequency = new WaitForSeconds(0.5f);
     private bool canSeeTarget;
     private AIStateHandler stateHandler;
     private AIChaseState chaseState;
@@ -24,10 +26,10 @@ public class AIPeacefulState : AIState
 
     private IEnumerator FOVRoutine()
     {
-        WaitForSeconds wait = new WaitForSeconds(0.2f);
+
         while (true)
         {
-            yield return wait;
+            yield return FOVCheckFrequency;
             FieldOfViewCheck();
         }
     }
@@ -59,7 +61,7 @@ public class AIPeacefulState : AIState
         Collider2D[] rangeChecks = Physics2D.OverlapCircleAll(transform.position, stateHandler.DetectionRadius, stateHandler.targetMask);
         if (rangeChecks.Length != 0)
         {
-            Debug.DrawRay(transform.position, rangeChecks[0].transform.position, Color.green, 2f);
+            //Debug.DrawRay(transform.position, rangeChecks[0].transform.position, Color.green, 2f);
 
             GameObject detectedObject = rangeChecks[0].transform.gameObject;
             chaseState.SetTargetEntity(detectedObject);

@@ -145,23 +145,23 @@ public abstract class LivingBeing : MonoBehaviour
     {
         if (AttributesDict != null && AttributesDict.ContainsKey(attributeType))
             AttributesDict[attributeType].Set(value);
+        Debug.Log($"{Name} has {value} {attributeType}");
         HandleEventInvokes(attributeType, value);
         if (attributeType == AttributeType.CurrentHitpoints && value <= 0)
             Die();
     }
 
-    public float ChangeAttribute(AttributeType attributeType, float value, ValueType valueType = ValueType.Flat)
+    public float ChangeAttribute(AttributeType attributeType, float value)
     {
         if (AttributesDict == null || !AttributesDict.ContainsKey(attributeType))
             throw new Exception("Attribute not found or invalid setter");
 
-        float currentValue = GetAttribute(attributeType);
-        float newValue = CalculateNewValueByType(currentValue, value, valueType, attributeType);
-        SetAttribute(attributeType, newValue);
+        //float newValue = CalculateNewValueByType(currentValue, value, valueType, attributeType);
+        SetAttribute(attributeType, GetAttribute(attributeType) + value);
 
         if (GetAttribute(AttributeType.CurrentHitpoints) <= 0)
             Die();
-        return newValue;
+        return GetAttribute(attributeType) + value;
     }
 
     public void HandleEventInvokes(AttributeType attributeType, float newValue)
@@ -201,51 +201,7 @@ public abstract class LivingBeing : MonoBehaviour
         }
     }
 
-    float CalculateNewValueByType(float currentValue, float value, ValueType valueType, AttributeType attributeType)
-    {
-        float newValue = valueType == ValueType.Percentage
-        ? currentValue * (1 + value / 100f)
-        : currentValue + value;
-        //DamageHandler.AdjustValue();
 
-        return HandleAttributeCap(attributeType, newValue, currentValue, value);
-    }
-
-    float HandleAttributeCap(AttributeType attributeType, float newValue, float currentValue, float delta)
-    {
-        switch (attributeType)
-        {
-            case AttributeType.CurrentHitpoints:
-                newValue = ApplyCap(AttributeType.MaxHitpoints, AttributeType.Overshield, newValue, currentValue, delta);
-                break;
-
-            case AttributeType.CurrentPower:
-                newValue = ApplyCap(AttributeType.MaxPower, AttributeType.PowerSurge, newValue, currentValue, delta);
-                break;
-        }
-        return newValue;
-    }
-
-    float ApplyCap(AttributeType attributeTypeMax, AttributeType attributeTypeTempMax, float newValue, float currentValue, float delta)
-    {
-        float max = GetAttribute(attributeTypeMax);
-        float tempMax = GetAttribute(attributeTypeTempMax);
-        if (newValue > max) // if the newly calculated value (after recieving heal or damage) is greater than the  characters max
-            return max;
-
-        if (delta < 0 && tempMax > 0) // if damage is being calculated and one has overshield
-        {
-            if (tempMax + delta <= 0) // if the damage is more than the shield
-            {
-                SetAttribute(attributeTypeTempMax, 0); // set overshield to 0
-                return currentValue + tempMax + delta; // return current health plus overshield value, minus damage value,
-            }
-            else
-                SetAttribute(attributeTypeTempMax, tempMax + delta); // otherwise lower overshield value by the damage
-            return currentValue; // return current health or mana
-        }
-        return newValue;
-    }
     #endregion
 
     #region Handle Regeneration
@@ -254,9 +210,11 @@ public abstract class LivingBeing : MonoBehaviour
         while (true)
         {
             float newHP = Mathf.Min(CurrentHP + TotalHealthRegeneration, MaxHP);
-            SetAttribute(AttributeType.CurrentHitpoints, newHP);
+            if (newHP != CurrentHP)
+                SetAttribute(AttributeType.CurrentHitpoints, newHP);
             float newPower = Mathf.Min(CurrentPower + TotalPowerRegeneration, MaxPower);
-            SetAttribute(AttributeType.CurrentPower, newPower);
+            if (newPower != CurrentPower)
+                SetAttribute(AttributeType.CurrentPower, newPower);
             yield return regenTickRate;
         }
     }

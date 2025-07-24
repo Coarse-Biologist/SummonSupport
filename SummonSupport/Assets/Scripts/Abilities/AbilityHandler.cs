@@ -7,8 +7,8 @@ public class AbilityHandler : MonoBehaviour
     [SerializeField] protected GameObject abilitySpawn;
     [SerializeField] public GameObject abilityDirection { get; private set; }
     [SerializeField] protected LivingBeing statsHandler;
-    [field: SerializeField] public List<Ability> Abilities { private set; get; }
-    [SerializeField] protected List<bool> abilitiesOnCooldown;
+    [field: SerializeField] public List<Ability> Abilities { private set; get; } = new();
+    [SerializeField] protected List<bool> abilitiesOnCooldown = new();
     private Dictionary<BeamAbility, GameObject> toggledAbilitiesDict = new();
 
 
@@ -31,7 +31,8 @@ public class AbilityHandler : MonoBehaviour
 
     protected bool CastAbility(int abilityIndex, Vector2 targetPosition, Quaternion rotation)
     {
-        if (abilitiesOnCooldown[abilityIndex])
+        Debug.Log($"index = {abilityIndex}, cooldown = {abilitiesOnCooldown}, abilities {Abilities},  count= {Abilities.Count}");
+        if (Abilities.Count <= 0 || abilitiesOnCooldown[abilityIndex])
             return false;
 
         Ability ability = Abilities[abilityIndex];
@@ -107,6 +108,7 @@ public class AbilityHandler : MonoBehaviour
         toggledAbilitiesDict.Remove(beamAbility);
         Destroy(activeAbility);
     }
+
 
 
     bool HasEnoughPower(float powerCost)
