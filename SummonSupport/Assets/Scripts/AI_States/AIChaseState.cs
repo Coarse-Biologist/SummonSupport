@@ -11,7 +11,7 @@ public class AIChaseState : AIState
     public GameObject targetEntity { private set; get; }
     private CreatureAbilityHandler abilityHandler;
     private bool targetIsInRange;
-    private Rigidbody2D rb;
+    public Rigidbody2D rb;
     private LivingBeing statScript;
     [SerializeField] GameObject rotationObject;
     private Coroutine attackCoroutine;

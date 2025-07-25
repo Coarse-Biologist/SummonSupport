@@ -11,12 +11,13 @@ public class AIStateHandler : MonoBehaviour
     [SerializeField] public int InterestRadius = 80; // radius beyond which a summon will lose interest in attacking
     [SerializeField] public int AttackSpeed = 1;
     [SerializeField] public int Cowardice = 0; // At what HP percentage a summon may try to retreat
+    [SerializeField] public Animator Animator;
     public LayerMask targetMask { private set; get; }
     public LayerMask obstructionMask { private set; get; }
     public AIState currentState;
     [SerializeField] public AI_CC_State ccState;
     [SerializeField] public AIState peaceState { private set; get; }
-    [SerializeField] public AIState chaseState { private set; get; }
+    [SerializeField] public AIChaseState chaseState { private set; get; }
     [SerializeField] public AIState obedienceState { private set; get; }
     [SerializeField] public LivingBeing livingBeing { private set; get; }
     [SerializeField] public MinionStats minionStats { private set; get; }
@@ -46,7 +47,10 @@ public class AIStateHandler : MonoBehaviour
         player = PlayerStats.Instance.gameObject;
     }
 
-
+    void Update()
+    {
+        
+    }
 
     private void RunStateMachine()
     {
@@ -60,6 +64,18 @@ public class AIStateHandler : MonoBehaviour
                 SwitchToNextState(nextState);
             }
             else Debug.Log("nextState state was null");
+        }
+        else if (chaseState.rb.linearVelocityX > 0 || chaseState.rb.linearVelocityY > 0)
+        {
+            Animator.SetTrigger("IsWalking");
+            SwitchToNextState(chaseState);
+            AIState nextState = chaseState.RunCurrentState();
+            if (nextState != null)
+            {
+                SwitchToNextState(nextState);
+            }
+            else Debug.Log("nextState state was null");
+            
         }
         else
         {
