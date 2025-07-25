@@ -1,9 +1,9 @@
 using UnityEngine;
 
 [System.Serializable]
-public enum Crew_TargetType
+public enum TargetType
 {
     Self,
-    OnTarget,
+    Target,
 }
 

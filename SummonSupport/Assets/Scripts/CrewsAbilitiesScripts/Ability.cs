@@ -13,7 +13,7 @@ public abstract class Ability : ScriptableObject
     [field: SerializeField, Min(0)] public float Cost { get; protected set; }
     [field: SerializeField] public List<RelationshipType> ListUsableOn { get; protected set; }
 
-    [field: SerializeField] public List<Crew_EffectPackage> TargetTypeAndEffects { get; protected set; } = new();
+    [field: SerializeField] public List<EffectPackage> TargetTypeAndEffects { get; protected set; } = new();
 
     public abstract bool Activate(GameObject Caster);
     public bool IsUsableOn(CharacterTag user, CharacterTag target)

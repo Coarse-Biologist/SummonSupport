@@ -1,7 +1,6 @@
 using UnityEngine;
 using System.Collections;
 using System.Linq;
-using UnityEngine.AI;
 
 public static class CombatStatHandler
 {
@@ -22,9 +21,9 @@ public static class CombatStatHandler
         if (!forSelf) theTarget = targetStats;
         Debug.Log($"the target of {ability} shall be {theTarget}");
 
-        foreach (Crew_EffectPackage package in ability.TargetTypeAndEffects)
+        foreach (EffectPackage package in ability.TargetTypeAndEffects)
         {
-            if (forSelf && package.TargetType == Crew_TargetType.Self || !forSelf && package.TargetType == Crew_TargetType.OnTarget)
+            if (forSelf && package.TargetType == TargetType.Self || !forSelf && package.TargetType == TargetType.Target)
             {
                 if (package.Heal.Value > 0) AdjustHealValue(package.Heal.Value, theTarget, casterStats);
                 if (package.HealOverTime.Value > 0) HandleApplyDOT(target, AttributeType.CurrentHitpoints, package.HealOverTime.Value, package.HealOverTime.Duration);
@@ -165,7 +164,7 @@ public static class CombatStatHandler
         }
         else
         {
-            if (changeValue + currentValue > max)
+            if (changeValue + currentValue >= max)
             {
                 Logging.Info($"{target.name} has had {AttributeType.CurrentHitpoints} changed by {changeValue}. option 3");
                 target.SetAttribute(AttributeType.CurrentHitpoints, max);

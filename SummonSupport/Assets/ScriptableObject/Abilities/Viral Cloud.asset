@@ -22,8 +22,7 @@ MonoBehaviour:
   <TargetTypeAndEffects>k__BackingField:
   - <EffectDescription>k__BackingField: heals self
     <TargetType>k__BackingField: 0
-    <HasAoE>k__BackingField: 0
-    <Radius>k__BackingField: 0
+    <UsableOn>k__BackingField: 0
     <Heal>k__BackingField:
       <Value>k__BackingField: 0
     <HealOverTime>k__BackingField:
@@ -42,8 +41,7 @@ MonoBehaviour:
     <ParticleEffect>k__BackingField: {fileID: 0}
   - <EffectDescription>k__BackingField: virulent cloud on enemies
     <TargetType>k__BackingField: 1
-    <HasAoE>k__BackingField: 0
-    <Radius>k__BackingField: 0
+    <UsableOn>k__BackingField: 1
     <Heal>k__BackingField:
       <Value>k__BackingField: 0
     <HealOverTime>k__BackingField:

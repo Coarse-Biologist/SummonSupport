@@ -15,6 +15,8 @@ public static class CommandMinion
         if (SelectedMinions != null)
         {
             Collider2D[] enemyHits = Physics2D.OverlapCircleAll(loc, 1, LayerMask.GetMask("Enemy"));
+            Logging.Info($"{enemyHits.Length} colliders in click area.");
+
             if (enemyHits.Length > 0)
             {
                 GameObject enemy = enemyHits[0].gameObject;

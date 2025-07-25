@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 9050172420336280654}
   - component: {fileID: 7962753422804989304}
   m_Layer: 7
-  m_Name: CreaturePrefab 1
+  m_Name: MinionPrefab
   m_TagString: Minion
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -91,8 +91,10 @@ MonoBehaviour:
   <Radiation>k__BackingField: 0
   <Light>k__BackingField: 0
   <Psychic>k__BackingField: 0
+  <Piercing>k__BackingField: 0
+  <Bludgeoning>k__BackingField: 0
+  <Slashing>k__BackingField: 0
   <XP_OnDeath>k__BackingField: 3
-  <Abilties>k__BackingField: []
   <Speed>k__BackingField: 0.4
   <Mass>k__BackingField: 1
 --- !u!114 &9145848355532623241
@@ -267,11 +269,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b3038df873d7b648ae2dc7e3851cef6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  abilitySpawn: {fileID: 0}
-  abilityDirection: {fileID: 7392398938588612979}
+  abilitySpawn: {fileID: 7392398938588612979}
   statsHandler: {fileID: 0}
-  abilities:
+  <Abilities>k__BackingField:
   - {fileID: 11400000, guid: 5605a5e8027c4e94691ae731bacfcb5a, type: 2}
+  - {fileID: 11400000, guid: 5e39961f19654e04bb7f41a70934544c, type: 2}
+  - {fileID: 11400000, guid: ef1f958feb55809438588f67d22120ae, type: 2}
+  - {fileID: 11400000, guid: 996489c834f79a74fb51758838eabbcd, type: 2}
   abilitiesOnCooldown: 
 --- !u!1 &1502490013454894205
 GameObject:

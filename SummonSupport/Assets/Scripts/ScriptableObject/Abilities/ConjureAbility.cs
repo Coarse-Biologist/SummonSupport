@@ -10,7 +10,6 @@ public class ConjureAbility : Ability
     [field: SerializeField] public float Radius = 1f;
 
 
-
     [field: Tooltip("Activate this if ability should only last a specific amount of time")]
     [field: SerializeField] public bool IsDecaying { get; protected set; }
     [field: SerializeField] public bool LeaveRotation { get; protected set; }
@@ -18,6 +17,12 @@ public class ConjureAbility : Ability
 
     [field: Tooltip("in seconds")]
     [field: SerializeField] public float TimeAlive { get; protected set; }
+
+    [field: Header("Tracking Settings"), Tooltip("in seconds")]
+    [field: SerializeField] public bool SeeksTarget { get; protected set; } = false;
+    [field: SerializeField] public float Speed { get; private set; } = 2f;
+    [field: SerializeField] public float SearchRadius { get; private set; } = 10f;
+
 
 
     public override bool Activate(GameObject user)
@@ -44,6 +49,7 @@ public class ConjureAbility : Ability
 
         return true;
     }
+
 
 
 }

@@ -31,7 +31,7 @@ public class AbilityHandler : MonoBehaviour
 
     protected bool CastAbility(int abilityIndex, Vector2 targetPosition, Quaternion rotation)
     {
-        Debug.Log($"index = {abilityIndex}, cooldown = {abilitiesOnCooldown}, abilities {Abilities},  count= {Abilities.Count}");
+        //Debug.Log($"index = {abilityIndex}, cooldown = {abilitiesOnCooldown}, abilities {Abilities},  count= {Abilities.Count}");
         if (Abilities.Count <= 0 || abilitiesOnCooldown[abilityIndex])
             return false;
 

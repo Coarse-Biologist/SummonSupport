@@ -145,7 +145,6 @@ public abstract class LivingBeing : MonoBehaviour
     {
         if (AttributesDict != null && AttributesDict.ContainsKey(attributeType))
             AttributesDict[attributeType].Set(value);
-        Debug.Log($"{Name} has {value} {attributeType}");
         HandleEventInvokes(attributeType, value);
         if (attributeType == AttributeType.CurrentHitpoints && value <= 0)
             Die();

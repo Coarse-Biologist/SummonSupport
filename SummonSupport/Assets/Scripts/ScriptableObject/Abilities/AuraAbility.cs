@@ -13,30 +13,36 @@ public class AuraAbility : Ability
 
     public override bool Activate(GameObject caster)
     {
-        Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
-        RaycastHit2D hit = Physics2D.Raycast(mousePos, Vector2.zero);
-
-        if (hit.collider != null && hit.collider.TryGetComponent<LivingBeing>(out LivingBeing livingBeing))
+        if (caster.CompareTag("Player"))
         {
-            Debug.Log("This happens! 5");
+            Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
-            GameObject auraInstance = Instantiate(AuraObject, hit.collider.transform.position, Quaternion.identity, hit.collider.transform);
-            auraInstance.GetComponent<Aura>().SetAuraStats(livingBeing, this, Uptime);
+            RaycastHit2D hit = Physics2D.Raycast(mousePos, Vector2.zero);
+            {
+                if (hit.collider != null && hit.collider.TryGetComponent<LivingBeing>(out LivingBeing livingBeing))
+                {
+                    Debug.Log("This happens! 5");
+
+                    GameObject auraInstance = Instantiate(AuraObject, hit.collider.transform.position, AuraObject.transform.rotation, hit.collider.transform);
+                    auraInstance.GetComponent<Aura>().SetAuraStats(livingBeing, this, Uptime);
+
+                }
+            }
         }
         else
         {
             Debug.Log("This happens! 6s");
+            Logging.Info($"{caster.GetComponent<LivingBeing>().name} applys aura");
 
-            GameObject auraInstance = Instantiate(AuraObject, caster.transform.position, Quaternion.identity, caster.transform);
+            GameObject auraInstance = Instantiate(AuraObject, caster.transform.position, AuraObject.transform.rotation, caster.transform);
+
             Logging.Info($"aura instance = {auraInstance}");
             Aura auraMonoScript = auraInstance.GetComponent<Aura>();
             if (auraMonoScript != null) auraMonoScript.HandleInstantiation(caster.GetComponent<LivingBeing>(), this, Radius, Uptime);
-            else Logging.Info($"auraMonoScript = {auraMonoScript}");
         }
 
 
-        Logging.Info($"{caster.GetComponent<LivingBeing>().name} applys aura");
         return true;
     }
 }

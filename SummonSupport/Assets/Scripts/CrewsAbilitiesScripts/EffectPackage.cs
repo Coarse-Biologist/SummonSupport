@@ -2,12 +2,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public class Crew_EffectPackage
+public class EffectPackage
 {
     [field: SerializeField] public string EffectDescription { get; private set; }
-    [field: SerializeField] public Crew_TargetType TargetType { get; private set; }
-    [field: SerializeField] public bool HasAoE { get; private set; } = false;
-    [field: SerializeField] public float Radius { get; private set; } = 0f;
+    [field: SerializeField] public TargetType TargetType { get; private set; }
     [field: SerializeField] public Heal_AT Heal { get; private set; } //
     [field: SerializeField] public HealoT_AT HealOverTime { get; private set; } //
     [field: SerializeField] public List<TempAttrIncrease_AT> AttributeUp { get; private set; } //
