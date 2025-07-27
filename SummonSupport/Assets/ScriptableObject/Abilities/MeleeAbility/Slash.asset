@@ -14,15 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Name>k__BackingField: Slash
   <Icon>k__BackingField: {fileID: 0}
-  <Cooldown>k__BackingField: 0
+  <Cooldown>k__BackingField: 1
   <CostType>k__BackingField: 0
-  <Cost>k__BackingField: 0
+  <Cost>k__BackingField: 20
   <ListUsableOn>k__BackingField: 01000000
   <TargetTypeAndEffects>k__BackingField:
   - <EffectDescription>k__BackingField: Belly slash
     <TargetType>k__BackingField: 1
-    <HasAoE>k__BackingField: 0
-    <Radius>k__BackingField: 0
     <Heal>k__BackingField:
       <Value>k__BackingField: 0
     <HealOverTime>k__BackingField:
@@ -34,6 +32,7 @@ MonoBehaviour:
     - <Value>k__BackingField: 50
       <Element>k__BackingField: 0
       <Physical>k__BackingField: 3
+      <ValueType>k__BackingField: 1
     <DamageOverTime>k__BackingField: []
     <EffectObject>k__BackingField: {fileID: 0}
     <ParticleEffect>k__BackingField: {fileID: 0}

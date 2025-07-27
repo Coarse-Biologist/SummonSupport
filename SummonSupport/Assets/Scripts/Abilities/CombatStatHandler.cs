@@ -64,17 +64,24 @@ public static class CombatStatHandler
     #region Adjust and apply damage, heal, temo attributes and damage over times
     public static float AdjustDamageValue(Damage_AT damage_AT, LivingBeing target, LivingBeing caster = null)
     {
-        float damageValue = 0f;
-        if (damage_AT.Element != Element.None) damageValue = AdjustBasedOnAffinity(damage_AT.Element, damage_AT.Value, caster, target);
-        if (damage_AT.Physical != PhysicalType.None) damageValue = AdjustBasedOnArmor(damage_AT.Physical, damage_AT.Value, target);
+        float damageValue = GetDamageByType(damage_AT, target);
+
+        if (damage_AT.Element != Element.None) damageValue = AdjustBasedOnAffinity(damage_AT.Element, damageValue, caster, target);
+        if (damage_AT.Physical != PhysicalType.None) damageValue = AdjustBasedOnArmor(damage_AT.Physical, damageValue, target);
         AdjustForOverValue(target, AttributeType.Overshield, AttributeType.MaxHitpoints, AttributeType.CurrentHitpoints, -damageValue);
 
         return damageValue;
     }
+    private static float GetDamageByType(Damage_AT damage_AT, LivingBeing target)
+    {
+        if (damage_AT.ValueType == ValueType.Flat) return damage_AT.Value;
+        if (damage_AT.ValueType == ValueType.Percentage) return damage_AT.Value / 100f * target.GetAttribute(AttributeType.MaxHitpoints);
+        else return damage_AT.Value * target.GetAttribute(AttributeType.MaxHitpoints) / (target.GetAttribute(AttributeType.CurrentHitpoints) * 2);
+    }
     public static float AdjustHealValue(float healValue, LivingBeing target, LivingBeing caster = null)
     {
-        AdjustForOverValue(target, AttributeType.Overshield, AttributeType.MaxHitpoints, AttributeType.CurrentHitpoints, healValue);
-
+        float newHP = Mathf.Min(healValue + target.GetAttribute(AttributeType.CurrentHitpoints), target.GetAttribute(AttributeType.MaxHitpoints));
+        target.SetAttribute(AttributeType.CurrentHitpoints, newHP);
         return healValue;
     }
     public static float AdjustAndApplyTempChange(TempAttrChange tempAttr, LivingBeing target, LivingBeing caster = null)
@@ -141,6 +148,8 @@ public static class CombatStatHandler
 
     public static void AdjustForOverValue(LivingBeing target, AttributeType attributeTypeTempMax, AttributeType attributeTypeMax, AttributeType typeCurrentValue, float changeValue)
     {
+        // skipping until we actually have mechanism to show overhealth.
+
         float max = target.GetAttribute(attributeTypeMax);
         float tempMax = target.GetAttribute(attributeTypeTempMax);
         float currentValue = target.GetAttribute(typeCurrentValue);
@@ -153,7 +162,7 @@ public static class CombatStatHandler
             if (tempMax + changeValue <= 0) // if the damage is more than the shield
             {
                 Logging.Info($"{target.name} has had {AttributeType.CurrentHitpoints} changed by {changeValue}. option 1");
-                target.SetAttribute(AttributeType.CurrentHitpoints, currentValue + changeValue);
+                target.SetAttribute(AttributeType.CurrentHitpoints, currentValue + changeValue - tempMax);
 
                 target.SetAttribute(attributeTypeTempMax, 0); // set overshield to 0
             }
@@ -233,103 +242,8 @@ public static class CombatStatHandler
 }
 
 
-//static void HandleApplyAttribute(LivingBeing target, AttributeType attributeType, float changeValue)
-//    switch (attributeType)
-//    {
-//        case AttributeType.CurrentHitpoints:
-//            AdjustForOverValue(target, AttributeType.Overshield, AttributeType.MaxHitpoints, AttributeType.CurrentHitpoints, changeValue);
-//            break;
-//
-//        case AttributeType.CurrentPower:
-//            AdjustForOverValue(target, AttributeType.PowerSurge, AttributeType.MaxPower, AttributeType.CurrentPower, changeValue);
-//            break;
-//
-//        default:
-//            ApplyNormalValue(target, attributeType, changeValue);
-//            break;
-//    }
-//}
+//public static void AdjustForOverValue(LivingBeing target, AttributeType attributeTypeTempMax, AttributeType attributeTypeMax, AttributeType typeCurrentValue, float changeValue)
 
-
-
-
-// CalculateNewValueByType(float currentValue, float value, ValueType valueType, AttributeType attributeType)
-//{
-//    float newValue = valueType == ValueType.Percentage
-//    ? currentValue * (1 + value / 100f)
-//    : currentValue + value;
-//    //DamageHandler.AdjustValue();
-//
-//    return HandleAttributeCap(attributeType, newValue, currentValue, value);
-//}
-//
-//float HandleAttributeCap(AttributeType attributeType, float newValue, float currentValue, float delta)
-//{
-//    switch (attributeType)
-//    {
-//        case AttributeType.CurrentHitpoints:
-//            newValue = ApplyCap(AttributeType.MaxHitpoints, AttributeType.Overshield, newValue, currentValue, delta);
-//            break;
-//
-//        case AttributeType.CurrentPower:
-//            newValue = ApplyCap(AttributeType.MaxPower, AttributeType.PowerSurge, newValue, currentValue, delta);
-//            break;
-//    }
-//    return newValue;
-//}
-//
-//float ApplyCap(AttributeType attributeTypeMax, AttributeType attributeTypeTempMax, float newValue, float currentValue, float delta)
-//{
-//    float max = GetAttribute(attributeTypeMax);
-//    float tempMax = GetAttribute(attributeTypeTempMax);
-//    if (newValue > max) // if the newly calculated value (after recieving heal or damage) is greater than the  characters max
-//        return max;
-//
-//    if (delta < 0 && tempMax > 0) // if damage is being calculated and one has overshield
-//    {
-//        if (tempMax + delta <= 0) // if the damage is more than the shield
-//        {
-//            SetAttribute(attributeTypeTempMax, 0); // set overshield to 0
-//            return currentValue + tempMax + delta; // return current health plus overshield value, minus damage value,
-//        }
-//        else
-//            SetAttribute(attributeTypeTempMax, tempMax + delta); // otherwise lower overshield value by the damage
-//        return currentValue; // return current health or mana
-//    }
-//    return newValue;
-//}
-
-//publicic static IEnumerator ApplyAttributeRepeatedly(LivingBeing target, AttributeType attributeType, float changeValue, float duration)
-//{
-//    AttributeType tempMax = AttributeType.None;
-//    AttributeType max = AttributeType.None;
-//    AttributeType current = AttributeType.None;
-//
-//
-//    float elapsed = 0f;
-//    if (attributeType == AttributeType.CurrentHitpoints)
-//    {
-//        tempMax = AttributeType.Overshield;
-//        max = AttributeType.MaxHitpoints;
-//        current = AttributeType.CurrentHitpoints;
-//    }
-//    if (attributeType == AttributeType.CurrentPower)
-//    {
-//        tempMax = AttributeType.PowerSurge;
-//        max = AttributeType.MaxPower;
-//        current = AttributeType.CurrentPower;
-//    }
-//    while (elapsed < duration)
-//    {
-//        if (tempMax != AttributeType.None)
-//        {
-//            ApplyValue(target, attributeType, changeValue);
-//        }
-//        else
-//            AdjustForOverValue(target, tempMax, max, current, changeValue);
-//
-//        yield return tickRate;
-//        elapsed += 1f;
-//        Logging.Info($"applying {elapsed}/{duration} ticks of {changeValue} {attributeType}");
-//    }
-//}
+//can be for power or health.
+// the question:
+// how much current and over points should the target have?
