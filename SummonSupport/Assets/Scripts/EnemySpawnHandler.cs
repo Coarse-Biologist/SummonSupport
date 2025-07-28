@@ -7,7 +7,7 @@ public class EnemySpawnHandler : MonoBehaviour
 {
     [SerializeField] GameObject enemyPrefab1 = null;
     [SerializeField] int avrgEnemiesPerWaves = 5;
-    [SerializeField] int avrgTimeBetweenWaves = 10;
+    //[SerializeField] int avrgTimeBetweenWaves = 10;
     [SerializeField] int minDistanceToPlayer = 5;
     [SerializeField] LayerMask targetMask;
     [SerializeField] LayerMask avoidMask;
