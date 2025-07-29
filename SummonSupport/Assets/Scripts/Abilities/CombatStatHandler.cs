@@ -1,6 +1,5 @@
 using UnityEngine;
 using System.Collections;
-using System.Linq;
 
 public static class CombatStatHandler
 {
@@ -14,17 +13,18 @@ public static class CombatStatHandler
 
     public static void HandleEffectPackages(Ability ability, LivingBeing caster, LivingBeing target, bool forSelf = false)
     {
-        //Debug.Log($"{ability} effects are being processed. Caster = {caster}, target = {target}");
         LivingBeing casterStats = caster.GetComponent<LivingBeing>();
         LivingBeing targetStats = target.GetComponent<LivingBeing>();
         LivingBeing theTarget = casterStats;
         if (!forSelf) theTarget = targetStats;
-        //Debug.Log($"the target of {ability} shall be {theTarget}");
+        theTarget.AlterAbilityList(ability, false);
+
 
         foreach (EffectPackage package in ability.TargetTypeAndEffects)
         {
             if (forSelf && package.TargetType == TargetType.Self || !forSelf && package.TargetType == TargetType.Target)
             {
+
                 if (package.Heal.Value > 0) AdjustHealValue(package.Heal.Value, theTarget, casterStats);
                 if (package.HealOverTime.Value > 0) HandleApplyDOT(ability, target, AttributeType.CurrentHitpoints, package.HealOverTime.Value, package.HealOverTime.Duration);
 
@@ -119,7 +119,7 @@ public static class CombatStatHandler
     private static float AdjustBasedOnAffinity(Element element, float damageValue, LivingBeing caster, LivingBeing target)
     {
         // change value based on Affinity;
-        Debug.Log($"element = {element}, damageValue = {damageValue}, target = {target}");
+        //Debug.Log($"element = {element}, damageValue = {damageValue}, target = {target}");
 
         float relevantAffinity = target.Affinities[element].Get();
         if (relevantAffinity > 0)
@@ -127,7 +127,7 @@ public static class CombatStatHandler
             damageValue -= damageValue * relevantAffinity / 100; //new value equals old value, plus old value times relevant affinity converted into percentage
         }
 
-        Logging.Info($"Based on affinity the damagebvalue has been changed to {damageValue}");
+        //Logging.Info($"Based on affinity the damagebvalue has been changed to {damageValue}");
 
         return damageValue;
     }
@@ -161,28 +161,28 @@ public static class CombatStatHandler
         {
             if (tempMax + changeValue <= 0) // if the damage is more than the shield
             {
-                Logging.Info($"{target.name} has had {AttributeType.CurrentHitpoints} changed by {changeValue}. option 1");
+                //Logging.Info($"{target.name} has had {AttributeType.CurrentHitpoints} changed by {changeValue}. option 1");
                 target.SetAttribute(AttributeType.CurrentHitpoints, currentValue + changeValue - tempMax);
 
                 target.SetAttribute(attributeTypeTempMax, 0); // set overshield to 0
             }
             else
-                Logging.Info($"{target.name} has had {AttributeType.CurrentHitpoints} changed by {changeValue}. option  2");
+                //Logging.Info($"{target.name} has had {AttributeType.CurrentHitpoints} changed by {changeValue}. option  2");
 
-            target.SetAttribute(attributeTypeTempMax, tempMax + changeValue); // otherwise lower overshield value by the damage
+                target.SetAttribute(attributeTypeTempMax, tempMax + changeValue); // otherwise lower overshield value by the damage
         }
         else
         {
             if (changeValue + currentValue >= max)
             {
-                Logging.Info($"{target.name} has had {AttributeType.CurrentHitpoints} changed by {changeValue}. option 3");
+                //Logging.Info($"{target.name} has had {AttributeType.CurrentHitpoints} changed by {changeValue}. option 3");
                 target.SetAttribute(AttributeType.CurrentHitpoints, max);
             }
 
             else
             {
                 target.SetAttribute(AttributeType.CurrentHitpoints, target.GetAttribute(AttributeType.CurrentHitpoints) + changeValue);
-                Logging.Info($"{target.name} has had {AttributeType.CurrentHitpoints} changed by {changeValue}. option 4");
+                //Logging.Info($"{target.name} has had {AttributeType.CurrentHitpoints} changed by {changeValue}. option 4");
 
             }
         }
@@ -192,7 +192,7 @@ public static class CombatStatHandler
 
     private static void HandleApplyDOT(Ability ability, LivingBeing target, AttributeType attributeType, float newValue, float duration)
     {
-        Debug.Log($"Changing {target}s regen by {newValue}");
+        //Debug.Log($"Changing {target}s regen by {newValue}");
         target.ChangeRegeneration(attributeType, newValue);
         target.StartCoroutine(ResetRegeneration(ability, target, attributeType, newValue, duration));
     }
@@ -200,12 +200,12 @@ public static class CombatStatHandler
     {
         WaitForSeconds OverTimeReset = new WaitForSeconds(duration);
         float elapsed = 0f;
-        while (elapsed < duration && target.AffectedByAbilities.Contains(ability))
+        while (elapsed < duration)
         {
-            Debug.Log($" {target} is affected by ability? : {target.AffectedByAbilities.Contains(ability)}");
-            yield return OverTimeReset;
+            yield return tickRate;
+            elapsed += tickRateFloat;
+            if (!target.AffectedByAbilities.Contains(ability)) elapsed = duration;
         }
-        if (!target.AffectedByAbilities.Contains(ability)) Debug.Log($"Stopping effect {ability.Name} because player is no longer being affected by it");
         target.ChangeRegeneration(attributeType, -newValue);
         target.AlterAbilityList(ability, false);
 
@@ -214,13 +214,13 @@ public static class CombatStatHandler
     #region apply already adjusted values, temporrily, repeatedly.
     private static void ApplyValue(LivingBeing target, AttributeType attributeType, float newValue)
     {
-        Logging.Info($"{target.name} has had {attributeType} changed by {newValue}");
+        //Logging.Info($"{target.name} has had {attributeType} changed by {newValue}");
         target.SetAttribute(attributeType, target.GetAttribute(attributeType) + newValue);
     }
 
     public static void ApplyTempValue(Ability ability, LivingBeing target, AttributeType attributeType, float newValue, float duration)
     {
-        Logging.Info($"{target.name} has had {attributeType} changed by {newValue}");
+        //Logging.Info($"{target.name} has had {attributeType} changed by {newValue}");
 
         target.SetAttribute(attributeType, target.GetAttribute(attributeType) + newValue);
         target.StartCoroutine(ResetTempAttribute(ability, target, attributeType, newValue, duration));
@@ -233,7 +233,7 @@ public static class CombatStatHandler
         {
             yield return tickRate;
             elapsed += tickRateFloat;
-            Logging.Info($"waiting {elapsed}/{duration} seconds for temporary attribute to reset");
+            if (!target.AffectedByAbilities.Contains(ability)) elapsed = duration;
         }
         if (!target.AffectedByAbilities.Contains(ability)) Debug.Log($"Stopping effect {ability.Name} because player is no longer being affected by it");
 

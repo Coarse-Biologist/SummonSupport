@@ -25,7 +25,7 @@ public class AuraAbility : Ability
                     Debug.Log("This happens! 5");
 
                     GameObject auraInstance = Instantiate(AuraObject, hit.collider.transform.position, AuraObject.transform.rotation, hit.collider.transform);
-                    auraInstance.GetComponent<Aura>().SetAuraStats(livingBeing, this, Uptime);
+                    auraInstance.GetComponent<Aura>().SetAuraStats(caster.GetComponent<LivingBeing>(), livingBeing, this, Uptime);
 
                 }
             }
@@ -39,7 +39,7 @@ public class AuraAbility : Ability
 
             Logging.Info($"aura instance = {auraInstance}");
             Aura auraMonoScript = auraInstance.GetComponent<Aura>();
-            if (auraMonoScript != null) auraMonoScript.HandleInstantiation(caster.GetComponent<LivingBeing>(), this, Radius, Uptime);
+            if (auraMonoScript != null) auraMonoScript.HandleInstantiation(caster.GetComponent<LivingBeing>(), null, this, Radius, Uptime);
         }
 
 

@@ -18,6 +18,9 @@ public class MeleeAbility : Ability
     [field: SerializeField] public GameObject MeleeParticleSystem { get; protected set; }
 
     private Transform originTransform;
+    private LivingBeing Caster;
+    private LivingBeing Target;
+
 
 
 
@@ -25,6 +28,7 @@ public class MeleeAbility : Ability
 
     public override bool Activate(GameObject user)
     {
+        Caster = user.GetComponent<LivingBeing>();
         if (originTransform == null)
         {
             originTransform = user.GetComponent<AbilityHandler>().abilityDirection.transform;
@@ -39,10 +43,11 @@ public class MeleeAbility : Ability
             {
                 if (VerifyActivate(collider, user))
                 {
+                    Target = collider.GetComponent<LivingBeing>();
                     SetEffects(user);
                     //Logging.Info("verified and rarified");
-                    CombatStatHandler.HandleEffectPackages(this, user.GetComponent<LivingBeing>(), collider.gameObject.GetComponent<LivingBeing>());
-                    SpawnHitEffect(collider.GetComponent<LivingBeing>());
+                    CombatStatHandler.HandleEffectPackages(this, Caster, Target);
+                    SpawnHitEffect(Target);
                     activated = true;
                 }
             }
@@ -62,11 +67,10 @@ public class MeleeAbility : Ability
         }
         //Logging.Info($"User = {user} collider = {collider.gameObject}");
 
-        if (!IsUsableOn(user.GetComponent<LivingBeing>().CharacterTag, collider.GetComponent<LivingBeing>().CharacterTag))
+        if (!IsUsableOn(Caster.CharacterTag, Target.CharacterTag))
         {
-            //Logging.Info($"oof, {user} could not use {this} on {collider.gameObject}");
-
-            return false;
+            if (!HasElementalSynergy(this, Target))
+                return false;
         }
         else Debug.Log($"usable on {collider.gameObject}");
         if (VerifyWithinShape(user, collider))

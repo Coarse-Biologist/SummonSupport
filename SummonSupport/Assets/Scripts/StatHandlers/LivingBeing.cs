@@ -125,9 +125,11 @@ public abstract class LivingBeing : MonoBehaviour
     #region Affinity handling
     public void GainAffinity(Element element, float amount)
     {
+        float newAffinity = Mathf.Min(amount + Affinities[element].Get(), 200);
+
         if (Affinities.TryGetValue(element, out (Func<float> Get, Action<float> Set) func))
         {
-            Affinities[element].Set(amount + Affinities[element].Get());
+            Affinities[element].Set(newAffinity);
         }
     }
     #endregion

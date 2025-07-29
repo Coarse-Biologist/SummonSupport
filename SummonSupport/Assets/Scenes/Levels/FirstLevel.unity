@@ -449,7 +449,7 @@ PrefabInstance:
     - target: {fileID: -2192539161432645077, guid: 8b808af4814c9664e80e2e15555215fb,
         type: 3}
       propertyPath: <MaxPower>k__BackingField
-      value: 200
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -2192539161432645077, guid: 8b808af4814c9664e80e2e15555215fb,
         type: 3}

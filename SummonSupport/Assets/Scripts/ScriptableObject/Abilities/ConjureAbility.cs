@@ -34,7 +34,6 @@ public class ConjureAbility : Ability
 
     public bool Activate(GameObject user, Vector3 spawnPosition, Quaternion rotation)
     {
-        Debug.Log("This happens! 3");
 
         Quaternion newRotation = Quaternion.identity;
         if (!LeaveRotation)
@@ -44,8 +43,7 @@ public class ConjureAbility : Ability
         if (IsDecaying)
             Destroy(spawnedObject, TimeAlive);
         if (spawnedObject.TryGetComponent(out Aura aura))
-            Debug.Log("This happens! 2");
-        aura.HandleInstantiation(user.GetComponent<LivingBeing>(), this, Radius, this.TimeAlive);
+            aura.HandleInstantiation(user.GetComponent<LivingBeing>(), null, this, Radius, this.TimeAlive);
 
         return true;
     }

@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 public class Aura : MonoBehaviour
@@ -11,28 +10,29 @@ public class Aura : MonoBehaviour
     [SerializeField] public float ActivationTime { get; private set; } = .5f;
     private bool Active = false;
 
-    private GameObject Target;
+    private LivingBeing target;
     private ConjureAbility conjureAbility;
 
 
 
-    public void HandleInstantiation(LivingBeing caster, Ability ability, float radius, float duration)
+    public void HandleInstantiation(LivingBeing caster, LivingBeing target, Ability ability, float radius, float duration)
     {
         if (ability is ConjureAbility) conjureAbility = (ConjureAbility)ability;
         GetComponent<CircleCollider2D>().radius = radius;
         Invoke("Activate", ActivationTime);
-        SetAuraStats(caster, ability, duration);
+        SetAuraStats(caster, target, ability, duration);
         CombatStatHandler.HandleEffectPackages(ability, caster, caster, true);
         if (conjureAbility.SeeksTarget)
         {
-            Target = FindTarget(conjureAbility.SearchRadius);
-            if (Target != null) StartCoroutine(SeekTarget(Target));
+            this.target = FindTarget(conjureAbility.SearchRadius);
+            if (this.target != null) StartCoroutine(SeekTarget(this.target.gameObject));
         }
     }
-    public void SetAuraStats(LivingBeing caster, Ability ability, float duration)
+    public void SetAuraStats(LivingBeing caster, LivingBeing target, Ability ability, float duration)
     {
         this.caster = caster;
         this.ability = ability;
+        this.target = target;
         SetAuraTimer(duration);
         //transform.Rotate(new Vector3(-110f, 0, 0));
 
@@ -51,16 +51,14 @@ public class Aura : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        Debug.Log("This happens! 8");
 
         if (Active)
         {
-            Logging.Info($"{other.gameObject} has entered the bite zone");
+            //Logging.Info($"{other.gameObject} has entered the bite zone");
             if (other.gameObject.TryGetComponent(out LivingBeing otherLivingBeing))
             {
-                Debug.Log("This happens! 7");
 
-                if (ability.ListUsableOn.Contains(RelationshipHandler.GetRelationshipType(caster.CharacterTag, otherLivingBeing.CharacterTag)) && !listLivingBeingsInAura.Contains(otherLivingBeing))
+                if (ability.ListUsableOn.Contains(RelationshipHandler.GetRelationshipType(caster.CharacterTag, otherLivingBeing.CharacterTag)))
                 {
                     otherLivingBeing.AlterAbilityList(ability, true);
                     CombatStatHandler.HandleEffectPackages(ability, caster, otherLivingBeing, false);
@@ -72,11 +70,10 @@ public class Aura : MonoBehaviour
 
     void OnTriggerExit2D(Collider2D other)
     {
-        LivingBeing otherLivingBeing = other.gameObject.GetComponent<LivingBeing>();
-        if (listLivingBeingsInAura.Contains(otherLivingBeing))
-        {
+        Debug.Log("DONT WORRY YOURE GOOD");
+        if (other.gameObject.TryGetComponent<LivingBeing>(out LivingBeing otherLivingBeing))
             otherLivingBeing.AlterAbilityList(ability, false);
-        }
+
     }
 
 
@@ -87,9 +84,9 @@ public class Aura : MonoBehaviour
     }
 
 
-    private GameObject FindTarget(float SearchRadius)
+    private LivingBeing FindTarget(float SearchRadius)
     {
-        GameObject target = null;
+        LivingBeing target = null;
         Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, SearchRadius);
         foreach (Collider2D collider in colliders)
         {
@@ -97,7 +94,7 @@ public class Aura : MonoBehaviour
                 continue;
             if (!ability.IsUsableOn(targetStats.CharacterTag, caster.CharacterTag))
                 continue;
-            else return collider.gameObject;
+            else return targetStats;
         }
         return target;
     }
