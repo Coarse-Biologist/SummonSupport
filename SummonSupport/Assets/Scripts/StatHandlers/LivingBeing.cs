@@ -14,6 +14,7 @@ public abstract class LivingBeing : MonoBehaviour
     [field: SerializeField] public string Description { get; private set; }
     [field: SerializeField] public List<string> BattleCries { get; private set; }
 
+    #region Resources
     [Header("Attributes - Resources")]
     [field: SerializeField] public float MaxHP { get; private set; } = 100;
     [field: SerializeField] public float Overshield { get; private set; }
@@ -21,6 +22,8 @@ public abstract class LivingBeing : MonoBehaviour
     [field: SerializeField] public float MaxPower { get; private set; } = 100;
     [field: SerializeField] public float PowerSurge { get; private set; }
     [field: SerializeField] public float CurrentPower { get; private set; } = 100;
+    #endregion
+    #region Health regen variables
 
     [Header("Attributes - Regenerations")]
     private WaitForSeconds regenTickRate;
@@ -33,7 +36,7 @@ public abstract class LivingBeing : MonoBehaviour
     [field: SerializeField] public int PowerRegenArrows { get; private set; } = 0;
     [field: SerializeField] public float RegenCalcOffset { get; private set; } = .8f;
     [field: SerializeField] public int MaxRegenArrows { get; private set; } = 6;
-
+    #endregion
 
     //TODO:
 
@@ -68,11 +71,8 @@ public abstract class LivingBeing : MonoBehaviour
 
     #region other data
 
-
-
-
     [Header("Other")]
-    //public Dictionary<string, StatusEffectInstance> activeStatusEffects = new();
+    [field: SerializeField] public List<Ability> AffectedByAbilities { get; private set; } = new();
     [field: SerializeField] public float XP_OnDeath { get; private set; } = 5f;
 
     public Dictionary<Element, (Func<float> Get, Action<float> Set)> Affinities { private set; get; } = new();
@@ -200,6 +200,17 @@ public abstract class LivingBeing : MonoBehaviour
         }
     }
 
+
+    #endregion
+
+    #region Changing list of abilities affecting one
+
+    public void AlterAbilityList(Ability ability, bool Add) // modifies the list of abilities by which one is affected
+    {
+        bool contains = AffectedByAbilities.Contains(ability);
+        if (Add && !contains) AffectedByAbilities.Add(ability);
+        if (!Add && contains) AffectedByAbilities.Remove(ability);
+    }
 
     #endregion
 

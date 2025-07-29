@@ -62,6 +62,7 @@ public class Aura : MonoBehaviour
 
                 if (ability.ListUsableOn.Contains(RelationshipHandler.GetRelationshipType(caster.CharacterTag, otherLivingBeing.CharacterTag)) && !listLivingBeingsInAura.Contains(otherLivingBeing))
                 {
+                    otherLivingBeing.AlterAbilityList(ability, true);
                     CombatStatHandler.HandleEffectPackages(ability, caster, otherLivingBeing, false);
                 }
             }
@@ -73,7 +74,8 @@ public class Aura : MonoBehaviour
     {
         LivingBeing otherLivingBeing = other.gameObject.GetComponent<LivingBeing>();
         if (listLivingBeingsInAura.Contains(otherLivingBeing))
-        {         //possibly remove aura effect? 
+        {
+            otherLivingBeing.AlterAbilityList(ability, false);
         }
     }
 

@@ -14,19 +14,19 @@ public static class CombatStatHandler
 
     public static void HandleEffectPackages(Ability ability, LivingBeing caster, LivingBeing target, bool forSelf = false)
     {
-        Debug.Log($"{ability} effects are being processed. Caster = {caster}, target = {target}");
+        //Debug.Log($"{ability} effects are being processed. Caster = {caster}, target = {target}");
         LivingBeing casterStats = caster.GetComponent<LivingBeing>();
         LivingBeing targetStats = target.GetComponent<LivingBeing>();
         LivingBeing theTarget = casterStats;
         if (!forSelf) theTarget = targetStats;
-        Debug.Log($"the target of {ability} shall be {theTarget}");
+        //Debug.Log($"the target of {ability} shall be {theTarget}");
 
         foreach (EffectPackage package in ability.TargetTypeAndEffects)
         {
             if (forSelf && package.TargetType == TargetType.Self || !forSelf && package.TargetType == TargetType.Target)
             {
                 if (package.Heal.Value > 0) AdjustHealValue(package.Heal.Value, theTarget, casterStats);
-                if (package.HealOverTime.Value > 0) HandleApplyDOT(target, AttributeType.CurrentHitpoints, package.HealOverTime.Value, package.HealOverTime.Duration);
+                if (package.HealOverTime.Value > 0) HandleApplyDOT(ability, target, AttributeType.CurrentHitpoints, package.HealOverTime.Value, package.HealOverTime.Duration);
 
                 if (package.Damage.Count > 0)
                 {
@@ -39,21 +39,21 @@ public static class CombatStatHandler
                 {
                     foreach (DamageoT_AT damage in package.DamageOverTime)
                     {
-                        AdjustAndApplyDOT(damage, theTarget, casterStats);
+                        AdjustAndApplyDOT(ability, damage, theTarget, casterStats);
                     }
                 }
                 if (package.AttributeUp.Count > 0)
                 {
                     foreach (TempAttrIncrease_AT tempChange in package.AttributeUp)
                     {
-                        AdjustAndApplyTempChange(tempChange, theTarget, casterStats);
+                        AdjustAndApplyTempChange(ability, tempChange, theTarget, casterStats);
                     }
                 }
                 if (package.AttributeDown.Count > 0)
                 {
                     foreach (TempAttrDecrease_AT tempChange in package.AttributeDown)
                     {
-                        AdjustAndApplyTempChange(tempChange, theTarget, casterStats);
+                        AdjustAndApplyTempChange(ability, tempChange, theTarget, casterStats);
                     }
                 }
             }
@@ -84,7 +84,7 @@ public static class CombatStatHandler
         target.SetAttribute(AttributeType.CurrentHitpoints, newHP);
         return healValue;
     }
-    public static float AdjustAndApplyTempChange(TempAttrChange tempAttr, LivingBeing target, LivingBeing caster = null)
+    public static float AdjustAndApplyTempChange(Ability ability, TempAttrChange tempAttr, LivingBeing target, LivingBeing caster = null)
     {
         float changeValue = tempAttr.Value;
         float duration = tempAttr.Duration;
@@ -96,12 +96,12 @@ public static class CombatStatHandler
             if (element != Element.None) changeValue = AdjustBasedOnAffinity(element, changeValue, caster, target);
             if (physical != PhysicalType.None) changeValue = AdjustBasedOnArmor(physical, changeValue, target);
         }
-        ApplyTempValue(target, tempAttr.AttributeType, changeValue, duration);
+        ApplyTempValue(ability, target, tempAttr.AttributeType, changeValue, duration);
         //target.StartCoroutine(ResetTempAttribute(target, tempAttr.AttributeType, -changeValue, duration)); //reset by using opposite
 
         return changeValue;
     }
-    public static float AdjustAndApplyDOT(DamageoT_AT damageOT, LivingBeing target, LivingBeing caster = null)
+    public static float AdjustAndApplyDOT(Ability ability, DamageoT_AT damageOT, LivingBeing target, LivingBeing caster = null)
     {
         float damageValue = -damageOT.Value;
         float duration = damageOT.Duration;
@@ -109,7 +109,7 @@ public static class CombatStatHandler
         PhysicalType physical = damageOT.Physical;
         if (damageOT.Element != Element.None) damageValue = AdjustBasedOnAffinity(element, damageValue, caster, target); // damage value is opposite?
         if (damageOT.Physical != PhysicalType.None) damageValue = AdjustBasedOnArmor(physical, damageValue, target);
-        HandleApplyDOT(target, AttributeType.CurrentHitpoints, damageValue, duration);
+        HandleApplyDOT(ability, target, AttributeType.CurrentHitpoints, damageValue, duration);
 
         return damageValue;
     }
@@ -190,22 +190,24 @@ public static class CombatStatHandler
 
     #endregion
 
-    private static void HandleApplyDOT(LivingBeing target, AttributeType attributeType, float newValue, float duration)
+    private static void HandleApplyDOT(Ability ability, LivingBeing target, AttributeType attributeType, float newValue, float duration)
     {
         Debug.Log($"Changing {target}s regen by {newValue}");
         target.ChangeRegeneration(attributeType, newValue);
-        target.StartCoroutine(ResetRegeneration(target, attributeType, newValue, duration));
+        target.StartCoroutine(ResetRegeneration(ability, target, attributeType, newValue, duration));
     }
-    private static IEnumerator ResetRegeneration(LivingBeing target, AttributeType attributeType, float newValue, float duration)
+    private static IEnumerator ResetRegeneration(Ability ability, LivingBeing target, AttributeType attributeType, float newValue, float duration)
     {
         WaitForSeconds OverTimeReset = new WaitForSeconds(duration);
         float elapsed = 0f;
-        while (elapsed < duration)
+        while (elapsed < duration && target.AffectedByAbilities.Contains(ability))
         {
+            Debug.Log($" {target} is affected by ability? : {target.AffectedByAbilities.Contains(ability)}");
             yield return OverTimeReset;
         }
+        if (!target.AffectedByAbilities.Contains(ability)) Debug.Log($"Stopping effect {ability.Name} because player is no longer being affected by it");
         target.ChangeRegeneration(attributeType, -newValue);
-
+        target.AlterAbilityList(ability, false);
 
     }
 
@@ -216,24 +218,28 @@ public static class CombatStatHandler
         target.SetAttribute(attributeType, target.GetAttribute(attributeType) + newValue);
     }
 
-    public static void ApplyTempValue(LivingBeing target, AttributeType attributeType, float newValue, float duration)
+    public static void ApplyTempValue(Ability ability, LivingBeing target, AttributeType attributeType, float newValue, float duration)
     {
         Logging.Info($"{target.name} has had {attributeType} changed by {newValue}");
 
         target.SetAttribute(attributeType, target.GetAttribute(attributeType) + newValue);
-        target.StartCoroutine(ResetTempAttribute(target, attributeType, newValue, duration));
+        target.StartCoroutine(ResetTempAttribute(ability, target, attributeType, newValue, duration));
 
     }
-    private static IEnumerator ResetTempAttribute(LivingBeing target, AttributeType attributeType, float changeValue, float duration)
+    private static IEnumerator ResetTempAttribute(Ability ability, LivingBeing target, AttributeType attributeType, float changeValue, float duration)
     {
         float elapsed = 0f;
-        while (elapsed < duration)
+        while (elapsed < duration && target.AffectedByAbilities.Contains(ability))
         {
             yield return tickRate;
             elapsed += tickRateFloat;
             Logging.Info($"waiting {elapsed}/{duration} seconds for temporary attribute to reset");
         }
+        if (!target.AffectedByAbilities.Contains(ability)) Debug.Log($"Stopping effect {ability.Name} because player is no longer being affected by it");
+
         ApplyValue(target, attributeType, -changeValue); // resets by adding the opposite of what was added before (which may have been negative)
+        target.AlterAbilityList(ability, false);
+
     }
 
 
