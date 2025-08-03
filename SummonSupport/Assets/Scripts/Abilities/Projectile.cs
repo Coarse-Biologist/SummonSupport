@@ -4,19 +4,28 @@ using UnityEngine;
 public class Projectile : MonoBehaviour
 {
     List<GameObject> ignoreGameObjects = new List<GameObject>();
+    public GameObject SpawnEffectOnHit { get; set; }
+
     public ProjectileAbility ability;
     public int piercedAlready = 0;
     public int splitAlready = 0;
     LivingBeing userLivingBeing = null;
 
+
+
+
     public void Shoot(GameObject user, GameObject spawnAt = null, Vector3 lookAt = default(Vector3))
-    {   
+    {
         if (user.TryGetComponent(out LivingBeing livingBeing))
             userLivingBeing = livingBeing;
+        else
+            Debug.Log($"user isnt a living being, weird right?");
         ignoreGameObjects.Add(user);
         SetProjectilePhysics(spawnAt, lookAt);
         Destroy(gameObject, ability.Lifetime); // TODO: change from lifetime to range
     }
+
+
 
     void SetProjectilePhysics(GameObject spawnPoint)
     {
@@ -28,59 +37,77 @@ public class Projectile : MonoBehaviour
             direction = spawnPoint.transform.right;
         Rigidbody2D rb = GetComponent<Rigidbody2D>();
         rb.linearVelocity = direction * ability.Speed;
+
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+
         transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
+    }
+    public void SetEffects(GameObject effectOnHit)
+    {
+        SpawnEffectOnHit = effectOnHit;
+    }
+
+    private void SpawnEffect(LivingBeing targetLivingBeing)
+    {
+        GameObject instance;
+        if (SpawnEffectOnHit != null)
+        {
+            instance = Instantiate(ability.SpawnEffectOnHit, targetLivingBeing.transform.position, Quaternion.identity, targetLivingBeing.transform.transform);
+            Destroy(instance, 3f);
+        }
     }
 
     void OnTriggerEnter2D(Collider2D other)
     {
         if (other.gameObject.CompareTag("Projectile") || ignoreGameObjects.Contains(other.gameObject))
             return;
-        
+
         if (!other.TryGetComponent(out LivingBeing otherLivingBeing))
         {
+            SpawnEffect(otherLivingBeing);
             DestroyProjectile();
             return;
         }
-        
-        if (userLivingBeing && !ability.IsUsableOn(userLivingBeing.CharacterTag, otherLivingBeing.CharacterTag))
+
+        if (!userLivingBeing || !ability.IsUsableOn(userLivingBeing.CharacterTag, otherLivingBeing.CharacterTag))
             return;
 
-        foreach(OnEventDo onHitDo in ability.ListOnHitDo)
-            HandleOnEventDo(onHitDo, other);
-        HandleOnHitBehaviour(other);
-        
+        Debug.Log($"ability = {ability.name}.");
+        Debug.Log($"caster = {userLivingBeing}.");
+        Debug.Log($" target = {otherLivingBeing}");
+
+        CombatStatHandler.HandleEffectPackages(ability, userLivingBeing, otherLivingBeing, false);
+        HandleOnHitBehaviour(otherLivingBeing);
+
     }
 
-    void HandleOnHitBehaviour(Collider2D other)
+    void HandleOnHitBehaviour(LivingBeing other)
     {
         switch (ability.PiercingMode)
-            {
-                case OnHitBehaviour.Ricochet:
-                    break;
-                case OnHitBehaviour.Pierce:
-                    piercedAlready++;
-                    if (piercedAlready == ability.MaxPierce)
-                        DestroyProjectile(other);
-                    break;
-                case OnHitBehaviour.Split:
-                    SplitProjectile(other);
-                    break;
-                case OnHitBehaviour.Destroy:
+        {
+            case OnHitBehaviour.Ricochet:
+                break;
+            case OnHitBehaviour.Pierce:
+                piercedAlready++;
+                if (piercedAlready == ability.MaxPierce)
                     DestroyProjectile(other);
-                    break;
-            }
+                break;
+            case OnHitBehaviour.Split:
+                SplitProjectile(other);
+                break;
+            case OnHitBehaviour.Destroy:
+                DestroyProjectile(other);
+                break;
+        }
     }
 
-    void DestroyProjectile(Collider2D other = null)
+    void DestroyProjectile(LivingBeing other = null)
     {
-        if (other)
-            foreach(OnEventDo onDestroyDo in ability.ListOnDestroyDo)
-                HandleOnEventDo(onDestroyDo, other);
-                
+        //probably casue effects if hitting an acceptable enemy?
+
         Destroy(gameObject);
     }
-    void SplitProjectile(Collider2D other)
+    void SplitProjectile(LivingBeing other)
     {
         if (splitAlready >= ability.MaxSplit)
             DestroyProjectile(other);
@@ -102,31 +129,7 @@ public class Projectile : MonoBehaviour
         }
         DestroyProjectile(other);
     }
-    void HandleOnEventDo(OnEventDo onEvent, Collider2D other) //TODO: This belongs in its own class!! Other Ability types will definitly use this!
-    {
-        switch (onEvent)
-        {
-            case OnEventDo.Nothing:
-                break;
-            case OnEventDo.Ability:
-                break;
-            case OnEventDo.Damage:
-                if (ability.Attribute != AttributeType.None && ability.Value != 0)
-                {
-                    
-                }
-                break;
-            case OnEventDo.Heal:
-                break;
-            case OnEventDo.StatusEffect:
-                if (ability.StatusEffects != null)
-                {
-                    foreach (StatusEffect statusEffect in ability.StatusEffects)
-                    {
-                        statusEffect.ApplyStatusEffect(other.gameObject, gameObject.transform.position);
-                    }
-                }
-                break;
-        }
-    }
+
+
+
 }

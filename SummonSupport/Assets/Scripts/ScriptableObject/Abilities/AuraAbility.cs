@@ -4,11 +4,45 @@ using UnityEngine;
 public class AuraAbility : Ability
 {
     [field: SerializeField, Header("Aura settings"), Tooltip("time in [seconds]")]
-    public float Uptime {get; protected set; }
+    public float Uptime { get; protected set; }
+    [field: SerializeField]
+    public float Radius { get; protected set; } = 1f;
 
-    public override bool Activate(GameObject user)
+    [field: SerializeField] public GameObject AuraObject { get; protected set; }
+    [field: SerializeField] public bool LeaveRotation { get; protected set; } = true;
+
+    public override bool Activate(GameObject caster)
     {
-        Logging.Info($"{user.name} applys aura");
+
+        if (caster.CompareTag("Player"))
+        {
+            Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+
+            RaycastHit2D hit = Physics2D.Raycast(mousePos, Vector2.zero);
+            {
+                if (hit.collider != null && hit.collider.TryGetComponent<LivingBeing>(out LivingBeing livingBeing))
+                {
+                    Debug.Log("This happens! 5");
+
+                    GameObject auraInstance = Instantiate(AuraObject, hit.collider.transform.position, AuraObject.transform.rotation, hit.collider.transform);
+                    auraInstance.GetComponent<Aura>().SetAuraStats(caster.GetComponent<LivingBeing>(), livingBeing, this, Uptime);
+
+                }
+            }
+        }
+        else
+        {
+            Debug.Log("This happens! 6s");
+            Logging.Info($"{caster.GetComponent<LivingBeing>().name} applys aura");
+
+            GameObject auraInstance = Instantiate(AuraObject, caster.transform.position, AuraObject.transform.rotation, caster.transform);
+
+            Logging.Info($"aura instance = {auraInstance}");
+            Aura auraMonoScript = auraInstance.GetComponent<Aura>();
+            if (auraMonoScript != null) auraMonoScript.HandleInstantiation(caster.GetComponent<LivingBeing>(), null, this, Radius, Uptime);
+        }
+
+
         return true;
     }
 }

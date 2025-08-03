@@ -1,0 +1,61 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f72222c874821e41bccb5f49eee621c, type: 3}
+  m_Name: LavaPortal
+  m_EditorClassIdentifier: 
+  <Name>k__BackingField: Lava Portal
+  <Icon>k__BackingField: {fileID: 8095344145157262792, guid: c3bce2abce0ec0e47ba9c908fd690f04,
+    type: 3}
+  <Cooldown>k__BackingField: 0.5
+  <CostType>k__BackingField: 4
+  <Cost>k__BackingField: 100
+  <ListUsableOn>k__BackingField: 01000000
+  <TargetTypeAndEffects>k__BackingField:
+  - <EffectDescription>k__BackingField: Melts
+    <TargetType>k__BackingField: 1
+    <Heal>k__BackingField:
+      <Value>k__BackingField: 0
+    <HealOverTime>k__BackingField:
+      <Value>k__BackingField: 0
+      <Duration>k__BackingField: 0
+    <AttributeUp>k__BackingField: []
+    <AttributeDown>k__BackingField:
+    - <AttributeType>k__BackingField: 7
+      <Value>k__BackingField: 40
+      <Duration>k__BackingField: 10
+      <Element>k__BackingField: 0
+      <Physical>k__BackingField: 0
+    <Damage>k__BackingField:
+    - <Value>k__BackingField: 100
+      <Element>k__BackingField: 4
+      <Physical>k__BackingField: 0
+      <ValueType>k__BackingField: 0
+    <DamageOverTime>k__BackingField:
+    - <Value>k__BackingField: 20
+      <Element>k__BackingField: 4
+      <Physical>k__BackingField: 0
+      <ValueType>k__BackingField: 0
+      <Duration>k__BackingField: 99
+    <SpecialAbilityAttribute>k__BackingField: 0
+  <ElementTypes>k__BackingField: 
+  <AbilityTypeTag>k__BackingField: 1
+  <ObjectToSpawn>k__BackingField: {fileID: 3088800244414480477, guid: 13dca4459f2e1ce4c90bf4fa3aef4c3b,
+    type: 3}
+  <SpawnOffset>k__BackingField: {x: 0, y: 0}
+  <RotationOffset>k__BackingField: 0
+  Radius: 1
+  <IsDecaying>k__BackingField: 1
+  <LeaveRotation>k__BackingField: 1
+  <TimeAlive>k__BackingField: 99
+  <SeeksTarget>k__BackingField: 0
+  <Speed>k__BackingField: 2
+  <SearchRadius>k__BackingField: 10

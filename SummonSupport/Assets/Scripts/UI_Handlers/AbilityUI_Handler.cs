@@ -89,7 +89,7 @@ public class AbilityUI_Handler : MonoBehaviour
     #region Ability slot changed invoke response
     public void SetAbilitySlot(int slotIndex, Ability ability)
     {
-        Logging.Info($"slotIndex = {slotIndex}. Ability = {ability.name}.");
+        //Logging.Info($"slotIndex = {slotIndex}. Ability = {ability.name}.");
 
         if (slotIndex <= abilityProgressBarDict.Keys.Count)
             abilityProgressBarDict[slotIndex] = ability;
@@ -100,7 +100,7 @@ public class AbilityUI_Handler : MonoBehaviour
     {
         if (ProgressBarDict.TryGetValue(slotIndex, out ProgressBar bar))
         {
-            //VisualElement background = bar.Q<VisualElement>("unity-progress-bar__background");
+            bar.title = ability.name;
             bar.style.backgroundImage = new StyleBackground(ability.Icon);
         }
     }

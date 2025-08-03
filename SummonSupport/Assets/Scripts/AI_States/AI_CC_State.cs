@@ -37,25 +37,25 @@ public class AI_CC_State : AIState
         }
     }
 
-    public void RecieveCC(StatusEffectType CC, Vector2 sourcePosition)
+    public void RecieveCC(StatusEffectType CC, LivingBeing caster)
     {
-        currentCCs.TryAdd(CC, sourcePosition);
+        currentCCs.TryAdd(CC, caster.transform.position);
     }
 
     private bool KnockInTheAir()
     {
         beingKnockedInAir = true;
-        if(currentCCs.TryGetValue(StatusEffectType.KnockInTheAir, out Vector2 sourcePosition) && timeElapsed <= duration)
-            {
-                rb.linearDamping = 40;
-                if (timeElapsed <= duration * .8)
-                    rb.AddForce(((Vector2)transform.position - sourcePosition).normalized, ForceMode2D.Impulse);
-                if (timeElapsed <= duration * .5)
-                    rb.AddForce(new Vector2(0, 2f), ForceMode2D.Impulse);
-                if (timeElapsed > duration * .5 && timeElapsed <= .8 * duration) rb.AddForce(new Vector2(0, -2), ForceMode2D.Impulse);
-                return true;
-            }
-       else
+        if (currentCCs.TryGetValue(StatusEffectType.KnockInTheAir, out Vector2 sourcePosition) && timeElapsed <= duration)
+        {
+            rb.linearDamping = 40;
+            if (timeElapsed <= duration * .8)
+                rb.AddForce(((Vector2)transform.position - sourcePosition).normalized, ForceMode2D.Impulse);
+            if (timeElapsed <= duration * .5)
+                rb.AddForce(new Vector2(0, 2f), ForceMode2D.Impulse);
+            if (timeElapsed > duration * .5 && timeElapsed <= .8 * duration) rb.AddForce(new Vector2(0, -2), ForceMode2D.Impulse);
+            return true;
+        }
+        else
         {
             beingKnockedInAir = false;
             timeElapsed = 0f;

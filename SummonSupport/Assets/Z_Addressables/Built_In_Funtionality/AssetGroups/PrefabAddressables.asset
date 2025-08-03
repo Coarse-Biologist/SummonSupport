@@ -14,7 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_GroupName: PrefabAddressables
   m_GUID: 724735711dbaf1242b6830e96cf6cfd4
-  m_SerializeEntries: []
+  m_SerializeEntries:
+  - m_GUID: 7e3bbe5460c69cf4396d9abb99c70a65
+    m_Address: Assets/Scripts/CrewsAbilitiesScripts/SquareProjectile.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: ecec97c89ee9bf34f83fcc630e389d11, type: 2}
   m_SchemaSet:

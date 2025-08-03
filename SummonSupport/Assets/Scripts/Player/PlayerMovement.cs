@@ -13,7 +13,7 @@ public class PlayerMovement : MonoBehaviour
     public Camera mainCamera;
     private CreatureSpriteController spriteController;
     [SerializeField] private PlayerInputActions inputActions;
-    [SerializeField] GameObject AbilityRotation;
+    [SerializeField] public GameObject AbilityRotation;
     private Vector2 lookInput;
     private Vector2 worldPosition;
     private Vector2 direction;
@@ -26,8 +26,6 @@ public class PlayerMovement : MonoBehaviour
     private bool dashing = false;
     private bool canDash = true;
     private bool lockedInUI = false;
-    [SerializeField] public Crew_Ability_SO crewsAbility;
-    [SerializeField] public GameObject crewsProjectile;
 
     #endregion
 
@@ -127,7 +125,25 @@ public class PlayerMovement : MonoBehaviour
         AbilityRotation.transform.rotation = Quaternion.Euler(0, 0, angle);
         spriteController.SetSpriteDirection(angle);
 
+        //DebugAbilityShape();
+
         return transform.rotation;
+    }
+    private void DebugAbilityShape()
+    {
+        Transform AR = AbilityRotation.transform;
+        Debug.DrawRay(AR.position, AR.up * 2, Color.black, .1f);
+
+        Debug.DrawRay(AR.position, -AR.up * 2, Color.black, .1f);
+
+        Debug.DrawRay(AR.position, AR.right * 2, Color.black, .1f);
+
+        Debug.DrawRay(AR.right * 2 + AR.position, AR.up * 2, Color.black, .1f);
+
+        Debug.DrawRay(AR.right * 2 + AR.position, -AR.up * 2, Color.black, .1f);
+        Debug.DrawRay(AR.up * 2 + AR.position, AR.right * 2, Color.black, .1f);
+
+        Debug.DrawRay(-AR.up * 2 + AR.position, AR.right * 2, Color.black, .1f);
     }
 
     #endregion
@@ -137,14 +153,7 @@ public class PlayerMovement : MonoBehaviour
         worldPosition = mainCamera.ScreenToWorldPoint(lookInput);
         Debug.DrawLine(new Vector3(0, 0, 0), worldPosition, Color.green);
         CommandMinion.HandleCommand(worldPosition);
-        if (crewsAbility != null)
-        {
-            GameObject projectileInstance = Instantiate(crewsProjectile, transform.position, Quaternion.identity);
-            Crew_ProjectileMono projectileScript = projectileInstance.GetComponent<Crew_ProjectileMono>();
-            Crew_EffectPackage projectilePackage = crewsAbility.TargetTypeAndEffects[0];
-            projectileScript.SetAbilityData(projectilePackage);
-            projectileScript.SetProjectilePhysics(worldPosition);
-        }
+
 
     }
 

@@ -164,7 +164,7 @@ public class PlayerUIHandler : MonoBehaviour
             minionHP.style.borderTopColor = Color.clear;
         }
         //.ToggleInClassList("selected");
-        Logging.Info("Button Clicked");
+        //Logging.Info("Button Clicked");
         CommandMinion.SetSelectedMinion(minionStats.gameObject);
     }
 
@@ -176,6 +176,7 @@ public class PlayerUIHandler : MonoBehaviour
         if (livingBeing.CharacterTag == CharacterTag.Player)
         {
             SetPlayerAttribute(attributeType);
+            ///SetPlayerXP(livingBeing.c)
         }
         else if (livingBeing.CharacterTag == CharacterTag.Minion)
         {
@@ -202,9 +203,10 @@ public class PlayerUIHandler : MonoBehaviour
             playerHealthBar.value = playerStats.GetAttribute(attributeType);
         if (attributeType == AttributeType.CurrentPower)
             playerPowerBar.value = playerStats.GetAttribute(attributeType);
-        if (attributeType == AttributeType.CurrentXP)
-        {
-            playerXP_Bar.value = playerStats.CurrentXP;
-        }
+
+    }
+    private void SetPlayerXP(float playerXP)
+    {
+        playerXP_Bar.value = playerStats.CurrentXP;
     }
 }

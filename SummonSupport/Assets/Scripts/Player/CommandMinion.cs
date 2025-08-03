@@ -1,19 +1,25 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public static class CommandMinion
 {
 
     public static List<GameObject> SelectedMinions { private set; get; } = new List<GameObject>();
+    public static List<GameObject> activeMinions { private set; get; } = new();
+
+    public static void SetActiveMinions(List<GameObject> activeMinionsList)
+    {
+        activeMinions = activeMinionsList;
+    }
 
     public static void HandleCommand(Vector2 loc)
     {
+
         if (SelectedMinions != null)
         {
             Collider2D[] enemyHits = Physics2D.OverlapCircleAll(loc, 1, LayerMask.GetMask("Enemy"));
+            Logging.Info($"{enemyHits.Length} colliders in click area.");
+
             if (enemyHits.Length > 0)
             {
                 GameObject enemy = enemyHits[0].gameObject;

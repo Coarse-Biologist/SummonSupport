@@ -19,8 +19,10 @@ public class PlayerAbilityHandler : AbilityHandler
     public void UpdateAbilities()
     {
         int index = 0;
-        foreach (Ability ability in abilities)
+        //Logging.Info($"Number of abilities one may potentially like to add: {abilities.Count}");
+        foreach (Ability ability in Abilities)
         {
+            // Logging.Info($"Slotting {ability} with name {ability.Name} in UI");
             EventDeclarer.SlotChanged.Invoke(index, ability);
             index++;
         }
@@ -40,6 +42,8 @@ public class PlayerAbilityHandler : AbilityHandler
     void OnEnable()
     {
         RegisterInputEvents(true);
+        inputActions ??= new PlayerInputActions();
+
         inputActions.Enable();
     }
 
@@ -53,6 +57,7 @@ public class PlayerAbilityHandler : AbilityHandler
     {
         foreach (var action in inputActions.Player.Get().actions)
         {
+
             if (action.name.StartsWith("Ability"))
             {
                 if (register)
@@ -64,15 +69,16 @@ public class PlayerAbilityHandler : AbilityHandler
     }
     void OnAbility(InputAction.CallbackContext context)
     {
-        if (inputActionToIndex.TryGetValue(context.action.name, out int index) && index < abilities.Count)
+        if (inputActionToIndex.TryGetValue(context.action.name, out int index) && index < Abilities.Count)
         {
             if (!abilitiesOnCooldown[index])
             {
+
                 if (CastAbility(index, GetMousePosition(), abilityDirection.transform.rotation))
                     EventDeclarer.AbilityUsed?.Invoke(index);
 
             }
-                
+
         }
     }
     Vector2 GetMousePosition()

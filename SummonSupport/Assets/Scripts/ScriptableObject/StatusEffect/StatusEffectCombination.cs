@@ -5,5 +5,5 @@ using System.Collections.Generic;
 public class StatusEffectCollection : ScriptableObject
 {
     [SerializeField] public Sprite Icon;
-    [SerializeField] public List<StatusEffect> effects;
+    //[SerializeField] public List<StatusEffect> effects;
 }

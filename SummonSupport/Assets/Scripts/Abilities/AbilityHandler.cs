@@ -1,26 +1,29 @@
 using System.Collections;
 using UnityEngine;
 using System.Collections.Generic;
-using System;
 
 public class AbilityHandler : MonoBehaviour
 {
     [SerializeField] protected GameObject abilitySpawn;
-    [SerializeField] protected GameObject abilityDirection;
+    [SerializeField] public GameObject abilityDirection { get; private set; }
     [SerializeField] protected LivingBeing statsHandler;
-    [SerializeField] protected List<Ability> abilities;
-    [SerializeField] protected List<bool> abilitiesOnCooldown;
+    [field: SerializeField] public List<Ability> Abilities { private set; get; } = new();
+    [SerializeField] protected List<bool> abilitiesOnCooldown = new();
+    private Dictionary<BeamAbility, GameObject> toggledAbilitiesDict = new();
+
+
 
 
     protected virtual void Awake()
     {
         if (abilitySpawn == null)
             abilitySpawn = gameObject;
-        if (abilityDirection == null)
-            abilityDirection = gameObject;
+
         if (statsHandler == null)
             statsHandler = gameObject.GetComponent<LivingBeing>();
-        foreach (Ability ablity in abilities)
+        if (abilityDirection == null)
+            abilityDirection = gameObject.transform.GetChild(0).gameObject;
+        foreach (Ability ablity in Abilities)
         {
             abilitiesOnCooldown.Add(false);
         }
@@ -28,12 +31,15 @@ public class AbilityHandler : MonoBehaviour
 
     protected bool CastAbility(int abilityIndex, Vector2 targetPosition, Quaternion rotation)
     {
-        if (abilitiesOnCooldown[abilityIndex])
+        Logging.Info($"Ability at index {abilityIndex} trying to be used by {statsHandler.Name}");
+
+        //Debug.Log($"index = {abilityIndex}, cooldown = {abilitiesOnCooldown}, abilities {Abilities},  count= {Abilities.Count}");
+        if (Abilities.Count <= 0 || abilitiesOnCooldown[abilityIndex])
             return false;
-            
-        Ability ability = abilities[abilityIndex];
-            
-        if (!HasEnoughPower(ability.PowerCost))
+
+        Ability ability = Abilities[abilityIndex];
+
+        if (!HasEnoughPower(ability.Cost))
             return false;
 
         bool usedAbility = HandleAbilityType(ability, targetPosition, rotation);
@@ -41,10 +47,10 @@ public class AbilityHandler : MonoBehaviour
         if (!usedAbility)
             return false;
 
-        StartCoroutine(SetOnCooldown(abilityIndex)); 
-        statsHandler?.ChangeAttribute(AttributeType.CurrentPower, -ability.PowerCost);
+        StartCoroutine(SetOnCooldown(abilityIndex));
+        statsHandler?.ChangeAttribute(AttributeType.CurrentPower, -ability.Cost);
         return true;
-    }   
+    }
 
     bool HandleAbilityType(Ability ability, Vector2 targetPosition, Quaternion rotation)
     {
@@ -58,13 +64,55 @@ public class AbilityHandler : MonoBehaviour
             case TargetMouseAbility pointAndClickAbility:
                 usedAbility = HandlePointAndClick(pointAndClickAbility);
                 break;
-            
+
             case ConjureAbility conjureAbility:
                 usedAbility = HandleConjureAbility(conjureAbility, targetPosition, rotation);
                 break;
+            case AuraAbility auraAbility:
+                usedAbility = HandleAuraAbility(auraAbility, statsHandler);
+                break;
+            case TeleportAbility teleportAbility:
+                usedAbility = teleportAbility.Activate(gameObject, targetPosition);
+                break;
+            case MeleeAbility meleeAbility:
+                usedAbility = meleeAbility.Activate(statsHandler.gameObject);
+                break;
+            case BeamAbility beamAbility:
+                usedAbility = HandleBeamAbility(beamAbility, statsHandler);
+                break;
         }
+        Logging.Info($"able to use {ability.Name} = {usedAbility}");
         return usedAbility;
     }
+    private bool HandleBeamAbility(BeamAbility beamAbility, LivingBeing statsHandler)
+    {
+        GameObject beamInstance = null;
+
+        if (toggledAbilitiesDict.TryGetValue(beamAbility, out GameObject activeAbility))
+        {
+            StopToggledAbility(beamAbility, activeAbility);
+
+            return false;
+        }
+        else
+        {
+            beamInstance = beamAbility.ToggleBeam(statsHandler.gameObject, abilityDirection.transform);
+            toggledAbilitiesDict.TryAdd(beamAbility, beamInstance);
+            statsHandler.ChangeRegeneration(beamAbility.CostType, -beamAbility.Cost);
+
+
+            return true;
+        }
+
+    }
+    private void StopToggledAbility(BeamAbility beamAbility, GameObject activeAbility)
+    {
+        statsHandler.ChangeRegeneration(AttributeType.CurrentPower, beamAbility.Cost);
+        toggledAbilitiesDict.Remove(beamAbility);
+        Destroy(activeAbility);
+    }
+
+
 
     bool HasEnoughPower(float powerCost)
     {
@@ -85,11 +133,14 @@ public class AbilityHandler : MonoBehaviour
     {
         return ability.Activate(gameObject, targetPosition, rotation);
     }
-
+    bool HandleAuraAbility(AuraAbility auraAbility, LivingBeing statsHandler)
+    {
+        return auraAbility.Activate(statsHandler.gameObject);
+    }
 
     private IEnumerator SetOnCooldown(int abilityIndex)
     {
-        Ability ability = abilities[abilityIndex];
+        Ability ability = Abilities[abilityIndex];
         try
         {
             abilitiesOnCooldown[abilityIndex] = true;
@@ -97,8 +148,9 @@ public class AbilityHandler : MonoBehaviour
         }
         finally
         {
-            abilitiesOnCooldown[abilityIndex] = false; 
+            abilitiesOnCooldown[abilityIndex] = false;
         }
     }
+
 }
 

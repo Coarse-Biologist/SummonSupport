@@ -6,9 +6,9 @@ using System.Collections.Generic;
 
 public class TurretHandler : AbilityHandler
 {
-    [SerializeField] float cooldown         = 5f;
-    [SerializeField] float rotationSpeed    = 5f;
-    
+    [SerializeField] float cooldown = 5f;
+    [SerializeField] float rotationSpeed = 5f;
+
 
     public List<GameObject> listTargets = new List<GameObject>();
     public int shootTargetIndexNext;
@@ -38,13 +38,13 @@ public class TurretHandler : AbilityHandler
         {
             listTargets.Remove(other.gameObject);
             if (hasTarget && listTargets.Count <= 0)
-                {
-                    hasTarget = false;
-                    StopCoroutine(ShootLoop());
-                }
+            {
+                hasTarget = false;
+                StopCoroutine(ShootLoop());
+            }
         }
     }
-    
+
     private IEnumerator ShootLoop()
     {
         while (true)
@@ -62,7 +62,7 @@ public class TurretHandler : AbilityHandler
 
     GameObject GetTarget()
     {
-        if (listTargets.Count == 0) 
+        if (listTargets.Count == 0)
             return null;
 
         shootTargetIndexNext %= listTargets.Count;
@@ -76,10 +76,10 @@ public class TurretHandler : AbilityHandler
         Vector3 direction = target.transform.position - transform.position;
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
         Quaternion targetRotation = Quaternion.Euler(0, 0, angle);
-        
+
         float timeElapsed = 0f;
         Quaternion startingRotation = abilityDirection.transform.rotation;
-        
+
         while (timeElapsed < 1f)
         {
             timeElapsed += Time.deltaTime * rotationSpeed;
@@ -92,7 +92,7 @@ public class TurretHandler : AbilityHandler
 
     void ShootTarget(GameObject target)
     {
-        if (abilities == null)
+        if (Abilities == null)
             return;
 
         if (listTargets.Count <= 0)

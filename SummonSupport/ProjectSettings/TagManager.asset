@@ -64,5 +64,8 @@ TagManager:
   - name: player
     uniqueID: 2425651459
     locked: 0
+  - name: Aura
+    uniqueID: 420551777
+    locked: 0
   m_RenderingLayers:
   - Default

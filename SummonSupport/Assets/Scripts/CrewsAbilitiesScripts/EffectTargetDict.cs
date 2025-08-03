@@ -5,7 +5,7 @@ using UnityEngine;
 public class EffectTargetDict
 {
 
-    [field: SerializeField] public Crew_EffectPackage Effect;
+    [field: SerializeField] public EffectPackage Effect;
 
 }
 

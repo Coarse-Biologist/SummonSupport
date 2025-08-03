@@ -4,16 +4,25 @@ using UnityEngine;
 public class ConjureAbility : Ability
 {
     [field: Header("Conjure settings"), Tooltip("Ability prefab")]
-    [field: SerializeField] public GameObject   ObjectToSpawn  { get; protected set; }
-    [field: SerializeField] public Vector2      SpawnOffset    { get; protected set; }
-    [field: SerializeField] public float        RotationOffset { get; protected set; } = 0;
+    [field: SerializeField] public GameObject ObjectToSpawn { get; protected set; }
+    [field: SerializeField] public Vector2 SpawnOffset { get; protected set; }
+    [field: SerializeField] public float RotationOffset { get; protected set; } = 0;
+    [field: SerializeField] public float Radius = 1f;
 
 
-    [field: Tooltip("Activate this if ability should only last a specific amount of time")] 
-    [field: SerializeField] public bool         IsDecaying     { get; protected set; }
+    [field: Tooltip("Activate this if ability should only last a specific amount of time")]
+    [field: SerializeField] public bool IsDecaying { get; protected set; }
+    [field: SerializeField] public bool LeaveRotation { get; protected set; }
 
-    [field: Tooltip("in seconds")] 
-    [field: SerializeField] public float        TimeAlive      { get; protected set; }
+
+    [field: Tooltip("in seconds")]
+    [field: SerializeField] public float TimeAlive { get; protected set; }
+
+    [field: Header("Tracking Settings"), Tooltip("in seconds")]
+    [field: SerializeField] public bool SeeksTarget { get; protected set; } = false;
+    [field: SerializeField] public float Speed { get; private set; } = 2f;
+    [field: SerializeField] public float SearchRadius { get; private set; } = 10f;
+
 
 
     public override bool Activate(GameObject user)
@@ -25,21 +34,20 @@ public class ConjureAbility : Ability
 
     public bool Activate(GameObject user, Vector3 spawnPosition, Quaternion rotation)
     {
-        Quaternion newRotation = rotation * Quaternion.Euler(0, 0, RotationOffset);
+
+        Quaternion newRotation = Quaternion.identity;
+        if (!LeaveRotation)
+            newRotation = rotation * Quaternion.Euler(0, 0, RotationOffset);
         GameObject spawnedObject = Instantiate(ObjectToSpawn, spawnPosition, newRotation);
 
         if (IsDecaying)
-            AddDecayToObject(spawnedObject);
-
+            Destroy(spawnedObject, TimeAlive);
         if (spawnedObject.TryGetComponent(out Aura aura))
-            aura.HandleInstanciation(user.GetComponent<LivingBeing>(), this);
-        
+            aura.HandleInstantiation(user.GetComponent<LivingBeing>(), null, this, Radius, this.TimeAlive);
+
         return true;
     }
 
-    public void AddDecayToObject(GameObject spawnedObject)
-    {
-        SelfDestructTimer selfDestructTimer = spawnedObject.AddComponent<SelfDestructTimer>();
-        selfDestructTimer.StartTimer(TimeAlive);
-    }
+
+
 }

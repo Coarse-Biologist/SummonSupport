@@ -16,14 +16,28 @@ MonoBehaviour:
   <Icon>k__BackingField: {fileID: 8095344145157262792, guid: c3bce2abce0ec0e47ba9c908fd690f04,
     type: 3}
   <Cooldown>k__BackingField: 2
-  <PowerCost>k__BackingField: 20
-  <StatusEffects>k__BackingField:
-  - {fileID: 11400000, guid: 84e50eaebc4a21f4fbc0ae6c56e66092, type: 2}
+  <CostType>k__BackingField: 0
+  <Cost>k__BackingField: 0
   <ListUsableOn>k__BackingField: 01000000
-  <Attribute>k__BackingField: 0
-  <Value>k__BackingField: 0
-  <ElementType>k__BackingField: 0
-  <OnCooldown>k__BackingField: 0
+  <TargetTypeAndEffects>k__BackingField:
+  - <EffectDescription>k__BackingField: Burns
+    <TargetType>k__BackingField: 1
+    <Heal>k__BackingField:
+      <Value>k__BackingField: 0
+    <HealOverTime>k__BackingField:
+      <Value>k__BackingField: 0
+      <Duration>k__BackingField: 0
+    <AttributeUp>k__BackingField: []
+    <AttributeDown>k__BackingField: []
+    <Damage>k__BackingField:
+    - <Value>k__BackingField: 20
+      <Element>k__BackingField: 4
+      <Physical>k__BackingField: 0
+      <ValueType>k__BackingField: 0
+    <DamageOverTime>k__BackingField: []
+    <SpecialAbilityAttribute>k__BackingField: 0
+  <ElementTypes>k__BackingField: 
+  <AbilityTypeTag>k__BackingField: 1
   <Speed>k__BackingField: 5
   <Projectile>k__BackingField: {fileID: 1503869405188693834, guid: a9f50fbd26367e9409b49cb9300cd576,
     type: 3}
@@ -33,5 +47,5 @@ MonoBehaviour:
   <MaxPierce>k__BackingField: 0
   <MaxSplit>k__BackingField: 1
   <SplitAngleOffset>k__BackingField: 45
-  <ListOnHitDo>k__BackingField: 03000000
-  <ListOnDestroyDo>k__BackingField: 
+  <ProjectileParticleSystem>k__BackingField: {fileID: 5647196156128557912, guid: bd1d5a2cef288fb4c87f1f0c1f18d32e,
+    type: 3}

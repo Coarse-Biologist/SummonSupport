@@ -15,13 +15,25 @@ MonoBehaviour:
   <Name>k__BackingField: Flash Heal
   <Icon>k__BackingField: {fileID: -5213843486968170516, guid: 71d4e6f2bf9eae84f9b9d55dc9f41410,
     type: 3}
-  <Cooldown>k__BackingField: 3
-  <PowerCost>k__BackingField: 15
-  <StatusEffects>k__BackingField:
-  - {fileID: 11400000, guid: b38d87f0dd3dc6646a96f8428c57744b, type: 2}
+  <Cooldown>k__BackingField: 2
+  <CostType>k__BackingField: 1
+  <Cost>k__BackingField: 50
   <ListUsableOn>k__BackingField: 00000000
-  <Attribute>k__BackingField: 1
-  <Value>k__BackingField: 25
-  <ElementType>k__BackingField: 2
-  <OnCooldown>k__BackingField: 0
-  <ListOnCastDo>k__BackingField: 0200000003000000
+  <TargetTypeAndEffects>k__BackingField:
+  - <EffectDescription>k__BackingField: 
+    <TargetType>k__BackingField: 1
+    <Heal>k__BackingField:
+      <Value>k__BackingField: 50
+    <HealOverTime>k__BackingField:
+      <Value>k__BackingField: 0
+      <Duration>k__BackingField: 0
+    <AttributeUp>k__BackingField: []
+    <AttributeDown>k__BackingField: []
+    <Damage>k__BackingField: []
+    <DamageOverTime>k__BackingField: []
+    <SpecialAbilityAttribute>k__BackingField: 0
+  <ElementTypes>k__BackingField: 
+  <AbilityTypeTag>k__BackingField: 0
+  <SpawnEffectOnHit>k__BackingField: {fileID: 7418358774842603446, guid: bd97673f52127cb448b52fb00741f85b,
+    type: 3}
+  <EffectOrientation>k__BackingField: 0

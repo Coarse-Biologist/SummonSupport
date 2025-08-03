@@ -68,6 +68,7 @@ public class AlchemyHandler : MonoBehaviour
         if (organString.Contains("Functional"))
         {
             stats.ChangeAttribute(AttributeType.MaxHitpoints, 10);
+
             healthUpgrade += 10;
         }
         if (organString.Contains("Hulking"))
@@ -176,6 +177,7 @@ public class AlchemyHandler : MonoBehaviour
             //CommandMinion.SetSelectedMinion(minion); //Good idea?...
             newMinionAdded?.Invoke(livingBeing);
         }
+        CommandMinion.SetActiveMinions(activeMinions);
     }
     #endregion
 

@@ -21,7 +21,8 @@ MonoBehaviour:
   <ListUsableOn>k__BackingField: 
   <Attribute>k__BackingField: 0
   <Value>k__BackingField: 0
-  <ElementType>k__BackingField: 0
+  <ElementType>k__BackingField: 1
+  <PhysicalType>k__BackingField: 0
   <OnCooldown>k__BackingField: 1
   <ObjectToSpawn>k__BackingField: {fileID: 626346471676512894, guid: 0426bd00677ff8c4d996ab592a456265,
     type: 3}

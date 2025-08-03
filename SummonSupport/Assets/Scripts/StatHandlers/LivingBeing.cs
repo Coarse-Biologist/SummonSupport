@@ -14,6 +14,7 @@ public abstract class LivingBeing : MonoBehaviour
     [field: SerializeField] public string Description { get; private set; }
     [field: SerializeField] public List<string> BattleCries { get; private set; }
 
+    #region Resources
     [Header("Attributes - Resources")]
     [field: SerializeField] public float MaxHP { get; private set; } = 100;
     [field: SerializeField] public float Overshield { get; private set; }
@@ -21,6 +22,8 @@ public abstract class LivingBeing : MonoBehaviour
     [field: SerializeField] public float MaxPower { get; private set; } = 100;
     [field: SerializeField] public float PowerSurge { get; private set; }
     [field: SerializeField] public float CurrentPower { get; private set; } = 100;
+    #endregion
+    #region Health regen variables
 
     [Header("Attributes - Regenerations")]
     private WaitForSeconds regenTickRate;
@@ -33,7 +36,7 @@ public abstract class LivingBeing : MonoBehaviour
     [field: SerializeField] public int PowerRegenArrows { get; private set; } = 0;
     [field: SerializeField] public float RegenCalcOffset { get; private set; } = .8f;
     [field: SerializeField] public int MaxRegenArrows { get; private set; } = 6;
-
+    #endregion
 
     //TODO:
 
@@ -69,12 +72,13 @@ public abstract class LivingBeing : MonoBehaviour
     #region other data
 
     [Header("Other")]
-    [field: SerializeField] public float XP_OnDeath { get; private set; } = 3;
-    public Dictionary<string, StatusEffectInstance> activeStatusEffects = new();
+    [field: SerializeField] public List<Ability> AffectedByAbilities { get; private set; } = new();
+    [field: SerializeField] public float XP_OnDeath { get; private set; } = 5f;
+
     public Dictionary<Element, (Func<float> Get, Action<float> Set)> Affinities { private set; get; } = new();
     public Dictionary<AttributeType, (Func<float> Get, Action<float> Set)> AttributesDict { private set; get; } = new();
 
-    [field: SerializeField] public List<Ability> Abilties { get; private set; } = new();
+    //[field: SerializeField] public List<Crew_Ability_SO> Abilties { get; private set; } = new();
     [field: SerializeField] public float Speed { get; private set; } = 3f;
     [field: SerializeField] public float Mass { get; private set; } = 1f;
 
@@ -89,6 +93,7 @@ public abstract class LivingBeing : MonoBehaviour
         GetComponent<Rigidbody2D>().mass = Mass;
         InitializeAttributeDict();
         InitializeAffinityDict();
+        InitializePhysicalDict();
         resourceBarInterface = GetComponent<I_ResourceBar>();
         regenTickRate = new WaitForSeconds(TickRateRegenerationInSeconds);
 
@@ -120,9 +125,11 @@ public abstract class LivingBeing : MonoBehaviour
     #region Affinity handling
     public void GainAffinity(Element element, float amount)
     {
+        float newAffinity = Mathf.Min(amount + Affinities[element].Get(), 200);
+
         if (Affinities.TryGetValue(element, out (Func<float> Get, Action<float> Set) func))
         {
-            Affinities[element].Set(amount + Affinities[element].Get());
+            Affinities[element].Set(newAffinity);
         }
     }
     #endregion
@@ -140,22 +147,22 @@ public abstract class LivingBeing : MonoBehaviour
     {
         if (AttributesDict != null && AttributesDict.ContainsKey(attributeType))
             AttributesDict[attributeType].Set(value);
-
         HandleEventInvokes(attributeType, value);
+        if (attributeType == AttributeType.CurrentHitpoints && value <= 0)
+            Die();
     }
 
-    public float ChangeAttribute(AttributeType attributeType, float value, ValueType valueType = ValueType.Flat)
+    public float ChangeAttribute(AttributeType attributeType, float value)
     {
         if (AttributesDict == null || !AttributesDict.ContainsKey(attributeType))
             throw new Exception("Attribute not found or invalid setter");
 
-        float currentValue = GetAttribute(attributeType);
-        float newValue = CalculateNewValueByType(currentValue, value, valueType, attributeType);
-        SetAttribute(attributeType, newValue);
+        //float newValue = CalculateNewValueByType(currentValue, value, valueType, attributeType);
+        SetAttribute(attributeType, GetAttribute(attributeType) + value);
 
         if (GetAttribute(AttributeType.CurrentHitpoints) <= 0)
             Die();
-        return newValue;
+        return GetAttribute(attributeType) + value;
     }
 
     public void HandleEventInvokes(AttributeType attributeType, float newValue)
@@ -195,51 +202,18 @@ public abstract class LivingBeing : MonoBehaviour
         }
     }
 
-    float CalculateNewValueByType(float currentValue, float value, ValueType valueType, AttributeType attributeType)
-    {
-        float newValue = valueType == ValueType.Percentage
-        ? currentValue * (1 + value / 100f)
-        : currentValue + value;
-        //DamageHandler.AdjustValue();
 
-        return HandleAttributeCap(attributeType, newValue, currentValue, value);
+    #endregion
+
+    #region Changing list of abilities affecting one
+
+    public void AlterAbilityList(Ability ability, bool Add) // modifies the list of abilities by which one is affected
+    {
+        bool contains = AffectedByAbilities.Contains(ability);
+        if (Add && !contains) AffectedByAbilities.Add(ability);
+        if (!Add && contains) AffectedByAbilities.Remove(ability);
     }
 
-    float HandleAttributeCap(AttributeType attributeType, float newValue, float currentValue, float delta)
-    {
-        switch (attributeType)
-        {
-            case AttributeType.CurrentHitpoints:
-                newValue = ApplyCap(AttributeType.MaxHitpoints, AttributeType.Overshield, newValue, currentValue, delta);
-                break;
-
-            case AttributeType.CurrentPower:
-                newValue = ApplyCap(AttributeType.MaxPower, AttributeType.PowerSurge, newValue, currentValue, delta);
-                break;
-        }
-        return newValue;
-    }
-
-    float ApplyCap(AttributeType attributeTypeMax, AttributeType attributeTypeTempMax, float newValue, float currentValue, float delta)
-    {
-        float max = GetAttribute(attributeTypeMax);
-        float tempMax = GetAttribute(attributeTypeTempMax);
-        if (newValue > max) // if the newly calculated value (after recieving heal or damage) is greater than the  characters max
-            return max;
-
-        if (delta < 0 && tempMax > 0) // if damage is being calculated and one has overshield
-        {
-            if (tempMax + delta <= 0) // if the damage is more than the shield
-            {
-                SetAttribute(attributeTypeTempMax, 0); // set overshield to 0
-                return currentValue + tempMax + delta; // return current health plus overshield value, minus damage value,
-            }
-            else
-                SetAttribute(attributeTypeTempMax, tempMax + delta); // otherwise lower overshield value by the damage
-            return currentValue; // return current health or mana
-        }
-        return newValue;
-    }
     #endregion
 
     #region Handle Regeneration
@@ -248,9 +222,11 @@ public abstract class LivingBeing : MonoBehaviour
         while (true)
         {
             float newHP = Mathf.Min(CurrentHP + TotalHealthRegeneration, MaxHP);
-            SetAttribute(AttributeType.CurrentHitpoints, newHP);
+            if (newHP != CurrentHP)
+                SetAttribute(AttributeType.CurrentHitpoints, newHP);
             float newPower = Mathf.Min(CurrentPower + TotalPowerRegeneration, MaxPower);
-            SetAttribute(AttributeType.CurrentPower, newPower);
+            if (newPower != CurrentPower)
+                SetAttribute(AttributeType.CurrentPower, newPower);
             yield return regenTickRate;
         }
     }

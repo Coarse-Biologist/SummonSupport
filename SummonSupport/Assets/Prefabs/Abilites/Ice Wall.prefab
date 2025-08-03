@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6908243660082152577}
   - component: {fileID: 1456046744496647003}
+  - component: {fileID: -3936895363337989366}
   m_Layer: 0
   m_Name: Ice Wall
   m_TagString: Untagged
@@ -72,6 +73,18 @@ CapsuleCollider2D:
   m_Offset: {x: 0, y: 0}
   m_Size: {x: 2.28, y: 1.03}
   m_Direction: 1
+--- !u!114 &-3936895363337989366
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 626346471676512894}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 083b9a9303dd9674b87cc82013ef6e84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4385505750438513570
 GameObject:
   m_ObjectHideFlags: 0

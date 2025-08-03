@@ -1,11 +1,11 @@
 using UnityEngine;
 
-public enum OnEventDo
-{
-    Nothing,
-    Damage,
-    Heal,
-    StatusEffect,
-    Ability,
-    CC,
-}
+//public enum OnEventDo
+//{
+//    Nothing,
+//    Damage,
+//    Heal,
+//    StatusEffect,
+//    Ability,
+//    CC,
+//}
