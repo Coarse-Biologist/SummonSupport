@@ -125,7 +125,7 @@ public class AIPeacefulState : AIState
             Vector2 currentLoc = new Vector2(transform.position.x, transform.position.y);
             Vector2 playerPos = player.transform.position;
             Vector2 direction = playerPos - currentLoc;
-            stateHandler.SetTargetPos(player.transform.position);
+            stateHandler.SetTarget(stateHandler.playerStats);
             if (!closeToPlayer && CompareTag("Minion") && (direction.sqrMagnitude > stateHandler.FollowRadius))
             {
                 GoToPlayer();
@@ -142,15 +142,15 @@ public class AIPeacefulState : AIState
     }
     private IEnumerator HandleSupportloop()
     {
-        LivingBeing targetStats = SelectFriendlyTarget();
-        stateHandler.SetTargetPos(targetStats.transform.position);
+        LivingBeing targetStats;
         runningSupportLoop = true;
         while (true)
         {
-            Logging.Info("i will give my heart for you!");
+            targetStats = SelectFriendlyTarget();
+            stateHandler.SetTarget(targetStats);
+            stateHandler.abilityHandler.UseAbility(targetStats);
+
             yield return supportSpeed;
-            Vector2 targetLoc = targetStats.transform.position;
-            stateHandler.abilityHandler.UseAbility(targetLoc, targetStats);
         }
 
     }

@@ -2,6 +2,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Diagnostics;
+using UnityEngine.Rendering;
 
 
 
@@ -10,6 +11,11 @@ public class CreatureAbilityHandler : AbilityHandler
     private int AI_Hostility { get; set; } = 50; // percent chance, the higher the number, the more likely AI will use attack abilities if possible.
     private List<Ability> supportAbilities { get; set; } = new();
     private List<Ability> attackAbilities { get; set; } = new();
+    private List<Ability> allSupportAbilities { get; set; } = new();
+    private List<Ability> synergyAbilities { get; set; } = new();
+
+
+
     private Ability selectedAbility { get; set; } = null;
 
 
@@ -26,7 +32,6 @@ public class CreatureAbilityHandler : AbilityHandler
         selectedAbility = null;
         bool targetIsFriendly = false;
 
-
         LivingBeing casterStats = casterAbilityHandler.GetComponent<LivingBeing>();
 
         if (target == null)
@@ -35,7 +40,7 @@ public class CreatureAbilityHandler : AbilityHandler
         if (RelationshipHandler.GetRelationshipType(target.CharacterTag, casterStats.CharacterTag) == RelationshipType.Friendly)
         {
             targetIsFriendly = true;
-            if (supportAbilities.Count == 0) return null;
+            //if (supportAbilities.Count == 0) return null;
         }
         if (RelationshipHandler.GetRelationshipType(target.CharacterTag, casterStats.CharacterTag) == RelationshipType.Hostile)
         {
@@ -44,19 +49,34 @@ public class CreatureAbilityHandler : AbilityHandler
         }
         Logging.Info($" elapsed time : {stopwatch.ElapsedMilliseconds}");
 
-
-
-        return SelectedAbility(targetIsFriendly);
+        return SelectAbility(targetIsFriendly, target);
 
 
     }
-    private Ability SelectedAbility(bool friendlyTarget)
+    private Ability SelectAbility(bool friendlyTarget, LivingBeing target)
     {
+        foreach (Ability ability in attackAbilities)
+        {
+            if (Ability.HasElementalSynergy(ability, target))
+            {
+                allSupportAbilities.Add(ability);
+                synergyAbilities.Add(ability);
+                UnityEngine.Debug.Log($"{ability.name} added");
+            }
+            else UnityEngine.Debug.Log($"{ability.name} would not synergize with {target}");
+        }
         if (friendlyTarget)
         {
-            return supportAbilities[UnityEngine.Random.Range(0, supportAbilities.Count)];
+            UnityEngine.Debug.Log($"numnber of all support abilities= {allSupportAbilities.Count}");
+            if (allSupportAbilities.Count == 0) return null;
+
+            selectedAbility = allSupportAbilities[Random.Range(0, allSupportAbilities.Count)];
         }
-        else return attackAbilities[UnityEngine.Random.Range(0, attackAbilities.Count)];
+        else selectedAbility = attackAbilities[Random.Range(0, attackAbilities.Count)];
+
+        foreach (Ability ability in synergyAbilities) { if (allSupportAbilities.Contains(ability)) allSupportAbilities.Remove(ability); }
+
+        return selectedAbility;
     }
 
 
@@ -67,8 +87,11 @@ public class CreatureAbilityHandler : AbilityHandler
             if (ability.AbilityTypeTag == AbilityTypeTag.DebuffsTarget)
                 attackAbilities.Add(ability);
             else if (ability.AbilityTypeTag == AbilityTypeTag.BuffsTarget)
+            {
                 supportAbilities.Add(ability);
+            }
         }
+        allSupportAbilities = supportAbilities;
         AI_Hostility /= attackAbilities.Count;
         AI_Hostility *= attackAbilities.Count;
     }
@@ -82,13 +105,13 @@ public class CreatureAbilityHandler : AbilityHandler
 
 
 
-    public void UseAbility(Vector2 targetLocation, LivingBeing target)
+    public void UseAbility(LivingBeing target)
     {
         Ability ability = GetAbilityForTarget(GetComponent<AbilityHandler>(), target);
         if (ability != null)
         {
             UnityEngine.Debug.Log($"{ability} = ability selected by {GetComponent<LivingBeing>().Name} against {target}");
-            CastAbility(Abilities.IndexOf(ability), targetLocation, abilityDirection.transform.rotation);
+            CastAbility(Abilities.IndexOf(ability), target.transform.position, abilityDirection.transform.rotation);
         }
     }
 
