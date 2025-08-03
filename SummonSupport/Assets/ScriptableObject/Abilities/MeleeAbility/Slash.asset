@@ -15,7 +15,7 @@ MonoBehaviour:
   <Name>k__BackingField: Slash
   <Icon>k__BackingField: {fileID: 0}
   <Cooldown>k__BackingField: 1
-  <CostType>k__BackingField: 0
+  <CostType>k__BackingField: 4
   <Cost>k__BackingField: 20
   <ListUsableOn>k__BackingField: 01000000
   <TargetTypeAndEffects>k__BackingField:
@@ -34,8 +34,9 @@ MonoBehaviour:
       <Physical>k__BackingField: 3
       <ValueType>k__BackingField: 2
     <DamageOverTime>k__BackingField: []
-    <EffectObject>k__BackingField: {fileID: 0}
-    <ParticleEffect>k__BackingField: {fileID: 0}
+    <SpecialAbilityAttribute>k__BackingField: 0
+  <ElementTypes>k__BackingField: 
+  <AbilityTypeTag>k__BackingField: 1
   <Range>k__BackingField: 2
   <Angle>k__BackingField: 0
   <Width>k__BackingField: 3

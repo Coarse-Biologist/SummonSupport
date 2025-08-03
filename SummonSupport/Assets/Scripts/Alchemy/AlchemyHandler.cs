@@ -177,6 +177,7 @@ public class AlchemyHandler : MonoBehaviour
             //CommandMinion.SetSelectedMinion(minion); //Good idea?...
             newMinionAdded?.Invoke(livingBeing);
         }
+        CommandMinion.SetActiveMinions(activeMinions);
     }
     #endregion
 

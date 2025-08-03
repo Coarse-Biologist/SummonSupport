@@ -30,7 +30,6 @@ public class ProjectileAbility : Ability
     }
     public bool Activate(GameObject user, GameObject spawnPoint, Transform direction)
     {
-
         GameObject projectile = Instantiate(Projectile, user.transform.position, Quaternion.identity);
         Projectile projectileScript = projectile.GetComponent<Projectile>();
         SetEffects(projectileScript, user);

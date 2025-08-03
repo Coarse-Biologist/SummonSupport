@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 [System.Serializable]
@@ -14,13 +15,10 @@ public class EffectPackage
     [field: SerializeField] public List<DamageoT_AT> DamageOverTime { get; private set; }
     [field: SerializeField] public List<StatusEffects> StatusEffects { get; private set; }
 
-
-    [field: SerializeField] public GameObject EffectObject { get; private set; }
-    [field: SerializeField] public GameObject ParticleEffect { get; private set; }
+    [field: SerializeField] public SpecialAbilityAttribute SpecialAbilityAttribute { get; private set; }
 
 
 }
 
-//[field: SerializeField] public Projectile_AT Projectile { get; private set; }
 
 

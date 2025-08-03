@@ -15,6 +15,8 @@ public abstract class Ability : ScriptableObject
     [field: SerializeField] public List<RelationshipType> ListUsableOn { get; protected set; }
     [field: SerializeField] public List<EffectPackage> TargetTypeAndEffects { get; protected set; } = new();
     [field: SerializeField] public List<Element> ElementTypes { get; protected set; } = new();
+    [field: SerializeField] public AbilityTypeTag AbilityTypeTag { get; protected set; } = AbilityTypeTag.BuffsTarget;
+
 
 
     public abstract bool Activate(GameObject Caster);

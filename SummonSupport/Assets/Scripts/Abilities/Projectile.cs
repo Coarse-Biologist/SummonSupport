@@ -16,9 +16,10 @@ public class Projectile : MonoBehaviour
 
     public void Shoot(GameObject user, GameObject spawnAt = null, Vector3 lookAt = default(Vector3))
     {
-
         if (user.TryGetComponent(out LivingBeing livingBeing))
             userLivingBeing = livingBeing;
+        else
+            Debug.Log($"user isnt a living being, weird right?");
         ignoreGameObjects.Add(user);
         SetProjectilePhysics(spawnAt, lookAt);
         Destroy(gameObject, ability.Lifetime); // TODO: change from lifetime to range
@@ -63,14 +64,17 @@ public class Projectile : MonoBehaviour
 
         if (!other.TryGetComponent(out LivingBeing otherLivingBeing))
         {
-
             SpawnEffect(otherLivingBeing);
             DestroyProjectile();
             return;
         }
 
-        if (userLivingBeing && !ability.IsUsableOn(userLivingBeing.CharacterTag, otherLivingBeing.CharacterTag))
+        if (!userLivingBeing || !ability.IsUsableOn(userLivingBeing.CharacterTag, otherLivingBeing.CharacterTag))
             return;
+
+        Debug.Log($"ability = {ability.name}.");
+        Debug.Log($"caster = {userLivingBeing}.");
+        Debug.Log($" target = {otherLivingBeing}");
 
         CombatStatHandler.HandleEffectPackages(ability, userLivingBeing, otherLivingBeing, false);
         HandleOnHitBehaviour(otherLivingBeing);

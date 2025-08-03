@@ -13,6 +13,7 @@ public static class CombatStatHandler
 
     public static void HandleEffectPackages(Ability ability, LivingBeing caster, LivingBeing target, bool forSelf = false)
     {
+        Debug.Log($"ability = {ability.name}. caster = {caster.Name}. target = {target.Name}. for self? {forSelf}");
         LivingBeing casterStats = caster.GetComponent<LivingBeing>();
         LivingBeing targetStats = target.GetComponent<LivingBeing>();
         LivingBeing theTarget = casterStats;
@@ -32,7 +33,7 @@ public static class CombatStatHandler
                 {
                     foreach (Damage_AT damage in package.Damage)
                     {
-                        AdjustDamageValue(damage, theTarget, casterStats);
+                        AdjustDamageValue(damage, theTarget, casterStats, package.SpecialAbilityAttribute);
                     }
                 }
                 if (package.DamageOverTime.Count > 0)
@@ -62,13 +63,18 @@ public static class CombatStatHandler
     }
 
     #region Adjust and apply damage, heal, temo attributes and damage over times
-    public static float AdjustDamageValue(Damage_AT damage_AT, LivingBeing target, LivingBeing caster = null)
+    public static float AdjustDamageValue(Damage_AT damage_AT, LivingBeing target, LivingBeing caster = null, SpecialAbilityAttribute specialAbilityAttribute = SpecialAbilityAttribute.None)
     {
         float damageValue = GetDamageByType(damage_AT, target);
 
         if (damage_AT.Element != Element.None) damageValue = AdjustBasedOnAffinity(damage_AT.Element, damageValue, caster, target);
         if (damage_AT.Physical != PhysicalType.None) damageValue = AdjustBasedOnArmor(damage_AT.Physical, damageValue, target);
         AdjustForOverValue(target, AttributeType.Overshield, AttributeType.MaxHitpoints, AttributeType.CurrentHitpoints, -damageValue);
+        if (specialAbilityAttribute == SpecialAbilityAttribute.Syphon)
+        {
+            AdjustForOverValue(target, AttributeType.Overshield, AttributeType.MaxHitpoints, AttributeType.CurrentHitpoints, damageValue);
+            Debug.Log($"appplying {damageValue} damage to {target}and healing caster {caster} for {damageValue}");
+        }
 
         return damageValue;
     }

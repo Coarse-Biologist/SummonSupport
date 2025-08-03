@@ -31,6 +31,8 @@ public class AbilityHandler : MonoBehaviour
 
     protected bool CastAbility(int abilityIndex, Vector2 targetPosition, Quaternion rotation)
     {
+        Logging.Info($"Ability at index {abilityIndex} trying to be used by {statsHandler.Name}");
+
         //Debug.Log($"index = {abilityIndex}, cooldown = {abilitiesOnCooldown}, abilities {Abilities},  count= {Abilities.Count}");
         if (Abilities.Count <= 0 || abilitiesOnCooldown[abilityIndex])
             return false;
@@ -79,6 +81,7 @@ public class AbilityHandler : MonoBehaviour
                 usedAbility = HandleBeamAbility(beamAbility, statsHandler);
                 break;
         }
+        Logging.Info($"able to use {ability.Name} = {usedAbility}");
         return usedAbility;
     }
     private bool HandleBeamAbility(BeamAbility beamAbility, LivingBeing statsHandler)

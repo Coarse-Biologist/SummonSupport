@@ -16,14 +16,12 @@ MonoBehaviour:
   <Icon>k__BackingField: {fileID: 544104916224676396, guid: 1999786300aba2a4ea58c6b2b395516e,
     type: 3}
   <Cooldown>k__BackingField: 6
-  <CostType>k__BackingField: 0
-  <Cost>k__BackingField: 0
+  <CostType>k__BackingField: 4
+  <Cost>k__BackingField: 30
   <ListUsableOn>k__BackingField: 01000000
   <TargetTypeAndEffects>k__BackingField:
   - <EffectDescription>k__BackingField: heals
     <TargetType>k__BackingField: 0
-    <HasAoE>k__BackingField: 0
-    <Radius>k__BackingField: 0
     <Heal>k__BackingField:
       <Value>k__BackingField: 40
     <HealOverTime>k__BackingField:
@@ -33,8 +31,9 @@ MonoBehaviour:
     <AttributeDown>k__BackingField: []
     <Damage>k__BackingField: []
     <DamageOverTime>k__BackingField: []
-    <EffectObject>k__BackingField: {fileID: 0}
-    <ParticleEffect>k__BackingField: {fileID: 0}
+    <SpecialAbilityAttribute>k__BackingField: 0
+  <ElementTypes>k__BackingField: 
+  <AbilityTypeTag>k__BackingField: 1
   <Range>k__BackingField: 20
   <ActivateOnUse>k__BackingField: []
   <ActivateOnArrive>k__BackingField:

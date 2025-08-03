@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System;
 using System.Runtime.InteropServices;
+using System.Collections.Generic;
 
 public class AIPeacefulState : AIState
 {
@@ -13,6 +14,12 @@ public class AIPeacefulState : AIState
     private GameObject player;
     private bool closeToPlayer = false;
     private Rigidbody2D rb;
+    #region Support ability use handling
+    private bool runningSupportLoop = false;
+    private WaitForSeconds supportSpeed = new WaitForSeconds(1);
+    private Coroutine supportCoroutine;
+    #endregion
+
 
 
     void Start()
@@ -61,8 +68,6 @@ public class AIPeacefulState : AIState
         Collider2D[] rangeChecks = Physics2D.OverlapCircleAll(transform.position, stateHandler.DetectionRadius, stateHandler.targetMask);
         if (rangeChecks.Length != 0)
         {
-            //Debug.DrawRay(transform.position, rangeChecks[0].transform.position, Color.green, 2f);
-
             GameObject detectedObject = rangeChecks[0].transform.gameObject;
             chaseState.SetTargetEntity(detectedObject);
             return detectedObject;
@@ -76,13 +81,10 @@ public class AIPeacefulState : AIState
 
     public bool CheckVisionBlocked(GameObject target, float angleOffset = 0)
     {
-        // Correct way to calculate the direction vector
         Vector2 directionToTarget = (target.transform.position - transform.position).normalized;
 
-        // Distance between the two objects
         float distanceToTarget = Vector2.Distance(transform.position, target.transform.position);
 
-        // Debug the raycast for visual feedback
         Debug.DrawLine(transform.position, target.transform.position, Color.red);
 
         if (angleOffset != 0) directionToTarget = RotatePoint(directionToTarget, transform.position, angleOffset);
@@ -109,6 +111,13 @@ public class AIPeacefulState : AIState
         if (canSeeTarget)
         {
             Debug.Log("Requesting chase state");
+            if (runningSupportLoop)
+            {
+                runningSupportLoop = false;
+
+                StopCoroutine(supportCoroutine);
+            }
+
             return chaseState;
         }
         else if (player)
@@ -116,9 +125,13 @@ public class AIPeacefulState : AIState
             Vector2 currentLoc = new Vector2(transform.position.x, transform.position.y);
             Vector2 playerPos = player.transform.position;
             Vector2 direction = playerPos - currentLoc;
+            stateHandler.SetTargetPos(player.transform.position);
             if (!closeToPlayer && CompareTag("Minion") && (direction.sqrMagnitude > stateHandler.FollowRadius))
             {
                 GoToPlayer();
+                // function which will decide whether minion should try to use some buff or heal on player or fellow minions
+                if (!runningSupportLoop)
+                    supportCoroutine = StartCoroutine(HandleSupportloop()); //HandleSupportloop(player.GetComponent<LivingBeing>()));
             }
             return this;
         }
@@ -126,6 +139,36 @@ public class AIPeacefulState : AIState
         {
             return this;
         }
+    }
+    private IEnumerator HandleSupportloop()
+    {
+        LivingBeing targetStats = SelectFriendlyTarget();
+        stateHandler.SetTargetPos(targetStats.transform.position);
+        runningSupportLoop = true;
+        while (true)
+        {
+            Logging.Info("i will give my heart for you!");
+            yield return supportSpeed;
+            Vector2 targetLoc = targetStats.transform.position;
+            stateHandler.abilityHandler.UseAbility(targetLoc, targetStats);
+        }
+
+    }
+    private LivingBeing SelectFriendlyTarget()
+    {
+        List<LivingBeing> friendlies = new();
+        if (player.TryGetComponent<LivingBeing>(out var playerStats))
+        {
+            friendlies.Add(playerStats);
+            friendlies.Add(gameObject.GetComponent<LivingBeing>());
+            foreach (GameObject minion in CommandMinion.activeMinions)
+            {
+                friendlies.Add(minion.GetComponent<LivingBeing>());
+            }
+        }
+        LivingBeing selectedFriend = friendlies[UnityEngine.Random.Range(0, friendlies.Count)];
+        Debug.Log($"Selecting friend: {selectedFriend}");
+        return selectedFriend;
     }
 
     public void GoToPlayer()

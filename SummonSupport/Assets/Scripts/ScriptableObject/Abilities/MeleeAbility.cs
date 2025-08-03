@@ -32,7 +32,7 @@ public class MeleeAbility : Ability
         if (originTransform == null)
         {
             originTransform = user.GetComponent<AbilityHandler>().abilityDirection.transform;
-            //Debug.Log($"setting origin transform equal to that of mr {user.GetComponent<LivingBeing>().Name}");
+            Debug.Log($"setting origin transform equal to that of mr {user.GetComponent<LivingBeing>().Name}");
         }
 
         Collider2D[] hits = Physics2D.OverlapCircleAll(user.transform.position, Range);
@@ -45,7 +45,7 @@ public class MeleeAbility : Ability
                 {
                     Target = collider.GetComponent<LivingBeing>();
                     SetEffects(user);
-                    //Logging.Info("verified and rarified");
+                    Logging.Info("verified and rarified");
                     CombatStatHandler.HandleEffectPackages(this, Caster, Target);
                     SpawnHitEffect(Target);
                     activated = true;
@@ -59,13 +59,16 @@ public class MeleeAbility : Ability
 
     private bool VerifyActivate(Collider2D collider, GameObject user)
     {
-        if (collider.GetComponent<LivingBeing>() == null)
+
+        if (!collider.TryGetComponent<LivingBeing>(out LivingBeing targetStats))
         {
-            //Logging.Info("oof, 1");
+            Logging.Info("oof, 1");
 
             return false;
         }
-        //Logging.Info($"User = {user} collider = {collider.gameObject}");
+        Target = targetStats;
+
+        Logging.Info($"User = {user} collider = {collider.gameObject}");
 
         if (!IsUsableOn(Caster.CharacterTag, Target.CharacterTag))
         {
@@ -75,13 +78,13 @@ public class MeleeAbility : Ability
         else Debug.Log($"usable on {collider.gameObject}");
         if (VerifyWithinShape(user, collider))
         {
-            //Logging.Info("yay, 3");
+            Logging.Info("yay, 3");
 
             return true;
         }
         else
         {
-            //Logging.Info("oof, 4");
+            Logging.Info("oof, 4");
 
             return false;
         }
@@ -90,7 +93,7 @@ public class MeleeAbility : Ability
     private bool VerifyWithinShape(GameObject user, Collider2D collider)
     {
 
-        //DebugAbilityShape(originTransform);
+        DebugAbilityShape(originTransform);
         Vector2 hitLocation = collider.transform.position;
         if ((hitLocation - (Vector2)originTransform.position).magnitude <= .2)
             return true;
@@ -119,6 +122,7 @@ public class MeleeAbility : Ability
             // Check if point is inside the rectangle
             bool isInside = forwardDistance <= Range && (Mathf.Abs(sideDistance) <= Width / 2f); //forwardDistance >= 0 &&
 
+            Logging.Info($"isInside? = {isInside}");
             if (isInside)
                 return true;
             else return false;

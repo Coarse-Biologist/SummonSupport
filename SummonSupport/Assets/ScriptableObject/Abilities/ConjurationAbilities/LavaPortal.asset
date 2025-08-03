@@ -16,8 +16,8 @@ MonoBehaviour:
   <Icon>k__BackingField: {fileID: 8095344145157262792, guid: c3bce2abce0ec0e47ba9c908fd690f04,
     type: 3}
   <Cooldown>k__BackingField: 0.5
-  <CostType>k__BackingField: 0
-  <Cost>k__BackingField: 0
+  <CostType>k__BackingField: 4
+  <Cost>k__BackingField: 100
   <ListUsableOn>k__BackingField: 01000000
   <TargetTypeAndEffects>k__BackingField:
   - <EffectDescription>k__BackingField: Melts
@@ -45,8 +45,9 @@ MonoBehaviour:
       <Physical>k__BackingField: 0
       <ValueType>k__BackingField: 0
       <Duration>k__BackingField: 99
-    <EffectObject>k__BackingField: {fileID: 0}
-    <ParticleEffect>k__BackingField: {fileID: 0}
+    <SpecialAbilityAttribute>k__BackingField: 0
+  <ElementTypes>k__BackingField: 
+  <AbilityTypeTag>k__BackingField: 1
   <ObjectToSpawn>k__BackingField: {fileID: 3088800244414480477, guid: 13dca4459f2e1ce4c90bf4fa3aef4c3b,
     type: 3}
   <SpawnOffset>k__BackingField: {x: 0, y: 0}

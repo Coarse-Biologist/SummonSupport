@@ -16,14 +16,12 @@ MonoBehaviour:
   <Icon>k__BackingField: {fileID: 3837697726249093711, guid: a949de51ac63b994784528b4e06be2b5,
     type: 3}
   <Cooldown>k__BackingField: 5
-  <CostType>k__BackingField: 0
-  <Cost>k__BackingField: 0
+  <CostType>k__BackingField: 4
+  <Cost>k__BackingField: 20
   <ListUsableOn>k__BackingField: 01000000
   <TargetTypeAndEffects>k__BackingField:
   - <EffectDescription>k__BackingField: Poisons
     <TargetType>k__BackingField: 1
-    <HasAoE>k__BackingField: 0
-    <Radius>k__BackingField: 0
     <Heal>k__BackingField:
       <Value>k__BackingField: 0
     <HealOverTime>k__BackingField:
@@ -35,13 +33,16 @@ MonoBehaviour:
     - <Value>k__BackingField: 20
       <Element>k__BackingField: 7
       <Physical>k__BackingField: 0
+      <ValueType>k__BackingField: 0
     <DamageOverTime>k__BackingField:
     - <Value>k__BackingField: 2
       <Element>k__BackingField: 7
       <Physical>k__BackingField: 0
+      <ValueType>k__BackingField: 0
       <Duration>k__BackingField: 5
-    <EffectObject>k__BackingField: {fileID: 0}
-    <ParticleEffect>k__BackingField: {fileID: 0}
+    <SpecialAbilityAttribute>k__BackingField: 0
+  <ElementTypes>k__BackingField: 
+  <AbilityTypeTag>k__BackingField: 1
   <Speed>k__BackingField: 5
   <Projectile>k__BackingField: {fileID: 1503869405188693834, guid: 30fe2be61079af849a80347b1ee23f48,
     type: 3}

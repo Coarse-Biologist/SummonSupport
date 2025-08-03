@@ -92,7 +92,6 @@ public class AIChaseState : AIState
             Vector2 direction = (targetLoc - (Vector2)transform.position).normalized;
             float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
             rotationObject.transform.rotation = Quaternion.Euler(0, 0, angle);
-            //Debug.DrawRay(rotationObject.transform.position, targetLoc.normalized * targetLoc.magnitude, Color.red);
             if (spriteController != null)
                 spriteController.SetSpriteDirection(angle);
         }
@@ -104,10 +103,10 @@ public class AIChaseState : AIState
         Vector2 currentLoc = new Vector2(transform.position.x, transform.position.y);
         Vector2 direction = targetLoc - currentLoc;
         float distance = direction.sqrMagnitude;
-        bool isBoss = true;
+        bool uniqueMovement = true;
         if (distance > 10 || peaceState.CheckVisionBlocked(targetEntity))
         {
-            if (!isBoss)
+            if (!uniqueMovement)
             {
                 if (direction.sqrMagnitude > 10 || peaceState.CheckVisionBlocked(targetEntity)) rb.linearVelocity = (targetLoc - currentLoc) * MovementSpeed;
                 else rb.linearVelocity = new Vector2(0, 0);
@@ -135,7 +134,7 @@ public class AIChaseState : AIState
         {
             yield return attackSpeed;
             Vector2 targetLoc = target.transform.position;
-            abilityHandler.UseAbility(targetLoc);
+            abilityHandler.UseAbility(targetLoc, target.GetComponent<LivingBeing>());
         }
 
     }

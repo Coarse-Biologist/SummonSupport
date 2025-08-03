@@ -100,7 +100,7 @@ public class AbilityUI_Handler : MonoBehaviour
     {
         if (ProgressBarDict.TryGetValue(slotIndex, out ProgressBar bar))
         {
-            //VisualElement background = bar.Q<VisualElement>("unity-progress-bar__background");
+            bar.title = ability.name;
             bar.style.backgroundImage = new StyleBackground(ability.Icon);
         }
     }

@@ -94,6 +94,7 @@ MonoBehaviour:
   <Piercing>k__BackingField: 0
   <Bludgeoning>k__BackingField: 0
   <Slashing>k__BackingField: 0
+  <AffectedByAbilities>k__BackingField: []
   <XP_OnDeath>k__BackingField: 3
   <Speed>k__BackingField: 0.4
   <Mass>k__BackingField: 1
@@ -276,6 +277,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 5e39961f19654e04bb7f41a70934544c, type: 2}
   - {fileID: 11400000, guid: ef1f958feb55809438588f67d22120ae, type: 2}
   - {fileID: 11400000, guid: 996489c834f79a74fb51758838eabbcd, type: 2}
+  - {fileID: 11400000, guid: 4c3c5f9615adc0745ad7d2d7106f3cd8, type: 2}
   abilitiesOnCooldown: 
 --- !u!1 &1502490013454894205
 GameObject:
