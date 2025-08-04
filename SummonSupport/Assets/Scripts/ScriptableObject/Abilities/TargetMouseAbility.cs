@@ -18,7 +18,7 @@ public class TargetMouseAbility : Ability
         bool usedAbility = false;
         Vector2 mousePos;
         if (casterStats.CharacterTag == CharacterTag.Player) mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        else mousePos = user.GetComponent<AIStateHandler>().targetPos;
+        else mousePos = user.GetComponent<AIStateHandler>().target.transform.position;
         int layerMask = ~LayerMask.GetMask("Obstruction"); // Alle außer "Obstruction"
         RaycastHit2D hit = Physics2D.Raycast(mousePos, Vector2.zero, Mathf.Infinity, layerMask);
         //Collider2D[] rangeChecks = Physics2D.OverlapCircleAll(mousePos, 1, stateHandler.targetMask);

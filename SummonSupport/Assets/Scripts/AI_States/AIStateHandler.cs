@@ -22,7 +22,8 @@ public class AIStateHandler : MonoBehaviour
     [SerializeField] public MinionStats minionStats { private set; get; }
     public CreatureAbilityHandler abilityHandler { private set; get; }
     public GameObject player { protected set; get; }
-    public Vector3 targetPos { protected set; get; }
+    public LivingBeing playerStats { protected set; get; }
+    public LivingBeing target { protected set; get; }
 
     public Vector2 lastSeenLoc;
 
@@ -48,10 +49,11 @@ public class AIStateHandler : MonoBehaviour
     void Start()
     {
         player = PlayerStats.Instance.gameObject;
+        playerStats = PlayerStats.Instance;
     }
-    public void SetTargetPos(Vector3 targetPosition)
+    public void SetTarget(LivingBeing theTarget)
     {
-        targetPos = targetPosition;
+        target = theTarget;
     }
 
 

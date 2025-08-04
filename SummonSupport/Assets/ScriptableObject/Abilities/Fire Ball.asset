@@ -36,7 +36,7 @@ MonoBehaviour:
       <ValueType>k__BackingField: 0
     <DamageOverTime>k__BackingField: []
     <SpecialAbilityAttribute>k__BackingField: 0
-  <ElementTypes>k__BackingField: 
+  <ElementTypes>k__BackingField: 04000000
   <AbilityTypeTag>k__BackingField: 1
   <Speed>k__BackingField: 5
   <Projectile>k__BackingField: {fileID: 1503869405188693834, guid: a9f50fbd26367e9409b49cb9300cd576,

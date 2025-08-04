@@ -69,7 +69,7 @@ public class Projectile : MonoBehaviour
             return;
         }
 
-        if (!userLivingBeing || !ability.IsUsableOn(userLivingBeing.CharacterTag, otherLivingBeing.CharacterTag))
+        if (!userLivingBeing || (!Ability.HasElementalSynergy(ability, otherLivingBeing) && !ability.IsUsableOn(userLivingBeing.CharacterTag, otherLivingBeing.CharacterTag)))
             return;
 
         Debug.Log($"ability = {ability.name}.");

@@ -134,7 +134,7 @@ public class AIChaseState : AIState
         {
             yield return attackSpeed;
             Vector2 targetLoc = target.transform.position;
-            abilityHandler.UseAbility(targetLoc, target.GetComponent<LivingBeing>());
+            abilityHandler.UseAbility(target.GetComponent<LivingBeing>());
         }
 
     }
