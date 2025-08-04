@@ -131,7 +131,7 @@ public class AIPeacefulState : AIState
                 GoToPlayer();
                 // function which will decide whether minion should try to use some buff or heal on player or fellow minions
                 if (!runningSupportLoop)
-                    supportCoroutine = StartCoroutine(HandleSupportloop()); //HandleSupportloop(player.GetComponent<LivingBeing>()));
+                    supportCoroutine = StartCoroutine(HandleSupportloop());
             }
             return this;
         }
@@ -147,6 +147,7 @@ public class AIPeacefulState : AIState
         while (true)
         {
             targetStats = SelectFriendlyTarget();
+            chaseState.LookAtTarget(targetStats.transform.position);
             stateHandler.SetTarget(targetStats);
             stateHandler.abilityHandler.UseAbility(targetStats);
 
