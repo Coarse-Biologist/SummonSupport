@@ -32,7 +32,7 @@ public static class RelationshipHandler
     }
     public static RelationshipType GetRelationshipType(CharacterTag owner, CharacterTag target)
     {
-        Logging.Info($"Relationship =  between {target} and {owner} is {RelationshipTable[(int)owner, (int)target]}");
+        //Logging.Info($"Relationship =  between {target} and {owner} is {RelationshipTable[(int)owner, (int)target]}");
         return RelationshipTable[(int)owner, (int)target];
     }
 }

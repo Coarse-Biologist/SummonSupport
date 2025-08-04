@@ -32,7 +32,7 @@ public class MeleeAbility : Ability
         if (originTransform == null)
         {
             originTransform = user.GetComponent<AbilityHandler>().abilityDirection.transform;
-            Debug.Log($"setting origin transform equal to that of mr {user.GetComponent<LivingBeing>().Name}");
+            //Debug.Log($"setting origin transform equal to that of mr {user.GetComponent<LivingBeing>().Name}");
         }
 
         Collider2D[] hits = Physics2D.OverlapCircleAll(user.transform.position, Range);
@@ -62,29 +62,29 @@ public class MeleeAbility : Ability
 
         if (!collider.TryGetComponent<LivingBeing>(out LivingBeing targetStats))
         {
-            Logging.Info("oof, 1");
+            //Logging.Info("oof, 1");
 
             return false;
         }
         Target = targetStats;
 
-        Logging.Info($"User = {user} collider = {collider.gameObject}");
+        //Logging.Info($"User = {user} collider = {collider.gameObject}");
 
         if (!IsUsableOn(Caster.CharacterTag, Target.CharacterTag))
         {
             if (!HasElementalSynergy(this, Target))
                 return false;
         }
-        else Debug.Log($"usable on {collider.gameObject}");
+        //else Debug.Log($"usable on {collider.gameObject}");
         if (VerifyWithinShape(user, collider))
         {
-            Logging.Info("yay, 3");
+            //Logging.Info("yay, 3");
 
             return true;
         }
         else
         {
-            Logging.Info("oof, 4");
+            //Logging.Info("oof, 4");
 
             return false;
         }

@@ -18,8 +18,8 @@ public class Projectile : MonoBehaviour
     {
         if (user.TryGetComponent(out LivingBeing livingBeing))
             userLivingBeing = livingBeing;
-        else
-            Debug.Log($"user isnt a living being, weird right?");
+        //else
+        //Debug.Log($"user isnt a living being, weird right?");
         ignoreGameObjects.Add(user);
         SetProjectilePhysics(spawnAt, lookAt);
         Destroy(gameObject, ability.Lifetime); // TODO: change from lifetime to range
@@ -72,9 +72,9 @@ public class Projectile : MonoBehaviour
         if (!userLivingBeing || (!Ability.HasElementalSynergy(ability, otherLivingBeing) && !ability.IsUsableOn(userLivingBeing.CharacterTag, otherLivingBeing.CharacterTag)))
             return;
 
-        Debug.Log($"ability = {ability.name}.");
-        Debug.Log($"caster = {userLivingBeing}.");
-        Debug.Log($" target = {otherLivingBeing}");
+        //Debug.Log($"ability = {ability.name}.");
+        //Debug.Log($"caster = {userLivingBeing}.");
+        //Debug.Log($" target = {otherLivingBeing}");
 
         CombatStatHandler.HandleEffectPackages(ability, userLivingBeing, otherLivingBeing, false);
         HandleOnHitBehaviour(otherLivingBeing);

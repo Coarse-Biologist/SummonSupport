@@ -210,9 +210,9 @@ public class AlchemyHandler : MonoBehaviour
                     craftedMinion = handle.Result;
                     minionPrefab = handle.Result;
 
-                    Debug.Log($"Loaded: {address}");
+                    //Debug.Log($"Loaded: {address}");
                 }
-                else Debug.Log($"address {address} failed to Load");
+                //else Debug.Log($"address {address} failed to Load");
             };
     }
 

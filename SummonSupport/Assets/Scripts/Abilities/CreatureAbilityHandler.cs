@@ -61,13 +61,13 @@ public class CreatureAbilityHandler : AbilityHandler
             {
                 allSupportAbilities.Add(ability);
                 synergyAbilities.Add(ability);
-                UnityEngine.Debug.Log($"{ability.name} added");
+                //UnityEngine.Debug.Log($"{ability.name} added");
             }
-            else UnityEngine.Debug.Log($"{ability.name} would not synergize with {target}");
+            //else UnityEngine.Debug.Log($"{ability.name} would not synergize with {target}");
         }
         if (friendlyTarget)
         {
-            UnityEngine.Debug.Log($"numnber of all support abilities= {allSupportAbilities.Count}");
+            //UnityEngine.Debug.Log($"numnber of all support abilities= {allSupportAbilities.Count}");
             if (allSupportAbilities.Count == 0) return null;
 
             selectedAbility = allSupportAbilities[Random.Range(0, allSupportAbilities.Count)];
@@ -110,14 +110,9 @@ public class CreatureAbilityHandler : AbilityHandler
         Ability ability = GetAbilityForTarget(GetComponent<AbilityHandler>(), target);
         if (ability != null)
         {
-            UnityEngine.Debug.Log($"{ability} = ability selected by {GetComponent<LivingBeing>().Name} against {target}");
+            //UnityEngine.Debug.Log($"{ability} = ability selected by {GetComponent<LivingBeing>().Name} against {target}");
             CastAbility(Abilities.IndexOf(ability), target.transform.position, abilityDirection.transform.rotation);
         }
     }
-
-    //private int GetAbilityIndex()
-    //{
-    //    return Random.Range(0, Abilities.Count);
-    //}
 
 }

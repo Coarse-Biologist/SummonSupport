@@ -35,7 +35,7 @@ public class Beam : MonoBehaviour
             {
                 onCoolDown = true;
                 Invoke("OffCoolDown", TickRate);
-                Debug.Log($"particle collided with {targetStatsHandler.Name}");
+                //Debug.Log($"particle collided with {targetStatsHandler.Name}");
                 AlreadyCollided.Add(targetStatsHandler);
                 GameObject hitEffect = Instantiate(Ability.SpawnEffectOnHit, other.transform.position, Quaternion.identity, other.transform);
                 Destroy(hitEffect, 5f);
@@ -70,7 +70,7 @@ public class Beam : MonoBehaviour
 
     private void UpdateRotation()
     {
-        Debug.Log("rotation func being called");
+        //Debug.Log("rotation func being called");
         transform.rotation = abilityRotation.rotation;// * Rotation90Z;
     }
 

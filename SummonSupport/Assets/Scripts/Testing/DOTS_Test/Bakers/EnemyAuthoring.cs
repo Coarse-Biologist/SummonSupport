@@ -14,7 +14,7 @@ public class EnemyAuthoring : MonoBehaviour
         public override void Bake(EnemyAuthoring authoring)
         {
 
-            Debug.Log("Bake function is called");
+            //("Bake function is called");
             var entity = GetEntity(TransformUsageFlags.Dynamic);
 
             AddComponent(entity, new SpeedComponent { Speed = authoring.Speed });

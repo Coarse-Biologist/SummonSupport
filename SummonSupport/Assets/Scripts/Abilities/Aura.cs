@@ -34,6 +34,7 @@ public class Aura : MonoBehaviour
         this.ability = ability;
         this.target = target;
         SetAuraTimer(duration);
+        Activate();
         //transform.Rotate(new Vector3(-110f, 0, 0));
 
     }
@@ -54,7 +55,7 @@ public class Aura : MonoBehaviour
 
         if (Active)
         {
-            //Logging.Info($"{other.gameObject} has entered the bite zone");
+            Logging.Info($"{other.gameObject} has entered the bite zone");
             if (other.gameObject.TryGetComponent(out LivingBeing otherLivingBeing))
             {
 
@@ -70,7 +71,6 @@ public class Aura : MonoBehaviour
 
     void OnTriggerExit2D(Collider2D other)
     {
-        Debug.Log("DONT WORRY YOURE GOOD");
         if (other.gameObject.TryGetComponent<LivingBeing>(out LivingBeing otherLivingBeing))
             otherLivingBeing.AlterAbilityList(ability, false);
 

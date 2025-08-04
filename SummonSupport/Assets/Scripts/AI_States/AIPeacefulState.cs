@@ -168,7 +168,6 @@ public class AIPeacefulState : AIState
             }
         }
         LivingBeing selectedFriend = friendlies[UnityEngine.Random.Range(0, friendlies.Count)];
-        Debug.Log($"Selecting friend: {selectedFriend}");
         return selectedFriend;
     }
 

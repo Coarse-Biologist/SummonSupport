@@ -17,7 +17,7 @@ public class BeamAbility : Ability
     public GameObject ToggleBeam(GameObject user, Transform abilityDirection)
     {
         Beam beamScript = SpawnBeam(user, abilityDirection).GetComponent<Beam>();
-        Debug.Log($"{abilityDirection} = ability direction object");
+        //Debug.Log($"{abilityDirection} = ability direction object");
 
         beamScript.SetAbilitysettings(user.GetComponent<LivingBeing>(), this, abilityDirection);
 

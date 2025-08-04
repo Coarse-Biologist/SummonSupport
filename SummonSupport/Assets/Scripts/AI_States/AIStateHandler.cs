@@ -69,7 +69,7 @@ public class AIStateHandler : MonoBehaviour
             {
                 SwitchToNextState(nextState);
             }
-            else Debug.Log("nextState state was null");
+            ///else Debug.Log("nextState state was null");
         }
         else
         {
@@ -79,7 +79,7 @@ public class AIStateHandler : MonoBehaviour
             {
                 SwitchToNextState(nextState);
             }
-            else Debug.Log("next state was null");
+            //else Debug.Log("next state was null");
 
         }
     }
