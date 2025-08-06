@@ -45,7 +45,7 @@ public class MeleeAbility : Ability
                 {
                     Target = collider.GetComponent<LivingBeing>();
                     SetEffects(user);
-                    Logging.Info("verified and rarified");
+                    //                    Logging.Info("verified and rarified");
                     CombatStatHandler.HandleEffectPackages(this, Caster, Target);
                     SpawnHitEffect(Target);
                     activated = true;
@@ -72,7 +72,7 @@ public class MeleeAbility : Ability
 
         if (!IsUsableOn(Caster.CharacterTag, Target.CharacterTag))
         {
-            if (!HasElementalSynergy(this, Target))
+            if (!HasElementalSynergy(this, Target) || !user.TryGetComponent<AI_CC_State>(out AI_CC_State ccState) || !ccState.isMad)
                 return false;
         }
         //else Debug.Log($"usable on {collider.gameObject}");
@@ -122,7 +122,7 @@ public class MeleeAbility : Ability
             // Check if point is inside the rectangle
             bool isInside = forwardDistance <= Range && (Mathf.Abs(sideDistance) <= Width / 2f); //forwardDistance >= 0 &&
 
-            Logging.Info($"isInside? = {isInside}");
+            //Logging.Info($"isInside? = {isInside}");
             if (isInside)
                 return true;
             else return false;

@@ -262,6 +262,10 @@ public abstract class LivingBeing : MonoBehaviour
     #endregion
 
     #region Niche attribute changes
+    public void SetCharacterTag(CharacterTag tag)
+    {
+        CharacterTag = tag;
+    }
     public void SetName(string newName)
     {
         Name = newName;

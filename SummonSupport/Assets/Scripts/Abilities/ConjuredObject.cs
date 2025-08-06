@@ -29,7 +29,7 @@ public class ConjuredObject : MonoBehaviour
     {
         if (collision.gameObject.TryGetComponent(out LivingBeing livingBeing))
         {
-            if (Ability.IsUsableOn(Conjurer.CharacterTag, livingBeing.CharacterTag))
+            if (Ability.IsUsableOn(Conjurer.CharacterTag, livingBeing.CharacterTag) || Conjurer.TryGetComponent<AI_CC_State>(out AI_CC_State ccState) && ccState.isMad)
                 CombatStatHandler.HandleEffectPackages(Ability, Conjurer, livingBeing, false);
         }
     }

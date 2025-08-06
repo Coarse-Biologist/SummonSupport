@@ -48,16 +48,16 @@ public class EnemySpawnHandler : MonoBehaviour
             int xOffset = GetRandomOffset();
             int yOffset = GetRandomOffset();
 
-            Logging.Info($" x offset =  {xOffset}, y offset = {yOffset}");
+            //Logging.Info($" x offset =  {xOffset}, y offset = {yOffset}");
 
             Vector2 direction = new Vector2(targetCenter.x + xOffset, targetCenter.y + yOffset);
-            Logging.Info($" direction = {direction}");
+            //Logging.Info($" direction = {direction}");
             RaycastHit2D hit = Physics2D.Raycast(origin, direction, finalMask);
             if (hit)
             {
                 spawnLocs.Add(direction);
                 spawnLocFound++;
-                Logging.Info($" Spawn loc found: {direction}");
+                //Logging.Info($" Spawn loc found: {direction}");
             }
         }
         return spawnLocs;

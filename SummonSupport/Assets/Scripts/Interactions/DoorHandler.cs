@@ -78,7 +78,7 @@ public class DoorHandler : MonoBehaviour, I_Interactable
         if (livingBeing.Affinities[elementalRequisite].Get() > difficulty * 10) return true;
         else
         {
-            Logging.Info($"{livingBeing.name} did not have the required elemental affinity to open the door");
+            //Logging.Info($"{livingBeing.name} did not have the required elemental affinity to open the door");
             InteractCanvasHandler.Instance.ShowInteractionOption(transform.position, "Failed to open");
             return false;
         }

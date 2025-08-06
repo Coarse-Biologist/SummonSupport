@@ -15,7 +15,7 @@ public static class CombatStatHandler
     public static void HandleEffectPackages(Ability ability, LivingBeing caster, LivingBeing target, bool forSelf = false)
     {
         Stopwatch stopwatch = new();
-        UnityEngine.Debug.Log($"ability = {ability.name}. caster = {caster.Name}. target = {target.Name}. for self? {forSelf}");
+        //UnityEngine.Debug.Log($"ability = {ability.name}. caster = {caster.Name}. target = {target.Name}. for self? {forSelf}");
         LivingBeing casterStats = caster.GetComponent<LivingBeing>();
         LivingBeing targetStats = target.GetComponent<LivingBeing>();
         LivingBeing theTarget = casterStats;
@@ -59,6 +59,17 @@ public static class CombatStatHandler
                         AdjustAndApplyTempChange(ability, tempChange, theTarget, casterStats);
                     }
                 }
+
+                if (package.StatusEffects.Count > 0)
+                {
+                    if (target.TryGetComponent<AI_CC_State>(out AI_CC_State ccState))
+                    {
+                        foreach (StatusEffects status in package.StatusEffects)
+                        {
+                            ccState.RecieveCC(status, casterStats);
+                        }
+                    }
+                }
             }
 
         }
@@ -74,10 +85,7 @@ public static class CombatStatHandler
         if (damage_AT.Physical != PhysicalType.None) damageValue = AdjustBasedOnArmor(damage_AT.Physical, damageValue, target);
         AdjustForOverValue(target, AttributeType.Overshield, AttributeType.MaxHitpoints, AttributeType.CurrentHitpoints, -damageValue);
         if (specialAbilityAttribute == SpecialAbilityAttribute.Syphon)
-        {
             AdjustForOverValue(target, AttributeType.Overshield, AttributeType.MaxHitpoints, AttributeType.CurrentHitpoints, damageValue);
-            UnityEngine.Debug.Log($"appplying {damageValue} damage to {target}and healing caster {caster} for {damageValue}");
-        }
 
         return damageValue;
     }

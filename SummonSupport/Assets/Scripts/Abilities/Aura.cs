@@ -17,15 +17,18 @@ public class Aura : MonoBehaviour
 
     public void HandleInstantiation(LivingBeing caster, LivingBeing target, Ability ability, float radius, float duration)
     {
-        if (ability is ConjureAbility) conjureAbility = (ConjureAbility)ability;
         GetComponent<CircleCollider2D>().radius = radius;
         Invoke("Activate", ActivationTime);
         SetAuraStats(caster, target, ability, duration);
         CombatStatHandler.HandleEffectPackages(ability, caster, caster, true);
-        if (conjureAbility.SeeksTarget)
+        if (ability is ConjureAbility)
         {
-            this.target = FindTarget(conjureAbility.SearchRadius);
-            if (this.target != null) StartCoroutine(SeekTarget(this.target.gameObject));
+            conjureAbility = (ConjureAbility)ability;
+            if (conjureAbility.SeeksTarget)
+            {
+                this.target = FindTarget(conjureAbility.SearchRadius);
+                if (this.target != null) StartCoroutine(SeekTarget(this.target.gameObject));
+            }
         }
     }
     public void SetAuraStats(LivingBeing caster, LivingBeing target, Ability ability, float duration)

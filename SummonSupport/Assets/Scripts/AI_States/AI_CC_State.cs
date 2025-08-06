@@ -1,14 +1,18 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
-using System;
-using Unity.Mathematics;
-using UnityEngine.InputSystem;
+using UnityEditor.Rendering;
+using System.Runtime.InteropServices;
+using System.Linq;
+
 
 
 public class AI_CC_State : AIState
 {
     private AIState peaceState;
+    private AIState chaseState;
+
+    private AIStateHandler stateHandler;
     public bool sufferingCC = false;
     public Dictionary<StatusEffectType, Vector2> currentCCs = new Dictionary<StatusEffectType, Vector2>();
     private Rigidbody2D rb;
@@ -17,29 +21,39 @@ public class AI_CC_State : AIState
     private float timeElapsed = 0f;
 
     private bool beingKnockedInAir = false;
+    public bool isMad { private set; get; } = false;
 
     public void Awake()
     {
         peaceState = GetComponent<AIPeacefulState>();
+        stateHandler = GetComponent<AIStateHandler>();
+        chaseState = GetComponent<AIChaseState>();
         rb = GetComponent<Rigidbody2D>();
     }
     public override AIState RunCurrentState()
     {
-        if (currentCCs.Keys.Count != 0)
+        if (currentCCs.Count == 0)
         {
-            if (!beingKnockedInAir && currentCCs.TryGetValue(StatusEffectType.KnockInTheAir, out Vector2 source)) StartCoroutine(KnockRoutine()); // will later have a switch for the different CCs
-            return this;
-        }
-        else
-        {
-            rb.bodyType = RigidbodyType2D.Dynamic;
             return peaceState;
         }
+        if (!beingKnockedInAir && currentCCs.Keys.Contains(StatusEffectType.KnockInTheAir))
+        {
+            StartCoroutine(KnockRoutine());
+            return this;
+        }
+        if (!isMad && currentCCs.Keys.Contains(StatusEffectType.Madness))
+        {
+            BecomeMad(10f);
+            return peaceState;
+        }
+
+        return peaceState;
+
     }
 
-    public void RecieveCC(StatusEffectType CC, LivingBeing caster)
+    public void RecieveCC(StatusEffects CC, LivingBeing caster)
     {
-        currentCCs.TryAdd(CC, caster.transform.position);
+        currentCCs.TryAdd(CC.EffectType, caster.transform.position);
     }
 
     private bool KnockInTheAir()
@@ -61,8 +75,25 @@ public class AI_CC_State : AIState
             timeElapsed = 0f;
             currentCCs.Remove(StatusEffectType.KnockInTheAir);
             rb.linearDamping = 10;
+            rb.bodyType = RigidbodyType2D.Dynamic;
             return false;
         }
+    }
+
+    private void BecomeMad(float duration)
+    {
+        isMad = true;
+        currentCCs.Remove(StatusEffectType.Madness);
+        stateHandler.SetTargetMask(true);
+        Invoke("RestoreSanity", duration);
+    }
+    private void RestoreSanity()
+    {
+        stateHandler.SetTargetMask(false);
+        isMad = false;
+        currentCCs.Remove(StatusEffectType.Madness);
+
+
     }
     private IEnumerator KnockRoutine()
     {

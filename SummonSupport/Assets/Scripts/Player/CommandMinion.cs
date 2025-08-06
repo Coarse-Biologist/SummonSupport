@@ -23,8 +23,9 @@ public static class CommandMinion
             if (enemyHits.Length > 0)
             {
                 GameObject enemy = enemyHits[0].gameObject;
+                if (enemy.TryGetComponent<LivingBeing>(out LivingBeing targetLivingbeing))
 
-                CommandMinionToAttack(enemy);
+                    CommandMinionToAttack(targetLivingbeing);
             }
 
             Collider2D[] interactHits = Physics2D.OverlapCircleAll(loc, 1);
@@ -85,7 +86,7 @@ public static class CommandMinion
         }
     }
 
-    public static void CommandMinionToAttack(GameObject enemy)
+    public static void CommandMinionToAttack(LivingBeing enemy)
     {
         foreach (GameObject minion in SelectedMinions)
         {

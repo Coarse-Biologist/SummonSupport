@@ -11,7 +11,7 @@ public class AIObedienceState : AIState
     private Rigidbody2D rb;
     public MinionCommands currentCommand;
     public Vector2 commandLoc { private set; get; }
-    public GameObject commandTarget { private set; get; }
+    public LivingBeing commandTarget { private set; get; }
     private MinionStats minionStats;
     //can be command + game object, command + location
 
@@ -48,7 +48,7 @@ public class AIObedienceState : AIState
 
         if (command == MinionCommands.FocusTarget && commandTarget != null)
         {
-            chaseState.SetTargetEntity(commandTarget);
+            stateHandler.SetTarget(commandTarget);
             state = GoToLocation();
         }
         else
@@ -66,7 +66,7 @@ public class AIObedienceState : AIState
     {
         commandLoc = loc;
     }
-    public void SetCommandTarget(GameObject target)
+    public void SetCommandTarget(LivingBeing target)
     {
         commandTarget = target;
     }
@@ -84,7 +84,7 @@ public class AIObedienceState : AIState
         else
         {
             minionStats.SetCommand(MinionCommands.None);
-            if (currentCommand == MinionCommands.GoTo) chaseState.SetTargetEntity(null); // is this good?
+            if (currentCommand == MinionCommands.GoTo) stateHandler.SetTarget(null); // is this good?
             return States.Chase; // Is this good?...
         }
 

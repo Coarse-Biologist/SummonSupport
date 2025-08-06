@@ -10,6 +10,7 @@ public class Projectile : MonoBehaviour
     public int piercedAlready = 0;
     public int splitAlready = 0;
     LivingBeing userLivingBeing = null;
+    private bool active = false;
 
 
 
@@ -23,6 +24,11 @@ public class Projectile : MonoBehaviour
         ignoreGameObjects.Add(user);
         SetProjectilePhysics(spawnAt, lookAt);
         Destroy(gameObject, ability.Lifetime); // TODO: change from lifetime to range
+        SetActive();
+    }
+    private void SetActive()
+    {
+        active = true;
     }
 
 
@@ -59,25 +65,31 @@ public class Projectile : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.CompareTag("Projectile") || ignoreGameObjects.Contains(other.gameObject))
-            return;
-
-        if (!other.TryGetComponent(out LivingBeing otherLivingBeing))
+        if (active)
         {
-            SpawnEffect(otherLivingBeing);
-            DestroyProjectile();
-            return;
+            if (other.gameObject.CompareTag("Projectile") || ignoreGameObjects.Contains(other.gameObject))
+                return;
+
+            if (!other.TryGetComponent(out LivingBeing otherLivingBeing))
+            {
+                SpawnEffect(otherLivingBeing);
+                DestroyProjectile();
+                return;
+            }
+
+            if (!userLivingBeing || (!Ability.HasElementalSynergy(ability, otherLivingBeing) && !ability.IsUsableOn(userLivingBeing.CharacterTag, otherLivingBeing.CharacterTag)))
+            {
+                if (!userLivingBeing.TryGetComponent<AI_CC_State>(out AI_CC_State ccState) || !ccState.isMad) return;
+
+            }
+
+            //Debug.Log($"ability = {ability.name}.");
+            //Debug.Log($"caster = {userLivingBeing}.");
+            //Debug.Log($" target = {otherLivingBeing}");
+
+            CombatStatHandler.HandleEffectPackages(ability, userLivingBeing, otherLivingBeing, false);
+            HandleOnHitBehaviour(otherLivingBeing);
         }
-
-        if (!userLivingBeing || (!Ability.HasElementalSynergy(ability, otherLivingBeing) && !ability.IsUsableOn(userLivingBeing.CharacterTag, otherLivingBeing.CharacterTag)))
-            return;
-
-        //Debug.Log($"ability = {ability.name}.");
-        //Debug.Log($"caster = {userLivingBeing}.");
-        //Debug.Log($" target = {otherLivingBeing}");
-
-        CombatStatHandler.HandleEffectPackages(ability, userLivingBeing, otherLivingBeing, false);
-        HandleOnHitBehaviour(otherLivingBeing);
 
     }
 

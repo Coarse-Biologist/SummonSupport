@@ -92,7 +92,7 @@ public class CreatureAbilityHandler : AbilityHandler
             }
         }
         allSupportAbilities = supportAbilities;
-        AI_Hostility /= attackAbilities.Count;
+        if (attackAbilities.Count != 0) AI_Hostility /= attackAbilities.Count;
         AI_Hostility *= attackAbilities.Count;
     }
     private bool RollForAggression() // if true, aggressive ability should be selected if possible.

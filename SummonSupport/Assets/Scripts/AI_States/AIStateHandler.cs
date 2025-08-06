@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using Unity.VisualScripting.Antlr3.Runtime.Misc;
 
 public class AIStateHandler : MonoBehaviour
 {
@@ -12,6 +13,9 @@ public class AIStateHandler : MonoBehaviour
     [SerializeField] public int AttackSpeed = 1;
     [SerializeField] public int Cowardice = 0; // At what HP percentage a summon may try to retreat
     public LayerMask targetMask { private set; get; }
+
+    public LayerMask enemyMask;
+    public LayerMask friendlyMask;
     public LayerMask obstructionMask { private set; get; }
     public AIState currentState;
     [SerializeField] public AI_CC_State ccState;
@@ -34,8 +38,7 @@ public class AIStateHandler : MonoBehaviour
     {
         startLocation = transform.position;
         obstructionMask = LayerMask.GetMask("Obstruction");
-        if (gameObject.CompareTag("Minion")) targetMask = LayerMask.GetMask("Enemy");
-        else targetMask = LayerMask.GetMask("Minion", "Player");
+
 
         currentState = GetComponentInChildren<AIPeacefulState>();
         obedienceState = GetComponent<AIObedienceState>();
@@ -44,6 +47,8 @@ public class AIStateHandler : MonoBehaviour
         ccState = GetComponent<AI_CC_State>();
         InvokeRepeating("RunStateMachine", 0f, .1f);
         abilityHandler = GetComponent<CreatureAbilityHandler>();
+        SetMasks();
+        SetTargetMask(false);
 
     }
     void Start()
@@ -53,10 +58,27 @@ public class AIStateHandler : MonoBehaviour
     }
     public void SetTarget(LivingBeing theTarget)
     {
+        //Debug.Log($"target of {this} is now {target}");
         target = theTarget;
     }
+    private void SetMasks()
+    {
+        enemyMask = LayerMask.GetMask("Enemy");
+        friendlyMask = LayerMask.GetMask("Player", "Minion");
 
+    }
 
+    public void SetTargetMask(bool invert = false)
+    {
+        if (invert)
+        {
+            Debug.Log($"Inverting!");
+        }
+        CharacterTag tag = livingBeing.CharacterTag;
+        if (tag == CharacterTag.Minion && !invert || tag == CharacterTag.Enemy && invert || tag == CharacterTag.Guard && !invert) targetMask = enemyMask;
+        else targetMask = friendlyMask;
+        Debug.Log(targetMask);
+    }
 
     private void RunStateMachine()
     {

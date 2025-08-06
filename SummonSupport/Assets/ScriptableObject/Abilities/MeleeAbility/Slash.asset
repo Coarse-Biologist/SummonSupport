@@ -34,6 +34,8 @@ MonoBehaviour:
       <Physical>k__BackingField: 3
       <ValueType>k__BackingField: 2
     <DamageOverTime>k__BackingField: []
+    <StatusEffects>k__BackingField:
+    - {fileID: 11400000, guid: d2c2bc483ce8e844bb6602d77e8062db, type: 2}
     <SpecialAbilityAttribute>k__BackingField: 0
   <ElementTypes>k__BackingField: 
   <AbilityTypeTag>k__BackingField: 1

@@ -37,6 +37,8 @@ public class TargetMouseAbility : Ability
 
     public bool ActivateAbility(GameObject user, LivingBeing targetLivingBeing, Vector2 mousePos)
     {
+        if (user.TryGetComponent<AI_CC_State>(out AI_CC_State ccState) && ccState.isMad) return true;
+
         if (user.TryGetComponent<LivingBeing>(out var userLivingBeing))
             if (!IsUsableOn(userLivingBeing.CharacterTag, targetLivingBeing.CharacterTag))
                 return false;

@@ -80,7 +80,7 @@ public class AbilityHandler : MonoBehaviour
                 usedAbility = HandleBeamAbility(beamAbility, statsHandler);
                 break;
         }
-        Logging.Info($"able to use {ability.Name} = {usedAbility}");
+        //Logging.Info($"able to use {ability.Name} = {usedAbility}");
         return usedAbility;
     }
     private bool HandleBeamAbility(BeamAbility beamAbility, LivingBeing statsHandler)

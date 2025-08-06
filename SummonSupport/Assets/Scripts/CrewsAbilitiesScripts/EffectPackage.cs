@@ -14,9 +14,7 @@ public class EffectPackage
     [field: SerializeField] public List<Damage_AT> Damage { get; private set; }
     [field: SerializeField] public List<DamageoT_AT> DamageOverTime { get; private set; }
     [field: SerializeField] public List<StatusEffects> StatusEffects { get; private set; }
-
     [field: SerializeField] public SpecialAbilityAttribute SpecialAbilityAttribute { get; private set; }
-
 
 }
 
