@@ -18,6 +18,8 @@ public class PlayerMovement : MonoBehaviour
     private Vector2 worldPosition;
     private Vector2 direction;
     Vector3 moveDirection;
+    [field: SerializeField] public GameObject DashDust { private set; get; }
+
     [SerializeField] float movementSpeed;
     [SerializeField] float dashBoost = 10f;
     [SerializeField] float dashCoolDown = 1f;
@@ -79,6 +81,10 @@ public class PlayerMovement : MonoBehaviour
             dashing = true;
             Invoke("ReturnToNormalSpeed", dashDuration);
             Invoke("ReadyDash", dashCoolDown);
+            GameObject DashDustInstance = Instantiate(DashDust, transform.position, Quaternion.identity, transform);
+            float angle = Mathf.Atan2(-moveDirection.y, -moveDirection.x) * Mathf.Rad2Deg;
+            DashDustInstance.transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
+            Destroy(DashDustInstance, dashDuration);
         }
     }
 

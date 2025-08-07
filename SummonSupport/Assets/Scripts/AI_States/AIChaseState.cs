@@ -38,7 +38,7 @@ public class AIChaseState : AIState
 
     public override AIState RunCurrentState()
     {
-        if (GetComponent<AI_CC_State>().isMad)
+        if (GetComponent<AI_CC_State>().isCharmed || GetComponent<AI_CC_State>().isMad)
         {
             Debug.Log("Running chase state while insane");
         }

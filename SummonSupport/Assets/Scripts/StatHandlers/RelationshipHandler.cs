@@ -42,11 +42,11 @@ public static class CrewsRelationshipHandler
 {
     public static List<CharacterTag> Allies = new List<CharacterTag> { CharacterTag.Player, CharacterTag.Minion, CharacterTag.Guard };
 
-    public static RelationshipType GetRelationshiptype(LivingBeing creature1, LivingBeing creature2)
+    public static RelationshipType GetRelationshipType(LivingBeing attacker, LivingBeing target)
     {
-        bool isAlly1 = Allies.Contains(creature1.CharacterTag);
-        bool isAlly2 = Allies.Contains(creature2.CharacterTag);
-        if (creature1.TryGetComponent<AI_CC_State>(out AI_CC_State ccState) && ccState.isMad) return RelationshipType.Hostile;
+        bool isAlly1 = Allies.Contains(attacker.CharacterTag);
+        bool isAlly2 = Allies.Contains(target.CharacterTag);
+        if (attacker.TryGetComponent<AI_CC_State>(out AI_CC_State ccState) && ccState.isCharmed) return RelationshipType.Hostile;
         return (isAlly1 == isAlly2) ? RelationshipType.Friendly : RelationshipType.Hostile;
     }
 }

@@ -14,8 +14,9 @@ public class AIStateHandler : MonoBehaviour
     [SerializeField] public int Cowardice = 0; // At what HP percentage a summon may try to retreat
     public LayerMask targetMask { private set; get; }
 
-    public LayerMask enemyMask;
-    public LayerMask friendlyMask;
+    public LayerMask enemyMask { private set; get; }
+    public LayerMask friendlyMask { private set; get; }
+    public LayerMask belligerantMask { private set; get; }
     public LayerMask obstructionMask { private set; get; }
     public AIState currentState;
     [SerializeField] public AI_CC_State ccState;
@@ -48,7 +49,7 @@ public class AIStateHandler : MonoBehaviour
         InvokeRepeating("RunStateMachine", 0f, .1f);
         abilityHandler = GetComponent<CreatureAbilityHandler>();
         SetMasks();
-        SetTargetMask(false);
+        SetTargetMask();
 
     }
     void Start()
@@ -63,27 +64,34 @@ public class AIStateHandler : MonoBehaviour
     }
     private void SetMasks()
     {
-        enemyMask = LayerMask.GetMask("Enemy");
-        friendlyMask = LayerMask.GetMask("Player", "Minion");
+        belligerantMask = LayerMask.GetMask("Enemy", "Player", "Minion", "Guard");      // used for madness
+        enemyMask = LayerMask.GetMask("Enemy");                                         // used by allies
+        friendlyMask = LayerMask.GetMask("Player", "Minion");                           // used by enemies
 
     }
 
-    public void SetTargetMask(bool invert = false)
+    public void SetTargetMask(StatusEffectType statusEffect = StatusEffectType.None)
     {
-        if (invert)
+        bool charmed = statusEffect == StatusEffectType.Charmed;
+        bool mad = statusEffect == StatusEffectType.Madness;
+        if (mad)
         {
-            Debug.Log($"Inverting!");
+            if (targetMask == belligerantMask) Debug.Log("mask is belligerant mask");
+            targetMask = belligerantMask;
+            return;
         }
         CharacterTag tag = livingBeing.CharacterTag;
-        if (tag == CharacterTag.Minion && !invert || tag == CharacterTag.Enemy && invert || tag == CharacterTag.Guard && !invert) targetMask = enemyMask;
+        if (tag == CharacterTag.Minion && !charmed || tag == CharacterTag.Enemy && charmed || tag == CharacterTag.Guard && !charmed) targetMask = enemyMask;
         else targetMask = friendlyMask;
-        Debug.Log(targetMask);
+        if (targetMask == friendlyMask) Debug.Log("mask is friendly mask");
+        if (targetMask == enemyMask) Debug.Log("mask is enemy  mask");
+
     }
 
     private void RunStateMachine()
     {
         // Called in Awake by using "Invoke repeating"
-        if (ccState != null && ccState.currentCCs.Count != 0) SwitchToNextState(ccState);
+        if (ccState != null && ccState.CCToCaster.Count != 0) SwitchToNextState(ccState);
         if (minionStats == null || minionStats.CurrentCommand == MinionCommands.None)
         {
             AIState nextState = currentState?.RunCurrentState();

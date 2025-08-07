@@ -25,6 +25,11 @@ public abstract class Ability : ScriptableObject
         RelationshipType relationship = RelationshipHandler.GetRelationshipType(user, target);
         return ListUsableOn.Contains(relationship);
     }
+    public bool ThoroughIsUsableOn(LivingBeing caster, LivingBeing target)
+    {
+        if (caster.TryGetComponent<AI_CC_State>(out AI_CC_State ccState) && ccState.isMad) return true;
+        return ListUsableOn.Contains(CrewsRelationshipHandler.GetRelationshipType(caster, target));
+    }
     public static bool HasElementalSynergy(Ability ability, LivingBeing potentialTarget)
     {
         foreach (Element element in ability.ElementTypes)

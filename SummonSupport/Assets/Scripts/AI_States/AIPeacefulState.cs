@@ -45,7 +45,7 @@ public class AIPeacefulState : AIState
     {
         LivingBeing target = CheckTargetInRange();
 
-        if (GetComponent<AI_CC_State>().isMad)
+        if (GetComponent<AI_CC_State>().isCharmed)
         {
             Debug.Log($"Field of view Check searching for {target}");
         }

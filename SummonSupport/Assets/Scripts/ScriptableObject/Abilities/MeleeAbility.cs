@@ -72,7 +72,7 @@ public class MeleeAbility : Ability
 
         if (!IsUsableOn(Caster.CharacterTag, Target.CharacterTag))
         {
-            if (!HasElementalSynergy(this, Target) || !user.TryGetComponent<AI_CC_State>(out AI_CC_State ccState) || !ccState.isMad)
+            if (!HasElementalSynergy(this, Target) || !user.TryGetComponent<AI_CC_State>(out AI_CC_State ccState) || !ccState.isCharmed)
                 return false;
         }
         //else Debug.Log($"usable on {collider.gameObject}");

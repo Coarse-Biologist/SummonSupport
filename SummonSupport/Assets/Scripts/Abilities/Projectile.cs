@@ -77,15 +77,8 @@ public class Projectile : MonoBehaviour
                 return;
             }
 
-            if (!userLivingBeing || (!Ability.HasElementalSynergy(ability, otherLivingBeing) && !ability.IsUsableOn(userLivingBeing.CharacterTag, otherLivingBeing.CharacterTag)))
-            {
-                if (!userLivingBeing.TryGetComponent<AI_CC_State>(out AI_CC_State ccState) || !ccState.isMad) return;
-
-            }
-
-            //Debug.Log($"ability = {ability.name}.");
-            //Debug.Log($"caster = {userLivingBeing}.");
-            //Debug.Log($" target = {otherLivingBeing}");
+            if (!userLivingBeing || (!Ability.HasElementalSynergy(ability, otherLivingBeing) && !ability.ThoroughIsUsableOn(userLivingBeing, otherLivingBeing)))
+                return;
 
             CombatStatHandler.HandleEffectPackages(ability, userLivingBeing, otherLivingBeing, false);
             HandleOnHitBehaviour(otherLivingBeing);

@@ -14,14 +14,17 @@ public class AI_CC_State : AIState
 
     private AIStateHandler stateHandler;
     public bool sufferingCC = false;
-    public Dictionary<StatusEffectType, Vector2> currentCCs = new Dictionary<StatusEffectType, Vector2>();
+    public Dictionary<StatusEffectType, LivingBeing> CCToCaster = new();
+    public Dictionary<StatusEffectType, StatusEffects> typeToCC = new();
+
     private Rigidbody2D rb;
-
-    private float duration = 2f;
+    WaitForSeconds wait = new WaitForSeconds(0.1f);
+    private float knockDuration = 2f;
     private float timeElapsed = 0f;
-
     private bool beingKnockedInAir = false;
+    public bool isCharmed { private set; get; } = false;
     public bool isMad { private set; get; } = false;
+
 
     public void Awake()
     {
@@ -32,18 +35,23 @@ public class AI_CC_State : AIState
     }
     public override AIState RunCurrentState()
     {
-        if (currentCCs.Count == 0)
+        if (CCToCaster.Count == 0)
         {
             return peaceState;
         }
-        if (!beingKnockedInAir && currentCCs.Keys.Contains(StatusEffectType.KnockInTheAir))
+        if (!beingKnockedInAir && typeToCC.Keys.Contains(StatusEffectType.KnockInTheAir))
         {
             StartCoroutine(KnockRoutine());
             return this;
         }
-        if (!isMad && currentCCs.Keys.Contains(StatusEffectType.Madness))
+        if (!isCharmed && typeToCC.Keys.Contains(StatusEffectType.Charmed))
         {
-            BecomeMad(10f);
+            BecomeCharmed(typeToCC[StatusEffectType.Charmed].Duration);
+            return peaceState;
+        }
+        if (!isMad && typeToCC.Keys.Contains(StatusEffectType.Madness))
+        {
+            BecomeMad(typeToCC[StatusEffectType.Madness].Duration);
             return peaceState;
         }
 
@@ -53,52 +61,67 @@ public class AI_CC_State : AIState
 
     public void RecieveCC(StatusEffects CC, LivingBeing caster)
     {
-        currentCCs.TryAdd(CC.EffectType, caster.transform.position);
+        CCToCaster.TryAdd(CC.EffectType, caster);
+        typeToCC.TryAdd(CC.EffectType, CC);
+    }
+    public void RemoveCC(StatusEffectType CC)
+    {
+        CCToCaster.Remove(CC);
+        typeToCC.Remove(CC);
     }
 
     private bool KnockInTheAir()
     {
         beingKnockedInAir = true;
-        if (currentCCs.TryGetValue(StatusEffectType.KnockInTheAir, out Vector2 sourcePosition) && timeElapsed <= duration)
+        if (CCToCaster.TryGetValue(StatusEffectType.KnockInTheAir, out LivingBeing caster) && timeElapsed <= knockDuration)
         {
             rb.linearDamping = 40;
-            if (timeElapsed <= duration * .8)
-                rb.AddForce(((Vector2)transform.position - sourcePosition).normalized, ForceMode2D.Impulse);
-            if (timeElapsed <= duration * .5)
+            if (timeElapsed <= knockDuration * .8)
+                rb.AddForce(((Vector2)transform.position - (Vector2)caster.transform.position).normalized, ForceMode2D.Impulse);
+            if (timeElapsed <= knockDuration * .5)
                 rb.AddForce(new Vector2(0, 2f), ForceMode2D.Impulse);
-            if (timeElapsed > duration * .5 && timeElapsed <= .8 * duration) rb.AddForce(new Vector2(0, -2), ForceMode2D.Impulse);
+            if (timeElapsed > knockDuration * .5 && timeElapsed <= .8 * knockDuration) rb.AddForce(new Vector2(0, -2), ForceMode2D.Impulse);
             return true;
         }
         else
         {
             beingKnockedInAir = false;
             timeElapsed = 0f;
-            currentCCs.Remove(StatusEffectType.KnockInTheAir);
+            RemoveCC(StatusEffectType.KnockInTheAir);
             rb.linearDamping = 10;
             rb.bodyType = RigidbodyType2D.Dynamic;
             return false;
         }
     }
 
+    private void BecomeCharmed(float duration)
+    {
+        isCharmed = true;
+        RemoveCC(StatusEffectType.Charmed);
+        stateHandler.SetTargetMask(StatusEffectType.Charmed);
+        Invoke("EndEffectCharmed", duration);
+    }
+    private void EndEffectCharmed()
+    {
+        stateHandler.SetTargetMask(StatusEffectType.None);
+        isCharmed = false;
+    }
     private void BecomeMad(float duration)
     {
         isMad = true;
-        currentCCs.Remove(StatusEffectType.Madness);
-        stateHandler.SetTargetMask(true);
-        Invoke("RestoreSanity", duration);
+        RemoveCC(StatusEffectType.Madness);
+        stateHandler.SetTargetMask(StatusEffectType.Madness);
+        Invoke("EndEffectMad", duration);
     }
-    private void RestoreSanity()
+    private void EndEffectMad()
     {
-        stateHandler.SetTargetMask(false);
+        stateHandler.SetTargetMask();
         isMad = false;
-        currentCCs.Remove(StatusEffectType.Madness);
-
-
+        //RemoveCC(StatusEffectType.Madness);
     }
     private IEnumerator KnockRoutine()
     {
         bool repeat = true;
-        WaitForSeconds wait = new WaitForSeconds(0.1f);
         while (repeat)
         {
             yield return wait;

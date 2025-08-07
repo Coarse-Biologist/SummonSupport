@@ -95,7 +95,7 @@ public class Aura : MonoBehaviour
         {
             if (!collider.TryGetComponent<LivingBeing>(out LivingBeing targetStats))
                 continue;
-            if (!ability.IsUsableOn(targetStats.CharacterTag, caster.CharacterTag))
+            if (!ability.ThoroughIsUsableOn(targetStats, caster))
                 continue;
             else return targetStats;
         }
