@@ -65,7 +65,7 @@ public class AIChaseState : AIState
                 if (stateHandler.target != stateHandler.playerStats) Logging.Info($"Chase state checks field of view and DOESNT See the target {stateHandler.target}!!!");
                 runningAttackLoop = false;
                 StopCoroutine(attackCoroutine);
-                Chase(stateHandler.lastSeenLoc);
+                Chase(stateHandler.lastSeenLoc, true);
                 LookAtTarget(stateHandler.lastSeenLoc);
             }
             return this;
@@ -104,7 +104,7 @@ public class AIChaseState : AIState
     }
 
 
-    public void Chase(Vector2 targetLoc)
+    public void Chase(Vector2 targetLoc, bool cantSeeTarget = false)
     {
         Vector2 currentLoc = new Vector2(transform.position.x, transform.position.y);
         Vector2 direction = targetLoc - currentLoc;
@@ -112,7 +112,7 @@ public class AIChaseState : AIState
         bool uniqueMovement = true;
         if (distance > 10 || peaceState.CheckVisionBlocked(stateHandler.target))
         {
-            if (!uniqueMovement)
+            if (!uniqueMovement || cantSeeTarget)
             {
                 if (direction.sqrMagnitude > 10 || peaceState.CheckVisionBlocked(stateHandler.target)) rb.linearVelocity = (targetLoc - currentLoc) * MovementSpeed;
                 else rb.linearVelocity = new Vector2(0, 0);
@@ -129,7 +129,7 @@ public class AIChaseState : AIState
         float dx = a * Mathf.Cos(theta) - a * theta * Mathf.Sin(theta);
         float dy = a * Mathf.Sin(theta) + a * theta * Mathf.Cos(theta);
 
-        rb.linearVelocity = new Vector2(dx, dy).normalized * MovementSpeed;
+        rb.linearVelocity = new Vector2(dx, dy).normalized * MovementSpeed * 3;
 
     }
 

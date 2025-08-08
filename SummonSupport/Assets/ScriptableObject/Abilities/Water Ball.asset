@@ -10,17 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fceeef8cfafe41444bf6aa890ebad1b7, type: 3}
-  m_Name: Fire Ball
+  m_Name: Water Ball
   m_EditorClassIdentifier: 
-  <Name>k__BackingField: Fire Ball
-  <Icon>k__BackingField: {fileID: 8095344145157262792, guid: c3bce2abce0ec0e47ba9c908fd690f04,
+  <Name>k__BackingField: Water Ball
+  <Icon>k__BackingField: {fileID: 6499692489935122731, guid: badfaf6775b237f458f28e356d130946,
     type: 3}
   <Cooldown>k__BackingField: 2
   <CostType>k__BackingField: 0
   <Cost>k__BackingField: 0
   <ListUsableOn>k__BackingField: 01000000
   <TargetTypeAndEffects>k__BackingField:
-  - <EffectDescription>k__BackingField: Burns
+  - <EffectDescription>k__BackingField: Whets
     <TargetType>k__BackingField: 1
     <Heal>k__BackingField:
       <Value>k__BackingField: 0
@@ -37,10 +37,10 @@ MonoBehaviour:
     <DamageOverTime>k__BackingField: []
     <StatusEffects>k__BackingField: []
     <SpecialAbilityAttribute>k__BackingField: 0
-  <ElementTypes>k__BackingField: 04000000
+  <ElementTypes>k__BackingField: 02000000
   <AbilityTypeTag>k__BackingField: 1
   <Speed>k__BackingField: 5
-  <Projectile>k__BackingField: {fileID: 1503869405188693834, guid: a9f50fbd26367e9409b49cb9300cd576,
+  <Projectile>k__BackingField: {fileID: 8103012624700279010, guid: f40f907a782de79488b0d4a5db1186ad,
     type: 3}
   <MaxRange>k__BackingField: 150
   <Lifetime>k__BackingField: 100
@@ -48,5 +48,5 @@ MonoBehaviour:
   <MaxPierce>k__BackingField: 0
   <MaxSplit>k__BackingField: 1
   <SplitAngleOffset>k__BackingField: 45
-  <ProjectileParticleSystem>k__BackingField: {fileID: 5647196156128557912, guid: bd1d5a2cef288fb4c87f1f0c1f18d32e,
+  <ProjectileParticleSystem>k__BackingField: {fileID: 5647196156128557912, guid: 727cb70e7d99ad94084b63e55721d0c5,
     type: 3}
