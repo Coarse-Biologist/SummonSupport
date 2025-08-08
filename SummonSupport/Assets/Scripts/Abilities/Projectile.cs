@@ -53,14 +53,16 @@ public class Projectile : MonoBehaviour
         SpawnEffectOnHit = effectOnHit;
     }
 
-    private void SpawnEffect(LivingBeing targetLivingBeing)
+    private void SpawnEffect(LivingBeing targetLivingBeing, GameObject SpawnEffectOnHit)
     {
         GameObject instance;
         if (SpawnEffectOnHit != null)
         {
-            instance = Instantiate(ability.SpawnEffectOnHit, targetLivingBeing.transform.position, Quaternion.identity, targetLivingBeing.transform.transform);
-            Destroy(instance, 3f);
+            Debug.Log("This happens, excellent");
+            instance = Instantiate(ability.SpawnEffectOnHit, transform.position, Quaternion.identity, targetLivingBeing.transform.transform);
+            Destroy(instance, instance.GetComponent<ParticleSystem>().main.duration);
         }
+        else Debug.Log("This happens but is null");
     }
 
     void OnTriggerEnter2D(Collider2D other)
@@ -72,7 +74,6 @@ public class Projectile : MonoBehaviour
 
             if (!other.TryGetComponent(out LivingBeing otherLivingBeing))
             {
-                SpawnEffect(otherLivingBeing);
                 DestroyProjectile();
                 return;
             }
@@ -80,6 +81,7 @@ public class Projectile : MonoBehaviour
             if (!userLivingBeing || (!Ability.HasElementalSynergy(ability, otherLivingBeing) && !ability.ThoroughIsUsableOn(userLivingBeing, otherLivingBeing)))
                 return;
 
+            SpawnEffect(otherLivingBeing, ability.SpawnEffectOnHit);
             CombatStatHandler.HandleEffectPackages(ability, userLivingBeing, otherLivingBeing, false);
             HandleOnHitBehaviour(otherLivingBeing);
         }

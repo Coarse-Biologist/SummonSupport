@@ -15,7 +15,7 @@ public class ProjectileAbility : Ability
     [field: SerializeField] public int MaxSplit { get; protected set; }
     [field: SerializeField] public int SplitAngleOffset { get; protected set; }
     [field: SerializeField] public GameObject ProjectileParticleSystem { get; protected set; }
-    public GameObject SpawnEffectOnHit { get; set; }
+    [field: SerializeField] public GameObject SpawnEffectOnHit { get; set; } = null;
 
 
 
@@ -41,6 +41,7 @@ public class ProjectileAbility : Ability
 
     private void SetEffects(Projectile projectile, GameObject user)
     {
+
         GameObject particleSystem;
 
         if (ProjectileParticleSystem != null)
@@ -50,6 +51,7 @@ public class ProjectileAbility : Ability
             Quaternion rotation = Quaternion.LookRotation(-user.transform.right);
             particleSystem.transform.rotation = rotation;
         }
+
 
     }
 }
