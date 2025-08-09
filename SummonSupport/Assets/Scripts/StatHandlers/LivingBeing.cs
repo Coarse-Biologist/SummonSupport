@@ -83,6 +83,7 @@ public abstract class LivingBeing : MonoBehaviour
     [field: SerializeField] public float Mass { get; private set; } = 1f;
 
     private I_ResourceBar resourceBarInterface;
+    private AbilityHandler abilityHandler;
 
     #endregion
 
@@ -103,6 +104,7 @@ public abstract class LivingBeing : MonoBehaviour
     {
         InitializeRegenerationValues();
         StartCoroutine(RegenerateRoutine());
+        abilityHandler = GetComponent<AbilityHandler>();
     }
 
     private void InitializeRegenerationValues()
@@ -150,6 +152,8 @@ public abstract class LivingBeing : MonoBehaviour
         HandleEventInvokes(attributeType, value);
         if (attributeType == AttributeType.CurrentHitpoints && value <= 0)
             Die();
+        else if (attributeType == AttributeType.CurrentPower && value <= 0)
+           abilityHandler.HandleNoMana();
     }
 
     public float ChangeAttribute(AttributeType attributeType, float value)

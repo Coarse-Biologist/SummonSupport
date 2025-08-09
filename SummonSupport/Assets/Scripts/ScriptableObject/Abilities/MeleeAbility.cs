@@ -2,6 +2,8 @@ using UnityEngine;
 using System.Collections.Generic;
 using System;
 using System.IO;
+using System.Collections;
+using UnityEngine.UIElements;
 
 [CreateAssetMenu(menuName = "Abilities/Melee Ability")]
 
@@ -44,7 +46,8 @@ public class MeleeAbility : Ability
                 if (VerifyActivate(collider, user))
                 {
                     Target = collider.GetComponent<LivingBeing>();
-                    SetEffects(user);
+
+                    UseWeaponOrSetEffect(user);
                     //                    Logging.Info("verified and rarified");
                     CombatStatHandler.HandleEffectPackages(this, Caster, Target);
                     SpawnHitEffect(Target);
@@ -56,6 +59,15 @@ public class MeleeAbility : Ability
         return activated;
 
     }
+    private void UseWeaponOrSetEffect(GameObject user)
+    {
+        if (Caster.TryGetComponent<AbilityHandler>(out AbilityHandler abilityHandler) && abilityHandler.weaponSlot != null)
+            abilityHandler.weaponSlot.GetComponent<WeaponMono>().UseWeapon();
+
+        else SetEffects(user);
+
+    }
+
 
     private bool VerifyActivate(Collider2D collider, GameObject user)
     {

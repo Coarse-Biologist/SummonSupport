@@ -10,6 +10,8 @@ public class AbilityHandler : MonoBehaviour
     [field: SerializeField] public List<Ability> Abilities { private set; get; } = new();
     [SerializeField] protected List<bool> abilitiesOnCooldown = new();
     private Dictionary<BeamAbility, GameObject> toggledAbilitiesDict = new();
+    [field: SerializeField] public GameObject weaponSlot { get; private set; } = null;
+
 
 
 
@@ -28,6 +30,7 @@ public class AbilityHandler : MonoBehaviour
             abilitiesOnCooldown.Add(false);
         }
     }
+
 
     protected bool CastAbility(int abilityIndex, Vector2 targetPosition, Quaternion rotation)
     {
@@ -99,7 +102,6 @@ public class AbilityHandler : MonoBehaviour
             toggledAbilitiesDict.TryAdd(beamAbility, beamInstance);
             statsHandler.ChangeRegeneration(beamAbility.CostType, -beamAbility.Cost);
 
-
             return true;
         }
 
@@ -116,6 +118,12 @@ public class AbilityHandler : MonoBehaviour
     bool HasEnoughPower(float powerCost)
     {
         return !statsHandler || powerCost < statsHandler.GetAttribute(AttributeType.CurrentPower);
+    }
+    public void HandleNoMana()
+    {
+        foreach (KeyValuePair<BeamAbility, GameObject> ability in toggledAbilitiesDict)
+        { Destroy(ability.Value); }
+        toggledAbilitiesDict.Clear();
     }
 
     bool HandleProjectile(ProjectileAbility ability)

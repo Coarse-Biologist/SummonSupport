@@ -43,10 +43,11 @@ MonoBehaviour:
   <Projectile>k__BackingField: {fileID: 1503869405188693834, guid: a9f50fbd26367e9409b49cb9300cd576,
     type: 3}
   <MaxRange>k__BackingField: 150
-  <Lifetime>k__BackingField: 100
+  <Lifetime>k__BackingField: 20
   <PiercingMode>k__BackingField: 3
   <MaxPierce>k__BackingField: 0
   <MaxSplit>k__BackingField: 1
   <SplitAngleOffset>k__BackingField: 45
   <ProjectileParticleSystem>k__BackingField: {fileID: 5647196156128557912, guid: bd1d5a2cef288fb4c87f1f0c1f18d32e,
     type: 3}
+  <SpawnEffectOnHit>k__BackingField: {fileID: 0}

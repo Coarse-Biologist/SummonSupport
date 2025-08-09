@@ -32,26 +32,13 @@ public class ProjectileAbility : Ability
     {
         GameObject projectile = Instantiate(Projectile, user.transform.position, Quaternion.identity);
         Projectile projectileScript = projectile.GetComponent<Projectile>();
-        SetEffects(projectileScript, user);
 
         projectileScript.ability = this;
         projectileScript.Shoot(user, spawnPoint, direction.right);
+        projectileScript.SetParticleTrailEffects(direction.right);
+
         return true;
     }
 
-    private void SetEffects(Projectile projectile, GameObject user)
-    {
-
-        GameObject particleSystem;
-
-        if (ProjectileParticleSystem != null)
-        {
-            particleSystem = Instantiate(ProjectileParticleSystem, user.transform.position, Quaternion.identity, projectile.transform);
-            //Quaternion rotation = Quaternion.LookRotation(-direction);
-            Quaternion rotation = Quaternion.LookRotation(-user.transform.right);
-            particleSystem.transform.rotation = rotation;
-        }
-
-
-    }
+    
 }

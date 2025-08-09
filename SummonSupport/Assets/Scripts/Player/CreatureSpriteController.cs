@@ -11,6 +11,7 @@ public class CreatureSpriteController : MonoBehaviour
     [SerializeField] private Sprite rightDownSprite;
     [SerializeField] private Sprite downLeftSprite;
     [SerializeField] private Sprite leftUpSprite;
+    [field: SerializeField] public bool unfinished { get; private set; } = false;
 
 
 
@@ -24,13 +25,16 @@ public class CreatureSpriteController : MonoBehaviour
 
     public void SetSpriteDirection(float angle)
     {
-        if (angle >= -22.5f && angle < 22.5f) sr.sprite = rightSprite;
-        else if (angle >= 22.5f && angle < 67.5f) sr.sprite = upRightSprite;
-        else if (angle >= 67.5f && angle < 112.5f) sr.sprite = upSprite;
-        else if (angle >= 112.5f && angle < 157.5f) sr.sprite = leftUpSprite;
-        else if (angle >= 157.5f || angle < -157.5f) sr.sprite = leftSprite;
-        else if (angle >= -157.5f && angle < -112.5f) sr.sprite = downLeftSprite;
-        else if (angle >= -112.5f && angle < -67.5f) sr.sprite = downSprite;
-        else if (angle >= -67.5f && angle < -22.5f) sr.sprite = rightDownSprite;
+        if (!unfinished)
+        {
+            if (angle >= -22.5f && angle < 22.5f) sr.sprite = rightSprite;
+            else if (angle >= 22.5f && angle < 67.5f) sr.sprite = upRightSprite;
+            else if (angle >= 67.5f && angle < 112.5f) sr.sprite = upSprite;
+            else if (angle >= 112.5f && angle < 157.5f) sr.sprite = leftUpSprite;
+            else if (angle >= 157.5f || angle < -157.5f) sr.sprite = leftSprite;
+            else if (angle >= -157.5f && angle < -112.5f) sr.sprite = downLeftSprite;
+            else if (angle >= -112.5f && angle < -67.5f) sr.sprite = downSprite;
+            else if (angle >= -67.5f && angle < -22.5f) sr.sprite = rightDownSprite;
+        }
     }
 }
