@@ -9,7 +9,7 @@ public class ProjectileAbility : Ability
     [field: SerializeField] public float Speed { get; protected set; }
     [field: SerializeField] public GameObject Projectile { get; protected set; }
     [field: SerializeField] public float MaxRange { get; protected set; }
-    [field: SerializeField] public float Lifetime { get; protected set; }
+    [field: SerializeField] public float Lifetime { get; protected set; } = 3;
     [field: SerializeField] public OnHitBehaviour PiercingMode { get; protected set; }
     [field: SerializeField] public int MaxPierce { get; protected set; }
     [field: SerializeField] public int MaxSplit { get; protected set; }
@@ -36,9 +36,10 @@ public class ProjectileAbility : Ability
         projectileScript.ability = this;
         projectileScript.Shoot(user, spawnPoint, direction.right);
         projectileScript.SetParticleTrailEffects(direction.right);
+        Destroy(projectile, Lifetime);
 
         return true;
     }
 
-    
+
 }

@@ -66,8 +66,8 @@ public class Projectile : MonoBehaviour
     }
     public void SetParticleTrailEffects(Vector2 direction) // -user.transform.right
     {
-            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-            GameObject particleSystem;
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        GameObject particleSystem;
         if (ability.ProjectileParticleSystem != null)
         {
             particleSystem = Instantiate(ability.ProjectileParticleSystem, gameObject.transform.position, Quaternion.identity, gameObject.transform);
@@ -147,7 +147,9 @@ public class Projectile : MonoBehaviour
                 projectileScript.splitAlready = this.splitAlready;
                 projectileScript.SetProjectilePhysics(gameObject, direction);
                 projectileScript.SetParticleTrailEffects(direction);
-                
+                Destroy(newProjectile, ability.Lifetime);
+
+
             }
         }
         DestroyProjectile(other);
