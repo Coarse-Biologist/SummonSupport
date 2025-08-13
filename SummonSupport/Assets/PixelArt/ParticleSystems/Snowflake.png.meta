@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: a8f668ec9ce97d44fbb9d63d73cb2648
+guid: de96781ccc6700c43a859ecadfe57505
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 3837697726249093711
-    second: Fire ball projectile 2_0
+      213: -3457482457770744763
+    second: Snowflake_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,13 +100,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Fire ball projectile 2_0
+      name: Snowflake_0
       rect:
         serializedVersion: 2
-        x: 15
-        y: 31
-        width: 497
-        height: 450
+        x: 0
+        y: 0
+        width: 16
+        height: 16
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: f4ac660cfbd324530800000000000000
-      internalID: 3837697726249093711
+      spriteID: 5442e6fe50e8400d0800000000000000
+      internalID: -3457482457770744763
       vertices: []
       indices: 
       edges: []
@@ -135,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Fire ball projectile 2_0: 3837697726249093711
+      Snowflake_0: -3457482457770744763
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

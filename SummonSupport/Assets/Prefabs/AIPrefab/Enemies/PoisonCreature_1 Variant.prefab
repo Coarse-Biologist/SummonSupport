@@ -201,7 +201,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: -3246607818379596667, guid: 013f5f57612f47a4489f196f59c076c3,
+      objectReference: {fileID: 21300000, guid: de6ca48ed9d9b80499bf16890d9ba7a3,
         type: 3}
     - target: {fileID: 4755851978388305148, guid: 8b808af4814c9664e80e2e15555215fb,
         type: 3}
@@ -426,19 +426,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa5b90360ce29454fa7ad2b61f02fcd0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  upSprite: {fileID: -3246607818379596667, guid: 013f5f57612f47a4489f196f59c076c3,
-    type: 3}
-  rightSprite: {fileID: 3465107832839144524, guid: 555663bda54c0994f92a46dece64619e,
-    type: 3}
-  downSprite: {fileID: 378600957544374878, guid: 417183b2905ad044bb46e17c85b60bf3,
-    type: 3}
-  leftSprite: {fileID: -4153647936878502544, guid: 6a79904746d6e5440b8210d65e20628a,
-    type: 3}
-  upRightSprite: {fileID: -3246607818379596667, guid: 013f5f57612f47a4489f196f59c076c3,
-    type: 3}
-  rightDownSprite: {fileID: 3465107832839144524, guid: 555663bda54c0994f92a46dece64619e,
-    type: 3}
-  downLeftSprite: {fileID: 378600957544374878, guid: 417183b2905ad044bb46e17c85b60bf3,
-    type: 3}
-  leftUpSprite: {fileID: -4153647936878502544, guid: 6a79904746d6e5440b8210d65e20628a,
-    type: 3}
+  NSprite: {fileID: 21300000, guid: ec089e33eba9cf44c8591f6881c8e0d1, type: 3}
+  ESprite: {fileID: 21300000, guid: 0545629213553174e86a023d1efd14c7, type: 3}
+  SSprite: {fileID: 21300000, guid: de6ca48ed9d9b80499bf16890d9ba7a3, type: 3}
+  WSprite: {fileID: 21300000, guid: fbf8f895179ca8a45adbf03dd8d726ab, type: 3}
+  NESprite: {fileID: 21300000, guid: 58a84394a6c12e643928e51aa386b18a, type: 3}
+  SESprite: {fileID: 21300000, guid: b76100e836537404a8192a95c6e25c44, type: 3}
+  SWSprite: {fileID: 21300000, guid: 81f169ad922ffb045a144c467549f5ae, type: 3}
+  NWSprite: {fileID: 21300000, guid: 8a255ed639863214c94b77c0b58f68e8, type: 3}
+  <unfinished>k__BackingField: 0

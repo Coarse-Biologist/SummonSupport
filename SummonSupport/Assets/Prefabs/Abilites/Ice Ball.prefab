@@ -12,9 +12,9 @@ GameObject:
   - component: {fileID: -8659720744529875140}
   - component: {fileID: -2435618459644733205}
   - component: {fileID: -9064724831577368548}
-  - component: {fileID: 6807858634492449281}
+  - component: {fileID: -3318842751727581633}
   m_Layer: 10
-  m_Name: Fire Ball
+  m_Name: Ice Ball
   m_TagString: Projectile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -28,13 +28,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1503869405188693834}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 1, w: 0}
+  m_LocalPosition: {x: 2.33, y: -2.44, z: 0}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.07596006}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 180}
 --- !u!50 &-8659720744529875140
 Rigidbody2D:
   serializedVersion: 5
@@ -113,7 +113,7 @@ MonoBehaviour:
   ability: {fileID: 0}
   piercedAlready: 0
   splitAlready: 0
---- !u!212 &6807858634492449281
+--- !u!212 &-3318842751727581633
 SpriteRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -159,11 +159,11 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_Sprite: {fileID: 3168155284008778401, guid: fc64d9b3754d31348bf7a2f9e792edae,
     type: 3}
-  m_Color: {r: 0.90188676, g: 0.30935422, b: 0, a: 1}
+  m_Color: {r: 0, g: 0.98490566, b: 0.9829846, a: 1}
   m_FlipX: 1
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 4.97, y: 4.5}
+  m_Size: {x: 1, y: 0.9375}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
