@@ -64,11 +64,14 @@ public class Aura : MonoBehaviour
 
                 if (ability.ListUsableOn.Contains(RelationshipHandler.GetRelationshipType(caster.CharacterTag, otherLivingBeing.CharacterTag)))
                 {
+                    Debug.Log($"usable on {otherLivingBeing.Name}");
+
                     otherLivingBeing.AlterAbilityList(ability, true);
                     CombatStatHandler.HandleEffectPackages(ability, caster, otherLivingBeing, false);
                 }
             }
-            //else Debug.Log($"other game object = {other.gameObject}");
+            else Debug.Log($"NOT usable on {otherLivingBeing.Name}");
+
         }
     }
 

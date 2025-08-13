@@ -105,11 +105,15 @@ MonoBehaviour:
   <MaxPower>k__BackingField: 1000
   <PowerSurge>k__BackingField: 0
   <CurrentPower>k__BackingField: 1000
-  <tickRateRegenerationInSeconds>k__BackingField: 0.2
+  <TickRateRegenerationInSeconds>k__BackingField: 0.2
   <HealthRegeneration>k__BackingField: 0
   <PowerRegeneration>k__BackingField: 1
   <TotalHealthRegeneration>k__BackingField: 0
   <TotalPowerRegeneration>k__BackingField: 0
+  <HealthRegenArrows>k__BackingField: 0
+  <PowerRegenArrows>k__BackingField: 0
+  <RegenCalcOffset>k__BackingField: 0.8
+  <MaxRegenArrows>k__BackingField: 6
   <Cold>k__BackingField: 0
   <Water>k__BackingField: 0
   <Earth>k__BackingField: 0
@@ -125,8 +129,11 @@ MonoBehaviour:
   <Radiation>k__BackingField: 0
   <Light>k__BackingField: 0
   <Psychic>k__BackingField: 0
+  <Piercing>k__BackingField: 0
+  <Bludgeoning>k__BackingField: 0
+  <Slashing>k__BackingField: 0
+  <AffectedByAbilities>k__BackingField: []
   <XP_OnDeath>k__BackingField: 3
-  <Abilties>k__BackingField: []
   <Speed>k__BackingField: 0.6
   <Mass>k__BackingField: 1
 --- !u!114 &7725120615296775044
@@ -218,6 +225,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mainCamera: {fileID: 0}
   AbilityRotation: {fileID: 2336236101845789617}
+  <DashDust>k__BackingField: {fileID: 0}
   movementSpeed: 0.6
   dashBoost: 1
   dashCoolDown: 1
@@ -310,14 +318,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   abilitySpawn: {fileID: 0}
-  abilityDirection: {fileID: 2336236101845789617}
   statsHandler: {fileID: 0}
-  abilities:
-  - {fileID: 11400000, guid: 5605a5e8027c4e94691ae731bacfcb5a, type: 2}
-  - {fileID: 11400000, guid: 265d2196a4dc4d347bf0f1d275f43d44, type: 2}
-  - {fileID: 11400000, guid: 4c3c5f9615adc0745ad7d2d7106f3cd8, type: 2}
-  - {fileID: 11400000, guid: a451f57a0774f5d4b9618dcb1f4b5103, type: 2}
+  <Abilities>k__BackingField: []
   abilitiesOnCooldown: 
+  <weaponSlot>k__BackingField: {fileID: 0}
 --- !u!114 &2864372725038760086
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -461,8 +465,7 @@ SpriteRenderer:
   m_SortingLayerID: -1869315837
   m_SortingLayer: 5
   m_SortingOrder: 0
-  m_Sprite: {fileID: -5089674144711089733, guid: 01b5c1199a82069418d8510028c92073,
-    type: 3}
+  m_Sprite: {fileID: 21300000, guid: 1a86543444ff83d47a09c25fcda93aa9, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -485,19 +488,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa5b90360ce29454fa7ad2b61f02fcd0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  upSprite: {fileID: -830254561175719942, guid: 091a6c0a77b95244f8f3698d092d1b15,
-    type: 3}
-  rightSprite: {fileID: 7605739276029177479, guid: 3752d356a01f92c4a8d9f5949be0641a,
-    type: 3}
-  downSprite: {fileID: -5089674144711089733, guid: 01b5c1199a82069418d8510028c92073,
-    type: 3}
-  leftSprite: {fileID: -2166838758592917925, guid: bd4e6e0c55f9d74479e07c4c03315796,
-    type: 3}
-  upRightSprite: {fileID: -5667695595260959248, guid: dfeda39f59ebc614bba60175765e3060,
-    type: 3}
-  rightDownSprite: {fileID: 2266111861211059247, guid: fc879a008abfb764d8f2172498f8ad73,
-    type: 3}
-  downLeftSprite: {fileID: 1838073393462154843, guid: 4fdd702fc3aa10c4cb030db350e6d283,
-    type: 3}
-  leftUpSprite: {fileID: -6138014068744602529, guid: 0b90c4239dc7c8c4cbfd7db645024165,
-    type: 3}
+  NSprite: {fileID: 21300000, guid: 8c4ccd29348cc3b498b02aa2d20e3c14, type: 3}
+  ESprite: {fileID: 21300000, guid: e50c3fcdb9e75d9448860f37dfe61bc0, type: 3}
+  SSprite: {fileID: 21300000, guid: 1fb9b1877fecf4144947056af6805046, type: 3}
+  WSprite: {fileID: 21300000, guid: bdf8ade6583f8d743b0e89d0382f06ef, type: 3}
+  NESprite: {fileID: 21300000, guid: 57d5312a0b280034e8589e6b115f57c9, type: 3}
+  SESprite: {fileID: 21300000, guid: 8f5ff636911aa0848a89bb8cd438236a, type: 3}
+  SWSprite: {fileID: 21300000, guid: 1a86543444ff83d47a09c25fcda93aa9, type: 3}
+  NWSprite: {fileID: 21300000, guid: 6550edc30d531a842b598b0e8ec108c9, type: 3}
+  <unfinished>k__BackingField: 0

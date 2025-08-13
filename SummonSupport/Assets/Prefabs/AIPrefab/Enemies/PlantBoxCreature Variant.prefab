@@ -51,8 +51,14 @@ PrefabInstance:
     - target: {fileID: 5977249927593721339, guid: 6687344da03022b4ba38fb5b7001ca11,
         type: 3}
       propertyPath: <Abilities>k__BackingField.Array.size
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5977249927593721339, guid: 6687344da03022b4ba38fb5b7001ca11,
+        type: 3}
+      propertyPath: '<Abilities>k__BackingField.Array.data[0]'
+      value: 
+      objectReference: {fileID: 11400000, guid: bb0b444e00a135545a1125115f2626f1,
+        type: 2}
     - target: {fileID: 6891184632032524477, guid: 6687344da03022b4ba38fb5b7001ca11,
         type: 3}
       propertyPath: <Heat>k__BackingField

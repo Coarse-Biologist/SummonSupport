@@ -50,4 +50,5 @@ MonoBehaviour:
   <SplitAngleOffset>k__BackingField: 45
   <ProjectileParticleSystem>k__BackingField: {fileID: 8397946336898582108, guid: e6fb8b5d969da8241baaff1bd374c273,
     type: 3}
-  <SpawnEffectOnHit>k__BackingField: {fileID: 0}
+  <SpawnEffectOnHit>k__BackingField: {fileID: 3120327116199938787, guid: 1c8e879845899e24290d617f97db8328,
+    type: 3}

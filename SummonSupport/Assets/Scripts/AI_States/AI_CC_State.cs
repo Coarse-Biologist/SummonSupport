@@ -4,18 +4,21 @@ using System.Collections;
 using UnityEditor.Rendering;
 using System.Runtime.InteropServices;
 using System.Linq;
+using System;
+using UnityEngine.Splines.Interpolators;
 
 
 
 public class AI_CC_State : AIState
 {
     private AIState peaceState;
-    private AIState chaseState;
+    private AIChaseState chaseState;
 
     private AIStateHandler stateHandler;
     public bool sufferingCC = false;
     public Dictionary<StatusEffectType, LivingBeing> CCToCaster = new();
     public Dictionary<StatusEffectType, StatusEffects> typeToCC = new();
+
 
     private Rigidbody2D rb;
     WaitForSeconds wait = new WaitForSeconds(0.1f);
@@ -24,6 +27,9 @@ public class AI_CC_State : AIState
     private bool beingKnockedInAir = false;
     public bool isCharmed { private set; get; } = false;
     public bool isMad { private set; get; } = false;
+    public bool beingPulled { private set; get; } = false;
+
+    public Vector2 PullEpicenter { private set; get; } = new Vector2(-1, -1);
 
 
 
@@ -43,6 +49,11 @@ public class AI_CC_State : AIState
         if (!beingKnockedInAir && typeToCC.Keys.Contains(StatusEffectType.KnockInTheAir))
         {
             StartCoroutine(KnockRoutine());
+            return this;
+        }
+        if (!beingPulled && typeToCC.Keys.Contains(StatusEffectType.Pulled))
+        {
+            StartCoroutine(PullRoutine());
             return this;
         }
         if (!isCharmed && typeToCC.Keys.Contains(StatusEffectType.Charmed))
@@ -70,6 +81,10 @@ public class AI_CC_State : AIState
         CCToCaster.Remove(CC);
         typeToCC.Remove(CC);
     }
+    public void SetPullEpicenter(Vector2 loc)
+    {
+        PullEpicenter = loc;
+    }
 
     private bool KnockInTheAir()
     {
@@ -92,6 +107,24 @@ public class AI_CC_State : AIState
             rb.linearDamping = 10;
             rb.bodyType = RigidbodyType2D.Dynamic;
             return false;
+        }
+    }
+    private IEnumerator PullRoutine()
+    {
+        beingPulled = true;
+        if (PullEpicenter == Vector2.zero) PullEpicenter = new Vector2(transform.position.x, transform.position.y - 2);
+        bool stillPulling = true;
+        while (stillPulling)
+        {
+            yield return wait;
+            transform.position = Vector3.MoveTowards(transform.position, PullEpicenter, .1f);
+            if (((Vector2)transform.position - PullEpicenter).sqrMagnitude < .3f)
+            {
+                stillPulling = false;
+                RemoveCC(StatusEffectType.Pulled);
+                PullEpicenter = new Vector2(0, 0);
+                beingPulled = false;
+            }
         }
     }
 

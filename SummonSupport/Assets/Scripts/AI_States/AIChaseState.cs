@@ -17,7 +17,7 @@ public class AIChaseState : AIState
     private bool runningAttackLoop = false;
     private CreatureSpriteController spriteController;
     private WaitForSeconds attackSpeed = new WaitForSeconds(1);
-    private float MovementSpeed;
+    public float MovementSpeed { private set; get; }
 
 
 

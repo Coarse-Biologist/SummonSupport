@@ -8,14 +8,14 @@ public abstract class LivingBeing : MonoBehaviour
 {
     #region Declarations
 
-    [Header("Birth certificate")]
+    [field: Header("Birth certificate")]
     [field: SerializeField] public string Name { get; private set; }
     [field: SerializeField] public CharacterTag CharacterTag { get; private set; }
     [field: SerializeField] public string Description { get; private set; }
     [field: SerializeField] public List<string> BattleCries { get; private set; }
 
     #region Resources
-    [Header("Attributes - Resources")]
+    [field: Header("Attributes - Resources")]
     [field: SerializeField] public float MaxHP { get; private set; } = 100;
     [field: SerializeField] public float Overshield { get; private set; }
     [field: SerializeField] public float CurrentHP { get; private set; } = 100;
@@ -25,7 +25,7 @@ public abstract class LivingBeing : MonoBehaviour
     #endregion
     #region Health regen variables
 
-    [Header("Attributes - Regenerations")]
+    [field: Header("Attributes - Regenerations")]
     private WaitForSeconds regenTickRate;
     [field: SerializeField] public float TickRateRegenerationInSeconds { get; private set; } = .2f;
     [field: SerializeField] public float HealthRegeneration { get; private set; } = 0;
@@ -42,7 +42,7 @@ public abstract class LivingBeing : MonoBehaviour
 
     #region Affinity Stats
 
-    [Header("Affinity Stats")]
+    [field: Header("Affinity Stats")]
     [field: SerializeField] protected float Cold { get; private set; } = 0;
     [field: SerializeField] protected float Water { get; private set; } = 0;
     [field: SerializeField] protected float Earth { get; private set; } = 0;
@@ -61,6 +61,8 @@ public abstract class LivingBeing : MonoBehaviour
     #endregion
 
     #region Armor Stats
+    [field: Header("Armor Stats")]
+
     [field: SerializeField] protected float Piercing { get; private set; } = 0;
     [field: SerializeField] protected float Bludgeoning { get; private set; } = 0;
     [field: SerializeField] protected float Slashing { get; private set; } = 0;
@@ -77,8 +79,6 @@ public abstract class LivingBeing : MonoBehaviour
 
     public Dictionary<Element, (Func<float> Get, Action<float> Set)> Affinities { private set; get; } = new();
     public Dictionary<AttributeType, (Func<float> Get, Action<float> Set)> AttributesDict { private set; get; } = new();
-
-    //[field: SerializeField] public List<Crew_Ability_SO> Abilties { get; private set; } = new();
     [field: SerializeField] public float Speed { get; private set; } = 3f;
     [field: SerializeField] public float Mass { get; private set; } = 1f;
 
@@ -153,7 +153,7 @@ public abstract class LivingBeing : MonoBehaviour
         if (attributeType == AttributeType.CurrentHitpoints && value <= 0)
             Die();
         else if (attributeType == AttributeType.CurrentPower && value <= 0)
-           abilityHandler.HandleNoMana();
+            abilityHandler.HandleNoMana();
     }
 
     public float ChangeAttribute(AttributeType attributeType, float value)

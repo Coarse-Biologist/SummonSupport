@@ -7,4 +7,5 @@ public enum StatusEffectType
     Confused,
     Charmed,
     Madness,
+    Pulled
 }
