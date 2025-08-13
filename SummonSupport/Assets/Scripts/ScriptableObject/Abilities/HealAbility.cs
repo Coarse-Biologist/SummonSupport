@@ -9,7 +9,7 @@ public class HealAbility : Ability
 
     public override bool Activate(GameObject user)
     {
-        Logging.Info($"{user.name} heals {HealAmount} HP!");
+        //Logging.Info($"{user.name} heals {HealAmount} HP!");
         return true;
     }
 }

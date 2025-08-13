@@ -38,21 +38,14 @@ public class AIChaseState : AIState
 
     public override AIState RunCurrentState()
     {
-        if (GetComponent<AI_CC_State>().isCharmed || GetComponent<AI_CC_State>().isMad)
-        {
-            Debug.Log("Running chase state while insane");
-        }
-        else
-        {
-            Debug.Log("Running chase state while Completely sane");
-        }
+
         if (stateHandler.minionStats != null && stateHandler.minionStats.CurrentCommand == MinionCommands.FocusTarget) stateHandler.SetTarget(obedienceState.commandTarget.GetComponent<LivingBeing>());
         if (stateHandler.target != null)
         {
             Vector2 targetLoc = stateHandler.target.transform.position;
             if (peaceState.FieldOfViewCheck() == true)
             {
-                if (stateHandler.target != stateHandler.playerStats) Logging.Info($"Chase state checks field of view and finds 'I See the {stateHandler.target}!'");
+                Logging.Info($"Chase state checks field of view and finds 'I See the {stateHandler.target}!'");
                 Chase(targetLoc);
 
                 LookAtTarget(targetLoc);
@@ -62,9 +55,12 @@ public class AIChaseState : AIState
 
             else
             {
-                if (stateHandler.target != stateHandler.playerStats) Logging.Info($"Chase state checks field of view and DOESNT See the target {stateHandler.target}!!!");
+
                 runningAttackLoop = false;
-                StopCoroutine(attackCoroutine);
+                if (attackCoroutine != null)
+                {
+                    StopCoroutine(attackCoroutine);
+                }
                 Chase(stateHandler.lastSeenLoc, true);
                 LookAtTarget(stateHandler.lastSeenLoc);
             }
@@ -72,7 +68,7 @@ public class AIChaseState : AIState
         }
         else
         {
-            Debug.Log($"trying to stop attack coroutine because target is null {stateHandler.target}");
+            //Debug.Log($"trying to stop attack coroutine because target is null {stateHandler.target}");
             if (attackCoroutine != null)
             {
                 runningAttackLoop = false;
@@ -106,6 +102,7 @@ public class AIChaseState : AIState
 
     public void Chase(Vector2 targetLoc, bool cantSeeTarget = false)
     {
+        Debug.Log("Chase func called.");
         Vector2 currentLoc = new Vector2(transform.position.x, transform.position.y);
         Vector2 direction = targetLoc - currentLoc;
         float distance = direction.sqrMagnitude;
@@ -114,14 +111,27 @@ public class AIChaseState : AIState
         {
             if (!uniqueMovement || cantSeeTarget)
             {
-                if (direction.sqrMagnitude > 10 || peaceState.CheckVisionBlocked(stateHandler.target)) rb.linearVelocity = (targetLoc - currentLoc) * MovementSpeed;
-                else rb.linearVelocity = new Vector2(0, 0);
+                Debug.Log("Chase func called. Either creature cant see target or hasnt the ability to walk strangely");
+
+                if (direction.sqrMagnitude > 10 || peaceState.CheckVisionBlocked(stateHandler.target))
+                {
+                    rb.linearVelocity = (targetLoc - currentLoc) * MovementSpeed;
+
+                    Debug.Log($"target loc = {targetLoc}. target =  {stateHandler.target}");
+                }
+                else
+                {
+                    rb.linearVelocity = new Vector2(0, 0);
+                    Debug.Log($"vision of target {stateHandler.target} was blocked ({peaceState.CheckVisionBlocked(stateHandler.target)}) or distance was less than 10 {direction.sqrMagnitude}");
+                }
             }
             else StrafeMovement(targetLoc, currentLoc, distance);
         }
     }
     private void StrafeMovement(Vector2 targetLoc, Vector2 currentLoc, float distance)
     {
+        Debug.Log("Strafe movent called");
+
         float a = -60f * distance;
         Vector2 offset = currentLoc - targetLoc;
         float theta = Mathf.Atan2(offset.y, offset.x);
@@ -141,7 +151,7 @@ public class AIChaseState : AIState
         {
             if (target != null)
             {
-                Debug.Log($"target = {target.Name}");
+                //Debug.Log($"target = {target.Name}");
 
                 yield return attackSpeed;
                 Vector2 targetLoc = target.transform.position;

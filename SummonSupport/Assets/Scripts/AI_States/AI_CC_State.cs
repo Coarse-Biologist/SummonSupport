@@ -26,6 +26,7 @@ public class AI_CC_State : AIState
     public bool isMad { private set; get; } = false;
 
 
+
     public void Awake()
     {
         peaceState = GetComponent<AIPeacefulState>();

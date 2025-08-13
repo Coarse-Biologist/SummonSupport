@@ -58,11 +58,11 @@ public class Projectile : MonoBehaviour
         GameObject instance;
         if (SpawnEffectOnHit != null)
         {
-            Debug.Log("This happens, excellent");
+            //Debug.Log("This happens, excellent");
             instance = Instantiate(ability.SpawnEffectOnHit, transform.position, Quaternion.identity, targetLivingBeing.transform.transform);
             Destroy(instance, instance.GetComponent<ParticleSystem>().main.duration);
         }
-        else Debug.Log("This happens but is null");
+        //else Debug.Log("This happens but is null");
     }
     public void SetParticleTrailEffects(Vector2 direction) // -user.transform.right
     {

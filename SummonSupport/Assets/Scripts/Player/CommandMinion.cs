@@ -18,7 +18,7 @@ public static class CommandMinion
         if (SelectedMinions != null)
         {
             Collider2D[] enemyHits = Physics2D.OverlapCircleAll(loc, 1, LayerMask.GetMask("Enemy"));
-            Logging.Info($"{enemyHits.Length} colliders in click area.");
+            //Logging.Info($"{enemyHits.Length} colliders in click area.");
 
             if (enemyHits.Length > 0)
             {
@@ -29,7 +29,7 @@ public static class CommandMinion
             }
 
             Collider2D[] interactHits = Physics2D.OverlapCircleAll(loc, 1);
-            Logging.Info($"{interactHits.Length} colliders in click area.");
+            //Logging.Info($"{interactHits.Length} colliders in click area.");
 
             if (interactHits.Length > 0)
             {
@@ -69,7 +69,7 @@ public static class CommandMinion
             minion.GetComponent<MinionInteractionHandler>().SetCommandToInteract(true);
             obedienceState.SetCommandLoc(loc);
             stats.SetCommand(MinionCommands.GoTo);
-            Logging.Info($"{stats.Name} is going to location {obedienceState.commandLoc} to interact");
+            //Logging.Info($"{stats.Name} is going to location {obedienceState.commandLoc} to interact");
         }
 
     }
@@ -81,7 +81,7 @@ public static class CommandMinion
             AIObedienceState obedienceState = minion.GetComponent<AIObedienceState>();
             obedienceState.SetCommandLoc(loc);
             stats.SetCommand(MinionCommands.GoTo);
-            Logging.Info($"{stats.Name} is going to location {obedienceState.commandLoc}");
+            //Logging.Info($"{stats.Name} is going to location {obedienceState.commandLoc}");
             //stats.ChangeAttribute(AttributeType.CurrentHitpoints, -10);
         }
     }
@@ -94,7 +94,7 @@ public static class CommandMinion
             AIObedienceState obedienceState = minion.GetComponent<AIObedienceState>();
             obedienceState.SetCommandTarget(enemy);
             stats.SetCommand(MinionCommands.FocusTarget);
-            Logging.Info($"{stats.Name} is seeking {obedienceState.commandTarget} at location {obedienceState.commandLoc}");
+            //Logging.Info($"{stats.Name} is seeking {obedienceState.commandTarget} at location {obedienceState.commandLoc}");
         }
     }
 

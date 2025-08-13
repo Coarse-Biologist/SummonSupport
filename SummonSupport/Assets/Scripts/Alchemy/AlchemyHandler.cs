@@ -47,7 +47,7 @@ public class AlchemyHandler : MonoBehaviour
                 AddActiveMinion(craftedMinion);
                 int knowledgeGain = GainKnowledge(elementList, combinedIngredients);
 
-                Logging.Info($"You have just gained a total of {knowledgeGain} knowledge from alchemic work.");
+                //Logging.Info($"You have just gained a total of {knowledgeGain} knowledge from alchemic work.");
             }
             else Logging.Error("Crafted Minion is null, was he loaded promtly or correctly?");
         }

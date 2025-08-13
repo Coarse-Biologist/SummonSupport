@@ -75,6 +75,7 @@ public class PlayerMovement : MonoBehaviour
     #region Dash logic
     private void OnDash(InputAction.CallbackContext context)
     {
+        EventDeclarer.SpawnEnemies?.Invoke(this.gameObject);
         if (canDash)
         {
             canDash = false;

@@ -47,7 +47,7 @@ public class CreatureAbilityHandler : AbilityHandler
             targetIsFriendly = false;
             if (attackAbilities.Count == 0) return null;
         }
-        Logging.Info($" elapsed time : {stopwatch.ElapsedMilliseconds}");
+        //Logging.Info($" elapsed time : {stopwatch.ElapsedMilliseconds}");
 
         return SelectAbility(targetIsFriendly, target);
 

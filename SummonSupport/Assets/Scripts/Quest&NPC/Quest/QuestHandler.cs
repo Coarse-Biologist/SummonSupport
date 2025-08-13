@@ -46,24 +46,24 @@ public class QuestHandler : MonoBehaviour
         Dictionary<RepeatableAccomplishments, int> goalReps = activeQuest.IntQuestReqs.ToDictionary(item => item.quest, item => item.reps);
         if (goalReps.Keys.Count > QuestRepTracker.Keys.Count)
         {
-            Logging.Info($"Dict<repeatable quests, completed repetitions>().keys was not to the quest {activeQuest.QuestName} number of required quests ");
+            //Logging.Info($"Dict<repeatable quests, completed repetitions>().keys was not to the quest {activeQuest.QuestName} number of required quests ");
             return false;
         }
         else
         {
-            Logging.Info($"Dict<repeatable quests, completed repetitions>().keys was equal to the quest {activeQuest.QuestName} number of required quests ");
+            //Logging.Info($"Dict<repeatable quests, completed repetitions>().keys was equal to the quest {activeQuest.QuestName} number of required quests ");
         }
         bool complete = true;
         foreach (KeyValuePair<RepeatableAccomplishments, int> kvp in goalReps)
         {
             if (QuestRepTracker.TryGetValue(kvp.Key, out int reps) && reps >= kvp.Value)
             {
-                Logging.Info($"Repetitions of quest {kvp.Key} was {reps} which is >=  the quest number of required repetitions ({kvp.Value} ) ");
+                //Logging.Info($"Repetitions of quest {kvp.Key} was {reps} which is >=  the quest number of required repetitions ({kvp.Value} ) ");
                 continue;
             }
             else
             {
-                Logging.Info($"Repetitions of quest {kvp.Key} was {reps} which is <=  the quest number of required repetitions ({kvp.Value} ) ");
+                //Logging.Info($"Repetitions of quest {kvp.Key} was {reps} which is <=  the quest number of required repetitions ({kvp.Value} ) ");
                 return false;
             }
         }

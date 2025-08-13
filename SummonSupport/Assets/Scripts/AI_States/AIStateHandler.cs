@@ -18,7 +18,7 @@ public class AIStateHandler : MonoBehaviour
     public LayerMask friendlyMask { private set; get; }
     public LayerMask belligerantMask { private set; get; }
     public LayerMask obstructionMask { private set; get; }
-    public AIState currentState;
+    public AIState currentState { get; private set; }
     [SerializeField] public AI_CC_State ccState;
     [SerializeField] public AIState peaceState { private set; get; }
     [SerializeField] public AIState chaseState { private set; get; }
@@ -33,6 +33,11 @@ public class AIStateHandler : MonoBehaviour
     public Vector2 lastSeenLoc;
 
     private Vector2 startLocation;
+
+    public void SetCurrentState(AIState state)
+    {
+        currentState = state;
+    }
 
 
     public void Awake()
@@ -76,20 +81,22 @@ public class AIStateHandler : MonoBehaviour
         bool mad = statusEffect == StatusEffectType.Madness;
         if (mad)
         {
-            if (targetMask == belligerantMask) Debug.Log("mask is belligerant mask");
-            targetMask = belligerantMask;
+            if (targetMask == belligerantMask) //Debug.Log("mask is belligerant mask");
+                targetMask = belligerantMask;
             return;
         }
         CharacterTag tag = livingBeing.CharacterTag;
         if (tag == CharacterTag.Minion && !charmed || tag == CharacterTag.Enemy && charmed || tag == CharacterTag.Guard && !charmed) targetMask = enemyMask;
         else targetMask = friendlyMask;
-        if (targetMask == friendlyMask) Debug.Log("mask is friendly mask");
-        if (targetMask == enemyMask) Debug.Log("mask is enemy  mask");
+        //if (targetMask == friendlyMask) //Debug.Log("mask is friendly mask");
+        //if (targetMask == enemyMask) //Debug.Log("mask is enemy  mask");
 
     }
 
     private void RunStateMachine()
     {
+        Debug.Log($"current state = {currentState}");
+
         // Called in Awake by using "Invoke repeating"
         if (ccState != null && ccState.CCToCaster.Count != 0) SwitchToNextState(ccState);
         if (minionStats == null || minionStats.CurrentCommand == MinionCommands.None)
@@ -99,14 +106,19 @@ public class AIStateHandler : MonoBehaviour
             {
                 SwitchToNextState(nextState);
             }
-            ///else Debug.Log("nextState state was null");
+            else Debug.Log("nextState state was null");
         }
         else
         {
-            SwitchToNextState(obedienceState);
-            AIState nextState = obedienceState.RunCurrentState();
-            if (nextState != null)
+            if (livingBeing.CharacterTag == CharacterTag.Minion)
             {
+                AIState nextState = obedienceState.RunCurrentState();
+                SwitchToNextState(nextState);
+
+            }
+            else
+            {
+                AIState nextState = peaceState.RunCurrentState();
                 SwitchToNextState(nextState);
             }
             //else Debug.Log("next state was null");

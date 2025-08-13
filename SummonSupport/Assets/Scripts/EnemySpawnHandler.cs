@@ -1,16 +1,16 @@
+using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+
+//using System.Numerics;
 using SummonSupportEvents;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
 public class EnemySpawnHandler : MonoBehaviour
 {
-    [SerializeField] GameObject enemyPrefab1 = null;
-    [SerializeField] int avrgEnemiesPerWaves = 5;
-    //[SerializeField] int avrgTimeBetweenWaves = 10;
-    [SerializeField] int minDistanceToPlayer = 5;
-    [SerializeField] LayerMask targetMask;
-    [SerializeField] LayerMask avoidMask;
+    [field: SerializeField] public GameObject enemyPrefab { get; private set; } = null;
+    [field: SerializeField] public GameObject SpawnCenter { get; private set; } = null;
 
 
 
@@ -23,56 +23,59 @@ public class EnemySpawnHandler : MonoBehaviour
         EventDeclarer.SpawnEnemies.RemoveListener(SpawnEnemies);
     }
 
-    private void SpawnEnemies(Vector2 targetArea)
+    private void SpawnEnemies(GameObject testNothing = null)
     {
-        List<Vector2> spawnLocs = GetSpawnLocations(targetArea);
-        foreach (Vector2 loc in spawnLocs)
+        List<GameObject> spawnedCreatures = new();
+        if (SpawnCenter != null && SpawnCenter.TryGetComponent<SpawnLocationInfo>(out SpawnLocationInfo spawnInfo) && spawnInfo.Creatures.Count > 0)
         {
-            Instantiate(enemyPrefab1, loc, Quaternion.identity);
+
+            List<Vector2> spawnLocs = GetSpawnLocations(SpawnCenter.transform.position, spawnInfo.radius, spawnInfo.desiredSpawns);
+            foreach (Vector2 loc in spawnLocs)
+            {
+
+                spawnedCreatures.Add(Instantiate(spawnInfo.Creatures[Random.Range(0, spawnInfo.Creatures.Count)], loc, Quaternion.identity));
+            }
+            if (spawnInfo.MoveTowardLocation && spawnInfo.TargetLocation != null)
+            {
+
+                foreach (GameObject creature in spawnedCreatures)
+                {
+
+                    MoveTowardTarget(creature, spawnInfo.TargetLocation.position);
+                }
+            }
+        }
+
+    }
+    private void MoveTowardTarget(GameObject creature, Vector2 loc)
+    {
+        if (creature.TryGetComponent<AIStateHandler>(out AIStateHandler stateHandler))
+        {
+            stateHandler.lastSeenLoc = PlayerStats.Instance.transform.position;
+            stateHandler.SetTarget(PlayerStats.Instance);
+            stateHandler.SetCurrentState(creature.GetComponent<AIChaseState>());
+        }
+        if (creature.TryGetComponent<Collider2D>(out Collider2D collider))
+        {
+
+            collider.isTrigger = true;
         }
     }
 
-    private List<Vector2> GetSpawnLocations(Vector2 targetCenter)
+    private List<Vector2> GetSpawnLocations(Vector2 origin, float radius, int desiredSpawns)
     {
-        LayerMask finalMask = targetMask & ~avoidMask;
-        Vector2 origin = Camera.main.transform.position;
-        List<Vector2> spawnLocs = new List<Vector2>();
-        int spawnLocFound = 0;
-        int goalSpawnLoc = GetVariedSpawnNumber();
-
-        int maxAttempts = 1000;
-        int attempts = 0;
-
-        while (spawnLocFound < goalSpawnLoc && attempts < maxAttempts)
+        List<Vector2> spawnLocs = new();
+        for (int i = 0; i < desiredSpawns; i++)
         {
-            int xOffset = GetRandomOffset();
-            int yOffset = GetRandomOffset();
-
-            //Logging.Info($" x offset =  {xOffset}, y offset = {yOffset}");
-
-            Vector2 direction = new Vector2(targetCenter.x + xOffset, targetCenter.y + yOffset);
-            //Logging.Info($" direction = {direction}");
-            RaycastHit2D hit = Physics2D.Raycast(origin, direction, finalMask);
-            if (hit)
-            {
-                spawnLocs.Add(direction);
-                spawnLocFound++;
-                //Logging.Info($" Spawn loc found: {direction}");
-            }
+            spawnLocs.Add(new Vector2(origin.x + GetRandomOffset(radius), origin.y + GetRandomOffset(radius)));
         }
         return spawnLocs;
     }
 
-    private int GetVariedRadiusSize()
+    private float GetRandomOffset(float radius)
     {
-        return Random.Range(minDistanceToPlayer, minDistanceToPlayer + 5);
-    }
-    private int GetVariedSpawnNumber()
-    {
-        return Random.Range(avrgEnemiesPerWaves - 3, avrgEnemiesPerWaves + 3);
-    }
-    private int GetRandomOffset()
-    {
-        return Random.Range(-5, 5);
+        return Random.Range(-radius, radius);
     }
 }
+
+

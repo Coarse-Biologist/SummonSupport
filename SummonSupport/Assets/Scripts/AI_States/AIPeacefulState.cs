@@ -45,15 +45,12 @@ public class AIPeacefulState : AIState
     {
         LivingBeing target = CheckTargetInRange();
 
-        if (GetComponent<AI_CC_State>().isCharmed)
-        {
-            Debug.Log($"Field of view Check searching for {target}");
-        }
+
         if (target != null && !CheckVisionBlocked(target))
         {
             stateHandler.lastSeenLoc = target.transform.position;
             canSeeTarget = true;
-            Debug.Log($"Field of view Check setting canSeetarget to {canSeeTarget}");
+            Debug.Log($"Field of view Check setting canSeetarget to {canSeeTarget} ({target})");
 
             return true;
         }
@@ -69,7 +66,7 @@ public class AIPeacefulState : AIState
     {
         //if (Vector3.Angle(transform.forward, directionToTarget) < angle / 2)
         Collider2D[] rangeChecks = Physics2D.OverlapCircleAll(transform.position, stateHandler.DetectionRadius, stateHandler.targetMask);
-        Debug.Log($"checking target in range: Looking for target of target mask {stateHandler.targetMask.value}");
+        //Debug.Log($"checking target in range: Looking for target of target mask {stateHandler.targetMask.value}");
         LivingBeing target = null;
         if (rangeChecks.Length != 0)
         {
@@ -85,7 +82,7 @@ public class AIPeacefulState : AIState
                 }
             }
         }
-        Debug.Log($"Check target in range with target mask {stateHandler.targetMask.value} target found = {target}. number of objects with this layer found = {rangeChecks.Length}");
+        //Debug.Log($"Check target in range with target mask {stateHandler.targetMask.value} target found = {target}. number of objects with this layer found = {rangeChecks.Length}");
         return target;
 
     }
@@ -122,10 +119,10 @@ public class AIPeacefulState : AIState
 
     public override AIState RunCurrentState()
     {
-        Debug.Log("Run current state: peaceful state says 'running peaceful state'");
+        //("Run current state: peaceful state says 'running peaceful state'");
         if (canSeeTarget)
         {
-            Debug.Log("Run current state: peaceful state says 'Requesting chase state'");
+            //Debug.Log("Run current state: peaceful state says 'Requesting chase state'");
             if (runningSupportLoop)
             {
                 runningSupportLoop = false;

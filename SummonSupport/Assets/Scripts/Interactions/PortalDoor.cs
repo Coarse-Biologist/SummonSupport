@@ -13,6 +13,6 @@ public class PortalDoor : MonoBehaviour
         {
             collision.gameObject.transform.position = DestinationDoor.position;
         }
-        else Logging.Info($"{collision.gameObject.name} was not a player");
+        //else Logging.Info($"{collision.gameObject.name} was not a player");
     }
 }
