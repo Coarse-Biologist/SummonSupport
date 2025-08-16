@@ -38,7 +38,7 @@ public class AIChaseState : AIState
 
     public override AIState RunCurrentState()
     {
-
+        if (stateHandler.StuckInAbilityAnimation) return this;
         if (stateHandler.minionStats != null && stateHandler.minionStats.CurrentCommand == MinionCommands.FocusTarget) stateHandler.SetTarget(obedienceState.commandTarget.GetComponent<LivingBeing>());
         if (stateHandler.target != null)
         {
@@ -89,43 +89,49 @@ public class AIChaseState : AIState
     }
     public void LookAtTarget(Vector2 targetLoc)
     {
-        if (rotationObject != null)
+        if (!stateHandler.StuckInAbilityAnimation)
         {
-            Vector2 direction = (targetLoc - (Vector2)transform.position).normalized;
-            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-            rotationObject.transform.rotation = Quaternion.Euler(0, 0, angle);
-            if (spriteController != null)
-                spriteController.SetSpriteDirection(angle);
+            if (rotationObject != null)
+            {
+                Vector2 direction = (targetLoc - (Vector2)transform.position).normalized;
+                float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+                rotationObject.transform.rotation = Quaternion.Euler(0, 0, angle);
+                if (spriteController != null)
+                    spriteController.SetSpriteDirection(angle);
+            }
         }
     }
 
 
     public void Chase(Vector2 targetLoc, bool cantSeeTarget = false)
     {
-        Debug.Log("Chase func called.");
-        Vector2 currentLoc = new Vector2(transform.position.x, transform.position.y);
-        Vector2 direction = targetLoc - currentLoc;
-        float distance = direction.sqrMagnitude;
-        bool uniqueMovement = true;
-        if (distance > 10 || peaceState.CheckVisionBlocked(stateHandler.target))
+        if (!stateHandler.StuckInAbilityAnimation)
         {
-            if (!uniqueMovement || cantSeeTarget)
+            Debug.Log("Chase func called.");
+            Vector2 currentLoc = new Vector2(transform.position.x, transform.position.y);
+            Vector2 direction = targetLoc - currentLoc;
+            float distance = direction.sqrMagnitude;
+            bool uniqueMovement = true;
+            if (distance > 10 || peaceState.CheckVisionBlocked(stateHandler.target))
             {
-                Debug.Log("Chase func called. Either creature cant see target or hasnt the ability to walk strangely");
-
-                if (direction.sqrMagnitude > 10 || peaceState.CheckVisionBlocked(stateHandler.target))
+                if (!uniqueMovement || cantSeeTarget)
                 {
-                    rb.linearVelocity = (targetLoc - currentLoc) * MovementSpeed;
+                    Debug.Log("Chase func called. Either creature cant see target or hasnt the ability to walk strangely");
 
-                    Debug.Log($"target loc = {targetLoc}. target =  {stateHandler.target}");
+                    if (direction.sqrMagnitude > 10 || peaceState.CheckVisionBlocked(stateHandler.target))
+                    {
+                        rb.linearVelocity = (targetLoc - currentLoc) * MovementSpeed;
+
+                        Debug.Log($"target loc = {targetLoc}. target =  {stateHandler.target}");
+                    }
+                    else
+                    {
+                        rb.linearVelocity = new Vector2(0, 0);
+                        Debug.Log($"vision of target {stateHandler.target} was blocked ({peaceState.CheckVisionBlocked(stateHandler.target)}) or distance was less than 10 {direction.sqrMagnitude}");
+                    }
                 }
-                else
-                {
-                    rb.linearVelocity = new Vector2(0, 0);
-                    Debug.Log($"vision of target {stateHandler.target} was blocked ({peaceState.CheckVisionBlocked(stateHandler.target)}) or distance was less than 10 {direction.sqrMagnitude}");
-                }
+                else StrafeMovement(targetLoc, currentLoc, distance);
             }
-            else StrafeMovement(targetLoc, currentLoc, distance);
         }
     }
     private void StrafeMovement(Vector2 targetLoc, Vector2 currentLoc, float distance)

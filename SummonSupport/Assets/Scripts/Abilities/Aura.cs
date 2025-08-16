@@ -70,7 +70,7 @@ public class Aura : MonoBehaviour
                     CombatStatHandler.HandleEffectPackages(ability, caster, otherLivingBeing, false);
                 }
             }
-            else Debug.Log($"NOT usable on {otherLivingBeing.Name}");
+            else Debug.Log($"NOT usable on {other.gameObject.name}");
 
         }
     }

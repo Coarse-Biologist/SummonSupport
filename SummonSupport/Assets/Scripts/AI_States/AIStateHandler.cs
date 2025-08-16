@@ -13,6 +13,7 @@ public class AIStateHandler : MonoBehaviour
     [SerializeField] public int AttackSpeed = 1;
     [SerializeField] public int Cowardice = 0; // At what HP percentage a summon may try to retreat
     public LayerMask targetMask { private set; get; }
+    public bool StuckInAbilityAnimation { private set; get; } = false;
 
     public LayerMask enemyMask { private set; get; }
     public LayerMask friendlyMask { private set; get; }
@@ -37,6 +38,10 @@ public class AIStateHandler : MonoBehaviour
     public void SetCurrentState(AIState state)
     {
         currentState = state;
+    }
+    public void SetStuckInAbilityAnimation(bool stuck)
+    {
+        StuckInAbilityAnimation = stuck;
     }
 
 

@@ -28,6 +28,7 @@ public class PlayerMovement : MonoBehaviour
     private bool dashing = false;
     private bool canDash = true;
     private bool lockedInUI = false;
+    private bool StuckInAbilityAnimation = false;
 
     #endregion
 
@@ -96,6 +97,11 @@ public class PlayerMovement : MonoBehaviour
     private void ReturnToNormalSpeed()
     {
         dashing = false;
+    }
+
+    public void SetStuckInAbilityAnimation(bool stuck)
+    {
+        StuckInAbilityAnimation = stuck;
     }
     #endregion
 
@@ -166,7 +172,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
-        if (!lockedInUI)
+        if (!lockedInUI && !StuckInAbilityAnimation)
         {
             HandleMove();
 
