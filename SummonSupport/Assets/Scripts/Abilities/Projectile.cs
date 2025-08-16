@@ -59,7 +59,7 @@ public class Projectile : MonoBehaviour
         if (SpawnEffectOnHit != null)
         {
             //Debug.Log("This happens, excellent");
-            instance = Instantiate(ability.SpawnEffectOnHit, transform.position, Quaternion.identity, targetLivingBeing.transform.transform);
+            instance = Instantiate(ability.SpawnEffectOnHit, targetLivingBeing.transform.position, Quaternion.identity, targetLivingBeing.transform.transform);
             Destroy(instance, instance.GetComponent<ParticleSystem>().main.duration);
         }
         //else Debug.Log("This happens but is null");

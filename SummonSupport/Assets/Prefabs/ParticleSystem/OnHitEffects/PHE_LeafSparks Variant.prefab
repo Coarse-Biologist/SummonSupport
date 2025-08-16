@@ -80,8 +80,18 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 2c74f38761410994a901c2de5522ca8c, type: 2}
     - target: {fileID: 9025102675782475170, guid: 933cfe8c2862c75499ef399a089d01f4,
         type: 3}
+      propertyPath: looping
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9025102675782475170, guid: 933cfe8c2862c75499ef399a089d01f4,
+        type: 3}
       propertyPath: ColorModule.enabled
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9025102675782475170, guid: 933cfe8c2862c75499ef399a089d01f4,
+        type: 3}
+      propertyPath: InitialModule.startLifetime.scalar
+      value: 1.2
       objectReference: {fileID: 0}
     - target: {fileID: 9025102675782475170, guid: 933cfe8c2862c75499ef399a089d01f4,
         type: 3}

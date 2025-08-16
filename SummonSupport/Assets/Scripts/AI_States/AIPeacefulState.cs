@@ -145,6 +145,7 @@ public class AIPeacefulState : AIState
                 if (!runningSupportLoop)
                     supportCoroutine = StartCoroutine(HandleSupportloop());
             }
+            chaseState.LookAtTarget(player.transform.position);
             return this;
         }
         else

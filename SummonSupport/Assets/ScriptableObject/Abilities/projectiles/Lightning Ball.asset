@@ -43,7 +43,7 @@ MonoBehaviour:
   <Projectile>k__BackingField: {fileID: 2972241173990281680, guid: 076762fc127b3394faad17411e5b6329,
     type: 3}
   <MaxRange>k__BackingField: 150
-  <Lifetime>k__BackingField: 20
+  <Lifetime>k__BackingField: 5
   <PiercingMode>k__BackingField: 3
   <MaxPierce>k__BackingField: 0
   <MaxSplit>k__BackingField: 1
