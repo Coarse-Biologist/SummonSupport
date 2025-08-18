@@ -38,14 +38,13 @@ public class AIChaseState : AIState
 
     public override AIState RunCurrentState()
     {
-        if (stateHandler.StuckInAbilityAnimation) return this;
         if (stateHandler.minionStats != null && stateHandler.minionStats.CurrentCommand == MinionCommands.FocusTarget) stateHandler.SetTarget(obedienceState.commandTarget.GetComponent<LivingBeing>());
         if (stateHandler.target != null)
         {
             Vector2 targetLoc = stateHandler.target.transform.position;
             if (peaceState.FieldOfViewCheck() == true)
             {
-                Logging.Info($"Chase state checks field of view and finds 'I See the {stateHandler.target}!'");
+                //Logging.Info($"Chase state checks field of view and finds 'I See the {stateHandler.target}!'");
                 Chase(targetLoc);
 
                 LookAtTarget(targetLoc);
@@ -89,17 +88,16 @@ public class AIChaseState : AIState
     }
     public void LookAtTarget(Vector2 targetLoc)
     {
-        if (!stateHandler.StuckInAbilityAnimation)
+
+        if (rotationObject != null)
         {
-            if (rotationObject != null)
-            {
-                Vector2 direction = (targetLoc - (Vector2)transform.position).normalized;
-                float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-                rotationObject.transform.rotation = Quaternion.Euler(0, 0, angle);
-                if (spriteController != null)
-                    spriteController.SetSpriteDirection(angle);
-            }
+            Vector2 direction = (targetLoc - (Vector2)transform.position).normalized;
+            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+            rotationObject.transform.rotation = Quaternion.Euler(0, 0, angle);
+            if (spriteController != null)
+                spriteController.SetSpriteDirection(angle);
         }
+
     }
 
 
@@ -107,7 +105,7 @@ public class AIChaseState : AIState
     {
         if (!stateHandler.StuckInAbilityAnimation)
         {
-            Debug.Log("Chase func called.");
+            //.Log("Chase func called.");
             Vector2 currentLoc = new Vector2(transform.position.x, transform.position.y);
             Vector2 direction = targetLoc - currentLoc;
             float distance = direction.sqrMagnitude;
@@ -116,18 +114,18 @@ public class AIChaseState : AIState
             {
                 if (!uniqueMovement || cantSeeTarget)
                 {
-                    Debug.Log("Chase func called. Either creature cant see target or hasnt the ability to walk strangely");
+                    //Debug.Log("Chase func called. Either creature cant see target or hasnt the ability to walk strangely");
 
                     if (direction.sqrMagnitude > 10 || peaceState.CheckVisionBlocked(stateHandler.target))
                     {
                         rb.linearVelocity = (targetLoc - currentLoc) * MovementSpeed;
 
-                        Debug.Log($"target loc = {targetLoc}. target =  {stateHandler.target}");
+                        //Debug.Log($"target loc = {targetLoc}. target =  {stateHandler.target}");
                     }
                     else
                     {
                         rb.linearVelocity = new Vector2(0, 0);
-                        Debug.Log($"vision of target {stateHandler.target} was blocked ({peaceState.CheckVisionBlocked(stateHandler.target)}) or distance was less than 10 {direction.sqrMagnitude}");
+                        //Debug.Log($"vision of target {stateHandler.target} was blocked ({peaceState.CheckVisionBlocked(stateHandler.target)}) or distance was less than 10 {direction.sqrMagnitude}");
                     }
                 }
                 else StrafeMovement(targetLoc, currentLoc, distance);
@@ -136,7 +134,7 @@ public class AIChaseState : AIState
     }
     private void StrafeMovement(Vector2 targetLoc, Vector2 currentLoc, float distance)
     {
-        Debug.Log("Strafe movent called");
+        //Debug.Log("Strafe movent called");
 
         float a = -60f * distance;
         Vector2 offset = currentLoc - targetLoc;

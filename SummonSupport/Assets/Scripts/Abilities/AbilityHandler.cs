@@ -11,6 +11,7 @@ public class AbilityHandler : MonoBehaviour
     [SerializeField] protected List<bool> abilitiesOnCooldown = new();
     private Dictionary<BeamAbility, GameObject> toggledAbilitiesDict = new();
     [field: SerializeField] public GameObject weaponSlot { get; private set; } = null;
+    private bool charging = false;
 
 
 
@@ -82,6 +83,13 @@ public class AbilityHandler : MonoBehaviour
             case BeamAbility beamAbility:
                 usedAbility = HandleBeamAbility(beamAbility, statsHandler);
                 break;
+            case ChargeAbility chargeAbility:
+                if (!charging)
+                {
+                    SetCharging(true);
+                    chargeAbility.Activate(gameObject);
+                }
+                break;
         }
         //Logging.Info($"able to use {ability.Name} = {usedAbility}");
         return usedAbility;
@@ -105,6 +113,10 @@ public class AbilityHandler : MonoBehaviour
             return true;
         }
 
+    }
+    public void SetCharging(bool alreadyCharging)
+    {
+        charging = alreadyCharging;
     }
     private void StopToggledAbility(BeamAbility beamAbility, GameObject activeAbility)
     {

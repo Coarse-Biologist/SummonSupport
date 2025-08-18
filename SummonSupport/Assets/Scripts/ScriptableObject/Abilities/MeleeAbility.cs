@@ -15,7 +15,6 @@ public class MeleeAbility : Ability
     [field: SerializeField] public float Range { get; private set; }
     [field: SerializeField] public float Angle { get; private set; }
     [field: SerializeField] public float Width { get; private set; }
-    [field: SerializeField] public MeleeMovementType MovementType { get; private set; } // will use the range specified above
     [field: SerializeField] public AreaOfEffectShape Shape { get; private set; }
     [field: SerializeField] public GameObject SpawnEffectOnHit { get; private set; }
     [field: SerializeField] public GameObject MeleeParticleSystem { get; protected set; }
@@ -36,15 +35,11 @@ public class MeleeAbility : Ability
         Caster = user.GetComponent<LivingBeing>();
         if (originTransform == null)
         {
+            Debug.Log($"the user: {user}.");
             originTransform = user.GetComponent<AbilityHandler>().abilityDirection.transform;
         }
-        if (MovementType != MeleeMovementType.None)
-        {
-            CoroutineManager.Instance.StartCustomCoroutine(HandleSpecialMovement(user, originTransform));
-            return true;
-        }
-        else
-            return AttemptActivation(user);
+
+        return AttemptActivation(user);
 
     }
     private void UseWeaponOrSetEffect(GameObject user)
@@ -56,39 +51,7 @@ public class MeleeAbility : Ability
 
     }
 
-    private IEnumerator HandleSpecialMovement(GameObject user, Transform originTransform)
-    {
-        Rigidbody2D rb = user.GetComponent<Rigidbody2D>();
 
-        if (MovementType == MeleeMovementType.Charge)
-        {
-            ToggleStuckInAbilityAnimation(user, true);
-        }
-        Vector2 startLoc = user.transform.position;
-
-        while ((startLoc - (Vector2)user.transform.position).magnitude < Range) // while the distance between current loc and startLoc is less than Range
-        {
-            Debug.Log("handling special movement?");
-            rb.linearVelocity = originTransform.right * 6;
-            yield return movementWait;
-        }
-
-        ToggleStuckInAbilityAnimation(user, false);
-        AttemptActivation(user);
-    }
-    private void ToggleStuckInAbilityAnimation(GameObject user, bool stuck)
-    {
-        if (Caster.CharacterTag != CharacterTag.Player)
-        {
-            AIStateHandler stateHandler = user.GetComponent<AIStateHandler>();
-            stateHandler.SetStuckInAbilityAnimation(stuck);
-        }
-        else
-        {
-            user.TryGetComponent<PlayerMovement>(out PlayerMovement playerMovemeentScript);
-            playerMovemeentScript.SetStuckInAbilityAnimation(stuck);
-        }
-    }
 
     private bool AttemptActivation(GameObject user)
     {

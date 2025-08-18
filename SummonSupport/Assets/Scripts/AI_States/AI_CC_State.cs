@@ -66,6 +66,11 @@ public class AI_CC_State : AIState
             BecomeMad(typeToCC[StatusEffectType.Madness].Duration);
             return peaceState;
         }
+        if (typeToCC.Keys.Contains(StatusEffectType.AttackAnimation))
+        {
+            return this;
+        }
+
 
         return peaceState;
 

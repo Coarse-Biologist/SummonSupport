@@ -100,7 +100,7 @@ public class AIStateHandler : MonoBehaviour
 
     private void RunStateMachine()
     {
-        Debug.Log($"current state = {currentState}");
+        //Debug.Log($"current state = {currentState}");
 
         // Called in Awake by using "Invoke repeating"
         if (ccState != null && ccState.CCToCaster.Count != 0) SwitchToNextState(ccState);

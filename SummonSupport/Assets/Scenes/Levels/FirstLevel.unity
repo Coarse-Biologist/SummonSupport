@@ -186,17 +186,17 @@ PrefabInstance:
     - target: {fileID: 4345559948793367723, guid: e4c43cb75dda4d3458057b35ce607d87,
         type: 3}
       propertyPath: m_Radius
-      value: 0.3230788
+      value: 0.5946508
       objectReference: {fileID: 0}
     - target: {fileID: 4345559948793367723, guid: e4c43cb75dda4d3458057b35ce607d87,
         type: 3}
       propertyPath: m_Offset.x
-      value: 0.4195041
+      value: 0.06102872
       objectReference: {fileID: 0}
     - target: {fileID: 4345559948793367723, guid: e4c43cb75dda4d3458057b35ce607d87,
         type: 3}
       propertyPath: m_Offset.y
-      value: 0.3711971
+      value: 0.1104881
       objectReference: {fileID: 0}
     - target: {fileID: 4574382234326199470, guid: e4c43cb75dda4d3458057b35ce607d87,
         type: 3}
@@ -1967,7 +1967,7 @@ PrefabInstance:
         type: 3}
       propertyPath: '<Abilities>k__BackingField.Array.data[0]'
       value: 
-      objectReference: {fileID: 11400000, guid: b559d9e2ab9c9ab438cc4533135f5519,
+      objectReference: {fileID: 11400000, guid: 6750601c70df4bb48a110f53f824cf77,
         type: 2}
     - target: {fileID: 8050359505653954497, guid: 3e4992f6f83b3fb4e8788f1d5f838238,
         type: 3}

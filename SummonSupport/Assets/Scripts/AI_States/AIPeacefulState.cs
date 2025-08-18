@@ -50,13 +50,13 @@ public class AIPeacefulState : AIState
         {
             stateHandler.lastSeenLoc = target.transform.position;
             canSeeTarget = true;
-            Debug.Log($"Field of view Check setting canSeetarget to {canSeeTarget} ({target})");
+            //Debug.Log($"Field of view Check setting canSeetarget to {canSeeTarget} ({target})");
 
             return true;
         }
         else
         {
-            Debug.Log($"Field of view Check: result of vision block check: cant see target ({target})");
+            //Debug.Log($"Field of view Check: result of vision block check: cant see target ({target})");
             canSeeTarget = false;
             return false;
         }
