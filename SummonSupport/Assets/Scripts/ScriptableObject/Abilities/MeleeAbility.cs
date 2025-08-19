@@ -22,6 +22,7 @@ public class MeleeAbility : Ability
     private Transform originTransform;
     private LivingBeing Caster;
     private LivingBeing Target;
+    private AbilityHandler abilityHandler;
 
     private WaitForSeconds movementWait = new WaitForSeconds(.1f);
 
@@ -33,10 +34,11 @@ public class MeleeAbility : Ability
     public override bool Activate(GameObject user)
     {
         Caster = user.GetComponent<LivingBeing>();
+        abilityHandler = user.GetComponent<AbilityHandler>();
         if (originTransform == null)
         {
             Debug.Log($"the user: {user}.");
-            originTransform = user.GetComponent<AbilityHandler>().abilityDirection.transform;
+            originTransform = abilityHandler.abilityDirection.transform;
         }
 
         return AttemptActivation(user);
@@ -45,9 +47,11 @@ public class MeleeAbility : Ability
     private void UseWeaponOrSetEffect(GameObject user)
     {
         if (Caster.TryGetComponent<AbilityHandler>(out AbilityHandler abilityHandler) && abilityHandler.weaponSlot != null)
+        {
             abilityHandler.weaponSlot.GetComponent<WeaponMono>().UseWeapon();
+        }
 
-        else SetEffects(user);
+        SetEffects(user);
 
     }
 

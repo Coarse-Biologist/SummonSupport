@@ -9,18 +9,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d7d1854101543804bb043f80b060a821, type: 3}
-  m_Name: Slash
+  m_Script: {fileID: 11500000, guid: 6f72222c874821e41bccb5f49eee621c, type: 3}
+  m_Name: Meteor
   m_EditorClassIdentifier: 
-  <Name>k__BackingField: Slash
-  <Icon>k__BackingField: {fileID: 0}
-  <Cooldown>k__BackingField: 3
+  <Name>k__BackingField: Lava Portal
+  <Icon>k__BackingField: {fileID: 8095344145157262792, guid: c3bce2abce0ec0e47ba9c908fd690f04,
+    type: 3}
+  <Cooldown>k__BackingField: 5
   <CostType>k__BackingField: 4
-  <Cost>k__BackingField: 20
+  <Cost>k__BackingField: 50
   <AbilityTypeTag>k__BackingField: 1
   <ListUsableOn>k__BackingField: 01000000
   <TargetTypeAndEffects>k__BackingField:
-  - <EffectDescription>k__BackingField: Belly slash
+  - <EffectDescription>k__BackingField: Melts
     <TargetType>k__BackingField: 1
     <Heal>k__BackingField:
       <Value>k__BackingField: 0
@@ -30,19 +31,24 @@ MonoBehaviour:
     <AttributeUp>k__BackingField: []
     <AttributeDown>k__BackingField: []
     <Damage>k__BackingField:
-    - <Value>k__BackingField: 10
-      <Element>k__BackingField: 0
-      <Physical>k__BackingField: 3
+    - <Value>k__BackingField: 100
+      <Element>k__BackingField: 4
+      <Physical>k__BackingField: 0
       <ValueType>k__BackingField: 0
     <DamageOverTime>k__BackingField: []
     <StatusEffects>k__BackingField: []
     <SpecialAbilityAttribute>k__BackingField: 0
   <ElementTypes>k__BackingField: 
-  <Range>k__BackingField: 2
-  <Angle>k__BackingField: 0
-  <Width>k__BackingField: 3
-  <Shape>k__BackingField: 2
-  <SpawnEffectOnHit>k__BackingField: {fileID: 4439306374306288678, guid: ad3ebfe5da0c21f43a7253ff8277fd9c,
+  <ObjectToSpawn>k__BackingField: {fileID: 1142077846852881211, guid: 92f7eebcf2302cd4b95a8d2467921c88,
     type: 3}
-  <MeleeParticleSystem>k__BackingField: {fileID: 134935324219964725, guid: 5c33c778bf848f540a0ad9ded58e9b9f,
+  <SpawnEffectOnHit>k__BackingField: {fileID: 1847413739128325886, guid: 704913a3a10ed9a45bdca983af7ed99f,
     type: 3}
+  <SpawnOffset>k__BackingField: {x: 0, y: 0}
+  <RotationOffset>k__BackingField: 0
+  Radius: 1
+  <IsDecaying>k__BackingField: 1
+  <LeaveRotation>k__BackingField: 1
+  <TimeAlive>k__BackingField: 99
+  <SeeksTarget>k__BackingField: 0
+  <Speed>k__BackingField: 2
+  <SearchRadius>k__BackingField: 10

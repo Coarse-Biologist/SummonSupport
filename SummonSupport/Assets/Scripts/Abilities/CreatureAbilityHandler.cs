@@ -76,7 +76,13 @@ public class CreatureAbilityHandler : AbilityHandler
 
         foreach (Ability ability in synergyAbilities) { if (allSupportAbilities.Contains(ability)) allSupportAbilities.Remove(ability); }
 
-        return selectedAbility;
+        if (IsOnCoolDown(selectedAbility))
+        {
+            UnityEngine.Debug.Log($"Returning null insytead of an ability");
+            return null;
+        }
+        else
+            return selectedAbility;
     }
 
 
@@ -110,7 +116,7 @@ public class CreatureAbilityHandler : AbilityHandler
         Ability ability = GetAbilityForTarget(GetComponent<AbilityHandler>(), target);
         if (ability != null)
         {
-            //UnityEngine.Debug.Log($"{ability} = ability selected by {GetComponent<LivingBeing>().Name} against {target}");
+            UnityEngine.Debug.Log($"{ability} = ability selected by {GetComponent<LivingBeing>().Name} against {target}");
             CastAbility(Abilities.IndexOf(ability), target.transform.position, abilityDirection.transform.rotation);
         }
     }

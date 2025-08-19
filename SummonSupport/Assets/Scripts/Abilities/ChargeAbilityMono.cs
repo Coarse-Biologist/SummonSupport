@@ -4,8 +4,7 @@ using UnityEngine;
 public class ChargeAbilityMono : MonoBehaviour
 {
     private ChargeAbility chargeAbility;
-    private float distanceTraveled = 0f;
-    private float maxDistance;
+
     private Coroutine chargeCoroutine;
     private Rigidbody2D rb;
     private Transform originTransform;
@@ -24,6 +23,7 @@ public class ChargeAbilityMono : MonoBehaviour
         ToggleStuckInAbilityAnimation(gameObject, true);
         chargeAbility = assignedAbility;
         abilityHandler = gameObject.GetComponentInParent<AbilityHandler>();
+        abilityHandler.SetCharging(true);
         caster = gameObject.GetComponentInParent<LivingBeing>();
         originTransform = abilityHandler.abilityDirection.transform;
         rb = gameObject.GetComponentInParent<Rigidbody2D>();
@@ -32,13 +32,12 @@ public class ChargeAbilityMono : MonoBehaviour
     private IEnumerator ChargeWhileLogical()
     {
         bool stillCharging = true;
+
         while (stillCharging)
         {
-            rb.linearVelocity = originTransform.right * 10;
-
+            rb.linearVelocity = originTransform.right * caster.GetAttribute(AttributeType.MovementSpeed) * 20;
             if ((startLoc - (Vector2)gameObject.transform.position).magnitude > chargeAbility.range)
             {
-                Debug.Log($"traveled {(startLoc - (Vector2)gameObject.transform.position).magnitude}. max is {chargeAbility.range}. Ending Charge");
                 EndCharge();
             }
             yield return chargeTickRate;
@@ -47,11 +46,10 @@ public class ChargeAbilityMono : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log("Gotcha!");
-        bool success = chargeAbility.ability.Activate(transform.parent.gameObject);
+        Ability abilityToCast = chargeAbility.ability;
+        bool success = abilityToCast.Activate(transform.parent.gameObject);
         if (success)
         {
-            Debug.Log($"ability was activated and therefor the charge is ending");
 
             EndCharge();
         }
@@ -59,7 +57,7 @@ public class ChargeAbilityMono : MonoBehaviour
 
     private void EndCharge()
     {
-        StopCoroutine(chargeCoroutine);
+        if (chargeCoroutine != null) StopCoroutine(chargeCoroutine);
         abilityHandler.SetCharging(false);
         ToggleStuckInAbilityAnimation(gameObject, false);
         Destroy(gameObject);
@@ -75,8 +73,8 @@ public class ChargeAbilityMono : MonoBehaviour
             else if (!stuck) ccState.RemoveCC(StatusEffectType.AttackAnimation);
         }
 
-        else if (user.TryGetComponent<PlayerMovement>(out PlayerMovement playerMovemeentScript))
-            playerMovemeentScript.SetStuckInAbilityAnimation(stuck);
+        else if (user.TryGetComponent<PlayerMovement>(out PlayerMovement playerMovementScript))
+            playerMovementScript.SetStuckInAbilityAnimation(stuck);
     }
 
 }

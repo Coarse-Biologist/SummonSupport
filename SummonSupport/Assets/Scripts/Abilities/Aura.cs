@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Splines;
+
 
 public class Aura : MonoBehaviour
 {
@@ -9,16 +11,39 @@ public class Aura : MonoBehaviour
     List<LivingBeing> listLivingBeingsInAura = new();
     [SerializeField] public float ActivationTime { get; private set; } = .5f;
     private bool Active = false;
+    private CircleCollider2D circleCollider;
 
     private LivingBeing target;
     private ConjureAbility conjureAbility;
+    private SplineAnimate splineAnimator;
+    private bool SetSplineAnimator()
+    {
+        if (TryGetComponent<SplineAnimate>(out SplineAnimate spline))
+        {
+            splineAnimator = spline;
+            return true;
+        }
+        else return false;
+    }
 
 
+    void Start()
+    {
+        if (SetSplineAnimator())
+        {
+            if (TryGetComponent<CircleCollider2D>(out CircleCollider2D colliderCito))
+            {
+                circleCollider = colliderCito;
+                circleCollider.enabled = false;
+                Debug.Log($"Disabling {circleCollider}"); InvokeRepeating("CheckEndNear", .5f, .01f);
+            }
+        }
+        Invoke("Activate", ActivationTime);
 
+    }
     public void HandleInstantiation(LivingBeing caster, LivingBeing target, Ability ability, float radius, float duration)
     {
         GetComponent<CircleCollider2D>().radius = radius;
-        Invoke("Activate", ActivationTime);
         SetAuraStats(caster, target, ability, duration);
         CombatStatHandler.HandleEffectPackages(ability, caster, caster, true);
         if (ability is ConjureAbility)
@@ -41,6 +66,17 @@ public class Aura : MonoBehaviour
         //transform.Rotate(new Vector3(-110f, 0, 0));
 
     }
+    private void CheckEndNear()
+    {
+        if (splineAnimator.GetEndNear())
+        {
+            circleCollider.enabled = true;
+            Debug.Log($"Enabling {circleCollider}");
+            CancelInvoke("CheckEndNear");
+        }
+
+
+    }
 
     private void Activate()
     {
@@ -55,24 +91,24 @@ public class Aura : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-
         if (Active)
         {
-            Logging.Info($"{other.gameObject} has entered the bite zone");
             if (other.gameObject.TryGetComponent(out LivingBeing otherLivingBeing))
             {
-
                 if (ability.ListUsableOn.Contains(RelationshipHandler.GetRelationshipType(caster.CharacterTag, otherLivingBeing.CharacterTag)))
                 {
-                    Debug.Log($"usable on {otherLivingBeing.Name}");
-
+                    //Debug.Log($"usable on {otherLivingBeing.Name}");
+                    if (ability is ConjureAbility)
+                    {
+                        SpawnOnHitEffect(otherLivingBeing, conjureAbility.SpawnEffectOnHit);
+                    }
                     otherLivingBeing.AlterAbilityList(ability, true);
                     CombatStatHandler.HandleEffectPackages(ability, caster, otherLivingBeing, false);
                 }
             }
             else Debug.Log($"NOT usable on {other.gameObject.name}");
-
         }
+        else Debug.Log($"OnTrigger Enter func called but the trigger object is not active");
     }
 
     void OnTriggerExit2D(Collider2D other)
@@ -80,6 +116,17 @@ public class Aura : MonoBehaviour
         if (other.gameObject.TryGetComponent<LivingBeing>(out LivingBeing otherLivingBeing))
             otherLivingBeing.AlterAbilityList(ability, false);
 
+    }
+    private void SpawnOnHitEffect(LivingBeing targetLivingBeing, GameObject SpawnEffectOnHit)
+    {
+        GameObject instance;
+        if (SpawnEffectOnHit != null)
+        {
+            //Debug.Log("This happens, excellent");
+            instance = Instantiate(SpawnEffectOnHit, targetLivingBeing.transform.position, Quaternion.identity, targetLivingBeing.transform.transform);
+            Destroy(instance, instance.GetComponent<ParticleSystem>().main.duration);
+        }
+        //else Debug.Log("This happens but is null");
     }
 
 
