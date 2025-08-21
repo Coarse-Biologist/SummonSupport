@@ -182,6 +182,7 @@ public class MeleeAbility : Ability
         if (SpawnEffectOnHit != null)
         {
             instance = Instantiate(SpawnEffectOnHit, targetLivingBeing.transform.position, Quaternion.identity, targetLivingBeing.transform.transform);
+            EffectColorChanger.SetImmersiveBleedEffect(instance.GetComponent<ParticleSystem>(), targetLivingBeing);
             Destroy(instance, 3f);
         }
 

@@ -68,13 +68,14 @@ public class Aura : MonoBehaviour
     }
     private void CheckEndNear()
     {
-        if (splineAnimator.GetEndNear())
+        Debug.Log($"Spline animator normalized  time =  {splineAnimator.NormalizedTime}");
+
+        if (splineAnimator.NormalizedTime > .75)
         {
             circleCollider.enabled = true;
             Debug.Log($"Enabling {circleCollider}");
             CancelInvoke("CheckEndNear");
         }
-
 
     }
 

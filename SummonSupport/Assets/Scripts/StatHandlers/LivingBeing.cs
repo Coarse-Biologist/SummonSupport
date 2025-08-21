@@ -4,6 +4,7 @@ using UnityEngine;
 using System.Collections;
 using SummonSupportEvents;
 using UnityEditor.Build.Pipeline.Tasks;
+using System.Linq;
 public abstract class LivingBeing : MonoBehaviour
 {
     #region Declarations
@@ -133,6 +134,10 @@ public abstract class LivingBeing : MonoBehaviour
         {
             Affinities[element].Set(newAffinity);
         }
+    }
+    public Element GetHighestAffinity()
+    {
+        return Affinities.OrderByDescending(a => a.Value.Get()).First().Key;
     }
     #endregion
     #region Attribute Handling

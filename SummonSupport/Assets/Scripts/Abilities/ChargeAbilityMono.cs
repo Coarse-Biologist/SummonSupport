@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class ChargeAbilityMono : MonoBehaviour
@@ -11,11 +12,12 @@ public class ChargeAbilityMono : MonoBehaviour
     private Vector2 startLoc;
     private AbilityHandler abilityHandler;
     private LivingBeing caster;
-    private WaitForSeconds chargeTickRate = new WaitForSeconds(.1f);
+    private WaitForSeconds chargeTickRate = new WaitForSeconds(.01f);
     [field: SerializeField] public StatusEffects attackAnimationCC;
-    private void Start()
+    void Start()
     {
         startLoc = transform.position;
+        Debug.Log($"start loc = {startLoc}");
     }
 
     public void Charge(ChargeAbility assignedAbility)
@@ -36,8 +38,10 @@ public class ChargeAbilityMono : MonoBehaviour
         while (stillCharging)
         {
             rb.linearVelocity = originTransform.right * caster.GetAttribute(AttributeType.MovementSpeed) * 20;
-            if ((startLoc - (Vector2)gameObject.transform.position).magnitude > chargeAbility.range)
+            if (((Vector2)gameObject.transform.position - startLoc).magnitude > chargeAbility.range)
             {
+                Debug.Log($"distance travelled: {((Vector2)gameObject.transform.position - startLoc).magnitude} Charge ability is being ended");
+
                 EndCharge();
             }
             yield return chargeTickRate;
@@ -50,13 +54,14 @@ public class ChargeAbilityMono : MonoBehaviour
         bool success = abilityToCast.Activate(transform.parent.gameObject);
         if (success)
         {
-
             EndCharge();
         }
     }
 
     private void EndCharge()
     {
+        Debug.Log("Ending charge");
+
         if (chargeCoroutine != null) StopCoroutine(chargeCoroutine);
         abilityHandler.SetCharging(false);
         ToggleStuckInAbilityAnimation(gameObject, false);
