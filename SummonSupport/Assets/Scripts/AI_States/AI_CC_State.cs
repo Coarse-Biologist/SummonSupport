@@ -71,22 +71,17 @@ public class AI_CC_State : AIState
             return this;
         }
 
-
         return peaceState;
 
     }
 
     public void RecieveCC(StatusEffects CC, LivingBeing caster)
     {
-        Debug.Log($"recieving cc = {CC}");
-
         CCToCaster.TryAdd(CC.EffectType, caster);
         typeToCC.TryAdd(CC.EffectType, CC);
     }
     public void RemoveCC(StatusEffectType CC)
     {
-        Debug.Log($"removing cc = {CC}");
-
         CCToCaster.Remove(CC);
         typeToCC.Remove(CC);
     }

@@ -14,11 +14,6 @@ public class ChargeAbilityMono : MonoBehaviour
     private LivingBeing caster;
     private WaitForSeconds chargeTickRate = new WaitForSeconds(.01f);
     [field: SerializeField] public StatusEffects attackAnimationCC;
-    void Start()
-    {
-        //startLoc = transform.position;
-        //Debug.Log($"start loc = {startLoc}");
-    }
 
     public void Charge(ChargeAbility assignedAbility)
     {
@@ -36,14 +31,11 @@ public class ChargeAbilityMono : MonoBehaviour
     {
         bool stillCharging = true;
         startLoc = transform.position;
-        Debug.Log($"start loc = {startLoc}");
         while (stillCharging)
         {
             rb.linearVelocity = originTransform.right * caster.GetAttribute(AttributeType.MovementSpeed) * 20;
             if (((Vector2)gameObject.transform.position - startLoc).magnitude > chargeAbility.range)
             {
-                Debug.Log($"distance travelled: {((Vector2)gameObject.transform.position - startLoc).magnitude} Charge ability is being ended");
-
                 EndCharge();
             }
             yield return chargeTickRate;
@@ -62,8 +54,6 @@ public class ChargeAbilityMono : MonoBehaviour
 
     private void EndCharge()
     {
-        Debug.Log("Ending charge");
-
         if (chargeCoroutine != null) StopCoroutine(chargeCoroutine);
         abilityHandler.SetCharging(false);
         ToggleStuckInAbilityAnimation(transform.parent.gameObject, false);
@@ -76,14 +66,13 @@ public class ChargeAbilityMono : MonoBehaviour
     {
         if (user.TryGetComponent<AI_CC_State>(out AI_CC_State ccState))
         {
-            Debug.Log($"going to give cc {attackAnimationCC} to {user}");
-
             if (stuck) ccState.RecieveCC(attackAnimationCC, caster);
             else if (!stuck) ccState.RemoveCC(StatusEffectType.AttackAnimation);
         }
 
         else if (user.TryGetComponent<PlayerMovement>(out PlayerMovement playerMovementScript))
             playerMovementScript.SetStuckInAbilityAnimation(stuck);
+        else Debug.Log($"No CcState script or playermovement script found on the sought gameObject: {user}");
     }
 
 }
