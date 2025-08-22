@@ -16,25 +16,27 @@ public class ChargeAbilityMono : MonoBehaviour
     [field: SerializeField] public StatusEffects attackAnimationCC;
     void Start()
     {
-        startLoc = transform.position;
-        Debug.Log($"start loc = {startLoc}");
+        //startLoc = transform.position;
+        //Debug.Log($"start loc = {startLoc}");
     }
 
     public void Charge(ChargeAbility assignedAbility)
     {
-        ToggleStuckInAbilityAnimation(gameObject, true);
+        GameObject user = transform.parent.gameObject;
+        ToggleStuckInAbilityAnimation(user, true);
         chargeAbility = assignedAbility;
-        abilityHandler = gameObject.GetComponentInParent<AbilityHandler>();
+        abilityHandler = user.GetComponentInParent<AbilityHandler>();
         abilityHandler.SetCharging(true);
-        caster = gameObject.GetComponentInParent<LivingBeing>();
+        caster = user.GetComponentInParent<LivingBeing>();
         originTransform = abilityHandler.abilityDirection.transform;
-        rb = gameObject.GetComponentInParent<Rigidbody2D>();
+        rb = user.GetComponentInParent<Rigidbody2D>();
         chargeCoroutine = StartCoroutine(ChargeWhileLogical());
     }
     private IEnumerator ChargeWhileLogical()
     {
         bool stillCharging = true;
-
+        startLoc = transform.position;
+        Debug.Log($"start loc = {startLoc}");
         while (stillCharging)
         {
             rb.linearVelocity = originTransform.right * caster.GetAttribute(AttributeType.MovementSpeed) * 20;
@@ -64,7 +66,7 @@ public class ChargeAbilityMono : MonoBehaviour
 
         if (chargeCoroutine != null) StopCoroutine(chargeCoroutine);
         abilityHandler.SetCharging(false);
-        ToggleStuckInAbilityAnimation(gameObject, false);
+        ToggleStuckInAbilityAnimation(transform.parent.gameObject, false);
         Destroy(gameObject);
     }
 
@@ -74,6 +76,8 @@ public class ChargeAbilityMono : MonoBehaviour
     {
         if (user.TryGetComponent<AI_CC_State>(out AI_CC_State ccState))
         {
+            Debug.Log($"going to give cc {attackAnimationCC} to {user}");
+
             if (stuck) ccState.RecieveCC(attackAnimationCC, caster);
             else if (!stuck) ccState.RemoveCC(StatusEffectType.AttackAnimation);
         }

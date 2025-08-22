@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8baa1a2bf98bd48429aa51000fd2e9f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackAnimationCC: {fileID: 0}
+  attackAnimationCC: {fileID: 11400000, guid: df0dced1bc901db4fb82bb4345bb661d, type: 2}
 --- !u!58 &6313108407294193918
 CircleCollider2D:
   m_ObjectHideFlags: 0
