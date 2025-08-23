@@ -31,7 +31,7 @@ public abstract class LivingBeing : MonoBehaviour
     [field: SerializeField] public float TickRateRegenerationInSeconds { get; private set; } = .2f;
     [field: SerializeField] public float HealthRegeneration { get; private set; } = 0;
     [field: SerializeField] public float PowerRegeneration { get; private set; } = 1;
-    [field: SerializeField] public float TotalHealthRegeneration { get; private set; } = 0;
+    [field: SerializeField] public float TotalHealthRegeneration { get; private set; } = 0; // i think this is / should be a private variable since it is only used for local calculations? or at least i think it doesnt need to be serialized since it would never be used (it is instantluy set to the value of HealthRegeneration)
     [field: SerializeField] public float TotalPowerRegeneration { get; private set; } = 0;
     [field: SerializeField] public int HealthRegenArrows { get; private set; } = 0;
     [field: SerializeField] public int PowerRegenArrows { get; private set; } = 0;
