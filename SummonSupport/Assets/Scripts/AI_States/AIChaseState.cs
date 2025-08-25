@@ -18,6 +18,7 @@ public class AIChaseState : AIState
     private CreatureSpriteController spriteController;
     private WaitForSeconds attackSpeed = new WaitForSeconds(1);
     public float MovementSpeed { private set; get; }
+    public float SelectedAbilityAttackRange { private set; get; } = 20f;
 
 
 
@@ -110,22 +111,21 @@ public class AIChaseState : AIState
             Vector2 direction = targetLoc - currentLoc;
             float distance = direction.sqrMagnitude;
             bool uniqueMovement = true;
-            if (distance > 10 || peaceState.CheckVisionBlocked(stateHandler.target))
+            if (distance > SelectedAbilityAttackRange || peaceState.CheckVisionBlocked(stateHandler.target))
             {
+                Debug.Log($"Chase func called. attack range = {SelectedAbilityAttackRange}");
+
                 if (!uniqueMovement || cantSeeTarget)
                 {
-                    //Debug.Log("Chase func called. Either creature cant see target or hasnt the ability to walk strangely");
+                    Debug.Log($"Chase func called. attack range = {SelectedAbilityAttackRange}");
 
-                    if (direction.sqrMagnitude > 10 || peaceState.CheckVisionBlocked(stateHandler.target))
+                    if (direction.sqrMagnitude > SelectedAbilityAttackRange || peaceState.CheckVisionBlocked(stateHandler.target))
                     {
                         rb.linearVelocity = (targetLoc - currentLoc) * MovementSpeed;
-
-                        //Debug.Log($"target loc = {targetLoc}. target =  {stateHandler.target}");
                     }
                     else
                     {
                         rb.linearVelocity = new Vector2(0, 0);
-                        //Debug.Log($"vision of target {stateHandler.target} was blocked ({peaceState.CheckVisionBlocked(stateHandler.target)}) or distance was less than 10 {direction.sqrMagnitude}");
                     }
                 }
                 else StrafeMovement(targetLoc, currentLoc, distance);
@@ -149,19 +149,31 @@ public class AIChaseState : AIState
 
     private IEnumerator HandleAttack(LivingBeing target)
     {
-
         runningAttackLoop = true;
         while (true)
         {
             if (target != null)
             {
-                //Debug.Log($"target = {target.Name}");
+                Ability ability = GetComponent<CreatureAbilityHandler>().GetAbilityForTarget(target);
+                if (ability != null)
+                {
+                    SetAbilityRange(ability.Range);
+                    if ((transform.position - target.transform.position).magnitude < SelectedAbilityAttackRange)
+                    {
+                        abilityHandler.UseAbility(target, ability);
+                    }
+                }
+                else Debug.Log("The ability was null during the Handl attack function of the ai chase state");
 
                 yield return attackSpeed;
-                Vector2 targetLoc = target.transform.position;
-                abilityHandler.UseAbility(target);
+
             }
         }
+    }
+
+    public void SetAbilityRange(float range)
+    {
+        SelectedAbilityAttackRange = range;
     }
 
 }

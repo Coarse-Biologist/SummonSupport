@@ -25,13 +25,13 @@ public class CreatureAbilityHandler : AbilityHandler
         SetAbilityLists();
     }
 
-    public Ability GetAbilityForTarget(AbilityHandler casterAbilityHandler, LivingBeing target)
+    public Ability GetAbilityForTarget(LivingBeing target)
     {
         Stopwatch stopwatch = Stopwatch.StartNew();
         selectedAbility = null;
         bool targetIsFriendly = false;
 
-        LivingBeing casterStats = casterAbilityHandler.GetComponent<LivingBeing>();
+        LivingBeing casterStats = GetComponent<LivingBeing>();
 
         if (target == null)
             return null;
@@ -110,9 +110,9 @@ public class CreatureAbilityHandler : AbilityHandler
 
 
 
-    public void UseAbility(LivingBeing target)
+    public void UseAbility(LivingBeing target, Ability ability)
     {
-        Ability ability = GetAbilityForTarget(GetComponent<AbilityHandler>(), target);
+        float range = ability.Range;
         if (ability != null)
         {
             UnityEngine.Debug.Log($"{ability} = ability selected by {GetComponent<LivingBeing>().Name} against {target}");

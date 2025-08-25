@@ -12,7 +12,6 @@ public class MeleeAbility : Ability
     [Header("Melee Ability settings")]
 
 
-    [field: SerializeField] public float Range { get; private set; }
     [field: SerializeField] public float Angle { get; private set; }
     [field: SerializeField] public float Width { get; private set; }
     [field: SerializeField] public AreaOfEffectShape Shape { get; private set; }

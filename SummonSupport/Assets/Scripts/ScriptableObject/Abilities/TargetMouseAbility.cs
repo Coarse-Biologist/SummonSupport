@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -8,6 +9,7 @@ public class TargetMouseAbility : Ability
     [field: Header("settings")]
     [field: SerializeField] public GameObject SpawnEffectOnHit { get; set; }
     [field: SerializeField] public EffectOrientation EffectOrientation { get; set; } = EffectOrientation.Identity;
+
 
 
 
