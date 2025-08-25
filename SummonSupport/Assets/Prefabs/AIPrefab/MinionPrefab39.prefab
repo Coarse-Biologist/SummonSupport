@@ -157,6 +157,11 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 21300000, guid: 5a2b72e3e310f3648a2142b74a62faff,
         type: 3}
+    - target: {fileID: 3574865514186009625, guid: 6a5ef38cf0637084f92a110a696def55,
+        type: 3}
+      propertyPath: <IsoOnly>k__BackingField
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4480734047223347181, guid: 6a5ef38cf0637084f92a110a696def55,
         type: 3}
       propertyPath: m_Sprite
