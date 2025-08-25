@@ -32,12 +32,12 @@ MonoBehaviour:
     <AttributeDown>k__BackingField: []
     <Damage>k__BackingField:
     - <Value>k__BackingField: 20
-      <Element>k__BackingField: 7
+      <Element>k__BackingField: 10
       <Physical>k__BackingField: 0
       <ValueType>k__BackingField: 0
     <DamageOverTime>k__BackingField:
     - <Value>k__BackingField: 2
-      <Element>k__BackingField: 7
+      <Element>k__BackingField: 10
       <Physical>k__BackingField: 0
       <ValueType>k__BackingField: 0
       <Duration>k__BackingField: 5

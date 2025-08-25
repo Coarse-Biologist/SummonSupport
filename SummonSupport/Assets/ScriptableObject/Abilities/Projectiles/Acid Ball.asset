@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fceeef8cfafe41444bf6aa890ebad1b7, type: 3}
-  m_Name: Radiation Ball
+  m_Name: Acid Ball
   m_EditorClassIdentifier: 
-  <Name>k__BackingField: Radiation Ball
-  <Icon>k__BackingField: {fileID: 5841563574567965085, guid: d46d43f87ef93d3448c986a15737f67a,
+  <Name>k__BackingField: Air Ball
+  <Icon>k__BackingField: {fileID: 3837697726249093711, guid: a949de51ac63b994784528b4e06be2b5,
     type: 3}
   <Cooldown>k__BackingField: 2
   <CostType>k__BackingField: 4
@@ -21,7 +21,7 @@ MonoBehaviour:
   <AbilityTypeTag>k__BackingField: 1
   <ListUsableOn>k__BackingField: 01000000
   <TargetTypeAndEffects>k__BackingField:
-  - <EffectDescription>k__BackingField: Irradiates
+  - <EffectDescription>k__BackingField: Corrodes
     <TargetType>k__BackingField: 1
     <Heal>k__BackingField:
       <Value>k__BackingField: 0
@@ -32,20 +32,20 @@ MonoBehaviour:
     <AttributeDown>k__BackingField: []
     <Damage>k__BackingField:
     - <Value>k__BackingField: 20
-      <Element>k__BackingField: 13
+      <Element>k__BackingField: 8
       <Physical>k__BackingField: 0
       <ValueType>k__BackingField: 0
     <DamageOverTime>k__BackingField:
     - <Value>k__BackingField: 5
-      <Element>k__BackingField: 13
+      <Element>k__BackingField: 8
       <Physical>k__BackingField: 0
       <ValueType>k__BackingField: 0
       <Duration>k__BackingField: 5
     <StatusEffects>k__BackingField: []
     <SpecialAbilityAttribute>k__BackingField: 0
-  <ElementTypes>k__BackingField: 0d000000
+  <ElementTypes>k__BackingField: 08000000
   <Speed>k__BackingField: 5
-  <Projectile>k__BackingField: {fileID: 1503869405188693834, guid: 90ef243ee6a5ea347bfaf7aaea6c8925,
+  <Projectile>k__BackingField: {fileID: 1503869405188693834, guid: 8fdcc8c94960c3d47bdc4abe02869e56,
     type: 3}
   <MaxRange>k__BackingField: 150
   <Lifetime>k__BackingField: 5
@@ -53,7 +53,7 @@ MonoBehaviour:
   <MaxPierce>k__BackingField: 0
   <MaxSplit>k__BackingField: 3
   <SplitAngleOffset>k__BackingField: 45
-  <ProjectileParticleSystem>k__BackingField: {fileID: 1847413739128325886, guid: 1a7b8a60cc2f0bb439493e4859cb8bb6,
+  <ProjectileParticleSystem>k__BackingField: {fileID: 5647196156128557912, guid: b916aa33dcb153e4b93f3ae33be33680,
     type: 3}
-  <SpawnEffectOnHit>k__BackingField: {fileID: 1847413739128325886, guid: 830db95daa93b6f4cae93aa6d4b33d0b,
+  <SpawnEffectOnHit>k__BackingField: {fileID: 5705030685624713920, guid: 1cf207986de988e47adade098e6119ca,
     type: 3}

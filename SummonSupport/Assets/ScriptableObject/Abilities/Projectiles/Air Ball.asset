@@ -21,7 +21,7 @@ MonoBehaviour:
   <AbilityTypeTag>k__BackingField: 1
   <ListUsableOn>k__BackingField: 01000000
   <TargetTypeAndEffects>k__BackingField:
-  - <EffectDescription>k__BackingField: Poisons
+  - <EffectDescription>k__BackingField: High pressured air
     <TargetType>k__BackingField: 1
     <Heal>k__BackingField:
       <Value>k__BackingField: 0
@@ -32,12 +32,12 @@ MonoBehaviour:
     <AttributeDown>k__BackingField: []
     <Damage>k__BackingField:
     - <Value>k__BackingField: 20
-      <Element>k__BackingField: 7
+      <Element>k__BackingField: 5
       <Physical>k__BackingField: 0
       <ValueType>k__BackingField: 0
     <DamageOverTime>k__BackingField:
     - <Value>k__BackingField: 2
-      <Element>k__BackingField: 7
+      <Element>k__BackingField: 5
       <Physical>k__BackingField: 0
       <ValueType>k__BackingField: 0
       <Duration>k__BackingField: 5

@@ -30,7 +30,7 @@ MonoBehaviour:
     <AttributeUp>k__BackingField: []
     <AttributeDown>k__BackingField: []
     <Damage>k__BackingField:
-    - <Value>k__BackingField: 10
+    - <Value>k__BackingField: 30
       <Element>k__BackingField: 0
       <Physical>k__BackingField: 3
       <ValueType>k__BackingField: 0

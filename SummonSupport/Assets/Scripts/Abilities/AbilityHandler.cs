@@ -34,15 +34,24 @@ public class AbilityHandler : MonoBehaviour
         }
     }
 
+    public void LearnAbility(Ability ability)
+    {
+        if (!Abilities.Contains(ability))
+        {
+            Abilities.Add(ability);
+            abilitiesOnCooldownCrew.Add(ability, false);
+            abilitiesOnCooldown.Add(false);
+        }
+    }
 
     protected bool CastAbility(int abilityIndex, Vector2 targetPosition, Quaternion rotation)
     {
         //Logging.Info($"Ability at index {abilityIndex} trying to be used by {statsHandler.Name}!!!!");
+        Ability ability = Abilities[abilityIndex];
 
         if (Abilities.Count <= 0 || abilitiesOnCooldown[abilityIndex])
             return false;
 
-        Ability ability = Abilities[abilityIndex];
 
         if (!HasEnoughPower(ability.Cost))
             return false;

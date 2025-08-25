@@ -22,9 +22,8 @@ public class CreatureAbilityHandler : AbilityHandler
     new void Awake()
     {
         base.Awake();
-        SetAbilityLists(GetComponent<AbilityHandler>());
+        SetAbilityLists();
     }
-
 
     public Ability GetAbilityForTarget(AbilityHandler casterAbilityHandler, LivingBeing target)
     {
@@ -86,9 +85,9 @@ public class CreatureAbilityHandler : AbilityHandler
     }
 
 
-    private void SetAbilityLists(AbilityHandler caster)
+    public void SetAbilityLists()
     {
-        foreach (Ability ability in caster.Abilities) // make list of support and attack abilities
+        foreach (Ability ability in Abilities) // make list of support and attack abilities
         {
             if (ability.AbilityTypeTag == AbilityTypeTag.DebuffsTarget)
                 attackAbilities.Add(ability);

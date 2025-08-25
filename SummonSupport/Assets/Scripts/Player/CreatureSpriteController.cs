@@ -19,6 +19,7 @@ public class CreatureSpriteController : MonoBehaviour
 
 
 
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
     {
@@ -50,5 +51,46 @@ public class CreatureSpriteController : MonoBehaviour
             }
         }
 
+    }
+
+    public void AlterColorByAffinity(Element strongestElement)
+    {
+        string str = strongestElement.ToString();
+        if (str.Contains("Cold") || str.Contains("Water"))
+        {
+            SetColor(new float[4] { 0f, 0f, 1f, 1f });
+        }
+        if (str.Contains("Plant") || str.Contains("Bacteria"))
+        {
+            SetColor(new float[4] { 0f, 1f, 0f, 1f });
+        }
+        if (str.Contains("Virus") || str.Contains("Acid"))
+        {
+            SetColor(new float[4] { 0.9f, 0.7f, 0.0f, 1.0f });
+        }
+        if (str.Contains("Light") || str.Contains("Electricity"))
+        {
+            SetColor(new float[4] { 0.85f, 0.85f, 0.0f, 1.0f });
+        }
+        if (str.Contains("Heat") || str.Contains("Radiation"))
+        {
+            SetColor(new float[4] { 1f, 0f, 0.0f, 1.0f });
+        }
+        if (str.Contains("Psychic") || str.Contains("Poison"))
+        {
+            SetColor(new float[4] { 0.5f, 0f, .5f, 1.0f });
+        }
+        if (str.Contains("Fungi") || str.Contains("Earth"))
+        {
+            SetColor(new float[4] { .4f, 0.4f, .4f, 1.0f });
+        }
+    }
+    public void SetColor(float[] rgbaValues)
+    {
+        float r = rgbaValues[0];
+        float g = rgbaValues[1];
+        float b = rgbaValues[2];
+        float a = rgbaValues[3];
+        sr.color = new Color(r, g, b, a);
     }
 }

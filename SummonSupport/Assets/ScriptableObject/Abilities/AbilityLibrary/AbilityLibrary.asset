@@ -1,0 +1,63 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a772c285c2b047846b6639997efc71f4, type: 3}
+  m_Name: AbilityLibrary
+  m_EditorClassIdentifier: 
+  entries:
+  - Element: 1
+    Abilities:
+    - {fileID: 11400000, guid: ff53d8b056b03f34d856d03b15608f36, type: 2}
+  - Element: 2
+    Abilities:
+    - {fileID: 11400000, guid: 5af910d9bc7c5c146ab32a701e0979dd, type: 2}
+  - Element: 3
+    Abilities:
+    - {fileID: 11400000, guid: 5d20d6cc1fa7eb547ba5d0f9aefcc225, type: 2}
+  - Element: 4
+    Abilities:
+    - {fileID: 11400000, guid: 5605a5e8027c4e94691ae731bacfcb5a, type: 2}
+    - {fileID: 11400000, guid: 893aad7fae2993c4da43dc50c4147674, type: 2}
+    - {fileID: 11400000, guid: 6eaaf721143e73a408e50f0c94decbe5, type: 2}
+  - Element: 5
+    Abilities:
+    - {fileID: 11400000, guid: b0436cdd83cb68c49bc69f2703f7f475, type: 2}
+  - Element: 6
+    Abilities:
+    - {fileID: 11400000, guid: a34fec9bcb32b274da2b5227eef299b0, type: 2}
+  - Element: 7
+    Abilities:
+    - {fileID: 11400000, guid: 5e39961f19654e04bb7f41a70934544c, type: 2}
+  - Element: 8
+    Abilities:
+    - {fileID: 11400000, guid: 6ecd8945d9da6ca4da64c6af3d43bf0f, type: 2}
+  - Element: 9
+    Abilities:
+    - {fileID: 11400000, guid: a51fc697c016f874ba93dd993138f074, type: 2}
+  - Element: 10
+    Abilities:
+    - {fileID: 11400000, guid: 63b0ad61041829940a6938c259cc8635, type: 2}
+  - Element: 11
+    Abilities:
+    - {fileID: 11400000, guid: bb0b444e00a135545a1125115f2626f1, type: 2}
+  - Element: 12
+    Abilities:
+    - {fileID: 11400000, guid: 7f4f0a7af7c10644b881eb535ffc4f8e, type: 2}
+    - {fileID: 11400000, guid: ef1f958feb55809438588f67d22120ae, type: 2}
+  - Element: 13
+    Abilities:
+    - {fileID: 11400000, guid: 50f97cd667dde2345a4e08bd5abdc79a, type: 2}
+  - Element: 14
+    Abilities:
+    - {fileID: 11400000, guid: 94ffa21eeeccdf04f96d399be9ef9ee7, type: 2}
+  - Element: 15
+    Abilities:
+    - {fileID: 11400000, guid: 6949278a1cdb58a478fa721871e6e803, type: 2}
