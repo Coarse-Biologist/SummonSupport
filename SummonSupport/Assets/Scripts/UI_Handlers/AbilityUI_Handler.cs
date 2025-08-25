@@ -111,7 +111,7 @@ public class AbilityUI_Handler : MonoBehaviour
         ProgressBar abilityProgressBar = ProgressBarDict[slotIndex];
         Ability ability = abilityProgressBarDict[slotIndex];
         float cooldown = ability.Cooldown;
-        Logging.Info($"Ability {ability.name} with cooldown {cooldown} has been used.");
+        //Logging.Info($"Ability {ability.name} with cooldown {cooldown} has been used.");
 
         abilityProgressBar.highValue = cooldown;
         abilityProgressBar.value = cooldown;

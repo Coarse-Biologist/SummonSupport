@@ -35,12 +35,12 @@ public class Beam : MonoBehaviour
             {
                 onCoolDown = true;
                 Invoke("OffCoolDown", TickRate);
-                //Debug.Log($"particle collided with {targetStatsHandler.Name}");
                 AlreadyCollided.Add(targetStatsHandler);
                 GameObject hitEffect = Instantiate(Ability.SpawnEffectOnHit, other.transform.position, Quaternion.identity, other.transform);
                 Destroy(hitEffect, 5f);
                 StartCoroutine(DelayedDeletion(targetStatsHandler));
-                CombatStatHandler.HandleEffectPackages(Ability, Caster, targetStatsHandler, false);
+                if (Ability.ThoroughIsUsableOn(Caster, targetStatsHandler))
+                    CombatStatHandler.HandleEffectPackages(Ability, Caster, targetStatsHandler, false);
             }
         }
     }

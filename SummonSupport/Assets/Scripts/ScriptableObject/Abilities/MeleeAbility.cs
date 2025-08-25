@@ -2,6 +2,8 @@ using UnityEngine;
 using System.Collections.Generic;
 using System;
 using System.IO;
+using System.Collections;
+using UnityEngine.UIElements;
 
 [CreateAssetMenu(menuName = "Abilities/Melee Ability")]
 
@@ -9,10 +11,10 @@ public class MeleeAbility : Ability
 {
     [Header("Melee Ability settings")]
 
+
     [field: SerializeField] public float Range { get; private set; }
     [field: SerializeField] public float Angle { get; private set; }
     [field: SerializeField] public float Width { get; private set; }
-
     [field: SerializeField] public AreaOfEffectShape Shape { get; private set; }
     [field: SerializeField] public GameObject SpawnEffectOnHit { get; private set; }
     [field: SerializeField] public GameObject MeleeParticleSystem { get; protected set; }
@@ -20,6 +22,9 @@ public class MeleeAbility : Ability
     private Transform originTransform;
     private LivingBeing Caster;
     private LivingBeing Target;
+    private AbilityHandler abilityHandler;
+
+    private WaitForSeconds movementWait = new WaitForSeconds(.1f);
 
 
 
@@ -29,12 +34,31 @@ public class MeleeAbility : Ability
     public override bool Activate(GameObject user)
     {
         Caster = user.GetComponent<LivingBeing>();
+        abilityHandler = user.GetComponent<AbilityHandler>();
         if (originTransform == null)
         {
-            originTransform = user.GetComponent<AbilityHandler>().abilityDirection.transform;
-            //Debug.Log($"setting origin transform equal to that of mr {user.GetComponent<LivingBeing>().Name}");
+            Debug.Log($"the user: {user}.");
+            originTransform = abilityHandler.abilityDirection.transform;
         }
 
+        return AttemptActivation(user);
+
+    }
+    private void UseWeaponOrSetEffect(GameObject user)
+    {
+        if (Caster.TryGetComponent<AbilityHandler>(out AbilityHandler abilityHandler) && abilityHandler.weaponSlot != null)
+        {
+            abilityHandler.weaponSlot.GetComponent<WeaponMono>().UseWeapon();
+        }
+
+        SetEffects(user);
+
+    }
+
+
+
+    private bool AttemptActivation(GameObject user)
+    {
         Collider2D[] hits = Physics2D.OverlapCircleAll(user.transform.position, Range);
         bool activated = false;
         foreach (Collider2D collider in hits)
@@ -44,8 +68,9 @@ public class MeleeAbility : Ability
                 if (VerifyActivate(collider, user))
                 {
                     Target = collider.GetComponent<LivingBeing>();
-                    SetEffects(user);
-                    Logging.Info("verified and rarified");
+
+                    UseWeaponOrSetEffect(user);
+                    //                    Logging.Info("verified and rarified");
                     CombatStatHandler.HandleEffectPackages(this, Caster, Target);
                     SpawnHitEffect(Target);
                     activated = true;
@@ -54,8 +79,8 @@ public class MeleeAbility : Ability
 
         }
         return activated;
-
     }
+
 
     private bool VerifyActivate(Collider2D collider, GameObject user)
     {
@@ -72,7 +97,7 @@ public class MeleeAbility : Ability
 
         if (!IsUsableOn(Caster.CharacterTag, Target.CharacterTag))
         {
-            if (!HasElementalSynergy(this, Target))
+            if (!HasElementalSynergy(this, Target) || !user.TryGetComponent<AI_CC_State>(out AI_CC_State ccState) || !ccState.isCharmed)
                 return false;
         }
         //else Debug.Log($"usable on {collider.gameObject}");
@@ -122,7 +147,7 @@ public class MeleeAbility : Ability
             // Check if point is inside the rectangle
             bool isInside = forwardDistance <= Range && (Mathf.Abs(sideDistance) <= Width / 2f); //forwardDistance >= 0 &&
 
-            Logging.Info($"isInside? = {isInside}");
+            //Logging.Info($"isInside? = {isInside}");
             if (isInside)
                 return true;
             else return false;
@@ -157,6 +182,7 @@ public class MeleeAbility : Ability
         if (SpawnEffectOnHit != null)
         {
             instance = Instantiate(SpawnEffectOnHit, targetLivingBeing.transform.position, Quaternion.identity, targetLivingBeing.transform.transform);
+            EffectColorChanger.SetImmersiveBleedEffect(instance.GetComponent<ParticleSystem>(), targetLivingBeing);
             Destroy(instance, 3f);
         }
 
@@ -179,47 +205,3 @@ public class MeleeAbility : Ability
 
 }
 
-
-
-// Vector2 centralLine = originTransform.forward;
-// Vector2 perpLine = new Vector2(-centralLine.y, centralLine.x);
-// Vector2 PerpLineToHit = hitLocation + centralLine;
-// Vector2 nearestPoint = GetIntercept(centralLine, PerpLineToHit);
-
-
-
-
-//Vector2 forwardLine = originTransform.right.normalized;
-//Vector2 targetPoint = collider.transform.position;
-//float t = Vector2.Dot(targetPoint, forwardLine) / Vector2.Dot(forwardLine, forwardLine);
-//Vector2 bottomLine = originTransform.right.normalized;
-//float t2 = Vector2.Dot(targetPoint, bottomLine) / Vector2.Dot(forwardLine, forwardLine);
-
-
-//new Vector2(originTransform.up.x + Width / 2, originTransform.up.y + Width / 2)
-
-
-// Vector2 AP = hitLocation - (Vector2)originTransform.position;
-// float t = Vector2.Dot(AP, originTransform.right) / Vector2.Dot(originTransform.right, originTransform.right);
-// Vector2 L = originTransform.position + originTransform.right * t;
-// float Distance1 = (hitLocation - L).magnitude;
-//
-// Vector2 centralHorizontalLine = (Vector2)originTransform.up + new Vector2(originTransform.right.x * Range / 2, originTransform.right.y * Range / 2);
-// float t2 = Vector2.Dot(AP, centralHorizontalLine) / Vector2.Dot(centralHorizontalLine, centralHorizontalLine);
-// Vector2 L2 = originTransform.position + originTransform.up * t2;
-// float Distance2 = (hitLocation - L2).magnitude;
-
-//Vector2 toTarget = (Vector2)hitLocation - (Vector2)originTransform.up * Width + (Vector2)originTransform.position;
-
-//Vector2 offsetOrigin = originTransform.position + originTransform.up * Width;
-//Vector2 toTarget = hitLocation - offsetOrigin;
-//
-//float x1 = Vector2.Dot(toTarget, originTransform.right);
-//float y1 = Vector2.Dot(toTarget, originTransform.up);
-//double angle1 = Mathf.Atan2(y1, x1) * Mathf.Rad2Deg;
-//
-//Vector2 toTarget2 = (Vector2)hitLocation - (Vector2)originTransform.right * Range + (Vector2)originTransform.position;
-//
-//float x2 = Vector2.Dot(toTarget2, originTransform.right);
-//float y2 = Vector2.Dot(toTarget2, originTransform.up);
-//double angle2 = Mathf.Atan2(y2, x2) * Mathf.Rad2Deg;

@@ -35,7 +35,7 @@ public class NPC_Handler : MonoBehaviour
 
     private void UnlockDialogue()
     {
-        Logging.Info("Dialogue unlocked");
+        //Logging.Info("Dialogue unlocked");
         dialogueUnlocked = true;
     }
 

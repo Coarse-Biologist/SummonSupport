@@ -5,6 +5,8 @@ public class ConjureAbility : Ability
 {
     [field: Header("Conjure settings"), Tooltip("Ability prefab")]
     [field: SerializeField] public GameObject ObjectToSpawn { get; protected set; }
+    [field: SerializeField] public GameObject SpawnEffectOnHit { get; set; } = null;
+
     [field: SerializeField] public Vector2 SpawnOffset { get; protected set; }
     [field: SerializeField] public float RotationOffset { get; protected set; } = 0;
     [field: SerializeField] public float Radius = 1f;
@@ -43,7 +45,18 @@ public class ConjureAbility : Ability
         if (IsDecaying)
             Destroy(spawnedObject, TimeAlive);
         if (spawnedObject.TryGetComponent(out Aura aura))
+        {
             aura.HandleInstantiation(user.GetComponent<LivingBeing>(), null, this, Radius, this.TimeAlive);
+        }
+        else
+        {
+            Aura auraInChildren = spawnedObject.GetComponentInChildren<Aura>();
+            if (auraInChildren != null)
+            {
+                auraInChildren.HandleInstantiation(user.GetComponent<LivingBeing>(), null, this, Radius, this.TimeAlive);
+            }
+        }
+
 
         return true;
     }

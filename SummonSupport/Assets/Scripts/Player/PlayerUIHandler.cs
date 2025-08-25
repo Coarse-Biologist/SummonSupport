@@ -94,10 +94,9 @@ public class PlayerUIHandler : MonoBehaviour
         playerXP_Bar.highValue = playerStats.MaxXP;
     }
 
-
-
     public void AddMinionHP(LivingBeing livingBeing)
     {
+        Debug.Log($"adding creature {livingBeing.name}");
         TemplateContainer prefabContainer = UIPrefabAssets.Instantiate();
         ProgressBar minionHP = prefabContainer.Q<ProgressBar>("HealthbarPrefab");
 
@@ -168,11 +167,8 @@ public class PlayerUIHandler : MonoBehaviour
         CommandMinion.SetSelectedMinion(minionStats.gameObject);
     }
 
-
-
     public void UpdateResourceBar(LivingBeing livingBeing, AttributeType attributeType)
     {
-
         if (livingBeing.CharacterTag == CharacterTag.Player)
         {
             SetPlayerAttribute(attributeType);

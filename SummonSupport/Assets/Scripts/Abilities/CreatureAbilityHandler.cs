@@ -22,9 +22,8 @@ public class CreatureAbilityHandler : AbilityHandler
     new void Awake()
     {
         base.Awake();
-        SetAbilityLists(GetComponent<AbilityHandler>());
+        SetAbilityLists();
     }
-
 
     public Ability GetAbilityForTarget(AbilityHandler casterAbilityHandler, LivingBeing target)
     {
@@ -47,7 +46,7 @@ public class CreatureAbilityHandler : AbilityHandler
             targetIsFriendly = false;
             if (attackAbilities.Count == 0) return null;
         }
-        Logging.Info($" elapsed time : {stopwatch.ElapsedMilliseconds}");
+        //Logging.Info($" elapsed time : {stopwatch.ElapsedMilliseconds}");
 
         return SelectAbility(targetIsFriendly, target);
 
@@ -76,13 +75,19 @@ public class CreatureAbilityHandler : AbilityHandler
 
         foreach (Ability ability in synergyAbilities) { if (allSupportAbilities.Contains(ability)) allSupportAbilities.Remove(ability); }
 
-        return selectedAbility;
+        if (IsOnCoolDown(selectedAbility))
+        {
+            UnityEngine.Debug.Log($"Returning null insytead of an ability");
+            return null;
+        }
+        else
+            return selectedAbility;
     }
 
 
-    private void SetAbilityLists(AbilityHandler caster)
+    public void SetAbilityLists()
     {
-        foreach (Ability ability in caster.Abilities) // make list of support and attack abilities
+        foreach (Ability ability in Abilities) // make list of support and attack abilities
         {
             if (ability.AbilityTypeTag == AbilityTypeTag.DebuffsTarget)
                 attackAbilities.Add(ability);
@@ -92,7 +97,7 @@ public class CreatureAbilityHandler : AbilityHandler
             }
         }
         allSupportAbilities = supportAbilities;
-        AI_Hostility /= attackAbilities.Count;
+        if (attackAbilities.Count != 0) AI_Hostility /= attackAbilities.Count;
         AI_Hostility *= attackAbilities.Count;
     }
     private bool RollForAggression() // if true, aggressive ability should be selected if possible.
@@ -110,7 +115,7 @@ public class CreatureAbilityHandler : AbilityHandler
         Ability ability = GetAbilityForTarget(GetComponent<AbilityHandler>(), target);
         if (ability != null)
         {
-            //UnityEngine.Debug.Log($"{ability} = ability selected by {GetComponent<LivingBeing>().Name} against {target}");
+            UnityEngine.Debug.Log($"{ability} = ability selected by {GetComponent<LivingBeing>().Name} against {target}");
             CastAbility(Abilities.IndexOf(ability), target.transform.position, abilityDirection.transform.rotation);
         }
     }

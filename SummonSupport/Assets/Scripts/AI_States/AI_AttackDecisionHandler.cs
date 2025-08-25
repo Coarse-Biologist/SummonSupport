@@ -41,8 +41,8 @@ public class AI_AttackDecisionHandler : MonoBehaviour
             targetIsFriendly = false;
             if (attackAbilities.Count == 0) return null;
         }
-        Logging.Info($" elapsed time : {stopwatch.ElapsedMilliseconds}");
-        Logging.Info($"{selectedAbility} = selected Ability. {target.Name} = selected target");
+        //Logging.Info($" elapsed time : {stopwatch.ElapsedMilliseconds}");
+        //Logging.Info($"{selectedAbility} = selected Ability. {target.Name} = selected target");
 
 
         return SelectedAbility(targetIsFriendly);

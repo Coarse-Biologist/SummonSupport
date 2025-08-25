@@ -9,13 +9,13 @@ public class ProjectileAbility : Ability
     [field: SerializeField] public float Speed { get; protected set; }
     [field: SerializeField] public GameObject Projectile { get; protected set; }
     [field: SerializeField] public float MaxRange { get; protected set; }
-    [field: SerializeField] public float Lifetime { get; protected set; }
+    [field: SerializeField] public float Lifetime { get; protected set; } = 3;
     [field: SerializeField] public OnHitBehaviour PiercingMode { get; protected set; }
     [field: SerializeField] public int MaxPierce { get; protected set; }
     [field: SerializeField] public int MaxSplit { get; protected set; }
     [field: SerializeField] public int SplitAngleOffset { get; protected set; }
     [field: SerializeField] public GameObject ProjectileParticleSystem { get; protected set; }
-    public GameObject SpawnEffectOnHit { get; set; }
+    [field: SerializeField] public GameObject SpawnEffectOnHit { get; set; } = null;
 
 
 
@@ -32,24 +32,14 @@ public class ProjectileAbility : Ability
     {
         GameObject projectile = Instantiate(Projectile, user.transform.position, Quaternion.identity);
         Projectile projectileScript = projectile.GetComponent<Projectile>();
-        SetEffects(projectileScript, user);
 
         projectileScript.ability = this;
         projectileScript.Shoot(user, spawnPoint, direction.right);
+        projectileScript.SetParticleTrailEffects(direction.right);
+        Destroy(projectile, Lifetime);
+
         return true;
     }
 
-    private void SetEffects(Projectile projectile, GameObject user)
-    {
-        GameObject particleSystem;
 
-        if (ProjectileParticleSystem != null)
-        {
-            particleSystem = Instantiate(ProjectileParticleSystem, user.transform.position, Quaternion.identity, projectile.transform);
-            //Quaternion rotation = Quaternion.LookRotation(-direction);
-            Quaternion rotation = Quaternion.LookRotation(-user.transform.right);
-            particleSystem.transform.rotation = rotation;
-        }
-
-    }
 }

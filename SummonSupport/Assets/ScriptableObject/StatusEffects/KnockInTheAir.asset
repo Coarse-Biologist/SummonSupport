@@ -9,15 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 20deeb31c91d6b14f8009947e6713b03, type: 3}
+  m_Script: {fileID: 11500000, guid: 9aea4a5536635d742ae35c809c15f9f8, type: 3}
   m_Name: KnockInTheAir
   m_EditorClassIdentifier: 
   <Name>k__BackingField: Knock in the air
   <Icon>k__BackingField: {fileID: 0}
-  <Type>k__BackingField: 6
-  <Attribute>k__BackingField: 0
-  <Duration>k__BackingField: 5
-  <TickRateSeconds>k__BackingField: 0.1
-  <Value>k__BackingField: 1
-  <ValueType>k__BackingField: 0
-  <ElementType>k__BackingField: 0
+  <EffectType>k__BackingField: 1
+  <Duration>k__BackingField: 1
+  <Element>k__BackingField: 0
+  <PhysicalType>k__BackingField: 2

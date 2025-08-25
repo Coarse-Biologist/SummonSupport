@@ -9,7 +9,11 @@ public class AbilityHandler : MonoBehaviour
     [SerializeField] protected LivingBeing statsHandler;
     [field: SerializeField] public List<Ability> Abilities { private set; get; } = new();
     [SerializeField] protected List<bool> abilitiesOnCooldown = new();
+    public Dictionary<Ability, bool> abilitiesOnCooldownCrew = new();
     private Dictionary<BeamAbility, GameObject> toggledAbilitiesDict = new();
+    [field: SerializeField] public GameObject weaponSlot { get; private set; } = null;
+    private bool charging = false;
+
 
 
 
@@ -23,20 +27,31 @@ public class AbilityHandler : MonoBehaviour
             statsHandler = gameObject.GetComponent<LivingBeing>();
         if (abilityDirection == null)
             abilityDirection = gameObject.transform.GetChild(0).gameObject;
-        foreach (Ability ablity in Abilities)
+        foreach (Ability ability in Abilities)
         {
+            abilitiesOnCooldown.Add(false);
+            abilitiesOnCooldownCrew.Add(ability, false);
+        }
+    }
+
+    public void LearnAbility(Ability ability)
+    {
+        if (!Abilities.Contains(ability))
+        {
+            Abilities.Add(ability);
+            abilitiesOnCooldownCrew.Add(ability, false);
             abilitiesOnCooldown.Add(false);
         }
     }
 
     protected bool CastAbility(int abilityIndex, Vector2 targetPosition, Quaternion rotation)
     {
-        //Logging.Info($"Ability at index {abilityIndex} trying to be used by {statsHandler.Name}");
+        //Logging.Info($"Ability at index {abilityIndex} trying to be used by {statsHandler.Name}!!!!");
+        Ability ability = Abilities[abilityIndex];
 
         if (Abilities.Count <= 0 || abilitiesOnCooldown[abilityIndex])
             return false;
 
-        Ability ability = Abilities[abilityIndex];
 
         if (!HasEnoughPower(ability.Cost))
             return false;
@@ -79,8 +94,18 @@ public class AbilityHandler : MonoBehaviour
             case BeamAbility beamAbility:
                 usedAbility = HandleBeamAbility(beamAbility, statsHandler);
                 break;
+            case ChargeAbility chargeAbility:
+                if (!charging)
+                {
+                    SetCharging(true);
+                    usedAbility = chargeAbility.Activate(gameObject);
+                }
+
+                break;
         }
-        Logging.Info($"able to use {ability.Name} = {usedAbility}");
+        //Logging.Info($"able to use {ability.Name} = {usedAbility}");
+        if (usedAbility) StartCoroutine(SetOnCooldown(Abilities.IndexOf(ability)));
+
         return usedAbility;
     }
     private bool HandleBeamAbility(BeamAbility beamAbility, LivingBeing statsHandler)
@@ -99,10 +124,13 @@ public class AbilityHandler : MonoBehaviour
             toggledAbilitiesDict.TryAdd(beamAbility, beamInstance);
             statsHandler.ChangeRegeneration(beamAbility.CostType, -beamAbility.Cost);
 
-
             return true;
         }
 
+    }
+    public void SetCharging(bool alreadyCharging)
+    {
+        charging = alreadyCharging;
     }
     private void StopToggledAbility(BeamAbility beamAbility, GameObject activeAbility)
     {
@@ -113,9 +141,15 @@ public class AbilityHandler : MonoBehaviour
 
 
 
-    bool HasEnoughPower(float powerCost)
+    public bool HasEnoughPower(float powerCost, AttributeType costType = AttributeType.CurrentPower)
     {
         return !statsHandler || powerCost < statsHandler.GetAttribute(AttributeType.CurrentPower);
+    }
+    public void HandleNoMana()
+    {
+        foreach (KeyValuePair<BeamAbility, GameObject> ability in toggledAbilitiesDict)
+        { Destroy(ability.Value); }
+        toggledAbilitiesDict.Clear();
     }
 
     bool HandleProjectile(ProjectileAbility ability)
@@ -137,18 +171,25 @@ public class AbilityHandler : MonoBehaviour
         return auraAbility.Activate(statsHandler.gameObject);
     }
 
-    private IEnumerator SetOnCooldown(int abilityIndex)
+    public IEnumerator SetOnCooldown(int abilityIndex)
     {
         Ability ability = Abilities[abilityIndex];
         try
         {
+            abilitiesOnCooldownCrew[ability] = true;
             abilitiesOnCooldown[abilityIndex] = true;
             yield return new WaitForSeconds(ability.Cooldown);
         }
         finally
         {
+            abilitiesOnCooldownCrew[ability] = false;
             abilitiesOnCooldown[abilityIndex] = false;
         }
+    }
+    protected bool IsOnCoolDown(Ability ability)
+    {
+        bool onCooldown = abilitiesOnCooldownCrew[ability];
+        return onCooldown;
     }
 
 }

@@ -14,9 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Name>k__BackingField: Slash
   <Icon>k__BackingField: {fileID: 0}
-  <Cooldown>k__BackingField: 1
+  <Cooldown>k__BackingField: 3
   <CostType>k__BackingField: 4
   <Cost>k__BackingField: 20
+  <AbilityTypeTag>k__BackingField: 1
   <ListUsableOn>k__BackingField: 01000000
   <TargetTypeAndEffects>k__BackingField:
   - <EffectDescription>k__BackingField: Belly slash
@@ -29,19 +30,19 @@ MonoBehaviour:
     <AttributeUp>k__BackingField: []
     <AttributeDown>k__BackingField: []
     <Damage>k__BackingField:
-    - <Value>k__BackingField: 50
+    - <Value>k__BackingField: 30
       <Element>k__BackingField: 0
       <Physical>k__BackingField: 3
-      <ValueType>k__BackingField: 2
+      <ValueType>k__BackingField: 0
     <DamageOverTime>k__BackingField: []
+    <StatusEffects>k__BackingField: []
     <SpecialAbilityAttribute>k__BackingField: 0
   <ElementTypes>k__BackingField: 
-  <AbilityTypeTag>k__BackingField: 1
   <Range>k__BackingField: 2
   <Angle>k__BackingField: 0
   <Width>k__BackingField: 3
   <Shape>k__BackingField: 2
   <SpawnEffectOnHit>k__BackingField: {fileID: 4439306374306288678, guid: ad3ebfe5da0c21f43a7253ff8277fd9c,
     type: 3}
-  <MeleeParticleSystem>k__BackingField: {fileID: 3833596520723288618, guid: 63d70ca71f984254aa100f374d860057,
+  <MeleeParticleSystem>k__BackingField: {fileID: 134935324219964725, guid: 5c33c778bf848f540a0ad9ded58e9b9f,
     type: 3}

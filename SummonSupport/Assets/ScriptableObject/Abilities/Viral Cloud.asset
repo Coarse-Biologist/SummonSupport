@@ -35,12 +35,8 @@ MonoBehaviour:
       <Physical>k__BackingField: 0
     <AttributeDown>k__BackingField: []
     <Damage>k__BackingField: []
-    <DamageOverTime>k__BackingField:
-    - <Value>k__BackingField: 10
-      <Element>k__BackingField: 0
-      <Physical>k__BackingField: 0
-      <ValueType>k__BackingField: 0
-      <Duration>k__BackingField: 5
+    <DamageOverTime>k__BackingField: []
+    <StatusEffects>k__BackingField: []
     <SpecialAbilityAttribute>k__BackingField: 0
   - <EffectDescription>k__BackingField: virulent cloud on enemies
     <TargetType>k__BackingField: 1
@@ -58,6 +54,8 @@ MonoBehaviour:
       <Physical>k__BackingField: 0
       <ValueType>k__BackingField: 0
       <Duration>k__BackingField: 10
+    <StatusEffects>k__BackingField:
+    - {fileID: 11400000, guid: d2c2bc483ce8e844bb6602d77e8062db, type: 2}
     <SpecialAbilityAttribute>k__BackingField: 0
   <ElementTypes>k__BackingField: 
   <AbilityTypeTag>k__BackingField: 0

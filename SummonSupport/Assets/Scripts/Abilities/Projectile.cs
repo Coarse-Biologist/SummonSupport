@@ -10,6 +10,7 @@ public class Projectile : MonoBehaviour
     public int piercedAlready = 0;
     public int splitAlready = 0;
     LivingBeing userLivingBeing = null;
+    private bool active = false;
 
 
 
@@ -23,6 +24,11 @@ public class Projectile : MonoBehaviour
         ignoreGameObjects.Add(user);
         SetProjectilePhysics(spawnAt, lookAt);
         Destroy(gameObject, ability.Lifetime); // TODO: change from lifetime to range
+        SetActive();
+    }
+    private void SetActive()
+    {
+        active = true;
     }
 
 
@@ -31,14 +37,14 @@ public class Projectile : MonoBehaviour
     {
         SetProjectilePhysics(spawnPoint, Vector3.zero);
     }
-    void SetProjectilePhysics(GameObject spawnPoint, Vector3 direction)
+    void SetProjectilePhysics(GameObject spawnPoint, Vector3 newDirection)
     {
-        if (direction == Vector3.zero)
-            direction = spawnPoint.transform.right;
+        if (newDirection == Vector3.zero)
+            newDirection = spawnPoint.transform.right;
         Rigidbody2D rb = GetComponent<Rigidbody2D>();
-        rb.linearVelocity = direction * ability.Speed;
+        rb.linearVelocity = newDirection * ability.Speed;
 
-        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        float angle = Mathf.Atan2(newDirection.y, newDirection.x) * Mathf.Rad2Deg;
 
         transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
     }
@@ -47,37 +53,52 @@ public class Projectile : MonoBehaviour
         SpawnEffectOnHit = effectOnHit;
     }
 
-    private void SpawnEffect(LivingBeing targetLivingBeing)
+    private void SpawnEffect(LivingBeing targetLivingBeing, GameObject SpawnEffectOnHit)
     {
         GameObject instance;
         if (SpawnEffectOnHit != null)
         {
+            //Debug.Log("This happens, excellent");
             instance = Instantiate(ability.SpawnEffectOnHit, targetLivingBeing.transform.position, Quaternion.identity, targetLivingBeing.transform.transform);
-            Destroy(instance, 3f);
+            Destroy(instance, instance.GetComponent<ParticleSystem>().main.duration);
         }
+        //else Debug.Log("This happens but is null");
+    }
+    public void SetParticleTrailEffects(Vector2 direction) // -user.transform.right
+    {
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        GameObject particleSystem;
+        if (ability.ProjectileParticleSystem != null)
+        {
+            particleSystem = Instantiate(ability.ProjectileParticleSystem, gameObject.transform.position, Quaternion.identity, gameObject.transform);
+            //particleSystem.transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
+            Quaternion rotation = Quaternion.LookRotation(-direction);
+            particleSystem.transform.rotation = rotation;
+
+        }
+
     }
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.CompareTag("Projectile") || ignoreGameObjects.Contains(other.gameObject))
-            return;
-
-        if (!other.TryGetComponent(out LivingBeing otherLivingBeing))
+        if (active)
         {
-            SpawnEffect(otherLivingBeing);
-            DestroyProjectile();
-            return;
+            if (other.gameObject.CompareTag("Projectile") || ignoreGameObjects.Contains(other.gameObject))
+                return;
+
+            if (!other.TryGetComponent(out LivingBeing otherLivingBeing))
+            {
+                DestroyProjectile();
+                return;
+            }
+
+            if (!userLivingBeing || (!Ability.HasElementalSynergy(ability, otherLivingBeing) && !ability.ThoroughIsUsableOn(userLivingBeing, otherLivingBeing)))
+                return;
+
+            SpawnEffect(otherLivingBeing, ability.SpawnEffectOnHit);
+            CombatStatHandler.HandleEffectPackages(ability, userLivingBeing, otherLivingBeing, false);
+            HandleOnHitBehaviour(otherLivingBeing);
         }
-
-        if (!userLivingBeing || (!Ability.HasElementalSynergy(ability, otherLivingBeing) && !ability.IsUsableOn(userLivingBeing.CharacterTag, otherLivingBeing.CharacterTag)))
-            return;
-
-        //Debug.Log($"ability = {ability.name}.");
-        //Debug.Log($"caster = {userLivingBeing}.");
-        //Debug.Log($" target = {otherLivingBeing}");
-
-        CombatStatHandler.HandleEffectPackages(ability, userLivingBeing, otherLivingBeing, false);
-        HandleOnHitBehaviour(otherLivingBeing);
 
     }
 
@@ -125,6 +146,10 @@ public class Projectile : MonoBehaviour
                 projectileScript.ability = ability;
                 projectileScript.splitAlready = this.splitAlready;
                 projectileScript.SetProjectilePhysics(gameObject, direction);
+                projectileScript.SetParticleTrailEffects(direction);
+                Destroy(newProjectile, ability.Lifetime);
+
+
             }
         }
         DestroyProjectile(other);

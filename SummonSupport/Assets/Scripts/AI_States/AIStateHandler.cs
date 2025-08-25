@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using Unity.VisualScripting.Antlr3.Runtime.Misc;
 
 public class AIStateHandler : MonoBehaviour
 {
@@ -12,8 +13,13 @@ public class AIStateHandler : MonoBehaviour
     [SerializeField] public int AttackSpeed = 1;
     [SerializeField] public int Cowardice = 0; // At what HP percentage a summon may try to retreat
     public LayerMask targetMask { private set; get; }
+    public bool StuckInAbilityAnimation { private set; get; } = false;
+
+    public LayerMask enemyMask { private set; get; }
+    public LayerMask friendlyMask { private set; get; }
+    public LayerMask belligerantMask { private set; get; }
     public LayerMask obstructionMask { private set; get; }
-    public AIState currentState;
+    public AIState currentState { get; private set; }
     [SerializeField] public AI_CC_State ccState;
     [SerializeField] public AIState peaceState { private set; get; }
     [SerializeField] public AIState chaseState { private set; get; }
@@ -29,13 +35,21 @@ public class AIStateHandler : MonoBehaviour
 
     private Vector2 startLocation;
 
+    public void SetCurrentState(AIState state)
+    {
+        currentState = state;
+    }
+    public void SetStuckInAbilityAnimation(bool stuck)
+    {
+        StuckInAbilityAnimation = stuck;
+    }
+
 
     public void Awake()
     {
         startLocation = transform.position;
         obstructionMask = LayerMask.GetMask("Obstruction");
-        if (gameObject.CompareTag("Minion")) targetMask = LayerMask.GetMask("Enemy");
-        else targetMask = LayerMask.GetMask("Minion", "Player");
+
 
         currentState = GetComponentInChildren<AIPeacefulState>();
         obedienceState = GetComponent<AIObedienceState>();
@@ -44,6 +58,8 @@ public class AIStateHandler : MonoBehaviour
         ccState = GetComponent<AI_CC_State>();
         InvokeRepeating("RunStateMachine", 0f, .1f);
         abilityHandler = GetComponent<CreatureAbilityHandler>();
+        SetMasks();
+        SetTargetMask();
 
     }
     void Start()
@@ -53,15 +69,41 @@ public class AIStateHandler : MonoBehaviour
     }
     public void SetTarget(LivingBeing theTarget)
     {
+        //Debug.Log($"target of {this} is now {target}");
         target = theTarget;
     }
+    private void SetMasks()
+    {
+        belligerantMask = LayerMask.GetMask("Enemy", "Player", "Minion", "Guard");      // used for madness
+        enemyMask = LayerMask.GetMask("Enemy");                                         // used by allies
+        friendlyMask = LayerMask.GetMask("Player", "Minion");                           // used by enemies
 
+    }
 
+    public void SetTargetMask(StatusEffectType statusEffect = StatusEffectType.None)
+    {
+        bool charmed = statusEffect == StatusEffectType.Charmed;
+        bool mad = statusEffect == StatusEffectType.Madness;
+        if (mad)
+        {
+            if (targetMask == belligerantMask) //Debug.Log("mask is belligerant mask");
+                targetMask = belligerantMask;
+            return;
+        }
+        CharacterTag tag = livingBeing.CharacterTag;
+        if (tag == CharacterTag.Minion && !charmed || tag == CharacterTag.Enemy && charmed || tag == CharacterTag.Guard && !charmed) targetMask = enemyMask;
+        else targetMask = friendlyMask;
+        //if (targetMask == friendlyMask) //Debug.Log("mask is friendly mask");
+        //if (targetMask == enemyMask) //Debug.Log("mask is enemy  mask");
+
+    }
 
     private void RunStateMachine()
     {
+        //Debug.Log($"current state = {currentState}");
+
         // Called in Awake by using "Invoke repeating"
-        if (ccState != null && ccState.currentCCs.Count != 0) SwitchToNextState(ccState);
+        if (ccState != null && ccState.CCToCaster.Count != 0) SwitchToNextState(ccState);
         if (minionStats == null || minionStats.CurrentCommand == MinionCommands.None)
         {
             AIState nextState = currentState?.RunCurrentState();
@@ -69,14 +111,19 @@ public class AIStateHandler : MonoBehaviour
             {
                 SwitchToNextState(nextState);
             }
-            ///else Debug.Log("nextState state was null");
+            else Debug.Log("nextState state was null");
         }
         else
         {
-            SwitchToNextState(obedienceState);
-            AIState nextState = obedienceState.RunCurrentState();
-            if (nextState != null)
+            if (livingBeing.CharacterTag == CharacterTag.Minion)
             {
+                AIState nextState = obedienceState.RunCurrentState();
+                SwitchToNextState(nextState);
+
+            }
+            else
+            {
+                AIState nextState = peaceState.RunCurrentState();
                 SwitchToNextState(nextState);
             }
             //else Debug.Log("next state was null");

@@ -31,6 +31,7 @@ MonoBehaviour:
     <AttributeDown>k__BackingField: []
     <Damage>k__BackingField: []
     <DamageOverTime>k__BackingField: []
+    <StatusEffects>k__BackingField: []
     <SpecialAbilityAttribute>k__BackingField: 0
   <ElementTypes>k__BackingField: 
   <AbilityTypeTag>k__BackingField: 1

@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Splines;
+
 
 public class Aura : MonoBehaviour
 {
@@ -9,23 +11,49 @@ public class Aura : MonoBehaviour
     List<LivingBeing> listLivingBeingsInAura = new();
     [SerializeField] public float ActivationTime { get; private set; } = .5f;
     private bool Active = false;
+    private CircleCollider2D circleCollider;
 
     private LivingBeing target;
     private ConjureAbility conjureAbility;
+    private SplineAnimate splineAnimator;
+    private bool SetSplineAnimator()
+    {
+        if (TryGetComponent<SplineAnimate>(out SplineAnimate spline))
+        {
+            splineAnimator = spline;
+            return true;
+        }
+        else return false;
+    }
 
 
+    void Start()
+    {
+        if (SetSplineAnimator())
+        {
+            if (TryGetComponent<CircleCollider2D>(out CircleCollider2D colliderCito))
+            {
+                circleCollider = colliderCito;
+                circleCollider.enabled = false;
+                Debug.Log($"Disabling {circleCollider}"); InvokeRepeating("CheckEndNear", .5f, .01f);
+            }
+        }
+        Invoke("Activate", ActivationTime);
 
+    }
     public void HandleInstantiation(LivingBeing caster, LivingBeing target, Ability ability, float radius, float duration)
     {
-        if (ability is ConjureAbility) conjureAbility = (ConjureAbility)ability;
         GetComponent<CircleCollider2D>().radius = radius;
-        Invoke("Activate", ActivationTime);
         SetAuraStats(caster, target, ability, duration);
         CombatStatHandler.HandleEffectPackages(ability, caster, caster, true);
-        if (conjureAbility.SeeksTarget)
+        if (ability is ConjureAbility)
         {
-            this.target = FindTarget(conjureAbility.SearchRadius);
-            if (this.target != null) StartCoroutine(SeekTarget(this.target.gameObject));
+            conjureAbility = (ConjureAbility)ability;
+            if (conjureAbility.SeeksTarget)
+            {
+                this.target = FindTarget(conjureAbility.SearchRadius);
+                if (this.target != null) StartCoroutine(SeekTarget(this.target.gameObject));
+            }
         }
     }
     public void SetAuraStats(LivingBeing caster, LivingBeing target, Ability ability, float duration)
@@ -36,6 +64,18 @@ public class Aura : MonoBehaviour
         SetAuraTimer(duration);
         Activate();
         //transform.Rotate(new Vector3(-110f, 0, 0));
+
+    }
+    private void CheckEndNear()
+    {
+        Debug.Log($"Spline animator normalized  time =  {splineAnimator.NormalizedTime}");
+
+        if (splineAnimator.NormalizedTime > .75)
+        {
+            circleCollider.enabled = true;
+            Debug.Log($"Enabling {circleCollider}");
+            CancelInvoke("CheckEndNear");
+        }
 
     }
 
@@ -52,21 +92,24 @@ public class Aura : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-
         if (Active)
         {
-            Logging.Info($"{other.gameObject} has entered the bite zone");
             if (other.gameObject.TryGetComponent(out LivingBeing otherLivingBeing))
             {
-
                 if (ability.ListUsableOn.Contains(RelationshipHandler.GetRelationshipType(caster.CharacterTag, otherLivingBeing.CharacterTag)))
                 {
+                    //Debug.Log($"usable on {otherLivingBeing.Name}");
+                    if (ability is ConjureAbility)
+                    {
+                        SpawnOnHitEffect(otherLivingBeing, conjureAbility.SpawnEffectOnHit);
+                    }
                     otherLivingBeing.AlterAbilityList(ability, true);
                     CombatStatHandler.HandleEffectPackages(ability, caster, otherLivingBeing, false);
                 }
             }
-            else Debug.Log($"other game object = {other.gameObject}");
+            else Debug.Log($"NOT usable on {other.gameObject.name}");
         }
+        else Debug.Log($"OnTrigger Enter func called but the trigger object is not active");
     }
 
     void OnTriggerExit2D(Collider2D other)
@@ -74,6 +117,17 @@ public class Aura : MonoBehaviour
         if (other.gameObject.TryGetComponent<LivingBeing>(out LivingBeing otherLivingBeing))
             otherLivingBeing.AlterAbilityList(ability, false);
 
+    }
+    private void SpawnOnHitEffect(LivingBeing targetLivingBeing, GameObject SpawnEffectOnHit)
+    {
+        GameObject instance;
+        if (SpawnEffectOnHit != null)
+        {
+            //Debug.Log("This happens, excellent");
+            instance = Instantiate(SpawnEffectOnHit, targetLivingBeing.transform.position, Quaternion.identity, targetLivingBeing.transform.transform);
+            Destroy(instance, instance.GetComponent<ParticleSystem>().main.duration);
+        }
+        //else Debug.Log("This happens but is null");
     }
 
 
@@ -92,7 +146,7 @@ public class Aura : MonoBehaviour
         {
             if (!collider.TryGetComponent<LivingBeing>(out LivingBeing targetStats))
                 continue;
-            if (!ability.IsUsableOn(targetStats.CharacterTag, caster.CharacterTag))
+            if (!ability.ThoroughIsUsableOn(targetStats, caster))
                 continue;
             else return targetStats;
         }

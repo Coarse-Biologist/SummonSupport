@@ -18,6 +18,8 @@ public class PlayerMovement : MonoBehaviour
     private Vector2 worldPosition;
     private Vector2 direction;
     Vector3 moveDirection;
+    [field: SerializeField] public GameObject DashDust { private set; get; }
+
     [SerializeField] float movementSpeed;
     [SerializeField] float dashBoost = 10f;
     [SerializeField] float dashCoolDown = 1f;
@@ -26,6 +28,7 @@ public class PlayerMovement : MonoBehaviour
     private bool dashing = false;
     private bool canDash = true;
     private bool lockedInUI = false;
+    private bool StuckInAbilityAnimation = false;
 
     #endregion
 
@@ -73,12 +76,17 @@ public class PlayerMovement : MonoBehaviour
     #region Dash logic
     private void OnDash(InputAction.CallbackContext context)
     {
+        //EventDeclarer.SpawnEnemies?.Invoke(this.gameObject);
         if (canDash)
         {
             canDash = false;
             dashing = true;
             Invoke("ReturnToNormalSpeed", dashDuration);
             Invoke("ReadyDash", dashCoolDown);
+            GameObject DashDustInstance = Instantiate(DashDust, transform.position, Quaternion.identity, transform);
+            float angle = Mathf.Atan2(-moveDirection.y, -moveDirection.x) * Mathf.Rad2Deg;
+            DashDustInstance.transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
+            Destroy(DashDustInstance, dashDuration);
         }
     }
 
@@ -89,6 +97,11 @@ public class PlayerMovement : MonoBehaviour
     private void ReturnToNormalSpeed()
     {
         dashing = false;
+    }
+
+    public void SetStuckInAbilityAnimation(bool stuck)
+    {
+        StuckInAbilityAnimation = stuck;
     }
     #endregion
 
@@ -159,7 +172,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
-        if (!lockedInUI)
+        if (!lockedInUI && !StuckInAbilityAnimation)
         {
             HandleMove();
 

@@ -29,7 +29,7 @@ public class ConjuredObject : MonoBehaviour
     {
         if (collision.gameObject.TryGetComponent(out LivingBeing livingBeing))
         {
-            if (Ability.IsUsableOn(Conjurer.CharacterTag, livingBeing.CharacterTag))
+            if (Ability.ThoroughIsUsableOn(Conjurer, livingBeing))
                 CombatStatHandler.HandleEffectPackages(Ability, Conjurer, livingBeing, false);
         }
     }

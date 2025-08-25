@@ -1,12 +1,12 @@
 using UnityEngine;
 using System.Collections;
-using System;
-using System.Runtime.InteropServices;
 using System.Collections.Generic;
+using System.Linq;
+using Unity.Entities.UniversalDelegates;
+//using Unity.VisualScripting;
 
 public class AIPeacefulState : AIState
 {
-    public GameObject detectedTargetObject;
     [field: SerializeField] WaitForSeconds FOVCheckFrequency = new WaitForSeconds(0.5f);
     private bool canSeeTarget;
     private AIStateHandler stateHandler;
@@ -43,43 +43,55 @@ public class AIPeacefulState : AIState
 
     public bool FieldOfViewCheck()
     {
-        bool visionBlocked = true;
-        GameObject target = CheckTargetInRange();
-        if (target != null)
-        {
-            visionBlocked = CheckVisionBlocked(target);
-        }
-        if (!visionBlocked && target != null)
+        LivingBeing target = CheckTargetInRange();
+
+
+        if (target != null && !CheckVisionBlocked(target))
         {
             stateHandler.lastSeenLoc = target.transform.position;
             canSeeTarget = true;
+            //Debug.Log($"Field of view Check setting canSeetarget to {canSeeTarget} ({target})");
+
             return true;
         }
         else
         {
+            //Debug.Log($"Field of view Check: result of vision block check: cant see target ({target})");
             canSeeTarget = false;
             return false;
         }
     }
 
-    public GameObject CheckTargetInRange()
+    public LivingBeing CheckTargetInRange()
     {
         //if (Vector3.Angle(transform.forward, directionToTarget) < angle / 2)
         Collider2D[] rangeChecks = Physics2D.OverlapCircleAll(transform.position, stateHandler.DetectionRadius, stateHandler.targetMask);
+        //Debug.Log($"checking target in range: Looking for target of target mask {stateHandler.targetMask.value}");
+        LivingBeing target = null;
         if (rangeChecks.Length != 0)
         {
-            GameObject detectedObject = rangeChecks[0].transform.gameObject;
-            chaseState.SetTargetEntity(detectedObject);
-            return detectedObject;
+            for (int i = 0; i < rangeChecks.Length; i++)
+            {
+                GameObject detectedObject = rangeChecks[i].transform.gameObject;
+                if (detectedObject == gameObject) continue;
+                if (detectedObject.TryGetComponent<LivingBeing>(out LivingBeing targetLivingBeing))
+                {
+                    stateHandler.SetTarget(targetLivingBeing);
+
+                    target = targetLivingBeing;
+                }
+            }
         }
-        else
-        {
-            return null;
-        }
+        //Debug.Log($"Check target in range with target mask {stateHandler.targetMask.value} target found = {target}. number of objects with this layer found = {rangeChecks.Length}");
+        return target;
 
     }
 
-    public bool CheckVisionBlocked(GameObject target, float angleOffset = 0)
+
+
+
+
+    public bool CheckVisionBlocked(LivingBeing target, float angleOffset = 0)
     {
         Vector2 directionToTarget = (target.transform.position - transform.position).normalized;
 
@@ -107,10 +119,10 @@ public class AIPeacefulState : AIState
 
     public override AIState RunCurrentState()
     {
-        //Debug.Log("running peaceful state");
+        //("Run current state: peaceful state says 'running peaceful state'");
         if (canSeeTarget)
         {
-            Debug.Log("Requesting chase state");
+            //Debug.Log("Run current state: peaceful state says 'Requesting chase state'");
             if (runningSupportLoop)
             {
                 runningSupportLoop = false;
@@ -133,6 +145,7 @@ public class AIPeacefulState : AIState
                 if (!runningSupportLoop)
                     supportCoroutine = StartCoroutine(HandleSupportloop());
             }
+            chaseState.LookAtTarget(player.transform.position);
             return this;
         }
         else

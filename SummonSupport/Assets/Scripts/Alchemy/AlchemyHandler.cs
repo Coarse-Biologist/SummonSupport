@@ -41,13 +41,14 @@ public class AlchemyHandler : MonoBehaviour
         {
             if (minionPrefab != null)
             {
-                craftedMinion = Instantiate(minionPrefab, new Vector2(transform.position.x, transform.position.y), Quaternion.identity);
+                craftedMinion = Instantiate(minionPrefab, transform.position, Quaternion.identity);
 
                 UpgradeMinion(craftedMinion, combinedIngredients, elementList);
                 AddActiveMinion(craftedMinion);
+                Debug.Log("Add ACtive minion");
                 int knowledgeGain = GainKnowledge(elementList, combinedIngredients);
 
-                Logging.Info($"You have just gained a total of {knowledgeGain} knowledge from alchemic work.");
+                //Logging.Info($"You have just gained a total of {knowledgeGain} knowledge from alchemic work.");
             }
             else Logging.Error("Crafted Minion is null, was he loaded promtly or correctly?");
         }
@@ -57,7 +58,11 @@ public class AlchemyHandler : MonoBehaviour
         Logging.Info($"{organ} used and is being handled.");
 
         EventDeclarer.RepeatableQuestCompleted?.Invoke(Quest.RepeatableAccomplishments.UseOrgans, 1);
-
+        if (stats == null)
+        {
+            Debug.Log("handle organ use stats was null");
+            return 0;
+        }
         int healthUpgrade = 0;
         string organString = organ.ToString();
         if (organString.Contains("Wretched"))
@@ -104,6 +109,7 @@ public class AlchemyHandler : MonoBehaviour
             stats.ChangeAttribute(AttributeType.MaxPower, 30);
             powerUpgrade += 30;
         }
+        else Debug.Log($"Core = {core}");
         return powerUpgrade;
     }
     private int HandleEtherUse(LivingBeing stats, AlchemyLoot ether, List<Element> elementList)
@@ -145,13 +151,27 @@ public class AlchemyHandler : MonoBehaviour
         }
         stats.RestoreResources();
         AlterMinionByElement(minion);
-
+        AddAbilitiesByElement(stats);
     }
+
+    private void AddAbilitiesByElement(LivingBeing livingBeing)
+    {
+        CreatureAbilityHandler abilityHandler = livingBeing.gameObject.GetComponent<CreatureAbilityHandler>();
+        if (abilityHandler == null) return;
+        Element strongestElement = livingBeing.GetHighestAffinity();
+        Ability ability = AbilityLibrary.GetAbility(strongestElement);
+        if (ability != null)
+        {
+            abilityHandler.LearnAbility(ability);
+            abilityHandler.SetAbilityLists();
+        }
+    }
+
     private void AlterMinionByElement(GameObject minion)
     {
         LivingBeing stats = minion.GetComponent<LivingBeing>();
-        MinionSpriteControl spriteControl = minion.GetComponentInChildren<MinionSpriteControl>();
-        Element strongestElement = stats.Affinities.OrderByDescending(a => a.Value.Get()).First().Key;
+        CreatureSpriteController spriteControl = minion.GetComponentInChildren<CreatureSpriteController>();
+        Element strongestElement = stats.GetHighestAffinity();
         string nameModifier = "";
 
         if (stats.Affinities[strongestElement].Get() > 50)
@@ -161,7 +181,6 @@ public class AlchemyHandler : MonoBehaviour
             stats.SetName(nameModifier + "Elemental");
         }
         else stats.SetName("Flesh Atronach");
-
     }
 
 
@@ -175,6 +194,7 @@ public class AlchemyHandler : MonoBehaviour
         {
             activeMinions.Add(minion);
             //CommandMinion.SetSelectedMinion(minion); //Good idea?...
+            Debug.Log("add active minion func. alchemy handler");
             newMinionAdded?.Invoke(livingBeing);
         }
         CommandMinion.SetActiveMinions(activeMinions);

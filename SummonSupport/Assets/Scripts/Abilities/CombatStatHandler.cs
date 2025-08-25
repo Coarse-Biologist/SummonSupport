@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Diagnostics;
+using UnityEngine.InputSystem;
 
 public static class CombatStatHandler
 {
@@ -59,6 +60,19 @@ public static class CombatStatHandler
                         AdjustAndApplyTempChange(ability, tempChange, theTarget, casterStats);
                     }
                 }
+
+                if (package.StatusEffects.Count > 0)
+                {
+                    if (target.TryGetComponent<AI_CC_State>(out AI_CC_State ccState))
+                    {
+                        foreach (StatusEffects status in package.StatusEffects)
+                        {
+                            ccState.RecieveCC(status, casterStats);
+                            if (status.EffectType == StatusEffectType.Pulled) ccState.SetPullEpicenter(Camera.main.ScreenToWorldPoint(Input.mousePosition));
+
+                        }
+                    }
+                }
             }
 
         }
@@ -74,10 +88,7 @@ public static class CombatStatHandler
         if (damage_AT.Physical != PhysicalType.None) damageValue = AdjustBasedOnArmor(damage_AT.Physical, damageValue, target);
         AdjustForOverValue(target, AttributeType.Overshield, AttributeType.MaxHitpoints, AttributeType.CurrentHitpoints, -damageValue);
         if (specialAbilityAttribute == SpecialAbilityAttribute.Syphon)
-        {
             AdjustForOverValue(target, AttributeType.Overshield, AttributeType.MaxHitpoints, AttributeType.CurrentHitpoints, damageValue);
-            UnityEngine.Debug.Log($"appplying {damageValue} damage to {target}and healing caster {caster} for {damageValue}");
-        }
 
         return damageValue;
     }
@@ -91,6 +102,7 @@ public static class CombatStatHandler
     {
         float newHP = Mathf.Min(healValue + target.GetAttribute(AttributeType.CurrentHitpoints), target.GetAttribute(AttributeType.MaxHitpoints));
         target.SetAttribute(AttributeType.CurrentHitpoints, newHP);
+        UnityEngine.Debug.Log($"healing {target.Name} for {healValue}");
         return healValue;
     }
     public static float AdjustAndApplyTempChange(Ability ability, TempAttrChange tempAttr, LivingBeing target, LivingBeing caster = null)
@@ -201,7 +213,7 @@ public static class CombatStatHandler
 
     private static void HandleApplyDOT(Ability ability, LivingBeing target, AttributeType attributeType, float newValue, float duration)
     {
-        //UnityEngine.Debug.Log($"Changing {target}s regen by {newValue}");
+        UnityEngine.Debug.Log($"Changing {target}s regen by {newValue}");
         target.ChangeRegeneration(attributeType, newValue);
         target.StartCoroutine(ResetRegeneration(ability, target, attributeType, newValue, duration));
     }

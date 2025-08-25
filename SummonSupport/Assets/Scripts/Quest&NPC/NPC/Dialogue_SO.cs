@@ -49,19 +49,19 @@ public class Dialogue_SO : ScriptableObject
         }
         if (dialogueUnlocked)
         {
-            Logging.Info($"while getting NPC response to player, dialogueUnlocked was true.");
+            //Logging.Info($"while getting NPC response to player, dialogueUnlocked was true.");
             foreach (player_key entry in unlockableDialoguePlayer)
             {
                 if (entry.Key == playerWords)
                 {
-                    Logging.Info($"{entry.Key} matches {playerWords}");
-                    Logging.Info($"NPC words being set to {entry.Value}");
+                    //Logging.Info($"{entry.Key} matches {playerWords}");
+                    //Logging.Info($"NPC words being set to {entry.Value}");
                     NPC_Words = entry.Value;
                     audioClip = entry.NPC_VoiceLine;
                 }
             }
         }
-        else Logging.Info($"while getting NPC response to player, dialogueUnlocked was FALSE.");
+        //else Logging.Info($"while getting NPC response to player, dialogueUnlocked was FALSE.");
 
         return new Tuple<string, AudioClip>(NPC_Words, audioClip);
     }
@@ -69,14 +69,14 @@ public class Dialogue_SO : ScriptableObject
 
     public DialogueResult GetResult(string playerChoice)
     {
-        Logging.Info(playerChoice + "get result func");
+        //Logging.Info(playerChoice + "get result func");
 
         foreach (player_key dict in player_keys)
         {
             if (playerChoice == dict.Key)
                 return dict.result;
 
-            else Logging.Info($"{playerChoice} is not equal to {dict.Key}");
+            //else Logging.Info($"{playerChoice} is not equal to {dict.Key}");
         }
         return DialogueResult.None;
     }

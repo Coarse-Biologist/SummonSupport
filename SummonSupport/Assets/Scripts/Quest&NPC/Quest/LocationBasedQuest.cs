@@ -12,7 +12,7 @@ public class LocationBasedQuest : MonoBehaviour, IQuest
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            Logging.Info("player in collider2d");
+            //Logging.Info("player in collider2d");
 
             CompleteQuest();
             GrantQuest();
