@@ -55,12 +55,12 @@ public class AlchemyHandler : MonoBehaviour
     }
     private int HandleOrganUse(LivingBeing stats, AlchemyLoot organ)
     {
-        Logging.Info($"{organ} used and is being handled.");
+        //Logging.Info($"{organ} used and is being handled.");
 
         EventDeclarer.RepeatableQuestCompleted?.Invoke(Quest.RepeatableAccomplishments.UseOrgans, 1);
         if (stats == null)
         {
-            Debug.Log("handle organ use stats was null");
+            //Debug.Log("handle organ use stats was null");
             return 0;
         }
         int healthUpgrade = 0;

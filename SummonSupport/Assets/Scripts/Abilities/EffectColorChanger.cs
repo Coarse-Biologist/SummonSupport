@@ -29,7 +29,7 @@ public static class EffectColorChanger
 
     private static void ChangeColor(LivingBeing livingBeing, ParticleSystem particleSystem)
     {
-        Debug.Log($"Trying to change color of {particleSystem} to match {livingBeing}s resistences.");
+        //Debug.Log($"Trying to change color of {particleSystem} to match {livingBeing}s resistences.");
         Element strongestElement = livingBeing.GetHighestAffinity();
         if (livingBeing.Affinities[strongestElement].Get() > 50)
         {

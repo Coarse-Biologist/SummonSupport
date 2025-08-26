@@ -112,7 +112,7 @@ public class EnemySpawnHandler : MonoBehaviour
     {
         if (level > 0)
         {
-            Debug.Log($"modifying stats to be {level}");
+            //Debug.Log($"modifying stats to be {level}");
             originalCreatureStats.SetAttribute(AttributeType.MaxHitpoints, originalCreatureStats.GetAttribute(AttributeType.MaxHitpoints) * Hp_Scalar * level);
             originalCreatureStats.SetAttribute(AttributeType.MaxPower, originalCreatureStats.GetAttribute(AttributeType.MaxPower) * Power_Scalar * level);
             originalCreatureStats.RestoreResources();
@@ -176,7 +176,7 @@ public class EnemySpawnHandler : MonoBehaviour
     private int GetCreatureLevel()
     {
         float roll = UnityEngine.Random.Range(0, 100);
-        Debug.Log($"roll = {roll}");
+        //Debug.Log($"roll = {roll}");
         if (roll < lvl1_creatureProbability) return 0;
         if (roll < lvl2_creatureProbability) return 1;
         if (roll < lvl3_creatureProbability) return 2;

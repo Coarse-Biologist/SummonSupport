@@ -36,7 +36,7 @@ public class MeleeAbility : Ability
         abilityHandler = user.GetComponent<AbilityHandler>();
         if (originTransform == null)
         {
-            Debug.Log($"the user: {user}.");
+            //Debug.Log($"the user: {user}.");
             originTransform = abilityHandler.abilityDirection.transform;
         }
 
@@ -47,7 +47,7 @@ public class MeleeAbility : Ability
     {
         if (Caster.TryGetComponent<AbilityHandler>(out AbilityHandler abilityHandler) && abilityHandler.weaponSlot != null)
         {
-            abilityHandler.weaponSlot.GetComponent<WeaponMono>().UseWeapon();
+            abilityHandler.weaponSlot.GetComponent<WeaponMono>().UseWeapon(abilityHandler.abilityDirection.transform.rotation);
         }
 
         SetEffects(user);

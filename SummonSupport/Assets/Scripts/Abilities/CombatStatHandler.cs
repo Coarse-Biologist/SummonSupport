@@ -16,7 +16,7 @@ public static class CombatStatHandler
     public static void HandleEffectPackages(Ability ability, LivingBeing caster, LivingBeing target, bool forSelf = false)
     {
         Stopwatch stopwatch = new();
-        UnityEngine.Debug.Log($"ability = {ability.name}. caster = {caster.Name}. target = {target.Name}. for self? {forSelf}");
+        //UnityEngine.Debug.Log($"ability = {ability.name}. caster = {caster.Name}. target = {target.Name}. for self? {forSelf}");
         LivingBeing casterStats = caster.GetComponent<LivingBeing>();
         LivingBeing targetStats = target.GetComponent<LivingBeing>();
         LivingBeing theTarget = casterStats;
@@ -102,7 +102,7 @@ public static class CombatStatHandler
     {
         float newHP = Mathf.Min(healValue + target.GetAttribute(AttributeType.CurrentHitpoints), target.GetAttribute(AttributeType.MaxHitpoints));
         target.SetAttribute(AttributeType.CurrentHitpoints, newHP);
-        UnityEngine.Debug.Log($"healing {target.Name} for {healValue}");
+        //UnityEngine.Debug.Log($"healing {target.Name} for {healValue}");
         return healValue;
     }
     public static float AdjustAndApplyTempChange(Ability ability, TempAttrChange tempAttr, LivingBeing target, LivingBeing caster = null)
@@ -213,7 +213,7 @@ public static class CombatStatHandler
 
     private static void HandleApplyDOT(Ability ability, LivingBeing target, AttributeType attributeType, float newValue, float duration)
     {
-        UnityEngine.Debug.Log($"Changing {target}s regen by {newValue}");
+        //UnityEngine.Debug.Log($"Changing {target}s regen by {newValue}");
         target.ChangeRegeneration(attributeType, newValue);
         target.StartCoroutine(ResetRegeneration(ability, target, attributeType, newValue, duration));
     }

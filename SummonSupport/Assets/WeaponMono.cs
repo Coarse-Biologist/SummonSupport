@@ -1,5 +1,6 @@
 using Unity.Entities.UniversalDelegates;
 using UnityEngine;
+using UnityEngine.Splines;
 using UnityEngine.UIElements;
 
 public class WeaponMono : MonoBehaviour
@@ -7,33 +8,38 @@ public class WeaponMono : MonoBehaviour
 
     [field: SerializeField] public WeaponUseTypes useAppearanceType { private set; get; }
 
-    [field: SerializeField] public float weaponUseSteps { private set; get; } = 10;
+    [field: SerializeField] public float weaponUseSpeed { private set; get; } = .8f;
 
-    private int weaponStepCounter = 0;
-    public void UseWeapon()
+    [field: SerializeField] public Sprite WeaponImage { private set; get; } = null;
+    private SplineAnimate splineAnimator;
+    private Vector2 startLoc;
+
+    public void UseWeapon(Quaternion rotation)
     {
+        startLoc = transform.localPosition;
 
-
-        if (useAppearanceType == WeaponUseTypes.LightSword)
+        if (gameObject.TryGetComponent<SplineAnimate>(out SplineAnimate animator))
         {
-            InvokeRepeating("CreateWeaponMotionPath", 0f, .02f);
-            Invoke("EndWeaponUse", .2f);
+            splineAnimator = animator;
+            Debug.Log($"animator's spline = {animator.Container.name}");
+            animator.Container.transform.rotation = new Quaternion(0, 0, rotation.z, 0);
+            if (gameObject.TryGetComponent<SpriteRenderer>(out SpriteRenderer spriteRenderer))
+            {
+                spriteRenderer.sprite = WeaponImage;
+            }
+            animator.Duration = weaponUseSpeed;
+            animator.Play();
+            Invoke("EndWeaponUse", weaponUseSpeed);
         }
     }
-    private void CreateWeaponMotionPath()
-    {
-        gameObject.transform.Rotate(-Vector3.back, 10, Space.Self);
-        //if (weaponStepCounter < weaponUseSteps / 2)
-        //    transform.position = new Vector2(transform.position.x, transform.position.y + .02f);
-        //else transform.position = new Vector2(transform.position.x, transform.position.y - .01f);
 
-        weaponStepCounter += 1;
-
-    }
     private void EndWeaponUse()
     {
-        CancelInvoke("CreateWeaponMotionPath");
-        gameObject.transform.rotation = Quaternion.identity;
+        Debug.Log("Ending weapon use");
+        splineAnimator.Restart(true);
+        splineAnimator.Container.transform.rotation = Quaternion.identity;
+        //transform.localPosition = startLoc;
     }
+
 }
 

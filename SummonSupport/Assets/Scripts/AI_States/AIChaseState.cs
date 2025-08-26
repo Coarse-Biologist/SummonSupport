@@ -113,11 +113,11 @@ public class AIChaseState : AIState
             bool uniqueMovement = true;
             if (distance > SelectedAbilityAttackRange || peaceState.CheckVisionBlocked(stateHandler.target))
             {
-                Debug.Log($"Chase func called. attack range = {SelectedAbilityAttackRange}");
+                //($"Chase func called. attack range = {SelectedAbilityAttackRange}");
 
                 if (!uniqueMovement || cantSeeTarget)
                 {
-                    Debug.Log($"Chase func called. attack range = {SelectedAbilityAttackRange}");
+                    //Debug.Log($"Chase func called. attack range = {SelectedAbilityAttackRange}");
 
                     if (direction.sqrMagnitude > SelectedAbilityAttackRange || peaceState.CheckVisionBlocked(stateHandler.target))
                     {
@@ -163,7 +163,7 @@ public class AIChaseState : AIState
                         abilityHandler.UseAbility(target, ability);
                     }
                 }
-                else Debug.Log("The ability was null during the Handl attack function of the ai chase state");
+                //else Debug.Log("The ability was null during the Handl attack function of the ai chase state");
 
                 yield return attackSpeed;
 

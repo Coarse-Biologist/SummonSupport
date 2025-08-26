@@ -77,7 +77,7 @@ public class CreatureAbilityHandler : AbilityHandler
 
         if (IsOnCoolDown(selectedAbility))
         {
-            UnityEngine.Debug.Log($"Returning null insytead of an ability");
+            //UnityEngine.Debug.Log($"Returning null insytead of an ability");
             return null;
         }
         else
@@ -115,7 +115,7 @@ public class CreatureAbilityHandler : AbilityHandler
         float range = ability.Range;
         if (ability != null)
         {
-            UnityEngine.Debug.Log($"{ability} = ability selected by {GetComponent<LivingBeing>().Name} against {target}");
+            //UnityEngine.Debug.Log($"{ability} = ability selected by {GetComponent<LivingBeing>().Name} against {target}");
             CastAbility(Abilities.IndexOf(ability), target.transform.position, abilityDirection.transform.rotation);
         }
     }
