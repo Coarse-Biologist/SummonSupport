@@ -208,7 +208,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     private bool CheckUsingCores()
     {
         var ingredients = selectedIngredients.Keys;
-        if (ingredients.Contains(AlchemyLoot.BrokenCores) || ingredients.Contains(AlchemyLoot.PowerfulCore) || ingredients.Contains(AlchemyLoot.WorkingCore) || ingredients.Contains(AlchemyLoot.BrokenCores)) return true;
+        if (ingredients.Contains(AlchemyLoot.BrokenCore) || ingredients.Contains(AlchemyLoot.PowerfulCore) || ingredients.Contains(AlchemyLoot.WorkingCore) || ingredients.Contains(AlchemyLoot.HulkingCore)) return true;
         else return false;
     }
 

@@ -1,13 +1,13 @@
 public enum AlchemyLoot
-    {
-        WretchedOrgans,
-        FunctionalOrgans,
-        HulkingOrgans,
-        BrokenCores,
-        WorkingCore,
-        PowerfulCore,
-        HulkingCore,
-        FaintEther,
-        PureEther,
-        IntenseEther,
-    }
+{
+    WretchedOrgans,
+    FunctionalOrgans,
+    HulkingOrgans,
+    BrokenCore,
+    WorkingCore,
+    PowerfulCore,
+    HulkingCore,
+    FaintEther,
+    PureEther,
+    IntenseEther,
+}

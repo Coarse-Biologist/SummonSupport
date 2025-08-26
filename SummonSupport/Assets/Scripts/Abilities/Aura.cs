@@ -55,6 +55,7 @@ public class Aura : MonoBehaviour
                 if (this.target != null) StartCoroutine(SeekTarget(this.target.gameObject));
             }
         }
+        Destroy(gameObject, duration);
     }
     public void SetAuraStats(LivingBeing caster, LivingBeing target, Ability ability, float duration)
     {

@@ -163,12 +163,14 @@ public class AIPeacefulState : AIState
             chaseState.LookAtTarget(targetStats.transform.position);
             stateHandler.SetTarget(targetStats);
             Ability ability = GetComponent<CreatureAbilityHandler>().GetAbilityForTarget(targetStats);
-            chaseState.SetAbilityRange(ability.Range);
-            if ((transform.position - targetStats.transform.position).magnitude < chaseState.SelectedAbilityAttackRange)
+            if (ability != null)
             {
-                stateHandler.abilityHandler.UseAbility(targetStats, ability);
+                chaseState.SetAbilityRange(ability.Range);
+                if ((transform.position - targetStats.transform.position).magnitude < chaseState.SelectedAbilityAttackRange)
+                {
+                    stateHandler.abilityHandler.UseAbility(targetStats, ability);
+                }
             }
-
             yield return supportSpeed;
         }
 
