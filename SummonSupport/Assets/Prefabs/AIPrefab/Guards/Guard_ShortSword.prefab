@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1001 &3416616697819154151
+--- !u!1001 &3413610377418412085
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -8,84 +8,84 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3105638800100481998}
     m_Modifications:
-    - target: {fileID: 2615014826083017273, guid: 4dd6b344b5e514d44a086fc4507b9ae3,
+    - target: {fileID: 832621370951240300, guid: f91821a2d2b66ca4c951b8f415dfa5aa,
+        type: 3}
+      propertyPath: m_Name
+      value: ShortSwordSpline
+      objectReference: {fileID: 0}
+    - target: {fileID: 5523832102253944543, guid: f91821a2d2b66ca4c951b8f415dfa5aa,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -2.7723875
+      value: -1.71
       objectReference: {fileID: 0}
-    - target: {fileID: 2615014826083017273, guid: 4dd6b344b5e514d44a086fc4507b9ae3,
+    - target: {fileID: 5523832102253944543, guid: f91821a2d2b66ca4c951b8f415dfa5aa,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.4435053
+      value: 0.3
       objectReference: {fileID: 0}
-    - target: {fileID: 2615014826083017273, guid: 4dd6b344b5e514d44a086fc4507b9ae3,
+    - target: {fileID: 5523832102253944543, guid: f91821a2d2b66ca4c951b8f415dfa5aa,
         type: 3}
       propertyPath: m_LocalPosition.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2615014826083017273, guid: 4dd6b344b5e514d44a086fc4507b9ae3,
+    - target: {fileID: 5523832102253944543, guid: f91821a2d2b66ca4c951b8f415dfa5aa,
         type: 3}
       propertyPath: m_LocalRotation.w
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 2615014826083017273, guid: 4dd6b344b5e514d44a086fc4507b9ae3,
+    - target: {fileID: 5523832102253944543, guid: f91821a2d2b66ca4c951b8f415dfa5aa,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2615014826083017273, guid: 4dd6b344b5e514d44a086fc4507b9ae3,
+    - target: {fileID: 5523832102253944543, guid: f91821a2d2b66ca4c951b8f415dfa5aa,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2615014826083017273, guid: 4dd6b344b5e514d44a086fc4507b9ae3,
+    - target: {fileID: 5523832102253944543, guid: f91821a2d2b66ca4c951b8f415dfa5aa,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2615014826083017273, guid: 4dd6b344b5e514d44a086fc4507b9ae3,
+    - target: {fileID: 5523832102253944543, guid: f91821a2d2b66ca4c951b8f415dfa5aa,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2615014826083017273, guid: 4dd6b344b5e514d44a086fc4507b9ae3,
+    - target: {fileID: 5523832102253944543, guid: f91821a2d2b66ca4c951b8f415dfa5aa,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2615014826083017273, guid: 4dd6b344b5e514d44a086fc4507b9ae3,
+    - target: {fileID: 5523832102253944543, guid: f91821a2d2b66ca4c951b8f415dfa5aa,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8948188472430663631, guid: 4dd6b344b5e514d44a086fc4507b9ae3,
-        type: 3}
-      propertyPath: m_Name
-      value: ShortSwordSpline
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 4dd6b344b5e514d44a086fc4507b9ae3, type: 3}
---- !u!4 &801681320041456862 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 2615014826083017273, guid: 4dd6b344b5e514d44a086fc4507b9ae3,
-    type: 3}
-  m_PrefabInstance: {fileID: 3416616697819154151}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &3698280219252106256 stripped
+  m_SourcePrefab: {fileID: 100100000, guid: f91821a2d2b66ca4c951b8f415dfa5aa, type: 3}
+--- !u!114 &4502060580103446906 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2033564944813646583, guid: 4dd6b344b5e514d44a086fc4507b9ae3,
+  m_CorrespondingSourceObject: {fileID: 1235425232098324815, guid: f91821a2d2b66ca4c951b8f415dfa5aa,
     type: 3}
-  m_PrefabInstance: {fileID: 3416616697819154151}
+  m_PrefabInstance: {fileID: 3413610377418412085}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dab5c7d4c32e743048dfca98e2d5914f, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: 
+  m_EditorClassIdentifier: Unity.Splines::UnityEngine.Splines.SplineContainer
+--- !u!4 &7203239918366248682 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5523832102253944543, guid: f91821a2d2b66ca4c951b8f415dfa5aa,
+    type: 3}
+  m_PrefabInstance: {fileID: 3413610377418412085}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &3890203352901460043
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -98,16 +98,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Target
       value: 
-      objectReference: {fileID: 3698280219252106256}
+      objectReference: {fileID: 4502060580103446906}
+    - target: {fileID: 2403701749155074808, guid: bf4707b5279ea6f44b62914980317635,
+        type: 3}
+      propertyPath: m_MaxSpeed
+      value: 5.1667433
+      objectReference: {fileID: 0}
     - target: {fileID: 7145296425808889377, guid: bf4707b5279ea6f44b62914980317635,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -1.5413814
+      value: -1.7100016
       objectReference: {fileID: 0}
     - target: {fileID: 7145296425808889377, guid: bf4707b5279ea6f44b62914980317635,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.1906563
+      value: 0.30000168
       objectReference: {fileID: 0}
     - target: {fileID: 7145296425808889377, guid: bf4707b5279ea6f44b62914980317635,
         type: 3}
@@ -182,7 +187,7 @@ PrefabInstance:
     - target: {fileID: 981238970087819063, guid: c71f7dd61a6fb3b44b4a693aa7c510c5,
         type: 3}
       propertyPath: m_Name
-      value: Guard_1
+      value: Guard_ShortSword
       objectReference: {fileID: 0}
     - target: {fileID: 981238970087819063, guid: c71f7dd61a6fb3b44b4a693aa7c510c5,
         type: 3}
@@ -409,7 +414,7 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 6197465742391261667, guid: c71f7dd61a6fb3b44b4a693aa7c510c5,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 801681320041456862}
+      addedObject: {fileID: 7203239918366248682}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c71f7dd61a6fb3b44b4a693aa7c510c5, type: 3}
 --- !u!4 &3105638800100481998 stripped

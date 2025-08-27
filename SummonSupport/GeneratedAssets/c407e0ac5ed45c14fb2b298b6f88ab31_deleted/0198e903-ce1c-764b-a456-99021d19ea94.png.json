@@ -1,0 +1,29 @@
+{
+    "asset": "c407e0ac5ed45c14fb2b298b6f88ab31",
+    "fileName": "0198e903-ce1c-764b-a456-99021d19ea94.png",
+    "prompt": "Pixel-art plant lizard, isometric, facing south-west",
+    "negativePrompt": "",
+    "model": "c65c79a0-b2af-46da-a8e5-2fc106ec2ab6",
+    "modelName": "RPG Chibis",
+    "customSeed": -1,
+    "w3CTraceId": "5db4bf5a1629d310499a42eaa513e4b9",
+    "refinementMode": "Generation",
+    "pixelateTargetSize": 0,
+    "pixelateKeepImageSize": false,
+    "pixelatePixelBlockSize": 0,
+    "pixelateMode": 0,
+    "pixelateOutlineThickness": 0,
+    "doodles": {
+        "m_Items": [
+            {
+                "doodleReferenceType": 6,
+                "doodle": [],
+                "label": "Pose",
+                "strength": 0.8999999761581421,
+                "invertStrength": false,
+                "assetReferenceGuid": "5a2b72e3e310f3648a2142b74a62faff"
+            }
+        ]
+    },
+    "upscaleFactor": 0
+}

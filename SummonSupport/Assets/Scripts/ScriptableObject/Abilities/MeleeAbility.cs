@@ -47,7 +47,7 @@ public class MeleeAbility : Ability
     {
         if (Caster.TryGetComponent<AbilityHandler>(out AbilityHandler abilityHandler) && abilityHandler.weaponSlot != null)
         {
-            abilityHandler.weaponSlot.GetComponent<WeaponMono>().UseWeapon(abilityHandler.abilityDirection.transform.rotation);
+            abilityHandler.weaponSlot.GetComponent<WeaponMono>().UseWeapon(abilityHandler.abilityDirection.transform);
         }
 
         SetEffects(user);
