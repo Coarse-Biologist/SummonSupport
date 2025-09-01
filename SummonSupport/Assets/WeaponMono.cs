@@ -20,6 +20,7 @@ public class WeaponMono : MonoBehaviour
     {
         Debug.Log(abilityRotation.rotation);
         startLoc = transform.localPosition;
+        //WeaponSpline.rotation = Quaternion.LookRotation(abilityRotation.position - WeaponSpline.position);
 
         if (gameObject.TryGetComponent<SplineAnimate>(out SplineAnimate animator))
         {
@@ -30,7 +31,6 @@ public class WeaponMono : MonoBehaviour
             {
                 spriteRenderer.sprite = WeaponImage;
             }
-            //WeaponSpline.rotation = Quaternion.LookRotation(abilityRotation.position - WeaponSpline.position);
             animator.Duration = weaponUseSpeed;
             animator.Play();
             Invoke("EndWeaponUse", weaponUseSpeed);

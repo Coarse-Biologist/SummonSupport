@@ -922,18 +922,6 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 1803127865}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &709061005 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4502060580103446906, guid: f0586e3c150aea345979285aa485949e,
-    type: 3}
-  m_PrefabInstance: {fileID: 161859130139155647}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dab5c7d4c32e743048dfca98e2d5914f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.Splines::UnityEngine.Splines.SplineContainer
 --- !u!1 &733149745 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6396764864317405711, guid: cd22dbe4f165d3043a08400991a4fea0,
@@ -2586,7 +2574,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Target
       value: 
-      objectReference: {fileID: 709061005}
+      objectReference: {fileID: 0}
     - target: {fileID: 1488278426357215923, guid: f0586e3c150aea345979285aa485949e,
         type: 3}
       propertyPath: m_Duration
@@ -2595,8 +2583,14 @@ PrefabInstance:
     - target: {fileID: 1488278426357215923, guid: f0586e3c150aea345979285aa485949e,
         type: 3}
       propertyPath: m_MaxSpeed
-      value: 2.5833716
+      value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1952588110575872773, guid: f0586e3c150aea345979285aa485949e,
+        type: 3}
+      propertyPath: <WeaponInfo>k__BackingField
+      value: 
+      objectReference: {fileID: 11400000, guid: eaf9721d390ab08468e1eaef52dc7115,
+        type: 2}
     - target: {fileID: 3105638800100481998, guid: f0586e3c150aea345979285aa485949e,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2704,7 +2698,9 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: -224788041743854073, guid: f0586e3c150aea345979285aa485949e, type: 3}
+    - {fileID: 5626288344356376031, guid: f0586e3c150aea345979285aa485949e, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f0586e3c150aea345979285aa485949e, type: 3}

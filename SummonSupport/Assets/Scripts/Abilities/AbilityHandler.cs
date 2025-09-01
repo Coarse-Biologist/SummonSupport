@@ -11,7 +11,7 @@ public class AbilityHandler : MonoBehaviour
     [SerializeField] protected List<bool> abilitiesOnCooldown = new();
     public Dictionary<Ability, bool> abilitiesOnCooldownCrew = new();
     private Dictionary<BeamAbility, GameObject> toggledAbilitiesDict = new();
-    [field: SerializeField] public GameObject weaponSlot { get; private set; } = null;
+    [field: SerializeField] public WeaponInfo WeaponInfo { get; private set; }
     private bool charging = false;
 
 

@@ -4,6 +4,7 @@ using System;
 using System.IO;
 using System.Collections;
 using UnityEngine.UIElements;
+using UnityEngine.Splines;
 
 [CreateAssetMenu(menuName = "Abilities/Melee Ability")]
 
@@ -43,16 +44,7 @@ public class MeleeAbility : Ability
         return AttemptActivation(user);
 
     }
-    private void UseWeaponOrSetEffect(GameObject user)
-    {
-        if (Caster.TryGetComponent<AbilityHandler>(out AbilityHandler abilityHandler) && abilityHandler.weaponSlot != null)
-        {
-            abilityHandler.weaponSlot.GetComponent<WeaponMono>().UseWeapon(abilityHandler.abilityDirection.transform);
-        }
 
-        SetEffects(user);
-
-    }
 
 
 
@@ -68,8 +60,7 @@ public class MeleeAbility : Ability
                 {
                     Target = collider.GetComponent<LivingBeing>();
 
-                    UseWeaponOrSetEffect(user);
-                    //                    Logging.Info("verified and rarified");
+                    SetEffects(Caster);
                     CombatStatHandler.HandleEffectPackages(this, Caster, Target);
                     SpawnHitEffect(Target);
                     activated = true;
@@ -186,18 +177,43 @@ public class MeleeAbility : Ability
         }
 
     }
-    private void SetEffects(GameObject caster)
+    private void SetEffects(LivingBeing caster)
     {
         GameObject particleSystem;
-        originTransform = caster.GetComponent<AbilityHandler>().abilityDirection.transform;
+        abilityHandler = caster.GetComponent<AbilityHandler>();
+        originTransform = abilityHandler.abilityDirection.transform;
 
         if (MeleeParticleSystem != null)
         {
-            particleSystem = Instantiate(MeleeParticleSystem, caster.transform.position, Quaternion.identity);
             float angle = Mathf.Atan2(-originTransform.transform.up.y, -originTransform.transform.up.x) * Mathf.Rad2Deg;
 
+            if (abilityHandler.WeaponInfo == null)
+            {
+                Debug.Log(Caster + "Doing this");
+                particleSystem = Instantiate(MeleeParticleSystem, caster.transform.position, Quaternion.identity);
+                Destroy(particleSystem, 2); //particleSystem.GetComponent<ParticleSystem>().main.duration);
+
+            }
+            else
+            {
+                particleSystem = Instantiate(abilityHandler.WeaponInfo.animationSplineObject, caster.transform.position, Quaternion.identity);
+
+                SpriteRenderer spriteRenderer = particleSystem.GetComponentInChildren<SpriteRenderer>();
+                if (spriteRenderer != null)
+                {
+                    spriteRenderer.sprite = abilityHandler.WeaponInfo.WeaponSprite;
+                }
+                else { Debug.Log("There must be an error here"); }
+                SplineAnimate animator = abilityHandler.WeaponInfo.animationSplineObject.GetComponentInChildren<SplineAnimate>();
+
+                animator.Play();
+
+                particleSystem.transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
+                Destroy(particleSystem, animator.Duration);
+
+            }
+
             particleSystem.transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
-            Destroy(particleSystem, 2f);
 
         }
     }
