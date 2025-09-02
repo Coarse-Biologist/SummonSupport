@@ -105,6 +105,7 @@ public class Aura : MonoBehaviour
                         SpawnOnHitEffect(otherLivingBeing, conjureAbility.SpawnEffectOnHit);
                     }
                     otherLivingBeing.AlterAbilityList(ability, true);
+                    Debug.Log($"Effects of {ability.Name} is being handled.");
                     CombatStatHandler.HandleEffectPackages(ability, caster, otherLivingBeing, false);
                 }
             }
