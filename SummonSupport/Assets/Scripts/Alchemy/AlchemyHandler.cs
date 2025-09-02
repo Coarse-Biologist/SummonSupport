@@ -121,19 +121,19 @@ public class AlchemyHandler : MonoBehaviour
         if (etherString.Contains("Faint"))
             foreach (Element element in elementList)
             {
-                stats.GainAffinity(element, 10 / elementList.Count);
+                stats.ChangeAffinity(element, 10 / elementList.Count);
                 elementUpgrade += 10 / elementList.Count;
             }
         if (etherString.Contains("Pure"))
             foreach (Element element in elementList)
             {
-                stats.GainAffinity(element, 30 / elementList.Count);
+                stats.ChangeAffinity(element, 30 / elementList.Count);
                 elementUpgrade += 30 / elementList.Count;
             }
         if (etherString.Contains("Intense"))
             foreach (Element element in elementList)
             {
-                stats.GainAffinity(element, 60 / elementList.Count);
+                stats.ChangeAffinity(element, 60 / elementList.Count);
                 elementUpgrade += 60 / elementList.Count;
             }
         return elementUpgrade;

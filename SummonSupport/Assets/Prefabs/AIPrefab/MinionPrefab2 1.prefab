@@ -19,6 +19,7 @@ GameObject:
   - component: {fileID: 5449713164746072181}
   - component: {fileID: 919777596954798988}
   - component: {fileID: -559392522847058540}
+  - component: {fileID: 7994287584884025300}
   m_Layer: 7
   m_Name: MinionPrefab2 1
   m_TagString: Minion
@@ -58,9 +59,7 @@ MonoBehaviour:
   DetectionRadius: 5
   AngleOfSight: 720
   InterestRadius: 500
-  AttackSpeed: 1
   Cowardice: 0
-  currentState: {fileID: 0}
   ccState: {fileID: 0}
   lastSeenLoc: {x: 0, y: 0}
 --- !u!114 &1748628830762966394
@@ -75,7 +74,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0ba192906d9c0c4ab421c7550d92983, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  detectedTargetObject: {fileID: 0}
 --- !u!114 &5944997523587190918
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -188,10 +186,11 @@ MonoBehaviour:
   <Radiation>k__BackingField: 0
   <Light>k__BackingField: 0
   <Psychic>k__BackingField: 0
+  <Piercing>k__BackingField: 0
+  <Bludgeoning>k__BackingField: 0
+  <Slashing>k__BackingField: 0
+  <AffectedByAbilities>k__BackingField: []
   <XP_OnDeath>k__BackingField: 3
-  <Abilties>k__BackingField: []
-  <Speed>k__BackingField: 0.4
-  <Mass>k__BackingField: 1
 --- !u!58 &5449713164746072181
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -253,11 +252,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   abilitySpawn: {fileID: 0}
-  abilityDirection: {fileID: 0}
   statsHandler: {fileID: 0}
-  abilities:
-  - {fileID: 11400000, guid: 5605a5e8027c4e94691ae731bacfcb5a, type: 2}
+  <Abilities>k__BackingField: []
   abilitiesOnCooldown: 
+  <WeaponInfo>k__BackingField: {fileID: 0}
+--- !u!114 &7994287584884025300
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7554373945403419730}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9957c0f2eaf0cb942a744feaeb7f63a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MovementScript
+  <MovementSpeed>k__BackingField: 0.5
+  <AttackSpeed>k__BackingField: 1
+  <DashBoost>k__BackingField: 10
+  <DashCoolDown>k__BackingField: 1
+  <DashDuration>k__BackingField: 0.1
+  <Weight>k__BackingField: 0.1
 --- !u!1 &7824187274753490669
 GameObject:
   m_ObjectHideFlags: 0
@@ -310,6 +326,8 @@ SpriteRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -331,6 +349,7 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 2

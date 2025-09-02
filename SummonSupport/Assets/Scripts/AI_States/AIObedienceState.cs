@@ -78,7 +78,7 @@ public class AIObedienceState : AIState
         Vector2 direction = commandLoc - currentLoc;
         if (direction.sqrMagnitude > 4)
         {
-            rb.linearVelocity = direction * stateHandler.livingBeing.Speed;
+            rb.linearVelocity = direction * stateHandler.movementScript.MovementSpeed;
             return States.Obedience;
         }
         else

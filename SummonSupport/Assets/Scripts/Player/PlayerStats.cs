@@ -20,7 +20,7 @@ public class PlayerStats : LivingBeing
         Instance = this;
     }
 
-    void Onable()
+    void OnEnable()
     {
         EventDeclarer.EnemyDefeated?.AddListener(GainXP);
     }
@@ -29,14 +29,14 @@ public class PlayerStats : LivingBeing
         EventDeclarer.EnemyDefeated?.RemoveListener(GainXP);
 
     }
-    private void GainXP(GameObject defeatedEnemy)
+    private void GainXP(LivingBeing defeatedEnemy)
     {
-        CurrentXP += defeatedEnemy.GetComponent<LivingBeing>().XP_OnDeath;
+        CurrentXP += defeatedEnemy.XP_OnDeath;
         if (CurrentXP >= MaxXP)
         {
             LevelUp();
         }
-        EventDeclarer.attributeChanged?.Invoke(this, AttributeType.CurrentXP);
+        PlayerUIHandler.Instance.SetPlayerXP(CurrentXP);
     }
     public void GainXP(int amount)
     {
@@ -45,7 +45,7 @@ public class PlayerStats : LivingBeing
         {
             LevelUp();
         }
-        EventDeclarer.attributeChanged?.Invoke(this, AttributeType.CurrentXP);
+        PlayerUIHandler.Instance.SetPlayerXP(CurrentXP);
     }
 
     private void LevelUp()

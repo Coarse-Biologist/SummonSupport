@@ -7,12 +7,4 @@ public enum AttributeType
     CurrentPower,
     MaxPower,
     PowerSurge,
-    Affinity,
-    Weight,
-    AttackSpeed,
-    MovementSpeed,
-    DashBoost,
-    DashDuration,
-    DashCooldown,
-    CurrentXP,
 }

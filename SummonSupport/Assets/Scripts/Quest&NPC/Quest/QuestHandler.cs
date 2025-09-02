@@ -27,18 +27,18 @@ public class QuestHandler : MonoBehaviour
     void OnEnable()
     {
         EventDeclarer.RepeatableQuestCompleted.AddListener(IncrementIntQuest);
-        EventDeclarer.EnemyDefeated.AddListener(IncrementEnemyDefeated);
-        EventDeclarer.QuestStarted.AddListener(AddActiveQuest);
-        EventDeclarer.QuestCompleted.AddListener(HandleQuestCompleted);
+        EventDeclarer.EnemyDefeated?.AddListener(IncrementEnemyDefeated);
+        EventDeclarer.QuestStarted?.AddListener(AddActiveQuest);
+        EventDeclarer.QuestCompleted?.AddListener(HandleQuestCompleted);
 
 
     }
     void OnDisable()
     {
-        EventDeclarer.RepeatableQuestCompleted.RemoveListener(IncrementIntQuest);
-        EventDeclarer.EnemyDefeated.RemoveListener(IncrementEnemyDefeated);
-        EventDeclarer.QuestStarted.RemoveListener(AddActiveQuest);
-        EventDeclarer.QuestCompleted.RemoveListener(HandleQuestCompleted);
+        EventDeclarer.RepeatableQuestCompleted?.RemoveListener(IncrementIntQuest);
+        EventDeclarer.EnemyDefeated?.RemoveListener(IncrementEnemyDefeated);
+        EventDeclarer.QuestStarted?.RemoveListener(AddActiveQuest);
+        EventDeclarer.QuestCompleted?.RemoveListener(HandleQuestCompleted);
     }
 
     public bool CheckQuestCompletion(Quest_SO activeQuest)
@@ -109,7 +109,7 @@ public class QuestHandler : MonoBehaviour
             Logging.Info($"quest: {intQuest} increased by {value}. Current total num = {value}");
         }
     }
-    public void IncrementEnemyDefeated(GameObject gameObject)
+    public void IncrementEnemyDefeated(LivingBeing livingBeing)
     {
         QuestRepTracker[RepeatableAccomplishments.DefeatEnemies]++;
     }

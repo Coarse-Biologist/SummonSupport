@@ -6,7 +6,7 @@ using SummonSupportEvents;
 using Unity.Mathematics;
 
 
-public class PlayerMovement : MonoBehaviour
+public class PlayerMovement : MovementScript
 {
     #region class Variables
     private Vector2 moveInput;
@@ -20,10 +20,6 @@ public class PlayerMovement : MonoBehaviour
     Vector3 moveDirection;
     [field: SerializeField] public GameObject DashDust { private set; get; }
 
-    [SerializeField] float movementSpeed;
-    [SerializeField] float dashBoost = 10f;
-    [SerializeField] float dashCoolDown = 1f;
-    [SerializeField] float dashDuration = .1f;
     private Rigidbody2D rb;
     private bool dashing = false;
     private bool canDash = true;
@@ -41,16 +37,12 @@ public class PlayerMovement : MonoBehaviour
 
     }
 
-    void Start()
-    {
-        movementSpeed = gameObject.GetComponent<PlayerStats>().Speed;
-    }
     #region Enable and Disable event subscriptions
     private void OnEnable()
     {
         //AlchemyBenchUI.Instance.playerUsingUI.AddListener(ToggleLockedInUI);
         inputActions ??= new PlayerInputActions();
-        EventDeclarer.SpeedAttributeChanged.AddListener(SetMovementAttribute);
+        EventDeclarer.SpeedAttributeChanged?.AddListener(SetMovementAttribute);
         inputActions.Player.Enable();
         inputActions.Player.Move.performed += OnMove;
         inputActions.Player.Move.canceled += OnMove;
@@ -63,7 +55,7 @@ public class PlayerMovement : MonoBehaviour
     {
         //AlchemyBenchUI.Instance.playerUsingUI.RemoveListener(ToggleLockedInUI);
 
-        EventDeclarer.SpeedAttributeChanged.RemoveListener(SetMovementAttribute);
+        EventDeclarer.SpeedAttributeChanged?.RemoveListener(SetMovementAttribute);
         inputActions.Player.Move.performed -= OnMove;
         inputActions.Player.Move.canceled -= OnMove;
         inputActions.Player.Dash.performed -= OnDash;
@@ -81,12 +73,12 @@ public class PlayerMovement : MonoBehaviour
         {
             canDash = false;
             dashing = true;
-            Invoke("ReturnToNormalSpeed", dashDuration);
-            Invoke("ReadyDash", dashCoolDown);
+            Invoke("ReturnToNormalSpeed", DashDuration);
+            Invoke("ReadyDash", DashCoolDown);
             GameObject DashDustInstance = Instantiate(DashDust, transform.position, Quaternion.identity, transform);
             float angle = Mathf.Atan2(-moveDirection.y, -moveDirection.x) * Mathf.Rad2Deg;
             DashDustInstance.transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
-            Destroy(DashDustInstance, dashDuration);
+            Destroy(DashDustInstance, DashDuration);
         }
     }
 
@@ -114,9 +106,9 @@ public class PlayerMovement : MonoBehaviour
     {
         float calculatedSpeed;
         if (dashing)
-            calculatedSpeed = movementSpeed + dashBoost;
+            calculatedSpeed = MovementSpeed + DashBoost;
         else
-            calculatedSpeed = movementSpeed;
+            calculatedSpeed = MovementSpeed;
 
         moveDirection = new Vector3(moveInput.x, moveInput.y, 0).normalized;
         rb.linearVelocity = moveDirection * calculatedSpeed * 10;
@@ -195,22 +187,22 @@ public class PlayerMovement : MonoBehaviour
         entityQuery.CopyFromComponentDataArray(seesTargetCompArray);
     }
 
-    private void SetMovementAttribute(AttributeType attribute, float newValue)
-    {
-        switch (attribute)
-        {
-            case AttributeType.MovementSpeed:
-                movementSpeed = newValue;
-                break;
-            case AttributeType.DashBoost:
-                dashBoost = newValue;
-                break;
-            case AttributeType.DashCooldown:
-                dashCoolDown = newValue;
-                break;
-            case AttributeType.DashDuration:
-                dashDuration = newValue;
-                break;
-        }
-    }
+    //private void SetMovementAttribute(MovementAttributes attribute, float newValue)
+    //{
+    //    switch (attribute)
+    //    {
+    //        case MovementAttributes.MovementSpeed:
+    //            movementSpeed = newValue;
+    //            break;
+    //        case MovementAttributes.DashBoost:
+    //            dashBoost = newValue;
+    //            break;
+    //        case MovementAttributes.DashCooldown:
+    //            dashCoolDown = newValue;
+    //            break;
+    //        case MovementAttributes.DashDuration:
+    //            dashDuration = newValue;
+    //            break;
+    //    }
+    //}
 }

@@ -17,7 +17,6 @@ public class AIChaseState : AIState
     private bool runningAttackLoop = false;
     private CreatureSpriteController spriteController;
     private WaitForSeconds attackSpeed = new WaitForSeconds(1);
-    public float MovementSpeed { private set; get; }
     public float SelectedAbilityAttackRange { private set; get; } = 20f;
 
 
@@ -31,8 +30,8 @@ public class AIChaseState : AIState
 
         rb = gameObject.GetComponent<Rigidbody2D>();
         statScript = GetComponent<LivingBeing>();
+
         abilityHandler = GetComponent<CreatureAbilityHandler>();
-        MovementSpeed = statScript.GetAttribute(AttributeType.MovementSpeed);
     }
 
 
@@ -121,7 +120,7 @@ public class AIChaseState : AIState
 
                     if (direction.sqrMagnitude > SelectedAbilityAttackRange || peaceState.CheckVisionBlocked(stateHandler.target))
                     {
-                        rb.linearVelocity = (targetLoc - currentLoc) * MovementSpeed;
+                        rb.linearVelocity = (targetLoc - currentLoc) * stateHandler.movementScript.MovementSpeed;
                     }
                     else
                     {
@@ -143,7 +142,7 @@ public class AIChaseState : AIState
         float dx = a * Mathf.Cos(theta) - a * theta * Mathf.Sin(theta);
         float dy = a * Mathf.Sin(theta) + a * theta * Mathf.Cos(theta);
 
-        rb.linearVelocity = new Vector2(dx, dy).normalized * MovementSpeed * 3;
+        rb.linearVelocity = new Vector2(dx, dy).normalized * stateHandler.movementScript.GetMovementAttribute(MovementAttributes.MovementSpeed) * 3;
 
     }
 

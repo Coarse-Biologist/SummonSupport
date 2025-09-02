@@ -189,7 +189,6 @@ public class MeleeAbility : Ability
 
             if (abilityHandler.WeaponInfo == null)
             {
-                Debug.Log(Caster + "Doing this");
                 particleSystem = Instantiate(MeleeParticleSystem, caster.transform.position, Quaternion.identity);
                 Destroy(particleSystem, 2); //particleSystem.GetComponent<ParticleSystem>().main.duration);
 

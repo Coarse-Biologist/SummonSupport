@@ -58,7 +58,7 @@ public class PlayerUIHandler : MonoBehaviour
         UpdateMaxValueResourceBar(playerStats, AttributeType.CurrentHitpoints);
         UpdateResourceBar(playerStats, AttributeType.CurrentHitpoints);
         UpdateResourceBar(playerStats, AttributeType.CurrentPower);
-        UpdateResourceBar(playerStats, AttributeType.CurrentXP);
+        SetPlayerXP(playerStats.CurrentXP);
 
     }
 
@@ -181,7 +181,6 @@ public class PlayerUIHandler : MonoBehaviour
     }
     private void SetMinionHealthBar(LivingBeing livingBeing)
     {
-
         ProgressBar hpBar = GetLivingBeingHPBar(livingBeing);
         if (hpBar != null)
         {
@@ -190,7 +189,6 @@ public class PlayerUIHandler : MonoBehaviour
             hpBar.title = $"{livingBeing.Name} HP: {hp}";
         }
         else Logging.Info($"There was no hp bar for the living being {livingBeing.name}");
-
     }
 
     private void SetPlayerAttribute(AttributeType attributeType)
@@ -199,9 +197,8 @@ public class PlayerUIHandler : MonoBehaviour
             playerHealthBar.value = playerStats.GetAttribute(attributeType);
         if (attributeType == AttributeType.CurrentPower)
             playerPowerBar.value = playerStats.GetAttribute(attributeType);
-
     }
-    private void SetPlayerXP(float playerXP)
+    public void SetPlayerXP(float playerXP)
     {
         playerXP_Bar.value = playerStats.CurrentXP;
     }

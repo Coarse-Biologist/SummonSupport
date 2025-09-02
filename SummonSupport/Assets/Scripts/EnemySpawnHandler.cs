@@ -123,7 +123,7 @@ public class EnemySpawnHandler : MonoBehaviour
 
             if (originalCreatureStats.Affinities[strongestElement].Get() > 0) // if the strongest affinity is non-zero
             {
-                originalCreatureStats.GainAffinity(strongestElement, level * Affinity_Scalar);
+                originalCreatureStats.ChangeAffinity(strongestElement, level * Affinity_Scalar);
             }
 
         }

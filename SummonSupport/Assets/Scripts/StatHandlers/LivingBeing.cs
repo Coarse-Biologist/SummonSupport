@@ -79,9 +79,8 @@ public abstract class LivingBeing : MonoBehaviour
     [field: SerializeField] public float XP_OnDeath { get; private set; } = 5f;
 
     public Dictionary<Element, (Func<float> Get, Action<float> Set)> Affinities { private set; get; } = new();
-    public Dictionary<AttributeType, (Func<float> Get, Action<float> Set)> AttributesDict { private set; get; } = new();
-    [field: SerializeField] public float Speed { get; private set; } = 3f;
-    [field: SerializeField] public float Mass { get; private set; } = 1f;
+    public Dictionary<AttributeType, (Func<float> Get, Action<float> Set)> ResourceAttributesDict { private set; get; } = new();
+
 
     private I_ResourceBar resourceBarInterface;
     private AbilityHandler abilityHandler;
@@ -92,7 +91,6 @@ public abstract class LivingBeing : MonoBehaviour
 
     protected virtual void Awake()
     {
-        GetComponent<Rigidbody2D>().mass = Mass;
         InitializeAttributeDict();
         InitializeAffinityDict();
         InitializePhysicalDict();
@@ -115,6 +113,8 @@ public abstract class LivingBeing : MonoBehaviour
     }
 
 
+
+
     #region Resource Control
 
     public void RestoreResources()
@@ -126,7 +126,7 @@ public abstract class LivingBeing : MonoBehaviour
     #endregion
 
     #region Affinity handling
-    public void GainAffinity(Element element, float amount)
+    public void ChangeAffinity(Element element, float amount)
     {
         float newAffinity = Mathf.Min(amount + Affinities[element].Get(), 200);
 
@@ -134,26 +134,65 @@ public abstract class LivingBeing : MonoBehaviour
         {
             Affinities[element].Set(newAffinity);
         }
+        Debug.Log($"Change affinity: current Affinity = {newAffinity}");
+
     }
+    public void SetAffinity(Element element, float amount)
+    {
+        float newAffinity = Mathf.Min(amount, 200);
+
+        if (Affinities.TryGetValue(element, out (Func<float> Get, Action<float> Set) func))
+        {
+            Affinities[element].Set(newAffinity);
+        }
+        Debug.Log($"SetAffinity: Affinity = {newAffinity}");
+    }
+
+
     public Element GetHighestAffinity()
     {
         return Affinities.OrderByDescending(a => a.Value.Get()).First().Key;
     }
+
     #endregion
+
+    #region Physical resistance handling
+
+    public void SetPhysicalResist(PhysicalType physicalType, float value)
+    {
+        float newResistance = Mathf.Min(value, 200);
+
+        if (PhysicalDict.TryGetValue(physicalType, out (Func<float> Get, Action<float> Set) func))
+        {
+            PhysicalDict[physicalType].Set(newResistance);
+        }
+    }
+
+    public void ChangePhysicalResistance(PhysicalType physicalType, float amount)
+    {
+        float newResistance = Mathf.Min(amount + PhysicalDict[physicalType].Get(), 200);
+
+        if (PhysicalDict.TryGetValue(physicalType, out (Func<float> Get, Action<float> Set) func))
+        {
+            PhysicalDict[physicalType].Set(newResistance);
+        }
+    }
+    #endregion
+
     #region Attribute Handling
 
     public float GetAttribute(AttributeType attribute)
     {
-        if (AttributesDict != null && AttributesDict.ContainsKey(attribute))
-            return AttributesDict[attribute].Get();
+        if (ResourceAttributesDict != null && ResourceAttributesDict.ContainsKey(attribute))
+            return ResourceAttributesDict[attribute].Get();
         else
             throw new Exception("Attribute not found");
     }
 
     public void SetAttribute(AttributeType attributeType, float value)
     {
-        if (AttributesDict != null && AttributesDict.ContainsKey(attributeType))
-            AttributesDict[attributeType].Set(value);
+        if (ResourceAttributesDict != null && ResourceAttributesDict.ContainsKey(attributeType))
+            ResourceAttributesDict[attributeType].Set(value);
         HandleEventInvokes(attributeType, value);
         if (attributeType == AttributeType.CurrentHitpoints && value <= 0)
             Die();
@@ -163,7 +202,7 @@ public abstract class LivingBeing : MonoBehaviour
 
     public float ChangeAttribute(AttributeType attributeType, float value)
     {
-        if (AttributesDict == null || !AttributesDict.ContainsKey(attributeType))
+        if (ResourceAttributesDict == null || !ResourceAttributesDict.ContainsKey(attributeType))
             throw new Exception("Attribute not found or invalid setter");
 
         //float newValue = CalculateNewValueByType(currentValue, value, valueType, attributeType);
@@ -201,13 +240,14 @@ public abstract class LivingBeing : MonoBehaviour
                     EventDeclarer.attributeChanged?.Invoke(this, attributeType);
                 resourceBarInterface?.SetPowerBarValue(GetAttribute(attributeType));
                 break;
-
-            case AttributeType.MovementSpeed:
-            case AttributeType.DashBoost:
-            case AttributeType.DashCooldown:
-            case AttributeType.DashDuration:
-                EventDeclarer.SpeedAttributeChanged.Invoke(attributeType, newValue);
+            default:
                 break;
+                //case AttributeType.MovementSpeed:
+                //case AttributeType.DashBoost:
+                //case AttributeType.DashCooldown:
+                //case AttributeType.DashDuration:
+                //EventDeclarer.SpeedAttributeChanged.Invoke(attributeType, newValue);
+                //break;
         }
     }
 
@@ -285,15 +325,7 @@ public abstract class LivingBeing : MonoBehaviour
     {
         Name = newName;
     }
-    public void Gainmass(float massGain)
-    {
-        Mass += massGain;
-        GetComponent<Rigidbody2D>().mass += massGain;
-    }
-    public void ChangeSpeed(float amount)
-    {
-        Speed += amount;
-    }
+
     public void LearnBattleCry(string newBattleCry)
     {
         if (!BattleCries.Contains(newBattleCry)) BattleCries.Add(newBattleCry);
@@ -305,7 +337,7 @@ public abstract class LivingBeing : MonoBehaviour
 
     void InitializeAttributeDict()
     {
-        AttributesDict = new Dictionary<AttributeType, (Func<float> Get, Action<float> Set)>
+        ResourceAttributesDict = new Dictionary<AttributeType, (Func<float> Get, Action<float> Set)>
             {
                 { AttributeType.MaxHitpoints,           (() => MaxHP,               v => MaxHP = v) },
                 { AttributeType.Overshield,             (() => Overshield,      v => Overshield = v) },
@@ -313,7 +345,7 @@ public abstract class LivingBeing : MonoBehaviour
                 { AttributeType.MaxPower,               (() => MaxPower,            v => MaxPower = v) },
                 { AttributeType.PowerSurge,             (() => PowerSurge,   v => PowerSurge = v) },
                 { AttributeType.CurrentPower,           (() => CurrentPower,        v => CurrentPower = v) },
-                { AttributeType.MovementSpeed,          (() => Speed,        v => Speed = v) },
+                //{ AttributeType.MovementSpeed,          (() => Speed,        v => Speed = v) },
             };
     }
 
@@ -353,6 +385,7 @@ public abstract class LivingBeing : MonoBehaviour
     {
         Logging.Info($"{gameObject.name} died");
         if (gameObject.GetComponent<MinionStats>() != null) EventDeclarer.minionDied?.Invoke(this);
+        if (CharacterTag == CharacterTag.Enemy) EventDeclarer.EnemyDefeated.Invoke(this);
         Destroy(gameObject);
     }
 }

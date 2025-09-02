@@ -1,9 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using Unity.Entities.UniversalDelegates;
-//using Unity.VisualScripting;
+
 
 public class AIPeacefulState : AIState
 {
@@ -197,7 +195,7 @@ public class AIPeacefulState : AIState
         Vector2 playerPos = player.transform.position;
         Vector2 direction = playerPos - currentLoc;
 
-        rb.linearVelocity = direction * stateHandler.livingBeing.Speed;
+        rb.linearVelocity = direction * stateHandler.movementScript.GetMovementAttribute(MovementAttributes.MovementSpeed);
 
     }
 }
