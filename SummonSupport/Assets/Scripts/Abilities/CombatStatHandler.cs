@@ -21,7 +21,6 @@ public static class CombatStatHandler
         LivingBeing targetStats = target.GetComponent<LivingBeing>();
         LivingBeing theTarget = casterStats;
         if (!forSelf) theTarget = targetStats;
-        theTarget.AlterAbilityList(ability, false);
 
 
         foreach (EffectPackage package in ability.TargetTypeAndEffects)
@@ -224,8 +223,13 @@ public static class CombatStatHandler
         while (elapsed < duration)
         {
             yield return tickRate;
-            elapsed += tickRateFloat;
-            if (!target.AffectedByAbilities.Contains(ability)) elapsed = duration;
+            if (!target.IsAffectedByAbility(ability))
+            {
+                elapsed += tickRateFloat;
+                UnityEngine.Debug.Log($"increasing elapsedtime because {target.Name} has left the {ability.Name}");
+            }
+            else UnityEngine.Debug.Log($"NOT increasing elapsedtime because {target.Name} is still within the {ability.Name}");
+            //if (!target.AffectedByAbilities.Contains(ability)) elapsed = duration;
         }
         target.ChangeRegeneration(attributeType, -newValue);
         target.AlterAbilityList(ability, false);
@@ -250,15 +254,19 @@ public static class CombatStatHandler
     private static IEnumerator ResetTempAttribute(Ability ability, LivingBeing target, AttributeType attributeType, float changeValue, float duration)
     {
         float elapsed = 0f;
-        while (elapsed < duration && target.AffectedByAbilities.Contains(ability))
+        while (elapsed < duration)// && target.AffectedByAbilities.Contains(ability))
         {
             yield return tickRate;
-            elapsed += tickRateFloat;
-            if (!target.AffectedByAbilities.Contains(ability)) elapsed = duration;
-        }
-        if (!target.AffectedByAbilities.Contains(ability)) //UnityEngine.Debug.Log($"Stopping effect {ability.Name} because player is no longer being affected by it");
+            if (!target.IsAffectedByAbility(ability))
+            {
+                elapsed += tickRateFloat;
+                UnityEngine.Debug.Log($"increasing elapsedtime because {target.Name} has left the {ability.Name}");
+            }
+            else UnityEngine.Debug.Log($"NOT increasing elapsedtime because {target.Name} is still within the {ability.Name}");
 
-            ApplyValue(target, attributeType, -changeValue); // resets by adding the opposite of what was added before (which may have been negative)
+        }
+        UnityEngine.Debug.Log($"Stopping effect {ability.Name} because duration without being directly affected by the ability has ended");
+        ApplyValue(target, attributeType, -changeValue); // resets by adding the opposite of what was added before (which may have been negative)
         target.AlterAbilityList(ability, false);
 
     }
