@@ -37,9 +37,11 @@ MonoBehaviour:
       <Physical>k__BackingField: 0
       <ValueType>k__BackingField: 0
     <DamageOverTime>k__BackingField: []
-    <StatusEffects>k__BackingField: []
+    <StatusEffects>k__BackingField:
+    - {fileID: 11400000, guid: b4787caaf899c8d4bbe607486149e76e, type: 2}
     <SpecialAbilityAttribute>k__BackingField: 0
   <ElementTypes>k__BackingField: 04000000
+  <PhysicalType>k__BackingField: 0
   <Speed>k__BackingField: 5
   <Projectile>k__BackingField: {fileID: 1503869405188693834, guid: a9f50fbd26367e9409b49cb9300cd576,
     type: 3}

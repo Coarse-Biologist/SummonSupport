@@ -543,7 +543,7 @@ PrefabInstance:
         type: 3}
       propertyPath: '<Abilities>k__BackingField.Array.data[4]'
       value: 
-      objectReference: {fileID: 11400000, guid: 6949278a1cdb58a478fa721871e6e803,
+      objectReference: {fileID: 11400000, guid: 5605a5e8027c4e94691ae731bacfcb5a,
         type: 2}
     - target: {fileID: 9084318776697772798, guid: e4c43cb75dda4d3458057b35ce607d87,
         type: 3}

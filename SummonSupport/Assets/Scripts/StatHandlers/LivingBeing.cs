@@ -76,6 +76,8 @@ public abstract class LivingBeing : MonoBehaviour
 
     [Header("Other")]
     [field: SerializeField] public List<Ability> AffectedByAbilities { get; private set; } = new();
+    public List<StatusEffectType> SufferedStatusEffects { get; private set; } = new();
+
     [field: SerializeField] public float XP_OnDeath { get; private set; } = 5f;
 
     public Dictionary<Element, (Func<float> Get, Action<float> Set)> Affinities { private set; get; } = new();
@@ -270,6 +272,19 @@ public abstract class LivingBeing : MonoBehaviour
     {
         return AffectedByAbilities.Contains(ability);
     }
+    public void AlterStatusEffectList(StatusEffectType status, bool Add) // modifies the list of abilities by which one is affected
+    {
+
+        bool contains = SufferedStatusEffects.Contains(status);
+        if (Add && !contains) SufferedStatusEffects.Add(status);
+        if (!Add && contains) SufferedStatusEffects.Remove(status);
+    }
+    public bool HasStatusEffect(StatusEffectType status)
+    {
+        return SufferedStatusEffects.Contains(status);
+    }
+
+
 
     #endregion
 
@@ -388,6 +403,11 @@ public abstract class LivingBeing : MonoBehaviour
         Logging.Info($"{gameObject.name} died");
         if (gameObject.GetComponent<MinionStats>() != null) EventDeclarer.minionDied?.Invoke(this);
         if (CharacterTag == CharacterTag.Enemy) EventDeclarer.EnemyDefeated.Invoke(this);
+        if (HasStatusEffect(StatusEffectType.ExplodeOnDeath)) ViciousDeathExplosion();
         Destroy(gameObject);
+    }
+    private void ViciousDeathExplosion()
+    {
+        Debug.Log("Softy died and caused chain reaction");
     }
 }

@@ -63,6 +63,11 @@ public static class CombatStatHandler
 
                 if (package.StatusEffects.Count > 0)
                 {
+                    foreach (StatusEffects status in package.StatusEffects)
+                    {
+                        target.AlterStatusEffectList(status.EffectType, true);
+                        target.StartCoroutine(RemoveStatusEffect(target, status));
+                    }
                     if (target.TryGetComponent<AI_CC_State>(out AI_CC_State ccState))
                     {
                         foreach (StatusEffects status in package.StatusEffects)
@@ -326,6 +331,16 @@ public static class CombatStatHandler
         target.AlterAbilityList(ability, false);
     }
 
+    #endregion
+
+    #region remove temp status effect
+
+    private static IEnumerator RemoveStatusEffect(LivingBeing target, StatusEffects status)
+    {
+        yield return new WaitForSeconds(status.Duration);
+        target.AlterStatusEffectList(status.EffectType, false);
+
+    }
     #endregion
 
     private static IEnumerator ResetTempAttribute(Ability ability, LivingBeing target, AttributeType attributeType, float changeValue, float duration)
