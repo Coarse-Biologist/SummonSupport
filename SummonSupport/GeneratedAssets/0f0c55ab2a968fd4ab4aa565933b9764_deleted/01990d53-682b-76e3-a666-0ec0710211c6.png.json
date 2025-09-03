@@ -1,0 +1,20 @@
+{
+    "asset": "0f0c55ab2a968fd4ab4aa565933b9764",
+    "fileName": "01990d53-682b-76e3-a666-0ec0710211c6.png",
+    "prompt": "pixel art style leaf sprites for a grasping vines particle system",
+    "negativePrompt": "",
+    "model": "c65c79a0-b2af-46da-a8e5-2fc106ec2ab6",
+    "modelName": "RPG Chibis",
+    "customSeed": -1,
+    "w3CTraceId": "f97ae050e567f337d62734a324e8b712",
+    "refinementMode": "Generation",
+    "pixelateTargetSize": 0,
+    "pixelateKeepImageSize": false,
+    "pixelatePixelBlockSize": 0,
+    "pixelateMode": 0,
+    "pixelateOutlineThickness": 0,
+    "doodles": {
+        "m_Items": []
+    },
+    "upscaleFactor": 0
+}

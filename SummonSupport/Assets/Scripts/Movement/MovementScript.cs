@@ -20,26 +20,25 @@ public class MovementScript : MonoBehaviour
     }
     public void SetMovementAttribute(MovementAttributes attribute, float newValue)
     {
-
         switch (attribute)
         {
             case MovementAttributes.MovementSpeed:
-                MovementSpeed = newValue;
+                MovementSpeed = Mathf.Max(newValue, 0);
                 break;
             case MovementAttributes.DashBoost:
-                DashBoost = newValue;
+                DashBoost = Mathf.Max(newValue, 0);
                 break;
             case MovementAttributes.DashCooldown:
-                DashCoolDown = newValue;
+                DashCoolDown = Mathf.Max(newValue, 0);
                 break;
             case MovementAttributes.DashDuration:
-                DashDuration = newValue;
+                DashDuration = Mathf.Max(newValue, 0);
                 break;
             case MovementAttributes.AttackSpeed:
-                AttackSpeed = newValue;
+                AttackSpeed = Mathf.Max(newValue, 0);
                 break;
             case MovementAttributes.Weight:
-                Weight = newValue;
+                Weight = Mathf.Max(newValue, 0);
                 break;
         }
     }

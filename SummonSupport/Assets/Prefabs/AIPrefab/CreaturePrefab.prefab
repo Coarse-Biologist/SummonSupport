@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6683928398212683686}
   - component: {fileID: -2192539161432645077}
+  - component: {fileID: 7837279254410864493}
   - component: {fileID: 9145848355532623241}
   - component: {fileID: 3294670582543144582}
   - component: {fileID: 5060913453079462963}
@@ -18,7 +19,6 @@ GameObject:
   - component: {fileID: 8272282993633927976}
   - component: {fileID: 4402697428807640596}
   - component: {fileID: 9050172420336280654}
-  - component: {fileID: 7837279254410864493}
   - component: {fileID: -4903327539478381990}
   m_Layer: 6
   m_Name: CreaturePrefab
@@ -96,6 +96,23 @@ MonoBehaviour:
   <Slashing>k__BackingField: 0
   <AffectedByAbilities>k__BackingField: []
   <XP_OnDeath>k__BackingField: 50
+--- !u!114 &7837279254410864493
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 530800861541312882}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b3038df873d7b648ae2dc7e3851cef6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  abilitySpawn: {fileID: 0}
+  statsHandler: {fileID: 0}
+  <Abilities>k__BackingField: []
+  abilitiesOnCooldown: 
+  <WeaponInfo>k__BackingField: {fileID: 0}
 --- !u!114 &9145848355532623241
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -241,23 +258,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4cddb68e1da92324a873ad3ce098c4ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &7837279254410864493
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 530800861541312882}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7b3038df873d7b648ae2dc7e3851cef6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  abilitySpawn: {fileID: 0}
-  statsHandler: {fileID: 0}
-  <Abilities>k__BackingField: []
-  abilitiesOnCooldown: 
-  <WeaponInfo>k__BackingField: {fileID: 0}
 --- !u!114 &-4903327539478381990
 MonoBehaviour:
   m_ObjectHideFlags: 0

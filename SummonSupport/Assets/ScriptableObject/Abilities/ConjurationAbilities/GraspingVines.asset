@@ -10,18 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6f72222c874821e41bccb5f49eee621c, type: 3}
-  m_Name: GravityWell
+  m_Name: GraspingVines
   m_EditorClassIdentifier: 
-  <Name>k__BackingField: 
+  <Name>k__BackingField: Grasping Vines
   <Icon>k__BackingField: {fileID: 0}
   <Cooldown>k__BackingField: 5
   <CostType>k__BackingField: 4
-  <Cost>k__BackingField: 15
+  <Cost>k__BackingField: 20
   <Range>k__BackingField: 15
   <AbilityTypeTag>k__BackingField: 1
   <ListUsableOn>k__BackingField: 01000000
   <TargetTypeAndEffects>k__BackingField:
-  - <EffectDescription>k__BackingField: 
+  - <EffectDescription>k__BackingField: Pull and damage over time
     <TargetType>k__BackingField: 1
     <Heal>k__BackingField:
       <Value>k__BackingField: 0
@@ -31,13 +31,18 @@ MonoBehaviour:
     <AttributeUp>k__BackingField: []
     <AttributeDown>k__BackingField: []
     <Damage>k__BackingField: []
-    <DamageOverTime>k__BackingField: []
+    <DamageOverTime>k__BackingField:
+    - <Value>k__BackingField: 1
+      <Element>k__BackingField: 11
+      <Physical>k__BackingField: 0
+      <ValueType>k__BackingField: 0
+      <Duration>k__BackingField: 3
     <StatusEffects>k__BackingField:
     - {fileID: 11400000, guid: de217b777d75f0e4280c41fbaa010a5a, type: 2}
     <SpecialAbilityAttribute>k__BackingField: 0
-  <ElementTypes>k__BackingField: 
+  <ElementTypes>k__BackingField: 0b000000
   <PhysicalType>k__BackingField: 0
-  <ObjectToSpawn>k__BackingField: {fileID: 6725234854290891213, guid: 23052f4373add044e8afe3b7eae99b51,
+  <ObjectToSpawn>k__BackingField: {fileID: 6725234854290891213, guid: 64f16b36343b43d499a5b2b1fbbc815c,
     type: 3}
   <SpawnEffectOnHit>k__BackingField: {fileID: 0}
   <SpawnOffset>k__BackingField: {x: 0, y: 0}

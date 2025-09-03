@@ -140,6 +140,8 @@ public abstract class LivingBeing : MonoBehaviour
     public void SetAffinity(Element element, float amount)
     {
         float newAffinity = Mathf.Min(amount, 200);
+        newAffinity = Mathf.Max(newAffinity, 0);
+
 
         if (Affinities.TryGetValue(element, out (Func<float> Get, Action<float> Set) func))
         {
