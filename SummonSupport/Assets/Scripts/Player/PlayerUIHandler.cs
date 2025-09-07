@@ -120,13 +120,16 @@ public class PlayerUIHandler : MonoBehaviour
     //    CommandMinion.SetSelectedMinion(selectedMinion.gameObject);
     //}
 
-    public void RemoveMinionHP(LivingBeing livingBeing)
+    public void RemoveMinionHP(GameObject minion)
     {
-        ProgressBar minionHP = GetLivingBeingHPBar(livingBeing);
-        if (minionHP != null)
+        if (minion.TryGetComponent(out LivingBeing livingBeing))
         {
-            HPDict.Remove(livingBeing);
-            minionHPBars.Remove(minionHP);
+            ProgressBar minionHP = GetLivingBeingHPBar(livingBeing);
+            if (minionHP != null)
+            {
+                HPDict.Remove(livingBeing);
+                minionHPBars.Remove(minionHP);
+            }
         }
     }
     private LivingBeing GetLivingBeingFromHPBar(ProgressBar minionHP)
@@ -143,7 +146,13 @@ public class PlayerUIHandler : MonoBehaviour
 
     private ProgressBar GetLivingBeingHPBar(LivingBeing minion)
     {
-        return HPDict[minion];
+        if (HPDict.TryGetValue(minion, out ProgressBar bar))
+            return bar;
+        else
+        {
+            Debug.Log($"{minion} was not found in the HP progress bar dictionary");
+            return null;
+        }
     }
     private void OnMinionSelect(ProgressBar minionHP)
     {

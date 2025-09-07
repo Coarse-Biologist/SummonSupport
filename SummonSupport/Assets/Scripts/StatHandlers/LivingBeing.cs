@@ -398,15 +398,11 @@ public abstract class LivingBeing : MonoBehaviour
     }
 
     #endregion
-    protected void Die()
-    {
-        Logging.Info($"{gameObject.name} died");
-        if (gameObject.GetComponent<MinionStats>() != null) EventDeclarer.minionDied?.Invoke(this);
-        if (CharacterTag == CharacterTag.Enemy) EventDeclarer.EnemyDefeated.Invoke(this);
-        if (HasStatusEffect(StatusEffectType.ExplodeOnDeath)) ViciousDeathExplosion();
-        Destroy(gameObject);
-    }
-    private void ViciousDeathExplosion()
+
+    public abstract void Die();
+    
+
+    protected void ViciousDeathExplosion()
     {
         Debug.Log("Softy died and caused chain reaction");
     }
