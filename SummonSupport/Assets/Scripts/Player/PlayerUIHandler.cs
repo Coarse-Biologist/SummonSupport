@@ -40,7 +40,7 @@ public class PlayerUIHandler : MonoBehaviour
         EventDeclarer.maxAttributeChanged.AddListener(UpdateMaxValueResourceBar);
         if (AlchemyHandler.Instance != null)
             AlchemyHandler.Instance.newMinionAdded.AddListener(AddMinionHP);
-        EventDeclarer.minionDied.AddListener(RemoveMinionHP);
+        //EventDeclarer.minionDied.AddListener(RemoveMinionHP);
     }
 
     void OnDisable()
@@ -49,7 +49,7 @@ public class PlayerUIHandler : MonoBehaviour
         EventDeclarer.maxAttributeChanged.RemoveListener(UpdateMaxValueResourceBar);
         if (AlchemyHandler.Instance != null)
             AlchemyHandler.Instance.newMinionAdded.RemoveListener(AddMinionHP);
-        EventDeclarer.minionDied.RemoveListener(RemoveMinionHP);
+        //EventDeclarer.minionDied.RemoveListener(RemoveMinionHP);
     }
 
     void Start()
@@ -193,7 +193,7 @@ public class PlayerUIHandler : MonoBehaviour
         ProgressBar hpBar = GetLivingBeingHPBar(livingBeing);
         if (hpBar != null)
         {
-            float hp = livingBeing.GetAttribute(AttributeType.CurrentHitpoints);
+            float hp = livingBeing.GetAttribute(AttributeType.CurrentHitpoints); // Math.Max(0, 
             hpBar.value = livingBeing.CurrentHP;
             hpBar.title = $"{livingBeing.Name} HP: {hp}";
         }

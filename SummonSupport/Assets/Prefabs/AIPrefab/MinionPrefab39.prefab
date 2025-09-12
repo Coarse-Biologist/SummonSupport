@@ -287,7 +287,7 @@ MonoBehaviour:
   <BattleCries>k__BackingField: []
   <MaxHP>k__BackingField: 100
   <Overshield>k__BackingField: 0
-  <CurrentHP>k__BackingField: 100
+  <CurrentHP>k__BackingField: 10
   <MaxPower>k__BackingField: 100
   <PowerSurge>k__BackingField: 0
   <CurrentPower>k__BackingField: 100

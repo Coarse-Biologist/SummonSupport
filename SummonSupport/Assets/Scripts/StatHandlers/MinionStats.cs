@@ -32,16 +32,45 @@ public class MinionStats : LivingBeing
         EventDeclarer.minionDied?.Invoke(gameObject);
         if (HasStatusEffect(StatusEffectType.ExplodeOnDeath)) ViciousDeathExplosion();
         //Destroy(gameObject);
-        gameObject.AddComponent<I_InteractMinionResurrect>();
-        if (TryGetComponent<Collider2D>(out Collider2D collider))
+        ToggleDeath(true);
+    }
+
+    private void ToggleDeath(bool dead)
+    {
+        if (dead)
         {
-            collider.isTrigger = true;
-            Debug.Log("Dying and therefore giving self resurrect interactable and setttin collider to trigger");
+            gameObject.AddComponent<I_InteractMinionResurrect>();
+            if (TryGetComponent<Collider2D>(out Collider2D collider))
+            {
+                collider.isTrigger = true;
+            }
+            if (gameObject.TryGetComponent<AIStateHandler>(out AIStateHandler stateHandler))
+            {
+                stateHandler.SetDead(true);
+            }
+        }
+        else
+        {
+            if (gameObject.TryGetComponent<I_InteractMinionResurrect>(out I_InteractMinionResurrect resurrectScript))
+                Destroy(resurrectScript);
+            if (TryGetComponent<Collider2D>(out Collider2D collider))
+            {
+                collider.isTrigger = false;
+            }
+            if (gameObject.TryGetComponent<AIStateHandler>(out AIStateHandler stateHandler))
+            {
+                stateHandler.SetDead(false);
+                Debug.Log("Setting state handler death to false");
+            }
+
         }
     }
+
     public void Resurrect()
     {
         Debug.Log($"Resurrecting minion {Name}");
+        ToggleDeath(false);
+        ChangeAttribute(AttributeType.CurrentHitpoints, 50f);
     }
 
 }

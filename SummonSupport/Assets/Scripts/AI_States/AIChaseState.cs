@@ -55,11 +55,7 @@ public class AIChaseState : AIState
             else
             {
 
-                runningAttackLoop = false;
-                if (attackCoroutine != null)
-                {
-                    StopCoroutine(attackCoroutine);
-                }
+                EndAttackRoutine();
                 Chase(stateHandler.lastSeenLoc, true);
                 LookAtTarget(stateHandler.lastSeenLoc);
             }
@@ -68,13 +64,15 @@ public class AIChaseState : AIState
         else
         {
             //Debug.Log($"trying to stop attack coroutine because target is null {stateHandler.target}");
-            if (attackCoroutine != null)
-            {
-                runningAttackLoop = false;
-                StopCoroutine(attackCoroutine);
-            }
+            EndAttackRoutine();
             return peaceState;
         }
+    }
+    private void EndAttackRoutine()
+    {
+        runningAttackLoop = false;
+        if (attackCoroutine != null)
+            StopCoroutine(attackCoroutine);
     }
 
     public bool CheckInRange()
@@ -99,7 +97,6 @@ public class AIChaseState : AIState
         }
 
     }
-
 
     public void Chase(Vector2 targetLoc, bool cantSeeTarget = false)
     {
@@ -151,6 +148,10 @@ public class AIChaseState : AIState
         runningAttackLoop = true;
         while (true)
         {
+            if (stateHandler.Dead)
+            {
+                EndAttackRoutine();
+            }
             if (target != null)
             {
                 Ability ability = GetComponent<CreatureAbilityHandler>().GetAbilityForTarget(target);

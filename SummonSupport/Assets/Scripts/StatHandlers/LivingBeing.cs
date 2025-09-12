@@ -5,6 +5,7 @@ using System.Collections;
 using SummonSupportEvents;
 using UnityEditor.Build.Pipeline.Tasks;
 using System.Linq;
+using NUnit.Framework.Constraints;
 public abstract class LivingBeing : MonoBehaviour
 {
     #region Declarations
@@ -195,10 +196,13 @@ public abstract class LivingBeing : MonoBehaviour
 
     public void SetAttribute(AttributeType attributeType, float value)
     {
+        value = (float)Math.Floor(value);
+        value = Math.Max(0, value);
+
         if (ResourceAttributesDict != null && ResourceAttributesDict.ContainsKey(attributeType))
             ResourceAttributesDict[attributeType].Set(value);
         HandleEventInvokes(attributeType, value);
-        if (attributeType == AttributeType.CurrentHitpoints && value <= 0)
+        if (GetAttribute(AttributeType.CurrentHitpoints) <= 0)
             Die();
         else if (attributeType == AttributeType.CurrentPower && value <= 0)
             abilityHandler.HandleNoMana();
@@ -206,10 +210,12 @@ public abstract class LivingBeing : MonoBehaviour
 
     public float ChangeAttribute(AttributeType attributeType, float value)
     {
+        //if (GetAttribute(AttributeType.CurrentHitpoints) <= 0) // do nothing if dead
+        //    return 0f;
+
         if (ResourceAttributesDict == null || !ResourceAttributesDict.ContainsKey(attributeType))
             throw new Exception("Attribute not found or invalid setter");
 
-        //float newValue = CalculateNewValueByType(currentValue, value, valueType, attributeType);
         SetAttribute(attributeType, GetAttribute(attributeType) + value);
 
         if (GetAttribute(AttributeType.CurrentHitpoints) <= 0)
@@ -262,7 +268,6 @@ public abstract class LivingBeing : MonoBehaviour
 
     public void AlterAbilityList(Ability ability, bool Add) // modifies the list of abilities by which one is affected
     {
-
         bool contains = AffectedByAbilities.Contains(ability);
         Debug.Log($"Alter ability func: add = {Add}. Contains = {contains}");
         if (Add && !contains) AffectedByAbilities.Add(ability);
@@ -400,7 +405,7 @@ public abstract class LivingBeing : MonoBehaviour
     #endregion
 
     public abstract void Die();
-    
+
 
     protected void ViciousDeathExplosion()
     {

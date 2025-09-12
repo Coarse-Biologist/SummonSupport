@@ -72,7 +72,7 @@ public class AIPeacefulState : AIState
             {
                 GameObject detectedObject = rangeChecks[i].transform.gameObject;
                 if (detectedObject == gameObject) continue;
-                if (detectedObject.TryGetComponent<LivingBeing>(out LivingBeing targetLivingBeing))
+                if (detectedObject.TryGetComponent<LivingBeing>(out LivingBeing targetLivingBeing) && targetLivingBeing.GetAttribute(AttributeType.CurrentHitpoints) > 0)
                 {
                     stateHandler.SetTarget(targetLivingBeing);
 
