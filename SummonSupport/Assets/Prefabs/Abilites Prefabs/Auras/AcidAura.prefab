@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 8105310033013969304}
   - component: {fileID: 4513890305982711557}
   m_Layer: 0
-  m_Name: ViralAura
+  m_Name: AcidAura
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1312,7 +1312,7 @@ ParticleSystem:
       maxGradient:
         serializedVersion: 2
         key0: {r: 0.5960735, g: 0.9547169, b: 0.048636444, a: 1}
-        key1: {r: 0.4994068, g: 0.59607846, b: 0.007843143, a: 0.21176471}
+        key1: {r: 0.4994068, g: 0.59607846, b: 0.007843143, a: 1}
         key2: {r: 0.5379229, g: 0.6150943, b: 0, a: 0}
         key3: {r: 0, g: 0, b: 0, a: 0}
         key4: {r: 0, g: 0, b: 0, a: 0}
@@ -4901,7 +4901,7 @@ GameObject:
   - component: {fileID: 851879256691826459}
   - component: {fileID: 4632166140059098475}
   m_Layer: 0
-  m_Name: ViralAura
+  m_Name: AcidAura
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6198,7 +6198,7 @@ ParticleSystem:
       maxGradient:
         serializedVersion: 2
         key0: {r: 0.5960735, g: 0.9547169, b: 0.048636444, a: 1}
-        key1: {r: 0.4994068, g: 0.59607846, b: 0.007843143, a: 0.21176471}
+        key1: {r: 0.4994068, g: 0.59607846, b: 0.007843143, a: 1}
         key2: {r: 0.5379229, g: 0.6150943, b: 0, a: 0}
         key3: {r: 0, g: 0, b: 0, a: 0}
         key4: {r: 0, g: 0, b: 0, a: 0}
