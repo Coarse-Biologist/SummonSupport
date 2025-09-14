@@ -43,7 +43,7 @@ MonoBehaviour:
   <ElementTypes>k__BackingField: 0f000000
   <PhysicalType>k__BackingField: 0
   <Uptime>k__BackingField: 10
-  <Radius>k__BackingField: 1
+  <Radius>k__BackingField: 2
   <AuraObject>k__BackingField: {fileID: 1699087696372334086, guid: 370893d9129e72343aaa0ab849d8063e,
     type: 3}
   <LeaveRotation>k__BackingField: 1

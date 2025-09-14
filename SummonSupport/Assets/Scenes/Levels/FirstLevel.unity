@@ -513,7 +513,7 @@ PrefabInstance:
     - target: {fileID: 9084318776697772798, guid: e4c43cb75dda4d3458057b35ce607d87,
         type: 3}
       propertyPath: <Abilities>k__BackingField.Array.size
-      value: 5
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 9084318776697772798, guid: e4c43cb75dda4d3458057b35ce607d87,
         type: 3}
@@ -549,7 +549,7 @@ PrefabInstance:
         type: 3}
       propertyPath: '<Abilities>k__BackingField.Array.data[5]'
       value: 
-      objectReference: {fileID: 11400000, guid: e959c2ee0da79214a833f2b04de5f78c,
+      objectReference: {fileID: 11400000, guid: 2c411350804b90246b5fcb0c56b66a2c,
         type: 2}
     - target: {fileID: 9084318776697772798, guid: e4c43cb75dda4d3458057b35ce607d87,
         type: 3}

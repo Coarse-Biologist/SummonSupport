@@ -6,7 +6,7 @@ public class AuraAbility : Ability
     [field: SerializeField, Header("Aura settings"), Tooltip("time in [seconds]")]
     public float Uptime { get; protected set; }
     [field: SerializeField]
-    public float Radius { get; protected set; } = 1f;
+    public float Radius { get; protected set; } = 2f;
 
     [field: SerializeField] public GameObject AuraObject { get; protected set; }
     [field: SerializeField] public bool LeaveRotation { get; protected set; } = true;
