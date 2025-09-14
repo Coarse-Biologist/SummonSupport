@@ -20,7 +20,7 @@ MonoBehaviour:
   <Cost>k__BackingField: 10
   <Range>k__BackingField: 20
   <AbilityTypeTag>k__BackingField: 0
-  <ListUsableOn>k__BackingField: 0100000000000000
+  <ListUsableOn>k__BackingField: 01000000
   <TargetTypeAndEffects>k__BackingField:
   - <EffectDescription>k__BackingField: Sand Cloud on target or self
     <TargetType>k__BackingField: 1

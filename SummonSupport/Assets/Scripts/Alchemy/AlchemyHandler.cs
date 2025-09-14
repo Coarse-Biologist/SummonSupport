@@ -53,7 +53,7 @@ public class AlchemyHandler : MonoBehaviour
             else Logging.Error("Crafted Minion is null, was he loaded promtly or correctly?");
         }
     }
-    private int HandleOrganUse(LivingBeing stats, AlchemyLoot organ)
+    private int HandleOrganUse(LivingBeing stats, KeyValuePair<AlchemyLoot, int> organKvp)
     {
         //Logging.Info($"{organ} used and is being handled.");
 
@@ -64,76 +64,76 @@ public class AlchemyHandler : MonoBehaviour
             return 0;
         }
         int healthUpgrade = 0;
-        string organString = organ.ToString();
+        string organString = organKvp.Key.ToString();
         if (organString.Contains("Wretched"))
         {
-            stats.ChangeAttribute(AttributeType.MaxHitpoints, 5);
+            stats.ChangeAttribute(AttributeType.MaxHitpoints, 5 * organKvp.Value);
             healthUpgrade += 5;
         }
         if (organString.Contains("Functional"))
         {
-            stats.ChangeAttribute(AttributeType.MaxHitpoints, 10);
+            stats.ChangeAttribute(AttributeType.MaxHitpoints, 10 * organKvp.Value);
 
             healthUpgrade += 10;
         }
         if (organString.Contains("Hulking"))
         {
-            stats.ChangeAttribute(AttributeType.MaxHitpoints, 20);
+            stats.ChangeAttribute(AttributeType.MaxHitpoints, 20 * organKvp.Value);
             healthUpgrade += 20;
         }
         return healthUpgrade;
     }
-    private int HandleCoreUse(LivingBeing stats, AlchemyLoot core)
+    private int HandleCoreUse(LivingBeing stats, KeyValuePair<AlchemyLoot, int> coreKvp)
     {
         EventDeclarer.RepeatableQuestCompleted?.Invoke(Quest.RepeatableAccomplishments.UseCores, 1);
 
         int powerUpgrade = 0;
-        string coreString = core.ToString();
+        string coreString = coreKvp.Key.ToString();
         if (coreString.Contains("Broken"))
         {
-            stats.ChangeAttribute(AttributeType.MaxPower, 5);
+            stats.ChangeAttribute(AttributeType.MaxPower, 5 * coreKvp.Value);
             powerUpgrade += 5;
         }
         if (coreString.Contains("Functional"))
         {
-            stats.ChangeAttribute(AttributeType.MaxPower, 10);
+            stats.ChangeAttribute(AttributeType.MaxPower, 10 * coreKvp.Value);
             powerUpgrade += 10;
         }
         if (coreString.Contains("Powerful"))
         {
-            stats.ChangeAttribute(AttributeType.MaxPower, 20);
+            stats.ChangeAttribute(AttributeType.MaxPower, 20 * coreKvp.Value);
             powerUpgrade += 20;
         }
         if (coreString.Contains("Hulking"))
         {
-            stats.ChangeAttribute(AttributeType.MaxPower, 30);
+            stats.ChangeAttribute(AttributeType.MaxPower, 30 * coreKvp.Value);
             powerUpgrade += 30;
         }
-        else Debug.Log($"Core = {core}");
+        else Debug.Log($"Core = {coreKvp.Key}");
         return powerUpgrade;
     }
-    private int HandleEtherUse(LivingBeing stats, AlchemyLoot ether, List<Element> elementList)
+    private int HandleEtherUse(LivingBeing stats, KeyValuePair<AlchemyLoot, int> etherKvp, List<Element> elementList)
     {
         EventDeclarer.RepeatableQuestCompleted?.Invoke(Quest.RepeatableAccomplishments.UseEther, 1);
 
         int elementUpgrade = 0;
-        string etherString = ether.ToString();
+        string etherString = etherKvp.Key.ToString();
         if (etherString.Contains("Faint"))
             foreach (Element element in elementList)
             {
-                stats.ChangeAffinity(element, 10 / elementList.Count);
+                stats.ChangeAffinity(element, 10 * etherKvp.Value / elementList.Count);
                 elementUpgrade += 10 / elementList.Count;
             }
         if (etherString.Contains("Pure"))
             foreach (Element element in elementList)
             {
-                stats.ChangeAffinity(element, 30 / elementList.Count);
+                stats.ChangeAffinity(element, 30 * etherKvp.Value / elementList.Count);
                 elementUpgrade += 30 / elementList.Count;
             }
         if (etherString.Contains("Intense"))
             foreach (Element element in elementList)
             {
-                stats.ChangeAffinity(element, 60 / elementList.Count);
+                stats.ChangeAffinity(element, 60 * etherKvp.Value / elementList.Count);
                 elementUpgrade += 60 / elementList.Count;
             }
         return elementUpgrade;
@@ -145,9 +145,9 @@ public class AlchemyHandler : MonoBehaviour
 
         foreach (KeyValuePair<AlchemyLoot, int> kvp in ingredients)
         {
-            if (kvp.Key.ToString().Contains("Organs")) HandleOrganUse(stats, kvp.Key);
-            if (kvp.Key.ToString().Contains("Cores")) HandleCoreUse(stats, kvp.Key);
-            if (kvp.Key.ToString().Contains("Ether")) HandleEtherUse(stats, kvp.Key, elementList);
+            if (kvp.Key.ToString().Contains("Organs")) HandleOrganUse(stats, kvp);
+            if (kvp.Key.ToString().Contains("Cores")) HandleCoreUse(stats, kvp);
+            if (kvp.Key.ToString().Contains("Ether")) HandleEtherUse(stats, kvp, elementList);
         }
         stats.RestoreResources();
         AlterMinionByElement(minion);
@@ -159,11 +159,16 @@ public class AlchemyHandler : MonoBehaviour
         CreatureAbilityHandler abilityHandler = livingBeing.gameObject.GetComponent<CreatureAbilityHandler>();
         if (abilityHandler == null) return;
         Element strongestElement = livingBeing.GetHighestAffinity();
-        Ability ability = AbilityLibrary.GetAbility(strongestElement);
-        if (ability != null)
+        List<Ability> abilities = AbilityLibrary.GetRandomAbilities(strongestElement, (int)(livingBeing.GetAttribute(AttributeType.MaxHitpoints) / 100));
+        Debug.Log(abilities);
+        if (abilities != null)
         {
-            abilityHandler.LearnAbility(ability);
+            foreach (Ability ability in abilities)
+            {
+                abilityHandler.LearnAbility(ability);
+            }
             abilityHandler.SetAbilityLists();
+
         }
     }
 
