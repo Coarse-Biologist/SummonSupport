@@ -35,7 +35,8 @@ public class Aura : MonoBehaviour
             {
                 circleCollider = colliderCito;
                 circleCollider.enabled = false;
-                //Debug.Log($"Disabling {circleCollider}"); InvokeRepeating("CheckEndNear", .5f, .01f);
+                Debug.Log($"Disabling {circleCollider}");
+                InvokeRepeating("CheckEndNear", .5f, .01f);
             }
         }
         Invoke("Activate", ActivationTime);
@@ -55,6 +56,7 @@ public class Aura : MonoBehaviour
                 if (this.target != null) StartCoroutine(SeekTarget(this.target.gameObject));
             }
         }
+        Debug.Log($"{ability.Name}  will be destroyed in {duration} seconds");
         Destroy(gameObject, duration);
     }
     public void SetAuraStats(LivingBeing caster, LivingBeing target, Ability ability, float duration)
@@ -64,17 +66,17 @@ public class Aura : MonoBehaviour
         this.target = target;
         SetAuraTimer(duration);
         Activate();
-        //transform.Rotate(new Vector3(-110f, 0, 0));
+        transform.Rotate(new Vector3(-110f, 0, 0));
 
     }
     private void CheckEndNear()
     {
-        //Debug.Log($"Spline animator normalized  time =  {splineAnimator.NormalizedTime}");
+        Debug.Log($"Spline animator normalized  time =  {splineAnimator.NormalizedTime}");
 
         if (splineAnimator.NormalizedTime > .75)
         {
             circleCollider.enabled = true;
-            //Debug.Log($"Enabling {circleCollider}");
+            Debug.Log($"Enabling {circleCollider}");
             CancelInvoke("CheckEndNear");
         }
 
@@ -93,6 +95,7 @@ public class Aura : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
+        Debug.Log($"aura script object {gameObject} has been entered by {other}");
         if (Active)
         {
             if (other.gameObject.TryGetComponent(out LivingBeing otherLivingBeing))
