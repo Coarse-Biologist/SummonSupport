@@ -38,7 +38,7 @@ public class ConjureAbility : Ability
     {
         Quaternion newRotation = Quaternion.identity;
         if (!LeaveRotation)
-            newRotation = rotation * Quaternion.Euler(0, 0, RotationOffset);
+            newRotation = rotation * Quaternion.Euler(0, 0, 0);
         GameObject spawnedObject = Instantiate(ObjectToSpawn, spawnPosition, newRotation);
 
         if (IsDecaying)

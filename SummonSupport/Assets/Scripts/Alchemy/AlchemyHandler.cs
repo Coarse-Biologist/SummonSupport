@@ -18,6 +18,9 @@ public class AlchemyHandler : MonoBehaviour
     public GameObject minionPrefab;
     public UnityEvent<GameObject> requestInstantiation = new UnityEvent<GameObject>();
     [SerializeField] public List<GameObject> activeMinions = new List<GameObject>();
+
+    [field: Tooltip("How many hitpoints per extra ability for a minion")]
+    [field: SerializeField] public int HPAbilityRatio { private set; get; } = 100;
     public UnityEvent<LivingBeing> newMinionAdded;
     public static AlchemyHandler Instance { get; private set; }
 
@@ -159,7 +162,7 @@ public class AlchemyHandler : MonoBehaviour
         CreatureAbilityHandler abilityHandler = livingBeing.gameObject.GetComponent<CreatureAbilityHandler>();
         if (abilityHandler == null) return;
         Element strongestElement = livingBeing.GetHighestAffinity();
-        List<Ability> abilities = AbilityLibrary.GetRandomAbilities(strongestElement, (int)(livingBeing.GetAttribute(AttributeType.MaxHitpoints) / 100));
+        List<Ability> abilities = AbilityLibrary.GetRandomAbilities(strongestElement, (int)(livingBeing.GetAttribute(AttributeType.MaxHitpoints) / HPAbilityRatio));
         Debug.Log(abilities);
         if (abilities != null)
         {

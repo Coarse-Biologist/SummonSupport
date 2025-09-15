@@ -537,13 +537,13 @@ PrefabInstance:
         type: 3}
       propertyPath: '<Abilities>k__BackingField.Array.data[3]'
       value: 
-      objectReference: {fileID: 11400000, guid: a1d92caf1a989f045afb6724af236c41,
+      objectReference: {fileID: 11400000, guid: 265d2196a4dc4d347bf0f1d275f43d44,
         type: 2}
     - target: {fileID: 9084318776697772798, guid: e4c43cb75dda4d3458057b35ce607d87,
         type: 3}
       propertyPath: '<Abilities>k__BackingField.Array.data[4]'
       value: 
-      objectReference: {fileID: 11400000, guid: 519c02e614c4703498de02471c8aaf9b,
+      objectReference: {fileID: 11400000, guid: 6eaaf721143e73a408e50f0c94decbe5,
         type: 2}
     - target: {fileID: 9084318776697772798, guid: e4c43cb75dda4d3458057b35ce607d87,
         type: 3}

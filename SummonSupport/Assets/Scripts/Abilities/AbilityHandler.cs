@@ -173,7 +173,10 @@ public class AbilityHandler : MonoBehaviour
 
     public IEnumerator SetOnCooldown(int abilityIndex)
     {
+        Debug.Log("Setting on cooldown");
         Ability ability = Abilities[abilityIndex];
+        Debug.Log($"Setting {ability} on cooldown");
+
         try
         {
             abilitiesOnCooldownCrew[ability] = true;

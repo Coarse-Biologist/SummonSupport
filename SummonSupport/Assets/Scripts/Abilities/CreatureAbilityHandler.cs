@@ -13,6 +13,7 @@ public class CreatureAbilityHandler : AbilityHandler
     private List<Ability> attackAbilities { get; set; } = new();
     private List<Ability> allSupportAbilities { get; set; } = new();
     private List<Ability> synergyAbilities { get; set; } = new();
+    private List<Ability> abilityOnCooldown = new();
 
 
 
@@ -50,25 +51,26 @@ public class CreatureAbilityHandler : AbilityHandler
 
         return SelectAbility(targetIsFriendly, target);
 
-
     }
     private Ability SelectAbility(bool friendlyTarget, LivingBeing target)
     {
         foreach (Ability ability in attackAbilities)
         {
-            if (Ability.HasElementalSynergy(ability, target))
+            if (Ability.HasElementalSynergy(ability, target) && !(ability is ProjectileAbility))
             {
                 allSupportAbilities.Add(ability);
                 synergyAbilities.Add(ability);
-                //UnityEngine.Debug.Log($"{ability.name} added");
+                UnityEngine.Debug.Log($"{ability.name} added to list of support and synergy abilities");
             }
-            //else UnityEngine.Debug.Log($"{ability.name} would not synergize with {target}");
+            else UnityEngine.Debug.Log($"{ability.name} would not synergize with {target}");
         }
         if (friendlyTarget)
         {
-            //UnityEngine.Debug.Log($"numnber of all support abilities= {allSupportAbilities.Count}");
-            if (allSupportAbilities.Count == 0) return null;
-
+            UnityEngine.Debug.Log($"The target {target} is friendly. the numnber of all support abilities= {allSupportAbilities.Count}");
+            if (allSupportAbilities.Count == 0)
+            {
+                return null;
+            }
             selectedAbility = allSupportAbilities[Random.Range(0, allSupportAbilities.Count)];
         }
         else selectedAbility = attackAbilities[Random.Range(0, attackAbilities.Count)];
@@ -77,11 +79,13 @@ public class CreatureAbilityHandler : AbilityHandler
 
         if (IsOnCoolDown(selectedAbility))
         {
-            //UnityEngine.Debug.Log($"Returning null insytead of an ability");
+            UnityEngine.Debug.Log($"Returning null insytead of an ability");
             return null;
         }
         else
+        {
             return selectedAbility;
+        }
     }
 
 

@@ -20,13 +20,13 @@ public class AuraAbility : Ability
             {
                 if (hit.collider != null && hit.collider.TryGetComponent<LivingBeing>(out LivingBeing livingBeing))
                 {
-                    GameObject auraInstance = Instantiate(AuraObject, hit.collider.transform.position, AuraObject.transform.rotation, hit.collider.transform);
+                    GameObject auraInstance = Instantiate(AuraObject, hit.collider.transform.position, Quaternion.identity, hit.collider.transform);
                     auraInstance.GetComponent<Aura>().SetAuraStats(caster.GetComponent<LivingBeing>(), livingBeing, this, Uptime);
 
                 }
                 else
                 {
-                    GameObject auraInstance = Instantiate(AuraObject, caster.transform.position, AuraObject.transform.rotation, caster.transform);
+                    GameObject auraInstance = Instantiate(AuraObject, caster.transform.position, Quaternion.identity, caster.transform);
                     Aura auraMonoScript = auraInstance.GetComponent<Aura>();
                     if (auraMonoScript != null) auraMonoScript.HandleInstantiation(caster.GetComponent<LivingBeing>(), null, this, Radius, Uptime);
                 }
@@ -34,7 +34,7 @@ public class AuraAbility : Ability
         }
         else
         {
-            GameObject auraInstance = Instantiate(AuraObject, caster.transform.position, AuraObject.transform.rotation, caster.transform);
+            GameObject auraInstance = Instantiate(AuraObject, caster.transform.position, Quaternion.identity, caster.transform);
             Aura auraMonoScript = auraInstance.GetComponent<Aura>();
             if (auraMonoScript != null) auraMonoScript.HandleInstantiation(caster.GetComponent<LivingBeing>(), null, this, Radius, Uptime);
         }

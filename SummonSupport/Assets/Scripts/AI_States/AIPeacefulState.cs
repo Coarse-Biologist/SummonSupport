@@ -157,6 +157,7 @@ public class AIPeacefulState : AIState
         runningSupportLoop = true;
         while (true)
         {
+            Debug.Log($"Running support loop");
             targetStats = SelectFriendlyTarget();
             chaseState.LookAtTarget(targetStats.transform.position);
             stateHandler.SetTarget(targetStats);
