@@ -8,6 +8,7 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 using System;
 using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using SummonSupportEvents;
+using UnityEditor.EditorTools;
 
 #endregion
 public class AlchemyHandler : MonoBehaviour
@@ -17,6 +18,8 @@ public class AlchemyHandler : MonoBehaviour
     private GameObject craftedMinion;
     public GameObject minionPrefab;
     public UnityEvent<GameObject> requestInstantiation = new UnityEvent<GameObject>();
+    [field: Tooltip("The amount of minion HP per new extra ability they can use.")]
+    [field: SerializeField] public int HPToAbilityRatio { get; private set; } = 50;
     [SerializeField] public List<GameObject> activeMinions = new List<GameObject>();
     public UnityEvent<LivingBeing> newMinionAdded;
     public static AlchemyHandler Instance { get; private set; }
@@ -159,7 +162,7 @@ public class AlchemyHandler : MonoBehaviour
         CreatureAbilityHandler abilityHandler = livingBeing.gameObject.GetComponent<CreatureAbilityHandler>();
         if (abilityHandler == null) return;
         Element strongestElement = livingBeing.GetHighestAffinity();
-        List<Ability> abilities = AbilityLibrary.GetRandomAbilities(strongestElement, (int)(livingBeing.GetAttribute(AttributeType.MaxHitpoints) / 100));
+        List<Ability> abilities = AbilityLibrary.GetRandomAbilities(strongestElement, (int)(livingBeing.GetAttribute(AttributeType.MaxHitpoints) / HPToAbilityRatio));
         Debug.Log(abilities);
         if (abilities != null)
         {

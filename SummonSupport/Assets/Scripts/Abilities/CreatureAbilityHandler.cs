@@ -25,7 +25,7 @@ public class CreatureAbilityHandler : AbilityHandler
         SetAbilityLists();
     }
 
-    public Ability GetAbilityForTarget(LivingBeing target)
+    public Ability GetAbilityForTarget(LivingBeing target, bool forSelf = false)
     {
         Stopwatch stopwatch = Stopwatch.StartNew();
         selectedAbility = null;
@@ -48,11 +48,11 @@ public class CreatureAbilityHandler : AbilityHandler
         }
         //Logging.Info($" elapsed time : {stopwatch.ElapsedMilliseconds}");
 
-        return SelectAbility(targetIsFriendly, target);
+        return SelectAbility(targetIsFriendly, target, forSelf);
 
 
     }
-    private Ability SelectAbility(bool friendlyTarget, LivingBeing target)
+    private Ability SelectAbility(bool friendlyTarget, LivingBeing target, bool forSelf = false)
     {
         foreach (Ability ability in attackAbilities)
         {
@@ -80,6 +80,8 @@ public class CreatureAbilityHandler : AbilityHandler
             //UnityEngine.Debug.Log($"Returning null insytead of an ability");
             return null;
         }
+        if (forSelf && selectedAbility is ProjectileAbility)
+            return null;
         else
             return selectedAbility;
     }

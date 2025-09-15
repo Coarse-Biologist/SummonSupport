@@ -139,6 +139,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2376002305397545486, guid: e4c43cb75dda4d3458057b35ce607d87,
         type: 3}
+      propertyPath: <Plant>k__BackingField
+      value: 200
+      objectReference: {fileID: 0}
+    - target: {fileID: 2376002305397545486, guid: e4c43cb75dda4d3458057b35ce607d87,
+        type: 3}
       propertyPath: <Poison>k__BackingField
       value: 200
       objectReference: {fileID: 0}
@@ -1615,6 +1620,7 @@ MonoBehaviour:
   requestInstantiation:
     m_PersistentCalls:
       m_Calls: []
+  <HPToAbilityRatio>k__BackingField: 50
   activeMinions: []
   newMinionAdded:
     m_PersistentCalls:

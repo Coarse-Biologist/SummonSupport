@@ -35,7 +35,8 @@ public class Aura : MonoBehaviour
             {
                 circleCollider = colliderCito;
                 circleCollider.enabled = false;
-                //Debug.Log($"Disabling {circleCollider}"); InvokeRepeating("CheckEndNear", .5f, .01f);
+                //Debug.Log($"Disabling {circleCollider}"); 
+                InvokeRepeating("CheckEndNear", .5f, .01f);
             }
         }
         Invoke("Activate", ActivationTime);

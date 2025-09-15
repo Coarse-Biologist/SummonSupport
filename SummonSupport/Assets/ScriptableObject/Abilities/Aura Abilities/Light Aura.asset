@@ -15,10 +15,10 @@ MonoBehaviour:
   <Name>k__BackingField: Light Aura
   <Icon>k__BackingField: {fileID: -8172051240425876022, guid: d46d43f87ef93d3448c986a15737f67a,
     type: 3}
-  <Cooldown>k__BackingField: 3
+  <Cooldown>k__BackingField: 10
   <CostType>k__BackingField: 4
   <Cost>k__BackingField: 10
-  <Range>k__BackingField: 20
+  <Range>k__BackingField: 3
   <AbilityTypeTag>k__BackingField: 0
   <ListUsableOn>k__BackingField: 01000000
   <TargetTypeAndEffects>k__BackingField:
@@ -43,7 +43,7 @@ MonoBehaviour:
   <ElementTypes>k__BackingField: 0e000000
   <PhysicalType>k__BackingField: 0
   <Uptime>k__BackingField: 10
-  <Radius>k__BackingField: 2
+  <Radius>k__BackingField: 3
   <AuraObject>k__BackingField: {fileID: 1699087696372334086, guid: fb28606cc754ca443ab8317690353969,
     type: 3}
   <LeaveRotation>k__BackingField: 1

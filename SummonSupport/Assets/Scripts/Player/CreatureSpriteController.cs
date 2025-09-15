@@ -60,7 +60,7 @@ public class CreatureSpriteController : MonoBehaviour
         {
             SetColor(new float[4] { 0f, 0f, 1f, 1f });
         }
-        if (str.Contains("Plant") || str.Contains("Bacteria"))
+        if (str.Contains("Plant") || str.Contains("Bacteria") || str.Contains("Poison"))
         {
             SetColor(new float[4] { 0f, 1f, 0f, 1f });
         }
@@ -76,7 +76,7 @@ public class CreatureSpriteController : MonoBehaviour
         {
             SetColor(new float[4] { 1f, 0f, 0.0f, 1.0f });
         }
-        if (str.Contains("Psychic") || str.Contains("Poison"))
+        if (str.Contains("Psychic"))
         {
             SetColor(new float[4] { 0.5f, 0f, .5f, 1.0f });
         }

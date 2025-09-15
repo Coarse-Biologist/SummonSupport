@@ -160,7 +160,7 @@ public class AIPeacefulState : AIState
             targetStats = SelectFriendlyTarget();
             chaseState.LookAtTarget(targetStats.transform.position);
             stateHandler.SetTarget(targetStats);
-            Ability ability = GetComponent<CreatureAbilityHandler>().GetAbilityForTarget(targetStats);
+            Ability ability = GetComponent<CreatureAbilityHandler>().GetAbilityForTarget(targetStats, targetStats == stateHandler.minionStats);
             if (ability != null)
             {
                 chaseState.SetAbilityRange(ability.Range);
