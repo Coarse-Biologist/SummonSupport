@@ -554,7 +554,7 @@ PrefabInstance:
         type: 3}
       propertyPath: '<Abilities>k__BackingField.Array.data[5]'
       value: 
-      objectReference: {fileID: 11400000, guid: 2c411350804b90246b5fcb0c56b66a2c,
+      objectReference: {fileID: 11400000, guid: 6eaaf721143e73a408e50f0c94decbe5,
         type: 2}
     - target: {fileID: 9084318776697772798, guid: e4c43cb75dda4d3458057b35ce607d87,
         type: 3}
@@ -801,6 +801,12 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3574865514186009625, guid: 6a5ef38cf0637084f92a110a696def55,
+        type: 3}
+      propertyPath: DeathSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 9113a2f909f46a3449ab0f4ab93b7d01,
+        type: 3}
     - target: {fileID: 6496810200666691143, guid: 6a5ef38cf0637084f92a110a696def55,
         type: 3}
       propertyPath: m_AnchorMax.x
@@ -1592,6 +1598,12 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9135585748230524783, guid: 68f6c4df11578064b837c63cb159861d,
+        type: 3}
+      propertyPath: DeathSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 9113a2f909f46a3449ab0f4ab93b7d01,
+        type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1669,6 +1681,12 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5147987956248969549, guid: 93320e9166a42de4797e9788569266a3,
+        type: 3}
+      propertyPath: DeathSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 9113a2f909f46a3449ab0f4ab93b7d01,
+        type: 3}
     - target: {fileID: 6197465742391261667, guid: 93320e9166a42de4797e9788569266a3,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1993,6 +2011,12 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 21300000, guid: e598ea94e40919d47b06bd7cf482055f,
         type: 3}
+    - target: {fileID: 5147987956248969549, guid: c71f7dd61a6fb3b44b4a693aa7c510c5,
+        type: 3}
+      propertyPath: DeathSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 9113a2f909f46a3449ab0f4ab93b7d01,
+        type: 3}
     - target: {fileID: 5243290695599561401, guid: c71f7dd61a6fb3b44b4a693aa7c510c5,
         type: 3}
       propertyPath: m_Sprite
@@ -2205,6 +2229,12 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9135585748230524783, guid: 3e4992f6f83b3fb4e8788f1d5f838238,
+        type: 3}
+      propertyPath: DeathSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 9113a2f909f46a3449ab0f4ab93b7d01,
+        type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2293,6 +2323,12 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4209163111430579040, guid: 03d3188c7d9f0094fb96ecaeaac4b783,
+        type: 3}
+      propertyPath: DeathSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 9113a2f909f46a3449ab0f4ab93b7d01,
+        type: 3}
     - target: {fileID: 5898805968400668990, guid: 03d3188c7d9f0094fb96ecaeaac4b783,
         type: 3}
       propertyPath: m_AnchorMax.x
@@ -2583,6 +2619,12 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7544542245152928700, guid: 90114787e01d9554598683ab909e2ec9,
+        type: 3}
+      propertyPath: DeathSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 9113a2f909f46a3449ab0f4ab93b7d01,
+        type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2900,6 +2942,12 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8323349360700700062, guid: 6687344da03022b4ba38fb5b7001ca11,
+        type: 3}
+      propertyPath: DeathSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 9113a2f909f46a3449ab0f4ab93b7d01,
+        type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3004,6 +3052,12 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9135585748230524783, guid: 897aab9f0a0b5db46a0f17a027993a2b,
+        type: 3}
+      propertyPath: DeathSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 9113a2f909f46a3449ab0f4ab93b7d01,
+        type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3150,6 +3204,12 @@ PrefabInstance:
       propertyPath: <Poison>k__BackingField
       value: 50
       objectReference: {fileID: 0}
+    - target: {fileID: 7904272580143572521, guid: bf3a7c387497a1c4b876116e70c15ecf,
+        type: 3}
+      propertyPath: DeathSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 9113a2f909f46a3449ab0f4ab93b7d01,
+        type: 3}
     - target: {fileID: 8989501020610944647, guid: bf3a7c387497a1c4b876116e70c15ecf,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -3263,6 +3323,12 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4387250050986861210, guid: da0bf5a522b70ab48b806cdce14b3e43,
+        type: 3}
+      propertyPath: DeathSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 9113a2f909f46a3449ab0f4ab93b7d01,
+        type: 3}
     - target: {fileID: 5784665533092634559, guid: da0bf5a522b70ab48b806cdce14b3e43,
         type: 3}
       propertyPath: m_AnchorMax.x
@@ -3598,6 +3664,12 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5147987956248969549, guid: c71f7dd61a6fb3b44b4a693aa7c510c5,
+        type: 3}
+      propertyPath: DeathSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 9113a2f909f46a3449ab0f4ab93b7d01,
+        type: 3}
     - target: {fileID: 5243290695599561401, guid: c71f7dd61a6fb3b44b4a693aa7c510c5,
         type: 3}
       propertyPath: m_Color.b
@@ -3884,6 +3956,12 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5889258396489607490, guid: d7356457bc227ac40a12feb4b6ec4540,
+        type: 3}
+      propertyPath: DeathSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 9113a2f909f46a3449ab0f4ab93b7d01,
+        type: 3}
     - target: {fileID: 9050762470000960609, guid: d7356457bc227ac40a12feb4b6ec4540,
         type: 3}
       propertyPath: <Water>k__BackingField

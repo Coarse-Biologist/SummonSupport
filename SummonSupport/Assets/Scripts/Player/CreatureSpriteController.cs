@@ -1,3 +1,4 @@
+using SummonSupportEvents;
 using UnityEngine;
 
 public class CreatureSpriteController : MonoBehaviour
@@ -11,8 +12,14 @@ public class CreatureSpriteController : MonoBehaviour
     [SerializeField] private Sprite SESprite;
     [SerializeField] private Sprite SWSprite;
     [SerializeField] private Sprite NWSprite;
+    [SerializeField] private Sprite DeathSprite;
+
+
     [field: SerializeField] public bool unfinished { get; private set; } = false;
     [field: SerializeField] public bool IsoOnly { get; private set; } = false;
+
+    private bool dead = false;
+
 
 
 
@@ -25,9 +32,26 @@ public class CreatureSpriteController : MonoBehaviour
     {
         sr = GetComponent<SpriteRenderer>();
     }
+    void OnEnable()
+    {
+        EventDeclarer.minionDied?.AddListener(CheckDead);
+    }
+
+
+    void OnDisable()
+    {
+        EventDeclarer.minionDied?.RemoveListener(CheckDead);
+    }
+
+    private void CheckDead(GameObject minionObject)
+    {
+        if (transform.parent == minionObject)
+            dead = true;
+    }
 
     public void SetSpriteDirection(float angle)
     {
+        if (dead) sr.sprite = DeathSprite;
         if (IsoOnly)
         {
             if (angle >= -180 && angle < -90) sr.sprite = SWSprite;
