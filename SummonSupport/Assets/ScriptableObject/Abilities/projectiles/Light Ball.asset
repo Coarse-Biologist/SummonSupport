@@ -39,6 +39,7 @@ MonoBehaviour:
     <StatusEffects>k__BackingField: []
     <SpecialAbilityAttribute>k__BackingField: 0
   <ElementTypes>k__BackingField: 0e000000
+  <PhysicalType>k__BackingField: 0
   <Speed>k__BackingField: 5
   <Projectile>k__BackingField: {fileID: 2972241173990281680, guid: 92209668e8a016544b8400b57246f195,
     type: 3}

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 using UnityEngine.Splines;
 
 
@@ -16,6 +17,8 @@ public class Aura : MonoBehaviour
     private LivingBeing target;
     private ConjureAbility conjureAbility;
     private SplineAnimate splineAnimator;
+
+    private UnityEngine.Rendering.Universal.Light2D lightScript;
     private bool SetSplineAnimator()
     {
         if (TryGetComponent<SplineAnimate>(out SplineAnimate spline))
@@ -29,6 +32,7 @@ public class Aura : MonoBehaviour
 
     void Start()
     {
+        Debug.Log("Aura script starts here and now");
         if (SetSplineAnimator())
         {
             if (TryGetComponent<CircleCollider2D>(out CircleCollider2D colliderCito))
@@ -40,7 +44,21 @@ public class Aura : MonoBehaviour
             }
         }
         Invoke("Activate", ActivationTime);
+        if (TryGetComponent<Light2D>(out Light2D FoundlightScript))
+        {
+            Debug.Log("Light script detected");
+            lightScript = FoundlightScript;
+            StartCoroutine(LightManager.MakeLightOscillate(lightScript));
+            if (TryGetComponent<ParticleSystem>(out ParticleSystem ps))
+            {
+                Debug.Log("changing color to color");
+                lightScript.color = Color.green;
+                lightScript.intensity = 3;
+                Debug.Log($"changing color to {lightScript.color}");
 
+            }
+        }
+        else Debug.Log("No light script found");
     }
     public void HandleInstantiation(LivingBeing caster, LivingBeing target, Ability ability, float radius, float duration)
     {

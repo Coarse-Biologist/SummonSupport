@@ -156,7 +156,9 @@ public abstract class LivingBeing : MonoBehaviour
 
     public Element GetHighestAffinity()
     {
-        return Affinities.OrderByDescending(a => a.Value.Get()).First().Key;
+        Element element = Affinities.OrderByDescending(a => a.Value.Get()).First().Key;
+        if (Affinities[element].Get() < 20) return Element.None;
+        else return element;
     }
 
     #endregion

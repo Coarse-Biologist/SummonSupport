@@ -40,6 +40,7 @@ public class AlchemyHandler : MonoBehaviour
 
     public void HandleCraftingResults(Dictionary<AlchemyLoot, int> combinedIngredients, List<Element> elementList)
     {
+
         if (combinedIngredients.Keys.Count > 0)
         {
             if (minionPrefab != null)
@@ -118,7 +119,7 @@ public class AlchemyHandler : MonoBehaviour
     private int HandleEtherUse(LivingBeing stats, KeyValuePair<AlchemyLoot, int> etherKvp, List<Element> elementList)
     {
         EventDeclarer.RepeatableQuestCompleted?.Invoke(Quest.RepeatableAccomplishments.UseEther, 1);
-
+        Debug.Log($"ether type : {etherKvp.Key}. Amount : {etherKvp.Value}");
         int elementUpgrade = 0;
         string etherString = etherKvp.Key.ToString();
         if (etherString.Contains("Faint"))
@@ -162,16 +163,20 @@ public class AlchemyHandler : MonoBehaviour
         CreatureAbilityHandler abilityHandler = livingBeing.gameObject.GetComponent<CreatureAbilityHandler>();
         if (abilityHandler == null) return;
         Element strongestElement = livingBeing.GetHighestAffinity();
-        List<Ability> abilities = AbilityLibrary.GetRandomAbilities(strongestElement, (int)(livingBeing.GetAttribute(AttributeType.MaxHitpoints) / HPToAbilityRatio));
-        Debug.Log(abilities);
-        if (abilities != null)
+        if (strongestElement != Element.None)
         {
-            foreach (Ability ability in abilities)
+            List<Ability> abilities = AbilityLibrary.GetRandomAbilities(strongestElement, (int)(livingBeing.GetAttribute(AttributeType.MaxHitpoints) / HPToAbilityRatio));
+            Debug.Log(abilities);
+
+            if (abilities != null)
             {
-                abilityHandler.LearnAbility(ability);
+                foreach (Ability ability in abilities)
+                {
+                    abilityHandler.LearnAbility(ability);
+                }
+
             }
             abilityHandler.SetAbilityLists();
-
         }
     }
 
@@ -182,7 +187,7 @@ public class AlchemyHandler : MonoBehaviour
         Element strongestElement = stats.GetHighestAffinity();
         string nameModifier = "";
 
-        if (stats.Affinities[strongestElement].Get() > 50)
+        if (strongestElement != Element.None && stats.Affinities[strongestElement].Get() > 50)
         {
             spriteControl.AlterColorByAffinity(strongestElement);
             nameModifier = strongestElement.ToString();

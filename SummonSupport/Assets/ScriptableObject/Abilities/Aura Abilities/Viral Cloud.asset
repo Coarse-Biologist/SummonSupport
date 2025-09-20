@@ -43,7 +43,7 @@ MonoBehaviour:
     <SpecialAbilityAttribute>k__BackingField: 0
   <ElementTypes>k__BackingField: 0c000000
   <PhysicalType>k__BackingField: 0
-  <Uptime>k__BackingField: 10
+  <Uptime>k__BackingField: 100
   <Radius>k__BackingField: 3
   <AuraObject>k__BackingField: {fileID: 1699087696372334086, guid: bc8366872ae84974e969b89dde807165,
     type: 3}

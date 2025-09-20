@@ -27,35 +27,7 @@ public class MinionSpriteControl : MonoBehaviour
     #region color control
     public void AlterColorByAffinity(Element strongestElement)
     {
-        string str = strongestElement.ToString();
-        if (str.Contains("Cold") || str.Contains("Water"))
-        {
-            SetColor(new float[4] { 0f, 0f, 1f, 1f });
-        }
-        if (str.Contains("Plant") || str.Contains("Bacteria"))
-        {
-            SetColor(new float[4] { 0f, 1f, 0f, 1f });
-        }
-        if (str.Contains("Virus") || str.Contains("Acid"))
-        {
-            SetColor(new float[4] { 0.9f, 0.7f, 0.0f, 1.0f });
-        }
-        if (str.Contains("Light") || str.Contains("Electricity"))
-        {
-            SetColor(new float[4] { 0.85f, 0.85f, 0.0f, 1.0f });
-        }
-        if (str.Contains("Heat") || str.Contains("Radiation"))
-        {
-            SetColor(new float[4] { 1f, 0f, 0.0f, 1.0f });
-        }
-        if (str.Contains("Psychic") || str.Contains("Poison"))
-        {
-            SetColor(new float[4] { 0.5f, 0f, .5f, 1.0f });
-        }
-        if (str.Contains("Fungi") || str.Contains("Earth"))
-        {
-            SetColor(new float[4] { .4f, 0.4f, .4f, 1.0f });
-        }
+        SetColor(EffectColorChanger.GetColorFromElement(strongestElement));
     }
 
     public void SlideColor(RGBAEnum color, float range)
