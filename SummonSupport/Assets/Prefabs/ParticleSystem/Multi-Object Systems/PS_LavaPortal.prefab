@@ -168,10 +168,20 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4192769493742589076, guid: 67c953d8ecb373d4d9255c187ba5bef9,
+        type: 3}
+      propertyPath: InitialModule.startLifetime.scalar
+      value: 0.6
+      objectReference: {fileID: 0}
     - target: {fileID: 6030475839939781346, guid: 67c953d8ecb373d4d9255c187ba5bef9,
         type: 3}
       propertyPath: m_Name
       value: LavaPortal
+      objectReference: {fileID: 0}
+    - target: {fileID: 7760099378281691013, guid: 67c953d8ecb373d4d9255c187ba5bef9,
+        type: 3}
+      propertyPath: startDelay.scalar
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8709347162462092442, guid: 67c953d8ecb373d4d9255c187ba5bef9,
         type: 3}

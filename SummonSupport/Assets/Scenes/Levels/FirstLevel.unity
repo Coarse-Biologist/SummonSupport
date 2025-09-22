@@ -135,7 +135,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!212 &24010129
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -2089,6 +2089,11 @@ MonoBehaviour:
     type: 3}
   <colorGradientLibrary>k__BackingField: {fileID: 11400000, guid: ee63455fb16bda24eace41db2d9f1c16,
     type: 2}
+  <GlowMaterials>k__BackingField:
+  - {fileID: 2100000, guid: 886fedbcf725fdb4294c5925c945b6ca, type: 2}
+  - {fileID: 2100000, guid: 0a07b4bf821f6754493c764eac24821c, type: 2}
+  - {fileID: 2100000, guid: 0a1c03311ed796b4fa3360f0d5a83bd5, type: 2}
+  - {fileID: 2100000, guid: 57ebbdeaefcfc8845a3039bc45eda813, type: 2}
   <ElementToAbilityLibrary_SO>k__BackingField: {fileID: 11400000, guid: 6dfeb61f698dfd84983f5773a706a16b,
     type: 2}
   <AllAbilities>k__BackingField:

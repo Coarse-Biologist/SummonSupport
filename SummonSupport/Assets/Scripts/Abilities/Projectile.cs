@@ -88,7 +88,7 @@ public class Projectile : MonoBehaviour
 
             if (!other.TryGetComponent(out LivingBeing otherLivingBeing))
             {
-                DestroyProjectile();
+                //DestroyProjectile();
                 return;
             }
 

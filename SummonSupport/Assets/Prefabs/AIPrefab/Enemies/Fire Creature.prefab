@@ -51,7 +51,7 @@ PrefabInstance:
     - target: {fileID: 530800861541312882, guid: 8b808af4814c9664e80e2e15555215fb,
         type: 3}
       propertyPath: m_Name
-      value: FireCreature_1 Variant
+      value: Fire Creature
       objectReference: {fileID: 0}
     - target: {fileID: 530800861541312882, guid: 8b808af4814c9664e80e2e15555215fb,
         type: 3}
@@ -124,6 +124,11 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 21300000, guid: de6ca48ed9d9b80499bf16890d9ba7a3,
         type: 3}
+    - target: {fileID: 4755851978388305148, guid: 8b808af4814c9664e80e2e15555215fb,
+        type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 0a1c03311ed796b4fa3360f0d5a83bd5, type: 2}
     - target: {fileID: 4873234443211265918, guid: 8b808af4814c9664e80e2e15555215fb,
         type: 3}
       propertyPath: m_Layer
@@ -334,7 +339,9 @@ MonoBehaviour:
   SESprite: {fileID: 21300000, guid: b76100e836537404a8192a95c6e25c44, type: 3}
   SWSprite: {fileID: 21300000, guid: 81f169ad922ffb045a144c467549f5ae, type: 3}
   NWSprite: {fileID: 21300000, guid: 8a255ed639863214c94b77c0b58f68e8, type: 3}
+  DeathSprite: {fileID: 0}
   <unfinished>k__BackingField: 0
+  <IsoOnly>k__BackingField: 0
 --- !u!4 &6197465742391261667 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6683928398212683686, guid: 8b808af4814c9664e80e2e15555215fb,

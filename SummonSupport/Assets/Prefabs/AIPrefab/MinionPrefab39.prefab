@@ -159,6 +159,12 @@ PrefabInstance:
         type: 3}
     - target: {fileID: 3574865514186009625, guid: 6a5ef38cf0637084f92a110a696def55,
         type: 3}
+      propertyPath: DeathSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 9113a2f909f46a3449ab0f4ab93b7d01,
+        type: 3}
+    - target: {fileID: 3574865514186009625, guid: 6a5ef38cf0637084f92a110a696def55,
+        type: 3}
       propertyPath: <IsoOnly>k__BackingField
       value: 1
       objectReference: {fileID: 0}
@@ -193,6 +199,11 @@ PrefabInstance:
       propertyPath: m_SortingLayerID
       value: -105541197
       objectReference: {fileID: 0}
+    - target: {fileID: 4480734047223347181, guid: 6a5ef38cf0637084f92a110a696def55,
+        type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 57ebbdeaefcfc8845a3039bc45eda813, type: 2}
     - target: {fileID: 5396371275077572574, guid: 6a5ef38cf0637084f92a110a696def55,
         type: 3}
       propertyPath: m_LocalScale.x

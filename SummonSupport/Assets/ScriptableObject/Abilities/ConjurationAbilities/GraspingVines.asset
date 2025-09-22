@@ -49,7 +49,7 @@ MonoBehaviour:
   <RotationOffset>k__BackingField: 0
   Radius: 4
   <IsDecaying>k__BackingField: 1
-  <LeaveRotation>k__BackingField: 0
+  <LeaveRotation>k__BackingField: 1
   <TimeAlive>k__BackingField: 5
   <SeeksTarget>k__BackingField: 0
   <Speed>k__BackingField: 2
