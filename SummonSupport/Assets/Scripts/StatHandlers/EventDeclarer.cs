@@ -24,5 +24,7 @@ namespace SummonSupportEvents
         public static UnityEvent<int> AbilityUsed = new(); // int should be the index of the ability
         public static UnityEvent<GameObject> SpawnEnemies = new();
 
+        public static UnityEvent<bool> PlayerDead = new();
+
     }
 }

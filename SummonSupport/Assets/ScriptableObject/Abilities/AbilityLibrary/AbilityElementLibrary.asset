@@ -26,6 +26,7 @@ MonoBehaviour:
     Abilities:
     - {fileID: 11400000, guid: 5d20d6cc1fa7eb547ba5d0f9aefcc225, type: 2}
     - {fileID: 11400000, guid: 33ec4070ca704ab44bd3fc9d63ac1070, type: 2}
+    - {fileID: 11400000, guid: e8a6eb052d248c145acb7ef3d6746f33, type: 2}
   - Element: 4
     Abilities:
     - {fileID: 11400000, guid: 5605a5e8027c4e94691ae731bacfcb5a, type: 2}

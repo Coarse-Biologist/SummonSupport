@@ -60,7 +60,7 @@ public class MeleeAbility : Ability
                 {
                     Target = collider.GetComponent<LivingBeing>();
 
-                    SetEffects(Caster);
+                    SetEffects(Caster, Target);
                     CombatStatHandler.HandleEffectPackages(this, Caster, Target);
                     SpawnHitEffect(Target);
                     activated = true;
@@ -113,7 +113,10 @@ public class MeleeAbility : Ability
         if ((hitLocation - (Vector2)originTransform.position).magnitude <= .2)
             return true;
         if (Shape == AreaOfEffectShape.Sphere)
-            return true;
+        {
+            if ((user.transform.position - collider.transform.position).magnitude <= Range)
+                return true;
+        }
         if (Shape == AreaOfEffectShape.Cone)
         {
             if (Vector2.Angle(hitLocation, originTransform.position) <= Angle)
@@ -169,6 +172,7 @@ public class MeleeAbility : Ability
     private void SpawnHitEffect(LivingBeing targetLivingBeing)
     {
         GameObject instance;
+
         if (SpawnEffectOnHit != null)
         {
             instance = Instantiate(SpawnEffectOnHit, targetLivingBeing.transform.position, Quaternion.identity, targetLivingBeing.transform.transform);
@@ -177,7 +181,7 @@ public class MeleeAbility : Ability
         }
 
     }
-    private void SetEffects(LivingBeing caster)
+    private void SetEffects(LivingBeing caster, LivingBeing target)
     {
         GameObject particleSystem;
         abilityHandler = caster.GetComponent<AbilityHandler>();
@@ -189,7 +193,7 @@ public class MeleeAbility : Ability
 
             if (abilityHandler.WeaponInfo == null)
             {
-                particleSystem = Instantiate(MeleeParticleSystem, caster.transform.position, Quaternion.identity);
+                particleSystem = Instantiate(MeleeParticleSystem, target.transform.position, Quaternion.identity);
                 Destroy(particleSystem, 2); //particleSystem.GetComponent<ParticleSystem>().main.duration);
 
             }
@@ -208,12 +212,15 @@ public class MeleeAbility : Ability
                 animator.Play();
 
                 particleSystem.transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
+
                 Destroy(particleSystem, animator.Duration);
 
             }
 
-            particleSystem.transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
-
+            if (Shape != AreaOfEffectShape.Sphere)
+            {
+                particleSystem.transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
+            }
         }
     }
 

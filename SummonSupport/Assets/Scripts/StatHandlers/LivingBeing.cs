@@ -70,7 +70,6 @@ public abstract class LivingBeing : MonoBehaviour
     [field: SerializeField] protected float Slashing { get; private set; } = 0;
     public Dictionary<PhysicalType, (Func<float> Get, Action<float> Set)> PhysicalDict { private set; get; } = new();
 
-
     #endregion
 
     #region other data
@@ -80,6 +79,7 @@ public abstract class LivingBeing : MonoBehaviour
     public List<StatusEffectType> SufferedStatusEffects { get; private set; } = new();
 
     [field: SerializeField] public float XP_OnDeath { get; private set; } = 5f;
+    public bool Dead { get; private set; } = false;
 
     public Dictionary<Element, (Func<float> Get, Action<float> Set)> Affinities { private set; get; } = new();
     public Dictionary<AttributeType, (Func<float> Get, Action<float> Set)> ResourceAttributesDict { private set; get; } = new();
@@ -187,6 +187,11 @@ public abstract class LivingBeing : MonoBehaviour
     #endregion
 
     #region Attribute Handling
+
+    protected void SetDead(bool isDead)
+    {
+        Dead = isDead;
+    }
 
     public float GetAttribute(AttributeType attribute)
     {

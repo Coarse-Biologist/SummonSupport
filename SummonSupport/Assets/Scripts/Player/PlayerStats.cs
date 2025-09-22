@@ -67,7 +67,9 @@ public class PlayerStats : LivingBeing
         Logging.Info($"{Name} died");
 
         if (HasStatusEffect(StatusEffectType.ExplodeOnDeath)) ViciousDeathExplosion();
-        Destroy(gameObject);
+        SetDead(true);
+        EventDeclarer.PlayerDead?.Invoke(true);
+        //Destroy(gameObject);
     }
 
 

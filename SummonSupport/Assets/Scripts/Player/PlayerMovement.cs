@@ -12,6 +12,7 @@ public class PlayerMovement : MovementScript
     private Vector2 moveInput;
     public Camera mainCamera;
     private CreatureSpriteController spriteController;
+    private LivingBeing playerStats;
     [SerializeField] private PlayerInputActions inputActions;
     [SerializeField] public GameObject AbilityRotation;
     private Vector2 lookInput;
@@ -34,6 +35,7 @@ public class PlayerMovement : MovementScript
         rb = GetComponent<Rigidbody2D>();
         mainCamera = Camera.main;
         inputActions = new PlayerInputActions();
+        playerStats = GetComponent<LivingBeing>();
 
     }
 
@@ -68,6 +70,8 @@ public class PlayerMovement : MovementScript
     #region Dash logic
     private void OnDash(InputAction.CallbackContext context)
     {
+        if (playerStats.Dead) return;
+
         //EventDeclarer.SpawnEnemies?.Invoke(this.gameObject);
         if (canDash)
         {
@@ -155,6 +159,8 @@ public class PlayerMovement : MovementScript
 
     private void SendMinionCommandContext(InputAction.CallbackContext context)
     {
+        if (playerStats.Dead) return;
+
         worldPosition = mainCamera.ScreenToWorldPoint(lookInput);
         Debug.DrawLine(new Vector3(0, 0, 0), worldPosition, Color.green);
         CommandMinion.HandleCommand(worldPosition);
@@ -162,8 +168,10 @@ public class PlayerMovement : MovementScript
 
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
+        if (playerStats.Dead) return;
+
         if (!lockedInUI && !StuckInAbilityAnimation)
         {
             HandleMove();

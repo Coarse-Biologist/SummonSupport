@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d7d1854101543804bb043f80b060a821, type: 3}
-  m_Name: Slash
+  m_Name: MudSlam
   m_EditorClassIdentifier: 
-  <Name>k__BackingField: Slash
+  <Name>k__BackingField: Slam
   <Icon>k__BackingField: {fileID: 0}
   <Cooldown>k__BackingField: 3
   <CostType>k__BackingField: 4
@@ -21,7 +21,7 @@ MonoBehaviour:
   <AbilityTypeTag>k__BackingField: 1
   <ListUsableOn>k__BackingField: 01000000
   <TargetTypeAndEffects>k__BackingField:
-  - <EffectDescription>k__BackingField: belly slash
+  - <EffectDescription>k__BackingField: Muddy Head Slam
     <TargetType>k__BackingField: 1
     <Heal>k__BackingField:
       <Value>k__BackingField: 0
@@ -32,18 +32,18 @@ MonoBehaviour:
     <AttributeDown>k__BackingField: []
     <Damage>k__BackingField:
     - <Value>k__BackingField: 30
-      <Element>k__BackingField: 0
-      <Physical>k__BackingField: 3
+      <Element>k__BackingField: 3
+      <Physical>k__BackingField: 0
       <ValueType>k__BackingField: 0
     <DamageOverTime>k__BackingField: []
     <StatusEffects>k__BackingField: []
     <SpecialAbilityAttribute>k__BackingField: 0
-  <ElementTypes>k__BackingField: 
+  <ElementTypes>k__BackingField: 03000000
   <PhysicalType>k__BackingField: 0
   <Angle>k__BackingField: 0
   <Width>k__BackingField: 3
-  <Shape>k__BackingField: 2
-  <SpawnEffectOnHit>k__BackingField: {fileID: 4439306374306288678, guid: ad3ebfe5da0c21f43a7253ff8277fd9c,
+  <Shape>k__BackingField: 1
+  <SpawnEffectOnHit>k__BackingField: {fileID: 5647196156128557912, guid: ef1808408a91fa0408f32d644044be96,
     type: 3}
-  <MeleeParticleSystem>k__BackingField: {fileID: 134935324219964725, guid: 5c33c778bf848f540a0ad9ded58e9b9f,
+  <MeleeParticleSystem>k__BackingField: {fileID: 4791784787350965432, guid: 1ffba3ca69bd177419346e316f083471,
     type: 3}
