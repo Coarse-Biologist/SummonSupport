@@ -11,7 +11,7 @@ PrefabInstance:
     - target: {fileID: 981238970087819063, guid: c71f7dd61a6fb3b44b4a693aa7c510c5,
         type: 3}
       propertyPath: m_Name
-      value: ElectricCreature_1 Variant
+      value: ElectricCreature
       objectReference: {fileID: 0}
     - target: {fileID: 3158349140324908136, guid: c71f7dd61a6fb3b44b4a693aa7c510c5,
         type: 3}
@@ -33,6 +33,12 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5147987956248969549, guid: c71f7dd61a6fb3b44b4a693aa7c510c5,
+        type: 3}
+      propertyPath: DeathSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 9113a2f909f46a3449ab0f4ab93b7d01,
+        type: 3}
     - target: {fileID: 5243290695599561401, guid: c71f7dd61a6fb3b44b4a693aa7c510c5,
         type: 3}
       propertyPath: m_Color.b
@@ -48,6 +54,11 @@ PrefabInstance:
       propertyPath: m_Color.r
       value: 0.90188676
       objectReference: {fileID: 0}
+    - target: {fileID: 5243290695599561401, guid: c71f7dd61a6fb3b44b4a693aa7c510c5,
+        type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 0a07b4bf821f6754493c764eac24821c, type: 2}
     - target: {fileID: 6197465742391261667, guid: c71f7dd61a6fb3b44b4a693aa7c510c5,
         type: 3}
       propertyPath: m_LocalPosition.x

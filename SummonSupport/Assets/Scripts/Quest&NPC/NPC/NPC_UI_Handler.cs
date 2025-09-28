@@ -118,22 +118,20 @@ public class NPC_UI_Handler : MonoBehaviour, I_Interactable
     private IEnumerator SlowlySetText(string full_npc_text)
     {
 
-        while (true)
+        while (full_npc_text.Length > textUpdateProgress)
         {
+
             string currentText = full_npc_text.Substring(0, textUpdateProgress + 1);
-            yield return new WaitForSeconds(textUpdateSpeed);
             npc_text.text = $"{npcData.npc_Name}: " + currentText;
             textUpdateProgress++;
-            if (textUpdateProgress == full_npc_text.Length)
-                StopCoroutine(textCoroutine);
+            yield return new WaitForSeconds(textUpdateSpeed);
+
+
+            // else// (textUpdateProgress == full_npc_text.Length)
+            //     StopCoroutine(textCoroutine);
         }
 
     }
-
-
-
-
-
 
     private void SetMetaInfo(string new_Info)
     {
@@ -182,7 +180,7 @@ public class NPC_UI_Handler : MonoBehaviour, I_Interactable
     private void OnOptionSelected(string playerResponse)
     {
         Tuple<string, AudioClip> NPC_Words = npcData.Dialogue.GetNPCResponseToPlayer(playerResponse, npcHandler.dialogueUnlocked);
-        Logging.Info($"Option selected: {playerResponse}. npc RESPONSE = {NPC_Words.Item1}");
+        //Logging.Info($"Option selected: {playerResponse}. npc RESPONSE = {NPC_Words.Item1}");
 
         audioSource.clip = NPC_Words.Item2;
         if (audioSource.clip != null)

@@ -1,22 +1,15 @@
 using UnityEngine;
 using System.Collections.Generic;
-[CreateAssetMenu(menuName = "SummonSupportItems/Items")]
-public class Item_SO : ScriptableObject, I_LootInterface
+[CreateAssetMenu(menuName = "SummonSupportItems/General")]
+public class Equipment_SO : ScriptableObject, I_LootInterface
 {
-    [SerializeField] private Rarity itemRarity = Rarity.Wretched;
-    public Rarity ItemRarity => itemRarity;
-    [SerializeField] private ItemType itemType = ItemType.Potion;
-    public ItemType ItemType => itemType;
-    [SerializeField] private int itemValue = 1;
-    public int ItemValue => itemValue;
-    [SerializeField] private ItemNameEnum itemEnum = ItemNameEnum.HealthPotion1;
-    public ItemNameEnum ItemEnum => itemEnum;
-    [SerializeField] private string itemName = "Item Name";
-    public string ItemName => itemName;
-    [SerializeField] private string itemDescription = "Item Description";
-    public string ItemDescription => itemDescription;
-    [SerializeField] private List<EquipmentSlot> equipmentSlot = new List<EquipmentSlot>();
-    public List<EquipmentSlot> EquipmentSlot => equipmentSlot;
+    [field: SerializeField] public Rarity ItemRarity { private set; get; } = Rarity.Wretched;
+    [field: SerializeField] public ItemType ItemType { private set; get; } = ItemType.Potion;
+    [field: SerializeField] public int ItemValue { private set; get; } = 1;
+    [field: SerializeField] public ItemNameEnum ItemEnum { private set; get; } = ItemNameEnum.HealthPotion1;
+    [field: SerializeField] public string ItemName { private set; get; } = "Item Name";
+    [field: SerializeField] public string ItemDescription { private set; get; } = "Item Description";
+    [field: SerializeField] public List<EquipmentSlot> EquipmentSlot { private set; get; } = new();
 
     public void Loot()
     {

@@ -17,10 +17,11 @@ MonoBehaviour:
   <Cooldown>k__BackingField: 3
   <CostType>k__BackingField: 4
   <Cost>k__BackingField: 20
+  <Range>k__BackingField: 3
   <AbilityTypeTag>k__BackingField: 1
   <ListUsableOn>k__BackingField: 01000000
   <TargetTypeAndEffects>k__BackingField:
-  - <EffectDescription>k__BackingField: Belly slash
+  - <EffectDescription>k__BackingField: belly slash
     <TargetType>k__BackingField: 1
     <Heal>k__BackingField:
       <Value>k__BackingField: 0
@@ -38,7 +39,7 @@ MonoBehaviour:
     <StatusEffects>k__BackingField: []
     <SpecialAbilityAttribute>k__BackingField: 0
   <ElementTypes>k__BackingField: 
-  <Range>k__BackingField: 2
+  <PhysicalType>k__BackingField: 0
   <Angle>k__BackingField: 0
   <Width>k__BackingField: 3
   <Shape>k__BackingField: 2

@@ -7,5 +7,6 @@ public enum ItemType
     Debuffer,
     Potion,
     Poison,
+    Armor,
     Quest,
 }

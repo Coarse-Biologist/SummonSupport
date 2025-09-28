@@ -18,6 +18,7 @@ MonoBehaviour:
   <Cooldown>k__BackingField: 2
   <CostType>k__BackingField: 4
   <Cost>k__BackingField: 30
+  <Range>k__BackingField: 20
   <AbilityTypeTag>k__BackingField: 0
   <ListUsableOn>k__BackingField: 00000000
   <TargetTypeAndEffects>k__BackingField:
@@ -37,6 +38,7 @@ MonoBehaviour:
   <ElementTypes>k__BackingField: 
   <ObjectToSpawn>k__BackingField: {fileID: 3310388010863704727, guid: 9f5c5168238435b4785dfd1e83d2aacb,
     type: 3}
+  <SpawnEffectOnHit>k__BackingField: {fileID: 0}
   <SpawnOffset>k__BackingField: {x: 0, y: 0}
   <RotationOffset>k__BackingField: 0
   Radius: 1

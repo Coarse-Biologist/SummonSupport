@@ -1,9 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using Unity.Entities.UniversalDelegates;
-//using Unity.VisualScripting;
+
 
 public class AIPeacefulState : AIState
 {
@@ -74,7 +72,7 @@ public class AIPeacefulState : AIState
             {
                 GameObject detectedObject = rangeChecks[i].transform.gameObject;
                 if (detectedObject == gameObject) continue;
-                if (detectedObject.TryGetComponent<LivingBeing>(out LivingBeing targetLivingBeing))
+                if (detectedObject.TryGetComponent<LivingBeing>(out LivingBeing targetLivingBeing) && targetLivingBeing.GetAttribute(AttributeType.CurrentHitpoints) > 0)
                 {
                     stateHandler.SetTarget(targetLivingBeing);
 
@@ -162,8 +160,15 @@ public class AIPeacefulState : AIState
             targetStats = SelectFriendlyTarget();
             chaseState.LookAtTarget(targetStats.transform.position);
             stateHandler.SetTarget(targetStats);
-            stateHandler.abilityHandler.UseAbility(targetStats);
-
+            Ability ability = GetComponent<CreatureAbilityHandler>().GetAbilityForTarget(targetStats, targetStats == stateHandler.minionStats);
+            if (ability != null)
+            {
+                chaseState.SetAbilityRange(ability.Range);
+                if ((transform.position - targetStats.transform.position).magnitude < chaseState.SelectedAbilityAttackRange)
+                {
+                    stateHandler.abilityHandler.UseAbility(targetStats, ability);
+                }
+            }
             yield return supportSpeed;
         }
 
@@ -190,7 +195,7 @@ public class AIPeacefulState : AIState
         Vector2 playerPos = player.transform.position;
         Vector2 direction = playerPos - currentLoc;
 
-        rb.linearVelocity = direction * stateHandler.livingBeing.Speed;
+        rb.linearVelocity = direction * stateHandler.movementScript.GetMovementAttribute(MovementAttributes.MovementSpeed);
 
     }
 }

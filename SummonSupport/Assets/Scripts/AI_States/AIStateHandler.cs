@@ -6,12 +6,14 @@ using Unity.VisualScripting.Antlr3.Runtime.Misc;
 
 public class AIStateHandler : MonoBehaviour
 {
-    [SerializeField] public int FollowRadius = 5; // The distance a summon follows behind a player
-    [SerializeField] public int DetectionRadius = 50; // the radius in which summons will recognize and try to chase or attack
-    [SerializeField] public int AngleOfSight = 360;
-    [SerializeField] public int InterestRadius = 80; // radius beyond which a summon will lose interest in attacking
-    [SerializeField] public int AttackSpeed = 1;
-    [SerializeField] public int Cowardice = 0; // At what HP percentage a summon may try to retreat
+    [field: SerializeField] public int FollowRadius = 5; // The distance a summon follows behind a player
+    [field: SerializeField] public int DetectionRadius = 50; // the radius in which summons will recognize and try to chase or attack
+    [field: SerializeField] public int AngleOfSight = 360;
+    [field: SerializeField] public int InterestRadius = 80; // radius beyond which a summon will lose interest in attacking
+    [field: SerializeField] public int Cowardice = 0; // At what HP percentage a summon may try to retreat
+    [field: SerializeField] public bool Dead = false; // At what HP percentage a summon may try to retreat
+
+
     public LayerMask targetMask { private set; get; }
     public bool StuckInAbilityAnimation { private set; get; } = false;
 
@@ -25,11 +27,13 @@ public class AIStateHandler : MonoBehaviour
     [SerializeField] public AIState chaseState { private set; get; }
     [SerializeField] public AIState obedienceState { private set; get; }
     [SerializeField] public LivingBeing livingBeing { private set; get; }
+    public MovementScript movementScript { get; private set; }
     [SerializeField] public MinionStats minionStats { private set; get; }
     public CreatureAbilityHandler abilityHandler { private set; get; }
     public GameObject player { protected set; get; }
     public LivingBeing playerStats { protected set; get; }
     public LivingBeing target { protected set; get; }
+
 
     public Vector2 lastSeenLoc;
 
@@ -54,6 +58,7 @@ public class AIStateHandler : MonoBehaviour
         currentState = GetComponentInChildren<AIPeacefulState>();
         obedienceState = GetComponent<AIObedienceState>();
         livingBeing = GetComponent<LivingBeing>();
+        movementScript = GetComponent<MovementScript>();
         minionStats = GetComponent<MinionStats>();
         ccState = GetComponent<AI_CC_State>();
         InvokeRepeating("RunStateMachine", 0f, .1f);
@@ -98,10 +103,15 @@ public class AIStateHandler : MonoBehaviour
 
     }
 
+    public void SetDead(bool dead)
+    {
+        Dead = dead;
+    }
+
     private void RunStateMachine()
     {
         //Debug.Log($"current state = {currentState}");
-
+        if (Dead) return;
         // Called in Awake by using "Invoke repeating"
         if (ccState != null && ccState.CCToCaster.Count != 0) SwitchToNextState(ccState);
         if (minionStats == null || minionStats.CurrentCommand == MinionCommands.None)

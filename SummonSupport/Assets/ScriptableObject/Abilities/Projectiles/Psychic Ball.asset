@@ -18,6 +18,7 @@ MonoBehaviour:
   <Cooldown>k__BackingField: 2
   <CostType>k__BackingField: 4
   <Cost>k__BackingField: 20
+  <Range>k__BackingField: 20
   <AbilityTypeTag>k__BackingField: 1
   <ListUsableOn>k__BackingField: 01000000
   <TargetTypeAndEffects>k__BackingField:
@@ -36,14 +37,16 @@ MonoBehaviour:
       <Physical>k__BackingField: 0
       <ValueType>k__BackingField: 0
     <DamageOverTime>k__BackingField:
-    - <Value>k__BackingField: 2
+    - <Value>k__BackingField: 1
       <Element>k__BackingField: 15
       <Physical>k__BackingField: 0
       <ValueType>k__BackingField: 0
       <Duration>k__BackingField: 5
-    <StatusEffects>k__BackingField: []
+    <StatusEffects>k__BackingField:
+    - {fileID: 11400000, guid: a1c4f82da9337b549af8c79d41093bdf, type: 2}
     <SpecialAbilityAttribute>k__BackingField: 0
   <ElementTypes>k__BackingField: 0f000000
+  <PhysicalType>k__BackingField: 0
   <Speed>k__BackingField: 5
   <Projectile>k__BackingField: {fileID: 1503869405188693834, guid: 0ddfb555a05f56046bee51468a7c0b49,
     type: 3}

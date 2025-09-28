@@ -7,8 +7,8 @@ using System;
 public static class EquipmentHandler
 {
 
-    public static Dictionary<Item_SO, int> ItemInventory = new();
-    public static Dictionary<EquipmentSlot, Item_SO> EquippedItems = new Dictionary<EquipmentSlot, Item_SO>();
+    public static Dictionary<Equipment_SO, int> ItemInventory = new();
+    public static Dictionary<EquipmentSlot, Equipment_SO> EquippedItems = new();
 
     public static void InitializeEquippedItemsDict()
     {
@@ -18,7 +18,7 @@ public static class EquipmentHandler
             EquippedItems.Add(slot, null);
         }
     }
-    public static void AddItemToInventory(Item_SO item, int num = 1)
+    public static void AddItemToInventory(Equipment_SO item, int num = 1)
     {
         if (item != null)
         {
@@ -28,15 +28,25 @@ public static class EquipmentHandler
                 ItemInventory.Add(item, num);
         }
     }
-    public static void SubtractItemfromInventory(Item_SO item, int num)
+    public static void SubtractItemfromInventory(Equipment_SO item, int num)
     {
         if (item != null)
         {
             if (ItemInventory.TryGetValue(item, out int currentlyOwned) && num <= currentlyOwned)
                 ItemInventory[item] -= num;
+            if (ItemInventory[item] == 0)
+                RemoveItemFromInventory(item);
         }
     }
-    public static void EquipItem(Item_SO item, EquipmentSlot equipmentSlot)
+    public static void RemoveItemFromInventory(Equipment_SO item)
+    {
+        if (item != null)
+        {
+            if (ItemInventory.TryGetValue(item, out int currentlyOwned))
+                ItemInventory.Remove(item);
+        }
+    }
+    public static void EquipItem(Equipment_SO item, EquipmentSlot equipmentSlot)
     {
         if (EquippedItems != null)
         {

@@ -14,9 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Name>k__BackingField: 
   <Icon>k__BackingField: {fileID: 0}
-  <Cooldown>k__BackingField: 0
-  <CostType>k__BackingField: 0
-  <Cost>k__BackingField: 0
+  <Cooldown>k__BackingField: 5
+  <CostType>k__BackingField: 4
+  <Cost>k__BackingField: 15
+  <Range>k__BackingField: 15
   <AbilityTypeTag>k__BackingField: 1
   <ListUsableOn>k__BackingField: 01000000
   <TargetTypeAndEffects>k__BackingField:
@@ -35,8 +36,10 @@ MonoBehaviour:
     - {fileID: 11400000, guid: de217b777d75f0e4280c41fbaa010a5a, type: 2}
     <SpecialAbilityAttribute>k__BackingField: 0
   <ElementTypes>k__BackingField: 
+  <PhysicalType>k__BackingField: 0
   <ObjectToSpawn>k__BackingField: {fileID: 6725234854290891213, guid: 23052f4373add044e8afe3b7eae99b51,
     type: 3}
+  <SpawnEffectOnHit>k__BackingField: {fileID: 0}
   <SpawnOffset>k__BackingField: {x: 0, y: 0}
   <RotationOffset>k__BackingField: 0
   Radius: 4

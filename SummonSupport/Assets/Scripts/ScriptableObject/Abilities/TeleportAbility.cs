@@ -8,7 +8,6 @@ public class TeleportAbility : Ability
 {
     [Header("Teleport settings")]
 
-    [field: SerializeField] public float Range { get; private set; }
     [field: SerializeField] public List<Ability> ActivateOnUse { get; private set; }
     [field: SerializeField] public List<Ability> ActivateOnArrive { get; private set; }
     [field: SerializeField] public GameObject EffectOnActivate { get; private set; }

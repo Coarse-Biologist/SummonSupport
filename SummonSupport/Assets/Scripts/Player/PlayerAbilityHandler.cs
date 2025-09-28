@@ -6,6 +6,7 @@ using SummonSupportEvents;
 public class PlayerAbilityHandler : AbilityHandler
 {
     PlayerInputActions inputActions;
+    private LivingBeing playerStats;
     private Dictionary<string, int> inputActionToIndex = new()
     {
         { "Ability1", 0 },
@@ -31,6 +32,7 @@ public class PlayerAbilityHandler : AbilityHandler
     {
         UpdateAbilities();
         // abilityRotation = gameObject.GetComponentInChildren<RectTransform>();
+        playerStats = GetComponent<LivingBeing>();
     }
 
     new void Awake()
@@ -43,13 +45,14 @@ public class PlayerAbilityHandler : AbilityHandler
     {
         RegisterInputEvents(true);
         inputActions ??= new PlayerInputActions();
-
+        EventDeclarer.PlayerLearnedAbility?.AddListener(LearnAbility);
         inputActions.Enable();
     }
 
     void OnDisable()
     {
         RegisterInputEvents(false);
+        EventDeclarer.PlayerLearnedAbility?.RemoveListener(LearnAbility);
         inputActions.Disable();
     }
 
@@ -69,6 +72,8 @@ public class PlayerAbilityHandler : AbilityHandler
     }
     void OnAbility(InputAction.CallbackContext context)
     {
+        if (playerStats.Dead) return;
+
         if (inputActionToIndex.TryGetValue(context.action.name, out int index) && index < Abilities.Count)
         {
             if (!abilitiesOnCooldown[index])

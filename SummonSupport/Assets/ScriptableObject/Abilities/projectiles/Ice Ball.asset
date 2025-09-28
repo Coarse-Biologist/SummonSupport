@@ -17,6 +17,7 @@ MonoBehaviour:
   <Cooldown>k__BackingField: 2
   <CostType>k__BackingField: 4
   <Cost>k__BackingField: 20
+  <Range>k__BackingField: 20
   <AbilityTypeTag>k__BackingField: 1
   <ListUsableOn>k__BackingField: 01000000
   <TargetTypeAndEffects>k__BackingField:

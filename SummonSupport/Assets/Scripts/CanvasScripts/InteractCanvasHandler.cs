@@ -31,7 +31,6 @@ public class InteractCanvasHandler : MonoBehaviour
         Canvas canvas = transform.GetComponent<Canvas>();
         canvas.GetComponentInChildren<TextMeshProUGUI>().text = temporaryText;
 
-
     }
 
 }

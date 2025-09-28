@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 using UnityEngine.Splines;
 
 
@@ -16,6 +17,8 @@ public class Aura : MonoBehaviour
     private LivingBeing target;
     private ConjureAbility conjureAbility;
     private SplineAnimate splineAnimator;
+
+    private UnityEngine.Rendering.Universal.Light2D lightScript;
     private bool SetSplineAnimator()
     {
         if (TryGetComponent<SplineAnimate>(out SplineAnimate spline))
@@ -29,17 +32,33 @@ public class Aura : MonoBehaviour
 
     void Start()
     {
+        Debug.Log("Aura script starts here and now");
         if (SetSplineAnimator())
         {
             if (TryGetComponent<CircleCollider2D>(out CircleCollider2D colliderCito))
             {
                 circleCollider = colliderCito;
                 circleCollider.enabled = false;
-                Debug.Log($"Disabling {circleCollider}"); InvokeRepeating("CheckEndNear", .5f, .01f);
+                //Debug.Log($"Disabling {circleCollider}"); 
+                InvokeRepeating("CheckEndNear", .5f, .01f);
             }
         }
         Invoke("Activate", ActivationTime);
+        if (TryGetComponent<Light2D>(out Light2D FoundlightScript))
+        {
+            Debug.Log("Light script detected");
+            lightScript = FoundlightScript;
+            StartCoroutine(LightManager.MakeLightOscillate(lightScript));
+            if (TryGetComponent<ParticleSystem>(out ParticleSystem ps))
+            {
+                Debug.Log("changing color to color");
+                lightScript.color = Color.green;
+                lightScript.intensity = 3;
+                Debug.Log($"changing color to {lightScript.color}");
 
+            }
+        }
+        else Debug.Log("No light script found");
     }
     public void HandleInstantiation(LivingBeing caster, LivingBeing target, Ability ability, float radius, float duration)
     {
@@ -55,6 +74,7 @@ public class Aura : MonoBehaviour
                 if (this.target != null) StartCoroutine(SeekTarget(this.target.gameObject));
             }
         }
+        Destroy(gameObject, duration);
     }
     public void SetAuraStats(LivingBeing caster, LivingBeing target, Ability ability, float duration)
     {
@@ -68,12 +88,12 @@ public class Aura : MonoBehaviour
     }
     private void CheckEndNear()
     {
-        Debug.Log($"Spline animator normalized  time =  {splineAnimator.NormalizedTime}");
+        //Debug.Log($"Spline animator normalized  time =  {splineAnimator.NormalizedTime}");
 
         if (splineAnimator.NormalizedTime > .75)
         {
             circleCollider.enabled = true;
-            Debug.Log($"Enabling {circleCollider}");
+            //Debug.Log($"Enabling {circleCollider}");
             CancelInvoke("CheckEndNear");
         }
 
@@ -104,6 +124,7 @@ public class Aura : MonoBehaviour
                         SpawnOnHitEffect(otherLivingBeing, conjureAbility.SpawnEffectOnHit);
                     }
                     otherLivingBeing.AlterAbilityList(ability, true);
+                    Debug.Log($"Effects of {ability.Name} is being handled.");
                     CombatStatHandler.HandleEffectPackages(ability, caster, otherLivingBeing, false);
                 }
             }

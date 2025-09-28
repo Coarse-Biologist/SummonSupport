@@ -25,13 +25,13 @@ public class CreatureAbilityHandler : AbilityHandler
         SetAbilityLists();
     }
 
-    public Ability GetAbilityForTarget(AbilityHandler casterAbilityHandler, LivingBeing target)
+    public Ability GetAbilityForTarget(LivingBeing target, bool forSelf = false)
     {
         Stopwatch stopwatch = Stopwatch.StartNew();
         selectedAbility = null;
         bool targetIsFriendly = false;
 
-        LivingBeing casterStats = casterAbilityHandler.GetComponent<LivingBeing>();
+        LivingBeing casterStats = GetComponent<LivingBeing>();
 
         if (target == null)
             return null;
@@ -48,11 +48,11 @@ public class CreatureAbilityHandler : AbilityHandler
         }
         //Logging.Info($" elapsed time : {stopwatch.ElapsedMilliseconds}");
 
-        return SelectAbility(targetIsFriendly, target);
+        return SelectAbility(targetIsFriendly, target, forSelf);
 
 
     }
-    private Ability SelectAbility(bool friendlyTarget, LivingBeing target)
+    private Ability SelectAbility(bool friendlyTarget, LivingBeing target, bool forSelf = false)
     {
         foreach (Ability ability in attackAbilities)
         {
@@ -77,9 +77,11 @@ public class CreatureAbilityHandler : AbilityHandler
 
         if (IsOnCoolDown(selectedAbility))
         {
-            UnityEngine.Debug.Log($"Returning null insytead of an ability");
+            //UnityEngine.Debug.Log($"Returning null insytead of an ability");
             return null;
         }
+        if (forSelf && selectedAbility is ProjectileAbility)
+            return null;
         else
             return selectedAbility;
     }
@@ -110,12 +112,12 @@ public class CreatureAbilityHandler : AbilityHandler
 
 
 
-    public void UseAbility(LivingBeing target)
+    public void UseAbility(LivingBeing target, Ability ability)
     {
-        Ability ability = GetAbilityForTarget(GetComponent<AbilityHandler>(), target);
+        float range = ability.Range;
         if (ability != null)
         {
-            UnityEngine.Debug.Log($"{ability} = ability selected by {GetComponent<LivingBeing>().Name} against {target}");
+            //UnityEngine.Debug.Log($"{ability} = ability selected by {GetComponent<LivingBeing>().Name} against {target}");
             CastAbility(Abilities.IndexOf(ability), target.transform.position, abilityDirection.transform.rotation);
         }
     }

@@ -19,7 +19,7 @@ public class GradientLibraryAsset : ScriptableObject
         {
             if (entry.Element == element)
             {
-                Debug.Log($"returning {entry.gradient} for the strongest element: {element}");
+                //Debug.Log($"returning {entry.gradient} for the strongest element: {element}");
                 return entry.gradient;
             }
         }

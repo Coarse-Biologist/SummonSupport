@@ -8,5 +8,6 @@ public enum StatusEffectType
     Charmed,
     Madness,
     Pulled,
-    AttackAnimation
+    AttackAnimation,
+    ExplodeOnDeath
 }

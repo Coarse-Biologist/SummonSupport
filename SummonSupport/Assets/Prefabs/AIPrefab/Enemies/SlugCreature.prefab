@@ -31,7 +31,7 @@ PrefabInstance:
     - target: {fileID: 2836918575422120019, guid: bf3a7c387497a1c4b876116e70c15ecf,
         type: 3}
       propertyPath: m_Name
-      value: SlugCreature Variant
+      value: SlugCreature
       objectReference: {fileID: 0}
     - target: {fileID: 4724702362339814154, guid: bf3a7c387497a1c4b876116e70c15ecf,
         type: 3}
@@ -116,6 +116,11 @@ PrefabInstance:
       propertyPath: m_Color.r
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 7062529144708824541, guid: bf3a7c387497a1c4b876116e70c15ecf,
+        type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 57ebbdeaefcfc8845a3039bc45eda813, type: 2}
     - target: {fileID: 7904272580143572521, guid: bf3a7c387497a1c4b876116e70c15ecf,
         type: 3}
       propertyPath: ESprite

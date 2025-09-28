@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Diagnostics;
 using UnityEngine.InputSystem;
+using Unity.VisualScripting;
 
 public static class CombatStatHandler
 {
@@ -16,12 +17,11 @@ public static class CombatStatHandler
     public static void HandleEffectPackages(Ability ability, LivingBeing caster, LivingBeing target, bool forSelf = false)
     {
         Stopwatch stopwatch = new();
-        UnityEngine.Debug.Log($"ability = {ability.name}. caster = {caster.Name}. target = {target.Name}. for self? {forSelf}");
+        //UnityEngine.Debug.Log($"ability = {ability.name}. caster = {caster.Name}. target = {target.Name}. for self? {forSelf}");
         LivingBeing casterStats = caster.GetComponent<LivingBeing>();
         LivingBeing targetStats = target.GetComponent<LivingBeing>();
         LivingBeing theTarget = casterStats;
         if (!forSelf) theTarget = targetStats;
-        theTarget.AlterAbilityList(ability, false);
 
 
         foreach (EffectPackage package in ability.TargetTypeAndEffects)
@@ -63,6 +63,11 @@ public static class CombatStatHandler
 
                 if (package.StatusEffects.Count > 0)
                 {
+                    foreach (StatusEffects status in package.StatusEffects)
+                    {
+                        target.AlterStatusEffectList(status.EffectType, true);
+                        target.StartCoroutine(RemoveStatusEffect(target, status));
+                    }
                     if (target.TryGetComponent<AI_CC_State>(out AI_CC_State ccState))
                     {
                         foreach (StatusEffects status in package.StatusEffects)
@@ -102,22 +107,27 @@ public static class CombatStatHandler
     {
         float newHP = Mathf.Min(healValue + target.GetAttribute(AttributeType.CurrentHitpoints), target.GetAttribute(AttributeType.MaxHitpoints));
         target.SetAttribute(AttributeType.CurrentHitpoints, newHP);
-        UnityEngine.Debug.Log($"healing {target.Name} for {healValue}");
+        //UnityEngine.Debug.Log($"healing {target.Name} for {healValue}");
         return healValue;
     }
     public static float AdjustAndApplyTempChange(Ability ability, TempAttrChange tempAttr, LivingBeing target, LivingBeing caster = null)
     {
+        UnityEngine.Debug.Log("Adjusting and applying tempchange");
         float changeValue = tempAttr.Value;
         float duration = tempAttr.Duration;
-        Element element = tempAttr.Element;
-        PhysicalType physical = tempAttr.Physical;
         if (tempAttr is TempAttrDecrease_AT) changeValue = -changeValue; // set to negative if it decreases
-        if (tempAttr.AttributeType == AttributeType.CurrentHitpoints || tempAttr.AttributeType == AttributeType.MaxHitpoints)
+        if (tempAttr.ResourceAttribute == AttributeType.CurrentHitpoints || tempAttr.ResourceAttribute == AttributeType.MaxHitpoints)
         {
-            if (element != Element.None) changeValue = AdjustBasedOnAffinity(element, changeValue, caster, target);
-            if (physical != PhysicalType.None) changeValue = AdjustBasedOnArmor(physical, changeValue, target);
+            if (ability.ElementTypes.Count > 0) changeValue = AdjustBasedOnAffinity(ability.ElementTypes[0], changeValue, caster, target);
+            if (ability.PhysicalType != PhysicalType.None) changeValue = AdjustBasedOnArmor(ability.PhysicalType, changeValue, target);
         }
-        ApplyTempValue(ability, target, tempAttr.AttributeType, changeValue, duration);
+        UnityEngine.Debug.Log($"the change value = {changeValue}. tempAttr.PhysicalResistance = {tempAttr.ElementalAffinity}");
+
+        if (tempAttr.ResourceAttribute != AttributeType.None) ApplyTempValue(ability, target, tempAttr.ResourceAttribute, changeValue, duration);
+        if (tempAttr.PhysicalResistance != PhysicalType.None) ApplyTempValue(ability, target, tempAttr.PhysicalResistance, changeValue, duration);
+        if (tempAttr.ElementalAffinity != Element.None) ApplyTempValue(ability, target, tempAttr.ElementalAffinity, changeValue, duration);
+        if (tempAttr.MovementAttribute != MovementAttributes.None) ApplyTempValue(ability, target, tempAttr.MovementAttribute, changeValue, duration);
+
         //target.StartCoroutine(ResetTempAttribute(target, tempAttr.AttributeType, -changeValue, duration)); //reset by using opposite
 
         return changeValue;
@@ -182,29 +192,23 @@ public static class CombatStatHandler
         {
             if (tempMax + changeValue <= 0) // if the damage is more than the shield
             {
-                //Logging.Info($"{target.name} has had {AttributeType.CurrentHitpoints} changed by {changeValue}. option 1");
                 target.SetAttribute(AttributeType.CurrentHitpoints, currentValue + changeValue - tempMax);
 
                 target.SetAttribute(attributeTypeTempMax, 0); // set overshield to 0
             }
             else
-                //Logging.Info($"{target.name} has had {AttributeType.CurrentHitpoints} changed by {changeValue}. option  2");
-
                 target.SetAttribute(attributeTypeTempMax, tempMax + changeValue); // otherwise lower overshield value by the damage
         }
         else
         {
             if (changeValue + currentValue >= max)
             {
-                //Logging.Info($"{target.name} has had {AttributeType.CurrentHitpoints} changed by {changeValue}. option 3");
                 target.SetAttribute(AttributeType.CurrentHitpoints, max);
             }
 
             else
             {
                 target.SetAttribute(AttributeType.CurrentHitpoints, target.GetAttribute(AttributeType.CurrentHitpoints) + changeValue);
-                //Logging.Info($"{target.name} has had {AttributeType.CurrentHitpoints} changed by {changeValue}. option 4");
-
             }
         }
     }
@@ -213,7 +217,7 @@ public static class CombatStatHandler
 
     private static void HandleApplyDOT(Ability ability, LivingBeing target, AttributeType attributeType, float newValue, float duration)
     {
-        UnityEngine.Debug.Log($"Changing {target}s regen by {newValue}");
+        //UnityEngine.Debug.Log($"Changing {target}s regen by {newValue}");
         target.ChangeRegeneration(attributeType, newValue);
         target.StartCoroutine(ResetRegeneration(ability, target, attributeType, newValue, duration));
     }
@@ -224,47 +228,139 @@ public static class CombatStatHandler
         while (elapsed < duration)
         {
             yield return tickRate;
-            elapsed += tickRateFloat;
-            if (!target.AffectedByAbilities.Contains(ability)) elapsed = duration;
+            if (!target.IsAffectedByAbility(ability))
+            {
+                elapsed += tickRateFloat;
+            }
         }
         target.ChangeRegeneration(attributeType, -newValue);
         target.AlterAbilityList(ability, false);
 
     }
 
-    #region apply already adjusted values, temporrily, repeatedly.
+    #region apply already adjusted values, temporarily, repeatedly.
     private static void ApplyValue(LivingBeing target, AttributeType attributeType, float newValue)
     {
         //Logging.Info($"{target.name} has had {attributeType} changed by {newValue}");
         target.SetAttribute(attributeType, target.GetAttribute(attributeType) + newValue);
     }
-
+    #region multiple temp value overrides
     public static void ApplyTempValue(Ability ability, LivingBeing target, AttributeType attributeType, float newValue, float duration)
     {
-        //Logging.Info($"{target.name} has had {attributeType} changed by {newValue}");
-
         target.SetAttribute(attributeType, target.GetAttribute(attributeType) + newValue);
         target.StartCoroutine(ResetTempAttribute(ability, target, attributeType, newValue, duration));
+    }
+    #region temp movement change
+
+    public static void ApplyTempValue(Ability ability, LivingBeing target, MovementAttributes movementAttribute, float newValue, float duration)
+    {
+        //Logging.Info($"{target.name} has had {attributeType} changed by {newValue}");
+        if (target.TryGetComponent<MovementScript>(out MovementScript movementScript))
+        {
+            movementScript.SetMovementAttribute(movementAttribute, movementScript.GetMovementAttribute(movementAttribute) + newValue);
+            movementScript.StartCoroutine(ResetTempMovementAttribute(ability, target, movementScript, movementAttribute, newValue, duration));
+        }
+    }
+
+    private static IEnumerator ResetTempMovementAttribute(Ability ability, LivingBeing target, MovementScript movementScript, MovementAttributes movementAttribute, float preChangeValue, float duration)
+    {
+        float elapsed = 0f;
+        while (elapsed < duration)// && target.AffectedByAbilities.Contains(ability))
+        {
+            yield return tickRate;
+            if (!target.IsAffectedByAbility(ability))
+            {
+                elapsed += tickRateFloat;
+            }
+        }
+        movementScript.SetMovementAttribute(movementAttribute, preChangeValue);
+        target.AlterAbilityList(ability, false);
+    }
+    #endregion
+
+    #region apply temp physical resistance
+
+    public static void ApplyTempValue(Ability ability, LivingBeing target, PhysicalType physicalType, float newValue, float duration)
+    {
+        Logging.Info($"{target.name} has had {physicalType} changed by {newValue}");
+        target.SetPhysicalResist(physicalType, target.PhysicalDict[physicalType].Get() + newValue);
+        target.StartCoroutine(ResetTempPhysicalResist(ability, target, physicalType, newValue, duration));
+    }
+
+    private static IEnumerator ResetTempPhysicalResist(Ability ability, LivingBeing target, PhysicalType physicalType, float preChangeValue, float duration)
+    {
+        float elapsed = 0f;
+        while (elapsed < duration)// && target.AffectedByAbilities.Contains(ability))
+        {
+            yield return tickRate;
+            if (!target.IsAffectedByAbility(ability))
+            {
+                elapsed += tickRateFloat;
+            }
+        }
+        target.SetPhysicalResist(physicalType, preChangeValue);
+        target.AlterAbilityList(ability, false);
+    }
+    #endregion
+
+    #region apply temp affinity
+
+    public static void ApplyTempValue(Ability ability, LivingBeing target, Element affinity, float changeValue, float duration)
+    {
+        Logging.Info($"{target.name} has had {affinity} changed by {changeValue}");
+        float preAffinityValue = target.Affinities[affinity].Get();
+        target.ChangeAffinity(affinity, changeValue);
+        target.StartCoroutine(ResetTempAffinity(ability, target, affinity, preAffinityValue, duration));
+    }
+
+    private static IEnumerator ResetTempAffinity(Ability ability, LivingBeing target, Element elementalAffinity, float preChangeValue, float duration)
+    {
+        float elapsed = 0f;
+        while (elapsed < duration)// && target.AffectedByAbilities.Contains(ability))
+        {
+            yield return tickRate;
+            if (!target.IsAffectedByAbility(ability))
+            {
+                elapsed += tickRateFloat;
+            }
+        }
+        Logging.Info($"{target.name} has had {elementalAffinity} changed back to {preChangeValue}");
+
+        target.SetAffinity(elementalAffinity, preChangeValue);
+
+        target.AlterAbilityList(ability, false);
+    }
+
+    #endregion
+
+    #region remove temp status effect
+
+    private static IEnumerator RemoveStatusEffect(LivingBeing target, StatusEffects status)
+    {
+        yield return new WaitForSeconds(status.Duration);
+        target.AlterStatusEffectList(status.EffectType, false);
 
     }
+    #endregion
+
     private static IEnumerator ResetTempAttribute(Ability ability, LivingBeing target, AttributeType attributeType, float changeValue, float duration)
     {
         float elapsed = 0f;
-        while (elapsed < duration && target.AffectedByAbilities.Contains(ability))
+        while (elapsed < duration)// && target.AffectedByAbilities.Contains(ability))
         {
             yield return tickRate;
-            elapsed += tickRateFloat;
-            if (!target.AffectedByAbilities.Contains(ability)) elapsed = duration;
+            if (!target.IsAffectedByAbility(ability))
+            {
+                elapsed += tickRateFloat;
+            }
         }
-        if (!target.AffectedByAbilities.Contains(ability)) //UnityEngine.Debug.Log($"Stopping effect {ability.Name} because player is no longer being affected by it");
-
-            ApplyValue(target, attributeType, -changeValue); // resets by adding the opposite of what was added before (which may have been negative)
+        ApplyValue(target, attributeType, -changeValue); // resets by adding the opposite of what was added before (which may have been negative)
         target.AlterAbilityList(ability, false);
-
     }
-
+    #endregion
 
     #endregion
+
 
 }
 

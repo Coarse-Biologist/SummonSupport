@@ -40,7 +40,7 @@ public class PlayerUIHandler : MonoBehaviour
         EventDeclarer.maxAttributeChanged.AddListener(UpdateMaxValueResourceBar);
         if (AlchemyHandler.Instance != null)
             AlchemyHandler.Instance.newMinionAdded.AddListener(AddMinionHP);
-        EventDeclarer.minionDied.AddListener(RemoveMinionHP);
+        //EventDeclarer.minionDied.AddListener(RemoveMinionHP);
     }
 
     void OnDisable()
@@ -49,7 +49,7 @@ public class PlayerUIHandler : MonoBehaviour
         EventDeclarer.maxAttributeChanged.RemoveListener(UpdateMaxValueResourceBar);
         if (AlchemyHandler.Instance != null)
             AlchemyHandler.Instance.newMinionAdded.RemoveListener(AddMinionHP);
-        EventDeclarer.minionDied.RemoveListener(RemoveMinionHP);
+        //EventDeclarer.minionDied.RemoveListener(RemoveMinionHP);
     }
 
     void Start()
@@ -58,7 +58,7 @@ public class PlayerUIHandler : MonoBehaviour
         UpdateMaxValueResourceBar(playerStats, AttributeType.CurrentHitpoints);
         UpdateResourceBar(playerStats, AttributeType.CurrentHitpoints);
         UpdateResourceBar(playerStats, AttributeType.CurrentPower);
-        UpdateResourceBar(playerStats, AttributeType.CurrentXP);
+        SetPlayerXP(playerStats.CurrentXP);
 
     }
 
@@ -120,13 +120,16 @@ public class PlayerUIHandler : MonoBehaviour
     //    CommandMinion.SetSelectedMinion(selectedMinion.gameObject);
     //}
 
-    public void RemoveMinionHP(LivingBeing livingBeing)
+    public void RemoveMinionHP(GameObject minion)
     {
-        ProgressBar minionHP = GetLivingBeingHPBar(livingBeing);
-        if (minionHP != null)
+        if (minion.TryGetComponent(out LivingBeing livingBeing))
         {
-            HPDict.Remove(livingBeing);
-            minionHPBars.Remove(minionHP);
+            ProgressBar minionHP = GetLivingBeingHPBar(livingBeing);
+            if (minionHP != null)
+            {
+                HPDict.Remove(livingBeing);
+                minionHPBars.Remove(minionHP);
+            }
         }
     }
     private LivingBeing GetLivingBeingFromHPBar(ProgressBar minionHP)
@@ -143,7 +146,13 @@ public class PlayerUIHandler : MonoBehaviour
 
     private ProgressBar GetLivingBeingHPBar(LivingBeing minion)
     {
-        return HPDict[minion];
+        if (HPDict.TryGetValue(minion, out ProgressBar bar))
+            return bar;
+        else
+        {
+            Debug.Log($"{minion} was not found in the HP progress bar dictionary");
+            return null;
+        }
     }
     private void OnMinionSelect(ProgressBar minionHP)
     {
@@ -181,16 +190,14 @@ public class PlayerUIHandler : MonoBehaviour
     }
     private void SetMinionHealthBar(LivingBeing livingBeing)
     {
-
         ProgressBar hpBar = GetLivingBeingHPBar(livingBeing);
         if (hpBar != null)
         {
-            float hp = livingBeing.GetAttribute(AttributeType.CurrentHitpoints);
+            float hp = livingBeing.GetAttribute(AttributeType.CurrentHitpoints); // Math.Max(0, 
             hpBar.value = livingBeing.CurrentHP;
             hpBar.title = $"{livingBeing.Name} HP: {hp}";
         }
         else Logging.Info($"There was no hp bar for the living being {livingBeing.name}");
-
     }
 
     private void SetPlayerAttribute(AttributeType attributeType)
@@ -199,9 +206,8 @@ public class PlayerUIHandler : MonoBehaviour
             playerHealthBar.value = playerStats.GetAttribute(attributeType);
         if (attributeType == AttributeType.CurrentPower)
             playerPowerBar.value = playerStats.GetAttribute(attributeType);
-
     }
-    private void SetPlayerXP(float playerXP)
+    public void SetPlayerXP(float playerXP)
     {
         playerXP_Bar.value = playerStats.CurrentXP;
     }

@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 using static AbilityLibrary_SO;
 
@@ -5,18 +7,44 @@ public static class AbilityLibrary
 {
 
     public static AbilityLibrary_SO abilityLibrary { get; private set; } = null;
+    public static PlayerAbilitiesByLevel playerAbilitiesByLevel { get; private set; } = new();
+
     public static void SetAbilityLibrary(AbilityLibrary_SO library_SO)
     {
         abilityLibrary = library_SO;
     }
-    public static Ability GetAbility(Element element)
+    public static List<Ability> GetRandomAbilities(Element element, int number = 1)
     {
+        List<Ability> abilitiesList = new();
+        Ability randomAbility = null;
+        int maxAttempts = 10;
         if (abilityLibrary != null)
         {
             foreach (ElementCategories elementCategory in abilityLibrary.entries)
             {
                 if (elementCategory.Element == element)
-                    return elementCategory.Abilities[Random.Range(0, elementCategory.Abilities.Count)];
+                {
+                    number = Math.Min(number, elementCategory.Abilities.Count);
+                    Debug.Log($"will be attempting to retrieve {number} abilities. {elementCategory.Abilities.Count} are available for {element}");
+                    for (int i = number; i > 0; i--)
+                    {
+                        maxAttempts--;
+                        randomAbility = elementCategory.Abilities[UnityEngine.Random.Range(0, elementCategory.Abilities.Count)];
+                        if (!abilitiesList.Contains(randomAbility))
+                        {
+                            Debug.Log($"Adding {randomAbility}");
+                            abilitiesList.Add(randomAbility);
+                            number--;
+                        }
+                        if (maxAttempts == 0)
+                        {
+                            Debug.Log($"breaking because max attempts reached");
+                            break;
+                        }
+                    }
+                    Debug.Log("returning abilities list");
+                    return abilitiesList;
+                }
             }
             return null;
         }
@@ -26,5 +54,6 @@ public static class AbilityLibrary
             return null;
         }
     }
+
 
 }

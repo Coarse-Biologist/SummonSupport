@@ -33,7 +33,7 @@ public class ChargeAbilityMono : MonoBehaviour
         startLoc = transform.position;
         while (stillCharging)
         {
-            rb.linearVelocity = originTransform.right * caster.GetAttribute(AttributeType.MovementSpeed) * 20;
+            rb.linearVelocity = originTransform.right * GetComponent<MovementScript>().MovementSpeed * 20;
             if (((Vector2)gameObject.transform.position - startLoc).magnitude > chargeAbility.range)
             {
                 EndCharge();

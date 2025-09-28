@@ -11,7 +11,7 @@ public class AbilityHandler : MonoBehaviour
     [SerializeField] protected List<bool> abilitiesOnCooldown = new();
     public Dictionary<Ability, bool> abilitiesOnCooldownCrew = new();
     private Dictionary<BeamAbility, GameObject> toggledAbilitiesDict = new();
-    [field: SerializeField] public GameObject weaponSlot { get; private set; } = null;
+    [field: SerializeField] public WeaponInfo WeaponInfo { get; private set; }
     private bool charging = false;
 
 
@@ -36,7 +36,8 @@ public class AbilityHandler : MonoBehaviour
 
     public void LearnAbility(Ability ability)
     {
-        if (!Abilities.Contains(ability))
+        Debug.Log($"Learning ability {ability}");
+        if (!Abilities.Contains(ability) && ability != null)
         {
             Abilities.Add(ability);
             abilitiesOnCooldownCrew.Add(ability, false);

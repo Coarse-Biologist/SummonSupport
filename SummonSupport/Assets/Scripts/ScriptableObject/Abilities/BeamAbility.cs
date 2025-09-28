@@ -7,7 +7,6 @@ public class BeamAbility : Ability
     [field: SerializeField] public GameObject BeamParticleSystem { get; protected set; }
     [field: SerializeField] public GameObject SpawnEffectOnHit { get; protected set; }
     [field: SerializeField] public float TickRate { get; private set; } = .5f;
-    [field: SerializeField] public float Range { get; private set; } = 5f;
 
     public override bool Activate(GameObject user)
     {

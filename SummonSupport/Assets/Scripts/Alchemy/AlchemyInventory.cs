@@ -5,12 +5,12 @@ using System.Collections.Generic;
 public static class AlchemyInventory
 {
     #region Class variables
-    public static Dictionary<AlchemyLoot, int> ingredients { get; private set; } = new Dictionary<AlchemyLoot, int>
+    public static Dictionary<AlchemyLoot, int> ingredients { get; private set; } = new()
         {
             { AlchemyLoot.WretchedOrgans, 10 },
             { AlchemyLoot.FunctionalOrgans, 10 },
             { AlchemyLoot.HulkingOrgans, 10 },
-            { AlchemyLoot.BrokenCores, 10 },
+            { AlchemyLoot.WeakCores, 10 },
             { AlchemyLoot.WorkingCore, 10 },
             { AlchemyLoot.PowerfulCore, 10 },
             { AlchemyLoot.HulkingCore, 10 },
@@ -18,12 +18,12 @@ public static class AlchemyInventory
             { AlchemyLoot.PureEther, 10 },
             { AlchemyLoot.IntenseEther,101 }
             };
-    public static Dictionary<AlchemyLoot, int> ingredientValues { get; private set; } = new Dictionary<AlchemyLoot, int>
+    public static Dictionary<AlchemyLoot, int> ingredientValues { get; private set; } = new()
         {
             { AlchemyLoot.WretchedOrgans, 1 },
             { AlchemyLoot.FunctionalOrgans, 2 },
             { AlchemyLoot.HulkingOrgans, 4 },
-            { AlchemyLoot.BrokenCores, 1 },
+            { AlchemyLoot.WeakCores, 1 },
             { AlchemyLoot.WorkingCore, 2 },
             { AlchemyLoot.PowerfulCore, 4 },
             { AlchemyLoot.HulkingCore, 6 },
@@ -31,8 +31,21 @@ public static class AlchemyInventory
             { AlchemyLoot.PureEther, 2 },
             { AlchemyLoot.IntenseEther, 4 }
             };
+    public static Dictionary<AlchemyLoot, int> AlchemyLootPowerValues { get; private set; } = new()
+        {
+            { AlchemyLoot.WretchedOrgans, 5 },
+            { AlchemyLoot.FunctionalOrgans, 10 },
+            { AlchemyLoot.HulkingOrgans, 20 },
+            { AlchemyLoot.WeakCores, 10 },
+            { AlchemyLoot.WorkingCore, 20 },
+            { AlchemyLoot.PowerfulCore, 30 },
+            { AlchemyLoot.HulkingCore, 60 },
+            { AlchemyLoot.FaintEther, 10 },
+            { AlchemyLoot.PureEther, 20 },
+            { AlchemyLoot.IntenseEther, 50 }
+            };
 
-    public static Dictionary<Element, int> knowledgeDict = new Dictionary<Element, int>
+    public static Dictionary<Element, int> knowledgeDict = new()
             {
                 { Element.Cold, 0 },
                 { Element.Water, 0 },
@@ -58,7 +71,8 @@ public static class AlchemyInventory
     #region Set Dict values
     public static void IncemementElementalKnowledge(Element element, int amount)
     {
-        knowledgeDict[element] += amount;
+        if (element != Element.None)
+            knowledgeDict[element] += amount;
     }
     public static void AlterIngredientNum(List<AlchemyLoot> newIngredients, int amount)
     {
@@ -93,8 +107,30 @@ public static class AlchemyInventory
         return sufficient;
     }
     #endregion
+    #region Check suffient resource
 
+    public static bool HasSufficientCorePower(Ability ability, Dictionary<AlchemyLoot, int> coreKvp)
+    {
+        int corePower = GetCorePowerResource(coreKvp);
+        if (Ability.GetCoreCraftingCost(ability) <= corePower)
+        {
+            ExpendIngredients(coreKvp);
+            return true;
+        }
+        else return false;
+    }
 
+    public static int GetCorePowerResource(Dictionary<AlchemyLoot, int> coreKvp)
+    {
+        int corePower = 0;
+        foreach (KeyValuePair<AlchemyLoot, int> kvp in coreKvp)
+        {
+            corePower += AlchemyLootPowerValues[kvp.Key] * kvp.Value;
+        }
+        return corePower;
+    }
+
+    #endregion
 }
 
 

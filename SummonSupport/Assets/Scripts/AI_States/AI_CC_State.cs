@@ -21,7 +21,8 @@ public class AI_CC_State : AIState
 
 
     private Rigidbody2D rb;
-    WaitForSeconds wait = new WaitForSeconds(0.1f);
+    private float waitTime = .1f;
+    WaitForSeconds wait;// = new WaitForSeconds(0.1f);
     private float knockDuration = 2f;
     private float timeElapsed = 0f;
     private bool beingKnockedInAir = false;
@@ -35,6 +36,7 @@ public class AI_CC_State : AIState
 
     public void Awake()
     {
+        wait = new WaitForSeconds(waitTime);
         peaceState = GetComponent<AIPeacefulState>();
         stateHandler = GetComponent<AIStateHandler>();
         chaseState = GetComponent<AIChaseState>();
@@ -115,14 +117,16 @@ public class AI_CC_State : AIState
     }
     private IEnumerator PullRoutine()
     {
+        float pullDuration = typeToCC[StatusEffectType.Pulled].Duration;
         beingPulled = true;
         if (PullEpicenter == Vector2.zero) PullEpicenter = new Vector2(transform.position.x, transform.position.y - 2);
         bool stillPulling = true;
         while (stillPulling)
         {
             yield return wait;
+            pullDuration -= waitTime;
             transform.position = Vector3.MoveTowards(transform.position, PullEpicenter, .1f);
-            if (((Vector2)transform.position - PullEpicenter).sqrMagnitude < .3f)
+            if (pullDuration <= 0) //((Vector2)transform.position - PullEpicenter).sqrMagnitude < .3f )
             {
                 stillPulling = false;
                 RemoveCC(StatusEffectType.Pulled);
