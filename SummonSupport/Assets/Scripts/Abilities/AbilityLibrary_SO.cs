@@ -13,5 +13,13 @@ public class AbilityLibrary_SO : ScriptableObject
 
     public ElementCategories[] entries;
 
+    [System.Serializable]
+    public struct PlayerAbilitiesByLevel
+    {
+        public int Level;
+        public List<Ability> Abilities;
+    }
 
+    public PlayerAbilitiesByLevel[] abilitiesByLevelEntries;
 }
+

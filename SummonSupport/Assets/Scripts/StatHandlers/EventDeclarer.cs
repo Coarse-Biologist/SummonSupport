@@ -25,6 +25,8 @@ namespace SummonSupportEvents
         public static UnityEvent<GameObject> SpawnEnemies = new();
 
         public static UnityEvent<bool> PlayerDead = new();
+        public static UnityEvent<Ability> PlayerLearnedAbility = new();
+ 
 
     }
 }

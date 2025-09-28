@@ -24,6 +24,8 @@ public class AlchemyHandler : MonoBehaviour
     public UnityEvent<LivingBeing> newMinionAdded;
     public static AlchemyHandler Instance { get; private set; }
 
+    public static Dictionary<AlchemyLoot, int> AlchemyLootValueDict = new();
+
     #endregion
 
     public void Awake()
@@ -34,6 +36,20 @@ public class AlchemyHandler : MonoBehaviour
             return;
         }
         Instance = this;
+        InitiateAlchemyLootDict();
+    }
+    private void InitiateAlchemyLootDict()
+    {
+        AlchemyLootValueDict.Add(AlchemyLoot.WretchedOrgans, 5);
+        AlchemyLootValueDict.Add(AlchemyLoot.FunctionalOrgans, 10);
+        AlchemyLootValueDict.Add(AlchemyLoot.HulkingOrgans, 20);
+        AlchemyLootValueDict.Add(AlchemyLoot.WeakCores, 5);
+        AlchemyLootValueDict.Add(AlchemyLoot.WorkingCore, 10);
+        AlchemyLootValueDict.Add(AlchemyLoot.PowerfulCore, 20);
+        AlchemyLootValueDict.Add(AlchemyLoot.HulkingCore, 30);
+        AlchemyLootValueDict.Add(AlchemyLoot.FaintEther, 10);
+        AlchemyLootValueDict.Add(AlchemyLoot.PureEther, 30);
+        AlchemyLootValueDict.Add(AlchemyLoot.IntenseEther, 50);
     }
 
     #region Crafting Minion
@@ -59,31 +75,12 @@ public class AlchemyHandler : MonoBehaviour
     }
     private int HandleOrganUse(LivingBeing stats, KeyValuePair<AlchemyLoot, int> organKvp)
     {
-        //Logging.Info($"{organ} used and is being handled.");
-
         EventDeclarer.RepeatableQuestCompleted?.Invoke(Quest.RepeatableAccomplishments.UseOrgans, 1);
-        if (stats == null)
-        {
-            //Debug.Log("handle organ use stats was null");
-            return 0;
-        }
         int healthUpgrade = 0;
-        string organString = organKvp.Key.ToString();
-        if (organString.Contains("Wretched"))
+        if (AlchemyLootValueDict.TryGetValue(organKvp.Key, out int num))
         {
-            stats.ChangeAttribute(AttributeType.MaxHitpoints, 5 * organKvp.Value);
-            healthUpgrade += 5;
-        }
-        if (organString.Contains("Functional"))
-        {
-            stats.ChangeAttribute(AttributeType.MaxHitpoints, 10 * organKvp.Value);
-
-            healthUpgrade += 10;
-        }
-        if (organString.Contains("Hulking"))
-        {
-            stats.ChangeAttribute(AttributeType.MaxHitpoints, 20 * organKvp.Value);
-            healthUpgrade += 20;
+            stats.ChangeAttribute(AttributeType.MaxHitpoints, num * organKvp.Value);
+            healthUpgrade += num * organKvp.Value;
         }
         return healthUpgrade;
     }
@@ -92,26 +89,11 @@ public class AlchemyHandler : MonoBehaviour
         EventDeclarer.RepeatableQuestCompleted?.Invoke(Quest.RepeatableAccomplishments.UseCores, 1);
 
         int powerUpgrade = 0;
-        string coreString = coreKvp.Key.ToString();
-        if (coreString.Contains("Broken"))
+
+        if (AlchemyLootValueDict.TryGetValue(coreKvp.Key, out int num))
         {
-            stats.ChangeAttribute(AttributeType.MaxPower, 5 * coreKvp.Value);
-            powerUpgrade += 5;
-        }
-        if (coreString.Contains("Functional"))
-        {
-            stats.ChangeAttribute(AttributeType.MaxPower, 10 * coreKvp.Value);
-            powerUpgrade += 10;
-        }
-        if (coreString.Contains("Powerful"))
-        {
-            stats.ChangeAttribute(AttributeType.MaxPower, 20 * coreKvp.Value);
-            powerUpgrade += 20;
-        }
-        if (coreString.Contains("Hulking"))
-        {
-            stats.ChangeAttribute(AttributeType.MaxPower, 30 * coreKvp.Value);
-            powerUpgrade += 30;
+            stats.ChangeAttribute(AttributeType.MaxPower, num * coreKvp.Value);
+            powerUpgrade += num * coreKvp.Value;
         }
         else Debug.Log($"Core = {coreKvp.Key}");
         return powerUpgrade;
@@ -121,25 +103,16 @@ public class AlchemyHandler : MonoBehaviour
         EventDeclarer.RepeatableQuestCompleted?.Invoke(Quest.RepeatableAccomplishments.UseEther, 1);
         Debug.Log($"ether type : {etherKvp.Key}. Amount : {etherKvp.Value}");
         int elementUpgrade = 0;
-        string etherString = etherKvp.Key.ToString();
-        if (etherString.Contains("Faint"))
+        if (AlchemyLootValueDict.TryGetValue(etherKvp.Key, out int num))
+        {
             foreach (Element element in elementList)
             {
-                stats.ChangeAffinity(element, 10 * etherKvp.Value / elementList.Count);
-                elementUpgrade += 10 / elementList.Count;
+                stats.ChangeAffinity(element, num * etherKvp.Value / elementList.Count);
+                elementUpgrade += num * etherKvp.Value;
             }
-        if (etherString.Contains("Pure"))
-            foreach (Element element in elementList)
-            {
-                stats.ChangeAffinity(element, 30 * etherKvp.Value / elementList.Count);
-                elementUpgrade += 30 / elementList.Count;
-            }
-        if (etherString.Contains("Intense"))
-            foreach (Element element in elementList)
-            {
-                stats.ChangeAffinity(element, 60 * etherKvp.Value / elementList.Count);
-                elementUpgrade += 60 / elementList.Count;
-            }
+        }
+
+
         return elementUpgrade;
     }
 

@@ -36,7 +36,8 @@ public class AbilityHandler : MonoBehaviour
 
     public void LearnAbility(Ability ability)
     {
-        if (!Abilities.Contains(ability))
+        Debug.Log($"Learning ability {ability}");
+        if (!Abilities.Contains(ability) && ability != null)
         {
             Abilities.Add(ability);
             abilitiesOnCooldownCrew.Add(ability, false);

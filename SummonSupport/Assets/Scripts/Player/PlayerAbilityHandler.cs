@@ -45,13 +45,14 @@ public class PlayerAbilityHandler : AbilityHandler
     {
         RegisterInputEvents(true);
         inputActions ??= new PlayerInputActions();
-
+        EventDeclarer.PlayerLearnedAbility?.AddListener(LearnAbility);
         inputActions.Enable();
     }
 
     void OnDisable()
     {
         RegisterInputEvents(false);
+        EventDeclarer.PlayerLearnedAbility?.RemoveListener(LearnAbility);
         inputActions.Disable();
     }
 

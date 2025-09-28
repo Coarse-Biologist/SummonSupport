@@ -76,6 +76,13 @@ public class AbilityUI_Handler : MonoBehaviour
         ProgressBarDict.Add(3, ProgressBarL4);
         ProgressBarDict.Add(4, ProgressBarL5);
         ProgressBarDict.Add(5, ProgressBarL6);
+
+        abilityProgressBarDict.Add(0, null);
+        abilityProgressBarDict.Add(1, null);
+        abilityProgressBarDict.Add(2, null);
+        abilityProgressBarDict.Add(3, null);
+        abilityProgressBarDict.Add(4, null);
+        abilityProgressBarDict.Add(5, null);
     }
 
 
@@ -89,10 +96,11 @@ public class AbilityUI_Handler : MonoBehaviour
     #region Ability slot changed invoke response
     public void SetAbilitySlot(int slotIndex, Ability ability)
     {
-        //Logging.Info($"slotIndex = {slotIndex}. Ability = {ability.name}.");
-
-        if (slotIndex <= abilityProgressBarDict.Keys.Count)
-            abilityProgressBarDict[slotIndex] = ability;
+        if (slotIndex <= abilityProgressBarDict.Keys.Count) // check if the index is usable
+        {
+            abilityProgressBarDict[slotIndex] = ability; // set ability to the slot
+        }
+        else Debug.Log("OOFJKJWCNKCNOWJOWCO!!!!!!!!!!");
         SetAbilityIcon(slotIndex, ability);
     }
 
@@ -109,9 +117,11 @@ public class AbilityUI_Handler : MonoBehaviour
     private void AbilityUsed(int slotIndex)
     {
         ProgressBar abilityProgressBar = ProgressBarDict[slotIndex];
+        if (abilityProgressBar == null) return;
         Ability ability = abilityProgressBarDict[slotIndex];
+        if (ability == null) return;
         float cooldown = ability.Cooldown;
-        //Logging.Info($"Ability {ability.name} with cooldown {cooldown} has been used.");
+        Logging.Info($"Ability {ability.name} with cooldown {cooldown} has been used.");
 
         abilityProgressBar.highValue = cooldown;
         abilityProgressBar.value = cooldown;

@@ -7,6 +7,8 @@ public static class AbilityLibrary
 {
 
     public static AbilityLibrary_SO abilityLibrary { get; private set; } = null;
+    public static PlayerAbilitiesByLevel playerAbilitiesByLevel { get; private set; } = new();
+
     public static void SetAbilityLibrary(AbilityLibrary_SO library_SO)
     {
         abilityLibrary = library_SO;

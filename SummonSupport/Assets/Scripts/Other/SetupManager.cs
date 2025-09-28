@@ -21,6 +21,9 @@ public class SetupManager : MonoBehaviour
 
 
 
+
+
+
     void Awake()
     {
         if (colorGradientLibrary != null && BleedEffect != null && GlowMaterials.Count() == 4)
