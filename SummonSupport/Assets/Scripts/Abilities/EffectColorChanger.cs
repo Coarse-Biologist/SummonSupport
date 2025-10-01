@@ -37,7 +37,8 @@ public static class EffectColorChanger
         ElementToColorDict.Add(Element.Electricity, new float[4] { 1f, 1f, 0.2f, 1f });     // bright yellow
         ElementToColorDict.Add(Element.Psychic, new float[4] { 0.6f, 0.2f, 0.8f, 1f }); // deep purple
         ElementToColorDict.Add(Element.Earth, new float[4] { 0.5f, 0.3f, 0.1f, 1f }); // earthy brown
-        ElementToColorDict.Add(Element.Fungi, new float[4] { 0.6f, 0.6f, 0.6f, 1f }); // sporey grey
+        ElementToColorDict.Add(Element.Fungi, new float[4] { 0.5f, 0.6f, 0.6f, 1f }); // sporey grey
+        ElementToColorDict.Add(Element.Air, new float[4] { 0.6f, 0.6f, 0.6f, 1f }); // sporey grey
         ElementToColorDict.Add(Element.Light, new float[4] { 1f, 1f, 0.85f, 1f });    // radiant soft white-yellow
     }
 

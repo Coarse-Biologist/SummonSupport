@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using SummonSupportEvents;
 using UnityEngine;
 
 public static class CommandMinion
@@ -7,6 +8,12 @@ public static class CommandMinion
     public static List<GameObject> SelectedMinions { private set; get; } = new List<GameObject>();
     public static List<GameObject> activeMinions { private set; get; } = new();
 
+
+    public static void RemoveActiveMinions(GameObject minionObject)
+    {
+        if (activeMinions.Contains(minionObject))
+            activeMinions.Remove(minionObject);
+    }
     public static void SetActiveMinions(List<GameObject> activeMinionsList)
     {
         activeMinions = activeMinionsList;

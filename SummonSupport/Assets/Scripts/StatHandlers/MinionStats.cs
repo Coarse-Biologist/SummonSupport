@@ -30,6 +30,7 @@ public class MinionStats : LivingBeing
     {
         Logging.Info($"{gameObject.name} died");
         EventDeclarer.minionDied?.Invoke(gameObject);
+
         if (HasStatusEffect(StatusEffectType.ExplodeOnDeath)) ViciousDeathExplosion();
         //Destroy(gameObject);
         ToggleDeath(true);

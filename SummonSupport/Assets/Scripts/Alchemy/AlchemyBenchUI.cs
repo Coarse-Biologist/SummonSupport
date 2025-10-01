@@ -55,6 +55,8 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     private Dictionary<AlchemyLoot, int> selectedIngredients = new Dictionary<AlchemyLoot, int>();
     private List<Element> selectedElements = new List<Element>();
     private GameObject minionToUpgrade;
+    private GameObject minionToRecycle;
+
 
     private bool elementsGenerated = false;
 
@@ -159,13 +161,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
         }
     }
 
-    private void ShowRecycleOptions()
-    {
-        confirmClear.Clear();
-        alchemyInventory.Clear();
-        ClearElementSelection();
-        instructions.text = "Which Minion would you like to recycle for components?";
-    }
+
     private void ShowCraftingInfo()
     {
         if (selectedIngredients.Keys.Count == 0)
@@ -328,6 +324,35 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
                 selectedIngredients[ingredient]++;
         }
         else selectedIngredients.Add(ingredient, 1);
+    }
+
+    #endregion
+
+    #region Recycling
+    private void ShowRecycleOptions()
+    {
+        confirmClear.Clear();
+        alchemyInventory.Clear();
+        ClearElementSelection();
+        instructions.text = "Which Minion would you like to recycle for components?";
+        ShowRecyclableMinions();
+    }
+    private void ShowRecyclableMinions()
+    {
+        Button clearButton = AddButtonToPanel("Clear Selection", confirmClear, 50, 5);
+        Button confirmButton = AddButtonToPanel("Confirm", confirmClear, 50, 5);
+        confirmButton.RegisterCallback<ClickEvent>(e => AlchemyHandler.HandleMinionRecycling(minionToRecycle));
+        clearButton.RegisterCallback<ClickEvent>(e => SetMinionToRecycle(null));
+        foreach (GameObject minion in alchemyHandler.activeMinions)
+        {
+            Debug.Log("Minion should be shown in alchemy inventory panel");
+            Button minionButton = AddButtonToPanel($"Recycle {minion.GetComponent<LivingBeing>().Name}", alchemyInventory, 45, 5);
+            minionButton.RegisterCallback<ClickEvent>(e => SetMinionToRecycle(minion));
+        }
+    }
+    private void SetMinionToRecycle(GameObject minion)
+    {
+        minionToRecycle = minion;
     }
 
     #endregion

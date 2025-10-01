@@ -39,8 +39,11 @@ public class PlayerUIHandler : MonoBehaviour
         EventDeclarer.attributeChanged.AddListener(UpdateResourceBar);
         EventDeclarer.maxAttributeChanged.AddListener(UpdateMaxValueResourceBar);
         if (AlchemyHandler.Instance != null)
+        {
             AlchemyHandler.Instance.newMinionAdded.AddListener(AddMinionHP);
-        //EventDeclarer.minionDied.AddListener(RemoveMinionHP);
+        }
+        EventDeclarer.minionDied?.AddListener(RemoveMinionHP);
+
     }
 
     void OnDisable()
@@ -48,8 +51,11 @@ public class PlayerUIHandler : MonoBehaviour
         EventDeclarer.attributeChanged.RemoveListener(UpdateResourceBar);
         EventDeclarer.maxAttributeChanged.RemoveListener(UpdateMaxValueResourceBar);
         if (AlchemyHandler.Instance != null)
+        {
             AlchemyHandler.Instance.newMinionAdded.RemoveListener(AddMinionHP);
-        //EventDeclarer.minionDied.RemoveListener(RemoveMinionHP);
+        }
+        EventDeclarer.minionDied.RemoveListener(RemoveMinionHP);
+
     }
 
     void Start()
@@ -130,7 +136,9 @@ public class PlayerUIHandler : MonoBehaviour
                 HPDict.Remove(livingBeing);
                 minionHPBars.Remove(minionHP);
             }
+            else Debug.Log("Yeah the HP bar youre trying to delete/ remove is NULL");
         }
+
     }
     private LivingBeing GetLivingBeingFromHPBar(ProgressBar minionHP)
     {

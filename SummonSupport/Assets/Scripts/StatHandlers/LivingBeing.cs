@@ -152,7 +152,11 @@ public abstract class LivingBeing : MonoBehaviour
         }
         Debug.Log($"SetAffinity: Affinity = {newAffinity}");
     }
-
+    public int GetAffinity(Element element)
+    {
+        if (element == Element.None) return 0;
+        return (int)Affinities[element].Get();
+    }
 
     public Element GetHighestAffinity()
     {

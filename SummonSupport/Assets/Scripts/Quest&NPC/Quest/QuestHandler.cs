@@ -90,7 +90,10 @@ public class QuestHandler : MonoBehaviour
             AlchemyInventory.IncemementElementalKnowledge(quest.BenefittedElements[i], quest.KnowledgeReward);
         }
         AlchemyInventory.GainTool(quest.AlchemyToolReward);
-        AlchemyInventory.AlterIngredientNum(quest.AlchemyLootReward, quest.AlchemyLootNum);
+        foreach (AlchemyLoot ingredient in quest.AlchemyLootReward)
+        {
+            AlchemyInventory.AlterIngredientNum(ingredient, quest.AlchemyLootNum);
+        }
         playerStats.GainXP(quest.XP_Reward);
     }
     public void IncrementIntQuest(RepeatableAccomplishments intQuest, int value = 1)

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Diagnostics;
 
 
 
@@ -74,18 +75,16 @@ public static class AlchemyInventory
         if (element != Element.None)
             knowledgeDict[element] += amount;
     }
-    public static void AlterIngredientNum(List<AlchemyLoot> newIngredients, int amount)
+    public static void AlterIngredientNum(AlchemyLoot newIngredient, int amount)
     {
-        foreach (AlchemyLoot ingredient in newIngredients)
-        {
-            ingredients[ingredient] += amount;
-        }
+        UnityEngine.Debug.Log($"Adding {amount} {newIngredient}");
+        ingredients[newIngredient] += amount;
     }
     public static void ExpendIngredients(Dictionary<AlchemyLoot, int> usedIngredients)
     {
         foreach (KeyValuePair<AlchemyLoot, int> kvp in usedIngredients)
         {
-            if (ingredients[kvp.Key] > 0) AlterIngredientNum(new List<AlchemyLoot> { kvp.Key }, -kvp.Value);
+            if (ingredients[kvp.Key] > 0) AlterIngredientNum(kvp.Key, -kvp.Value);
         }
     }
     public static void GainTool(AlchemyTool tool)

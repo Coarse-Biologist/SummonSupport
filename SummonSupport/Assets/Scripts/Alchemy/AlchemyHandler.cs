@@ -6,9 +6,10 @@ using UnityEngine.Events;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using System;
-using Unity.VisualScripting.Antlr3.Runtime.Misc;
+//using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using SummonSupportEvents;
 using UnityEditor.EditorTools;
+using Unity.Collections.LowLevel.Unsafe;
 
 #endregion
 public class AlchemyHandler : MonoBehaviour
@@ -72,6 +73,34 @@ public class AlchemyHandler : MonoBehaviour
             }
             else Logging.Error("Crafted Minion is null, was he loaded promtly or correctly?");
         }
+    }
+
+    public static void HandleMinionRecycling(GameObject minion)
+    {
+        if (minion.TryGetComponent<MinionStats>(out MinionStats stats))
+        {
+            float minionPower = stats.MaxHP - 100f;
+            float minionHP = stats.MaxHP - 100f;
+            float minionAffinity = GetCombinedElementValues(stats);
+
+            AlchemyInventory.AlterIngredientNum(AlchemyLoot.WeakCores, (int)minionPower / 20);
+            AlchemyInventory.AlterIngredientNum(AlchemyLoot.FaintEther, (int)minionAffinity / 20);
+            AlchemyInventory.AlterIngredientNum(AlchemyLoot.WretchedOrgans, (int)minionHP / 20);
+        }
+        EventDeclarer.minionDied?.Invoke(minion);
+        CommandMinion.RemoveActiveMinions(minion);
+
+
+        Destroy(minion);
+    }
+    private static int GetCombinedElementValues(MinionStats stats)
+    {
+        int combinedAffinity = 0;
+        foreach (Element element in Enum.GetValues(typeof(Element)))
+        {
+            combinedAffinity += stats.GetAffinity(element);
+        }
+        return combinedAffinity;
     }
     private int HandleOrganUse(LivingBeing stats, KeyValuePair<AlchemyLoot, int> organKvp)
     {
@@ -185,6 +214,7 @@ public class AlchemyHandler : MonoBehaviour
         }
         CommandMinion.SetActiveMinions(activeMinions);
     }
+
     #endregion
 
 
