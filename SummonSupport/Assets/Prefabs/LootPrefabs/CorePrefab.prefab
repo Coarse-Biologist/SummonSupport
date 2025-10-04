@@ -76,16 +76,16 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: -1986771613
-  m_SortingLayer: 2
+  m_SortingLayerID: -105541197
+  m_SortingLayer: 3
   m_SortingOrder: 0
-  m_Sprite: {fileID: -3556958270160313209, guid: c71a0568c97b2944c9caaec77c4ea54f,
+  m_Sprite: {fileID: 8002091499068346063, guid: a2b11e72e26e08a4c83af95070857868,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.48, y: 0.54}
+  m_Size: {x: 4.97, y: 4.5}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -103,7 +103,7 @@ GameObject:
   - component: {fileID: 2339808515288282819}
   - component: {fileID: 2507926237638401071}
   m_Layer: 0
-  m_Name: WretchedOrganPrefab
+  m_Name: CorePrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -183,4 +183,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ec5d9ec064e10a4c9ffd0dc214ef8d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  alchemyMaterial: 0
+  alchemyMaterial: 4

@@ -54,7 +54,7 @@ public static class EffectColorChanger
         }
     }
 
-    private static void ChangeParticleSystemColor(LivingBeing livingBeing, ParticleSystem particleSystem)
+    public static void ChangeParticleSystemColor(LivingBeing livingBeing, ParticleSystem particleSystem)
     {
         //Debug.Log($"Trying to change color of {particleSystem} to match {livingBeing}s resistences.");
         Element strongestElement = livingBeing.GetHighestAffinity();

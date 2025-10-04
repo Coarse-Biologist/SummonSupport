@@ -168,7 +168,6 @@ public class AlchemyHandler : MonoBehaviour
         if (strongestElement != Element.None)
         {
             List<Ability> abilities = AbilityLibrary.GetRandomAbilities(strongestElement, (int)(livingBeing.GetAttribute(AttributeType.MaxHitpoints) / HPToAbilityRatio));
-            Debug.Log(abilities);
 
             if (abilities != null)
             {
@@ -176,7 +175,6 @@ public class AlchemyHandler : MonoBehaviour
                 {
                     abilityHandler.LearnAbility(ability);
                 }
-
             }
             abilityHandler.SetAbilityLists();
         }
@@ -193,7 +191,7 @@ public class AlchemyHandler : MonoBehaviour
         {
             spriteControl.AlterColorByAffinity(strongestElement);
             nameModifier = strongestElement.ToString();
-            stats.SetName(nameModifier + "Elemental");
+            stats.SetName(nameModifier + " Elemental");
         }
         else stats.SetName("Flesh Atronach");
     }
@@ -208,8 +206,6 @@ public class AlchemyHandler : MonoBehaviour
         if (!activeMinions.Contains(minion))
         {
             activeMinions.Add(minion);
-            //CommandMinion.SetSelectedMinion(minion); //Good idea?...
-            Debug.Log("add active minion func. alchemy handler");
             newMinionAdded?.Invoke(livingBeing);
         }
         CommandMinion.SetActiveMinions(activeMinions);

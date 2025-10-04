@@ -241,7 +241,7 @@ PrefabInstance:
     - target: {fileID: 2376002305397545486, guid: e4c43cb75dda4d3458057b35ce607d87,
         type: 3}
       propertyPath: <MaxPower>k__BackingField
-      value: 7000
+      value: 200
       objectReference: {fileID: 0}
     - target: {fileID: 2376002305397545486, guid: e4c43cb75dda4d3458057b35ce607d87,
         type: 3}
@@ -251,7 +251,7 @@ PrefabInstance:
     - target: {fileID: 2376002305397545486, guid: e4c43cb75dda4d3458057b35ce607d87,
         type: 3}
       propertyPath: <CurrentPower>k__BackingField
-      value: 7000
+      value: 200
       objectReference: {fileID: 0}
     - target: {fileID: 2864372725038760086, guid: e4c43cb75dda4d3458057b35ce607d87,
         type: 3}
@@ -609,13 +609,13 @@ PrefabInstance:
     - target: {fileID: 9084318776697772798, guid: e4c43cb75dda4d3458057b35ce607d87,
         type: 3}
       propertyPath: <Abilities>k__BackingField.Array.size
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9084318776697772798, guid: e4c43cb75dda4d3458057b35ce607d87,
         type: 3}
       propertyPath: '<Abilities>k__BackingField.Array.data[0]'
       value: 
-      objectReference: {fileID: 11400000, guid: 6eaaf721143e73a408e50f0c94decbe5,
+      objectReference: {fileID: 11400000, guid: 4c3c5f9615adc0745ad7d2d7106f3cd8,
         type: 2}
     - target: {fileID: 9084318776697772798, guid: e4c43cb75dda4d3458057b35ce607d87,
         type: 3}
@@ -1954,27 +1954,27 @@ PrefabInstance:
     - target: {fileID: 981238970087819063, guid: 93320e9166a42de4797e9788569266a3,
         type: 3}
       propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3158349140324908136, guid: 93320e9166a42de4797e9788569266a3,
+        type: 3}
+      propertyPath: m_AnchorMax.x
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3158349140324908136, guid: 93320e9166a42de4797e9788569266a3,
         type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3158349140324908136, guid: 93320e9166a42de4797e9788569266a3,
-        type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3225813800379955987, guid: 93320e9166a42de4797e9788569266a3,
         type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3225813800379955987, guid: 93320e9166a42de4797e9788569266a3,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5147987956248969549, guid: 93320e9166a42de4797e9788569266a3,
         type: 3}
@@ -2032,11 +2032,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7733047835931855982, guid: 93320e9166a42de4797e9788569266a3,
-        type: 3}
-      propertyPath: <Psychic>k__BackingField
-      value: 100
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2089,7 +2084,6 @@ GameObject:
   - component: {fileID: 1724141750}
   - component: {fileID: 1724141751}
   - component: {fileID: 1724141752}
-  - component: {fileID: 1724141753}
   m_Layer: 0
   m_Name: LevelManagerObj
   m_TagString: Untagged
@@ -2234,28 +2228,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 3b4a413103fe04844aef447d6f81ed91, type: 2}
   - {fileID: 11400000, guid: e8a6eb052d248c145acb7ef3d6746f33, type: 2}
   - {fileID: 11400000, guid: 3426d86dfddd8b342b4b8164207c3157, type: 2}
---- !u!114 &1724141753
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1724141744}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: de0b74f2d68e82946a3c45cbb8c72e8f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::LootSpawnHandler
-  FaintEtherPrefab: {fileID: 1603576786375305078, guid: 4b44e8359f8e987428a28cc86e8c682a,
-    type: 3}
-  PowerfulEtherPrefab: {fileID: 8303758734340665098, guid: 87c8e425b8685bd44b72e0c6ac3846db,
-    type: 3}
-  IntenseEtherPrefab: {fileID: 5159388326128767723, guid: 825139f16c3d6dd4186eb72fa81c9e50,
-    type: 3}
-  OrganPrefab: {fileID: 5071872005011018874, guid: 718a45226ef45724c8075316c8e86006,
-    type: 3}
-  CorePrefab: {fileID: 5071872005011018874, guid: b31d7f22abcbe7345bcf62cb99a6a8a0,
-    type: 3}
 --- !u!1001 &1794702600
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3553,22 +3525,22 @@ PrefabInstance:
     - target: {fileID: 77819044276542220, guid: bf3a7c387497a1c4b876116e70c15ecf,
         type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 77819044276542220, guid: bf3a7c387497a1c4b876116e70c15ecf,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 433657566683716727, guid: bf3a7c387497a1c4b876116e70c15ecf,
         type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 433657566683716727, guid: bf3a7c387497a1c4b876116e70c15ecf,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2836918575422120019, guid: bf3a7c387497a1c4b876116e70c15ecf,
         type: 3}
@@ -3578,7 +3550,7 @@ PrefabInstance:
     - target: {fileID: 2836918575422120019, guid: bf3a7c387497a1c4b876116e70c15ecf,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4724702362339814154, guid: bf3a7c387497a1c4b876116e70c15ecf,
         type: 3}
@@ -3588,7 +3560,7 @@ PrefabInstance:
     - target: {fileID: 4724702362339814154, guid: bf3a7c387497a1c4b876116e70c15ecf,
         type: 3}
       propertyPath: <Poison>k__BackingField
-      value: 100
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 7904272580143572521, guid: bf3a7c387497a1c4b876116e70c15ecf,
         type: 3}

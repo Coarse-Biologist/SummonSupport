@@ -46,6 +46,7 @@ public abstract class Ability : ScriptableObject
         return false;
     }
 
+
     public static int GetCoreCraftingCost(Ability ability)
     {
         return (int)ability.Cooldown * (int)ability.Cost;

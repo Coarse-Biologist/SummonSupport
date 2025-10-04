@@ -10,13 +10,13 @@ public class EnemyStats : LivingBeing
 
     public MinionCommands CurrentCommand { get; private set; } = MinionCommands.None;
 
-public override void Die()
-{
-    Logging.Info($"{Name} died");
-    EventDeclarer.EnemyDefeated.Invoke(this);
-    if (HasStatusEffect(StatusEffectType.ExplodeOnDeath)) ViciousDeathExplosion();
-    Destroy(gameObject);
-}
+    public override void Die()
+    {
+        Logging.Info($"{Name} died");
+        EventDeclarer.EnemyDefeated.Invoke(this);
+        if (HasStatusEffect(StatusEffectType.ExplodeOnDeath)) ViciousDeathExplosion();
+        Destroy(gameObject);
+    }
 
 
 }

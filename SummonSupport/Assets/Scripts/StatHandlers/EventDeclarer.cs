@@ -14,7 +14,7 @@ namespace SummonSupportEvents
         public static UnityEvent<Quest_SO> QuestStarted = new();
         public static UnityEvent<Quest_SO> QuestCompleted = new();
         public static UnityEvent<RepeatableAccomplishments, int> RepeatableQuestCompleted = new UnityEvent<RepeatableAccomplishments, int>();
-        public static UnityEvent<LivingBeing> EnemyDefeated = new();
+        public static UnityEvent<EnemyStats> EnemyDefeated = new();
 
         #endregion
         public static UnityEvent<GameObject> minionDied = new UnityEvent<GameObject>();

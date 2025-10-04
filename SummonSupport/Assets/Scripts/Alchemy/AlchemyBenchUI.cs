@@ -294,13 +294,16 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
             List<Element> elementsList = Enum.GetValues(typeof(Element)).Cast<Element>().ToList();
             foreach (Element element in elementsList)
             {
-                TemplateContainer prefabContainer = UIPrefabAssets.Instantiate();
-                Toggle elementToggle = prefabContainer.Q<Toggle>("TogglePrefab");
-                elementToggle.text = element.ToString();
-                //elementToggle.style.backgroundColor = Color.green;
+                if (AlchemyInventory.GetElementalKnowledge(element) >= 50)
+                {
+                    TemplateContainer prefabContainer = UIPrefabAssets.Instantiate();
+                    Toggle elementToggle = prefabContainer.Q<Toggle>("TogglePrefab");
+                    elementToggle.text = element.ToString();
+                    //elementToggle.style.backgroundColor = Color.green;
 
-                panel.Add(elementToggle);
-                elementToggle.RegisterCallback<ClickEvent>(e => ToggleSelectedElement(element));
+                    panel.Add(elementToggle);
+                    elementToggle.RegisterCallback<ClickEvent>(e => ToggleSelectedElement(element));
+                }
             }
         }
 
