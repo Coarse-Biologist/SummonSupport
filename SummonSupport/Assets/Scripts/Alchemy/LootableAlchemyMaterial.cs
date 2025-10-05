@@ -10,4 +10,9 @@ public class LootableAlchemyMaterial : MonoBehaviour, I_LootInterface
         AlchemyInventory.AlterIngredientNum(alchemyMaterial, 1);
         Destroy(this.gameObject);
     }
+
+    public void SetAlchemyMaterial(AlchemyLoot assignedLoot)
+    {
+        alchemyMaterial = assignedLoot;
+    }
 }

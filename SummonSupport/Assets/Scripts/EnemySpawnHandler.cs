@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using SummonSupportEvents;
 using Unity.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class EnemySpawnHandler : MonoBehaviour
@@ -37,10 +38,7 @@ public class EnemySpawnHandler : MonoBehaviour
     void Start()
     {
         SetSpawnProbabilities(Difficulty.Novice);
-
     }
-
-
 
 
     void OnEnable()
@@ -52,10 +50,10 @@ public class EnemySpawnHandler : MonoBehaviour
         EventDeclarer.SpawnEnemies.RemoveListener(SpawnEnemies);
     }
 
-    private void SpawnEnemies(GameObject testNothing = null)
+    private void SpawnEnemies(SpawnLocationInfo spawnInfo = null)
     {
         List<GameObject> spawnedCreatures = new();
-        if (SpawnCenter != null && SpawnCenter.TryGetComponent<SpawnLocationInfo>(out SpawnLocationInfo spawnInfo) && spawnInfo.Creatures.Count > 0)
+        if (spawnInfo != null & spawnInfo.Creatures.Count > 0)
         {
             List<Vector2> spawnLocs = GetSpawnLocations(SpawnCenter.transform.position, spawnInfo.Radius, spawnInfo.DesiredSpawns);
             foreach (Vector2 loc in spawnLocs)
@@ -73,6 +71,7 @@ public class EnemySpawnHandler : MonoBehaviour
                 }
             }
         }
+        else Debug.Log($"The invoked spawn center {spawnInfo} contains no creatures.");
     }
     private void MoveTowardTarget(GameObject creature, Vector2 loc)
     {
@@ -84,7 +83,6 @@ public class EnemySpawnHandler : MonoBehaviour
         }
         if (creature.TryGetComponent<Collider2D>(out Collider2D collider))
         {
-
             collider.isTrigger = true;
         }
     }
