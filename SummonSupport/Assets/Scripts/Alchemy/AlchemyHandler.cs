@@ -21,6 +21,10 @@ public class AlchemyHandler : MonoBehaviour
     public UnityEvent<GameObject> requestInstantiation = new UnityEvent<GameObject>();
     [field: Tooltip("The amount of minion HP per new extra ability they can use.")]
     [field: SerializeField] public int HPToAbilityRatio { get; private set; } = 50;
+    [field: SerializeField] public static float recycleExchangeRate { get; private set; } = .05f;
+    [field: SerializeField] public static float knowledgeGainRate { get; private set; } = 1f;
+
+
     [SerializeField] public List<GameObject> activeMinions = new List<GameObject>();
     public UnityEvent<LivingBeing> newMinionAdded;
     public static AlchemyHandler Instance { get; private set; }
@@ -83,9 +87,9 @@ public class AlchemyHandler : MonoBehaviour
             float minionHP = stats.MaxHP - 100f;
             float minionAffinity = GetCombinedElementValues(stats);
 
-            AlchemyInventory.AlterIngredientNum(AlchemyLoot.WeakCores, (int)minionPower / 20);
-            AlchemyInventory.AlterIngredientNum(AlchemyLoot.FaintEther, (int)minionAffinity / 20);
-            AlchemyInventory.AlterIngredientNum(AlchemyLoot.WretchedOrgans, (int)minionHP / 20);
+            AlchemyInventory.AlterIngredientNum(AlchemyLoot.WeakCores, (int)(minionPower * recycleExchangeRate));
+            AlchemyInventory.AlterIngredientNum(AlchemyLoot.FaintEther, (int)(minionAffinity * recycleExchangeRate));
+            AlchemyInventory.AlterIngredientNum(AlchemyLoot.WretchedOrgans, (int)(minionHP * recycleExchangeRate));
         }
         EventDeclarer.minionDied?.Invoke(minion);
         CommandMinion.RemoveActiveMinions(minion);

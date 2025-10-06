@@ -33,6 +33,11 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4024602656334153809, guid: c71f7dd61a6fb3b44b4a693aa7c510c5,
+        type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5147987956248969549, guid: c71f7dd61a6fb3b44b4a693aa7c510c5,
         type: 3}
       propertyPath: DeathSprite

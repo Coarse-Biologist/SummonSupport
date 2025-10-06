@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2319527277683662088}
   - component: {fileID: 8485957082102939299}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: AlchemyMatSprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -184,3 +184,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   alchemyMaterial: 0
+  Element: 0

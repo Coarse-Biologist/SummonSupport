@@ -11,6 +11,7 @@ public class I_InteractMinionResurrect : MonoBehaviour, I_Interactable
     {
         if (interactor.TryGetComponent<PlayerStats>(out PlayerStats playerStats))
         {
+            InteractCanvasHandler.Instance.DisplayIncrementalText(transform.position, "Resurrecting...");
             playerStats.ResurrectMinion(this.gameObject);
         }
     }

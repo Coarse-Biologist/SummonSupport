@@ -609,19 +609,19 @@ PrefabInstance:
     - target: {fileID: 9084318776697772798, guid: e4c43cb75dda4d3458057b35ce607d87,
         type: 3}
       propertyPath: <Abilities>k__BackingField.Array.size
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9084318776697772798, guid: e4c43cb75dda4d3458057b35ce607d87,
         type: 3}
       propertyPath: '<Abilities>k__BackingField.Array.data[0]'
       value: 
-      objectReference: {fileID: 11400000, guid: 6ecd8945d9da6ca4da64c6af3d43bf0f,
+      objectReference: {fileID: 11400000, guid: 6eaaf721143e73a408e50f0c94decbe5,
         type: 2}
     - target: {fileID: 9084318776697772798, guid: e4c43cb75dda4d3458057b35ce607d87,
         type: 3}
       propertyPath: '<Abilities>k__BackingField.Array.data[1]'
       value: 
-      objectReference: {fileID: 11400000, guid: 5e39961f19654e04bb7f41a70934544c,
+      objectReference: {fileID: 11400000, guid: 3426d86dfddd8b342b4b8164207c3157,
         type: 2}
     - target: {fileID: 9084318776697772798, guid: e4c43cb75dda4d3458057b35ce607d87,
         type: 3}
@@ -1296,6 +1296,12 @@ EdgeCollider2D:
   m_AdjacentEndPoint: {x: 0, y: 0}
   m_UseAdjacentStartPoint: 0
   m_UseAdjacentEndPoint: 0
+--- !u!1 &1139511177 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1969626846854164280, guid: d7356457bc227ac40a12feb4b6ec4540,
+    type: 3}
+  m_PrefabInstance: {fileID: 8413954040934154735}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1301384386 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8534931431352031482, guid: 8718351146758e64e82ee8d98f6a7408,
@@ -2099,8 +2105,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1724141744}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -3.6485271, y: -5.4676423, z: 0.2955172}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2159,8 +2165,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93e3fd9ce2ccb9548ad2bd2ba1f01db6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <enemyPrefab>k__BackingField: {fileID: 3758045756830353685, guid: 3e4992f6f83b3fb4e8788f1d5f838238,
-    type: 3}
+  <enemyPrefab>k__BackingField: {fileID: 1139511177}
   <SpawnCenter>k__BackingField: {fileID: 1627477746}
   <AllCreatures>k__BackingField:
   - {fileID: 5260407401840793296, guid: 8083f1f2449ed0b488ce4e399a55432f, type: 3}
@@ -2251,7 +2256,7 @@ MonoBehaviour:
     type: 3}
   CorePrefab: {fileID: 5071872005011018874, guid: b31d7f22abcbe7345bcf62cb99a6a8a0,
     type: 3}
-  LootScaler: 1
+  LootScaler: 0.3
 --- !u!1001 &1794702600
 PrefabInstance:
   m_ObjectHideFlags: 0

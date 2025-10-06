@@ -8,7 +8,7 @@ public class LootSpawnHandler : MonoBehaviour
     [field: SerializeField] GameObject IntenseEtherPrefab;
     [field: SerializeField] GameObject OrganPrefab;
     [field: SerializeField] GameObject CorePrefab;
-    [field: SerializeField] float LootScaler = .3f;
+    [field: SerializeField] float LootScaler = 1f;
 
 
 
@@ -27,9 +27,6 @@ public class LootSpawnHandler : MonoBehaviour
         Debug.Log("Maybe going to drop some loot, eh?");
         if (etherValue > 50)
         {
-
-            // do dice roll for core / ether / organ drop and scales by their Power / Affinity and HP levels.
-            // if the resulting value is high enough, spawn tge thing :)
             SpawnEther(enemyStats, GetEtherType(etherValue));
         }
         if (enemyStats.MaxHP > 150)
@@ -40,12 +37,15 @@ public class LootSpawnHandler : MonoBehaviour
         {
             SpawnCores(enemyStats.transform, GetCoreType(enemyStats.MaxPower));
         }
-
     }
     private void SpawnEther(EnemyStats enemyStats, GameObject etherPrefab)
     {
         if (etherPrefab == null) return;
         GameObject instance = Instantiate(etherPrefab, enemyStats.transform.position, Quaternion.identity);
+        if (instance.TryGetComponent<LootableAlchemyMaterial>(out LootableAlchemyMaterial lootScript))
+        {
+            lootScript.SetElement(enemyStats.GetHighestAffinity());
+        }
         if (instance.TryGetComponent<ParticleSystem>(out ParticleSystem ps))
         {
             EffectColorChanger.ChangeParticleSystemColor(enemyStats, ps);
@@ -66,7 +66,6 @@ public class LootSpawnHandler : MonoBehaviour
 
     private void SpawnOrgans(Transform enemy, AlchemyLoot organType)
     {
-
         if (organType == AlchemyLoot.WeakCores) return;
         Instantiate(OrganPrefab, enemy.transform.position, Quaternion.identity);
         if (OrganPrefab.TryGetComponent<LootableAlchemyMaterial>(out LootableAlchemyMaterial lootScript))
