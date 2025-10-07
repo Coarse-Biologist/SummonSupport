@@ -80,32 +80,32 @@ public static class EffectColorChanger
         if (ElementToColorDict.TryGetValue(element, out float[] colorArray)) return colorArray;
         else throw new Exception("element not found in find color by element function");
     }
+    public static void SetColor(SpriteRenderer sr, float[] rgbaValues)
+    {
+        float r = rgbaValues[0];
+        float g = rgbaValues[1];
+        float b = rgbaValues[2];
+        float a = rgbaValues[3];
+        sr.color = new Color(r, g, b, a);
+    }
     public static Material GetGlowByElement(Element element)
     {
         if (GlowMaterials == null || GlowMaterials.Count() != 4)
-            throw new Exception("There are now glow materials to be assigned to minions.");
+            throw new Exception("There are no glow materials to be assigned to minions.");
         if (element == Element.Light || element == Element.Electricity || element == Element.Radiation)
         {
-            Debug.Log($"returning {GlowMaterials[0]}");
-
             return GlowMaterials[0];
         }
         else if (element == Element.Heat || element == Element.Psychic)
         {
-            Debug.Log($"returning {GlowMaterials[1]}");
-
             return GlowMaterials[1];
         }
         else if (element == Element.Cold || element == Element.Water || element == Element.Acid)
         {
-            Debug.Log($"returning {GlowMaterials[2]}");
-
             return GlowMaterials[2];
         }
-
         else
         {
-            Debug.Log($"returning {GlowMaterials[3]}");
             return GlowMaterials[3];
         }
     }
