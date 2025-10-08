@@ -2081,9 +2081,10 @@ GameObject:
   - component: {fileID: 1724141748}
   - component: {fileID: 1724141749}
   - component: {fileID: 1724141750}
-  - component: {fileID: 1724141751}
   - component: {fileID: 1724141752}
   - component: {fileID: 1724141753}
+  - component: {fileID: 1724141751}
+  - component: {fileID: 1724141754}
   m_Layer: 0
   m_Name: LevelManagerObj
   m_TagString: Untagged
@@ -2261,6 +2262,18 @@ MonoBehaviour:
   <HulkingCoreSprite>k__BackingField: {fileID: 21300000, guid: d3d029430fd59964e8e6b23d65fc4285,
     type: 3}
   LootScaler: 1
+--- !u!114 &1724141754
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1724141744}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e546f90877e7c0347a6c7de2695c52ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PauseGameHandler
 --- !u!1001 &1794702600
 PrefabInstance:
   m_ObjectHideFlags: 0

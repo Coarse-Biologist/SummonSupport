@@ -31,6 +31,7 @@ public class AlchemyHandler : MonoBehaviour
 
     public static Dictionary<AlchemyLoot, int> AlchemyLootValueDict = new();
 
+
     #endregion
 
     public void Awake()
@@ -45,6 +46,7 @@ public class AlchemyHandler : MonoBehaviour
     }
     private void InitiateAlchemyLootDict()
     {
+        if (AlchemyLootValueDict.TryGetValue(AlchemyLoot.WretchedOrgans, out int num)) return;
         AlchemyLootValueDict.Add(AlchemyLoot.WretchedOrgans, 5);
         AlchemyLootValueDict.Add(AlchemyLoot.FunctionalOrgans, 10);
         AlchemyLootValueDict.Add(AlchemyLoot.HulkingOrgans, 20);

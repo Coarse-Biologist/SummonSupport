@@ -26,6 +26,7 @@ namespace SummonSupportEvents
 
         public static UnityEvent<bool> PlayerDead = new();
         public static UnityEvent<Ability> PlayerLearnedAbility = new();
+        public static UnityEvent TogglePauseGame = new();
 
 
     }

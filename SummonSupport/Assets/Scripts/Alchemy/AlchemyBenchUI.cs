@@ -65,15 +65,24 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     #endregion
 
     #region Setup
+
+    //void OnEnable()
+    //{
+    //    EventDeclarer.TogglePauseGame?.AddListener();
+    //}
+    //void OnDisable()
+    //{
+    //    EventDeclarer.TogglePauseGame?.RemoveListener();
+    //}
+
     void Awake()
     {
         Instance = this;
         alchemyHandler = GetComponent<AlchemyHandler>();
-
     }
+
     void Start()
     {
-
         ui = UI_DocHandler.Instance.ui;
         UIPrefabAssets = UI_DocHandler.Instance.UIPrefabAssets;
         root = ui.rootVisualElement;
@@ -117,6 +126,9 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
         if (Player.TryGetComponent<PlayerAbilityHandler>(out PlayerAbilityHandler abilityHandler))
             playerAbilityHandler = abilityHandler;
         else return;
+        Time.timeScale = 0f;
+
+        //EventDeclarer.TogglePauseGame?.Invoke();
         HideInteractionOption();
         PlayerUsingUI();
         SetInstructionsText("");
@@ -139,6 +151,8 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     private void QuitAlchemyUI()
     {
         HideUI(craftingUI);
+        Time.timeScale = 1f;
+
         PlayerUsingUI();
     }
 
