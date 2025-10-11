@@ -26,7 +26,7 @@ public static class EffectColorChanger
     private static void InitializeColorDict()
     {
         if (ElementToColorDict.TryGetValue(Element.Cold, out float[] floatArray)) return;
-        else { Debug.Log("initializing color dict"); }
+        //else { Debug.Log("initializing color dict"); }
         ElementToColorDict.Add(Element.Cold, new float[4] { 0.3f, 0.7f, 1f, 1f });   // icy blue
         ElementToColorDict.Add(Element.Water, new float[4] { 0f, 0.4f, 1f, 1f });     // deep water blue
         ElementToColorDict.Add(Element.Plant, new float[4] { 0.1f, 0.6f, 0.1f, 1f }); // natural green
@@ -60,11 +60,13 @@ public static class EffectColorChanger
     {
         //Debug.Log($"Trying to change color of {particleSystem} to match {livingBeing}s resistences.");
         Element strongestElement = livingBeing.GetHighestAffinity();
-        if (livingBeing.Affinities[strongestElement].Get() > 50)
+        if (livingBeing.Affinities[strongestElement].Get() > 0)
         {
             var colorGradient = colorGradientLibrary.GetGradientByElement(strongestElement);
             SetGradient(particleSystem, colorGradient);
+            //Debug.Log($"color gradient selected: {colorGradient.colorKeys[0]}");
         }
+        //else Debug.Log("NO GRADIENT SELECTED");
 
     }
 

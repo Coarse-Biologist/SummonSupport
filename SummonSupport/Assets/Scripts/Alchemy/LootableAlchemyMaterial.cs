@@ -19,7 +19,7 @@ public class LootableAlchemyMaterial : MonoBehaviour, I_LootInterface
                 Debug.Log($"Knowledge gain = {knowledgeGain} for element {Element}");
             }
         }
-        Destroy(this.gameObject);
+        Destroy(gameObject);
     }
 
     public void SetAlchemyMaterial(AlchemyLoot assignedLoot)

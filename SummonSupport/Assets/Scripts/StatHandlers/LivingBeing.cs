@@ -280,7 +280,7 @@ public abstract class LivingBeing : MonoBehaviour
     public void AlterAbilityList(Ability ability, bool Add) // modifies the list of abilities by which one is affected
     {
         bool contains = AffectedByAbilities.Contains(ability);
-        Debug.Log($"Alter ability func: add = {Add}. Contains = {contains}");
+        //Debug.Log($"Alter ability func: add = {Add}. Contains = {contains}");
         if (Add && !contains) AffectedByAbilities.Add(ability);
         if (!Add && contains) AffectedByAbilities.Remove(ability);
     }

@@ -101,7 +101,7 @@ public static class AlchemyInventory
         {
             KnownTools.Add(tool);
         }
-        else Logging.Error($"The tool {tool} is already known");
+        //else Logging.Error($"The tool {tool} is already known");
     }
     #endregion
 

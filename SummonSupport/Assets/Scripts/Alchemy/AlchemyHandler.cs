@@ -72,7 +72,7 @@ public class AlchemyHandler : MonoBehaviour
 
                 UpgradeMinion(craftedMinion, combinedIngredients, elementList);
                 AddActiveMinion(craftedMinion);
-                Debug.Log("Add ACtive minion");
+                //Debug.Log("Add ACtive minion");
                 int knowledgeGain = GainKnowledge(elementList, combinedIngredients);
 
                 //Logging.Info($"You have just gained a total of {knowledgeGain} knowledge from alchemic work.");

@@ -27,7 +27,6 @@ public class PlayerMovement : MovementScript
     private bool canDash = true;
     private bool lockedInUI = false;
     private bool StuckInAbilityAnimation = false;
-    private bool paused = false;
 
     #endregion
 

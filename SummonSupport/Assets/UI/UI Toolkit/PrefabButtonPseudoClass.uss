@@ -4,8 +4,8 @@
 }
 
 .toggle:hover {
-    -unity-background-image-tint-color: rgb(0, 151, 28);
-    background-color: rgb(2, 129, 0);
+    -unity-background-image-tint-color: rgb(184, 177, 177);
+    background-color: rgb(255, 255, 255);
     scale: 1.2 1.2;
     transition-duration: 0.3s;
 }
@@ -38,11 +38,12 @@
 }
 
 .toggle:active {
-    -unity-background-image-tint-color: rgb(0, 146, 27);
-    background-color: rgb(3, 176, 0);
+    -unity-background-image-tint-color: rgb(184, 177, 177);
+    background-color: rgb(255, 255, 255);
     transition-duration: 0.2s;
     transition-timing-function: ease-in-out;
     scale: 1.5 1;
+    background-image: url("project://database/Assets/PixelArt/UI_Sprites/StoneButton.png?fileID=2800000&guid=df2136feabe033a47aa6a3f2891c8183&type=3#StoneButton");
 }
 
 .healthbar .unity-progress-bar__progress {

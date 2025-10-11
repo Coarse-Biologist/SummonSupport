@@ -35,13 +35,13 @@ public class LootSpawnHandler : MonoBehaviour
     private void DecideDropLoot(EnemyStats enemyStats)
     {
         float etherValue = enemyStats.GetAffinity(enemyStats.GetHighestAffinity());
-        if (etherValue > 50)
+        if (etherValue >= 50)
         {
             SpawnEther(enemyStats, GetEtherType(etherValue));
         }
         if (enemyStats.MaxHP > 150)
         {
-            SpawnOrgans(enemyStats.transform, GetOrganType(enemyStats.MaxHP));
+            SpawnOrgans(enemyStats, GetOrganType(enemyStats.MaxHP));
         }
         if (enemyStats.MaxPower > 150)
         {
@@ -50,7 +50,10 @@ public class LootSpawnHandler : MonoBehaviour
     }
     private void SpawnEther(EnemyStats enemyStats, GameObject etherPrefab)
     {
+
         if (etherPrefab == null) return;
+        Debug.Log($"A {etherPrefab.name} will be spawned for {enemyStats.Name}");
+
         GameObject instance = Instantiate(etherPrefab, enemyStats.transform.position, Quaternion.identity);
         if (instance.TryGetComponent(out LootableAlchemyMaterial lootScript))
         {
@@ -73,8 +76,10 @@ public class LootSpawnHandler : MonoBehaviour
         else return null;
     }
 
-    private void SpawnOrgans(Transform enemy, AlchemyLoot organType)
+    private void SpawnOrgans(EnemyStats enemy, AlchemyLoot organType)
     {
+        Debug.Log($"A {organType} will be spawned for {enemy}");
+
         if (organType == AlchemyLoot.WeakCores) return;
         Instantiate(OrganPrefab, enemy.transform.position, Quaternion.identity);
         if (OrganPrefab.TryGetComponent(out LootableAlchemyMaterial lootScript))
@@ -97,6 +102,7 @@ public class LootSpawnHandler : MonoBehaviour
     private void SpawnCores(EnemyStats enemy, AlchemyLoot coreType)
     {
         if (coreType == AlchemyLoot.WretchedOrgans) return;
+        Debug.Log($"A {coreType} will be spawned for {enemy.Name}");
         GameObject instance = Instantiate(CorePrefab, enemy.transform.position, Quaternion.identity);
         if (instance.TryGetComponent<LootableAlchemyMaterial>(out LootableAlchemyMaterial lootScript))
         {
@@ -119,7 +125,10 @@ public class LootSpawnHandler : MonoBehaviour
                     sr.sprite = HulkingCoreSprite;
                     break;
             }
-            EffectColorChanger.SetColor(sr, EffectColorChanger.GetColorFromElement(enemy.GetHighestAffinity()));
+            Element strongestElement = enemy.GetHighestAffinity();
+            EffectColorChanger.SetColor(sr, EffectColorChanger.GetColorFromElement(strongestElement));
+            Material glowMaterial = EffectColorChanger.GetGlowByElement(strongestElement);
+            sr.material = glowMaterial;
         }
     }
 

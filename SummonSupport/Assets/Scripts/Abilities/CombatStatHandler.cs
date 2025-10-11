@@ -18,7 +18,7 @@ public static class CombatStatHandler
     {
         Stopwatch stopwatch = new();
         //UnityEngine.Debug.Log($"ability = {ability.name}. caster = {caster.Name}. target = {target.Name}. for self? {forSelf}");
-        LivingBeing casterStats = caster.GetComponent<LivingBeing>();
+        LivingBeing casterStats = caster.GetComponent<LivingBeing>(); //#TODO NANI?
         LivingBeing targetStats = target.GetComponent<LivingBeing>();
         LivingBeing theTarget = casterStats;
         if (!forSelf) theTarget = targetStats;
