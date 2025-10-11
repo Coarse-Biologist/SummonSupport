@@ -64,7 +64,7 @@ public class PlayerStats : LivingBeing
 
     public override void Die()
     {
-        Logging.Info($"{Name} died");
+        //Logging.Info($"{Name} died");
 
         if (HasStatusEffect(StatusEffectType.ExplodeOnDeath)) ViciousDeathExplosion();
         SetDead(true);

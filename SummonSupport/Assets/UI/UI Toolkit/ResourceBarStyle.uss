@@ -12,6 +12,8 @@
     color: white;
     font-size: 14px;
     font-style: bold;
+    text-shadow: 0 0 20px rgb(255, 32, 32);
+    background-image: none;
 }
 
 .powerbar {
@@ -27,12 +29,23 @@
 
 .healthbar .unity-progress-bar__progress {
     background-color: rgb(131, 0, 0);
+    text-shadow: 0 0 10px rgb(255, 69, 63);
+    -unity-text-outline-width: 1px;
+    -unity-text-outline-color: rgb(0, 0, 0);
+    font-size: 100px;
+    letter-spacing: 0;
 }
+
 .healthbar.glow {
     border-color: yellow;
     box-shadow: 0 0 10px yellow;
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    color: rgba(255, 255, 255, 0);
+    background-color: rgba(255, 255, 255, 0);
 }
-
 
 .powerbar .unity-progress-bar__background {
     background-color: rgb(0, 0, 0);

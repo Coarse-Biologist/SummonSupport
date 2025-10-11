@@ -16,15 +16,20 @@ public class PauseGameHandler : MonoBehaviour
     private VisualElement PauseMenu;
     private Button ResumeButton;
     private Button RestartButton;
+    private Button OptionsButton;
+
     private Button QuitButton;
     void OnEnable()
     {
         EventDeclarer.TogglePauseGame?.AddListener(ToggleGamePause);
+        EventDeclarer.PlayerDead?.AddListener(DeathPause);
 
     }
     void OnDisable()
     {
         EventDeclarer.TogglePauseGame?.RemoveListener(ToggleGamePause);
+        EventDeclarer.PlayerDead?.RemoveListener(DeathPause);
+
     }
 
     void Start()
@@ -34,6 +39,7 @@ public class PauseGameHandler : MonoBehaviour
         root = ui.rootVisualElement;
         PauseMenu = root.Q<VisualElement>("PauseMenu");
         ResumeButton = PauseMenu.Q<Button>("Resume");
+        OptionsButton = PauseMenu.Q<Button>("Options");
         RestartButton = PauseMenu.Q<Button>("Restart");
         QuitButton = PauseMenu.Q<Button>("Quit");
         ResumeButton.RegisterCallback<ClickEvent>(e => Resume());
@@ -67,7 +73,6 @@ public class PauseGameHandler : MonoBehaviour
 
     private void Resume()
     {
-
         PauseMenu.SetEnabled(false);
         PauseMenu.style.display = DisplayStyle.None;
 
@@ -75,9 +80,18 @@ public class PauseGameHandler : MonoBehaviour
     }
     private void Restart()
     {
-
         Time.timeScale = 1f;
         SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex);
+    }
 
+    private void DeathPause(bool dead)
+    {
+        PauseMenu.SetEnabled(true);
+        PauseMenu.style.display = DisplayStyle.Flex;
+        ResumeButton.style.display = DisplayStyle.None;
+        OptionsButton.style.display = DisplayStyle.None;
+
+
+        Time.timeScale = 0f;
     }
 }
