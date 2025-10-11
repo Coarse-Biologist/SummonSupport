@@ -4,6 +4,7 @@ using Unity.Entities;
 using Unity.Collections;
 using SummonSupportEvents;
 using Unity.Mathematics;
+using UnityEngine.SceneManagement;
 
 
 public class PlayerMovement : MovementScript
@@ -51,6 +52,8 @@ public class PlayerMovement : MovementScript
         inputActions.Player.Dash.performed += OnDash;
         inputActions.Player.LookDirection.performed += OnLook;
         inputActions.Player.CommandMinion.performed += SendMinionCommandContext;
+        inputActions.Player.TogglePauseGame.performed += ToggleGamePause;
+
     }
 
     private void OnDisable()
@@ -63,6 +66,8 @@ public class PlayerMovement : MovementScript
         inputActions.Player.Dash.performed -= OnDash;
         inputActions.Player.LookDirection.performed -= OnLook;
         inputActions.Player.CommandMinion.performed -= SendMinionCommandContext;
+        inputActions.Player.TogglePauseGame.performed -= ToggleGamePause;
+
         inputActions.Player.Disable();
     }
     #endregion
@@ -164,8 +169,6 @@ public class PlayerMovement : MovementScript
         worldPosition = mainCamera.ScreenToWorldPoint(lookInput);
         Debug.DrawLine(new Vector3(0, 0, 0), worldPosition, Color.green);
         CommandMinion.HandleCommand(worldPosition);
-
-
     }
 
     private void FixedUpdate()
@@ -193,6 +196,26 @@ public class PlayerMovement : MovementScript
             seesTargetCompArray[i] = seesTargetComponent;
         }
         entityQuery.CopyFromComponentDataArray(seesTargetCompArray);
+    }
+
+    private void ToggleGamePause(InputAction.CallbackContext context)
+    {
+        if (!lockedInUI)
+        {
+            //paused = !paused;
+            EventDeclarer.TogglePauseGame?.Invoke();
+
+            //if (paused)
+            //{
+            //    Debug.Log("Pausing");
+            //    Time.timeScale = 0f;
+            //}
+            //else
+            //{
+            //    Debug.Log("Unpausing");
+            //    Time.timeScale = 1f;
+            //}
+        }
     }
 
     //private void SetMovementAttribute(MovementAttributes attribute, float newValue)

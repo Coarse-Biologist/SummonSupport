@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System;
 using System.Linq;
 using System.Text.RegularExpressions;
-using Unity.VisualScripting;
+//using Unity.VisualScripting;
 using SummonSupportEvents;
 
 
@@ -65,15 +65,24 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     #endregion
 
     #region Setup
+
+    //void OnEnable()
+    //{
+    //    EventDeclarer.TogglePauseGame?.AddListener();
+    //}
+    //void OnDisable()
+    //{
+    //    EventDeclarer.TogglePauseGame?.RemoveListener();
+    //}
+
     void Awake()
     {
         Instance = this;
         alchemyHandler = GetComponent<AlchemyHandler>();
-
     }
+
     void Start()
     {
-
         ui = UI_DocHandler.Instance.ui;
         UIPrefabAssets = UI_DocHandler.Instance.UIPrefabAssets;
         root = ui.rootVisualElement;
@@ -117,6 +126,9 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
         if (Player.TryGetComponent<PlayerAbilityHandler>(out PlayerAbilityHandler abilityHandler))
             playerAbilityHandler = abilityHandler;
         else return;
+        Time.timeScale = 0f;
+
+        //EventDeclarer.TogglePauseGame?.Invoke();
         HideInteractionOption();
         PlayerUsingUI();
         SetInstructionsText("");
@@ -139,6 +151,8 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     private void QuitAlchemyUI()
     {
         HideUI(craftingUI);
+        Time.timeScale = 1f;
+
         PlayerUsingUI();
     }
 
@@ -198,6 +212,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     }
     private void HandleUpgradeMinion(GameObject minionToUpgrade)
     {
+        if (minionToUpgrade == null) return;
         alchemyHandler.UpgradeMinion(minionToUpgrade, selectedIngredients, selectedElements);
         AlchemyInventory.ExpendIngredients(selectedIngredients);
         ClearCraftingSelection();
@@ -294,13 +309,18 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
             List<Element> elementsList = Enum.GetValues(typeof(Element)).Cast<Element>().ToList();
             foreach (Element element in elementsList)
             {
-                TemplateContainer prefabContainer = UIPrefabAssets.Instantiate();
-                Toggle elementToggle = prefabContainer.Q<Toggle>("TogglePrefab");
-                elementToggle.text = element.ToString();
-                //elementToggle.style.backgroundColor = Color.green;
+                if (AlchemyInventory.GetElementalKnowledge(element) >= 50)
+                {
+                    TemplateContainer prefabContainer = UIPrefabAssets.Instantiate();
+                    Toggle elementToggle = prefabContainer.Q<Toggle>("TogglePrefab");
+                    elementToggle.text = element.ToString();
+                    elementToggle.style.width = Length.Percent(30);
+                    elementToggle.style.height = Length.Percent(10);
+                    //elementToggle.style.backgroundColor = Color.green;
 
-                panel.Add(elementToggle);
-                elementToggle.RegisterCallback<ClickEvent>(e => ToggleSelectedElement(element));
+                    panel.Add(elementToggle);
+                    elementToggle.RegisterCallback<ClickEvent>(e => ToggleSelectedElement(element));
+                }
             }
         }
 
@@ -396,6 +416,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     }
     private void LearnAbilityIfSufficientResources()
     {
+        if (selectedAbility == null || selectedIngredients.Count() == 0) return;
         if (AlchemyInventory.HasSufficientCorePower(selectedAbility, selectedIngredients))
         {
             SetInstructionsText($"You have concocted the ability {selectedAbility.name}!");
@@ -424,9 +445,14 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
 
     private void ShowAbilityCraftingInfo()
     {
-        if (selectedIngredients.Keys.Count == 0)
-            instructions.text = "Select cores to concoct the desired ability.";
-        else
+
+        if (selectedIngredients.Keys.Count == 0 && selectedAbility == null)
+            instructions.text = "Select cores to concoct a desired ability.";
+        else if (selectedIngredients.Keys.Count == 0 && selectedAbility != null)
+        {
+            instructions.text = $"Select cores with sufficient value ({Ability.GetCoreCraftingCost(selectedAbility)}to concoct {selectedAbility.Name}.";
+        }
+        else if (selectedAbility != null && selectedIngredients.Keys.Count != 0)
         {
             string ingredientInfo = $"Selected ability: {selectedAbility.name}. Selected Cores: ";
 

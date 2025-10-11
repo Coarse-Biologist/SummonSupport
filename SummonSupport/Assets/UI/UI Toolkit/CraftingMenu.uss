@@ -1,12 +1,12 @@
 .button {
-    background-color: rgb(0, 57, 0);
-    -unity-background-image-tint-color: rgb(0, 115, 18);
-    background-image: none;
+    background-color: rgba(255, 255, 255, 0);
+    -unity-background-image-tint-color: rgb(255, 255, 255);
+    background-image: url("project://database/Assets/PixelArt/UI_Sprites/StoneButton.png?fileID=2800000&guid=52e3837347aeec24e8388f9a62608186&type=3#StoneButton");
     border-left-color: rgb(0, 0, 0);
     border-right-color: rgb(0, 0, 0);
     border-top-color: rgb(0, 0, 0);
     border-bottom-color: rgb(0, 0, 0);
-    color: rgb(0, 132, 0);
+    color: rgb(255, 255, 255);
     text-shadow: 0 0 0 rgba(0, 140, 3, 0);
 }
 
@@ -14,43 +14,54 @@
     transform-origin: center 70%;
     translate: 0 0;
     scale: 1.2 1.2;
-    background-color: rgb(10, 125, 0);
-    -unity-background-image-tint-color: rgb(0, 101, 9);
+    background-color: rgba(255, 255, 255, 0);
+    -unity-background-image-tint-color: rgb(184, 177, 177);
+    background-image: url("project://database/Assets/PixelArt/UI_Sprites/StoneButton.png?fileID=2800000&guid=52e3837347aeec24e8388f9a62608186&type=3#StoneButton");
 }
 
 .button:active {
     transform-origin: center;
     translate: 0 0;
     scale: 1 1.2;
-    background-color: rgb(0, 113, 28);
-    -unity-background-image-tint-color: rgb(0, 102, 3);
+    background-color: rgba(255, 255, 255, 0);
+    -unity-background-image-tint-color: rgb(255, 255, 255);
     rotate: 0;
     transition-duration: 0.2s;
     transition-timing-function: ease-in-out;
+    background-image: url("project://database/Assets/PixelArt/UI_Sprites/StoneButton.png?fileID=2800000&guid=52e3837347aeec24e8388f9a62608186&type=3#StoneButton");
 }
 
 .toggle {
+    background-image: url("project://database/Assets/PixelArt/UI_Sprites/StoneButton.png?fileID=2800000&guid=52e3837347aeec24e8388f9a62608186&type=3#StoneButton");
+    background-color: rgba(255, 255, 255, 0);
 }
 
 .toggle .unity-toggle__checkmark {
-    background-color: rgb(1, 120, 31);
+    background-color: rgba(255, 255, 255, 0);
     border-radius: 6px;
+    background-size: 103% 100%;
+    background-image: url("project://database/Assets/PixelArt/UI_Sprites/StoneButton.png?fileID=2800000&guid=52e3837347aeec24e8388f9a62608186&type=3#StoneButton");
 }
 
 .toggle:hover {
     scale: 1.2 1.2;
     transition-timing-function: ease;
     transition-duration: 0.2s;
+    background-image: url("project://database/Assets/PixelArt/UI_Sprites/StoneButton.png?fileID=2800000&guid=52e3837347aeec24e8388f9a62608186&type=3#StoneButton");
+    background-color: rgba(255, 255, 255, 0);
+    -unity-background-image-tint-color: rgb(184, 177, 177);
 }
 
 .toggle:active {
     transition-duration: 0.2s;
     scale: 1.5 1.5;
     transition-timing-function: ease-in-out;
+    -unity-background-image-tint-color: rgb(184, 177, 177);
+    background-color: rgba(255, 255, 255, 0);
 }
 
 .buttonPrefab {
-    background-color: rgb(0, 63, 2);
+    background-color: rgba(255, 255, 255, 0);
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
     border-bottom-right-radius: 8px;
@@ -60,15 +71,19 @@
     border-top-color: rgba(0, 80, 2, 0);
     border-bottom-color: rgba(0, 80, 2, 0);
     text-shadow: 0 0 0 rgba(0, 134, 16, 0);
+    color: rgb(0, 0, 0);
+    background-image: url("project://database/Assets/PixelArt/UI_Sprites/StoneButton.png?fileID=2800000&guid=52e3837347aeec24e8388f9a62608186&type=3#StoneButton");
 }
 
 .buttonPrefab:hover {
     scale: 1.2 1.2;
-    background-color: rgb(1, 145, 0);
+    background-color: rgba(255, 255, 255, 0);
+    background-image: url("project://database/Assets/PixelArt/UI_Sprites/StoneButton.png?fileID=2800000&guid=52e3837347aeec24e8388f9a62608186&type=3#StoneButton");
+    -unity-background-image-tint-color: rgb(184, 177, 177);
 }
 
 .buttonPrefab:active {
-    background-color: rgb(0, 120, 3);
+    background-color: rgba(255, 255, 255, 0);
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
     border-bottom-right-radius: 8px;
@@ -80,6 +95,7 @@
     scale: 1.5 1;
     transition-duration: 0.3s;
     transition-timing-function: ease-in-out;
+    background-image: url("project://database/Assets/PixelArt/UI_Sprites/StoneButton.png?fileID=2800000&guid=52e3837347aeec24e8388f9a62608186&type=3#StoneButton");
 }
 
 .AbilityProgressbar {

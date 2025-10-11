@@ -2,6 +2,7 @@ using UnityEngine.InputSystem;
 using System.Collections.Generic;
 using UnityEngine;
 using SummonSupportEvents;
+using Unity.VisualScripting;
 
 public class PlayerAbilityHandler : AbilityHandler
 {
@@ -43,8 +44,8 @@ public class PlayerAbilityHandler : AbilityHandler
 
     void OnEnable()
     {
-        RegisterInputEvents(true);
         inputActions ??= new PlayerInputActions();
+        RegisterInputEvents(true);
         EventDeclarer.PlayerLearnedAbility?.AddListener(LearnAbility);
         inputActions.Enable();
     }
@@ -58,6 +59,7 @@ public class PlayerAbilityHandler : AbilityHandler
 
     void RegisterInputEvents(bool register)
     {
+        if (inputActions == null) throw new System.Exception("The players input actions is null.");
         foreach (var action in inputActions.Player.Get().actions)
         {
 

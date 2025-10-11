@@ -1,0 +1,146 @@
+using SummonSupportEvents;
+using UnityEngine;
+
+public class LootSpawnHandler : MonoBehaviour
+{
+    [field: SerializeField] GameObject FaintEtherPrefab;
+    [field: SerializeField] GameObject PowerfulEtherPrefab;
+    [field: SerializeField] GameObject IntenseEtherPrefab;
+    [field: SerializeField] GameObject OrganPrefab;
+
+    #region Cores
+    [field: SerializeField] GameObject CorePrefab;
+    [field: SerializeField] public Sprite WeakCoreSprite { get; private set; }
+    [field: SerializeField] public Sprite WorkingCoreSprite { get; private set; }
+
+    [field: SerializeField] public Sprite PowerfulCoreSprite { get; private set; }
+
+    [field: SerializeField] public Sprite HulkingCoreSprite { get; private set; }
+
+
+    #endregion
+    [field: SerializeField] float LootScaler = 1f;
+
+
+
+    void OnEnable()
+    {
+        EventDeclarer.EnemyDefeated?.AddListener(DecideDropLoot);
+    }
+    void OnDisable()
+    {
+        EventDeclarer.EnemyDefeated?.AddListener(DecideDropLoot);
+    }
+
+    private void DecideDropLoot(EnemyStats enemyStats)
+    {
+        float etherValue = enemyStats.GetAffinity(enemyStats.GetHighestAffinity());
+        if (etherValue >= 50)
+        {
+            SpawnEther(enemyStats, GetEtherType(etherValue));
+        }
+        if (enemyStats.MaxHP > 150)
+        {
+            SpawnOrgans(enemyStats, GetOrganType(enemyStats.MaxHP));
+        }
+        if (enemyStats.MaxPower > 150)
+        {
+            SpawnCores(enemyStats, GetCoreType(enemyStats.MaxPower));
+        }
+    }
+    private void SpawnEther(EnemyStats enemyStats, GameObject etherPrefab)
+    {
+
+        if (etherPrefab == null) return;
+        Debug.Log($"A {etherPrefab.name} will be spawned for {enemyStats.Name}");
+
+        GameObject instance = Instantiate(etherPrefab, enemyStats.transform.position, Quaternion.identity);
+        if (instance.TryGetComponent(out LootableAlchemyMaterial lootScript))
+        {
+            lootScript.SetElement(enemyStats.GetHighestAffinity());
+        }
+        if (instance.TryGetComponent(out ParticleSystem ps))
+        {
+            EffectColorChanger.ChangeParticleSystemColor(enemyStats, ps);
+        }
+    }
+
+    private GameObject GetEtherType(float etherValue)
+    {
+        float lootRoll = Random.Range(0, 150) + (etherValue * LootScaler);
+
+        if (lootRoll < 50) return null;
+        if (lootRoll > 50 && lootRoll < 100) return FaintEtherPrefab;
+        if (lootRoll > 100 && lootRoll < 150) return PowerfulEtherPrefab;
+        if (lootRoll > 150) return IntenseEtherPrefab;
+        else return null;
+    }
+
+    private void SpawnOrgans(EnemyStats enemy, AlchemyLoot organType)
+    {
+        Debug.Log($"A {organType} will be spawned for {enemy}");
+
+        if (organType == AlchemyLoot.WeakCores) return;
+        Instantiate(OrganPrefab, enemy.transform.position, Quaternion.identity);
+        if (OrganPrefab.TryGetComponent(out LootableAlchemyMaterial lootScript))
+        {
+            lootScript.SetAlchemyMaterial(organType);
+        }
+    }
+
+    private AlchemyLoot GetOrganType(float HP)
+    {
+        float lootRoll = Random.Range(0, 150) + (HP * LootScaler);
+
+        if (lootRoll < 50) return AlchemyLoot.WeakCores;
+        if (lootRoll > 50 && lootRoll < 100) return AlchemyLoot.WretchedOrgans;
+        if (lootRoll > 100 && lootRoll < 150) return AlchemyLoot.FunctionalOrgans;
+        if (lootRoll > 150) return AlchemyLoot.HulkingOrgans;
+        else return AlchemyLoot.WeakCores;
+    }
+
+    private void SpawnCores(EnemyStats enemy, AlchemyLoot coreType)
+    {
+        if (coreType == AlchemyLoot.WretchedOrgans) return;
+        Debug.Log($"A {coreType} will be spawned for {enemy.Name}");
+        GameObject instance = Instantiate(CorePrefab, enemy.transform.position, Quaternion.identity);
+        if (instance.TryGetComponent<LootableAlchemyMaterial>(out LootableAlchemyMaterial lootScript))
+        {
+            lootScript.SetAlchemyMaterial(coreType);
+        }
+        if (instance.TryGetComponent<SpriteRenderer>(out SpriteRenderer sr))
+        {
+            switch (coreType)
+            {
+                case AlchemyLoot.WeakCores:
+                    sr.sprite = WeakCoreSprite;
+                    break;
+                case AlchemyLoot.WorkingCore:
+                    sr.sprite = WorkingCoreSprite;
+                    break;
+                case AlchemyLoot.PowerfulCore:
+                    sr.sprite = PowerfulCoreSprite;
+                    break;
+                case AlchemyLoot.HulkingCore:
+                    sr.sprite = HulkingCoreSprite;
+                    break;
+            }
+            Element strongestElement = enemy.GetHighestAffinity();
+            EffectColorChanger.SetColor(sr, EffectColorChanger.GetColorFromElement(strongestElement));
+            Material glowMaterial = EffectColorChanger.GetGlowByElement(strongestElement);
+            sr.material = glowMaterial;
+        }
+    }
+
+    private AlchemyLoot GetCoreType(float power)
+    {
+        float lootRoll = Random.Range(0, 150) + (power * LootScaler);
+        if (lootRoll < 50) return AlchemyLoot.WretchedOrgans;
+        if (lootRoll > 40 && lootRoll < 80) return AlchemyLoot.WeakCores;
+        if (lootRoll > 80 && lootRoll < 120) return AlchemyLoot.WorkingCore;
+        if (lootRoll > 120 && lootRoll < 160) return AlchemyLoot.PowerfulCore;
+        if (lootRoll > 160) return AlchemyLoot.HulkingCore;
+
+        else return AlchemyLoot.WretchedOrgans;
+    }
+}

@@ -190,6 +190,15 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""TogglePauseGame"",
+                    ""type"": ""Button"",
+                    ""id"": ""b457247d-de12-4c31-86c0-628b8858dcd5"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -368,6 +377,17 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""action"": ""CommandMinion"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e705387d-db71-4edd-b166-f8da28ac8755"",
+                    ""path"": ""<Keyboard>/p"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""TogglePauseGame"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -387,6 +407,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         m_Player_Ability6 = m_Player.FindAction("Ability6", throwIfNotFound: true);
         m_Player_LookDirection = m_Player.FindAction("LookDirection", throwIfNotFound: true);
         m_Player_CommandMinion = m_Player.FindAction("CommandMinion", throwIfNotFound: true);
+        m_Player_TogglePauseGame = m_Player.FindAction("TogglePauseGame", throwIfNotFound: true);
     }
 
     ~@PlayerInputActions()
@@ -478,6 +499,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Ability6;
     private readonly InputAction m_Player_LookDirection;
     private readonly InputAction m_Player_CommandMinion;
+    private readonly InputAction m_Player_TogglePauseGame;
     /// <summary>
     /// Provides access to input actions defined in input action map "Player".
     /// </summary>
@@ -533,6 +555,10 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Player/CommandMinion".
         /// </summary>
         public InputAction @CommandMinion => m_Wrapper.m_Player_CommandMinion;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/TogglePauseGame".
+        /// </summary>
+        public InputAction @TogglePauseGame => m_Wrapper.m_Player_TogglePauseGame;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -592,6 +618,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @CommandMinion.started += instance.OnCommandMinion;
             @CommandMinion.performed += instance.OnCommandMinion;
             @CommandMinion.canceled += instance.OnCommandMinion;
+            @TogglePauseGame.started += instance.OnTogglePauseGame;
+            @TogglePauseGame.performed += instance.OnTogglePauseGame;
+            @TogglePauseGame.canceled += instance.OnTogglePauseGame;
         }
 
         /// <summary>
@@ -636,6 +665,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @CommandMinion.started -= instance.OnCommandMinion;
             @CommandMinion.performed -= instance.OnCommandMinion;
             @CommandMinion.canceled -= instance.OnCommandMinion;
+            @TogglePauseGame.started -= instance.OnTogglePauseGame;
+            @TogglePauseGame.performed -= instance.OnTogglePauseGame;
+            @TogglePauseGame.canceled -= instance.OnTogglePauseGame;
         }
 
         /// <summary>
@@ -753,5 +785,12 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnCommandMinion(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "TogglePauseGame" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnTogglePauseGame(InputAction.CallbackContext context);
     }
 }

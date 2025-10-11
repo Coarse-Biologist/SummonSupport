@@ -75,6 +75,14 @@ public static class AlchemyInventory
         if (element != Element.None)
             knowledgeDict[element] += amount;
     }
+    public static int GetElementalKnowledge(Element element)
+    {
+        if (element != Element.None && knowledgeDict.TryGetValue(element, out int value))
+        {
+            return value;
+        }
+        else return 0;
+    }
     public static void AlterIngredientNum(AlchemyLoot newIngredient, int amount)
     {
         UnityEngine.Debug.Log($"Adding {amount} {newIngredient}");
@@ -93,7 +101,7 @@ public static class AlchemyInventory
         {
             KnownTools.Add(tool);
         }
-        else Logging.Error($"The tool {tool} is already known");
+        //else Logging.Error($"The tool {tool} is already known");
     }
     #endregion
 

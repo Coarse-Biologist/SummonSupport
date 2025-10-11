@@ -21,11 +21,16 @@ public class AlchemyHandler : MonoBehaviour
     public UnityEvent<GameObject> requestInstantiation = new UnityEvent<GameObject>();
     [field: Tooltip("The amount of minion HP per new extra ability they can use.")]
     [field: SerializeField] public int HPToAbilityRatio { get; private set; } = 50;
+    [field: SerializeField] public static float recycleExchangeRate { get; private set; } = .05f;
+    [field: SerializeField] public static float knowledgeGainRate { get; private set; } = 1f;
+
+
     [SerializeField] public List<GameObject> activeMinions = new List<GameObject>();
     public UnityEvent<LivingBeing> newMinionAdded;
     public static AlchemyHandler Instance { get; private set; }
 
     public static Dictionary<AlchemyLoot, int> AlchemyLootValueDict = new();
+
 
     #endregion
 
@@ -41,6 +46,7 @@ public class AlchemyHandler : MonoBehaviour
     }
     private void InitiateAlchemyLootDict()
     {
+        if (AlchemyLootValueDict.TryGetValue(AlchemyLoot.WretchedOrgans, out int num)) return;
         AlchemyLootValueDict.Add(AlchemyLoot.WretchedOrgans, 5);
         AlchemyLootValueDict.Add(AlchemyLoot.FunctionalOrgans, 10);
         AlchemyLootValueDict.Add(AlchemyLoot.HulkingOrgans, 20);
@@ -66,7 +72,7 @@ public class AlchemyHandler : MonoBehaviour
 
                 UpgradeMinion(craftedMinion, combinedIngredients, elementList);
                 AddActiveMinion(craftedMinion);
-                Debug.Log("Add ACtive minion");
+                //Debug.Log("Add ACtive minion");
                 int knowledgeGain = GainKnowledge(elementList, combinedIngredients);
 
                 //Logging.Info($"You have just gained a total of {knowledgeGain} knowledge from alchemic work.");
@@ -83,9 +89,9 @@ public class AlchemyHandler : MonoBehaviour
             float minionHP = stats.MaxHP - 100f;
             float minionAffinity = GetCombinedElementValues(stats);
 
-            AlchemyInventory.AlterIngredientNum(AlchemyLoot.WeakCores, (int)minionPower / 20);
-            AlchemyInventory.AlterIngredientNum(AlchemyLoot.FaintEther, (int)minionAffinity / 20);
-            AlchemyInventory.AlterIngredientNum(AlchemyLoot.WretchedOrgans, (int)minionHP / 20);
+            AlchemyInventory.AlterIngredientNum(AlchemyLoot.WeakCores, (int)(minionPower * recycleExchangeRate));
+            AlchemyInventory.AlterIngredientNum(AlchemyLoot.FaintEther, (int)(minionAffinity * recycleExchangeRate));
+            AlchemyInventory.AlterIngredientNum(AlchemyLoot.WretchedOrgans, (int)(minionHP * recycleExchangeRate));
         }
         EventDeclarer.minionDied?.Invoke(minion);
         CommandMinion.RemoveActiveMinions(minion);
@@ -168,7 +174,6 @@ public class AlchemyHandler : MonoBehaviour
         if (strongestElement != Element.None)
         {
             List<Ability> abilities = AbilityLibrary.GetRandomAbilities(strongestElement, (int)(livingBeing.GetAttribute(AttributeType.MaxHitpoints) / HPToAbilityRatio));
-            Debug.Log(abilities);
 
             if (abilities != null)
             {
@@ -176,7 +181,6 @@ public class AlchemyHandler : MonoBehaviour
                 {
                     abilityHandler.LearnAbility(ability);
                 }
-
             }
             abilityHandler.SetAbilityLists();
         }
@@ -193,7 +197,7 @@ public class AlchemyHandler : MonoBehaviour
         {
             spriteControl.AlterColorByAffinity(strongestElement);
             nameModifier = strongestElement.ToString();
-            stats.SetName(nameModifier + "Elemental");
+            stats.SetName(nameModifier + " Elemental");
         }
         else stats.SetName("Flesh Atronach");
     }
@@ -208,8 +212,6 @@ public class AlchemyHandler : MonoBehaviour
         if (!activeMinions.Contains(minion))
         {
             activeMinions.Add(minion);
-            //CommandMinion.SetSelectedMinion(minion); //Good idea?...
-            Debug.Log("add active minion func. alchemy handler");
             newMinionAdded?.Invoke(livingBeing);
         }
         CommandMinion.SetActiveMinions(activeMinions);

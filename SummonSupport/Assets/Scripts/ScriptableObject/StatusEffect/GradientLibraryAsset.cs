@@ -23,7 +23,7 @@ public class GradientLibraryAsset : ScriptableObject
                 return entry.gradient;
             }
         }
-        Debug.LogWarning($"GradientLibrary: No gradient found with name '{element}'");
+        //Debug.LogWarning($"GradientLibrary: No gradient found with name '{element}'");
         return null;
     }
 

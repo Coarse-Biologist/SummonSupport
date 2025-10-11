@@ -25,6 +25,8 @@ public static class EffectColorChanger
 
     private static void InitializeColorDict()
     {
+        if (ElementToColorDict.TryGetValue(Element.Cold, out float[] floatArray)) return;
+        //else { Debug.Log("initializing color dict"); }
         ElementToColorDict.Add(Element.Cold, new float[4] { 0.3f, 0.7f, 1f, 1f });   // icy blue
         ElementToColorDict.Add(Element.Water, new float[4] { 0f, 0.4f, 1f, 1f });     // deep water blue
         ElementToColorDict.Add(Element.Plant, new float[4] { 0.1f, 0.6f, 0.1f, 1f }); // natural green
@@ -54,15 +56,17 @@ public static class EffectColorChanger
         }
     }
 
-    private static void ChangeParticleSystemColor(LivingBeing livingBeing, ParticleSystem particleSystem)
+    public static void ChangeParticleSystemColor(LivingBeing livingBeing, ParticleSystem particleSystem)
     {
         //Debug.Log($"Trying to change color of {particleSystem} to match {livingBeing}s resistences.");
         Element strongestElement = livingBeing.GetHighestAffinity();
-        if (livingBeing.Affinities[strongestElement].Get() > 50)
+        if (livingBeing.Affinities[strongestElement].Get() > 0)
         {
             var colorGradient = colorGradientLibrary.GetGradientByElement(strongestElement);
             SetGradient(particleSystem, colorGradient);
+            //Debug.Log($"color gradient selected: {colorGradient.colorKeys[0]}");
         }
+        //else Debug.Log("NO GRADIENT SELECTED");
 
     }
 
@@ -80,32 +84,32 @@ public static class EffectColorChanger
         if (ElementToColorDict.TryGetValue(element, out float[] colorArray)) return colorArray;
         else throw new Exception("element not found in find color by element function");
     }
+    public static void SetColor(SpriteRenderer sr, float[] rgbaValues)
+    {
+        float r = rgbaValues[0];
+        float g = rgbaValues[1];
+        float b = rgbaValues[2];
+        float a = rgbaValues[3];
+        sr.color = new Color(r, g, b, a);
+    }
     public static Material GetGlowByElement(Element element)
     {
         if (GlowMaterials == null || GlowMaterials.Count() != 4)
-            throw new Exception("There are now glow materials to be assigned to minions.");
+            throw new Exception("There are no glow materials to be assigned to minions.");
         if (element == Element.Light || element == Element.Electricity || element == Element.Radiation)
         {
-            Debug.Log($"returning {GlowMaterials[0]}");
-
             return GlowMaterials[0];
         }
         else if (element == Element.Heat || element == Element.Psychic)
         {
-            Debug.Log($"returning {GlowMaterials[1]}");
-
             return GlowMaterials[1];
         }
         else if (element == Element.Cold || element == Element.Water || element == Element.Acid)
         {
-            Debug.Log($"returning {GlowMaterials[2]}");
-
             return GlowMaterials[2];
         }
-
         else
         {
-            Debug.Log($"returning {GlowMaterials[3]}");
             return GlowMaterials[3];
         }
     }

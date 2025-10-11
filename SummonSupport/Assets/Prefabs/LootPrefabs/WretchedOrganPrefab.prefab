@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2319527277683662088}
   - component: {fileID: 8485957082102939299}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: AlchemyMatSprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -52,10 +52,12 @@ SpriteRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: 57ebbdeaefcfc8845a3039bc45eda813, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -73,19 +75,20 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: -105541197
-  m_SortingLayer: 3
+  m_GlobalIlluminationMeshLod: 0
+  m_SortingLayerID: -1986771613
+  m_SortingLayer: 2
   m_SortingOrder: 0
-  m_Sprite: {fileID: 5846916156826147622, guid: 272bcc5108b422940a67e20ec3d0c762,
+  m_Sprite: {fileID: -3556958270160313209, guid: c71a0568c97b2944c9caaec77c4ea54f,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 10.21, y: 10.24}
+  m_Size: {x: 0.48, y: 0.54}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 0
+  m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!1 &5071872005011018874
@@ -181,3 +184,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   alchemyMaterial: 0
+  Element: 0
