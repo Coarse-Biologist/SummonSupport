@@ -25,6 +25,7 @@ public class AbilityUI_Handler : MonoBehaviour
     private ProgressBar ProgressBarL5;
     private ProgressBar ProgressBarL6;
 
+    private AbilityModHandler modHandler;
     #endregion
 
     #endregion
@@ -38,6 +39,12 @@ public class AbilityUI_Handler : MonoBehaviour
         }
 
         Setup();
+
+    }
+    void Start()
+    {
+        if (PlayerStats.Instance.TryGetComponent(out AbilityModHandler handler))
+            modHandler = handler;
     }
 
     void OnEnable()
@@ -50,7 +57,6 @@ public class AbilityUI_Handler : MonoBehaviour
     {
         EventDeclarer.SlotChanged?.RemoveListener(SetAbilitySlot);
         EventDeclarer.AbilityUsed?.RemoveListener(AbilityUsed);
-
     }
     private void GetAllProgressBars()
     {
@@ -90,6 +96,7 @@ public class AbilityUI_Handler : MonoBehaviour
     {
         GetAllProgressBars();
         InitializeProgressBarDict();
+
     }
     #endregion
 
@@ -123,7 +130,7 @@ public class AbilityUI_Handler : MonoBehaviour
         if (abilityProgressBar == null) return;
         Ability ability = abilityProgressBarDict[slotIndex];
         if (ability == null) return;
-        float cooldown = ability.Cooldown;
+        float cooldown = ability.Cooldown + modHandler.GetModAttributeByType(ability, AbilityModTypes.Cooldown);
         //Logging.Info($"Ability {ability.name} with cooldown {cooldown} has been used.");
 
         abilityProgressBar.highValue = cooldown;

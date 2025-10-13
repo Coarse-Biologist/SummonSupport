@@ -68,7 +68,6 @@ public class AbilityHandler : MonoBehaviour
 
         StartCoroutine(SetOnCooldown(abilityIndex));
         int costMod = modHandler.GetModAttributeByType(ability, AbilityModTypes.Cost);
-        Debug.Log(costMod);
         statsHandler?.ChangeAttribute(AttributeType.CurrentPower, -ability.Cost + costMod);
         return true;
     }
@@ -185,7 +184,7 @@ public class AbilityHandler : MonoBehaviour
         {
             abilitiesOnCooldownCrew[ability] = true;
             abilitiesOnCooldown[abilityIndex] = true;
-            yield return new WaitForSeconds(ability.Cooldown);
+            yield return new WaitForSeconds(ability.Cooldown + modHandler.GetModAttributeByType(ability, AbilityModTypes.Cooldown));
         }
         finally
         {

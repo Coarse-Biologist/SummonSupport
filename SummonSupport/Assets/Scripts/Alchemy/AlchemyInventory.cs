@@ -135,20 +135,20 @@ public static class AlchemyInventory
         int corePower = 0;
         foreach (KeyValuePair<AlchemyLoot, int> kvp in coreKvp)
         {
-            corePower += AlchemyLootPowerValues[kvp.Key] * kvp.Value;
+            if (kvp.Key.ToString().Contains("Core")) corePower += AlchemyLootPowerValues[kvp.Key] * kvp.Value;
         }
         return corePower;
     }
 
-    public static bool BuyCraftingPowerWithCores(int requiredCraftingPower) // returns true if trade was possible/ successful - false otherwise
+    public static (bool bought, int price) BuyCraftingPowerWithCores(int requiredCraftingPower) // returns true if trade was possible/ successful - false otherwise
     {
         Dictionary<AlchemyLoot, int> CoreDict = ingredients.Where(g => g.ToString().Contains("Core")).ToDictionary(g => g.Key, g => g.Value);
         int currentPotentialPower = GetCorePowerResource(CoreDict);
-
-        if (currentPotentialPower < requiredCraftingPower) return false;
+        (bool sufficient, int currentExpenditure) continueTuple = new();
+        if (currentPotentialPower < requiredCraftingPower) return (false, 0);
         else
         {
-            var continueTuple = ExpendCoresWhile(CoreDict, AlchemyLoot.WeakCore, 0, requiredCraftingPower);
+            continueTuple = ExpendCoresWhile(CoreDict, AlchemyLoot.WeakCore, 0, requiredCraftingPower);
             if (!continueTuple.sufficient)
                 continueTuple = ExpendCoresWhile(CoreDict, AlchemyLoot.WorkingCore, continueTuple.currentExpenditure, requiredCraftingPower);
             if (!continueTuple.sufficient)
@@ -157,7 +157,7 @@ public static class AlchemyInventory
                 continueTuple = ExpendCoresWhile(CoreDict, AlchemyLoot.HulkingCore, continueTuple.currentExpenditure, requiredCraftingPower);
 
         }
-        return true;
+        return (true, continueTuple.currentExpenditure);
     }
 
     private static (bool sufficient, int currentExpenditure) ExpendCoresWhile(Dictionary<AlchemyLoot, int> CoreDict, AlchemyLoot coreType, int currentlySpent, int goalNum)

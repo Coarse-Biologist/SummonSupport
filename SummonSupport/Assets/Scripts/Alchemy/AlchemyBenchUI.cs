@@ -301,7 +301,8 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     private void SetSelectedModAttribute(AbilityModTypes modType)
     {
         selectedModType = modType;
-        SetInstructionsText($"The {AbilityModHandler.GetAbilityModString(modType)} of {selectedAbility.Name} can be improved by {AbilityModHandler.GetModCost(selectedAbility, modType)}");
+        SetInstructionsText($"The {AbilityModHandler.GetAbilityModString(modType)} of {selectedAbility.Name} can be improved for {AbilityModHandler.GetModCost(selectedAbility, modType)} core power. You currently have: {AlchemyInventory.GetCorePowerResource(AlchemyInventory.ingredients)}");
+
     }
     private void AttemptModification(AbilityModTypes modAttribute)
     {
@@ -309,13 +310,17 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
         if (selectedAbility == null) return;
         if (selectedModHandler == null) return;
         if (selectedModType == AbilityModTypes.None) return;
-        else Debug.Log($"the attribute {modAttribute} will be changed for the ability {selectedAbility} belonging to {selectedModHandler.gameObject.GetComponent<LivingBeing>().Name}. this has a cost of {Ability.GetCoreCraftingCost(selectedAbility)}");
-        bool bought = AlchemyInventory.BuyCraftingPowerWithCores(Ability.GetCoreCraftingCost(selectedAbility));
-        if (bought) selectedModHandler.Mod_Cost(selectedAbility, 10);
+
+
+        var boughtPrice = AlchemyInventory.BuyCraftingPowerWithCores(Ability.GetCoreCraftingCost(selectedAbility));
+        if (boughtPrice.bought)
+        {
+            selectedModHandler.ModAttributeByType(selectedAbility, selectedModType, AbilityModHandler.GetModIncrementValue(selectedModType));
+            SetInstructionsText($"You have modified the {AbilityModHandler.GetAbilityModString(selectedModType)} of {selectedAbility.Name} by {AbilityModHandler.GetModIncrementValue(selectedModType)} at the cost of {boughtPrice.price} core power.");
+        }
     }
     private void SetSelectedModHandler(AbilityModHandler modHandler)
     {
-        Debug.Log("something will be set as selected modHandler");
         selectedModHandler = modHandler;
     }
 
