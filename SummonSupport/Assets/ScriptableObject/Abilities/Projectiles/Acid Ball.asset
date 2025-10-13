@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fceeef8cfafe41444bf6aa890ebad1b7, type: 3}
   m_Name: Acid Ball
   m_EditorClassIdentifier: 
-  <Name>k__BackingField: Air Ball
+  <Name>k__BackingField: Acid Ball
   <Icon>k__BackingField: {fileID: 3837697726249093711, guid: a949de51ac63b994784528b4e06be2b5,
     type: 3}
   <Cooldown>k__BackingField: 2

@@ -4,7 +4,7 @@ using UnityEngine;
 public class AuraAbility : Ability
 {
     [field: SerializeField, Header("Aura settings"), Tooltip("time in [seconds]")]
-    public float Uptime { get; protected set; }
+    public float Duration { get; protected set; }
     [field: SerializeField]
     public float Radius { get; protected set; } = 2f;
 
@@ -21,14 +21,14 @@ public class AuraAbility : Ability
                 if (hit.collider != null && hit.collider.TryGetComponent<LivingBeing>(out LivingBeing livingBeing))
                 {
                     GameObject auraInstance = Instantiate(AuraObject, hit.collider.transform.position, AuraObject.transform.rotation, hit.collider.transform);
-                    auraInstance.GetComponent<Aura>().SetAuraStats(caster.GetComponent<LivingBeing>(), livingBeing, this, Uptime);
+                    auraInstance.GetComponent<Aura>().SetAuraStats(caster.GetComponent<LivingBeing>(), livingBeing, this, Duration);
 
                 }
                 else
                 {
                     GameObject auraInstance = Instantiate(AuraObject, caster.transform.position, AuraObject.transform.rotation, caster.transform);
                     Aura auraMonoScript = auraInstance.GetComponent<Aura>();
-                    if (auraMonoScript != null) auraMonoScript.HandleInstantiation(caster.GetComponent<LivingBeing>(), null, this, Radius, Uptime);
+                    if (auraMonoScript != null) auraMonoScript.HandleInstantiation(caster.GetComponent<LivingBeing>(), null, this, Radius, Duration);
                 }
             }
         }
@@ -36,7 +36,7 @@ public class AuraAbility : Ability
         {
             GameObject auraInstance = Instantiate(AuraObject, caster.transform.position, AuraObject.transform.rotation, caster.transform);
             Aura auraMonoScript = auraInstance.GetComponent<Aura>();
-            if (auraMonoScript != null) auraMonoScript.HandleInstantiation(caster.GetComponent<LivingBeing>(), null, this, Radius, Uptime);
+            if (auraMonoScript != null) auraMonoScript.HandleInstantiation(caster.GetComponent<LivingBeing>(), null, this, Radius, Duration);
         }
         return true;
     }

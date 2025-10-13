@@ -80,7 +80,7 @@ public class LootSpawnHandler : MonoBehaviour
     {
         Debug.Log($"A {organType} will be spawned for {enemy}");
 
-        if (organType == AlchemyLoot.WeakCores) return;
+        if (organType == AlchemyLoot.WeakCore) return;
         Instantiate(OrganPrefab, enemy.transform.position, Quaternion.identity);
         if (OrganPrefab.TryGetComponent(out LootableAlchemyMaterial lootScript))
         {
@@ -92,11 +92,11 @@ public class LootSpawnHandler : MonoBehaviour
     {
         float lootRoll = Random.Range(0, 150) + (HP * LootScaler);
 
-        if (lootRoll < 50) return AlchemyLoot.WeakCores;
+        if (lootRoll < 50) return AlchemyLoot.WeakCore;
         if (lootRoll > 50 && lootRoll < 100) return AlchemyLoot.WretchedOrgans;
         if (lootRoll > 100 && lootRoll < 150) return AlchemyLoot.FunctionalOrgans;
         if (lootRoll > 150) return AlchemyLoot.HulkingOrgans;
-        else return AlchemyLoot.WeakCores;
+        else return AlchemyLoot.WeakCore;
     }
 
     private void SpawnCores(EnemyStats enemy, AlchemyLoot coreType)
@@ -112,7 +112,7 @@ public class LootSpawnHandler : MonoBehaviour
         {
             switch (coreType)
             {
-                case AlchemyLoot.WeakCores:
+                case AlchemyLoot.WeakCore:
                     sr.sprite = WeakCoreSprite;
                     break;
                 case AlchemyLoot.WorkingCore:
@@ -136,7 +136,7 @@ public class LootSpawnHandler : MonoBehaviour
     {
         float lootRoll = Random.Range(0, 150) + (power * LootScaler);
         if (lootRoll < 50) return AlchemyLoot.WretchedOrgans;
-        if (lootRoll > 40 && lootRoll < 80) return AlchemyLoot.WeakCores;
+        if (lootRoll > 40 && lootRoll < 80) return AlchemyLoot.WeakCore;
         if (lootRoll > 80 && lootRoll < 120) return AlchemyLoot.WorkingCore;
         if (lootRoll > 120 && lootRoll < 160) return AlchemyLoot.PowerfulCore;
         if (lootRoll > 160) return AlchemyLoot.HulkingCore;

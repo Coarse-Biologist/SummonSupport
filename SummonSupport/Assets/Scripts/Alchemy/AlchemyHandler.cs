@@ -50,7 +50,7 @@ public class AlchemyHandler : MonoBehaviour
         AlchemyLootValueDict.Add(AlchemyLoot.WretchedOrgans, 5);
         AlchemyLootValueDict.Add(AlchemyLoot.FunctionalOrgans, 10);
         AlchemyLootValueDict.Add(AlchemyLoot.HulkingOrgans, 20);
-        AlchemyLootValueDict.Add(AlchemyLoot.WeakCores, 5);
+        AlchemyLootValueDict.Add(AlchemyLoot.WeakCore, 5);
         AlchemyLootValueDict.Add(AlchemyLoot.WorkingCore, 10);
         AlchemyLootValueDict.Add(AlchemyLoot.PowerfulCore, 20);
         AlchemyLootValueDict.Add(AlchemyLoot.HulkingCore, 30);
@@ -63,6 +63,16 @@ public class AlchemyHandler : MonoBehaviour
 
     public void HandleCraftingResults(Dictionary<AlchemyLoot, int> combinedIngredients, List<Element> elementList)
     {
+        if (elementList.Count() == 0)
+        {
+            Debug.Log("Wont be spending ether since you selected no element!");
+            combinedIngredients = combinedIngredients
+            .Where(g => !g.ToString()
+            .Contains("Ether"))
+            .ToDictionary(g => g.Key, g => g.Value);
+        }
+
+        AlchemyInventory.ExpendIngredients(combinedIngredients);
 
         if (combinedIngredients.Keys.Count > 0)
         {
@@ -89,7 +99,7 @@ public class AlchemyHandler : MonoBehaviour
             float minionHP = stats.MaxHP - 100f;
             float minionAffinity = GetCombinedElementValues(stats);
 
-            AlchemyInventory.AlterIngredientNum(AlchemyLoot.WeakCores, (int)(minionPower * recycleExchangeRate));
+            AlchemyInventory.AlterIngredientNum(AlchemyLoot.WeakCore, (int)(minionPower * recycleExchangeRate));
             AlchemyInventory.AlterIngredientNum(AlchemyLoot.FaintEther, (int)(minionAffinity * recycleExchangeRate));
             AlchemyInventory.AlterIngredientNum(AlchemyLoot.WretchedOrgans, (int)(minionHP * recycleExchangeRate));
         }
@@ -110,10 +120,10 @@ public class AlchemyHandler : MonoBehaviour
     }
     private int HandleOrganUse(LivingBeing stats, KeyValuePair<AlchemyLoot, int> organKvp)
     {
-        EventDeclarer.RepeatableQuestCompleted?.Invoke(Quest.RepeatableAccomplishments.UseOrgans, 1);
         int healthUpgrade = 0;
         if (AlchemyLootValueDict.TryGetValue(organKvp.Key, out int num))
         {
+            EventDeclarer.RepeatableQuestCompleted?.Invoke(Quest.RepeatableAccomplishments.UseOrgans, num);
             stats.ChangeAttribute(AttributeType.MaxHitpoints, num * organKvp.Value);
             healthUpgrade += num * organKvp.Value;
         }
@@ -121,12 +131,13 @@ public class AlchemyHandler : MonoBehaviour
     }
     private int HandleCoreUse(LivingBeing stats, KeyValuePair<AlchemyLoot, int> coreKvp)
     {
-        EventDeclarer.RepeatableQuestCompleted?.Invoke(Quest.RepeatableAccomplishments.UseCores, 1);
 
         int powerUpgrade = 0;
 
         if (AlchemyLootValueDict.TryGetValue(coreKvp.Key, out int num))
         {
+            EventDeclarer.RepeatableQuestCompleted?.Invoke(Quest.RepeatableAccomplishments.UseCores, num);
+
             stats.ChangeAttribute(AttributeType.MaxPower, num * coreKvp.Value);
             powerUpgrade += num * coreKvp.Value;
         }
@@ -135,18 +146,19 @@ public class AlchemyHandler : MonoBehaviour
     }
     private int HandleEtherUse(LivingBeing stats, KeyValuePair<AlchemyLoot, int> etherKvp, List<Element> elementList)
     {
-        EventDeclarer.RepeatableQuestCompleted?.Invoke(Quest.RepeatableAccomplishments.UseEther, 1);
+        if (elementList.Count() == 0) return 0;
         Debug.Log($"ether type : {etherKvp.Key}. Amount : {etherKvp.Value}");
         int elementUpgrade = 0;
         if (AlchemyLootValueDict.TryGetValue(etherKvp.Key, out int num))
         {
+            EventDeclarer.RepeatableQuestCompleted?.Invoke(Quest.RepeatableAccomplishments.UseEther, num);
+
             foreach (Element element in elementList)
             {
                 stats.ChangeAffinity(element, num * etherKvp.Value / elementList.Count);
                 elementUpgrade += num * etherKvp.Value;
             }
         }
-
 
         return elementUpgrade;
     }

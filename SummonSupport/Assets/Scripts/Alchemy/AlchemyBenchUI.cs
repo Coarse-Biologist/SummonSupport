@@ -57,6 +57,12 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     private GameObject minionToUpgrade;
     private GameObject minionToRecycle;
 
+    #region ability modding
+    private AbilityModHandler selectedModHandler;
+
+    private AbilityModTypes selectedModType = AbilityModTypes.None;
+
+    #endregion
 
     private bool elementsGenerated = false;
 
@@ -136,11 +142,14 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
         Button abilitySlotButton = craftingUI.Q<Button>("AbilitySlotButton");
         Button craftButton = craftingUI.Q<Button>("CraftButton");
         Button upgradeButton = craftingUI.Q<Button>("UpgradeButton");
+        Button AbilityModButton = craftingUI.Q<Button>("ModifyAbilitiesButton");
         Button recycleButton = craftingUI.Q<Button>("RecycleButton");
         Button quitButton = craftingUI.Q<Button>("QuitButton");
 
+
         craftAbilityButton.RegisterCallback<ClickEvent>(e => ShowAbilityCraftingOptions());
         abilitySlotButton.RegisterCallback<ClickEvent>(e => SlotAbilities());
+        AbilityModButton.RegisterCallback<ClickEvent>(e => ShowAbilityModOptions());
 
         craftButton.RegisterCallback<ClickEvent>(e => ShowCraftingOptions());
         upgradeButton.RegisterCallback<ClickEvent>(e => HandleUpgradeDisplay());
@@ -196,7 +205,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
 
     #endregion
 
-    #region Upgrading 
+    #region Upgrading Minions
     private void HandleUpgradeDisplay()
     {
         confirmClear.Clear();
@@ -235,11 +244,88 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     }
     #endregion
 
+    #region Modify Abilities
+
+    private void ShowAbilityModOptions()
+    {
+        ClearPanel(confirmClear);
+        SetSelectedAbility(null);
+        Button confirmButton = AddButtonToPanel("Confirm", confirmClear, 50, 5);
+        Button clearButton = AddButtonToPanel("Clear Selection", confirmClear, 50, 5);
+
+        clearButton.RegisterCallback<ClickEvent>(e => SetSelectedAbility(null));
+        confirmButton.RegisterCallback<ClickEvent>(e => AttemptModification(selectedModType));
+
+        SetInstructionsText("Select an ability to modify.");
+        DisplayAllModableAbilities();
+    }
+
+    private void DisplayAllModableAbilities()
+    {
+        ClearPanel(alchemyInventory);
+        ClearPanel(elementSelection);
+        if (PlayerStats.Instance.TryGetComponent<AbilityHandler>(out AbilityHandler abilityHandler) && PlayerStats.Instance.TryGetComponent(out AbilityModHandler playerModHandler))
+            foreach (Ability ability in abilityHandler.Abilities)
+            {
+                ///Ability potentiallySelectedAbility = ability;
+                Button button = AddButtonToPanel($"{ability.Name}", alchemyInventory, 40, 5);
+                button.RegisterCallback<ClickEvent>(e => SetSelectedAbility(ability));
+                button.RegisterCallback<ClickEvent>(e => DisplayAbilityModOptions(ability));
+                button.RegisterCallback<ClickEvent>(e => SetSelectedModHandler(playerModHandler));
+
+
+            }
+        foreach (GameObject minion in alchemyHandler.activeMinions)
+        {
+            if (minion.TryGetComponent(out CreatureAbilityHandler creatureAbilityHandler) && minion.TryGetComponent(out AbilityModHandler modHandler))
+                foreach (Ability ability in creatureAbilityHandler.Abilities)
+                {
+                    Ability potentiallySelectedAbility = ability;
+                    Button button = AddButtonToPanel($"{ability.Name}", alchemyInventory, 20, 5);
+                    button.RegisterCallback<ClickEvent>(e => SetSelectedAbility(potentiallySelectedAbility));
+                    button.RegisterCallback<ClickEvent>(e => DisplayAbilityModOptions(potentiallySelectedAbility));
+                    button.RegisterCallback<ClickEvent>(e => SetSelectedModHandler(modHandler));
+                }
+        }
+    }
+    private void DisplayAbilityModOptions(Ability ability)
+    {
+        ClearPanel(elementSelection);
+        SetInstructionsText($"Select an attribute for the ability which you would like to upgrade.");
+        foreach (AbilityModTypes modableAttribute in AbilityModHandler.GetModableAttributes(ability))
+        {
+            Button button = AddButtonToPanel(AbilityModHandler.GetAbilityModString(modableAttribute), elementSelection, 40, 10);
+            button.RegisterCallback<ClickEvent>(e => SetSelectedModAttribute(modableAttribute));
+        }
+    }
+    private void SetSelectedModAttribute(AbilityModTypes modType)
+    {
+        selectedModType = modType;
+        SetInstructionsText($"The {AbilityModHandler.GetAbilityModString(modType)} of {selectedAbility.Name} can be improved by {AbilityModHandler.GetModCost(selectedAbility, modType)}");
+    }
+    private void AttemptModification(AbilityModTypes modAttribute)
+    {
+        Debug.Log($"{modAttribute} {selectedAbility} {selectedModHandler}");
+        if (selectedAbility == null) return;
+        if (selectedModHandler == null) return;
+        if (selectedModType == AbilityModTypes.None) return;
+        else Debug.Log($"the attribute {modAttribute} will be changed for the ability {selectedAbility} belonging to {selectedModHandler.gameObject.GetComponent<LivingBeing>().Name}. this has a cost of {Ability.GetCoreCraftingCost(selectedAbility)}");
+        bool bought = AlchemyInventory.BuyCraftingPowerWithCores(Ability.GetCoreCraftingCost(selectedAbility));
+        if (bought) selectedModHandler.Mod_Cost(selectedAbility, 10);
+    }
+    private void SetSelectedModHandler(AbilityModHandler modHandler)
+    {
+        Debug.Log("something will be set as selected modHandler");
+        selectedModHandler = modHandler;
+    }
+
+    #endregion
+
     #region Crafting
     private bool CheckUsingCores()
     {
         var ingredients = selectedIngredients.Keys;
-        if (ingredients.Contains(AlchemyLoot.WeakCores) || ingredients.Contains(AlchemyLoot.PowerfulCore) || ingredients.Contains(AlchemyLoot.WorkingCore) || ingredients.Contains(AlchemyLoot.HulkingCore)) return true;
+        if (ingredients.Contains(AlchemyLoot.WeakCore) || ingredients.Contains(AlchemyLoot.PowerfulCore) || ingredients.Contains(AlchemyLoot.WorkingCore) || ingredients.Contains(AlchemyLoot.HulkingCore)) return true;
         else return false;
     }
 
@@ -247,7 +333,6 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     {
         if (CheckUsingCores())
         {
-            AlchemyInventory.ExpendIngredients(selectedIngredients);
             alchemyHandler.HandleCraftingResults(selectedIngredients, selectedElements);
             ClearCraftingSelection();
         }
@@ -402,7 +487,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     {
         foreach (KeyValuePair<AlchemyLoot, int> kvp in AlchemyInventory.ingredients)
         {
-            if (kvp.Key == AlchemyLoot.WeakCores || kvp.Key == AlchemyLoot.WorkingCore || kvp.Key == AlchemyLoot.PowerfulCore || kvp.Key == AlchemyLoot.HulkingCore)
+            if (kvp.Key == AlchemyLoot.WeakCore || kvp.Key == AlchemyLoot.WorkingCore || kvp.Key == AlchemyLoot.PowerfulCore || kvp.Key == AlchemyLoot.HulkingCore)
             {
                 if (kvp.Value != 0)
                 {
@@ -468,6 +553,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
 
     private void SetSelectedAbility(Ability ability)
     {
+        //Debug.Log($"Ah, i see, you want to select {ability.name} as your selected ability!");
         selectedAbility = ability;
     }
 

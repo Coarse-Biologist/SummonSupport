@@ -3,7 +3,7 @@ public enum AlchemyLoot
     WretchedOrgans,
     FunctionalOrgans,
     HulkingOrgans,
-    WeakCores,
+    WeakCore,
     WorkingCore,
     PowerfulCore,
     HulkingCore,

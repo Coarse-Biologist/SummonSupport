@@ -13,6 +13,7 @@ public class AbilityHandler : MonoBehaviour
     private Dictionary<BeamAbility, GameObject> toggledAbilitiesDict = new();
     [field: SerializeField] public WeaponInfo WeaponInfo { get; private set; }
     private bool charging = false;
+    private AbilityModHandler modHandler;
 
 
 
@@ -32,6 +33,9 @@ public class AbilityHandler : MonoBehaviour
             abilitiesOnCooldown.Add(false);
             abilitiesOnCooldownCrew.Add(ability, false);
         }
+        if (gameObject.TryGetComponent(out AbilityModHandler modScript))
+            modHandler = modScript;
+        else throw new System.Exception("NOPENOPENOPENOPENOPENOPENOPE");
     }
 
     public void LearnAbility(Ability ability)
@@ -63,7 +67,9 @@ public class AbilityHandler : MonoBehaviour
             return false;
 
         StartCoroutine(SetOnCooldown(abilityIndex));
-        statsHandler?.ChangeAttribute(AttributeType.CurrentPower, -ability.Cost);
+        int costMod = modHandler.GetModAttributeByType(ability, AbilityModTypes.Cost);
+        Debug.Log(costMod);
+        statsHandler?.ChangeAttribute(AttributeType.CurrentPower, -ability.Cost + costMod);
         return true;
     }
 

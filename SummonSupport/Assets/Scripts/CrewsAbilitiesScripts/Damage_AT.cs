@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 [System.Serializable]
 public class Damage_AT
@@ -8,6 +9,11 @@ public class Damage_AT
 
     [field: SerializeField, Tooltip("The 'Exectute' value type makes damage increase as health is lower. The current equation is calculatedDamage = damage * max / (current * 2)")]
     public ValueType ValueType { get; private set; } = ValueType.Flat;
+    public void Mod_DamageValue(float damage_Change)
+    {
+        Value += damage_Change;
+        Value = Math.Max(0, Value);
+    }
 
 }
 

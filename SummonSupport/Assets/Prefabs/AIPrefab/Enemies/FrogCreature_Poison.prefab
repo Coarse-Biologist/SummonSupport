@@ -186,7 +186,7 @@ PrefabInstance:
     - target: {fileID: 8895494779999529571, guid: 6a5ef38cf0637084f92a110a696def55,
         type: 3}
       propertyPath: m_Name
-      value: FrogCreature_Poison Variant
+      value: FrogCreature_Poison
       objectReference: {fileID: 0}
     - target: {fileID: 8895494779999529571, guid: 6a5ef38cf0637084f92a110a696def55,
         type: 3}
@@ -196,5 +196,27 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8895494779999529571, guid: 6a5ef38cf0637084f92a110a696def55,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -5926691313771355866}
   m_SourcePrefab: {fileID: 100100000, guid: 6a5ef38cf0637084f92a110a696def55, type: 3}
+--- !u!1 &1969626846854164280 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8895494779999529571, guid: 6a5ef38cf0637084f92a110a696def55,
+    type: 3}
+  m_PrefabInstance: {fileID: 6928401487133803867}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &-5926691313771355866
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1969626846854164280}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf6e2c2e7a35ed14a8e559a025cea79d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AbilityModHandler

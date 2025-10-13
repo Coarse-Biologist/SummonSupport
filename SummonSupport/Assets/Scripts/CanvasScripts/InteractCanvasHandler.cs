@@ -73,11 +73,12 @@ public class InteractCanvasHandler : MonoBehaviour
         Vector2 loc = enemyStats.transform.position;
         loc = new Vector2(loc.x, loc.y + 1);
         int XPgained = (int)enemyStats.XP_OnDeath;
-        if (canvasInstance == null) canvasInstance = Instantiate(interactCanvas, loc, Quaternion.identity);
-        else canvasInstance.SetActive(true);
-        TextMeshProUGUI canvasGUI = canvasInstance.GetComponentInChildren<TextMeshProUGUI>();
+        GameObject xpCanvas = Instantiate(interactCanvas, loc, Quaternion.identity);
+        TextMeshProUGUI canvasGUI = xpCanvas.GetComponentInChildren<TextMeshProUGUI>();
         canvasGUI.text = $"{XPgained} XP gained!";
-
+        Destroy(xpCanvas, 2f);
     }
+
+
 
 }
