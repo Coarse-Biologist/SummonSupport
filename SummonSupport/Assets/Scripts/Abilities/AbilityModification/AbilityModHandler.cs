@@ -6,24 +6,20 @@ using UnityEngine;
 public class AbilityModHandler : MonoBehaviour
 {
     public Dictionary<Ability, Mod_Base> ModdedAbilities { private set; get; } = new();
-    public static Dictionary<AbilityModTypes, int> ModIncrements = new();
+    public static readonly Dictionary<AbilityModTypes, int> ModIncrements = new()
+    {
+        { AbilityModTypes.Cost, -1 },
+        { AbilityModTypes.Cooldown, -1 },
+        { AbilityModTypes.Damage, 10 },
+        { AbilityModTypes.DamageOverTime, 1 },
+        { AbilityModTypes.Heal, 5 },
+        { AbilityModTypes.HealOverTime, 1 },
+        { AbilityModTypes.MaxPierce, 1 },
+        { AbilityModTypes.MaxSplit, 1 },
+        { AbilityModTypes.Duration, 1 }
+    };
 
-    void Awake()
-    {
-        InstantiateModIncrementsDict();
-    }
-    private static void InstantiateModIncrementsDict()
-    {
-        ModIncrements.Add(AbilityModTypes.Cost, -1);
-        ModIncrements.Add(AbilityModTypes.Cooldown, -1);
-        ModIncrements.Add(AbilityModTypes.Damage, 10);
-        ModIncrements.Add(AbilityModTypes.DamageOverTime, 1);
-        ModIncrements.Add(AbilityModTypes.Heal, 5);
-        ModIncrements.Add(AbilityModTypes.HealOverTime, 1);
-        ModIncrements.Add(AbilityModTypes.MaxPierce, 1);
-        ModIncrements.Add(AbilityModTypes.MaxSplit, 1);
-        ModIncrements.Add(AbilityModTypes.Duration, 1);
-    }
+
     public Mod_Base GetAbilityMod(Ability ability)
     {
         if (ModdedAbilities.TryGetValue(ability, out Mod_Base mod))

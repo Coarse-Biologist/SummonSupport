@@ -51,7 +51,7 @@ public class AlchemyHandler : MonoBehaviour
         AlchemyLootValueDict.Add(AlchemyLoot.FunctionalOrgans, 10);
         AlchemyLootValueDict.Add(AlchemyLoot.HulkingOrgans, 20);
         AlchemyLootValueDict.Add(AlchemyLoot.WeakCore, 5);
-        AlchemyLootValueDict.Add(AlchemyLoot.WorkingCore, 10);
+        AlchemyLootValueDict.Add(AlchemyLoot.SolidCore, 10);
         AlchemyLootValueDict.Add(AlchemyLoot.PowerfulCore, 20);
         AlchemyLootValueDict.Add(AlchemyLoot.HulkingCore, 30);
         AlchemyLootValueDict.Add(AlchemyLoot.FaintEther, 10);
@@ -65,7 +65,6 @@ public class AlchemyHandler : MonoBehaviour
     {
         if (elementList.Count() == 0)
         {
-            Debug.Log("Wont be spending ether since you selected no element!");
             combinedIngredients = combinedIngredients
             .Where(g => !g.ToString()
             .Contains("Ether"))

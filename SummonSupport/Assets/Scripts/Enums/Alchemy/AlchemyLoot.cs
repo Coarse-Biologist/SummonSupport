@@ -4,7 +4,7 @@ public enum AlchemyLoot
     FunctionalOrgans,
     HulkingOrgans,
     WeakCore,
-    WorkingCore,
+    SolidCore,
     PowerfulCore,
     HulkingCore,
     FaintEther,

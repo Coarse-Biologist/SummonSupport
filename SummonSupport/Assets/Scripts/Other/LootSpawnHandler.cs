@@ -115,7 +115,7 @@ public class LootSpawnHandler : MonoBehaviour
                 case AlchemyLoot.WeakCore:
                     sr.sprite = WeakCoreSprite;
                     break;
-                case AlchemyLoot.WorkingCore:
+                case AlchemyLoot.SolidCore:
                     sr.sprite = WorkingCoreSprite;
                     break;
                 case AlchemyLoot.PowerfulCore:
@@ -137,7 +137,7 @@ public class LootSpawnHandler : MonoBehaviour
         float lootRoll = Random.Range(0, 150) + (power * LootScaler);
         if (lootRoll < 50) return AlchemyLoot.WretchedOrgans;
         if (lootRoll > 40 && lootRoll < 80) return AlchemyLoot.WeakCore;
-        if (lootRoll > 80 && lootRoll < 120) return AlchemyLoot.WorkingCore;
+        if (lootRoll > 80 && lootRoll < 120) return AlchemyLoot.SolidCore;
         if (lootRoll > 120 && lootRoll < 160) return AlchemyLoot.PowerfulCore;
         if (lootRoll > 160) return AlchemyLoot.HulkingCore;
 

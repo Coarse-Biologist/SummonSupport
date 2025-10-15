@@ -15,7 +15,7 @@ public static class AlchemyInventory
             { AlchemyLoot.FunctionalOrgans, 10 },
             { AlchemyLoot.HulkingOrgans, 10 },
             { AlchemyLoot.WeakCore, 10 },
-            { AlchemyLoot.WorkingCore, 10 },
+            { AlchemyLoot.SolidCore, 10 },
             { AlchemyLoot.PowerfulCore, 10 },
             { AlchemyLoot.HulkingCore, 10 },
             { AlchemyLoot.FaintEther, 10 },
@@ -28,7 +28,7 @@ public static class AlchemyInventory
             { AlchemyLoot.FunctionalOrgans, 2 },
             { AlchemyLoot.HulkingOrgans, 4 },
             { AlchemyLoot.WeakCore, 1 },
-            { AlchemyLoot.WorkingCore, 2 },
+            { AlchemyLoot.SolidCore, 2 },
             { AlchemyLoot.PowerfulCore, 4 },
             { AlchemyLoot.HulkingCore, 6 },
             { AlchemyLoot.FaintEther, 1 },
@@ -41,7 +41,7 @@ public static class AlchemyInventory
             { AlchemyLoot.FunctionalOrgans, 10 },
             { AlchemyLoot.HulkingOrgans, 20 },
             { AlchemyLoot.WeakCore, 10 },
-            { AlchemyLoot.WorkingCore, 20 },
+            { AlchemyLoot.SolidCore, 20 },
             { AlchemyLoot.PowerfulCore, 30 },
             { AlchemyLoot.HulkingCore, 60 },
             { AlchemyLoot.FaintEther, 10 },
@@ -150,7 +150,7 @@ public static class AlchemyInventory
         {
             continueTuple = ExpendCoresWhile(CoreDict, AlchemyLoot.WeakCore, 0, requiredCraftingPower);
             if (!continueTuple.sufficient)
-                continueTuple = ExpendCoresWhile(CoreDict, AlchemyLoot.WorkingCore, continueTuple.currentExpenditure, requiredCraftingPower);
+                continueTuple = ExpendCoresWhile(CoreDict, AlchemyLoot.SolidCore, continueTuple.currentExpenditure, requiredCraftingPower);
             if (!continueTuple.sufficient)
                 continueTuple = ExpendCoresWhile(CoreDict, AlchemyLoot.PowerfulCore, continueTuple.currentExpenditure, requiredCraftingPower);
             if (!continueTuple.sufficient)
@@ -178,4 +178,9 @@ public static class AlchemyInventory
         return (currentlySpent >= goalNum, currentlySpent);
     }
     #endregion
+
+    public static string GetAlchemyLootString(AlchemyLoot lootString)
+    {
+        return System.Text.RegularExpressions.Regex.Replace(lootString.ToString(), "(?<!^)([A-Z])", " $1");
+    }
 }
