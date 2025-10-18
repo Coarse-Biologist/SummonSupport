@@ -12,11 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3c13530f7208ff4eb2390a91d90efc5, type: 3}
   m_Name: Syphon
   m_EditorClassIdentifier: 
-  <Name>k__BackingField: 
+  <Name>k__BackingField: Syphon
   <Icon>k__BackingField: {fileID: 0}
   <Cooldown>k__BackingField: 3
   <CostType>k__BackingField: 4
   <Cost>k__BackingField: 20
+  <Range>k__BackingField: 20
+  <AbilityTypeTag>k__BackingField: 1
   <ListUsableOn>k__BackingField: 01000000
   <TargetTypeAndEffects>k__BackingField:
   - <EffectDescription>k__BackingField: Heals Caster value of damage
@@ -34,9 +36,10 @@ MonoBehaviour:
       <Physical>k__BackingField: 0
       <ValueType>k__BackingField: 0
     <DamageOverTime>k__BackingField: []
+    <StatusEffects>k__BackingField: []
     <SpecialAbilityAttribute>k__BackingField: 1
   <ElementTypes>k__BackingField: 
-  <AbilityTypeTag>k__BackingField: 1
+  <PhysicalType>k__BackingField: 0
   <SpawnEffectOnHit>k__BackingField: {fileID: 2790420997563984172, guid: 4d4cd1497a1659a43b31e1dd11036df7,
     type: 3}
   <EffectOrientation>k__BackingField: 1

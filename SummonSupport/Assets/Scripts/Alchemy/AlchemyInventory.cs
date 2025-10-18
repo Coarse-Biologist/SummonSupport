@@ -1,5 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
+using System.Linq;
 
 
 
@@ -11,8 +14,8 @@ public static class AlchemyInventory
             { AlchemyLoot.WretchedOrgans, 10 },
             { AlchemyLoot.FunctionalOrgans, 10 },
             { AlchemyLoot.HulkingOrgans, 10 },
-            { AlchemyLoot.WeakCores, 10 },
-            { AlchemyLoot.WorkingCore, 10 },
+            { AlchemyLoot.WeakCore, 10 },
+            { AlchemyLoot.SolidCore, 10 },
             { AlchemyLoot.PowerfulCore, 10 },
             { AlchemyLoot.HulkingCore, 10 },
             { AlchemyLoot.FaintEther, 10 },
@@ -24,8 +27,8 @@ public static class AlchemyInventory
             { AlchemyLoot.WretchedOrgans, 1 },
             { AlchemyLoot.FunctionalOrgans, 2 },
             { AlchemyLoot.HulkingOrgans, 4 },
-            { AlchemyLoot.WeakCores, 1 },
-            { AlchemyLoot.WorkingCore, 2 },
+            { AlchemyLoot.WeakCore, 1 },
+            { AlchemyLoot.SolidCore, 2 },
             { AlchemyLoot.PowerfulCore, 4 },
             { AlchemyLoot.HulkingCore, 6 },
             { AlchemyLoot.FaintEther, 1 },
@@ -37,8 +40,8 @@ public static class AlchemyInventory
             { AlchemyLoot.WretchedOrgans, 5 },
             { AlchemyLoot.FunctionalOrgans, 10 },
             { AlchemyLoot.HulkingOrgans, 20 },
-            { AlchemyLoot.WeakCores, 10 },
-            { AlchemyLoot.WorkingCore, 20 },
+            { AlchemyLoot.WeakCore, 10 },
+            { AlchemyLoot.SolidCore, 20 },
             { AlchemyLoot.PowerfulCore, 30 },
             { AlchemyLoot.HulkingCore, 60 },
             { AlchemyLoot.FaintEther, 10 },
@@ -132,12 +135,52 @@ public static class AlchemyInventory
         int corePower = 0;
         foreach (KeyValuePair<AlchemyLoot, int> kvp in coreKvp)
         {
-            corePower += AlchemyLootPowerValues[kvp.Key] * kvp.Value;
+            if (kvp.Key.ToString().Contains("Core")) corePower += AlchemyLootPowerValues[kvp.Key] * kvp.Value;
         }
         return corePower;
     }
 
+    public static (bool bought, int price) BuyCraftingPowerWithCores(int requiredCraftingPower) // returns true if trade was possible/ successful - false otherwise
+    {
+        Dictionary<AlchemyLoot, int> CoreDict = ingredients.Where(g => g.ToString().Contains("Core")).ToDictionary(g => g.Key, g => g.Value);
+        int currentPotentialPower = GetCorePowerResource(CoreDict);
+        (bool sufficient, int currentExpenditure) continueTuple = new();
+        if (currentPotentialPower < requiredCraftingPower) return (false, 0);
+        else
+        {
+            continueTuple = ExpendCoresWhile(CoreDict, AlchemyLoot.WeakCore, 0, requiredCraftingPower);
+            if (!continueTuple.sufficient)
+                continueTuple = ExpendCoresWhile(CoreDict, AlchemyLoot.SolidCore, continueTuple.currentExpenditure, requiredCraftingPower);
+            if (!continueTuple.sufficient)
+                continueTuple = ExpendCoresWhile(CoreDict, AlchemyLoot.PowerfulCore, continueTuple.currentExpenditure, requiredCraftingPower);
+            if (!continueTuple.sufficient)
+                continueTuple = ExpendCoresWhile(CoreDict, AlchemyLoot.HulkingCore, continueTuple.currentExpenditure, requiredCraftingPower);
+
+        }
+        return (true, continueTuple.currentExpenditure);
+    }
+
+    private static (bool sufficient, int currentExpenditure) ExpendCoresWhile(Dictionary<AlchemyLoot, int> CoreDict, AlchemyLoot coreType, int currentlySpent, int goalNum)
+    {
+        int recursions = 0;
+        int maxRecursions = 100;
+        while (CoreDict.TryGetValue(coreType, out int num) && num > 0 && currentlySpent < goalNum)
+        {
+            CoreDict[coreType] = num - 1;
+            AlterIngredientNum(coreType, -1);
+            currentlySpent += AlchemyLootPowerValues[coreType];
+            recursions += 1;
+            if (recursions >= maxRecursions)
+            {
+                throw new System.Exception("GG Brueder, cant even make a simple chain of nested 'while loops'?");
+            }
+        }
+        return (currentlySpent >= goalNum, currentlySpent);
+    }
     #endregion
+
+    public static string GetAlchemyLootString(AlchemyLoot lootString)
+    {
+        return System.Text.RegularExpressions.Regex.Replace(lootString.ToString(), "(?<!^)([A-Z])", " $1");
+    }
 }
-
-

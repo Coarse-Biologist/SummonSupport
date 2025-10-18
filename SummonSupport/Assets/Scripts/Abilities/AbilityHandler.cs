@@ -13,9 +13,7 @@ public class AbilityHandler : MonoBehaviour
     private Dictionary<BeamAbility, GameObject> toggledAbilitiesDict = new();
     [field: SerializeField] public WeaponInfo WeaponInfo { get; private set; }
     private bool charging = false;
-
-
-
+    private AbilityModHandler modHandler;
 
 
     protected virtual void Awake()
@@ -32,6 +30,9 @@ public class AbilityHandler : MonoBehaviour
             abilitiesOnCooldown.Add(false);
             abilitiesOnCooldownCrew.Add(ability, false);
         }
+        if (gameObject.TryGetComponent(out AbilityModHandler modScript))
+            modHandler = modScript;
+        else throw new System.Exception("NOPENOPENOPENOPENOPENOPENOPE");
     }
 
     public void LearnAbility(Ability ability)
@@ -63,7 +64,8 @@ public class AbilityHandler : MonoBehaviour
             return false;
 
         StartCoroutine(SetOnCooldown(abilityIndex));
-        statsHandler?.ChangeAttribute(AttributeType.CurrentPower, -ability.Cost);
+        int costMod = modHandler.GetModAttributeByType(ability, AbilityModTypes.Cost);
+        statsHandler?.ChangeAttribute(AttributeType.CurrentPower, -ability.Cost + costMod);
         return true;
     }
 
@@ -79,7 +81,9 @@ public class AbilityHandler : MonoBehaviour
             case TargetMouseAbility pointAndClickAbility:
                 usedAbility = HandlePointAndClick(pointAndClickAbility);
                 break;
-
+            case DashAbility dashAbility:
+                usedAbility = HandleDashAbility(dashAbility);
+                break;
             case ConjureAbility conjureAbility:
                 usedAbility = HandleConjureAbility(conjureAbility, targetPosition, rotation);
                 break;
@@ -167,6 +171,11 @@ public class AbilityHandler : MonoBehaviour
     {
         return ability.Activate(gameObject, targetPosition, rotation);
     }
+
+    bool HandleDashAbility(DashAbility dashAbility)
+    {
+        return dashAbility.Activate(gameObject);
+    }
     bool HandleAuraAbility(AuraAbility auraAbility, LivingBeing statsHandler)
     {
         return auraAbility.Activate(statsHandler.gameObject);
@@ -179,7 +188,7 @@ public class AbilityHandler : MonoBehaviour
         {
             abilitiesOnCooldownCrew[ability] = true;
             abilitiesOnCooldown[abilityIndex] = true;
-            yield return new WaitForSeconds(ability.Cooldown);
+            yield return new WaitForSeconds(ability.Cooldown + modHandler.GetModAttributeByType(ability, AbilityModTypes.Cooldown));
         }
         finally
         {

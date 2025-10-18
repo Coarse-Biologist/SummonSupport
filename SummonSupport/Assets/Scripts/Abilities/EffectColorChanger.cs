@@ -55,6 +55,11 @@ public static class EffectColorChanger
             }
         }
     }
+    public static void ChangeObjectsParticleSystemColor(LivingBeing livingBeing, GameObject potentialParticleSystemObject)
+    {
+        ParticleSystem ps = potentialParticleSystemObject.GetComponentInChildren<ParticleSystem>();
+        if (ps != null) ChangeParticleSystemColor(livingBeing, ps);
+    }
 
     public static void ChangeParticleSystemColor(LivingBeing livingBeing, ParticleSystem particleSystem)
     {

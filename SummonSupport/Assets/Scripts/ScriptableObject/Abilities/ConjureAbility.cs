@@ -18,7 +18,7 @@ public class ConjureAbility : Ability
 
 
     [field: Tooltip("in seconds")]
-    [field: SerializeField] public float TimeAlive { get; protected set; }
+    [field: SerializeField] public float Duration { get; protected set; }
 
     [field: Header("Tracking Settings"), Tooltip("in seconds")]
     [field: SerializeField] public bool SeeksTarget { get; protected set; } = false;
@@ -36,24 +36,23 @@ public class ConjureAbility : Ability
 
     public bool Activate(GameObject user, Vector3 spawnPosition, Quaternion rotation)
     {
-
         Quaternion newRotation = Quaternion.identity;
         if (!LeaveRotation)
             newRotation = rotation * Quaternion.Euler(0, 0, RotationOffset);
         GameObject spawnedObject = Instantiate(ObjectToSpawn, spawnPosition, newRotation);
 
         if (IsDecaying)
-            Destroy(spawnedObject, TimeAlive);
+            Destroy(spawnedObject, Duration);
         if (spawnedObject.TryGetComponent(out Aura aura))
         {
-            aura.HandleInstantiation(user.GetComponent<LivingBeing>(), null, this, Radius, this.TimeAlive);
+            aura.HandleInstantiation(user.GetComponent<LivingBeing>(), null, this, Radius, this.Duration);
         }
         else
         {
             Aura auraInChildren = spawnedObject.GetComponentInChildren<Aura>();
             if (auraInChildren != null)
             {
-                auraInChildren.HandleInstantiation(user.GetComponent<LivingBeing>(), null, this, Radius, this.TimeAlive);
+                auraInChildren.HandleInstantiation(user.GetComponent<LivingBeing>(), null, this, Radius, this.Duration);
             }
         }
 

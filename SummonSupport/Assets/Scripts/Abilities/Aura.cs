@@ -62,7 +62,8 @@ public class Aura : MonoBehaviour
     }
     public void HandleInstantiation(LivingBeing caster, LivingBeing target, Ability ability, float radius, float duration)
     {
-        GetComponent<CircleCollider2D>().radius = radius;
+        if (TryGetComponent<CircleCollider2D>(out CircleCollider2D collider))
+            collider.radius = radius;
         SetAuraStats(caster, target, ability, duration);
         CombatStatHandler.HandleEffectPackages(ability, caster, caster, true);
         if (ability is ConjureAbility)

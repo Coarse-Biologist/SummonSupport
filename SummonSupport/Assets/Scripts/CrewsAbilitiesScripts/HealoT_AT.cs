@@ -4,4 +4,9 @@ using UnityEngine;
 public class HealoT_AT : Heal_AT
 {
     [field: SerializeField] public float Duration { get; private set; } = 1f;
+
+    public void Mod_Duration(float duration_Change)
+    {
+        Duration += duration_Change;
+    }
 }

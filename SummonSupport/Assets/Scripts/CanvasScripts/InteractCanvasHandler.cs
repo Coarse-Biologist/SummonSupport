@@ -4,18 +4,29 @@ using UnityEngine.Events;
 using UnityEngine.Tilemaps;
 using System.Collections;
 using UnityEditor.Rendering.Canvas.ShaderGraph;
+using System;
+using SummonSupportEvents;
 
 public class InteractCanvasHandler : MonoBehaviour
 {
     public static InteractCanvasHandler Instance { get; private set; }
     private GameObject canvasInstance;
     [SerializeField] GameObject interactCanvas;
-    [field: SerializeField] public float slowDisplaySpeed = 1f;
+    [field: SerializeField] public float slowDisplaySpeed = .8f;
 
     public void Awake()
     {
         Instance = this;
 
+    }
+
+    private void OnEnable()
+    {
+        EventDeclarer.EnemyDefeated?.AddListener(DisplayXPGain);
+    }
+    private void OnDisable()
+    {
+        EventDeclarer.EnemyDefeated?.RemoveListener(DisplayXPGain);
     }
 
     public void ShowInteractionOption(Vector2 spawnLoc, string interactMessage)
@@ -56,5 +67,18 @@ public class InteractCanvasHandler : MonoBehaviour
         }
         HideInteractionOption();
     }
+
+    public void DisplayXPGain(EnemyStats enemyStats)
+    {
+        Vector2 loc = enemyStats.transform.position;
+        loc = new Vector2(loc.x, loc.y + 1);
+        int XPgained = (int)enemyStats.XP_OnDeath;
+        GameObject xpCanvas = Instantiate(interactCanvas, loc, Quaternion.identity);
+        TextMeshProUGUI canvasGUI = xpCanvas.GetComponentInChildren<TextMeshProUGUI>();
+        canvasGUI.text = $"{XPgained} XP gained!";
+        Destroy(xpCanvas, 2f);
+    }
+
+
 
 }

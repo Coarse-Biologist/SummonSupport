@@ -135,7 +135,7 @@ PrefabInstance:
     - target: {fileID: 530800861541312882, guid: 8b808af4814c9664e80e2e15555215fb,
         type: 3}
       propertyPath: m_Name
-      value: PoisonCreature_1 Variant
+      value: PoisonCreature
       objectReference: {fileID: 0}
     - target: {fileID: 530800861541312882, guid: 8b808af4814c9664e80e2e15555215fb,
         type: 3}
@@ -396,6 +396,10 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 8506254847367735243}
     m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 530800861541312882, guid: 8b808af4814c9664e80e2e15555215fb,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1424181721086719812}
     - targetCorrespondingSourceObject: {fileID: 1502490013454894205, guid: 8b808af4814c9664e80e2e15555215fb,
         type: 3}
       insertIndex: -1
@@ -407,6 +411,24 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 8013562838338304814}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &7523311983966868060 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 530800861541312882, guid: 8b808af4814c9664e80e2e15555215fb,
+    type: 3}
+  m_PrefabInstance: {fileID: 8013562838338304814}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1424181721086719812
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7523311983966868060}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf6e2c2e7a35ed14a8e559a025cea79d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AbilityModHandler
 --- !u!1 &8671779684049181941 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1688213642100582363, guid: 8b808af4814c9664e80e2e15555215fb,
@@ -439,4 +461,6 @@ MonoBehaviour:
   SESprite: {fileID: 21300000, guid: b76100e836537404a8192a95c6e25c44, type: 3}
   SWSprite: {fileID: 21300000, guid: 81f169ad922ffb045a144c467549f5ae, type: 3}
   NWSprite: {fileID: 21300000, guid: 8a255ed639863214c94b77c0b58f68e8, type: 3}
+  DeathSprite: {fileID: 0}
   <unfinished>k__BackingField: 0
+  <IsoOnly>k__BackingField: 0
