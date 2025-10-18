@@ -11,6 +11,8 @@ public static class CombatStatHandler
     // doesnt use or recognize percentage based damage
     private static float tickRateFloat = 1f;
     private static WaitForSeconds tickRate = new WaitForSeconds(tickRateFloat);
+    private static Ability currentAbility;
+    private static AbilityModHandler modHandler;
 
 
 
@@ -21,6 +23,8 @@ public static class CombatStatHandler
         LivingBeing casterStats = caster.GetComponent<LivingBeing>(); //#TODO NANI?
         LivingBeing targetStats = target.GetComponent<LivingBeing>();
         LivingBeing theTarget = casterStats;
+        currentAbility = ability;
+        modHandler = caster.gameObject.GetComponent<AbilityModHandler>();
         if (!forSelf) theTarget = targetStats;
 
 
@@ -28,7 +32,6 @@ public static class CombatStatHandler
         {
             if (forSelf && package.TargetType == TargetType.Self || !forSelf && package.TargetType == TargetType.Target)
             {
-
                 if (package.Heal.Value > 0) AdjustHealValue(package.Heal.Value, theTarget, casterStats);
                 if (package.HealOverTime.Value > 0) HandleApplyDOT(ability, target, AttributeType.CurrentHitpoints, package.HealOverTime.Value, package.HealOverTime.Duration);
 
@@ -88,7 +91,9 @@ public static class CombatStatHandler
     public static float AdjustDamageValue(Damage_AT damage_AT, LivingBeing target, LivingBeing caster = null, SpecialAbilityAttribute specialAbilityAttribute = SpecialAbilityAttribute.None)
     {
         float damageValue = GetDamageByType(damage_AT, target);
-
+        int dmgmod = modHandler.GetModAttributeByType(currentAbility, AbilityModTypes.Damage);
+        UnityEngine.Debug.Log($"mod changing damage by: {dmgmod}");
+        damageValue += modHandler.GetModAttributeByType(currentAbility, AbilityModTypes.Damage);
         if (damage_AT.Element != Element.None) damageValue = AdjustBasedOnAffinity(damage_AT.Element, damageValue, caster, target);
         if (damage_AT.Physical != PhysicalType.None) damageValue = AdjustBasedOnArmor(damage_AT.Physical, damageValue, target);
         AdjustForOverValue(target, AttributeType.Overshield, AttributeType.MaxHitpoints, AttributeType.CurrentHitpoints, -damageValue);
