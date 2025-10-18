@@ -609,7 +609,7 @@ PrefabInstance:
     - target: {fileID: 9084318776697772798, guid: e4c43cb75dda4d3458057b35ce607d87,
         type: 3}
       propertyPath: <Abilities>k__BackingField.Array.size
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 9084318776697772798, guid: e4c43cb75dda4d3458057b35ce607d87,
         type: 3}
@@ -621,13 +621,13 @@ PrefabInstance:
         type: 3}
       propertyPath: '<Abilities>k__BackingField.Array.data[1]'
       value: 
-      objectReference: {fileID: 11400000, guid: 5e39961f19654e04bb7f41a70934544c,
+      objectReference: {fileID: 11400000, guid: 996489c834f79a74fb51758838eabbcd,
         type: 2}
     - target: {fileID: 9084318776697772798, guid: e4c43cb75dda4d3458057b35ce607d87,
         type: 3}
       propertyPath: '<Abilities>k__BackingField.Array.data[2]'
       value: 
-      objectReference: {fileID: 11400000, guid: c465a9cc289a0f1428157a45a03a6425,
+      objectReference: {fileID: 11400000, guid: 8f2a5a22743383f44970afda4eb890cf,
         type: 2}
     - target: {fileID: 9084318776697772798, guid: e4c43cb75dda4d3458057b35ce607d87,
         type: 3}
@@ -653,7 +653,8 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: e959c2ee0da79214a833f2b04de5f78c,
         type: 2}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 6208275916050814258, guid: e4c43cb75dda4d3458057b35ce607d87, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -2420,6 +2421,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 3b4a413103fe04844aef447d6f81ed91, type: 2}
   - {fileID: 11400000, guid: e8a6eb052d248c145acb7ef3d6746f33, type: 2}
   - {fileID: 11400000, guid: 3426d86dfddd8b342b4b8164207c3157, type: 2}
+  - {fileID: 11400000, guid: 996489c834f79a74fb51758838eabbcd, type: 2}
 --- !u!114 &1724141753
 MonoBehaviour:
   m_ObjectHideFlags: 0

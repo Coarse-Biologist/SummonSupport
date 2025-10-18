@@ -7,6 +7,7 @@ using Unity.VisualScripting;
 public class PlayerAbilityHandler : AbilityHandler
 {
     PlayerInputActions inputActions;
+    public static Ability DashAbility { private set; get; }
     private LivingBeing playerStats;
     private Dictionary<string, int> inputActionToIndex = new()
     {
@@ -18,6 +19,11 @@ public class PlayerAbilityHandler : AbilityHandler
         { "Ability6", 5 },
     };
 
+    public static void SetDashAbility(DashAbility ability)
+    {
+        Debug.Log("Setting dash ability");
+        DashAbility = ability;
+    }
     public void UpdateAbilities()
     {
         int index = 0;

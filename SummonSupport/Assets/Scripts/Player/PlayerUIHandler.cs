@@ -217,6 +217,8 @@ public class PlayerUIHandler : MonoBehaviour
     }
     public void SetPlayerXP(float playerXP)
     {
+        Debug.Log($"player xp = {playerXP}");
         playerXP_Bar.value = playerStats.CurrentXP;
+        playerXP_Bar.highValue = playerStats.MaxXP;
     }
 }

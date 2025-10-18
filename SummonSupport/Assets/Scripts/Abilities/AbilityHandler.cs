@@ -16,9 +16,6 @@ public class AbilityHandler : MonoBehaviour
     private AbilityModHandler modHandler;
 
 
-
-
-
     protected virtual void Awake()
     {
         if (abilitySpawn == null)
@@ -84,7 +81,9 @@ public class AbilityHandler : MonoBehaviour
             case TargetMouseAbility pointAndClickAbility:
                 usedAbility = HandlePointAndClick(pointAndClickAbility);
                 break;
-
+            case DashAbility dashAbility:
+                usedAbility = HandleDashAbility(dashAbility);
+                break;
             case ConjureAbility conjureAbility:
                 usedAbility = HandleConjureAbility(conjureAbility, targetPosition, rotation);
                 break;
@@ -171,6 +170,11 @@ public class AbilityHandler : MonoBehaviour
     bool HandleConjureAbility(ConjureAbility ability, Vector2 targetPosition, Quaternion rotation)
     {
         return ability.Activate(gameObject, targetPosition, rotation);
+    }
+
+    bool HandleDashAbility(DashAbility dashAbility)
+    {
+        return dashAbility.Activate(gameObject);
     }
     bool HandleAuraAbility(AuraAbility auraAbility, LivingBeing statsHandler)
     {

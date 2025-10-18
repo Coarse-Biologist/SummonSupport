@@ -36,7 +36,6 @@ public class ConjureAbility : Ability
 
     public bool Activate(GameObject user, Vector3 spawnPosition, Quaternion rotation)
     {
-
         Quaternion newRotation = Quaternion.identity;
         if (!LeaveRotation)
             newRotation = rotation * Quaternion.Euler(0, 0, RotationOffset);

@@ -48,7 +48,6 @@ GameObject:
   - component: {fileID: 7725120615296775044}
   - component: {fileID: 4886425859411069616}
   - component: {fileID: 4697203378900965796}
-  - component: {fileID: 6208275916050814258}
   - component: {fileID: 4345559948793367723}
   - component: {fileID: 9084318776697772798}
   - component: {fileID: 2864372725038760086}
@@ -135,6 +134,7 @@ MonoBehaviour:
   <Slashing>k__BackingField: 0
   <AffectedByAbilities>k__BackingField: []
   <XP_OnDeath>k__BackingField: 3
+  <SkillPoints>k__BackingField: 0
 --- !u!114 &7725120615296775044
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -262,18 +262,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 4
---- !u!114 &6208275916050814258
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3599053616304235129}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d4637318251a84647b52db2f162f8aaf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!58 &4345559948793367723
 CircleCollider2D:
   m_ObjectHideFlags: 0

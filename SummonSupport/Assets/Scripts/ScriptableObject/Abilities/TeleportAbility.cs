@@ -50,7 +50,9 @@ public class TeleportAbility : Ability
 
     public IEnumerator TeleportToBeing(GameObject user, GameObject target)
     {
-        Instantiate(EffectOnActivate, user.transform.position, Quaternion.identity, user.transform);
+        GameObject onHitEffectInstance = Instantiate(EffectOnActivate, user.transform.position, Quaternion.identity, user.transform);
+
+        EffectColorChanger.ChangeObjectsParticleSystemColor(user.GetComponent<LivingBeing>(), onHitEffectInstance);
 
         yield return new WaitForSeconds(ActivationSpeed);
 
@@ -61,10 +63,5 @@ public class TeleportAbility : Ability
             ability.Activate(user);
         }
 
-        // handle effects and status effects in package
-        //foreach (Crew_EffectPackage statusEffect in StatusEffects)
-        //{
-        //    //apply status effects
-        //}
     }
 }

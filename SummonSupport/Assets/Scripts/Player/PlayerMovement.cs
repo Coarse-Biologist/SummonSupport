@@ -25,6 +25,7 @@ public class PlayerMovement : MovementScript
     private Rigidbody2D rb;
     private bool dashing = false;
     private bool canDash = true;
+    GameObject DashDustInstance = null;
     private bool lockedInUI = false;
     private bool StuckInAbilityAnimation = false;
 
@@ -84,10 +85,14 @@ public class PlayerMovement : MovementScript
             dashing = true;
             Invoke("ReturnToNormalSpeed", DashDuration);
             Invoke("ReadyDash", DashCoolDown);
-            GameObject DashDustInstance = Instantiate(DashDust, transform.position, Quaternion.identity, transform);
-            float angle = Mathf.Atan2(-moveDirection.y, -moveDirection.x) * Mathf.Rad2Deg;
-            DashDustInstance.transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
-            Destroy(DashDustInstance, DashDuration);
+            if (PlayerAbilityHandler.DashAbility != null) PlayerAbilityHandler.DashAbility.Activate(gameObject);
+            else
+            {
+                DashDustInstance = Instantiate(DashDust, transform.position, Quaternion.identity, transform);
+                float angle = Mathf.Atan2(-moveDirection.y, -moveDirection.x) * Mathf.Rad2Deg;
+                DashDustInstance.transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
+                Destroy(DashDustInstance, DashDuration);
+            }
         }
     }
 

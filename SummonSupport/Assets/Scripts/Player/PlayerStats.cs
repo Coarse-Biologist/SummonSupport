@@ -9,9 +9,12 @@ public class PlayerStats : LivingBeing
     public static PlayerStats Instance;
 
     [Header("Experience Info")]
+
     [SerializeField] public int CurrentLevel { private set; get; } = 0;
     [SerializeField] public float CurrentXP { private set; get; } = 0;
-    [SerializeField] public float MaxXP { private set; get; } = 10;
+    [SerializeField] public float MaxXP { private set; get; } = 100;
+    [field: SerializeField] public int SkillPoints { private set; get; } = 0;
+
 
     #region Ressurrection Variables
     [SerializeField] public float ResurrectTime { private set; get; } = 5f;
@@ -38,6 +41,7 @@ public class PlayerStats : LivingBeing
     }
     private void GainXP(LivingBeing defeatedEnemy)
     {
+        Debug.Log($"Gaining Xp in playerStats script. Current xp = {CurrentXP}");
         CurrentXP += defeatedEnemy.XP_OnDeath;
         if (CurrentXP >= MaxXP)
         {
@@ -47,7 +51,11 @@ public class PlayerStats : LivingBeing
     }
     public void GainXP(int amount)
     {
+        Debug.Log($"Gaining Xp in playerStats script. Current xp prior to gain s= {CurrentXP}");
+
         CurrentXP += amount;
+        Debug.Log($"Gaining Xp in playerStats script. xp after gain = {CurrentXP}");
+
         if (CurrentXP >= MaxXP)
         {
             LevelUp();
@@ -60,7 +68,9 @@ public class PlayerStats : LivingBeing
         CurrentLevel += 1;
         CurrentXP -= MaxXP;
         MaxXP *= 2;
+        SkillPoints++;
     }
+
 
     public override void Die()
     {

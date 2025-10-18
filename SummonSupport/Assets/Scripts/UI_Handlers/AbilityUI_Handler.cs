@@ -104,11 +104,10 @@ public class AbilityUI_Handler : MonoBehaviour
     public void SetAbilitySlot(int slotIndex, Ability ability)
     {
         if (ability == null) return;
-        if (slotIndex <= abilityProgressBarDict.Keys.Count) // check if the index is usable
+        else if (slotIndex <= abilityProgressBarDict.Keys.Count) // check if the index is usable
         {
             abilityProgressBarDict[slotIndex] = ability; // set ability to the slot
             SetAbilityIcon(slotIndex, ability);
-
         }
         else Debug.Log("OOFJKJWCNKCNOWJOWCO!!!!!!!!!!");
     }

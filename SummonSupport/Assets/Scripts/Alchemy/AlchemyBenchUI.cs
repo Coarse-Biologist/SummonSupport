@@ -513,10 +513,11 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
             {
                 foreach (Ability ability in abilityLibraryEntry.Abilities)
                 {
-                    Button abilityButton = AddButtonToPanel($"{ability.Name} : {Ability.GetCoreCraftingCost(ability)} Core Power", alchemyInventory, 50, 5);
-                    abilityButton.RegisterCallback<ClickEvent>(e => ShowAbilityCraftingInfo());
+                    Button abilityButton = AddButtonToPanel($"{ability.Name} : {Ability.GetCoreCraftingCost(ability)} Core Power", alchemyInventory, 70, 5);
 
                     abilityButton.RegisterCallback<ClickEvent>(e => SetSelectedAbility(ability));
+                    abilityButton.RegisterCallback<ClickEvent>(e => ShowAbilityCraftingInfo());
+
                 }
             }
         }
@@ -540,6 +541,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     {
         //Debug.Log($"Ah, i see, you want to select {ability.name} as your selected ability!");
         selectedAbility = ability;
+
     }
 
     #endregion
@@ -566,10 +568,15 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
         Button confirmButton = AddButtonToPanel("Confirm", confirmClear, 35, 5);
         //Button setAbilitySlot = AddButtonToPanel("Set Ability Slot", confirmClear, 50, 5);
 
-        confirmButton.RegisterCallback<ClickEvent>(e => EventDeclarer.SlotChanged?.Invoke(abilitySlot, selectedAbility));
+        confirmButton.RegisterCallback<ClickEvent>(e => HandleAbilityandSlotSelected(abilitySlot, selectedAbility));
 
     }
+    private void HandleAbilityandSlotSelected(int abilitySlot, Ability selectedAbility)
+    {
+        if (selectedAbility is DashAbility) PlayerAbilityHandler.SetDashAbility((DashAbility)selectedAbility);
+        else EventDeclarer.SlotChanged?.Invoke(abilitySlot, selectedAbility);
 
+    }
     private void SpawnAbilitySlotButtons()
     {
         for (int i = 0; i < 5; i++)
@@ -586,10 +593,18 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
             {
                 Button abilityButton = AddButtonToPanel($"{ability.name}", alchemyInventory, 50, 5);
                 abilityButton.RegisterCallback<ClickEvent>(e => SetSelectedAbility(ability));
-                SetInstructionsText($"Slot selected: {abilitySlot}. Ability Selected for the slot: {selectedAbility.Name}");
+                abilityButton.RegisterCallback<ClickEvent>(e => SetAbilitySlottingInstructions(ability));
 
             }
         else throw new Exception("The players ability handler variable has not been set properly in the alchmey UI bench, or it does not exist");
+        SetInstructionsText($"Slot selected: {abilitySlot}. Ability Selected for the slot: {selectedAbility.Name}");
+
+    }
+    private void SetAbilitySlottingInstructions(Ability ability)
+    {
+        if (ability is DashAbility) instructions.text = $"Confirm if you would like {ability.Name} to be used upon dashing.";
+
+        else instructions.text = $"Select the slot in which you would like to store the ability {ability.Name}.";
     }
     private void SetSelectedSlot(int slotIndex)
     {
