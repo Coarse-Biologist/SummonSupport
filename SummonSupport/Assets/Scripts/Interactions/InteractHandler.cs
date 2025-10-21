@@ -32,14 +32,14 @@ public class InteractHandler : MonoBehaviour
         }
     }
 
-    void FixedUpdate()
+    void Update()
     {
-        if(checkingForTab)
+        if (checkingForTab)
         {
-        if (Input.GetKeyDown(KeyCode.Tab) && mostRecentInteractable != null)
-        {
-            mostRecentInteractable.Interact(this.gameObject);
-        }
+            if (Input.GetKeyDown(KeyCode.Tab) && !mostRecentInteractable.Equals(null))
+            {
+                mostRecentInteractable.Interact(this.gameObject); // Todo null reference after minon is ressed
+            }
         }
     }
 

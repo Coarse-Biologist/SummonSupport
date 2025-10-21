@@ -17,7 +17,9 @@ namespace SummonSupportEvents
         public static UnityEvent<EnemyStats> EnemyDefeated = new();
 
         #endregion
-        public static UnityEvent<GameObject> minionDied = new UnityEvent<GameObject>();
+        public static UnityEvent<GameObject> minionDied = new ();
+        public static UnityEvent<GameObject> minionRecycled = new ();
+
         public static UnityEvent<MinionStats> SetActiveMinion = new();
         public static UnityEvent<MovementAttributes, float> SpeedAttributeChanged = new();
         public static UnityEvent<int, Ability> SlotChanged = new();

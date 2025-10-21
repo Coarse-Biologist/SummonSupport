@@ -27,7 +27,6 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
 
     #endregion
 
-
     private UIDocument ui;
     private VisualElement root;
     private VisualElement interactWindow;
@@ -460,6 +459,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
             minionButton.RegisterCallback<ClickEvent>(e => SetMinionToRecycle(minion));
         }
     }
+
     private void SetMinionToRecycle(GameObject minion)
     {
         minionToRecycle = minion;

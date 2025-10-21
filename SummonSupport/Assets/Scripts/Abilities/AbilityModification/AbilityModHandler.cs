@@ -14,7 +14,9 @@ public class AbilityModHandler : MonoBehaviour
         { AbilityModTypes.DamageOverTime, 1 },
         { AbilityModTypes.Heal, 5 },
         { AbilityModTypes.HealOverTime, 1 },
+        { AbilityModTypes.MakePierce, 1 },
         { AbilityModTypes.MaxPierce, 1 },
+        { AbilityModTypes.MakeSplit, 1 },
         { AbilityModTypes.MaxSplit, 1 },
         { AbilityModTypes.Duration, 1 }
     };

@@ -41,7 +41,7 @@ public class PlayerStats : LivingBeing
     }
     private void GainXP(LivingBeing defeatedEnemy)
     {
-        Debug.Log($"Gaining Xp in playerStats script. Current xp = {CurrentXP}");
+        //Debug.Log($"Gaining Xp in playerStats script. Current xp = {CurrentXP}");
         CurrentXP += defeatedEnemy.XP_OnDeath;
         if (CurrentXP >= MaxXP)
         {
@@ -51,10 +51,10 @@ public class PlayerStats : LivingBeing
     }
     public void GainXP(int amount)
     {
-        Debug.Log($"Gaining Xp in playerStats script. Current xp prior to gain s= {CurrentXP}");
+        //Debug.Log($"Gaining Xp in playerStats script. Current xp prior to gain s= {CurrentXP}");
 
         CurrentXP += amount;
-        Debug.Log($"Gaining Xp in playerStats script. xp after gain = {CurrentXP}");
+        //Debug.Log($"Gaining Xp in playerStats script. xp after gain = {CurrentXP}");
 
         if (CurrentXP >= MaxXP)
         {

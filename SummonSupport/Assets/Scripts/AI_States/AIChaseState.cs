@@ -44,7 +44,10 @@ public class AIChaseState : AIState
             Vector2 targetLoc = stateHandler.target.transform.position;
             if (peaceState.FieldOfViewCheck() == true)
             {
-                //Logging.Info($"Chase state checks field of view and finds 'I See the {stateHandler.target}!'");
+                if (stateHandler.minionStats != null)
+                {
+                    Logging.Info($"{stateHandler.minionStats.Name} Chase state checks field of view and finds 'I See the {stateHandler.target}!'");
+                }
                 Chase(targetLoc);
 
                 LookAtTarget(targetLoc);
@@ -102,18 +105,21 @@ public class AIChaseState : AIState
     {
         if (!stateHandler.StuckInAbilityAnimation)
         {
-            //.Log("Chase func called.");
+            if (stateHandler.minionStats != null)
+            { Debug.Log("Chase func called."); }
             Vector2 currentLoc = new Vector2(transform.position.x, transform.position.y);
             Vector2 direction = targetLoc - currentLoc;
             float distance = direction.sqrMagnitude;
-            bool uniqueMovement = true;
+            bool uniqueMovement = false;
             if (distance > SelectedAbilityAttackRange || peaceState.CheckVisionBlocked(stateHandler.target))
             {
-                //($"Chase func called. attack range = {SelectedAbilityAttackRange}");
+                if (stateHandler.minionStats != null)
+                { Debug.Log($"Chase func called. attack range = {SelectedAbilityAttackRange}"); }
 
                 if (!uniqueMovement || cantSeeTarget)
                 {
-                    //Debug.Log($"Chase func called. attack range = {SelectedAbilityAttackRange}");
+                    if (stateHandler.minionStats != null)
+                    { Debug.Log($"Chase func called. attack range = {SelectedAbilityAttackRange}"); }
 
                     if (direction.sqrMagnitude > SelectedAbilityAttackRange || peaceState.CheckVisionBlocked(stateHandler.target))
                     {
@@ -130,7 +136,7 @@ public class AIChaseState : AIState
     }
     private void StrafeMovement(Vector2 targetLoc, Vector2 currentLoc, float distance)
     {
-        //Debug.Log("Strafe movent called");
+        Debug.Log("Strafe movement called");
 
         float a = -60f * distance;
         Vector2 offset = currentLoc - targetLoc;
