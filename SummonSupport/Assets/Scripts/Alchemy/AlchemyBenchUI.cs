@@ -300,7 +300,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     private void SetSelectedModAttribute(AbilityModTypes modType)
     {
         selectedModType = modType;
-        SetInstructionsText($"The {AbilityModHandler.GetAbilityModString(modType)} of {selectedAbility.Name} can be improved for {AbilityModHandler.GetModCost(selectedAbility, modType)} core power. You currently have: {AlchemyInventory.GetCorePowerResource(AlchemyInventory.ingredients)}");
+        SetInstructionsText($"The {AbilityModHandler.GetAbilityModString(modType)} of {selectedAbility.Name} can be improved for {AbilityModHandler.GetModCost(modType)} core power. You currently have: {AlchemyInventory.GetCorePowerResource(AlchemyInventory.ingredients)}");
 
     }
     private void AttemptModification(AbilityModTypes modAttribute)
@@ -311,7 +311,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
         if (selectedModType == AbilityModTypes.None) return;
 
 
-        var boughtPrice = AlchemyInventory.BuyCraftingPowerWithCores(Ability.GetCoreCraftingCost(selectedAbility));
+        var boughtPrice = AlchemyInventory.BuyCraftingPowerWithCores(AbilityModHandler.GetModCost(selectedModType));
         if (boughtPrice.bought)
         {
             selectedModHandler.ModAttributeByType(selectedAbility, selectedModType, AbilityModHandler.GetModIncrementValue(selectedModType));

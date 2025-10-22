@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Unity.Entities.UniversalDelegates;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class AbilityModHandler : MonoBehaviour
@@ -18,10 +19,39 @@ public class AbilityModHandler : MonoBehaviour
         { AbilityModTypes.MaxPierce, 1 },
         { AbilityModTypes.MakeSplit, 1 },
         { AbilityModTypes.MaxSplit, 1 },
-        { AbilityModTypes.Duration, 1 }
+        { AbilityModTypes.MakeRicochet, 1 },
+        { AbilityModTypes.MaxRicochet, 1 },
+        { AbilityModTypes.Duration, 1 },
+        { AbilityModTypes.Range, 1 }
+
+    };
+    public static readonly Dictionary<AbilityModTypes, int> ModCosts = new()
+    {
+        { AbilityModTypes.Cost, 10 },
+        { AbilityModTypes.Cooldown, 100 },
+        { AbilityModTypes.Damage, 50 },
+        { AbilityModTypes.DamageOverTime, 40 },
+        { AbilityModTypes.Heal, 60 },
+        { AbilityModTypes.HealOverTime, 50 },
+        { AbilityModTypes.MakePierce, 300 },
+        { AbilityModTypes.MaxPierce, 150 },
+        { AbilityModTypes.MakeSplit, 300 },
+        { AbilityModTypes.MaxSplit, 150 },
+        { AbilityModTypes.MakeRicochet, 300 },
+        { AbilityModTypes.MaxRicochet, 150 },
+        { AbilityModTypes.Duration, 80 },
+        { AbilityModTypes.Range, 30 }
+
     };
 
-
+    public static int GetModCost(AbilityModTypes modType)
+    {
+        if (ModCosts.TryGetValue(modType, out int cost))
+        {
+            return cost;
+        }
+        else throw new System.Exception($"The mod whose price you are searching {modType} is not in the Ability Mod cost dictionary!");
+    }
     public Mod_Base GetAbilityMod(Ability ability)
     {
         if (ModdedAbilities.TryGetValue(ability, out Mod_Base mod))
@@ -32,9 +62,19 @@ public class AbilityModHandler : MonoBehaviour
 
     public Mod_Base TryAddNewAbilityMod(Ability ability)
     {
+        Mod_Base mod;
         if (!ModdedAbilities.TryGetValue(ability, out Mod_Base existingMod))
         {
-            Mod_Base mod = new();
+            if (ability is ProjectileAbility)
+            {
+                Debug.Log($"Adding projectile mod for the ability {ability.Name}");
+                mod = new Mod_Projectile();
+            }
+            else
+            {
+                Debug.Log($"Adding normal mod for the ability {ability.Name}");
+                mod = new Mod_Base();
+            }
             ModdedAbilities.Add(ability, mod);
             return mod;
         }
@@ -72,64 +112,158 @@ public class AbilityModHandler : MonoBehaviour
         Mod_Base mod = TryAddNewAbilityMod(ability);
         mod.Mod_Cooldown(modValue);
     }
+    public void Mod_ModOnHitBehavior(Ability ability, AbilityModTypes modType)
+    {
+        if (ability is ProjectileAbility)
+        {
+            Mod_Projectile mod = (Mod_Projectile)TryAddNewAbilityMod(ability);
+            switch (modType)
+            {
+                case AbilityModTypes.MakePierce:
+                    {
+                        mod.Mod_OnHitBehaviour(OnHitBehaviour.Pierce);
+                        break;
+                    }
+
+                case AbilityModTypes.MakeSplit:
+                    {
+                        mod.Mod_OnHitBehaviour(OnHitBehaviour.Split);
+                        break;
+                    }
+                case AbilityModTypes.MakeRicochet:
+                    {
+                        mod.Mod_OnHitBehaviour(OnHitBehaviour.Ricochet);
+                        break;
+                    }
+                default:
+                    break;
+            }
+        }
+    }
+    private void Mod_HitBehaviourValue(Ability ability, AbilityModTypes modType)
+    {
+        Mod_Projectile mod = (Mod_Projectile)TryAddNewAbilityMod(ability);
+        switch (modType)
+        {
+            case AbilityModTypes.MaxRicochet:
+                {
+                    mod.Mod_Ricochet(1);
+                    break;
+                }
+            case AbilityModTypes.MaxPierce:
+                {
+                    mod.Mod_Pierce(1);
+                    break;
+                }
+            case AbilityModTypes.MaxSplit:
+                {
+                    mod.Mod_Split(1);
+                    break;
+                }
+        }
+    }
     #endregion
     public void ModAttributeByType(Ability ability, AbilityModTypes modType, float changeValue)
     {
-        if (modType == AbilityModTypes.Damage)
+        switch (modType)
         {
-            Mod_InstantDamage(ability, changeValue);
+            case AbilityModTypes.Damage:
+                {
+                    Mod_InstantDamage(ability, changeValue);
+                    break;
+                }
+            case AbilityModTypes.DamageOverTime:
+                {
+                    Mod_DotDamage(ability, changeValue);
+                    break;
+                }
+            case AbilityModTypes.Heal:
+                {
+                    Mod_Heal(ability, changeValue);
+                    break;
+                }
+            case AbilityModTypes.HealOverTime:
+                {
+                    Mod_HealOverTime(ability, changeValue);
+                    break;
+                }
+            case AbilityModTypes.Cost:
+                {
+                    Mod_Cost(ability, changeValue);
+                    break;
+                }
+            case AbilityModTypes.Cooldown:
+                {
+                    Mod_Cooldown(ability, changeValue);
+                    break;
+                }
+
+            case AbilityModTypes.MakePierce:
+                {
+                    Mod_ModOnHitBehavior(ability, modType);
+                    break;
+                }
+            case AbilityModTypes.MakeSplit:
+                {
+                    Mod_ModOnHitBehavior(ability, modType);
+                    break;
+                }
+            case AbilityModTypes.MakeRicochet:
+                {
+                    Mod_ModOnHitBehavior(ability, modType);
+                    break;
+                }
+            case AbilityModTypes.MaxRicochet:
+                {
+                    Mod_HitBehaviourValue(ability, modType);
+                    break;
+                }
+            case AbilityModTypes.MaxPierce:
+                {
+                    Mod_HitBehaviourValue(ability, modType);
+                    break;
+                }
+            case AbilityModTypes.MaxSplit:
+                {
+                    Mod_HitBehaviourValue(ability, modType);
+                    break;
+                }
+            default:
+                Debug.LogWarning($"no implimentation for {modType}");
+                break;
         }
-        else if (modType == AbilityModTypes.DamageOverTime)
-        {
-            Mod_DotDamage(ability, changeValue);
-        }
-        else if (modType == AbilityModTypes.Heal)
-        {
-            Mod_Heal(ability, changeValue);
-        }
-        else if (modType == AbilityModTypes.HealOverTime)
-        {
-            Mod_HealOverTime(ability, changeValue);
-        }
-        else if (modType == AbilityModTypes.Cost)
-        {
-            Mod_Cost(ability, changeValue);
-        }
-        else if (modType == AbilityModTypes.Cooldown)
-        {
-            Mod_Cooldown(ability, changeValue);
-        }
-        else if (modType == AbilityModTypes.Cooldown)
-        {
-            Mod_Heal(ability, changeValue);
-        }
-        Debug.Log($"attribute type {modType} will be changed by {changeValue}");
 
     }
 
     public int GetModAttributeByType(Ability ability, AbilityModTypes modType)
     {
         if (!ModdedAbilities.TryGetValue(ability, out Mod_Base mod)) return 0;
-        if (modType == AbilityModTypes.Damage)
+        else if (modType == AbilityModTypes.Damage)
         {
             return (int)mod.TargetEffects_Mod.Damage.Value;
         }
-        if (modType == AbilityModTypes.Cost)
+        else if (modType == AbilityModTypes.Cost)
         {
             return (int)mod.Cost_Mod;
         }
-        if (modType == AbilityModTypes.Cooldown)
+        else if (modType == AbilityModTypes.Cooldown)
         {
             return (int)mod.Cooldown_Mod;
         }
+        else if (mod is Mod_Projectile projectileMod)
+        {
+            Debug.Log($" max split found by func = {projectileMod.GetHitAttributeValue(modType)}");
+            return projectileMod.GetHitAttributeValue(modType);
+        }
         else return 0;
     }
-
-    public static int GetModCost(Ability selectedAbility, AbilityModTypes modType)
+    public OnHitBehaviour GetHitBehaviour(Ability ability)
     {
-        Debug.Log($"A genius yet elegantly simple calculation has produced the ability upgrade value 7");
-        return 7;
+        if (!ModdedAbilities.TryGetValue(ability, out Mod_Base mod) || mod is not Mod_Projectile projectileMod) return OnHitBehaviour.Destroy;
+        else return projectileMod.HitBehaviour_Mod;
+
     }
+
     public static int GetModIncrementValue(AbilityModTypes modType)
     {
         if (ModIncrements.TryGetValue(modType, out int num))

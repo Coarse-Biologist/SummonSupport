@@ -12,6 +12,8 @@ public class Projectile : MonoBehaviour
     LivingBeing userLivingBeing = null;
     private bool active = false;
 
+    private AbilityModHandler modHandler;
+    private Mod_Projectile projectileMod;
 
 
 
@@ -19,6 +21,11 @@ public class Projectile : MonoBehaviour
     {
         if (user.TryGetComponent(out LivingBeing livingBeing))
             userLivingBeing = livingBeing;
+        if (user.TryGetComponent(out AbilityModHandler handler))
+        {
+            Debug.Log("mod handler found!!!!!!!!!!!!!!$%^&*(*&^%$)");
+            modHandler = handler;
+        }
         //else
         //Debug.Log($"user isnt a living being, weird right?");
         ignoreGameObjects.Add(user);
@@ -104,7 +111,19 @@ public class Projectile : MonoBehaviour
 
     void HandleOnHitBehaviour(LivingBeing other)
     {
-        switch (ability.PiercingMode)
+        OnHitBehaviour hitBehaviour = ability.PiercingMode;
+        if (modHandler != null)
+        {
+            OnHitBehaviour modBehaviour = modHandler.GetHitBehaviour(ability);
+            if (modBehaviour != OnHitBehaviour.Destroy)
+            {
+                Debug.Log($"Mod for on hit behavior found! {modBehaviour}");
+
+                hitBehaviour = modBehaviour;
+            }
+            Debug.Log($"on hit behavior = {hitBehaviour}");
+        }
+        switch (hitBehaviour)
         {
             case OnHitBehaviour.Ricochet:
                 break;
@@ -130,7 +149,14 @@ public class Projectile : MonoBehaviour
     }
     void SplitProjectile(LivingBeing other)
     {
-        if (splitAlready >= ability.MaxSplit)
+        int maxSplit = ability.MaxSplit;
+        if (modHandler != null)
+        {
+            maxSplit += modHandler.GetModAttributeByType(ability, AbilityModTypes.MaxSplit);
+        }
+        else Debug.Log($"modhandler is maybe null? {modHandler}");
+        Debug.Log($"Split already {splitAlready} times. max split = {maxSplit}. Abilities default max = {ability.MaxSplit}");
+        if (splitAlready >= maxSplit)
             DestroyProjectile(other);
         else
         {

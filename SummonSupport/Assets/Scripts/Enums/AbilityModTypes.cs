@@ -16,6 +16,8 @@ public enum AbilityModTypes
     Width,
     MakePierce,
     MaxPierce,
+    MakeRicochet,
+    MaxRicochet,
     MakeSplit,
     MaxSplit,
     StatusEffect,

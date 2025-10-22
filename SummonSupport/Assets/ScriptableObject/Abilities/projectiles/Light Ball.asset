@@ -45,9 +45,9 @@ MonoBehaviour:
     type: 3}
   <MaxRange>k__BackingField: 150
   <Lifetime>k__BackingField: 5
-  <PiercingMode>k__BackingField: 3
+  <PiercingMode>k__BackingField: 0
   <MaxPierce>k__BackingField: 0
-  <MaxSplit>k__BackingField: 1
+  <MaxSplit>k__BackingField: 0
   <SplitAngleOffset>k__BackingField: 45
   <ProjectileParticleSystem>k__BackingField: {fileID: 1822476630938799536, guid: d741ec2676dfd7d4fa6dba81c1a52af2,
     type: 3}
