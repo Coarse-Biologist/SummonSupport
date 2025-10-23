@@ -269,8 +269,9 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
                 ///Ability potentiallySelectedAbility = ability;
                 Button button = AddButtonToPanel($"{ability.Name}", alchemyInventory, 40, 5);
                 button.RegisterCallback<ClickEvent>(e => SetSelectedAbility(ability));
-                button.RegisterCallback<ClickEvent>(e => DisplayAbilityModOptions(ability));
                 button.RegisterCallback<ClickEvent>(e => SetSelectedModHandler(playerModHandler));
+                button.RegisterCallback<ClickEvent>(e => DisplayAbilityModOptions(ability));
+
 
 
             }
@@ -281,9 +282,9 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
                 {
                     Ability potentiallySelectedAbility = ability;
                     Button button = AddButtonToPanel($"{ability.Name}", alchemyInventory, 20, 5);
+                    button.RegisterCallback<ClickEvent>(e => SetSelectedModHandler(modHandler));
                     button.RegisterCallback<ClickEvent>(e => SetSelectedAbility(potentiallySelectedAbility));
                     button.RegisterCallback<ClickEvent>(e => DisplayAbilityModOptions(potentiallySelectedAbility));
-                    button.RegisterCallback<ClickEvent>(e => SetSelectedModHandler(modHandler));
                 }
         }
     }
@@ -291,7 +292,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     {
         ClearPanel(elementSelection);
         SetInstructionsText($"Select an attribute for the ability which you would like to upgrade.");
-        foreach (AbilityModTypes modableAttribute in AbilityModHandler.GetModableAttributes(ability))
+        foreach (AbilityModTypes modableAttribute in selectedModHandler.GetModableAttributes(ability))
         {
             Button button = AddButtonToPanel(AbilityModHandler.GetAbilityModString(modableAttribute), elementSelection, 40, 10);
             button.RegisterCallback<ClickEvent>(e => SetSelectedModAttribute(modableAttribute));

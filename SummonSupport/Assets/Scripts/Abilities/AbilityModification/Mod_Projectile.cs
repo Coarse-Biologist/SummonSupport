@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Mod_Projectile : Mod_Base
@@ -5,7 +6,7 @@ public class Mod_Projectile : Mod_Base
     public float Speed_Mod { get; protected set; } = 0;
     public float MaxRange_Mod { get; protected set; } = 0;
     public float Lifetime_Mod { get; protected set; } = 0;
-    public OnHitBehaviour HitBehaviour_Mod { get; protected set; } = OnHitBehaviour.Destroy;
+    public List<OnHitBehaviour> HitBehaviour_Mod { get; protected set; } = new();
     public int MaxPierce_Mod { get; protected set; } = 0;
     public int MaxSplit_Mod { get; protected set; } = 0;
     public int MaxRicochet_Mod { get; protected set; } = 0;
@@ -18,7 +19,9 @@ public class Mod_Projectile : Mod_Base
     }
     public void Mod_OnHitBehaviour(OnHitBehaviour behavior)
     {
-        HitBehaviour_Mod = behavior;
+        if (!HitBehaviour_Mod.Contains(behavior))
+            HitBehaviour_Mod.Add(behavior);
+        else throw new System.Exception($"Youre trying to add an on hit behavior {behavior} twice.");
     }
     public void Mod_Pierce(int changeValue)
     {

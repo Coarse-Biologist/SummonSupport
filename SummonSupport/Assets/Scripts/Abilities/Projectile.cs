@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Projectile : MonoBehaviour
@@ -111,34 +112,38 @@ public class Projectile : MonoBehaviour
 
     void HandleOnHitBehaviour(LivingBeing other)
     {
+        List<OnHitBehaviour> modBehaviour = new();
         OnHitBehaviour hitBehaviour = ability.PiercingMode;
+
         if (modHandler != null)
         {
-            OnHitBehaviour modBehaviour = modHandler.GetHitBehaviour(ability);
-            if (modBehaviour != OnHitBehaviour.Destroy)
+            modBehaviour = modHandler.GetHitBehaviour(ability);
+            if (modBehaviour.Count > 0)
             {
-                Debug.Log($"Mod for on hit behavior found! {modBehaviour}");
+                Debug.Log($"Mod for on hit behavior found! {modBehaviour[0]}");
 
-                hitBehaviour = modBehaviour;
+                if (!modBehaviour.Contains(hitBehaviour))
+                    modBehaviour.Add(hitBehaviour);
             }
             Debug.Log($"on hit behavior = {hitBehaviour}");
         }
-        switch (hitBehaviour)
-        {
-            case OnHitBehaviour.Ricochet:
-                break;
-            case OnHitBehaviour.Pierce:
-                piercedAlready++;
-                if (piercedAlready == ability.MaxPierce)
+        foreach (OnHitBehaviour behaviour in modBehaviour)
+            switch (behaviour)
+            {
+                case OnHitBehaviour.Ricochet:
+                    break;
+                case OnHitBehaviour.Pierce:
+                    piercedAlready++;
+                    if (piercedAlready == ability.MaxPierce)
+                        DestroyProjectile(other);
+                    break;
+                case OnHitBehaviour.Split:
+                    SplitProjectile(other);
+                    break;
+                case OnHitBehaviour.Destroy:
                     DestroyProjectile(other);
-                break;
-            case OnHitBehaviour.Split:
-                SplitProjectile(other);
-                break;
-            case OnHitBehaviour.Destroy:
-                DestroyProjectile(other);
-                break;
-        }
+                    break;
+            }
     }
 
     void DestroyProjectile(LivingBeing other = null)

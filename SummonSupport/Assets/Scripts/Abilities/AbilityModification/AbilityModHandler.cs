@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.Entities.UniversalDelegates;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -43,6 +44,17 @@ public class AbilityModHandler : MonoBehaviour
         { AbilityModTypes.Range, 30 }
 
     };
+    public static readonly Dictionary<Type, List<AbilityModTypes>> ModOptions = new()
+        {
+         {typeof(ProjectileAbility), new List<AbilityModTypes>() { AbilityModTypes.MakePierce, AbilityModTypes.MaxPierce, AbilityModTypes.MakeSplit, AbilityModTypes.MaxSplit, AbilityModTypes.Cost, AbilityModTypes.Cooldown, AbilityModTypes.Damage, AbilityModTypes.DamageOverTime, AbilityModTypes.Heal, AbilityModTypes.HealOverTime } },
+             {typeof(TargetMouseAbility),new List<AbilityModTypes>() { AbilityModTypes.Cost, AbilityModTypes.Cooldown, AbilityModTypes.Damage, AbilityModTypes.DamageOverTime, AbilityModTypes.Heal, AbilityModTypes.HealOverTime } },
+             {typeof(ConjureAbility), new List<AbilityModTypes>() { AbilityModTypes.Cost, AbilityModTypes.Cooldown, AbilityModTypes.Damage, AbilityModTypes.DamageOverTime, AbilityModTypes.Heal, AbilityModTypes.HealOverTime } },
+            {typeof(AuraAbility), new List<AbilityModTypes>() { AbilityModTypes.Cost, AbilityModTypes.Cooldown, AbilityModTypes.Damage, AbilityModTypes.DamageOverTime, AbilityModTypes.Heal, AbilityModTypes.HealOverTime } },
+             {typeof(TeleportAbility), new List<AbilityModTypes>() { AbilityModTypes.Cost, AbilityModTypes.Cooldown, AbilityModTypes.Damage, AbilityModTypes.DamageOverTime, AbilityModTypes.Heal, AbilityModTypes.HealOverTime } },
+             {typeof(MeleeAbility), new List<AbilityModTypes>() { AbilityModTypes.Cost, AbilityModTypes.Cooldown, AbilityModTypes.Damage, AbilityModTypes.DamageOverTime, AbilityModTypes.Heal, AbilityModTypes.HealOverTime } },
+             {typeof(BeamAbility), new List<AbilityModTypes>() { AbilityModTypes.Cost, AbilityModTypes.Cooldown, AbilityModTypes.Damage, AbilityModTypes.DamageOverTime, AbilityModTypes.Heal, AbilityModTypes.HealOverTime } },
+             {typeof(ChargeAbility), new List<AbilityModTypes>() { AbilityModTypes.Range, AbilityModTypes.Cost, AbilityModTypes.Cooldown, AbilityModTypes.Damage, AbilityModTypes.DamageOverTime, AbilityModTypes.Heal, AbilityModTypes.HealOverTime }},
+        };
 
     public static int GetModCost(AbilityModTypes modType)
     {
@@ -122,17 +134,22 @@ public class AbilityModHandler : MonoBehaviour
                 case AbilityModTypes.MakePierce:
                     {
                         mod.Mod_OnHitBehaviour(OnHitBehaviour.Pierce);
+                        mod.Mod_AddAquiredBoolMod(AbilityModTypes.MakePierce);
+
                         break;
                     }
 
                 case AbilityModTypes.MakeSplit:
                     {
                         mod.Mod_OnHitBehaviour(OnHitBehaviour.Split);
+                        mod.Mod_AddAquiredBoolMod(AbilityModTypes.MakeSplit);
                         break;
                     }
                 case AbilityModTypes.MakeRicochet:
                     {
                         mod.Mod_OnHitBehaviour(OnHitBehaviour.Ricochet);
+                        mod.Mod_AddAquiredBoolMod(AbilityModTypes.MakeRicochet);
+
                         break;
                     }
                 default:
@@ -201,6 +218,7 @@ public class AbilityModHandler : MonoBehaviour
             case AbilityModTypes.MakePierce:
                 {
                     Mod_ModOnHitBehavior(ability, modType);
+
                     break;
                 }
             case AbilityModTypes.MakeSplit:
@@ -257,9 +275,9 @@ public class AbilityModHandler : MonoBehaviour
         }
         else return 0;
     }
-    public OnHitBehaviour GetHitBehaviour(Ability ability)
+    public List<OnHitBehaviour> GetHitBehaviour(Ability ability)
     {
-        if (!ModdedAbilities.TryGetValue(ability, out Mod_Base mod) || mod is not Mod_Projectile projectileMod) return OnHitBehaviour.Destroy;
+        if (!ModdedAbilities.TryGetValue(ability, out Mod_Base mod) || mod is not Mod_Projectile projectileMod) return new List<OnHitBehaviour> { OnHitBehaviour.Destroy };
         else return projectileMod.HitBehaviour_Mod;
 
     }
@@ -274,31 +292,19 @@ public class AbilityModHandler : MonoBehaviour
     }
 
 
-    public static List<AbilityModTypes> GetModableAttributes(Ability ability)
+    public List<AbilityModTypes> GetModableAttributes(Ability ability)
     {
-        switch (ability)
-        {
-            case ProjectileAbility projectile:
-                return new List<AbilityModTypes>() { AbilityModTypes.MakePierce, AbilityModTypes.MaxPierce, AbilityModTypes.MakeSplit, AbilityModTypes.MaxSplit, AbilityModTypes.Cost, AbilityModTypes.Cooldown, AbilityModTypes.Damage, AbilityModTypes.DamageOverTime, AbilityModTypes.Heal, AbilityModTypes.HealOverTime };
-            case TargetMouseAbility pointAndClickAbility:
-                return new List<AbilityModTypes>() { AbilityModTypes.Cost, AbilityModTypes.Cooldown, AbilityModTypes.Damage, AbilityModTypes.DamageOverTime, AbilityModTypes.Heal, AbilityModTypes.HealOverTime };
-            case ConjureAbility conjureAbility:
-                return new List<AbilityModTypes>() { AbilityModTypes.Cost, AbilityModTypes.Cooldown, AbilityModTypes.Damage, AbilityModTypes.DamageOverTime, AbilityModTypes.Heal, AbilityModTypes.HealOverTime };
-            case AuraAbility auraAbility:
-                return new List<AbilityModTypes>() { AbilityModTypes.Cost, AbilityModTypes.Cooldown, AbilityModTypes.Damage, AbilityModTypes.DamageOverTime, AbilityModTypes.Heal, AbilityModTypes.HealOverTime };
-            case TeleportAbility teleportAbility:
-                return new List<AbilityModTypes>() { AbilityModTypes.Cost, AbilityModTypes.Cooldown, AbilityModTypes.Damage, AbilityModTypes.DamageOverTime, AbilityModTypes.Heal, AbilityModTypes.HealOverTime };
-            case MeleeAbility meleeAbility:
-                return new List<AbilityModTypes>() { AbilityModTypes.Cost, AbilityModTypes.Cooldown, AbilityModTypes.Damage, AbilityModTypes.DamageOverTime, AbilityModTypes.Heal, AbilityModTypes.HealOverTime };
-            case BeamAbility beamAbility:
-                return new List<AbilityModTypes>() { AbilityModTypes.Cost, AbilityModTypes.Cooldown, AbilityModTypes.Damage, AbilityModTypes.DamageOverTime, AbilityModTypes.Heal, AbilityModTypes.HealOverTime };
-            case ChargeAbility chargeAbility:
-                return new List<AbilityModTypes>() { AbilityModTypes.Range, AbilityModTypes.Cost, AbilityModTypes.Cooldown, AbilityModTypes.Damage, AbilityModTypes.DamageOverTime, AbilityModTypes.Heal, AbilityModTypes.HealOverTime };
-            default:
-                return new List<AbilityModTypes>() { AbilityModTypes.Cost, AbilityModTypes.Cooldown, AbilityModTypes.Damage, AbilityModTypes.DamageOverTime, AbilityModTypes.Heal, AbilityModTypes.HealOverTime };
-        }
-    }
+        Mod_Base mod = TryAddNewAbilityMod(ability);
 
+        if (ModOptions.TryGetValue(ability.GetType(), out List<AbilityModTypes> modOptions))
+            return GetUncommon(modOptions, mod.AquiredBool_Mods);
+        else return new List<AbilityModTypes>();
+
+    }
+    public static List<T> GetUncommon<T>(List<T> listA, List<T> listB)
+    {
+        return listA.Except(listB).Union(listB.Except(listA)).ToList();
+    }
     public static string GetAbilityModString(AbilityModTypes modEnum)
     {
         return System.Text.RegularExpressions.Regex.Replace(modEnum.ToString(), "(?<!^)([A-Z])", " $1");
