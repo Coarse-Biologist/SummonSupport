@@ -24,7 +24,6 @@ public class Projectile : MonoBehaviour
             userLivingBeing = livingBeing;
         if (user.TryGetComponent(out AbilityModHandler handler))
         {
-            Debug.Log("mod handler found!!!!!!!!!!!!!!$%^&*(*&^%$)");
             modHandler = handler;
         }
         //else
@@ -113,40 +112,40 @@ public class Projectile : MonoBehaviour
     void HandleOnHitBehaviour(LivingBeing other)
     {
         List<OnHitBehaviour> modBehaviour = new();
-        OnHitBehaviour hitBehaviour = ability.PiercingMode;
 
         if (modHandler != null)
         {
             modBehaviour = modHandler.GetHitBehaviour(ability);
-            if (modBehaviour.Count > 0)
-            {
-                Debug.Log($"Mod for on hit behavior found! {modBehaviour[0]}");
-
-                if (!modBehaviour.Contains(hitBehaviour))
-                    modBehaviour.Add(hitBehaviour);
-            }
-            Debug.Log($"on hit behavior = {hitBehaviour}");
         }
+        if (modBehaviour.Count() == 0) modBehaviour = new List<OnHitBehaviour> { ability.PiercingMode };
         foreach (OnHitBehaviour behaviour in modBehaviour)
+        {
+            Debug.Log($"Handling behavior {behaviour}");
+
             switch (behaviour)
             {
                 case OnHitBehaviour.Ricochet:
                     break;
                 case OnHitBehaviour.Pierce:
+                    if (piercedAlready == modHandler.GetModAttributeByType(ability, AbilityModTypes.MaxPierce))
+                    {
+                        Debug.Log($"pierced already = {piercedAlready}.");
+                        DestroyProjectile();
+                    }
                     piercedAlready++;
-                    if (piercedAlready == ability.MaxPierce)
-                        DestroyProjectile(other);
+
                     break;
                 case OnHitBehaviour.Split:
                     SplitProjectile(other);
                     break;
                 case OnHitBehaviour.Destroy:
-                    DestroyProjectile(other);
+                    DestroyProjectile();
                     break;
             }
+        }
     }
 
-    void DestroyProjectile(LivingBeing other = null)
+    void DestroyProjectile()
     {
         //probably casue effects if hitting an acceptable enemy?
 
@@ -161,8 +160,11 @@ public class Projectile : MonoBehaviour
         }
         else Debug.Log($"modhandler is maybe null? {modHandler}");
         Debug.Log($"Split already {splitAlready} times. max split = {maxSplit}. Abilities default max = {ability.MaxSplit}");
-        if (splitAlready >= maxSplit)
-            DestroyProjectile(other);
+        if (splitAlready >= maxSplit && piercedAlready >= modHandler.GetModAttributeByType(ability, AbilityModTypes.MaxPierce))
+        {
+            Debug.Log($"pierced already = {piercedAlready}.");
+            DestroyProjectile();
+        }
         else
         {
             splitAlready++;
@@ -180,10 +182,8 @@ public class Projectile : MonoBehaviour
                 projectileScript.SetParticleTrailEffects(direction);
                 Destroy(newProjectile, ability.Lifetime);
 
-
             }
         }
-        DestroyProjectile(other);
     }
 
 

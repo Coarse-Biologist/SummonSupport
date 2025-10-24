@@ -52,7 +52,6 @@ public class LootSpawnHandler : MonoBehaviour
     {
 
         if (etherPrefab == null) return;
-        Debug.Log($"A {etherPrefab.name} will be spawned for {enemyStats.Name}");
 
         GameObject instance = Instantiate(etherPrefab, enemyStats.transform.position, Quaternion.identity);
         if (instance.TryGetComponent(out LootableAlchemyMaterial lootScript))
@@ -78,7 +77,6 @@ public class LootSpawnHandler : MonoBehaviour
 
     private void SpawnOrgans(EnemyStats enemy, AlchemyLoot organType)
     {
-        Debug.Log($"A {organType} will be spawned for {enemy}");
 
         if (organType == AlchemyLoot.WeakCore) return;
         Instantiate(OrganPrefab, enemy.transform.position, Quaternion.identity);
@@ -102,7 +100,6 @@ public class LootSpawnHandler : MonoBehaviour
     private void SpawnCores(EnemyStats enemy, AlchemyLoot coreType)
     {
         if (coreType == AlchemyLoot.WretchedOrgans) return;
-        Debug.Log($"A {coreType} will be spawned for {enemy.Name}");
         GameObject instance = Instantiate(CorePrefab, enemy.transform.position, Quaternion.identity);
         if (instance.TryGetComponent<LootableAlchemyMaterial>(out LootableAlchemyMaterial lootScript))
         {

@@ -92,7 +92,6 @@ public static class CombatStatHandler
     {
         float damageValue = GetDamageByType(damage_AT, target);
         int dmgmod = modHandler.GetModAttributeByType(currentAbility, AbilityModTypes.Damage);
-        UnityEngine.Debug.Log($"mod changing damage by: {dmgmod}");
         damageValue += modHandler.GetModAttributeByType(currentAbility, AbilityModTypes.Damage);
         if (damage_AT.Element != Element.None) damageValue = AdjustBasedOnAffinity(damage_AT.Element, damageValue, caster, target);
         if (damage_AT.Physical != PhysicalType.None) damageValue = AdjustBasedOnArmor(damage_AT.Physical, damageValue, target);

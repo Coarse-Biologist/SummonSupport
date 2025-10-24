@@ -270,14 +270,14 @@ public class AbilityModHandler : MonoBehaviour
         }
         else if (mod is Mod_Projectile projectileMod)
         {
-            Debug.Log($" max split found by func = {projectileMod.GetHitAttributeValue(modType)}");
+            Debug.Log($"{modType} found by func = {projectileMod.GetHitAttributeValue(modType)}");
             return projectileMod.GetHitAttributeValue(modType);
         }
         else return 0;
     }
     public List<OnHitBehaviour> GetHitBehaviour(Ability ability)
     {
-        if (!ModdedAbilities.TryGetValue(ability, out Mod_Base mod) || mod is not Mod_Projectile projectileMod) return new List<OnHitBehaviour> { OnHitBehaviour.Destroy };
+        if (!ModdedAbilities.TryGetValue(ability, out Mod_Base mod) || mod is not Mod_Projectile projectileMod) return new List<OnHitBehaviour> { };
         else return projectileMod.HitBehaviour_Mod;
 
     }
