@@ -79,12 +79,12 @@ public class AbilityModHandler : MonoBehaviour
         {
             if (ability is ProjectileAbility)
             {
-                Debug.Log($"Adding projectile mod for the ability {ability.Name}");
+                //Debug.Log($"Adding projectile mod for the ability {ability.Name}");
                 mod = new Mod_Projectile();
             }
             else
             {
-                Debug.Log($"Adding normal mod for the ability {ability.Name}");
+                //Debug.Log($"Adding normal mod for the ability {ability.Name}");
                 mod = new Mod_Base();
             }
             ModdedAbilities.Add(ability, mod);
@@ -133,6 +133,7 @@ public class AbilityModHandler : MonoBehaviour
             {
                 case AbilityModTypes.MakePierce:
                     {
+                        mod.Mod_Pierce(1);
                         mod.Mod_OnHitBehaviour(OnHitBehaviour.Pierce);
                         mod.Mod_AddAquiredBoolMod(AbilityModTypes.MakePierce);
 
@@ -141,12 +142,14 @@ public class AbilityModHandler : MonoBehaviour
 
                 case AbilityModTypes.MakeSplit:
                     {
+                        mod.Mod_Pierce(1);
                         mod.Mod_OnHitBehaviour(OnHitBehaviour.Split);
                         mod.Mod_AddAquiredBoolMod(AbilityModTypes.MakeSplit);
                         break;
                     }
                 case AbilityModTypes.MakeRicochet:
                     {
+                        mod.Mod_Ricochet(1);
                         mod.Mod_OnHitBehaviour(OnHitBehaviour.Ricochet);
                         mod.Mod_AddAquiredBoolMod(AbilityModTypes.MakeRicochet);
 
@@ -182,6 +185,7 @@ public class AbilityModHandler : MonoBehaviour
     #endregion
     public void ModAttributeByType(Ability ability, AbilityModTypes modType, float changeValue)
     {
+
         switch (modType)
         {
             case AbilityModTypes.Damage:
@@ -270,7 +274,7 @@ public class AbilityModHandler : MonoBehaviour
         }
         else if (mod is Mod_Projectile projectileMod)
         {
-            Debug.Log($"{modType} found by func = {projectileMod.GetHitAttributeValue(modType)}");
+            //Debug.Log($"{modType} found by func = {projectileMod.GetHitAttributeValue(modType)}");
             return projectileMod.GetHitAttributeValue(modType);
         }
         else return 0;

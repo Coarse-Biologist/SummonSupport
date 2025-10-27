@@ -11,7 +11,7 @@ public class DashAbility : ConjureAbility
         // find backward direction
         Vector2 spawnPosition = (Vector2)user.transform.position - new Vector2(originTransform.right.x, originTransform.right.y);
         Quaternion rotation = originTransform.rotation;
-        Debug.Log($"spawn position = {spawnPosition}");
+        //Debug.Log($"spawn position = {spawnPosition}");
         return Activate(user, spawnPosition, rotation);
     }
 }

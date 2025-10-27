@@ -146,9 +146,9 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
         ResetVars();
         SetInstructionsText("Manage minions or abilities here at your alchemy station");
 
-        Button abilityManagementOptions = AddButtonToPanel("Abilities", centerPanel, 30, 5);
-        Button minionManagementOptions = AddButtonToPanel("Minions", centerPanel, 30, 5);
-        Button quitButton = AddButtonToPanel("Quit", centerPanel, 30, 5);
+        Button abilityManagementOptions = AddButtonToPanel("Abilities", centerPanel, 50, 5);
+        Button minionManagementOptions = AddButtonToPanel("Minions", centerPanel, 50, 5);
+        Button quitButton = AddButtonToPanel("Quit", centerPanel, 50, 5);
 
         abilityManagementOptions.RegisterCallback<ClickEvent>(e => ShowAbilityManagementOptions());
 
@@ -164,10 +164,10 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
 
         SetInstructionsText("Craft, upgrade or recycle minions for parts.");
 
-        Button craftMinionsButton = AddButtonToPanel("Craft", centerPanel, 20, 5);
-        Button minionManagementOptions = AddButtonToPanel("Upgrade", centerPanel, 20, 5);
-        Button recycleButton = AddButtonToPanel("Recycle", centerPanel, 20, 5);
-        Button backButton = AddButtonToPanel("Back", centerPanel, 20, 5);
+        Button craftMinionsButton = AddButtonToPanel("Craft", centerPanel, 50, 5);
+        Button minionManagementOptions = AddButtonToPanel("Upgrade", centerPanel, 50, 5);
+        Button recycleButton = AddButtonToPanel("Recycle", centerPanel, 50, 5);
+        Button backButton = AddButtonToPanel("Back", centerPanel, 50, 5);
 
 
         craftMinionsButton.RegisterCallback<ClickEvent>(e => ShowCraftingOptions());
@@ -186,10 +186,10 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
 
         SetInstructionsText("Would you like to concoct new abilities, modify them, or control their use slots?");
 
-        Button craftButton = AddButtonToPanel("Concoct", centerPanel, 20, 5);
-        Button abilityModButton = AddButtonToPanel("Modify", centerPanel, 20, 5);
-        Button abilitySlotButton = AddButtonToPanel("Set Slot", centerPanel, 20, 5);
-        Button backButton = AddButtonToPanel("Back", centerPanel, 20, 5);
+        Button craftButton = AddButtonToPanel("Concoct", centerPanel, 50, 5);
+        Button abilityModButton = AddButtonToPanel("Modify", centerPanel, 50, 5);
+        Button abilitySlotButton = AddButtonToPanel("Set Slot", centerPanel, 50, 5);
+        Button backButton = AddButtonToPanel("Back", centerPanel, 50, 5);
 
         craftButton.RegisterCallback<ClickEvent>(e => ShowAbilityCraftingOptions());
         abilitySlotButton.RegisterCallback<ClickEvent>(e => SlotAbilities());

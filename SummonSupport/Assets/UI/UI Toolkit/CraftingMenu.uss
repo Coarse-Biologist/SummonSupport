@@ -8,6 +8,7 @@
     border-bottom-color: rgb(0, 0, 0);
     color: rgb(255, 255, 255);
     text-shadow: 0 0 0 rgba(0, 140, 3, 0);
+    -unity-font-definition: url("project://database/Assets/UI/Fonts/Jacquard12-Regular.ttf?fileID=12800000&guid=99a5c8ab7f14486418a8206a324dc773&type=3#Jacquard12-Regular");
 }
 
 .button:hover {
@@ -17,6 +18,7 @@
     background-color: rgba(255, 255, 255, 0);
     -unity-background-image-tint-color: rgb(184, 177, 177);
     background-image: url("project://database/Assets/PixelArt/UI_Sprites/StoneButton.png?fileID=2800000&guid=52e3837347aeec24e8388f9a62608186&type=3#StoneButton");
+    -unity-font-definition: url("project://database/Assets/UI/Fonts/Jacquard12-Regular.ttf?fileID=12800000&guid=99a5c8ab7f14486418a8206a324dc773&type=3#Jacquard12-Regular");
 }
 
 .button:active {
@@ -29,11 +31,13 @@
     transition-duration: 0.2s;
     transition-timing-function: ease-in-out;
     background-image: url("project://database/Assets/PixelArt/UI_Sprites/StoneButton.png?fileID=2800000&guid=52e3837347aeec24e8388f9a62608186&type=3#StoneButton");
+    -unity-font-definition: url("project://database/Assets/UI/Fonts/Jacquard12-Regular.ttf?fileID=12800000&guid=99a5c8ab7f14486418a8206a324dc773&type=3#Jacquard12-Regular");
 }
 
 .toggle {
     background-image: url("project://database/Assets/PixelArt/UI_Sprites/StoneButton.png?fileID=2800000&guid=52e3837347aeec24e8388f9a62608186&type=3#StoneButton");
     background-color: rgba(255, 255, 255, 0);
+    -unity-font-definition: url("project://database/Assets/UI/Fonts/Jacquard12-Regular.ttf?fileID=12800000&guid=99a5c8ab7f14486418a8206a324dc773&type=3#Jacquard12-Regular");
 }
 
 .toggle .unity-toggle__checkmark {
@@ -41,6 +45,7 @@
     border-radius: 6px;
     background-size: 103% 100%;
     background-image: url("project://database/Assets/PixelArt/UI_Sprites/StoneButton.png?fileID=2800000&guid=52e3837347aeec24e8388f9a62608186&type=3#StoneButton");
+    -unity-font-definition: url("project://database/Assets/UI/Fonts/Jacquard12-Regular.ttf?fileID=12800000&guid=99a5c8ab7f14486418a8206a324dc773&type=3#Jacquard12-Regular");
 }
 
 .toggle:hover {
@@ -50,6 +55,7 @@
     background-image: url("project://database/Assets/PixelArt/UI_Sprites/StoneButton.png?fileID=2800000&guid=52e3837347aeec24e8388f9a62608186&type=3#StoneButton");
     background-color: rgba(255, 255, 255, 0);
     -unity-background-image-tint-color: rgb(184, 177, 177);
+    -unity-font-definition: url("project://database/Assets/UI/Fonts/Jacquard12-Regular.ttf?fileID=12800000&guid=99a5c8ab7f14486418a8206a324dc773&type=3#Jacquard12-Regular");
 }
 
 .toggle:active {

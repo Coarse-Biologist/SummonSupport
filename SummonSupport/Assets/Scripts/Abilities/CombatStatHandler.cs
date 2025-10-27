@@ -116,7 +116,7 @@ public static class CombatStatHandler
     }
     public static float AdjustAndApplyTempChange(Ability ability, TempAttrChange tempAttr, LivingBeing target, LivingBeing caster = null)
     {
-        UnityEngine.Debug.Log("Adjusting and applying tempchange");
+        //UnityEngine.Debug.Log("Adjusting and applying tempchange");
         float changeValue = tempAttr.Value;
         float duration = tempAttr.Duration;
         if (tempAttr is TempAttrDecrease_AT) changeValue = -changeValue; // set to negative if it decreases
@@ -125,7 +125,7 @@ public static class CombatStatHandler
             if (ability.ElementTypes.Count > 0) changeValue = AdjustBasedOnAffinity(ability.ElementTypes[0], changeValue, caster, target);
             if (ability.PhysicalType != PhysicalType.None) changeValue = AdjustBasedOnArmor(ability.PhysicalType, changeValue, target);
         }
-        UnityEngine.Debug.Log($"the change value = {changeValue}. tempAttr.PhysicalResistance = {tempAttr.ElementalAffinity}");
+        //UnityEngine.Debug.Log($"the change value = {changeValue}. tempAttr.PhysicalResistance = {tempAttr.ElementalAffinity}");
 
         if (tempAttr.ResourceAttribute != AttributeType.None) ApplyTempValue(ability, target, tempAttr.ResourceAttribute, changeValue, duration);
         if (tempAttr.PhysicalResistance != PhysicalType.None) ApplyTempValue(ability, target, tempAttr.PhysicalResistance, changeValue, duration);

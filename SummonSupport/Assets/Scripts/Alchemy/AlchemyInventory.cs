@@ -88,7 +88,7 @@ public static class AlchemyInventory
     }
     public static void AlterIngredientNum(AlchemyLoot newIngredient, int amount)
     {
-        UnityEngine.Debug.Log($"Adding {amount} {newIngredient}");
+        //UnityEngine.Debug.Log($"Adding {amount} {newIngredient}");
         ingredients[newIngredient] += amount;
     }
     public static void ExpendIngredients(Dictionary<AlchemyLoot, int> usedIngredients)

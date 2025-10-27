@@ -1,4 +1,4 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
     <Style src="project://database/Assets/UI/UI%20Toolkit/testdeletejodi.uss?fileID=7433441132597879392&amp;guid=f386d82caf078924796d0a776d05d7b7&amp;type=3#testdeletejodi" />
-    <ui:ProgressBar value="22" title="my-progress" />
+    <ui:ProgressBar value="22" title="my-progress" style="-unity-font-definition: url(&quot;project://database/Assets/UI/Fonts/Jacquard12-Regular.ttf?fileID=12800000&amp;guid=99a5c8ab7f14486418a8206a324dc773&amp;type=3#Jacquard12-Regular&quot;); font-size: 20px;" />
 </ui:UXML>

@@ -8,7 +8,6 @@ public static class LightManager
     private static WaitForSeconds waitTime = new WaitForSeconds(.5f);
     public static IEnumerator MakeLightOscillate(Light2D light)
     {
-        Debug.Log("Its happening!");
         bool small = false;
         while (light != null)
         {

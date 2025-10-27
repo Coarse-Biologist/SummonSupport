@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -9,7 +10,7 @@ public class Projectile : MonoBehaviour
 
     public ProjectileAbility ability;
     public int piercedAlready = 0;
-    public int splitAlready = 0;
+    public bool splitAlready = false;
     LivingBeing userLivingBeing = null;
     private bool active = false;
 
@@ -44,7 +45,7 @@ public class Projectile : MonoBehaviour
     {
         SetProjectilePhysics(spawnPoint, Vector3.zero);
     }
-    void SetProjectilePhysics(GameObject spawnPoint, Vector3 newDirection)
+    void SetProjectilePhysics(GameObject spawnPoint, Vector3 newDirection, bool isSplinter = false)
     {
         if (newDirection == Vector3.zero)
             newDirection = spawnPoint.transform.right;
@@ -54,6 +55,7 @@ public class Projectile : MonoBehaviour
         float angle = Mathf.Atan2(newDirection.y, newDirection.x) * Mathf.Rad2Deg;
 
         transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
+
     }
     public void SetEffects(GameObject effectOnHit)
     {
@@ -106,6 +108,7 @@ public class Projectile : MonoBehaviour
             CombatStatHandler.HandleEffectPackages(ability, userLivingBeing, otherLivingBeing, false);
             HandleOnHitBehaviour(otherLivingBeing);
         }
+        else Debug.Log("Not active and therefore just a moving sprite");
 
     }
 
@@ -136,7 +139,12 @@ public class Projectile : MonoBehaviour
 
                     break;
                 case OnHitBehaviour.Split:
-                    SplitProjectile(other);
+                    if (!splitAlready)
+                        SplitProjectile(other);
+                    else
+                    {
+                        Destroy(gameObject);
+                    }
                     break;
                 case OnHitBehaviour.Destroy:
                     DestroyProjectile();
@@ -153,39 +161,34 @@ public class Projectile : MonoBehaviour
     }
     void SplitProjectile(LivingBeing other)
     {
+        splitAlready = true;
         int maxSplit = ability.MaxSplit;
         if (modHandler != null)
         {
-            maxSplit += modHandler.GetModAttributeByType(ability, AbilityModTypes.MaxSplit);
+            maxSplit += modHandler.GetModAttributeByType(ability, AbilityModTypes.MaxSplit) + 1;
         }
-        else Debug.Log($"modhandler is maybe null? {modHandler}");
-        Debug.Log($"Split already {splitAlready} times. max split = {maxSplit}. Abilities default max = {ability.MaxSplit}");
-        if (splitAlready >= maxSplit && piercedAlready >= modHandler.GetModAttributeByType(ability, AbilityModTypes.MaxPierce))
+        //int left = -1;
+        for (int i = 0; i < maxSplit; i += 1) // i starts at -1, code block is completed as long as i is less than or equal to one. upon completion it goes up by 2. the code block will therefore happen once?
         {
-            Debug.Log($"pierced already = {piercedAlready}.");
-            DestroyProjectile();
-        }
-        else
-        {
-            splitAlready++;
-            for (int i = -1; i <= 1; i += 2) // -1 and +1
-            {
-                Quaternion rotation = Quaternion.Euler(0, 0, i * ability.SplitAngleOffset);
-                Vector3 direction = rotation * transform.right;
 
-                GameObject newProjectile = Instantiate(ability.Projectile, transform.position, Quaternion.identity);
-                Projectile projectileScript = newProjectile.GetComponent<Projectile>();
-                projectileScript.ignoreGameObjects = new List<GameObject>(ignoreGameObjects) { other.gameObject };
-                projectileScript.ability = ability;
-                projectileScript.splitAlready = this.splitAlready;
-                projectileScript.SetProjectilePhysics(gameObject, direction);
-                projectileScript.SetParticleTrailEffects(direction);
-                Destroy(newProjectile, ability.Lifetime);
+            Debug.Log("for loop is being carried out in the split func of the projectile script");
+            Quaternion rotation;
+            rotation = Quaternion.Euler(0, 0, (float)Math.Cos(45 * i) * ability.SplitAngleOffset);
 
-            }
+            Vector3 direction = rotation * transform.right;
+            GameObject newProjectile = Instantiate(ability.Projectile, transform.position, Quaternion.identity);
+            Projectile projectileScript = newProjectile.GetComponent<Projectile>();
+            projectileScript.ignoreGameObjects = new List<GameObject>(ignoreGameObjects) { other.gameObject };
+            projectileScript.ability = ability;
+            projectileScript.splitAlready = this.splitAlready;
+            projectileScript.SetProjectilePhysics(gameObject, direction);
+            projectileScript.SetParticleTrailEffects(direction);
+            projectileScript.SetActive();
+            Destroy(newProjectile, ability.Lifetime);
         }
     }
-
-
-
 }
+
+
+
+

@@ -25,19 +25,16 @@ public class Mod_Projectile : Mod_Base
     }
     public void Mod_Pierce(int changeValue)
     {
-        Debug.Log("AM I ADDING ANY VALUE TO THE PIERCE MAX?");
 
         MaxPierce_Mod += changeValue;
     }
     public void Mod_Ricochet(int changeValue)
     {
-        Debug.Log("AM I ADDING ANY VALUE TO THE rICOCHET MAX?");
 
         MaxRicochet_Mod += changeValue;
     }
     public void Mod_Split(int changeValue)
     {
-        Debug.Log("AM I ADDING ANY VALUE TO THE SPLIT MAX?");
         MaxSplit_Mod += changeValue;
     }
 }

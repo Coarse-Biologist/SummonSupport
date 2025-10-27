@@ -32,7 +32,7 @@ public class Aura : MonoBehaviour
 
     void Start()
     {
-        Debug.Log("Aura script starts here and now");
+        //Debug.Log("Aura script starts here and now");
         if (SetSplineAnimator())
         {
             if (TryGetComponent<CircleCollider2D>(out CircleCollider2D colliderCito))
@@ -46,15 +46,15 @@ public class Aura : MonoBehaviour
         Invoke("Activate", ActivationTime);
         if (TryGetComponent<Light2D>(out Light2D FoundlightScript))
         {
-            Debug.Log("Light script detected");
+            //Debug.Log("Light script detected");
             lightScript = FoundlightScript;
             StartCoroutine(LightManager.MakeLightOscillate(lightScript));
             if (TryGetComponent<ParticleSystem>(out ParticleSystem ps))
             {
-                Debug.Log("changing color to color");
+                //Debug.Log("changing color to color");
                 lightScript.color = Color.green;
                 lightScript.intensity = 3;
-                Debug.Log($"changing color to {lightScript.color}");
+                //Debug.Log($"changing color to {lightScript.color}");
 
             }
         }
@@ -125,7 +125,7 @@ public class Aura : MonoBehaviour
                         SpawnOnHitEffect(otherLivingBeing, conjureAbility.SpawnEffectOnHit);
                     }
                     otherLivingBeing.AlterAbilityList(ability, true);
-                    Debug.Log($"Effects of {ability.Name} is being handled.");
+                    //Debug.Log($"Effects of {ability.Name} is being handled.");
                     CombatStatHandler.HandleEffectPackages(ability, caster, otherLivingBeing, false);
                 }
             }
