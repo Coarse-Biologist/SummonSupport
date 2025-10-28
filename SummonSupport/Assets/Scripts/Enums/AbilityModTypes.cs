@@ -3,23 +3,24 @@ using UnityEngine;
 public enum AbilityModTypes
 {
     None,
-    Cost,
-    Cooldown,
-    Heal,
-    HealOverTime,
-    Damage,
-    DamageOverTime,
-    Duration,
+    Cost, // Implimented
+    Cooldown, // implimented
+    Heal, //implemented
+    HealOverTime,//implemented
+    Damage, // implimented
+    DamageOverTime, // implimented
+    Duration, // implimented
     Radius,
     Speed,
     Range,
     Width,
-    MakePierce,
-    MaxPierce,
-    MakeRicochet,
-    MaxRicochet,
-    MakeSplit,
-    MaxSplit,
+    PierceOnHit, //  implimented
+    MaxPierce, //  implimented
+    RicochetOnHit, // rather implimented
+    MaxRicochet, // rather implimented
+    SplitOnHit, //  implimented
+    MaxSplit, // implimented
+    ProjectileNumber,
     StatusEffect,
 
 }

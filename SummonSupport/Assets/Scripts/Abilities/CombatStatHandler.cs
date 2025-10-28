@@ -13,6 +13,7 @@ public static class CombatStatHandler
     private static WaitForSeconds tickRate = new WaitForSeconds(tickRateFloat);
     private static Ability currentAbility;
     private static AbilityModHandler modHandler;
+    private static Mod_Base mod;
 
 
 
@@ -27,14 +28,19 @@ public static class CombatStatHandler
         modHandler = caster.gameObject.GetComponent<AbilityModHandler>();
         if (!forSelf) theTarget = targetStats;
 
-
+        mod = modHandler.GetAbilityMod(ability);
         foreach (EffectPackage package in ability.TargetTypeAndEffects)
         {
             if (forSelf && package.TargetType == TargetType.Self || !forSelf && package.TargetType == TargetType.Target)
             {
-                if (package.Heal.Value > 0) AdjustHealValue(package.Heal.Value, theTarget, casterStats);
-                if (package.HealOverTime.Value > 0) HandleApplyDOT(ability, target, AttributeType.CurrentHitpoints, package.HealOverTime.Value, package.HealOverTime.Duration);
-
+                if (package.Heal.Value > 0)
+                {
+                    AdjustHealValue(package.Heal.Value, theTarget, casterStats);
+                }
+                if (package.HealOverTime.Value > 0)
+                {
+                    HandleApplyDOT(ability, target, AttributeType.CurrentHitpoints, package.HealOverTime.Value, package.HealOverTime.Duration, AbilityModTypes.HealOverTime);
+                }
                 if (package.Damage.Count > 0)
                 {
                     foreach (Damage_AT damage in package.Damage)
@@ -91,7 +97,6 @@ public static class CombatStatHandler
     public static float AdjustDamageValue(Damage_AT damage_AT, LivingBeing target, LivingBeing caster = null, SpecialAbilityAttribute specialAbilityAttribute = SpecialAbilityAttribute.None)
     {
         float damageValue = GetDamageByType(damage_AT, target);
-        int dmgmod = modHandler.GetModAttributeByType(currentAbility, AbilityModTypes.Damage);
         damageValue += modHandler.GetModAttributeByType(currentAbility, AbilityModTypes.Damage);
         if (damage_AT.Element != Element.None) damageValue = AdjustBasedOnAffinity(damage_AT.Element, damageValue, caster, target);
         if (damage_AT.Physical != PhysicalType.None) damageValue = AdjustBasedOnArmor(damage_AT.Physical, damageValue, target);
@@ -109,6 +114,8 @@ public static class CombatStatHandler
     }
     public static float AdjustHealValue(float healValue, LivingBeing target, LivingBeing caster = null)
     {
+        if (mod != null)
+            healValue += mod.GetModdedAttribute(AbilityModTypes.Heal);
         float newHP = Mathf.Min(healValue + target.GetAttribute(AttributeType.CurrentHitpoints), target.GetAttribute(AttributeType.MaxHitpoints));
         target.SetAttribute(AttributeType.CurrentHitpoints, newHP);
         //UnityEngine.Debug.Log($"healing {target.Name} for {healValue}");
@@ -138,8 +145,17 @@ public static class CombatStatHandler
     }
     public static float AdjustAndApplyDOT(Ability ability, DamageoT_AT damageOT, LivingBeing target, LivingBeing caster = null)
     {
+
         float damageValue = -damageOT.Value;
         float duration = damageOT.Duration;
+
+        if (mod != null)
+        {
+            damageValue += modHandler.GetModAttributeByType(ability, AbilityModTypes.DamageOverTime);
+            duration += modHandler.GetModAttributeByType(ability, AbilityModTypes.Duration);
+        }
+
+
         Element element = damageOT.Element;
         PhysicalType physical = damageOT.Physical;
         if (damageOT.Element != Element.None) damageValue = AdjustBasedOnAffinity(element, damageValue, caster, target); // damage value is opposite?
@@ -219,11 +235,13 @@ public static class CombatStatHandler
 
     #endregion
 
-    private static void HandleApplyDOT(Ability ability, LivingBeing target, AttributeType attributeType, float newValue, float duration)
+    private static void HandleApplyDOT(Ability ability, LivingBeing target, AttributeType attributeType, float changeValue, float duration, AbilityModTypes modType = AbilityModTypes.None)
     {
         //UnityEngine.Debug.Log($"Changing {target}s regen by {newValue}");
-        target.ChangeRegeneration(attributeType, newValue);
-        target.StartCoroutine(ResetRegeneration(ability, target, attributeType, newValue, duration));
+        if (mod != null)
+            changeValue += mod.GetModdedAttribute(modType);
+        target.ChangeRegeneration(attributeType, changeValue);
+        target.StartCoroutine(ResetRegeneration(ability, target, attributeType, changeValue, duration));
     }
     private static IEnumerator ResetRegeneration(Ability ability, LivingBeing target, AttributeType attributeType, float newValue, float duration)
     {

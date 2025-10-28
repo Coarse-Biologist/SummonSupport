@@ -46,26 +46,30 @@ public class TeleportAbility : Ability
     public override bool Activate(GameObject user)
     {
         throw new System.NotImplementedException();
-    }   
+    }
 
     public IEnumerator TeleportToBeing(GameObject user, GameObject target)
     {
-        if(target != null && user != null)
+        if (target != null && user != null)
         {
-            GameObject onHitEffectInstance = Instantiate(EffectOnActivate, user.transform.position, Quaternion.identity, user.transform);
-    
-            EffectColorChanger.ChangeObjectsParticleSystemColor(user.GetComponent<LivingBeing>(), onHitEffectInstance);
-    
-            yield return new WaitForSeconds(ActivationSpeed);
-    
-            user.transform.position = target.transform.position;
-    
-            foreach (Ability ability in ActivateOnArrive)
+            if (!user.TryGetComponent<LivingBeing>(out LivingBeing livingBeing)) yield return new WaitForSeconds(ActivationSpeed);
+            else
             {
-                ability.Activate(user);
+                GameObject onHitEffectInstance = Instantiate(EffectOnActivate, user.transform.position, Quaternion.identity, user.transform);
+
+                EffectColorChanger.ChangeObjectsParticleSystemColor(livingBeing, onHitEffectInstance);
+
+                yield return new WaitForSeconds(ActivationSpeed);
+
+                user.transform.position = target.transform.position;
+
+                foreach (Ability ability in ActivateOnArrive)
+                {
+                    ability.Activate(user);
+                }
             }
         }
         else yield return new WaitForSeconds(ActivationSpeed);
- 
+
     }
 }

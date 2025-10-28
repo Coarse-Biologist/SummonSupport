@@ -348,7 +348,6 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     }
     private void AttemptModification(AbilityModTypes modAttribute)
     {
-        Debug.Log($"{modAttribute} {selectedAbility} {selectedModHandler}");
         if (selectedAbility == null) return;
         if (selectedModHandler == null) return;
         if (selectedModType == AbilityModTypes.None) return;

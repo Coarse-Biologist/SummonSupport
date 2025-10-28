@@ -15,7 +15,7 @@ public class Projectile : MonoBehaviour
     private bool active = false;
 
     private AbilityModHandler modHandler;
-    private Mod_Projectile projectileMod;
+    private Mod_Base projectileMod;
 
 
 
@@ -41,16 +41,18 @@ public class Projectile : MonoBehaviour
 
 
 
-    void SetProjectilePhysics(GameObject spawnPoint)
-    {
-        SetProjectilePhysics(spawnPoint, Vector3.zero);
-    }
-    void SetProjectilePhysics(GameObject spawnPoint, Vector3 newDirection, bool isSplinter = false)
+
+    public void SetProjectilePhysics(GameObject spawnPoint, Vector3 newDirection, bool isSplinter = false)
     {
         if (newDirection == Vector3.zero)
             newDirection = spawnPoint.transform.right;
         Rigidbody2D rb = GetComponent<Rigidbody2D>();
-        rb.linearVelocity = newDirection * ability.Speed;
+        float speed = ability.Speed;
+        if (modHandler != null)
+        {
+            speed += modHandler.GetModAttributeByType(ability, AbilityModTypes.Speed);
+        }
+        rb.linearVelocity = newDirection * speed;
 
         float angle = Mathf.Atan2(newDirection.y, newDirection.x) * Mathf.Rad2Deg;
 
@@ -67,11 +69,11 @@ public class Projectile : MonoBehaviour
         GameObject instance;
         if (SpawnEffectOnHit != null)
         {
-            //Debug.Log("This happens, excellent");
+            Debug.Log($"The on hit effect for {ability.Name} is being spawned");
             instance = Instantiate(ability.SpawnEffectOnHit, targetLivingBeing.transform.position, Quaternion.identity, targetLivingBeing.transform.transform);
             Destroy(instance, instance.GetComponent<ParticleSystem>().main.duration);
         }
-        //else Debug.Log("This happens but is null");
+        else Debug.Log($"there is no on hit effect for {ability.Name}");
     }
     public void SetParticleTrailEffects(Vector2 direction) // -user.transform.right
     {
@@ -114,55 +116,40 @@ public class Projectile : MonoBehaviour
 
     void HandleOnHitBehaviour(LivingBeing other)
     {
-        List<OnHitBehaviour> modBehaviour = new();
+        bool splitMode = false;
+        Debug.Log($"Handling On hit behavior");
 
-        if (modHandler != null)
-        {
-            modBehaviour = modHandler.GetHitBehaviour(ability);
-        }
-        if (modBehaviour.Count() == 0) modBehaviour = new List<OnHitBehaviour> { ability.PiercingMode };
-        foreach (OnHitBehaviour behaviour in modBehaviour)
-        {
-            Debug.Log($"Handling behavior {behaviour}");
-
-            switch (behaviour)
+        if (!splitAlready)
+            if (ability.PiercingMode == OnHitBehaviour.Split || modHandler != null && modHandler.GetModAttributeByType(ability, AbilityModTypes.SplitOnHit) != 0)
             {
-                case OnHitBehaviour.Ricochet:
-                    break;
-                case OnHitBehaviour.Pierce:
-                    if (piercedAlready == modHandler.GetModAttributeByType(ability, AbilityModTypes.MaxPierce))
-                    {
-                        Debug.Log($"pierced already = {piercedAlready}.");
-                        DestroyProjectile();
-                    }
-                    piercedAlready++;
-
-                    break;
-                case OnHitBehaviour.Split:
-                    if (!splitAlready)
-                        SplitProjectile(other);
-                    else
-                    {
-                        Destroy(gameObject);
-                    }
-                    break;
-                case OnHitBehaviour.Destroy:
-                    DestroyProjectile();
-                    break;
+                SplitProjectile(other);
+                splitMode = true;
             }
+        if (ability.PiercingMode == OnHitBehaviour.Pierce || (modHandler != null && modHandler.GetModAttributeByType(ability, AbilityModTypes.PierceOnHit) != 0))
+        {
+
+            if (piercedAlready == modHandler.GetModAttributeByType(ability, AbilityModTypes.MaxPierce) + ability.MaxPierce)
+            {
+                if (!splitMode || splitAlready)
+                {
+                    Debug.Log($"pierced already = {piercedAlready}.");
+                    Destroy(gameObject);
+                }
+            }
+            else
+                piercedAlready++;
         }
+        else Destroy(gameObject);
     }
 
-    void DestroyProjectile()
-    {
-        //probably casue effects if hitting an acceptable enemy?
 
-        Destroy(gameObject);
-    }
+
+
     void SplitProjectile(LivingBeing other)
     {
         splitAlready = true;
         int maxSplit = ability.MaxSplit;
+        int totalAngle = ability.SplitAngleOffset;
         if (modHandler != null)
         {
             maxSplit += modHandler.GetModAttributeByType(ability, AbilityModTypes.MaxSplit) + 1;
@@ -173,12 +160,35 @@ public class Projectile : MonoBehaviour
 
             Debug.Log("for loop is being carried out in the split func of the projectile script");
             Quaternion rotation;
-            rotation = Quaternion.Euler(0, 0, (float)Math.Cos(45 * i) * ability.SplitAngleOffset);
+            rotation = Quaternion.Euler(0, 0, (float)Math.Sin(45 * i) * (10 + 5 * i));
 
             Vector3 direction = rotation * transform.right;
             GameObject newProjectile = Instantiate(ability.Projectile, transform.position, Quaternion.identity);
             Projectile projectileScript = newProjectile.GetComponent<Projectile>();
             projectileScript.ignoreGameObjects = new List<GameObject>(ignoreGameObjects) { other.gameObject };
+            projectileScript.ability = ability;
+            projectileScript.splitAlready = this.splitAlready;
+            projectileScript.SetProjectilePhysics(gameObject, direction);
+            projectileScript.SetParticleTrailEffects(direction);
+            projectileScript.SetActive();
+            Destroy(newProjectile, ability.Lifetime);
+        }
+    }
+    public void ShootMultiple()
+    {
+        int shots = 1;
+        if (modHandler != null)
+        {
+            shots += modHandler.GetModAttributeByType(ability, AbilityModTypes.ProjectileNumber);
+        }
+        for (int i = 0; i < shots; i += 1)
+        {
+            Debug.Log("for loop is being carried out in the Shoot multiple func of the projectile script");
+            Quaternion rotation;
+            rotation = Quaternion.Euler(0, 0, (float)Math.Sin(45 * i) * (10 + 5 * i));
+            Vector3 direction = rotation * transform.right;
+            GameObject newProjectile = Instantiate(ability.Projectile, transform.position, Quaternion.identity);
+            Projectile projectileScript = newProjectile.GetComponent<Projectile>();
             projectileScript.ability = ability;
             projectileScript.splitAlready = this.splitAlready;
             projectileScript.SetProjectilePhysics(gameObject, direction);
