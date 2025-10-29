@@ -43,10 +43,10 @@ public class ProjectileAbility : Ability
             float rotZ = (float)Math.Sin(45 * i) * (10 + 5 * i);
             Quaternion rotation = Quaternion.Euler(0, 0, rotZ);
             Vector3 newDirection = rotation * direction.right;
-            projectileScript.ability = this;
+
+            projectileScript.SetActive(this, user.GetComponent<LivingBeing>(), modHandler);
             projectileScript.SetProjectilePhysics(projectile, newDirection);
             projectileScript.SetParticleTrailEffects(newDirection);
-            projectileScript.SetActive(user);
 
             Destroy(projectile, Lifetime);
         }

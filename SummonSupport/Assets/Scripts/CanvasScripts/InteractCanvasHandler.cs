@@ -72,12 +72,15 @@ public class InteractCanvasHandler : MonoBehaviour
     {
         Vector2 loc = PlayerStats.Instance.transform.position;
         loc = new Vector2(loc.x, loc.y + 1);
-        int XPgained = (int)enemyStats.XP_OnDeath;
         GameObject xpCanvas = Instantiate(xpTextGUI, loc, Quaternion.identity);
         if (xpCanvas.TryGetComponent(out TextMeshProUGUI canvasGUI))
-            canvasGUI.text = $"{XPgained} XP";
-
-        Destroy(xpCanvas, 2f);
+            canvasGUI.text = $"{(int)enemyStats.XP_OnDeath} XP";
+        if (xpCanvas.TryGetComponent(out Rigidbody2D rb))
+        {
+            rb.AddForce(new Vector2(((Random.Range(0f, 1f) > 0.5f) ? 1 : -1) * 2, 4), ForceMode2D.Impulse);
+            //the X parameter of the func is 1 or -1, dependin gon whether random range is > .5 or not
+        }
+        Destroy(xpCanvas, .8f);
     }
 
 

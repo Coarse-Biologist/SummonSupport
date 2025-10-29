@@ -19,7 +19,7 @@ public class Mod_Base
     public float MaxPierce_Mod { get; protected set; } = 0;
     public float MaxSplit_Mod { get; protected set; } = 0;
     public float MaxRicochet_Mod { get; protected set; } = 0;
-    public float ProjectileNumber_Mod { get; protected set; } = 5;
+    public float ProjectileNumber_Mod { get; protected set; } = 0;
 
 
 

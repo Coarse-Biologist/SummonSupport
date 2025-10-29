@@ -1,21 +1,26 @@
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
 using UnityEngine;
 
+[RequireComponent(typeof(Collider2D))]
 public class Projectile : MonoBehaviour
 {
     List<GameObject> ignoreGameObjects = new List<GameObject>();
     public GameObject SpawnEffectOnHit { get; set; }
 
     public ProjectileAbility ability;
-    public int piercedAlready = 0;
+    public int piercedAlready { private set; get; } = 0;
+    public int ricochedAlready { private set; get; } = 0;
+
     public bool splitAlready = false;
     LivingBeing userLivingBeing = null;
     private bool active = false;
 
-    private AbilityModHandler modHandler;
-    private Mod_Base projectileMod;
+    public AbilityModHandler modHandler { private set; get; }
+    public Mod_Base projectileMod { private set; get; }
+    Rigidbody2D rb;
 
 
 
@@ -33,12 +38,31 @@ public class Projectile : MonoBehaviour
         SetProjectilePhysics(spawnAt, lookAt);
         Destroy(gameObject, ability.Lifetime); // TODO: change from lifetime to range
     }
-    public void SetActive(GameObject user = null)
+    public void SetActive(ProjectileAbility ab, LivingBeing lb, AbilityModHandler handler = null)
     {
-        if (user.TryGetComponent(out LivingBeing livingBeing))
-            userLivingBeing = livingBeing;
-        ignoreGameObjects.Add(user);
+        ability = ab;
+
+        userLivingBeing = lb;
+        modHandler = handler;
+        if (modHandler != null)
+        {
+            projectileMod = modHandler.GetAbilityMod(ability);
+        }
+        // set ricochet properties if it should.
+        if (ability.PiercingMode == OnHitBehaviour.Ricochet || (projectileMod != null && projectileMod.GetModdedAttribute(AbilityModTypes.MaxRicochet) > 0))
+        {
+            if (ricochedAlready < projectileMod.GetModdedAttribute(AbilityModTypes.MaxRicochet))
+            {
+                Debug.Log($"physics mat is being assigned");
+                PhysicsMaterial2D mat = new PhysicsMaterial2D();
+                mat.bounciness = 2f;
+                mat.friction = 0f;
+                GetComponent<Collider2D>().sharedMaterial = mat;
+            }
+        }
+        ignoreGameObjects.Add(lb.gameObject);
         active = true;
+
     }
 
 
@@ -48,7 +72,7 @@ public class Projectile : MonoBehaviour
     {
         if (newDirection == Vector3.zero)
             newDirection = spawnPoint.transform.right;
-        Rigidbody2D rb = GetComponent<Rigidbody2D>();
+        rb = GetComponent<Rigidbody2D>();
         float speed = ability.Speed;
         if (modHandler != null)
         {
@@ -64,6 +88,32 @@ public class Projectile : MonoBehaviour
     public void SetEffects(GameObject effectOnHit)
     {
         SpawnEffectOnHit = effectOnHit;
+    }
+
+    public void IncrementRicochet()
+    {
+        if (projectileMod == null)
+        {
+            Destroy(gameObject);
+        }
+        else if (ricochedAlready >= projectileMod.GetModdedAttribute(AbilityModTypes.MaxRicochet))
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            ReorientSpin();
+            ricochedAlready++;
+        }
+    }
+    private void ReorientSpin()
+    {
+        Vector2 v = rb.linearVelocity;
+        if (v.sqrMagnitude > 0.01f)
+        {
+            float angle = Mathf.Atan2(v.y, v.x) * Mathf.Rad2Deg;
+            transform.rotation = Quaternion.Euler(0, 0, angle);
+        }
     }
 
     private void SpawnEffect(LivingBeing targetLivingBeing, GameObject SpawnEffectOnHit)
@@ -168,11 +218,11 @@ public class Projectile : MonoBehaviour
             GameObject newProjectile = Instantiate(ability.Projectile, transform.position, Quaternion.identity);
             Projectile projectileScript = newProjectile.GetComponent<Projectile>();
             projectileScript.ignoreGameObjects = new List<GameObject>(ignoreGameObjects) { other.gameObject };
-            projectileScript.ability = ability;
+
             projectileScript.splitAlready = this.splitAlready;
+            projectileScript.SetActive(ability, userLivingBeing, modHandler);
             projectileScript.SetProjectilePhysics(gameObject, direction);
             projectileScript.SetParticleTrailEffects(direction);
-            projectileScript.SetActive();
             Destroy(newProjectile, ability.Lifetime);
         }
     }

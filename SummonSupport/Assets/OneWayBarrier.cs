@@ -9,8 +9,16 @@ public class OneWayBarrier : MonoBehaviour
     private WaitForSeconds waitTime = new WaitForSeconds(1f);
     private List<Collider2D> triggersToDeactivate = new();
 
+    void OnCollisionEnter2D(UnityEngine.Collision2D collision)
+    {
+        if (collision.gameObject.TryGetComponent(out Projectile projectile))
+        {
+            projectile.IncrementRicochet();
+        }
+    }
     void OnTriggerEnter2D(Collider2D collider)
     {
+
         //Debug.Log($"on exit function is called. the collider culprit was {collider}");
         if (collider.gameObject.TryGetComponent<EnemyStats>(out EnemyStats enemyStats))
         {
@@ -43,5 +51,4 @@ public class OneWayBarrier : MonoBehaviour
     }
 
 }
-
 

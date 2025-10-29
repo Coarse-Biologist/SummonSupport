@@ -51,7 +51,7 @@ public class AbilityModHandler : MonoBehaviour
 
     public static readonly Dictionary<Type, List<AbilityModTypes>> ModOptions = new()
         {
-            {typeof(ProjectileAbility), new List<AbilityModTypes>() { AbilityModTypes.ProjectileNumber, AbilityModTypes.MaxPierce, AbilityModTypes.MaxSplit, AbilityModTypes.Cost, AbilityModTypes.Cooldown, AbilityModTypes.Damage, AbilityModTypes.DamageOverTime, AbilityModTypes.Heal, AbilityModTypes.HealOverTime } },
+            {typeof(ProjectileAbility), new List<AbilityModTypes>() { AbilityModTypes.ProjectileNumber, AbilityModTypes.MaxPierce, AbilityModTypes.MaxSplit, AbilityModTypes.MaxRicochet, AbilityModTypes.Cost, AbilityModTypes.Cooldown, AbilityModTypes.Damage, AbilityModTypes.DamageOverTime, AbilityModTypes.Heal, AbilityModTypes.HealOverTime } },
             {typeof(TargetMouseAbility),new List<AbilityModTypes>() { AbilityModTypes.Cost, AbilityModTypes.Cooldown, AbilityModTypes.Damage, AbilityModTypes.DamageOverTime, AbilityModTypes.Heal, AbilityModTypes.HealOverTime } },
             {typeof(ConjureAbility), new List<AbilityModTypes>() { AbilityModTypes.Cost, AbilityModTypes.Cooldown, AbilityModTypes.Damage, AbilityModTypes.DamageOverTime, AbilityModTypes.Heal, AbilityModTypes.HealOverTime } },
             {typeof(AuraAbility), new List<AbilityModTypes>() { AbilityModTypes.Cost, AbilityModTypes.Cooldown, AbilityModTypes.Damage, AbilityModTypes.DamageOverTime, AbilityModTypes.Heal, AbilityModTypes.HealOverTime } },
