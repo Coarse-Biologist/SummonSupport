@@ -27,9 +27,9 @@ public class ProjectileAbility : Ability
     public bool Activate(GameObject user, GameObject spawnPoint)
     {
 
-        return Activate(user, spawnPoint, spawnPoint.transform);
+        return Activate(user, spawnPoint.transform);
     }
-    public bool Activate(GameObject user, GameObject spawnPoint, Transform direction)
+    public bool Activate(GameObject user, Transform direction)
     {
         int shots = 1;
         if (user.TryGetComponent(out AbilityModHandler modHandler))
@@ -46,6 +46,7 @@ public class ProjectileAbility : Ability
             projectileScript.ability = this;
             projectileScript.SetProjectilePhysics(projectile, newDirection);
             projectileScript.SetParticleTrailEffects(newDirection);
+            projectileScript.SetActive(user);
 
             Destroy(projectile, Lifetime);
         }

@@ -32,17 +32,19 @@ public class Projectile : MonoBehaviour
         ignoreGameObjects.Add(user);
         SetProjectilePhysics(spawnAt, lookAt);
         Destroy(gameObject, ability.Lifetime); // TODO: change from lifetime to range
-        SetActive();
     }
-    private void SetActive()
+    public void SetActive(GameObject user = null)
     {
+        if (user.TryGetComponent(out LivingBeing livingBeing))
+            userLivingBeing = livingBeing;
+        ignoreGameObjects.Add(user);
         active = true;
     }
 
 
 
 
-    public void SetProjectilePhysics(GameObject spawnPoint, Vector3 newDirection, bool isSplinter = false)
+    public void SetProjectilePhysics(GameObject spawnPoint, Vector3 newDirection)
     {
         if (newDirection == Vector3.zero)
             newDirection = spawnPoint.transform.right;
@@ -120,12 +122,12 @@ public class Projectile : MonoBehaviour
         Debug.Log($"Handling On hit behavior");
 
         if (!splitAlready)
-            if (ability.PiercingMode == OnHitBehaviour.Split || modHandler != null && modHandler.GetModAttributeByType(ability, AbilityModTypes.SplitOnHit) != 0)
+            if (ability.PiercingMode == OnHitBehaviour.Split || modHandler != null && modHandler.GetModAttributeByType(ability, AbilityModTypes.MaxSplit) != 0)
             {
                 SplitProjectile(other);
                 splitMode = true;
             }
-        if (ability.PiercingMode == OnHitBehaviour.Pierce || (modHandler != null && modHandler.GetModAttributeByType(ability, AbilityModTypes.PierceOnHit) != 0))
+        if (ability.PiercingMode == OnHitBehaviour.Pierce || (modHandler != null && modHandler.GetModAttributeByType(ability, AbilityModTypes.MaxPierce) != 0))
         {
 
             if (piercedAlready == modHandler.GetModAttributeByType(ability, AbilityModTypes.MaxPierce) + ability.MaxPierce)
@@ -174,29 +176,7 @@ public class Projectile : MonoBehaviour
             Destroy(newProjectile, ability.Lifetime);
         }
     }
-    public void ShootMultiple()
-    {
-        int shots = 1;
-        if (modHandler != null)
-        {
-            shots += modHandler.GetModAttributeByType(ability, AbilityModTypes.ProjectileNumber);
-        }
-        for (int i = 0; i < shots; i += 1)
-        {
-            Debug.Log("for loop is being carried out in the Shoot multiple func of the projectile script");
-            Quaternion rotation;
-            rotation = Quaternion.Euler(0, 0, (float)Math.Sin(45 * i) * (10 + 5 * i));
-            Vector3 direction = rotation * transform.right;
-            GameObject newProjectile = Instantiate(ability.Projectile, transform.position, Quaternion.identity);
-            Projectile projectileScript = newProjectile.GetComponent<Projectile>();
-            projectileScript.ability = ability;
-            projectileScript.splitAlready = this.splitAlready;
-            projectileScript.SetProjectilePhysics(gameObject, direction);
-            projectileScript.SetParticleTrailEffects(direction);
-            projectileScript.SetActive();
-            Destroy(newProjectile, ability.Lifetime);
-        }
-    }
+
 }
 
 

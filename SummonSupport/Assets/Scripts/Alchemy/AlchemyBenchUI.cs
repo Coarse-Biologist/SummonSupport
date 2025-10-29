@@ -296,6 +296,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
 
         clearButton.RegisterCallback<ClickEvent>(e => SetSelectedAbility(null));
         confirmButton.RegisterCallback<ClickEvent>(e => AttemptModification(selectedModType));
+        confirmButton.RegisterCallback<ClickEvent>(e => DisplayAbilityModOptions(selectedAbility));
 
         SetInstructionsText("Select an ability to modify.");
         DisplayAllModableAbilities();
@@ -313,9 +314,6 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
                 button.RegisterCallback<ClickEvent>(e => SetSelectedAbility(ability));
                 button.RegisterCallback<ClickEvent>(e => SetSelectedModHandler(playerModHandler));
                 button.RegisterCallback<ClickEvent>(e => DisplayAbilityModOptions(ability));
-
-
-
             }
         foreach (GameObject minion in alchemyHandler.activeMinions)
         {
@@ -332,6 +330,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     }
     private void DisplayAbilityModOptions(Ability ability)
     {
+        if (selectedAbility == null) return;
         ClearPanel(bottomRightPanel);
         SetInstructionsText($"Select an attribute for the ability which you would like to upgrade.");
         foreach (AbilityModTypes modableAttribute in selectedModHandler.GetModableAttributes(ability))

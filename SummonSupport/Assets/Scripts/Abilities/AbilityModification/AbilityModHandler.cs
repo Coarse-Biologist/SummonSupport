@@ -8,7 +8,7 @@ using UnityEngine;
 public class AbilityModHandler : MonoBehaviour
 {
     public Dictionary<Ability, Mod_Base> ModdedAbilities { private set; get; } = new();
-    public static readonly List<AbilityModTypes> BoolMods = new() { AbilityModTypes.PierceOnHit, AbilityModTypes.RicochetOnHit, AbilityModTypes.SplitOnHit };
+    public static readonly List<AbilityModTypes> BoolMods = new();
 
     public static readonly Dictionary<AbilityModTypes, int> ModIncrements = new()
 
@@ -23,9 +23,6 @@ public class AbilityModHandler : MonoBehaviour
         { AbilityModTypes.Range, 1 },
         { AbilityModTypes.Radius, 1 },
 
-        { AbilityModTypes.RicochetOnHit, 1 },
-        { AbilityModTypes.SplitOnHit, 1 },
-        { AbilityModTypes.PierceOnHit, 1 },
         { AbilityModTypes.MaxPierce, 1 },
         { AbilityModTypes.MaxSplit, 1 },
         { AbilityModTypes.MaxRicochet, 1 },
@@ -47,17 +44,14 @@ public class AbilityModHandler : MonoBehaviour
         { AbilityModTypes.Range, 30 },
         { AbilityModTypes.Radius, 100 },
 // projectile perks
-        { AbilityModTypes.PierceOnHit, 300 },
         { AbilityModTypes.MaxPierce, 150 },
-        { AbilityModTypes.SplitOnHit, 300 },
         { AbilityModTypes.MaxSplit, 150 },
-        { AbilityModTypes.RicochetOnHit, 300 },
         { AbilityModTypes.MaxRicochet, 150 },
         { AbilityModTypes.ProjectileNumber, 400 } };
 
     public static readonly Dictionary<Type, List<AbilityModTypes>> ModOptions = new()
         {
-            {typeof(ProjectileAbility), new List<AbilityModTypes>() { AbilityModTypes.ProjectileNumber, AbilityModTypes.PierceOnHit, AbilityModTypes.MaxPierce, AbilityModTypes.SplitOnHit, AbilityModTypes.MaxSplit, AbilityModTypes.Cost, AbilityModTypes.Cooldown, AbilityModTypes.Damage, AbilityModTypes.DamageOverTime, AbilityModTypes.Heal, AbilityModTypes.HealOverTime } },
+            {typeof(ProjectileAbility), new List<AbilityModTypes>() { AbilityModTypes.ProjectileNumber, AbilityModTypes.MaxPierce, AbilityModTypes.MaxSplit, AbilityModTypes.Cost, AbilityModTypes.Cooldown, AbilityModTypes.Damage, AbilityModTypes.DamageOverTime, AbilityModTypes.Heal, AbilityModTypes.HealOverTime } },
             {typeof(TargetMouseAbility),new List<AbilityModTypes>() { AbilityModTypes.Cost, AbilityModTypes.Cooldown, AbilityModTypes.Damage, AbilityModTypes.DamageOverTime, AbilityModTypes.Heal, AbilityModTypes.HealOverTime } },
             {typeof(ConjureAbility), new List<AbilityModTypes>() { AbilityModTypes.Cost, AbilityModTypes.Cooldown, AbilityModTypes.Damage, AbilityModTypes.DamageOverTime, AbilityModTypes.Heal, AbilityModTypes.HealOverTime } },
             {typeof(AuraAbility), new List<AbilityModTypes>() { AbilityModTypes.Cost, AbilityModTypes.Cooldown, AbilityModTypes.Damage, AbilityModTypes.DamageOverTime, AbilityModTypes.Heal, AbilityModTypes.HealOverTime } },

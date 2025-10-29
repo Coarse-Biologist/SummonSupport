@@ -14,11 +14,8 @@ public enum AbilityModTypes
     Speed,
     Range,
     Width,
-    PierceOnHit, //  implimented
     MaxPierce, //  implimented
-    RicochetOnHit, // rather implimented
     MaxRicochet, // rather implimented
-    SplitOnHit, //  implimented
     MaxSplit, // implimented
     ProjectileNumber,
     StatusEffect,

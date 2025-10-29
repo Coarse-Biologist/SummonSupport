@@ -17,11 +17,8 @@ public class Mod_Base
     #region Projectile variables
     public float ProjectileSpeed_Mod { get; protected set; } = 0;
     public float MaxPierce_Mod { get; protected set; } = 0;
-    public float MaxSplit_Mod { get; protected set; } = 5;
+    public float MaxSplit_Mod { get; protected set; } = 0;
     public float MaxRicochet_Mod { get; protected set; } = 0;
-    public float PiercesOnHit_Mod { get; protected set; } = 0;
-    public float SplitsOnHit_Mod { get; protected set; } = 1;
-    public float RicochetsOnHit_Mod { get; protected set; } = 0;
     public float ProjectileNumber_Mod { get; protected set; } = 5;
 
 
@@ -50,9 +47,6 @@ public class Mod_Base
             { AbilityModTypes.MaxPierce, (() => MaxPierce_Mod, v => MaxPierce_Mod = v) },
             { AbilityModTypes.MaxSplit, (() => MaxSplit_Mod, v => MaxSplit_Mod = v) },
             { AbilityModTypes.MaxRicochet, (() => MaxRicochet_Mod, v => MaxRicochet_Mod = v) },
-            { AbilityModTypes.PierceOnHit, (() => PiercesOnHit_Mod, v => PiercesOnHit_Mod = v) },
-            { AbilityModTypes.SplitOnHit, (() => SplitsOnHit_Mod, v => SplitsOnHit_Mod = v) },
-            { AbilityModTypes.RicochetOnHit, (() => RicochetsOnHit_Mod, v => RicochetsOnHit_Mod = v) },
             { AbilityModTypes.ProjectileNumber, (() => ProjectileNumber_Mod, v => ProjectileNumber_Mod = v) },
 
 
