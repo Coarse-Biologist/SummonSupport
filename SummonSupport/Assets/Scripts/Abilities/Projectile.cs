@@ -66,8 +66,6 @@ public class Projectile : MonoBehaviour
     }
 
 
-
-
     public void SetProjectilePhysics(GameObject spawnPoint, Vector3 newDirection)
     {
         if (newDirection == Vector3.zero)
@@ -90,7 +88,7 @@ public class Projectile : MonoBehaviour
         SpawnEffectOnHit = effectOnHit;
     }
 
-    public void IncrementRicochet()
+    public void HandleRicochet()
     {
         if (projectileMod == null)
         {
@@ -102,6 +100,7 @@ public class Projectile : MonoBehaviour
         }
         else
         {
+            SpawnEffect(transform.position);
             ReorientSpin();
             ricochedAlready++;
         }
@@ -114,15 +113,35 @@ public class Projectile : MonoBehaviour
             float angle = Mathf.Atan2(v.y, v.x) * Mathf.Rad2Deg;
             transform.rotation = Quaternion.Euler(0, 0, angle);
         }
+
+        ParticleSystem ps = GetComponentInChildren<ParticleSystem>();
+        if (ps != null)
+        {
+            Debug.Log("resetting particle system");
+            ps.Simulate(0f, true, true);
+            ps.Play();
+        }
+        else Debug.Log($"game object {gameObject} has no particle system");
     }
 
-    private void SpawnEffect(LivingBeing targetLivingBeing, GameObject SpawnEffectOnHit)
+    private void SpawnEffect(LivingBeing targetLivingBeing)
     {
         GameObject instance;
-        if (SpawnEffectOnHit != null)
+        if (ability.SpawnEffectOnHit != null)
         {
             Debug.Log($"The on hit effect for {ability.Name} is being spawned");
             instance = Instantiate(ability.SpawnEffectOnHit, targetLivingBeing.transform.position, Quaternion.identity, targetLivingBeing.transform.transform);
+            Destroy(instance, instance.GetComponent<ParticleSystem>().main.duration);
+        }
+        else Debug.Log($"there is no on hit effect for {ability.Name}");
+    }
+    private void SpawnEffect(Vector2 loc)
+    {
+        GameObject instance;
+        if (ability.SpawnEffectOnHit != null)
+        {
+            Debug.Log($"The on hit effect for {ability.Name} is being spawned");
+            instance = Instantiate(ability.SpawnEffectOnHit, loc, Quaternion.identity);
             Destroy(instance, instance.GetComponent<ParticleSystem>().main.duration);
         }
         else Debug.Log($"there is no on hit effect for {ability.Name}");
@@ -158,7 +177,7 @@ public class Projectile : MonoBehaviour
             if (!userLivingBeing || (!Ability.HasElementalSynergy(ability, otherLivingBeing) && !ability.ThoroughIsUsableOn(userLivingBeing, otherLivingBeing)))
                 return;
 
-            SpawnEffect(otherLivingBeing, ability.SpawnEffectOnHit);
+            SpawnEffect(otherLivingBeing);
             CombatStatHandler.HandleEffectPackages(ability, userLivingBeing, otherLivingBeing, false);
             HandleOnHitBehaviour(otherLivingBeing);
         }
@@ -168,28 +187,23 @@ public class Projectile : MonoBehaviour
 
     void HandleOnHitBehaviour(LivingBeing other)
     {
-        bool splitMode = false;
-        Debug.Log($"Handling On hit behavior");
-
         if (!splitAlready)
-            if (ability.PiercingMode == OnHitBehaviour.Split || modHandler != null && modHandler.GetModAttributeByType(ability, AbilityModTypes.MaxSplit) != 0)
+        {
+            if (ability.PiercingMode == OnHitBehaviour.Split || projectileMod != null)
             {
                 SplitProjectile(other);
-                splitMode = true;
             }
-        if (ability.PiercingMode == OnHitBehaviour.Pierce || (modHandler != null && modHandler.GetModAttributeByType(ability, AbilityModTypes.MaxPierce) != 0))
+        }
+        else if (piercedAlready < ability.MaxPierce + projectileMod.GetModdedAttribute(AbilityModTypes.MaxPierce))
         {
-
-            if (piercedAlready == modHandler.GetModAttributeByType(ability, AbilityModTypes.MaxPierce) + ability.MaxPierce)
+            piercedAlready++;
+        }
+        else if (ability.PiercingMode == OnHitBehaviour.Ricochet || projectileMod != null)
+        {
+            if (ricochedAlready < projectileMod.GetModdedAttribute(AbilityModTypes.MaxRicochet))
             {
-                if (!splitMode || splitAlready)
-                {
-                    Debug.Log($"pierced already = {piercedAlready}.");
-                    Destroy(gameObject);
-                }
+                HandleRicochet();
             }
-            else
-                piercedAlready++;
         }
         else Destroy(gameObject);
     }
@@ -201,7 +215,6 @@ public class Projectile : MonoBehaviour
     {
         splitAlready = true;
         int maxSplit = ability.MaxSplit;
-        int totalAngle = ability.SplitAngleOffset;
         if (modHandler != null)
         {
             maxSplit += modHandler.GetModAttributeByType(ability, AbilityModTypes.MaxSplit) + 1;
