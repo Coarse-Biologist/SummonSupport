@@ -80,7 +80,10 @@ public static class CombatStatHandler
     public static float AdjustDamageValue(Damage_AT damage_AT, SpecialAbilityAttribute specialAbilityAttribute = SpecialAbilityAttribute.None)
     {
         float damageValue = GetDamageByType(damage_AT);
-        damageValue += modHandler.GetModAttributeByType(currentAbility, AbilityModTypes.Damage);
+        if (modHandler != null)
+        {
+            damageValue += modHandler.GetModAttributeByType(currentAbility, AbilityModTypes.Damage);
+        }
         foreach (Element element in currentAbility.ElementTypes)
         {
             if (element != Element.None) damageValue = AdjustBasedOnAffinity(element, damageValue);

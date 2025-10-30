@@ -17,8 +17,6 @@ public class ConjureAbility : Ability
     [field: SerializeField] public bool LeaveRotation { get; protected set; }
 
 
-    [field: Tooltip("in seconds")]
-    [field: SerializeField] public float Duration { get; protected set; }
 
     [field: Header("Tracking Settings"), Tooltip("in seconds")]
     [field: SerializeField] public bool SeeksTarget { get; protected set; } = false;

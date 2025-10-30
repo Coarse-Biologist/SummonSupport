@@ -165,6 +165,7 @@ public class Projectile : MonoBehaviour
     {
         if (active)
         {
+
             if (other.gameObject.CompareTag("Projectile") || ignoreGameObjects.Contains(other.gameObject))
                 return;
 
@@ -187,25 +188,34 @@ public class Projectile : MonoBehaviour
 
     void HandleOnHitBehaviour(LivingBeing other)
     {
-        if (!splitAlready)
+        Debug.Log("Handling On hit behaviour");
+
+        if (!splitAlready && ability.PiercingMode == OnHitBehaviour.Split || modHandler.GetModAttributeByType(ability, AbilityModTypes.MaxSplit) > 0)
         {
-            if (ability.PiercingMode == OnHitBehaviour.Split || projectileMod != null)
-            {
-                SplitProjectile(other);
-            }
+            Debug.Log("Trying to split");
+            SplitProjectile(other);
         }
-        else if (piercedAlready < ability.MaxPierce + projectileMod.GetModdedAttribute(AbilityModTypes.MaxPierce))
+        else if (piercedAlready < ability.MaxPierce + modHandler.GetModAttributeByType(ability, AbilityModTypes.MaxPierce))
         {
+            Debug.Log("Trying to pierce");
+
             piercedAlready++;
         }
         else if (ability.PiercingMode == OnHitBehaviour.Ricochet || projectileMod != null)
         {
             if (ricochedAlready < projectileMod.GetModdedAttribute(AbilityModTypes.MaxRicochet))
             {
+                Debug.Log("Trying to ricochet");
+
                 HandleRicochet();
             }
         }
-        else Destroy(gameObject);
+        else
+        {
+            Debug.Log("Trying to destroy");
+
+            Destroy(gameObject);
+        }
     }
 
 
