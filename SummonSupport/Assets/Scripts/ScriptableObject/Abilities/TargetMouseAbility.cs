@@ -16,7 +16,6 @@ public class TargetMouseAbility : Ability
     public override bool Activate(GameObject user)
     {
         LivingBeing casterStats = user.GetComponent<LivingBeing>();
-        bool onSelf = false;
         bool usedAbility = false;
         Vector2 mousePos;
         if (casterStats.CharacterTag == CharacterTag.Player) mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -28,9 +27,20 @@ public class TargetMouseAbility : Ability
         if (hit.collider != null)
             if (hit.collider.TryGetComponent<LivingBeing>(out var target))
             {
-                if (target == casterStats) onSelf = true;
-                usedAbility = ActivateAbility(user, target, mousePos);
-                CombatStatHandler.HandleEffectPackages(this, casterStats, target, onSelf);
+                if (target == casterStats)
+                    usedAbility = ActivateAbility(user, target, mousePos);
+                if (usedAbility)
+                {
+                    SpawnEffect(target, user);
+                    if (casterStats == target)
+                    {
+                        CombatStatHandler.HandleEffectPackage(this, casterStats, target, SelfEffects);
+                    }
+                    else
+                    {
+                        CombatStatHandler.HandleEffectPackage(this, casterStats, target, TargetEffects);
+                    }
+                }
             }
 
         return usedAbility;
@@ -44,9 +54,6 @@ public class TargetMouseAbility : Ability
         if (user.TryGetComponent<LivingBeing>(out var userLivingBeing))
             if (!IsUsableOn(userLivingBeing.CharacterTag, targetLivingBeing.CharacterTag))
                 return false;
-
-        SpawnEffect(targetLivingBeing, user);
-
         //cause all effects that should happen on successful hit
         return true;
     }

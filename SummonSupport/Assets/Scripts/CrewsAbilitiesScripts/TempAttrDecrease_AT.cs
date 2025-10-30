@@ -16,8 +16,6 @@ public class TempAttrChange
     [field: SerializeField] public PhysicalType PhysicalResistance { get; private set; } = PhysicalType.None;
 
     [field: SerializeField] public float Value { get; private set; } = 0f;
-    [field: SerializeField] public float Duration { get; private set; } = 1f;
-
 
 }
 

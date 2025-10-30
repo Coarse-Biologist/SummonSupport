@@ -59,7 +59,7 @@ public class Aura : MonoBehaviour
         if (TryGetComponent<CircleCollider2D>(out CircleCollider2D collider))
             collider.radius = radius;
         if (abilityMod != null) collider.radius += abilityMod.GetModdedAttribute(AbilityModTypes.Radius);
-        CombatStatHandler.HandleEffectPackages(ability, caster, caster, true);
+        CombatStatHandler.HandleEffectPackage(ability, caster, caster, ability.SelfEffects);
         if (ability is ConjureAbility)
         {
             conjureAbility = (ConjureAbility)ability;
@@ -124,7 +124,7 @@ public class Aura : MonoBehaviour
                     }
                     otherLivingBeing.AlterAbilityList(ability, true);
                     //Debug.Log($"Effects of {ability.Name} is being handled.");
-                    CombatStatHandler.HandleEffectPackages(ability, caster, otherLivingBeing, false);
+                    CombatStatHandler.HandleEffectPackage(ability, caster, otherLivingBeing, ability.TargetEffects);
                 }
             }
             else Debug.Log($"NOT usable on {other.gameObject.name}");

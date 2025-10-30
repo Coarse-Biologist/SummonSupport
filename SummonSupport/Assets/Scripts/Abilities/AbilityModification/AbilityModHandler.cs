@@ -123,7 +123,12 @@ public class AbilityModHandler : MonoBehaviour
         if (ModOptions.TryGetValue(ability.GetType(), out List<AbilityModTypes> modOptions))
         {
             foreach (AbilityModTypes modType in BoolMods)
+            {
                 if (mod.GetModdedAttribute(modType) != 0 && modOptions.Contains(modType)) modOptions.Remove(modType);
+            }
+            //bool heals = false;
+            //bool damages = false;
+
             return modOptions;
         }
         else return new List<AbilityModTypes>();

@@ -30,7 +30,7 @@ public class ConjuredObject : MonoBehaviour
         if (collision.gameObject.TryGetComponent(out LivingBeing livingBeing))
         {
             if (Ability.ThoroughIsUsableOn(Conjurer, livingBeing))
-                CombatStatHandler.HandleEffectPackages(Ability, Conjurer, livingBeing, false);
+                CombatStatHandler.HandleEffectPackage(Ability, Conjurer, livingBeing, Ability.TargetEffects);
         }
     }
 }

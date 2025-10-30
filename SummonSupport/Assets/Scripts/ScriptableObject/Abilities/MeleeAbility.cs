@@ -61,7 +61,7 @@ public class MeleeAbility : Ability
                     Target = collider.GetComponent<LivingBeing>();
 
                     SetEffects(Caster, Target);
-                    CombatStatHandler.HandleEffectPackages(this, Caster, Target);
+                    CombatStatHandler.HandleEffectPackage(this, Caster, Target, this.TargetEffects);
                     SpawnHitEffect(Target);
                     activated = true;
                 }

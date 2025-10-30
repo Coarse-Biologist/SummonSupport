@@ -178,7 +178,7 @@ public class Projectile : MonoBehaviour
                 return;
 
             SpawnEffect(otherLivingBeing);
-            CombatStatHandler.HandleEffectPackages(ability, userLivingBeing, otherLivingBeing, false);
+            CombatStatHandler.HandleEffectPackage(ability, userLivingBeing, otherLivingBeing, ability.TargetEffects);
             HandleOnHitBehaviour(otherLivingBeing);
         }
         else Debug.Log("Not active and therefore just a moving sprite");
