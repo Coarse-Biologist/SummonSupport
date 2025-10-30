@@ -342,6 +342,11 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 21300000, guid: 1a86543444ff83d47a09c25fcda93aa9,
         type: 3}
+    - target: {fileID: 4697203378900965796, guid: e4c43cb75dda4d3458057b35ce607d87,
+        type: 3}
+      propertyPath: m_AngularDamping
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4886425859411069616, guid: e4c43cb75dda4d3458057b35ce607d87,
         type: 3}
       propertyPath: crewsAbility
@@ -609,7 +614,7 @@ PrefabInstance:
     - target: {fileID: 9084318776697772798, guid: e4c43cb75dda4d3458057b35ce607d87,
         type: 3}
       propertyPath: <Abilities>k__BackingField.Array.size
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 9084318776697772798, guid: e4c43cb75dda4d3458057b35ce607d87,
         type: 3}
@@ -627,7 +632,7 @@ PrefabInstance:
         type: 3}
       propertyPath: '<Abilities>k__BackingField.Array.data[2]'
       value: 
-      objectReference: {fileID: 11400000, guid: 8f2a5a22743383f44970afda4eb890cf,
+      objectReference: {fileID: 11400000, guid: 5e39961f19654e04bb7f41a70934544c,
         type: 2}
     - target: {fileID: 9084318776697772798, guid: e4c43cb75dda4d3458057b35ce607d87,
         type: 3}
