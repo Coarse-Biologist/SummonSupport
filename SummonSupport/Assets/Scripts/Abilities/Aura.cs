@@ -58,7 +58,7 @@ public class Aura : MonoBehaviour
 
         if (TryGetComponent<CircleCollider2D>(out CircleCollider2D collider))
             collider.radius = radius;
-        if (abilityMod != null) collider.radius += abilityMod.GetModdedAttribute(AbilityModTypes.Radius);
+        if (abilityMod != null) collider.radius += abilityMod.GetModdedAttribute(AbilityModTypes.Size);
         CombatStatHandler.HandleEffectPackage(ability, caster, caster, ability.SelfEffects);
         if (ability is ConjureAbility)
         {

@@ -42,7 +42,7 @@ public class Mod_Base
             { AbilityModTypes.Cost, (() => Cost_Mod, v => Cost_Mod = v) },
             { AbilityModTypes.Range, (() => Range_Mod, v => Range_Mod = v) },
             { AbilityModTypes.Duration, (() => Duration_Mod, v => Duration_Mod = v) },
-            { AbilityModTypes.Radius, (() => Radius_Mod, v => Radius_Mod = v) },
+            { AbilityModTypes.Size, (() => Radius_Mod, v => Radius_Mod = v) },
             { AbilityModTypes.Speed, (() => ProjectileSpeed_Mod, v => ProjectileSpeed_Mod = v) },
             { AbilityModTypes.MaxPierce, (() => MaxPierce_Mod, v => MaxPierce_Mod = v) },
             { AbilityModTypes.MaxSplit, (() => MaxSplit_Mod, v => MaxSplit_Mod = v) },

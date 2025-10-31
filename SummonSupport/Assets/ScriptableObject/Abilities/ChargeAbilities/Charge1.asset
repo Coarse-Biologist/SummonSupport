@@ -17,25 +17,50 @@ MonoBehaviour:
   <Cooldown>k__BackingField: 5
   <CostType>k__BackingField: 4
   <Cost>k__BackingField: 30
+  <Range>k__BackingField: 20
+  <Duration>k__BackingField: 0
   <AbilityTypeTag>k__BackingField: 1
   <ListUsableOn>k__BackingField: 01000000
-  <TargetTypeAndEffects>k__BackingField:
-  - <EffectDescription>k__BackingField: 
-    <TargetType>k__BackingField: 1
+  <TargetEffects>k__BackingField:
+    <EffectDescription>k__BackingField: 
     <Heal>k__BackingField:
       <Value>k__BackingField: 0
+      <ValueType>k__BackingField: 0
     <HealOverTime>k__BackingField:
       <Value>k__BackingField: 0
-      <Duration>k__BackingField: 0
+      <ValueType>k__BackingField: 0
+    <Damage>k__BackingField:
+      <Value>k__BackingField: 50
+    <DamageOverTime>k__BackingField:
+      <Value>k__BackingField: 0
     <AttributeUp>k__BackingField: []
     <AttributeDown>k__BackingField: []
-    <Damage>k__BackingField: []
-    <DamageOverTime>k__BackingField: []
+    <StatusEffects>k__BackingField: []
+    <SpecialAbilityAttribute>k__BackingField: 0
+  <SelfEffects>k__BackingField:
+    <EffectDescription>k__BackingField: 
+    <Heal>k__BackingField:
+      <Value>k__BackingField: 0
+      <ValueType>k__BackingField: 0
+    <HealOverTime>k__BackingField:
+      <Value>k__BackingField: 0
+      <ValueType>k__BackingField: 0
+    <Damage>k__BackingField:
+      <Value>k__BackingField: 0
+    <DamageOverTime>k__BackingField:
+      <Value>k__BackingField: 0
+    <AttributeUp>k__BackingField: []
+    <AttributeDown>k__BackingField: []
     <StatusEffects>k__BackingField: []
     <SpecialAbilityAttribute>k__BackingField: 0
   <ElementTypes>k__BackingField: 
+  <PhysicalType>k__BackingField: 2
   <ability>k__BackingField: {fileID: 11400000, guid: 946e5f54d23bbc24e9bf9696f3cf93c2,
     type: 2}
   <range>k__BackingField: 10
   <chargeMonoObject>k__BackingField: {fileID: 5632219802437681561, guid: 5e8c448d366f06c4da1190c92ec9f27f,
+    type: 3}
+  <chargeTrail>k__BackingField: {fileID: 7630514947524880290, guid: 52ab56f57e18a8949b3623c87c5b2acd,
+    type: 3}
+  <HitEffect>k__BackingField: {fileID: 8554696951228805582, guid: 7bfcb6e9a8dfc5544ae6f2975f7ebf45,
     type: 3}

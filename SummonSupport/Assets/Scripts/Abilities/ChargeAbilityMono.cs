@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -13,6 +14,8 @@ public class ChargeAbilityMono : MonoBehaviour
     private AbilityHandler abilityHandler;
     private LivingBeing caster;
     private WaitForSeconds chargeTickRate = new WaitForSeconds(.01f);
+    public GameObject trailEffect { private set; get; }
+
     [field: SerializeField] public StatusEffects attackAnimationCC;
 
     public void Charge(ChargeAbility assignedAbility)
@@ -29,11 +32,18 @@ public class ChargeAbilityMono : MonoBehaviour
     }
     private IEnumerator ChargeWhileLogical()
     {
+        if (chargeAbility.chargeTrail != null)
+        {
+            trailEffect = Instantiate(chargeAbility.chargeTrail, transform.position, originTransform.rotation, transform);
+            Debug.Log($"Spawning charge trail {trailEffect} because i can");
+        }
+        else Debug.Log($"there was no traileffect");
+
         bool stillCharging = true;
         startLoc = transform.position;
         while (stillCharging)
         {
-            rb.linearVelocity = originTransform.right * GetComponent<MovementScript>().MovementSpeed * 20;
+            rb.linearVelocity = originTransform.right * 20;
             if (((Vector2)gameObject.transform.position - startLoc).magnitude > chargeAbility.range)
             {
                 EndCharge();
@@ -48,12 +58,17 @@ public class ChargeAbilityMono : MonoBehaviour
         bool success = abilityToCast.Activate(transform.parent.gameObject);
         if (success)
         {
+            if (chargeAbility.HitEffect != null)
+            {
+                Instantiate(chargeAbility.HitEffect, collision.transform.position, quaternion.identity, collision.transform);
+            }
             EndCharge();
         }
     }
 
     private void EndCharge()
     {
+        if (trailEffect != null) Destroy(trailEffect);
         if (chargeCoroutine != null) StopCoroutine(chargeCoroutine);
         abilityHandler.SetCharging(false);
         ToggleStuckInAbilityAnimation(transform.parent.gameObject, false);

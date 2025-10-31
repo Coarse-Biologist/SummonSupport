@@ -19,31 +19,43 @@ MonoBehaviour:
   <CostType>k__BackingField: 4
   <Cost>k__BackingField: 10
   <Range>k__BackingField: 3
+  <Duration>k__BackingField: 8
   <AbilityTypeTag>k__BackingField: 0
   <ListUsableOn>k__BackingField: 01000000
-  <TargetTypeAndEffects>k__BackingField:
-  - <EffectDescription>k__BackingField: Bacterial Cloud Auraon enemies
-    <TargetType>k__BackingField: 1
+  <TargetEffects>k__BackingField:
+    <EffectDescription>k__BackingField: 
     <Heal>k__BackingField:
       <Value>k__BackingField: 0
+      <ValueType>k__BackingField: 0
     <HealOverTime>k__BackingField:
       <Value>k__BackingField: 0
-      <Duration>k__BackingField: 0
+      <ValueType>k__BackingField: 0
+    <Damage>k__BackingField:
+      <Value>k__BackingField: 0
+    <DamageOverTime>k__BackingField:
+      <Value>k__BackingField: 2
     <AttributeUp>k__BackingField: []
     <AttributeDown>k__BackingField: []
-    <Damage>k__BackingField: []
-    <DamageOverTime>k__BackingField:
-    - <Value>k__BackingField: 4
-      <Element>k__BackingField: 9
-      <Physical>k__BackingField: 0
+    <StatusEffects>k__BackingField: []
+    <SpecialAbilityAttribute>k__BackingField: 0
+  <SelfEffects>k__BackingField:
+    <EffectDescription>k__BackingField: 
+    <Heal>k__BackingField:
+      <Value>k__BackingField: 0
       <ValueType>k__BackingField: 0
-      <Duration>k__BackingField: 10
-    <StatusEffects>k__BackingField:
-    - {fileID: 11400000, guid: d2c2bc483ce8e844bb6602d77e8062db, type: 2}
+    <HealOverTime>k__BackingField:
+      <Value>k__BackingField: 0
+      <ValueType>k__BackingField: 0
+    <Damage>k__BackingField:
+      <Value>k__BackingField: 0
+    <DamageOverTime>k__BackingField:
+      <Value>k__BackingField: 0
+    <AttributeUp>k__BackingField: []
+    <AttributeDown>k__BackingField: []
+    <StatusEffects>k__BackingField: []
     <SpecialAbilityAttribute>k__BackingField: 0
   <ElementTypes>k__BackingField: 09000000
   <PhysicalType>k__BackingField: 0
-  <Uptime>k__BackingField: 10
   <Radius>k__BackingField: 3
   <AuraObject>k__BackingField: {fileID: 1699087696372334086, guid: 4e3ed8cafc46d0948af6193c20f22a87,
     type: 3}

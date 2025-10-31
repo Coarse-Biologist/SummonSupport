@@ -17,29 +17,44 @@ MonoBehaviour:
     type: 3}
   <Cooldown>k__BackingField: 5
   <CostType>k__BackingField: 4
-  <Cost>k__BackingField: 50
+  <Cost>k__BackingField: 70
   <Range>k__BackingField: 15
+  <Duration>k__BackingField: 3
   <AbilityTypeTag>k__BackingField: 1
   <ListUsableOn>k__BackingField: 01000000
-  <TargetTypeAndEffects>k__BackingField:
-  - <EffectDescription>k__BackingField: Melts
-    <TargetType>k__BackingField: 1
+  <TargetEffects>k__BackingField:
+    <EffectDescription>k__BackingField: 
     <Heal>k__BackingField:
       <Value>k__BackingField: 0
+      <ValueType>k__BackingField: 0
     <HealOverTime>k__BackingField:
       <Value>k__BackingField: 0
-      <Duration>k__BackingField: 0
+      <ValueType>k__BackingField: 0
+    <Damage>k__BackingField:
+      <Value>k__BackingField: 100
+    <DamageOverTime>k__BackingField:
+      <Value>k__BackingField: 2
     <AttributeUp>k__BackingField: []
     <AttributeDown>k__BackingField: []
-    <Damage>k__BackingField:
-    - <Value>k__BackingField: 100
-      <Element>k__BackingField: 4
-      <Physical>k__BackingField: 0
-      <ValueType>k__BackingField: 0
-    <DamageOverTime>k__BackingField: []
     <StatusEffects>k__BackingField: []
     <SpecialAbilityAttribute>k__BackingField: 0
-  <ElementTypes>k__BackingField: 
+  <SelfEffects>k__BackingField:
+    <EffectDescription>k__BackingField: 
+    <Heal>k__BackingField:
+      <Value>k__BackingField: 0
+      <ValueType>k__BackingField: 0
+    <HealOverTime>k__BackingField:
+      <Value>k__BackingField: 0
+      <ValueType>k__BackingField: 0
+    <Damage>k__BackingField:
+      <Value>k__BackingField: 0
+    <DamageOverTime>k__BackingField:
+      <Value>k__BackingField: 0
+    <AttributeUp>k__BackingField: []
+    <AttributeDown>k__BackingField: []
+    <StatusEffects>k__BackingField: []
+    <SpecialAbilityAttribute>k__BackingField: 0
+  <ElementTypes>k__BackingField: 040000000d000000
   <PhysicalType>k__BackingField: 0
   <ObjectToSpawn>k__BackingField: {fileID: 1142077846852881211, guid: 92f7eebcf2302cd4b95a8d2467921c88,
     type: 3}
@@ -50,7 +65,6 @@ MonoBehaviour:
   Radius: 1
   <IsDecaying>k__BackingField: 1
   <LeaveRotation>k__BackingField: 1
-  <TimeAlive>k__BackingField: 3
   <SeeksTarget>k__BackingField: 0
   <Speed>k__BackingField: 2
   <SearchRadius>k__BackingField: 10

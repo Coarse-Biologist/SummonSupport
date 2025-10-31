@@ -10,7 +10,7 @@ public enum AbilityModTypes
     Damage, // implimented
     DamageOverTime, // implimented
     Duration, // implimented
-    Radius,
+    Size,
     Speed,
     Range,
     Width,
