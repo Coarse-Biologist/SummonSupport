@@ -20,14 +20,9 @@ public class Mod_Base
     public float MaxSplit_Mod { get; protected set; } = 0;
     public float MaxRicochet_Mod { get; protected set; } = 0;
     public float ProjectileNumber_Mod { get; protected set; } = 0;
-
-
-
-    public List<OnHitBehaviour> HitBehaviour_Mod { get; protected set; } = new();
-
+    public List<StatusEffectType> StatusEffects_Mod { get; protected set; } = new();
 
     #endregion
-
     public Dictionary<AbilityModTypes, (Func<float> Get, Action<float> Set)> Base_Mods { get; private set; }
 
     public Mod_Base()
@@ -48,8 +43,6 @@ public class Mod_Base
             { AbilityModTypes.MaxSplit, (() => MaxSplit_Mod, v => MaxSplit_Mod = v) },
             { AbilityModTypes.MaxRicochet, (() => MaxRicochet_Mod, v => MaxRicochet_Mod = v) },
             { AbilityModTypes.ProjectileNumber, (() => ProjectileNumber_Mod, v => ProjectileNumber_Mod = v) },
-
-
         };
     }
 
@@ -59,6 +52,10 @@ public class Mod_Base
 
     //public List<AbilityModTypes> AquiredBool_Mods { get; protected set; } = new();
 
+    public void Mod_AddStatusEffect(StatusEffectType status)
+    {
+        if (StatusEffects_Mod.Contains(status)) StatusEffects_Mod.Add(status);
+    }
 
 
     public void Mod_Attribute(AbilityModTypes modType, float changeValue)

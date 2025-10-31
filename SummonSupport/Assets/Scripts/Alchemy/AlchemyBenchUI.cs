@@ -58,6 +58,8 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     private AbilityModHandler selectedModHandler;
 
     private AbilityModTypes selectedModType = AbilityModTypes.None;
+    private StatusEffectType selectedStatusEffect = StatusEffectType.None;
+
     private List<Button> SpawnedButtons = new();
 
     #endregion
@@ -335,28 +337,59 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
         SetInstructionsText($"Select an attribute for the ability which you would like to upgrade.");
         foreach (AbilityModTypes modableAttribute in selectedModHandler.GetModableAttributes(ability))
         {
-            Button button = AddButtonToPanel(AbilityModHandler.GetAbilityModString(modableAttribute), bottomRightPanel, 40, 10);
+            Button button = AddButtonToPanel(AbilityModHandler.GetCleanEnumString(modableAttribute), bottomRightPanel, 40, 10);
             button.RegisterCallback<ClickEvent>(e => SetSelectedModAttribute(modableAttribute));
+        }
+        Button statuseffectButton = AddButtonToPanel(AbilityModHandler.GetCleanEnumString(AbilityModTypes.StatusEffect), bottomRightPanel, 40, 10);
+        statuseffectButton.RegisterCallback<ClickEvent>(e => ShowStatusEffectOptionScreen());
+
+    }
+    private void ShowStatusEffectOptionScreen()
+    {
+        ClearPanel(bottomRightPanel);
+        foreach (StatusEffects status in SetupManager.AllStatusEffects)
+        {
+            Button button = AddButtonToPanel(AbilityModHandler.GetCleanEnumString(status.EffectType), bottomRightPanel, 40, 10);
+            button.RegisterCallback<ClickEvent>(e => SetSelectedModAttribute(status.EffectType));
         }
     }
     private void SetSelectedModAttribute(AbilityModTypes modType)
     {
         selectedModType = modType;
-        SetInstructionsText($"The {AbilityModHandler.GetAbilityModString(modType)} of {selectedAbility.Name} can be improved for {AbilityModHandler.GetModCost(modType)} core power. You currently have: {AlchemyInventory.GetCorePowerResource(AlchemyInventory.ingredients)}");
+        selectedStatusEffect = StatusEffectType.None;
+        SetInstructionsText($"The {AbilityModHandler.GetCleanEnumString(modType)} of {selectedAbility.Name} can be improved for {AbilityModHandler.GetModCost(modType)} core power. You currently have: {AlchemyInventory.GetCorePowerResource(AlchemyInventory.ingredients)}");
+
+    }
+    private void SetSelectedModAttribute(StatusEffectType modType)
+    {
+        selectedStatusEffect = modType;
+        selectedModType = AbilityModTypes.None;
+        SetInstructionsText($"The {AbilityModHandler.GetCleanEnumString(modType)} of {selectedAbility.Name} can be improved for {AbilityModHandler.GetModCost(modType)} core power. You currently have: {AlchemyInventory.GetCorePowerResource(AlchemyInventory.ingredients)}");
 
     }
     private void AttemptModification(AbilityModTypes modAttribute)
     {
         if (selectedAbility == null) return;
         if (selectedModHandler == null) return;
-        if (selectedModType == AbilityModTypes.None) return;
+        if (selectedModType == AbilityModTypes.None && selectedStatusEffect == StatusEffectType.None) return;
 
-
-        var boughtPrice = AlchemyInventory.BuyCraftingPowerWithCores(AbilityModHandler.GetModCost(selectedModType));
-        if (boughtPrice.bought)
+        if (selectedModType != AbilityModTypes.None)
         {
-            selectedModHandler.ModAttributeByType(selectedAbility, selectedModType, AbilityModHandler.GetModIncrementValue(selectedModType));
-            SetInstructionsText($"You have modified the {AbilityModHandler.GetAbilityModString(selectedModType)} of {selectedAbility.Name} by {AbilityModHandler.GetModIncrementValue(selectedModType)} at the cost of {boughtPrice.price} core power.");
+            var boughtPrice = AlchemyInventory.BuyCraftingPowerWithCores(AbilityModHandler.GetModCost(selectedModType));
+            if (boughtPrice.bought)
+            {
+                selectedModHandler.ModAttributeByType(selectedAbility, selectedModType, AbilityModHandler.GetModIncrementValue(selectedModType));
+                SetInstructionsText($"You have modified the {AbilityModHandler.GetCleanEnumString(selectedModType)} of {selectedAbility.Name} by {AbilityModHandler.GetModIncrementValue(selectedModType)} at the cost of {boughtPrice.price} core power.");
+            }
+        }
+        else if (selectedStatusEffect != StatusEffectType.None)
+        {
+            var boughtPrice = AlchemyInventory.BuyCraftingPowerWithCores(AbilityModHandler.GetModCost(selectedStatusEffect));
+            if (boughtPrice.bought)
+            {
+                selectedModHandler.AddStatusEffectToAbility(selectedAbility, selectedStatusEffect);
+                SetInstructionsText($"You have modified the {AbilityModHandler.GetCleanEnumString(selectedModType)} of {selectedAbility.Name} by {AbilityModHandler.GetModIncrementValue(selectedModType)} at the cost of {boughtPrice.price} core power.");
+            }
         }
     }
     private void SetSelectedModHandler(AbilityModHandler modHandler)

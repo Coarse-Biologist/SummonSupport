@@ -29,9 +29,6 @@ public class AbilityModHandler : MonoBehaviour
         { AbilityModTypes.ProjectileNumber, 1 } };
 
 
-
-
-
     public static readonly Dictionary<AbilityModTypes, int> ModCosts = new()
     {
         { AbilityModTypes.Cost, 10 },
@@ -69,6 +66,10 @@ public class AbilityModHandler : MonoBehaviour
         }
         else throw new System.Exception($"The mod whose price you are searching {modType} is not in the Ability Mod cost dictionary!");
     }
+    public static int GetModCost(StatusEffectType modType)
+    {
+        return 500;
+    }
     public Mod_Base GetAbilityMod(Ability ability)
     {
         if (ModdedAbilities.TryGetValue(ability, out Mod_Base mod))
@@ -104,6 +105,10 @@ public class AbilityModHandler : MonoBehaviour
         if (!ModdedAbilities.TryGetValue(ability, out Mod_Base existingMod)) return 0;
         else return existingMod.GetModdedAttribute(modType);
     }
+    public void AddStatusEffectToAbility(Ability ability, StatusEffectType effectType)
+    {
+        Debug.Log($"Modding to add {effectType} to {ability}!");
+    }
 
 
     public static int GetModIncrementValue(AbilityModTypes modType)
@@ -138,7 +143,7 @@ public class AbilityModHandler : MonoBehaviour
     {
         return listA.Except(listB).Union(listB.Except(listA)).ToList();
     }
-    public static string GetAbilityModString(AbilityModTypes modEnum)
+    public static string GetCleanEnumString<Enum>(Enum modEnum)
     {
         return System.Text.RegularExpressions.Regex.Replace(modEnum.ToString(), "(?<!^)([A-Z])", " $1");
     }

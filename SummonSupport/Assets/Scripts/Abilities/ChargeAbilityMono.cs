@@ -15,6 +15,11 @@ public class ChargeAbilityMono : MonoBehaviour
     private LivingBeing caster;
     private WaitForSeconds chargeTickRate = new WaitForSeconds(.01f);
     public GameObject trailEffect { private set; get; }
+    private AbilityModHandler modHandler;
+    private float speed = 0;
+    private float range = 0;
+
+    double maxChargeTime = 2f;
 
     [field: SerializeField] public StatusEffects attackAnimationCC;
 
@@ -26,6 +31,13 @@ public class ChargeAbilityMono : MonoBehaviour
         abilityHandler = user.GetComponentInParent<AbilityHandler>();
         abilityHandler.SetCharging(true);
         caster = user.GetComponentInParent<LivingBeing>();
+        modHandler = caster.GetComponent<AbilityModHandler>();
+        if (caster.gameObject.TryGetComponent(out MovementScript movementScript))
+        {
+            speed = movementScript.MovementSpeed;
+        }
+        range = chargeAbility.range;
+
         originTransform = abilityHandler.abilityDirection.transform;
         rb = user.GetComponentInParent<Rigidbody2D>();
         chargeCoroutine = StartCoroutine(ChargeWhileLogical());
@@ -35,19 +47,22 @@ public class ChargeAbilityMono : MonoBehaviour
         if (chargeAbility.chargeTrail != null)
         {
             trailEffect = Instantiate(chargeAbility.chargeTrail, transform.position, originTransform.rotation, transform);
-            Debug.Log($"Spawning charge trail {trailEffect} because i can");
         }
-        else Debug.Log($"there was no traileffect");
-
+        if (modHandler != null)
+        {
+            speed += modHandler.GetModAttributeByType(chargeAbility, AbilityModTypes.Speed);
+            speed += modHandler.GetModAttributeByType(chargeAbility, AbilityModTypes.Range);
+        }
         bool stillCharging = true;
         startLoc = transform.position;
-        while (stillCharging)
+        while (stillCharging && maxChargeTime > 0)
         {
-            rb.linearVelocity = originTransform.right * 20;
-            if (((Vector2)gameObject.transform.position - startLoc).magnitude > chargeAbility.range)
+            rb.linearVelocity = originTransform.right * speed * 35;
+            if (((Vector2)gameObject.transform.position - startLoc).magnitude > range)
             {
                 EndCharge();
             }
+            maxChargeTime -= .01;
             yield return chargeTickRate;
         }
     }

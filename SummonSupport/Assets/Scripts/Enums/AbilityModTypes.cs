@@ -13,7 +13,6 @@ public enum AbilityModTypes
     Size,
     Speed,
     Range,
-    Width,
     MaxPierce, //  implimented
     MaxRicochet, // rather implimented
     MaxSplit, // implimented
