@@ -13,8 +13,11 @@ public class Projectile : MonoBehaviour
     public ProjectileAbility ability;
     public int piercedAlready { private set; get; } = 0;
     public int ricochedAlready { private set; get; } = 0;
-
     public bool splitAlready = false;
+
+    int split = 0;
+    int pierce = 0;
+    int ricochet = 0;
     LivingBeing userLivingBeing = null;
     private bool active = false;
 
@@ -189,21 +192,27 @@ public class Projectile : MonoBehaviour
     void HandleOnHitBehaviour(LivingBeing other)
     {
         Debug.Log("Handling On hit behaviour");
+        if (modHandler != null)
+        {
+            split = modHandler.GetModAttributeByType(ability, AbilityModTypes.MaxSplit);
+            pierce = modHandler.GetModAttributeByType(ability, AbilityModTypes.MaxPierce);
+            ricochet = modHandler.GetModAttributeByType(ability, AbilityModTypes.MaxRicochet);
+        }
 
-        if (!splitAlready && ability.PiercingMode == OnHitBehaviour.Split || modHandler.GetModAttributeByType(ability, AbilityModTypes.MaxSplit) > 0)
+        if (!splitAlready && (ability.PiercingMode == OnHitBehaviour.Split || split > 0))
         {
             Debug.Log("Trying to split");
-            SplitProjectile(other);
+            SplitProjectile(other, split);
         }
-        else if (piercedAlready < ability.MaxPierce + modHandler.GetModAttributeByType(ability, AbilityModTypes.MaxPierce))
+        else if (piercedAlready < ability.MaxPierce + pierce)
         {
             Debug.Log("Trying to pierce");
 
             piercedAlready++;
         }
-        else if (ability.PiercingMode == OnHitBehaviour.Ricochet || projectileMod != null)
+        else if (ability.PiercingMode == OnHitBehaviour.Ricochet || ricochet > 0)
         {
-            if (ricochedAlready < projectileMod.GetModdedAttribute(AbilityModTypes.MaxRicochet))
+            if (ricochedAlready < ricochet)
             {
                 Debug.Log("Trying to ricochet");
 
@@ -221,21 +230,18 @@ public class Projectile : MonoBehaviour
 
 
 
-    void SplitProjectile(LivingBeing other)
+    void SplitProjectile(LivingBeing other, int splits)
     {
         splitAlready = true;
-        int maxSplit = ability.MaxSplit;
-        if (modHandler != null)
-        {
-            maxSplit += modHandler.GetModAttributeByType(ability, AbilityModTypes.MaxSplit) + 1;
-        }
+        int maxSplit = ability.MaxSplit + splits + 1;
+
         //int left = -1;
         for (int i = 0; i < maxSplit; i += 1) // i starts at -1, code block is completed as long as i is less than or equal to one. upon completion it goes up by 2. the code block will therefore happen once?
         {
 
             Debug.Log("for loop is being carried out in the split func of the projectile script");
             Quaternion rotation;
-            rotation = Quaternion.Euler(0, 0, (float)Math.Sin(45 * i) * (10 + 5 * i));
+            rotation = Quaternion.Euler(0, 0, (float)Math.Sin(45 * i) * (30 + 5 * i));
 
             Vector3 direction = rotation * transform.right;
             GameObject newProjectile = Instantiate(ability.Projectile, transform.position, Quaternion.identity);
