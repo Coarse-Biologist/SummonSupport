@@ -69,7 +69,7 @@ public class ChargeAbilityMono : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-        Ability abilityToCast = chargeAbility.ability;
+        Ability abilityToCast = chargeAbility.ActivateOnHit;
         bool success = abilityToCast.Activate(transform.parent.gameObject);
         if (success)
         {

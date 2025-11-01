@@ -3,6 +3,7 @@ using System.Collections;
 using System.Diagnostics;
 using UnityEngine.InputSystem;
 using Unity.VisualScripting;
+using System.Collections.Generic;
 
 public static class CombatStatHandler
 {
@@ -16,6 +17,8 @@ public static class CombatStatHandler
     private static LivingBeing currentTarget;
     private static LivingBeing currentCaster;
     private static Ability currentAbility;
+    private static List<StatusEffects> currentStatusEffects = new();
+
 
 
 
@@ -25,6 +28,8 @@ public static class CombatStatHandler
         currentAbility = ability;
         currentCaster = caster;
         currentTarget = target;
+        modHandler = caster.GetComponent<AbilityModHandler>();
+        UnityEngine.Debug.Log($"caster = {caster.Name}, target = {target.Name} mod handler = {modHandler}");
 
         if (effectPackage.Heal.Value > 0)
         {
@@ -56,16 +61,21 @@ public static class CombatStatHandler
                 AdjustAndApplyTempChange(tempChange);
             }
         }
-        if (effectPackage.StatusEffects.Count > 0)
+        //currentStatusEffects.Add(AbilityLibrary.GetStatusEffectLibrary().entries[0].Effect);
+        SetAllCurrentStatusEffects(ability, effectPackage);
+        UnityEngine.Debug.Log($"current status effect list = {currentStatusEffects}");
+        if (currentStatusEffects != null && currentStatusEffects.Count > 0)
         {
-            foreach (StatusEffects status in effectPackage.StatusEffects)
+            foreach (StatusEffects status in currentStatusEffects)
             {
+                UnityEngine.Debug.Log("The endgame of status effects has been reached?");
+
                 target.AlterStatusEffectList(status.EffectType, true);
                 target.StartCoroutine(RemoveStatusEffect(status));
             }
             if (target.TryGetComponent<AI_CC_State>(out AI_CC_State ccState))
             {
-                foreach (StatusEffects status in effectPackage.StatusEffects)
+                foreach (StatusEffects status in currentStatusEffects)
                 {
                     ccState.RecieveCC(status, currentCaster);
                     if (status.EffectType == StatusEffectType.Pulled) ccState.SetPullEpicenter(Camera.main.ScreenToWorldPoint(Input.mousePosition));
@@ -73,6 +83,21 @@ public static class CombatStatHandler
                 }
             }
         }
+    }
+
+    private static void SetAllCurrentStatusEffects(Ability ability, EffectPackage effectPackage)
+    {
+        if (modHandler != null)
+        {
+            currentStatusEffects = modHandler.GetModStatusEffects(ability);
+            {
+                foreach (StatusEffects status in effectPackage.StatusEffects)
+                {
+                    if (!currentStatusEffects.Contains(status)) currentStatusEffects.Add(status);
+                }
+            }
+        }
+        else currentStatusEffects = effectPackage.StatusEffects;
     }
 
 
@@ -348,6 +373,7 @@ public static class CombatStatHandler
 
     private static IEnumerator RemoveStatusEffect(StatusEffects status)
     {
+        UnityEngine.Debug.Log("The endgame of status effects has been reached?");
         yield return new WaitForSeconds(status.Duration);
         currentTarget.AlterStatusEffectList(status.EffectType, false);
 

@@ -22,8 +22,7 @@ public class SetupManager : MonoBehaviour
 
     [field: SerializeField] public AbilityLibrary_SO ElementToAbilityLibrary_SO { get; private set; } = null;
     [field: SerializeField] public List<Ability> AllAbilities { get; private set; } = null;
-    [field: SerializeField] public static List<StatusEffects> AllStatusEffects { get; private set; } = new();
-    [field: SerializeField] public static Dictionary<StatusEffectType, StatusEffects> StatusEffectDict { get; private set; } = new();
+    [field: SerializeField] public StatusEffectsLibrary StatusEffectsLibrary { get; private set; }
 
 
 
@@ -43,25 +42,23 @@ public class SetupManager : MonoBehaviour
             AbilityLibrary.SetAbilityLibrary(ElementToAbilityLibrary_SO);
         }
         else throw new System.Exception("The ability library scriptable object is not loaded into the SetupManager");
-        if (AllStatusEffects.Count != 0)
+        if (StatusEffectsLibrary.entries.Count() != 0)
         {
-            InitializeStatusEffectDict();
+            AbilityLibrary.SetStatusEffectLibrary(StatusEffectsLibrary);
         }
         else throw new System.Exception("The status effects scriptable objects are not loaded into the SetupManager");
 
     }
-    private void InitializeStatusEffectDict()
+    public StatusEffectsLibrary GetStatusEffectLibrary()
     {
-        foreach (StatusEffects effect in AllStatusEffects)
-        {
-            StatusEffectDict.TryAdd(effect.EffectType, effect);
-        }
+        return StatusEffectsLibrary;
     }
-    public static StatusEffects GetStatusEffect(StatusEffectType type)
-    {
-        if (StatusEffectDict.TryGetValue(type, out StatusEffects status)) return status;
-        else throw new System.Exception($"The status effect type {type} you have tried to search was  ot present in tge setup manager script");
 
-    }
+    //public static StatusEffects GetStatusEffect(StatusEffectType type)
+    //{
+    //    //if (StatusEffectDict.TryGetValue(type, out StatusEffects status)) return status;
+    //    //else throw new System.Exception($"The status effect type {type} you have tried to search was  ot present in tge setup manager script");
+    //
+    //}
 
 }

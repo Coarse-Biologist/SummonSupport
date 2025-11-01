@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 664c921d8af93b14b8141a3273369f19, type: 3}
+  m_Name: StatuEffectsLibraryAsset
+  m_EditorClassIdentifier: Assembly-CSharp::StatusEffectsLibrary
+  entries:
+  - Type: 1
+    Effect: {fileID: 11400000, guid: 6ef243f4fc8d3fc49a992694220d85ee, type: 2}
+  - Type: 2
+    Effect: {fileID: 11400000, guid: cd27898494af29c498198f0470c47632, type: 2}
+  - Type: 3
+    Effect: {fileID: 11400000, guid: 950c5110c28d3e14e91ab7bf88eee014, type: 2}
+  - Type: 4
+    Effect: {fileID: 11400000, guid: 238b170d3d4c26344bf2d0fa36669467, type: 2}
+  - Type: 5
+    Effect: {fileID: 11400000, guid: a1c4f82da9337b549af8c79d41093bdf, type: 2}
+  - Type: 0
+    Effect: {fileID: 0}
+  - Type: 6
+    Effect: {fileID: 11400000, guid: d2c2bc483ce8e844bb6602d77e8062db, type: 2}
+  - Type: 7
+    Effect: {fileID: 11400000, guid: de217b777d75f0e4280c41fbaa010a5a, type: 2}
+  - Type: 9
+    Effect: {fileID: 11400000, guid: b4787caaf899c8d4bbe607486149e76e, type: 2}

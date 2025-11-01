@@ -55,7 +55,7 @@ MonoBehaviour:
     <SpecialAbilityAttribute>k__BackingField: 0
   <ElementTypes>k__BackingField: 
   <PhysicalType>k__BackingField: 2
-  <ability>k__BackingField: {fileID: 11400000, guid: 946e5f54d23bbc24e9bf9696f3cf93c2,
+  <ActivateOnHit>k__BackingField: {fileID: 11400000, guid: 946e5f54d23bbc24e9bf9696f3cf93c2,
     type: 2}
   <range>k__BackingField: 10
   <chargeMonoObject>k__BackingField: {fileID: 5632219802437681561, guid: 5e8c448d366f06c4da1190c92ec9f27f,

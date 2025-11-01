@@ -8,7 +8,7 @@ using UnityEngine;
 public class AbilityModHandler : MonoBehaviour
 {
     public Dictionary<Ability, Mod_Base> ModdedAbilities { private set; get; } = new();
-    public static readonly List<AbilityModTypes> BoolMods = new();
+
 
     public static readonly Dictionary<AbilityModTypes, int> ModIncrements = new()
 
@@ -80,11 +80,17 @@ public class AbilityModHandler : MonoBehaviour
 
     public Mod_Base TryAddNewAbilityMod(Ability ability)
     {
+
+        Ability abilityToAdd;
+        if (ability is ChargeAbility chargeAbility) abilityToAdd = chargeAbility.ActivateOnHit;
+        else if (ability is TeleportAbility teleportAbility) abilityToAdd = teleportAbility.ActivateOnArrive;
+        else abilityToAdd = ability;
         Mod_Base mod;
-        if (!ModdedAbilities.TryGetValue(ability, out Mod_Base existingMod))
+        if (!ModdedAbilities.TryGetValue(abilityToAdd, out Mod_Base existingMod))
         {
             mod = new Mod_Base();
-            ModdedAbilities.Add(ability, mod);
+            ModdedAbilities.Add(abilityToAdd, mod);
+            Debug.Log($"Adding {abilityToAdd.Name} to the modded abilities list with the mod {mod}");
             return mod;
         }
         else return existingMod;
@@ -105,9 +111,31 @@ public class AbilityModHandler : MonoBehaviour
         if (!ModdedAbilities.TryGetValue(ability, out Mod_Base existingMod)) return 0;
         else return existingMod.GetModdedAttribute(modType);
     }
-    public void AddStatusEffectToAbility(Ability ability, StatusEffectType effectType)
+
+    public List<StatusEffects> GetModStatusEffects(Ability ability)
+    {
+        if (!ModdedAbilities.TryGetValue(ability, out Mod_Base existingMod))
+        {
+            foreach (KeyValuePair<Ability, Mod_Base> kvp in ModdedAbilities)
+            {
+                Debug.Log($"ability = {kvp.Key}. mod = {kvp.Value}");
+
+            }
+            Debug.Log("REturning Null like no 0nes business");
+            return new();
+        }
+        else
+        {
+            Debug.Log($"REturning a dope ass list of length{existingMod.GetStatusEffects().Count}");
+
+            return existingMod.GetStatusEffects();
+        }
+    }
+    public void AddStatusEffectToAbility(Ability ability, StatusEffects effectType)
     {
         Debug.Log($"Modding to add {effectType} to {ability}!");
+        Mod_Base mod = TryAddNewAbilityMod(ability);
+        mod.Mod_AddStatusEffect(effectType);
     }
 
 
@@ -127,13 +155,6 @@ public class AbilityModHandler : MonoBehaviour
 
         if (ModOptions.TryGetValue(ability.GetType(), out List<AbilityModTypes> modOptions))
         {
-            foreach (AbilityModTypes modType in BoolMods)
-            {
-                if (mod.GetModdedAttribute(modType) != 0 && modOptions.Contains(modType)) modOptions.Remove(modType);
-            }
-            //bool heals = false;
-            //bool damages = false;
-
             return modOptions;
         }
         else return new List<AbilityModTypes>();

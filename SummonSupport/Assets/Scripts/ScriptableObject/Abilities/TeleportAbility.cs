@@ -8,8 +8,8 @@ public class TeleportAbility : Ability
 {
     [Header("Teleport settings")]
 
-    [field: SerializeField] public List<Ability> ActivateOnUse { get; private set; }
-    [field: SerializeField] public List<Ability> ActivateOnArrive { get; private set; }
+    [field: SerializeField] public Ability ActivateOnUse { get; private set; }
+    [field: SerializeField] public Ability ActivateOnArrive { get; private set; }
     [field: SerializeField] public GameObject EffectOnActivate { get; private set; }
     [field: SerializeField] public float ActivationSpeed { get; private set; } = .3f;
 
@@ -63,10 +63,9 @@ public class TeleportAbility : Ability
 
                 user.transform.position = target.transform.position;
 
-                foreach (Ability ability in ActivateOnArrive)
-                {
-                    ability.Activate(user);
-                }
+
+                ActivateOnArrive.Activate(user);
+
             }
         }
         else yield return new WaitForSeconds(ActivationSpeed);

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using NUnit.Framework.Constraints;
 using UnityEngine;
 
 public class Mod_Base
@@ -20,7 +21,7 @@ public class Mod_Base
     public float MaxSplit_Mod { get; protected set; } = 0;
     public float MaxRicochet_Mod { get; protected set; } = 0;
     public float ProjectileNumber_Mod { get; protected set; } = 0;
-    public List<StatusEffectType> StatusEffects_Mod { get; protected set; } = new();
+    public List<StatusEffects> StatusEffects_Mod { get; protected set; } = new();
 
     #endregion
     public Dictionary<AbilityModTypes, (Func<float> Get, Action<float> Set)> Base_Mods { get; private set; }
@@ -52,9 +53,20 @@ public class Mod_Base
 
     //public List<AbilityModTypes> AquiredBool_Mods { get; protected set; } = new();
 
-    public void Mod_AddStatusEffect(StatusEffectType status)
+    public void Mod_AddStatusEffect(StatusEffects status)
     {
-        if (StatusEffects_Mod.Contains(status)) StatusEffects_Mod.Add(status);
+        if (!StatusEffects_Mod.Contains(status))
+        {
+            Debug.Log("Modding status effect in base mod!!!!!!!!!!.");
+            StatusEffects_Mod.Add(status);
+        }
+        else throw new System.Exception("You are trying to mod an ability to gain a mod it already has.");
+    }
+
+    public List<StatusEffects> GetStatusEffects()
+    {
+        Debug.Log($"here I am asked to return {StatusEffects_Mod[0]}");
+        return StatusEffects_Mod;
     }
 
 
@@ -82,31 +94,3 @@ public class Mod_Base
 
 
 }
-
-// void InitializeModDict()
-// {
-//     
-// Affinities = new Dictionary<Element, (Func<float> Get, Action<float> Set)>
-// {
-//     {AbilityModTypes.Cost,  (() => Cost,            v => Cost = v) },
-//     {AbilityModTypes.Cooldown,  (() => Cost,            v => Cost = v) },
-//     {AbilityModTypes.Heal,  (() => Heal_Mod,            v => Heal_Mod = v) },
-//     {AbilityModTypes.HealOverTime, (() => Cost,            v => Cost = v) },
-//     {AbilityModTypes.Damage,  (() => InstantDamage_Mod,            v => InstantDamage_Mod = v) },
-//     {AbilityModTypes.DamageOverTime,  (() => Mod_DamageOverTime,            v => Mod_DamageOverTime = v) },
-//     {AbilityModTypes.Duration,  (() => Mod_Duration,            v => Mod_Duration = v) },
-//     {AbilityModTypes.Radius, (() => Cost,            v => Cost = v) },
-//     {AbilityModTypes.Speed, (() => Cost,            v => Cost = v) },
-//     {AbilityModTypes.Range,  (() => Cost,            v => Cost = v) },
-//     {AbilityModTypes.Width, (() => Cost,            v => Cost = v) },
-//     {AbilityModTypes.MakePierce,   (() => Cost,            v => Cost = v) },
-//     {AbilityModTypes.MaxPierce,   (() => Cost,            v => Cost = v) },
-//     {AbilityModTypes.MakeRicochet,   (() => Cost,            v => Cost = v) },
-//     {AbilityModTypes.MaxRicochet,   (() => Cost,            v => Cost = v) },
-//     {AbilityModTypes.MakeSplit,   (() => Cost,            v => Cost = v) },
-//     {AbilityModTypes.MaxSplit,   (() => Cost,            v => Cost = v) },
-//     {AbilityModTypes.StatusEffect, (() => Cost,            v => Cost = v) },
-// }
-
-
-
