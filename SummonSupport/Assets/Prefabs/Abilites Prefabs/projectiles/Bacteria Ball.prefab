@@ -54,7 +54,7 @@ Rigidbody2D:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 456
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -75,10 +75,10 @@ CircleCollider2D:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 448
+    m_Bits: 456
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 7346239
+    m_Bits: 7346231
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2
@@ -92,7 +92,7 @@ CircleCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
@@ -110,6 +110,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13400c3fa81f46549a3f6498c7d5e16e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <physicsCollider>k__BackingField: {fileID: -2435618459644733205}
   ability: {fileID: 0}
   splitAlready: 0
 --- !u!212 &6807858634492449281

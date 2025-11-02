@@ -65,7 +65,7 @@ public class Mod_Base
 
     public List<StatusEffects> GetStatusEffects()
     {
-        Debug.Log($"here I am asked to return {StatusEffects_Mod[0]}");
+        Debug.Log($"here I am asked to return {StatusEffects_Mod}");
         return StatusEffects_Mod;
     }
 

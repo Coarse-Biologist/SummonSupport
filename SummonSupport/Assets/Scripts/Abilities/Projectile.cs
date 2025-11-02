@@ -7,6 +7,8 @@ using UnityEngine;
 [RequireComponent(typeof(Collider2D))]
 public class Projectile : MonoBehaviour
 {
+    [field: SerializeField]
+    public Collider2D physicsCollider { private set; get; } = null;
     List<GameObject> ignoreGameObjects = new List<GameObject>();
     public GameObject SpawnEffectOnHit { get; set; }
 
@@ -54,13 +56,16 @@ public class Projectile : MonoBehaviour
         // set ricochet properties if it should.
         if (ability.PiercingMode == OnHitBehaviour.Ricochet || (projectileMod != null && projectileMod.GetModdedAttribute(AbilityModTypes.MaxRicochet) > 0))
         {
-            if (ricochedAlready < projectileMod.GetModdedAttribute(AbilityModTypes.MaxRicochet))
+            if (physicsCollider != null)
             {
-                Debug.Log($"physics mat is being assigned");
-                PhysicsMaterial2D mat = new PhysicsMaterial2D();
-                mat.bounciness = 2f;
-                mat.friction = 0f;
-                GetComponent<Collider2D>().sharedMaterial = mat;
+                if (ricochedAlready < projectileMod.GetModdedAttribute(AbilityModTypes.MaxRicochet))
+                {
+                    Debug.Log($"physics mat is being assigned");
+                    PhysicsMaterial2D mat = new PhysicsMaterial2D();
+                    mat.bounciness = 2f;
+                    mat.friction = 0f;
+                    physicsCollider.sharedMaterial = mat;
+                }
             }
         }
         ignoreGameObjects.Add(lb.gameObject);

@@ -32,7 +32,8 @@ public class OneWayBarrier : MonoBehaviour
         if (collider.gameObject.TryGetComponent<EnemyStats>(out EnemyStats enemyStats))
         {
             //triggersToDeactivate.Add(collider);
-            StartCoroutine(DelayedTriggerDeactivation(collider));
+            if (collider != null)
+                StartCoroutine(DelayedTriggerDeactivation(collider));
         }
         //else Debug.Log($"{collider.gameObject} does not have a charStats (it is {charStats})");
 

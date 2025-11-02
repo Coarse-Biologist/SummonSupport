@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using SummonSupportEvents;
 using UnityEngine;
+using UnityEngine.Rendering.PostProcessing;
 
 public class PlayerStats : LivingBeing
 {
@@ -10,7 +11,7 @@ public class PlayerStats : LivingBeing
 
     [Header("Experience Info")]
 
-    [SerializeField] public int CurrentLevel { private set; get; } = 0;
+    [SerializeField] public int CurrentLevel { private set; get; } = 1;
     [SerializeField] public float CurrentXP { private set; get; } = 0;
     [SerializeField] public float MaxXP { private set; get; } = 100;
     [field: SerializeField] public int SkillPoints { private set; get; } = 0;
@@ -22,7 +23,9 @@ public class PlayerStats : LivingBeing
     private WaitForSeconds resurrectionIncrement = new WaitForSeconds(.5f);
 
     #endregion
-    [SerializeField] public Dictionary<string, int> SlottedAbilities { private set; get; } = new Dictionary<string, int>(); //This will store the slot in which an ability is contained. the string is a placeholder until we decide the object type of an ability
+    [field: SerializeField] public int TotalControlllableMinions { private set; get; } = 2;
+    [field: SerializeField] public int AbilitySlots { private set; get; } = 2;
+    [field: SerializeField] public Dictionary<string, int> SlottedAbilities { private set; get; } = new Dictionary<string, int>(); //This will store the slot in which an ability is contained. the string is a placeholder until we decide the object type of an ability
 
     protected override void Awake()
     {
@@ -49,11 +52,22 @@ public class PlayerStats : LivingBeing
         }
         PlayerUIHandler.Instance.SetPlayerXP(CurrentXP);
     }
+    public void AddControllableMinions(int changeValue)
+    {
+        TotalControlllableMinions = Math.Max(0, TotalControlllableMinions + changeValue);
+        Debug.Log($"Changing total controllable minion number");
+
+    }
+    public void AddAbilitySlot(int changeValue)
+    {
+        AbilitySlots = Math.Max(0, AbilitySlots + changeValue);
+        Debug.Log($"Changing ability slot number");
+    }
     public void GainXP(int amount)
     {
         //Debug.Log($"Gaining Xp in playerStats script. Current xp prior to gain s= {CurrentXP}");
 
-        CurrentXP += amount;
+        CurrentXP += amount * 30;
         //Debug.Log($"Gaining Xp in playerStats script. xp after gain = {CurrentXP}");
 
         if (CurrentXP >= MaxXP)
@@ -69,6 +83,40 @@ public class PlayerStats : LivingBeing
         CurrentXP -= MaxXP;
         MaxXP *= 2;
         SkillPoints++;
+        EventDeclarer.PlayerLevelUp?.Invoke(LevelUpHandler.GetLevelRewardString(CurrentLevel));
+        GainLevelRewards(LevelUpHandler.GetLevelRewards(CurrentLevel));
+    }
+    private void GainLevelRewards(List<LevelRewards> rewards)
+    {
+        foreach (LevelRewards reward in rewards)
+        {
+            switch (reward)
+            {
+                case LevelRewards.SkillPoint:
+                    SkillPoints++;
+                    break;
+                case LevelRewards.MaximumHealth:
+                    ChangeAttribute(AttributeType.MaxHitpoints, GetAttribute(AttributeType.MaxHitpoints) / 100);
+                    RestoreResources();
+                    break;
+                case LevelRewards.MaximumPower:
+                    ChangeAttribute(AttributeType.MaxPower, GetAttribute(AttributeType.MaxHitpoints) / 100);
+                    RestoreResources();
+                    break;
+                case LevelRewards.HealthRegeneration:
+                    ChangeHealthRegeneration(1);
+                    break;
+                case LevelRewards.PowerRegeneration:
+                    ChangePowerRegeneration(1);
+                    break;
+                case LevelRewards.TotalControlllableMinions:
+                    AddControllableMinions(1);
+                    break;
+                default:
+                    Debug.LogWarning($"There is no behavior implimented for the level up reward {reward}");
+                    break;
+            }
+        }
     }
 
 
@@ -112,4 +160,6 @@ public class PlayerStats : LivingBeing
             }
         }
     }
+
+
 }

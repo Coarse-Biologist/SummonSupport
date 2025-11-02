@@ -43,9 +43,10 @@ public static class CombatStatHandler
         {
             AdjustDamageValue(effectPackage.Damage, effectPackage.SpecialAbilityAttribute);
         }
-        if (effectPackage.Damage.Value > 0)
+        if (effectPackage.DamageOverTime.Value > 0)
         {
-            AdjustAndApplyDOT(effectPackage.Damage);
+            UnityEngine.Debug.Log($"effectPackage.DamageOverTime.Value = {effectPackage.DamageOverTime.Value}.");
+            AdjustAndApplyDOT(effectPackage.DamageOverTime);
         }
         if (effectPackage.AttributeUp.Count > 0)
         {

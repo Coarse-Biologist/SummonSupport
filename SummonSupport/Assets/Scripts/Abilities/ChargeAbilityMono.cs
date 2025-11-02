@@ -18,6 +18,8 @@ public class ChargeAbilityMono : MonoBehaviour
     private AbilityModHandler modHandler;
     private float speed = 0;
     private float range = 0;
+    private int alreadypierced = 0;
+    private int maxPierce = 0;
 
     double maxChargeTime = 2f;
 
@@ -38,6 +40,12 @@ public class ChargeAbilityMono : MonoBehaviour
         }
         range = chargeAbility.range;
 
+        if (modHandler != null)
+        {
+            maxPierce = modHandler.GetModAttributeByType(chargeAbility.ActivateOnHit, AbilityModTypes.MaxPierce);
+        }
+        Debug.Log($"Max pierce = {maxPierce}");
+
         originTransform = abilityHandler.abilityDirection.transform;
         rb = user.GetComponentInParent<Rigidbody2D>();
         chargeCoroutine = StartCoroutine(ChargeWhileLogical());
@@ -51,7 +59,7 @@ public class ChargeAbilityMono : MonoBehaviour
         if (modHandler != null)
         {
             speed += modHandler.GetModAttributeByType(chargeAbility, AbilityModTypes.Speed);
-            speed += modHandler.GetModAttributeByType(chargeAbility, AbilityModTypes.Range);
+            range += modHandler.GetModAttributeByType(chargeAbility, AbilityModTypes.Range);
         }
         bool stillCharging = true;
         startLoc = transform.position;
@@ -76,8 +84,10 @@ public class ChargeAbilityMono : MonoBehaviour
             if (chargeAbility.HitEffect != null)
             {
                 Instantiate(chargeAbility.HitEffect, collision.transform.position, quaternion.identity, collision.transform);
+                alreadypierced++;
             }
-            EndCharge();
+            if (alreadypierced > maxPierce)
+                EndCharge();
         }
     }
 

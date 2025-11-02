@@ -30,7 +30,7 @@ public abstract class LivingBeing : MonoBehaviour
     [field: Header("Attributes - Regenerations")]
     private WaitForSeconds regenTickRate;
     [field: SerializeField] public float TickRateRegenerationInSeconds { get; private set; } = .2f;
-    [field: SerializeField] public float HealthRegeneration { get; private set; } = 0;
+    [field: SerializeField] public float HealthRegeneration { get; private set; } = 1;
     [field: SerializeField] public float PowerRegeneration { get; private set; } = 1;
     [field: SerializeField] public float TotalHealthRegeneration { get; private set; } = 0; // i think this is / should be a private variable since it is only used for local calculations? or at least i think it doesnt need to be serialized since it would never be used (it is instantluy set to the value of HealthRegeneration)
     [field: SerializeField] public float TotalPowerRegeneration { get; private set; } = 0;
@@ -195,6 +195,18 @@ public abstract class LivingBeing : MonoBehaviour
     protected void SetDead(bool isDead)
     {
         Dead = isDead;
+    }
+    public void ChangeHealthRegeneration(float Value)
+    {
+        HealthRegeneration = Math.Max(0, HealthRegeneration + Value);
+        Debug.Log($"Changing health regen. new total: {HealthRegeneration}");
+
+    }
+    public void ChangePowerRegeneration(float Value)
+    {
+        HealthRegeneration = Math.Max(0, PowerRegeneration + Value);
+        Debug.Log($"Changing power regen. new total: {PowerRegeneration}");
+
     }
 
     public float GetAttribute(AttributeType attribute)

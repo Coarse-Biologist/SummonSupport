@@ -226,7 +226,7 @@ PrefabInstance:
     - target: {fileID: 2376002305397545486, guid: e4c43cb75dda4d3458057b35ce607d87,
         type: 3}
       propertyPath: <MaxHP>k__BackingField
-      value: 20
+      value: 1000
       objectReference: {fileID: 0}
     - target: {fileID: 2376002305397545486, guid: e4c43cb75dda4d3458057b35ce607d87,
         type: 3}
@@ -246,17 +246,12 @@ PrefabInstance:
     - target: {fileID: 2376002305397545486, guid: e4c43cb75dda4d3458057b35ce607d87,
         type: 3}
       propertyPath: <CurrentHP>k__BackingField
-      value: 20
+      value: 1000
       objectReference: {fileID: 0}
     - target: {fileID: 2376002305397545486, guid: e4c43cb75dda4d3458057b35ce607d87,
         type: 3}
       propertyPath: <CurrentPower>k__BackingField
       value: 1000
-      objectReference: {fileID: 0}
-    - target: {fileID: 2376002305397545486, guid: e4c43cb75dda4d3458057b35ce607d87,
-        type: 3}
-      propertyPath: <HealthRegeneration>k__BackingField
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2864372725038760086, guid: e4c43cb75dda4d3458057b35ce607d87,
         type: 3}
@@ -298,16 +293,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Offset.y
       value: 0.1104881
-      objectReference: {fileID: 0}
-    - target: {fileID: 4345559948793367723, guid: e4c43cb75dda4d3458057b35ce607d87,
-        type: 3}
-      propertyPath: m_IsTrigger
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4345559948793367723, guid: e4c43cb75dda4d3458057b35ce607d87,
-        type: 3}
-      propertyPath: m_IncludeLayers.m_Bits
-      value: 3264
       objectReference: {fileID: 0}
     - target: {fileID: 4574382234326199470, guid: e4c43cb75dda4d3458057b35ce607d87,
         type: 3}
@@ -361,11 +346,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AngularDamping
       value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4697203378900965796, guid: e4c43cb75dda4d3458057b35ce607d87,
-        type: 3}
-      propertyPath: m_IncludeLayers.m_Bits
-      value: 1024
       objectReference: {fileID: 0}
     - target: {fileID: 4886425859411069616, guid: e4c43cb75dda4d3458057b35ce607d87,
         type: 3}
@@ -634,7 +614,7 @@ PrefabInstance:
     - target: {fileID: 9084318776697772798, guid: e4c43cb75dda4d3458057b35ce607d87,
         type: 3}
       propertyPath: <Abilities>k__BackingField.Array.size
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 9084318776697772798, guid: e4c43cb75dda4d3458057b35ce607d87,
         type: 3}
@@ -652,13 +632,13 @@ PrefabInstance:
         type: 3}
       propertyPath: '<Abilities>k__BackingField.Array.data[2]'
       value: 
-      objectReference: {fileID: 11400000, guid: a34fec9bcb32b274da2b5227eef299b0,
+      objectReference: {fileID: 11400000, guid: a1d92caf1a989f045afb6724af236c41,
         type: 2}
     - target: {fileID: 9084318776697772798, guid: e4c43cb75dda4d3458057b35ce607d87,
         type: 3}
       propertyPath: '<Abilities>k__BackingField.Array.data[3]'
       value: 
-      objectReference: {fileID: 11400000, guid: a1d92caf1a989f045afb6724af236c41,
+      objectReference: {fileID: 11400000, guid: 6eaaf721143e73a408e50f0c94decbe5,
         type: 2}
     - target: {fileID: 9084318776697772798, guid: e4c43cb75dda4d3458057b35ce607d87,
         type: 3}
