@@ -18,22 +18,46 @@ MonoBehaviour:
   <Cooldown>k__BackingField: 2
   <CostType>k__BackingField: 1
   <Cost>k__BackingField: 50
+  <Range>k__BackingField: 20
+  <Duration>k__BackingField: 0
+  <AbilityTypeTag>k__BackingField: 0
   <ListUsableOn>k__BackingField: 00000000
-  <TargetTypeAndEffects>k__BackingField:
-  - <EffectDescription>k__BackingField: 
-    <TargetType>k__BackingField: 1
+  <TargetEffects>k__BackingField:
+    <EffectDescription>k__BackingField: 
     <Heal>k__BackingField:
       <Value>k__BackingField: 50
+      <ValueType>k__BackingField: 0
     <HealOverTime>k__BackingField:
+      <Value>k__BackingField: 1
+      <ValueType>k__BackingField: 0
+    <Damage>k__BackingField:
       <Value>k__BackingField: 0
-      <Duration>k__BackingField: 0
+    <DamageOverTime>k__BackingField:
+      <Value>k__BackingField: 0
     <AttributeUp>k__BackingField: []
     <AttributeDown>k__BackingField: []
-    <Damage>k__BackingField: []
-    <DamageOverTime>k__BackingField: []
+    <StatusEffects>k__BackingField: []
+    <SpecialAbilityAttribute>k__BackingField: 0
+  <SelfEffects>k__BackingField:
+    <EffectDescription>k__BackingField: 
+    <Heal>k__BackingField:
+      <Value>k__BackingField: 0
+      <ValueType>k__BackingField: 0
+    <HealOverTime>k__BackingField:
+      <Value>k__BackingField: 0
+      <ValueType>k__BackingField: 0
+    <Damage>k__BackingField:
+      <Value>k__BackingField: 0
+    <DamageOverTime>k__BackingField:
+      <Value>k__BackingField: 0
+    <AttributeUp>k__BackingField: []
+    <AttributeDown>k__BackingField: []
+    <StatusEffects>k__BackingField: []
     <SpecialAbilityAttribute>k__BackingField: 0
   <ElementTypes>k__BackingField: 
-  <AbilityTypeTag>k__BackingField: 0
+  <PhysicalType>k__BackingField: 0
+  <OnHitEffect>k__BackingField: {fileID: 7418358774842603446, guid: bd97673f52127cb448b52fb00741f85b,
+    type: 3}
   <SpawnEffectOnHit>k__BackingField: {fileID: 7418358774842603446, guid: bd97673f52127cb448b52fb00741f85b,
     type: 3}
   <EffectOrientation>k__BackingField: 0

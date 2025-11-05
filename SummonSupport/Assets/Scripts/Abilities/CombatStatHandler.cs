@@ -247,7 +247,11 @@ public static class CombatStatHandler
 
     private static void HandleApplyDOT(AttributeType attributeType, float changeValue, AbilityModTypes modType)
     {
-        float duration = 0;
+        float duration = currentAbility.Duration;
+        if(modHandler != null)
+        {
+            duration += modHandler.GetModAttributeByType(currentAbility, AbilityModTypes.Duration);
+        }
         //UnityEngine.D
         // ebug.Log($"Changing {target}s regen by {newValue}");
         if (mod != null)

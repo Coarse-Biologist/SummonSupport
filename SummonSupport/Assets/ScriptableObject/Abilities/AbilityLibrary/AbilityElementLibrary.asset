@@ -89,6 +89,7 @@ MonoBehaviour:
   - Level: 1
     Abilities:
     - {fileID: 11400000, guid: 6d37a0724617e2244a87765939cde59b, type: 2}
+    - {fileID: 11400000, guid: 8f2a5a22743383f44970afda4eb890cf, type: 2}
   - Level: 2
     Abilities:
     - {fileID: 11400000, guid: 3426d86dfddd8b342b4b8164207c3157, type: 2}

@@ -56,6 +56,8 @@ MonoBehaviour:
     <SpecialAbilityAttribute>k__BackingField: 0
   <ElementTypes>k__BackingField: 0c000000
   <PhysicalType>k__BackingField: 0
+  <OnHitEffect>k__BackingField: {fileID: 5705030685624713920, guid: e378c4ebb8c3f9d43b451efa5c71483d,
+    type: 3}
   <Radius>k__BackingField: 3
   <AuraObject>k__BackingField: {fileID: 1699087696372334086, guid: bc8366872ae84974e969b89dde807165,
     type: 3}

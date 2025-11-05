@@ -118,9 +118,9 @@ public class Aura : MonoBehaviour
                 if (ability.ListUsableOn.Contains(RelationshipHandler.GetRelationshipType(caster.CharacterTag, otherLivingBeing.CharacterTag)))
                 {
                     //Debug.Log($"usable on {otherLivingBeing.Name}");
-                    if (ability is ConjureAbility)
+                    if(ability.OnHitEffect != null)
                     {
-                        SpawnOnHitEffect(otherLivingBeing, conjureAbility.SpawnEffectOnHit);
+                        SpawnOnHitEffect(otherLivingBeing, ability.OnHitEffect);
                     }
                     otherLivingBeing.AlterAbilityList(ability, true);
                     //Debug.Log($"Effects of {ability.Name} is being handled.");

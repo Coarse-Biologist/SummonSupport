@@ -56,6 +56,8 @@ MonoBehaviour:
     <SpecialAbilityAttribute>k__BackingField: 0
   <ElementTypes>k__BackingField: 
   <PhysicalType>k__BackingField: 0
+  <OnHitEffect>k__BackingField: {fileID: 1847413739128325886, guid: af3daea78fb84b541a9b871b3917d9a9,
+    type: 3}
   <ObjectToSpawn>k__BackingField: {fileID: 6725234854290891213, guid: 23052f4373add044e8afe3b7eae99b51,
     type: 3}
   <SpawnEffectOnHit>k__BackingField: {fileID: 0}

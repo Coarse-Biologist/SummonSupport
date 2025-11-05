@@ -26,6 +26,30 @@ public static class LevelUpHandler
     {LevelRewards.TotalControlllableMinions, "+ 1 Total controllable minions"},
     };
 
+    public static Dictionary<LevelRewards, int> RewardsCostDict = new()
+    {
+    {LevelRewards.MaximumHealth, 1},
+    {LevelRewards.MaximumPower, 1},
+    {LevelRewards.HealthRegeneration, 1},
+    {LevelRewards.PowerRegeneration, 1},
+    {LevelRewards.ElementalAffinity, 1},
+    {LevelRewards.AbilitySlot, 5},
+    {LevelRewards.TotalControlllableMinions, 10},
+    };
+
+    public static int GetSkillPointCost(LevelRewards reward)
+    {
+        if(RewardsCostDict.TryGetValue(reward, out int cost))
+        {
+            return cost;
+        }
+        else 
+        {
+            throw new System.Exception($"You want to know the cost of an upgrade which is not yet available.");
+            return 0;
+        }
+    }
+
 
     public static List<LevelRewards> GetLevelRewards(int level)
     {

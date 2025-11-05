@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 9025102675782475170}
   - component: {fileID: 7193127590494400578}
   m_Layer: 0
-  m_Name: PE_LightSparks
+  m_Name: PHE_LightSparks
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -224,7 +224,7 @@ public abstract class LivingBeing : MonoBehaviour
 
         if (ResourceAttributesDict != null && ResourceAttributesDict.ContainsKey(attributeType))
             ResourceAttributesDict[attributeType].Set(value);
-        HandleEventInvokes(attributeType, value);
+        HandleEventInvokes(attributeType, value); // make overrides for minions, players and enemies
         if (GetAttribute(AttributeType.CurrentHitpoints) <= 0)
             Die();
         else if (attributeType == AttributeType.CurrentPower && value <= 0)

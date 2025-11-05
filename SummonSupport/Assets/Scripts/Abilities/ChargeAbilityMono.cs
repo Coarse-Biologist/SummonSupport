@@ -21,7 +21,6 @@ public class ChargeAbilityMono : MonoBehaviour
     private int alreadypierced = 0;
     private int maxPierce = 0;
 
-    double maxChargeTime = 2f;
 
     [field: SerializeField] public StatusEffects attackAnimationCC;
 
@@ -63,20 +62,20 @@ public class ChargeAbilityMono : MonoBehaviour
         }
         bool stillCharging = true;
         startLoc = transform.position;
-        while (stillCharging && maxChargeTime > 0)
+        while (stillCharging)
         {
             rb.linearVelocity = originTransform.right * speed * 35;
             if (((Vector2)gameObject.transform.position - startLoc).magnitude > range)
             {
                 EndCharge();
             }
-            maxChargeTime -= .01;
             yield return chargeTickRate;
         }
     }
 
     void OnTriggerEnter2D(Collider2D collision)
     {
+        if(collision is EdgeCollider2D wall) EndCharge();
         Ability abilityToCast = chargeAbility.ActivateOnHit;
         bool success = abilityToCast.Activate(transform.parent.gameObject);
         if (success)

@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using System;
 using System.Linq;
 using System.Text.RegularExpressions;
-//using Unity.VisualScripting;
 using SummonSupportEvents;
 using static StatusEffectsLibrary;
 
@@ -62,6 +61,22 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     private StatusEffects selectedStatusEffect = null;
 
     private List<Button> SpawnedButtons = new();
+
+    #region player upgrades
+
+    public static Dictionary<LevelRewards, int> selectedPlayerUpgrades = new()
+        {
+        {LevelRewards.MaximumHealth, 0},
+        {LevelRewards.MaximumPower, 0},
+        {LevelRewards.HealthRegeneration, 0},
+        {LevelRewards.PowerRegeneration, 0},
+        {LevelRewards.ElementalAffinity, 0},
+        {LevelRewards.AbilitySlot, 0},
+        {LevelRewards.TotalControlllableMinions, 0},
+        };
+    private int selectedUpgradeCost = 0;
+
+    #endregion
 
     #endregion
 
@@ -148,18 +163,91 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
         ClearAllPanels(true);
         ResetVars();
         SetInstructionsText("Manage minions or abilities here at your alchemy station");
-
+        Button playerManagementButton = AddButtonToPanel("Player", centerPanel, 50, 5);
         Button abilityManagementOptions = AddButtonToPanel("Abilities", centerPanel, 50, 5);
         Button minionManagementOptions = AddButtonToPanel("Minions", centerPanel, 50, 5);
         Button quitButton = AddButtonToPanel("Quit", centerPanel, 50, 5);
 
+        playerManagementButton.RegisterCallback<ClickEvent>(e => ShowPlayerManagementOptions());
         abilityManagementOptions.RegisterCallback<ClickEvent>(e => ShowAbilityManagementOptions());
-
         minionManagementOptions.RegisterCallback<ClickEvent>(e => ShowMinionManagementOptions());
         quitButton.RegisterCallback<ClickEvent>(e => QuitAlchemyUI());
+    }
+#region player upgrade handling
+    private void ShowPlayerManagementOptions()
+    {
+        ClearAllPanels(true);
+        ResetVars();
 
+        SetInstructionsText($"Use skill-points to purchase upgrades. \nYou have {PlayerStats.Instance.SkillPoints} skill-points.");
+        Button backButton = AddButtonToPanel("Back", centerPanel, 50, 5);
+
+        Button confirmButton = AddButtonToPanel("Confirm", topRightPanel, 50, 5);
+        Button clearButton = AddButtonToPanel("Clear Selection", topRightPanel, 50, 5);
+
+        backButton.RegisterCallback<ClickEvent>(e => ShowDefaultScreen());
+        confirmButton.RegisterCallback<ClickEvent>(e => PlayerStats.Instance.GainLevelRewards(selectedPlayerUpgrades));
+        clearButton.RegisterCallback<ClickEvent>(e => ClearSelectedPlayerUpgrades());
+
+
+        ShowPlayerUpgradeOptions();
 
     }
+
+    private void ShowPlayerUpgradeOptions()
+    {
+        foreach(LevelRewards reward in LevelUpHandler.RewardsCostDict.Keys)
+        {
+            Button button = AddButtonToPanel(LevelUpHandler.RewardsDescriptionDict[reward], bottomLeftPanel, 50, 5);
+            button.RegisterCallback<ClickEvent>(e => TryAddSelectedPlayerUpgrade(reward));
+            button.RegisterCallback<ClickEvent>(e => SetPlayerUpgradeInfo());
+        }
+    }
+
+    private void TryAddSelectedPlayerUpgrade(LevelRewards reward)
+    {
+        int price = LevelUpHandler.RewardsCostDict[reward];
+        
+        if(selectedUpgradeCost + price < PlayerStats.Instance.SkillPoints)
+        {
+            selectedUpgradeCost +=  price;
+            selectedPlayerUpgrades[reward] +=1;
+            
+        }
+        else Debug.Log($"Insufficient skill-points for the upgrade {reward}");
+    }
+
+    private void ClearSelectedPlayerUpgrades()
+    {
+        foreach(KeyValuePair<LevelRewards, int> kvp in selectedPlayerUpgrades)
+        {
+            selectedPlayerUpgrades[kvp.Key] = 0;
+        }
+        SetInstructionsText($"Use skill-points to purchase upgrades. \nYou have {PlayerStats.Instance.SkillPoints} skill-points.");
+    }
+
+    private void SetPlayerUpgradeInfo()
+    {
+        Debug.Log($"trying to add text info");
+
+        string text = $"Select upgrades. Remaining Skill-Points: {PlayerStats.Instance.SkillPoints - selectedUpgradeCost}. Currently selected upgrades:";
+        foreach(var rewardKvp in selectedPlayerUpgrades)
+        {
+            
+            if(rewardKvp.Value != 0)
+            {
+            text += $"\n{LevelUpHandler.RewardsDescriptionDict[rewardKvp.Key]} x {rewardKvp.Value}";
+            }
+        }
+        SetInstructionsText(text);
+    }
+    private void UpgradePlayer()
+    {
+        
+    }
+
+    #endregion
+
     private void ShowMinionManagementOptions()
     {
         ClearAllPanels(true);
@@ -178,9 +266,8 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
         recycleButton.RegisterCallback<ClickEvent>(e => ShowRecycleOptions());
         backButton.RegisterCallback<ClickEvent>(e => ShowDefaultScreen());
 
-
-
     }
+    
     private void ShowAbilityManagementOptions()
     {
         ClearAllPanels(true);
@@ -256,8 +343,8 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
         ResetVars();
         ShowUpgradableMinions();
         ShowUpgradeInfo();
-        Button confirmButton = AddButtonToPanel("Confirm", topRightPanel, 35, 5);
-        Button clearButton = AddButtonToPanel("Clear Selection", topRightPanel, 35, 5);
+        Button confirmButton = AddButtonToPanel("Confirm", topRightPanel, 50, 5);
+        Button clearButton = AddButtonToPanel("Clear Selection", topRightPanel, 50, 5);
         confirmButton.RegisterCallback<ClickEvent>(e => HandleUpgradeMinion(minionToUpgrade));
         clearButton.RegisterCallback<ClickEvent>(e => ClearCraftingSelection());
         clearButton.RegisterCallback<ClickEvent>(e => HandleUpgradeDisplay());
@@ -294,8 +381,8 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
         ClearAllPanels();
         ResetVars();
 
-        Button confirmButton = AddButtonToPanel("Confirm", topRightPanel, 35, 5);
-        Button clearButton = AddButtonToPanel("Clear Selection", topRightPanel, 35, 5);
+        Button confirmButton = AddButtonToPanel("Confirm", topRightPanel, 50, 5);
+        Button clearButton = AddButtonToPanel("Clear Selection", topRightPanel, 50, 5);
 
         clearButton.RegisterCallback<ClickEvent>(e => SetSelectedAbility(null));
         confirmButton.RegisterCallback<ClickEvent>(e => AttemptModification(selectedModType));
@@ -432,9 +519,9 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
         ShowCraftingInfo();
         SpawnIngredientButtons();
         ShowElementToggles(bottomRightPanel);
-        Button confirmButton = AddButtonToPanel("Confirm", topRightPanel, 35, 5);
+        Button confirmButton = AddButtonToPanel("Confirm", topRightPanel, 50, 5);
 
-        Button clearButton = AddButtonToPanel("Clear Selection", topRightPanel, 35, 5);
+        Button clearButton = AddButtonToPanel("Clear Selection", topRightPanel, 50, 5);
         clearButton.RegisterCallback<ClickEvent>(e => ClearCraftingSelection());
         clearButton.RegisterCallback<ClickEvent>(e => ShowCraftingInfo());
         clearButton.RegisterCallback<ClickEvent>(e => SpawnIngredientButtons());
@@ -526,9 +613,9 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     }
     private void ShowRecyclableMinions()
     {
-        Button confirmButton = AddButtonToPanel("Confirm", topRightPanel, 35, 5);
+        Button confirmButton = AddButtonToPanel("Confirm", topRightPanel, 50, 5);
 
-        Button clearButton = AddButtonToPanel("Clear Selection", topRightPanel, 35, 5);
+        Button clearButton = AddButtonToPanel("Clear Selection", topRightPanel, 50, 5);
         confirmButton.RegisterCallback<ClickEvent>(e => AlchemyHandler.HandleMinionRecycling(minionToRecycle));
         clearButton.RegisterCallback<ClickEvent>(e => SetMinionToRecycle(null));
         foreach (GameObject minion in alchemyHandler.activeMinions)
@@ -556,9 +643,9 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
         SetInstructionsText("Select an ability to learn for which you have sufficient cores.");
         SpawnCraftableAbilityButtons();
 
-        Button confirmButton = AddButtonToPanel("Confirm", topRightPanel, 35, 5);
+        Button confirmButton = AddButtonToPanel("Confirm", topRightPanel, 50, 5);
 
-        Button clearButton = AddButtonToPanel("Clear Selection", topRightPanel, 35, 5);
+        Button clearButton = AddButtonToPanel("Clear Selection", topRightPanel, 50, 5);
         clearButton.RegisterCallback<ClickEvent>(e => SetInstructionsText("Select an ability to learn for which you have sufficient cores."));
         clearButton.RegisterCallback<ClickEvent>(e => SetSelectedAbility(null));
 
@@ -634,9 +721,9 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
         SpawnKnownAbilityButtons();
 
         SetInstructionsText("Select an ability and a slot.");
-        Button confirmButton = AddButtonToPanel("Confirm", topRightPanel, 35, 5);
+        Button confirmButton = AddButtonToPanel("Confirm", topRightPanel, 50, 5);
 
-        Button clearButton = AddButtonToPanel("Clear Selection", topRightPanel, 35, 5);
+        Button clearButton = AddButtonToPanel("Clear Selection", topRightPanel, 50, 5);
         clearButton.RegisterCallback<ClickEvent>(e => SetInstructionsText("Select an ability and a slot."));
         clearButton.RegisterCallback<ClickEvent>(e => SetSelectedAbility(null));
 
