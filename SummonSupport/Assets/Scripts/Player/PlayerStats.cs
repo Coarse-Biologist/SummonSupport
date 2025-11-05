@@ -44,7 +44,6 @@ public class PlayerStats : LivingBeing
     }
     private void GainXP(LivingBeing defeatedEnemy)
     {
-        //Debug.Log($"Gaining Xp in playerStats script. Current xp = {CurrentXP}");
         CurrentXP += defeatedEnemy.XP_OnDeath;
         if (CurrentXP >= MaxXP)
         {
@@ -61,14 +60,11 @@ public class PlayerStats : LivingBeing
     public void AddAbilitySlot(int changeValue)
     {
         AbilitySlots = Math.Max(0, AbilitySlots + changeValue);
-        Debug.Log($"Changing ability slot number");
     }
     public void GainXP(int amount)
     {
-        //Debug.Log($"Gaining Xp in playerStats script. Current xp prior to gain s= {CurrentXP}");
 
         CurrentXP += amount * 30;
-        //Debug.Log($"Gaining Xp in playerStats script. xp after gain = {CurrentXP}");
 
         if (CurrentXP >= MaxXP)
         {
@@ -136,11 +132,11 @@ public class PlayerStats : LivingBeing
                     RestoreResources();
                     break;
                 case LevelRewards.MaximumPower:
-                    ChangeAttribute(AttributeType.MaxPower, GetAttribute(AttributeType.MaxHitpoints)* reward.Value / 100);
+                    ChangeAttribute(AttributeType.MaxPower, GetAttribute(AttributeType.MaxHitpoints) * reward.Value / 100);
                     RestoreResources();
                     break;
                 case LevelRewards.HealthRegeneration:
-                    ChangeHealthRegeneration(1* reward.Value);
+                    ChangeHealthRegeneration(1 * reward.Value);
                     break;
                 case LevelRewards.PowerRegeneration:
                     ChangePowerRegeneration(1 * reward.Value);
@@ -161,18 +157,15 @@ public class PlayerStats : LivingBeing
 
     public override void Die()
     {
-        //Logging.Info($"{Name} died");
 
         if (HasStatusEffect(StatusEffectType.ExplodeOnDeath)) ViciousDeathExplosion();
         SetDead(true);
         EventDeclarer.PlayerDead?.Invoke(true);
-        //Destroy(gameObject);
     }
 
 
     public void ResurrectMinion(GameObject minion)
     {
-        Debug.Log($" {Name} Wants to resurrect a minion.");
         StartCoroutine(CheckResurrection(minion));
     }
 

@@ -173,7 +173,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
         minionManagementOptions.RegisterCallback<ClickEvent>(e => ShowMinionManagementOptions());
         quitButton.RegisterCallback<ClickEvent>(e => QuitAlchemyUI());
     }
-#region player upgrade handling
+    #region player upgrade handling
     private void ShowPlayerManagementOptions()
     {
         ClearAllPanels(true);
@@ -196,7 +196,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
 
     private void ShowPlayerUpgradeOptions()
     {
-        foreach(LevelRewards reward in LevelUpHandler.RewardsCostDict.Keys)
+        foreach (LevelRewards reward in LevelUpHandler.RewardsCostDict.Keys)
         {
             Button button = AddButtonToPanel(LevelUpHandler.RewardsDescriptionDict[reward], bottomLeftPanel, 50, 5);
             button.RegisterCallback<ClickEvent>(e => TryAddSelectedPlayerUpgrade(reward));
@@ -207,19 +207,19 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     private void TryAddSelectedPlayerUpgrade(LevelRewards reward)
     {
         int price = LevelUpHandler.RewardsCostDict[reward];
-        
-        if(selectedUpgradeCost + price < PlayerStats.Instance.SkillPoints)
+
+        if (selectedUpgradeCost + price < PlayerStats.Instance.SkillPoints)
         {
-            selectedUpgradeCost +=  price;
-            selectedPlayerUpgrades[reward] +=1;
-            
+            selectedUpgradeCost += price;
+            selectedPlayerUpgrades[reward] += 1;
+
         }
         else Debug.Log($"Insufficient skill-points for the upgrade {reward}");
     }
 
     private void ClearSelectedPlayerUpgrades()
     {
-        foreach(KeyValuePair<LevelRewards, int> kvp in selectedPlayerUpgrades)
+        foreach (KeyValuePair<LevelRewards, int> kvp in selectedPlayerUpgrades)
         {
             selectedPlayerUpgrades[kvp.Key] = 0;
         }
@@ -231,19 +231,19 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
         Debug.Log($"trying to add text info");
 
         string text = $"Select upgrades. Remaining Skill-Points: {PlayerStats.Instance.SkillPoints - selectedUpgradeCost}. Currently selected upgrades:";
-        foreach(var rewardKvp in selectedPlayerUpgrades)
+        foreach (var rewardKvp in selectedPlayerUpgrades)
         {
-            
-            if(rewardKvp.Value != 0)
+
+            if (rewardKvp.Value != 0)
             {
-            text += $"\n{LevelUpHandler.RewardsDescriptionDict[rewardKvp.Key]} x {rewardKvp.Value}";
+                text += $"\n{LevelUpHandler.RewardsDescriptionDict[rewardKvp.Key]} x {rewardKvp.Value}";
             }
         }
         SetInstructionsText(text);
     }
     private void UpgradePlayer()
     {
-        
+
     }
 
     #endregion
@@ -267,7 +267,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
         backButton.RegisterCallback<ClickEvent>(e => ShowDefaultScreen());
 
     }
-    
+
     private void ShowAbilityManagementOptions()
     {
         ClearAllPanels(true);
@@ -330,7 +330,8 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
             }
             instructions.text = ingredientInfo;
         }
-        if (!CheckUsingCores()) instructions.text += $" You must use cores and organs in order to craft a minion.";
+        if (!CheckUsingCoresandOrgans()) instructions.text += $" You must use cores and organs in order to craft a minion.";
+
     }
 
 
@@ -493,7 +494,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     #endregion
 
     #region Crafting
-    private bool CheckUsingCores()
+    private bool CheckUsingCoresandOrgans()
     {
         string ingredients = "";
         foreach (var loot in selectedIngredients.Keys)
@@ -504,31 +505,37 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
 
     private void Craft()
     {
-        if (CheckUsingCores())
+        if (CheckUsingCoresandOrgans())
         {
             alchemyHandler.HandleCraftingResults(selectedIngredients, selectedElements);
             ClearCraftingSelection();
-            SetInstructionsText("You have sucessfully crafted a new minion!");
+            ShowCraftingOptions();
         }
+
     }
     private void ShowCraftingOptions()
     {
         ClearAllPanels();
         ResetVars();
+        if (CommandMinion.activeMinions.Count() == PlayerStats.Instance.TotalControlllableMinions)
+        {
+            instructions.text = "You already have your maximum number of minions. Upgrade your current minions, recycle and replace them, or acquire more minion slots.";
+        }
+        else
+        {
+            ShowCraftingInfo();
+            SpawnIngredientButtons();
+            ShowElementToggles(bottomRightPanel);
+            Button confirmButton = AddButtonToPanel("Confirm", topRightPanel, 50, 5);
 
-        ShowCraftingInfo();
-        SpawnIngredientButtons();
-        ShowElementToggles(bottomRightPanel);
-        Button confirmButton = AddButtonToPanel("Confirm", topRightPanel, 50, 5);
+            Button clearButton = AddButtonToPanel("Clear Selection", topRightPanel, 50, 5);
+            clearButton.RegisterCallback<ClickEvent>(e => ClearCraftingSelection());
+            clearButton.RegisterCallback<ClickEvent>(e => ShowCraftingInfo());
+            clearButton.RegisterCallback<ClickEvent>(e => SpawnIngredientButtons());
 
-        Button clearButton = AddButtonToPanel("Clear Selection", topRightPanel, 50, 5);
-        clearButton.RegisterCallback<ClickEvent>(e => ClearCraftingSelection());
-        clearButton.RegisterCallback<ClickEvent>(e => ShowCraftingInfo());
-        clearButton.RegisterCallback<ClickEvent>(e => SpawnIngredientButtons());
-
-        confirmButton.RegisterCallback<ClickEvent>(e => Craft());
-        confirmButton.RegisterCallback<ClickEvent>(e => ShowCraftingInfo());
-
+            confirmButton.RegisterCallback<ClickEvent>(e => Craft());
+            confirmButton.RegisterCallback<ClickEvent>(e => ShowCraftingInfo());
+        }
     }
     private void SpawnIngredientButtons()
     {

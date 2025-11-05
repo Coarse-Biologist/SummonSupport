@@ -18,12 +18,12 @@ public static class LevelUpHandler
     {
     {LevelRewards.SkillPoint, "+1 Skill-point!"},
     {LevelRewards.MaximumHealth, "+1% Maximum health!"},
-    {LevelRewards.MaximumPower, "+ 1% Maximum power!"},
-    {LevelRewards.HealthRegeneration, "+ 1 HP per second!"},
-    {LevelRewards.PowerRegeneration, "+ 1 Power per second!"},
-    {LevelRewards.ElementalAffinity, "+ 10 Elemental affinity"},
-    {LevelRewards.AbilitySlot, "+ 1 Ability slot"},
-    {LevelRewards.TotalControlllableMinions, "+ 1 Total controllable minions"},
+    {LevelRewards.MaximumPower, "+1% Maximum power!"},
+    {LevelRewards.HealthRegeneration, "+1 HP per second!"},
+    {LevelRewards.PowerRegeneration, "+1 Power per second!"},
+    {LevelRewards.ElementalAffinity, "+10 Elemental affinity"},
+    {LevelRewards.AbilitySlot, "+1 Ability slot"},
+    {LevelRewards.TotalControlllableMinions, "+1 controllable Minions"},
     };
 
     public static Dictionary<LevelRewards, int> RewardsCostDict = new()
@@ -39,15 +39,11 @@ public static class LevelUpHandler
 
     public static int GetSkillPointCost(LevelRewards reward)
     {
-        if(RewardsCostDict.TryGetValue(reward, out int cost))
-        {
+        if (RewardsCostDict.TryGetValue(reward, out int cost))
             return cost;
-        }
-        else 
-        {
+        else
             throw new System.Exception($"You want to know the cost of an upgrade which is not yet available.");
-            return 0;
-        }
+
     }
 
 
@@ -58,7 +54,6 @@ public static class LevelUpHandler
             Debug.LogWarning($"There are no rewards for level {level}, yet you are trying to access them in the LevelUpHandler");
             return null;
         }
-
         else return rewards;
     }
 
