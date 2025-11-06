@@ -27,6 +27,8 @@ public class AIObedienceState : AIState
 
     public override AIState RunCurrentState()
     {
+        if (stateHandler.minionStats != null) { Debug.Log($"{stateHandler.minionStats.Name} is obeying"); }
+
         currentCommand = minionStats.CurrentCommand;
         States state = ObeyCommand(currentCommand);
 
@@ -78,14 +80,14 @@ public class AIObedienceState : AIState
         Vector2 direction = commandLoc - currentLoc;
         if (direction.sqrMagnitude > 4)
         {
-            rb.linearVelocity = direction * stateHandler.movementScript.MovementSpeed;
+            rb.linearVelocity = direction * stateHandler.movementScript.MovementSpeed * 3;
             return States.Obedience;
         }
         else
         {
             minionStats.SetCommand(MinionCommands.None);
             if (currentCommand == MinionCommands.GoTo) stateHandler.SetTarget(null); // is this good?
-            return States.Chase; // Is this good?...
+            return States.Peace; // Is this good?...
         }
 
     }

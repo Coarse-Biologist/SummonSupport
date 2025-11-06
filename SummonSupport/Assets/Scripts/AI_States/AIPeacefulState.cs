@@ -44,7 +44,6 @@ public class AIPeacefulState : AIState
     {
         LivingBeing target = CheckTargetInRange();
 
-
         if (target != null && !CheckVisionBlocked(target))
         {
             stateHandler.lastSeenLoc = target.transform.position;
@@ -130,6 +129,8 @@ public class AIPeacefulState : AIState
     public override AIState RunCurrentState()
     {
         //("Run current state: peaceful state says 'running peaceful state'");
+        if (stateHandler.minionStats != null) { Debug.Log($"{stateHandler.minionStats} is maybe peacefully looking around"); }
+
         if (canSeeTarget)
         {
             //Debug.Log("Run current state: peaceful state says 'Requesting chase state'");

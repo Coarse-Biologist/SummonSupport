@@ -188,6 +188,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: LavaPuddle
       objectReference: {fileID: 0}
+    - target: {fileID: 8773999901916420829, guid: 67c953d8ecb373d4d9255c187ba5bef9,
+        type: 3}
+      propertyPath: m_SortingLayer
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8773999901916420829, guid: 67c953d8ecb373d4d9255c187ba5bef9,
+        type: 3}
+      propertyPath: m_SortingLayerID
+      value: -1869315837
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: -5297643976000390770, guid: 67c953d8ecb373d4d9255c187ba5bef9, type: 3}
     - {fileID: 5575731255510762650, guid: 67c953d8ecb373d4d9255c187ba5bef9, type: 3}

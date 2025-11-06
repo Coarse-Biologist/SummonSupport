@@ -186,7 +186,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
         Button clearButton = AddButtonToPanel("Clear Selection", topRightPanel, 50, 5);
 
         backButton.RegisterCallback<ClickEvent>(e => ShowDefaultScreen());
-        confirmButton.RegisterCallback<ClickEvent>(e => PlayerStats.Instance.GainLevelRewards(selectedPlayerUpgrades));
+        confirmButton.RegisterCallback<ClickEvent>(e => HandleplayerUpgradeAttempt());
         clearButton.RegisterCallback<ClickEvent>(e => ClearSelectedPlayerUpgrades());
 
 
@@ -203,27 +203,32 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
             button.RegisterCallback<ClickEvent>(e => SetPlayerUpgradeInfo());
         }
     }
+    private void HandleplayerUpgradeAttempt()
+    {
+
+        SetInstructionsText($"Upgrade successful! \nYou have {PlayerStats.Instance.SkillPoints} skill-points.");
+        PlayerStats.Instance.GainLevelRewards(selectedPlayerUpgrades);
+        ClearSelectedPlayerUpgrades();
+    }
 
     private void TryAddSelectedPlayerUpgrade(LevelRewards reward)
     {
         int price = LevelUpHandler.RewardsCostDict[reward];
 
-        if (selectedUpgradeCost + price < PlayerStats.Instance.SkillPoints)
+        if (selectedUpgradeCost + price <= PlayerStats.Instance.SkillPoints)
         {
             selectedUpgradeCost += price;
             selectedPlayerUpgrades[reward] += 1;
-
         }
         else Debug.Log($"Insufficient skill-points for the upgrade {reward}");
     }
 
     private void ClearSelectedPlayerUpgrades()
     {
-        foreach (KeyValuePair<LevelRewards, int> kvp in selectedPlayerUpgrades)
+        foreach (LevelRewards key in selectedPlayerUpgrades.Keys.ToList())
         {
-            selectedPlayerUpgrades[kvp.Key] = 0;
+            selectedPlayerUpgrades[key] = 0;
         }
-        SetInstructionsText($"Use skill-points to purchase upgrades. \nYou have {PlayerStats.Instance.SkillPoints} skill-points.");
     }
 
     private void SetPlayerUpgradeInfo()

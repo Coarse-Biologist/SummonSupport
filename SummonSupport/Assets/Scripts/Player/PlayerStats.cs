@@ -122,34 +122,37 @@ public class PlayerStats : LivingBeing
     {
         foreach (var reward in rewards)
         {
-            switch (reward.Key)
+            if (rewards[reward.Key] != 0)
             {
-                case LevelRewards.SkillPoint:
-                    SkillPoints++;
-                    break;
-                case LevelRewards.MaximumHealth:
-                    ChangeAttribute(AttributeType.MaxHitpoints, GetAttribute(AttributeType.MaxHitpoints) * reward.Value / 100);
-                    RestoreResources();
-                    break;
-                case LevelRewards.MaximumPower:
-                    ChangeAttribute(AttributeType.MaxPower, GetAttribute(AttributeType.MaxHitpoints) * reward.Value / 100);
-                    RestoreResources();
-                    break;
-                case LevelRewards.HealthRegeneration:
-                    ChangeHealthRegeneration(1 * reward.Value);
-                    break;
-                case LevelRewards.PowerRegeneration:
-                    ChangePowerRegeneration(1 * reward.Value);
-                    break;
-                case LevelRewards.TotalControlllableMinions:
-                    AddControllableMinions(1 * reward.Value);
-                    break;
-                case LevelRewards.ElementalAffinity:
-                    ChangeAffinity(GetHighestAffinity(), 10 * reward.Value);
-                    break;
-                default:
-                    Debug.LogWarning($"There is no behavior implimented for the level up reward {reward}");
-                    break;
+                switch (reward.Key)
+                {
+                    case LevelRewards.SkillPoint:
+                        SkillPoints++;
+                        break;
+                    case LevelRewards.MaximumHealth:
+                        ChangeAttribute(AttributeType.MaxHitpoints, GetAttribute(AttributeType.MaxHitpoints) * reward.Value / 100);
+                        RestoreResources();
+                        break;
+                    case LevelRewards.MaximumPower:
+                        ChangeAttribute(AttributeType.MaxPower, GetAttribute(AttributeType.MaxHitpoints) * reward.Value / 100);
+                        RestoreResources();
+                        break;
+                    case LevelRewards.HealthRegeneration:
+                        ChangeHealthRegeneration(1 * reward.Value);
+                        break;
+                    case LevelRewards.PowerRegeneration:
+                        ChangePowerRegeneration(1 * reward.Value);
+                        break;
+                    case LevelRewards.TotalControlllableMinions:
+                        AddControllableMinions(1 * reward.Value);
+                        break;
+                    case LevelRewards.ElementalAffinity:
+                        ChangeAffinity(GetHighestAffinity(), 10 * reward.Value);
+                        break;
+                    default:
+                        Debug.LogWarning($"There is no behavior implimented for the level up reward {reward}");
+                        break;
+                }
             }
         }
     }

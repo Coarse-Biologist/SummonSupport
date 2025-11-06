@@ -38,6 +38,8 @@ public class AIChaseState : AIState
 
     public override AIState RunCurrentState()
     {
+        if (stateHandler.minionStats != null) { Debug.Log($"{stateHandler.minionStats.Name} is looking for enemies or something"); }
+
         if (stateHandler.minionStats != null && stateHandler.minionStats.CurrentCommand == MinionCommands.FocusTarget) stateHandler.SetTarget(obedienceState.commandTarget.GetComponent<LivingBeing>());
         if (stateHandler.target != null)
         {
@@ -105,22 +107,16 @@ public class AIChaseState : AIState
     {
         if (!stateHandler.StuckInAbilityAnimation)
         {
-            if (stateHandler.minionStats != null)
-            { Debug.Log("Chase func called."); }
+
             Vector2 currentLoc = new Vector2(transform.position.x, transform.position.y);
             Vector2 direction = targetLoc - currentLoc;
             float distance = direction.sqrMagnitude;
             bool uniqueMovement = false;
             if (distance > SelectedAbilityAttackRange || peaceState.CheckVisionBlocked(stateHandler.target))
             {
-                if (stateHandler.minionStats != null)
-                { Debug.Log($"Chase func called. attack range = {SelectedAbilityAttackRange}"); }
 
                 if (!uniqueMovement || cantSeeTarget)
                 {
-                    if (stateHandler.minionStats != null)
-                    { Debug.Log($"Chase func called. attack range = {SelectedAbilityAttackRange}"); }
-
                     if (direction.sqrMagnitude > SelectedAbilityAttackRange || peaceState.CheckVisionBlocked(stateHandler.target))
                     {
                         rb.linearVelocity = (targetLoc - currentLoc) * stateHandler.movementScript.MovementSpeed;
