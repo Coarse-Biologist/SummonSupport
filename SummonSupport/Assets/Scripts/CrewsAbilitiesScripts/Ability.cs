@@ -14,12 +14,15 @@ public abstract class Ability : ScriptableObject
     [field: SerializeField] public AttributeType CostType { get; protected set; }
     [field: SerializeField, Min(0)] public float Cost { get; protected set; }
     [field: SerializeField, Min(0)] public float Range { get; protected set; } = 20;
-
+    [field: SerializeField, Min(0)] public float Duration { get; protected set; }
     [field: SerializeField] public AbilityTypeTag AbilityTypeTag { get; protected set; } = AbilityTypeTag.BuffsTarget;
     [field: SerializeField] public List<RelationshipType> ListUsableOn { get; protected set; }
-    [field: SerializeField] public List<EffectPackage> TargetTypeAndEffects { get; protected set; } = new();
+    [field: SerializeField] public EffectPackage TargetEffects { get; protected set; } = new();
+    [field: SerializeField] public EffectPackage SelfEffects { get; protected set; } = new();
     [field: SerializeField] public List<Element> ElementTypes { get; protected set; } = new();
     [field: SerializeField] public PhysicalType PhysicalType { get; protected set; } = new();
+    [field: SerializeField] public GameObject OnHitEffect { get; protected set; }
+
 
 
 

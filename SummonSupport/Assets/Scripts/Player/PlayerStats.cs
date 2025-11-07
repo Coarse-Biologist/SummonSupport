@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using SummonSupportEvents;
 using UnityEngine;
+using UnityEngine.Rendering.PostProcessing;
 
 public class PlayerStats : LivingBeing
 {
@@ -10,10 +11,10 @@ public class PlayerStats : LivingBeing
 
     [Header("Experience Info")]
 
-    [SerializeField] public int CurrentLevel { private set; get; } = 0;
+    [SerializeField] public int CurrentLevel { private set; get; } = 1;
     [SerializeField] public float CurrentXP { private set; get; } = 0;
     [SerializeField] public float MaxXP { private set; get; } = 100;
-    [field: SerializeField] public int SkillPoints { private set; get; } = 0;
+    [field: SerializeField] public int SkillPoints { private set; get; } = 100;
 
 
     #region Ressurrection Variables
@@ -22,7 +23,9 @@ public class PlayerStats : LivingBeing
     private WaitForSeconds resurrectionIncrement = new WaitForSeconds(.5f);
 
     #endregion
-    [SerializeField] public Dictionary<string, int> SlottedAbilities { private set; get; } = new Dictionary<string, int>(); //This will store the slot in which an ability is contained. the string is a placeholder until we decide the object type of an ability
+    [field: SerializeField] public int TotalControlllableMinions { private set; get; } = 2;
+    [field: SerializeField] public int AbilitySlots { private set; get; } = 2;
+    [field: SerializeField] public Dictionary<string, int> SlottedAbilities { private set; get; } = new Dictionary<string, int>(); //This will store the slot in which an ability is contained. the string is a placeholder until we decide the object type of an ability
 
     protected override void Awake()
     {
@@ -41,7 +44,6 @@ public class PlayerStats : LivingBeing
     }
     private void GainXP(LivingBeing defeatedEnemy)
     {
-        Debug.Log($"Gaining Xp in playerStats script. Current xp = {CurrentXP}");
         CurrentXP += defeatedEnemy.XP_OnDeath;
         if (CurrentXP >= MaxXP)
         {
@@ -49,12 +51,20 @@ public class PlayerStats : LivingBeing
         }
         PlayerUIHandler.Instance.SetPlayerXP(CurrentXP);
     }
+    public void AddControllableMinions(int changeValue)
+    {
+        TotalControlllableMinions = Math.Max(0, TotalControlllableMinions + changeValue);
+        Debug.Log($"Changing total controllable minion number");
+
+    }
+    public void AddAbilitySlot(int changeValue)
+    {
+        AbilitySlots = Math.Max(0, AbilitySlots + changeValue);
+    }
     public void GainXP(int amount)
     {
-        Debug.Log($"Gaining Xp in playerStats script. Current xp prior to gain s= {CurrentXP}");
 
-        CurrentXP += amount;
-        Debug.Log($"Gaining Xp in playerStats script. xp after gain = {CurrentXP}");
+        CurrentXP += amount * 30;
 
         if (CurrentXP >= MaxXP)
         {
@@ -69,23 +79,96 @@ public class PlayerStats : LivingBeing
         CurrentXP -= MaxXP;
         MaxXP *= 2;
         SkillPoints++;
+        EventDeclarer.PlayerLevelUp?.Invoke(LevelUpHandler.GetLevelRewardString(CurrentLevel));
+        LevelUpHandler.GetLevelRewards(CurrentLevel);
+    }
+
+    public void GainLevelRewards(List<LevelRewards> rewards)
+    {
+        foreach (LevelRewards reward in rewards)
+        {
+            switch (reward)
+            {
+                case LevelRewards.SkillPoint:
+                    SkillPoints++;
+                    break;
+                case LevelRewards.MaximumHealth:
+                    ChangeAttribute(AttributeType.MaxHitpoints, GetAttribute(AttributeType.MaxHitpoints) / 100);
+                    RestoreResources();
+                    break;
+                case LevelRewards.MaximumPower:
+                    ChangeAttribute(AttributeType.MaxPower, GetAttribute(AttributeType.MaxHitpoints) / 100);
+                    RestoreResources();
+                    break;
+                case LevelRewards.HealthRegeneration:
+                    ChangeHealthRegeneration(1);
+                    break;
+                case LevelRewards.PowerRegeneration:
+                    ChangePowerRegeneration(1);
+                    break;
+                case LevelRewards.TotalControlllableMinions:
+                    AddControllableMinions(1);
+                    break;
+                case LevelRewards.ElementalAffinity:
+                    ChangeAffinity(GetHighestAffinity(), 10);
+                    break;
+                default:
+                    Debug.LogWarning($"There is no behavior implimented for the level up reward {reward}");
+                    break;
+            }
+        }
+    }
+    public void GainLevelRewards(Dictionary<LevelRewards, int> rewards)
+    {
+        foreach (var reward in rewards)
+        {
+            if (rewards[reward.Key] != 0)
+            {
+                switch (reward.Key)
+                {
+                    case LevelRewards.SkillPoint:
+                        SkillPoints++;
+                        break;
+                    case LevelRewards.MaximumHealth:
+                        ChangeAttribute(AttributeType.MaxHitpoints, GetAttribute(AttributeType.MaxHitpoints) * reward.Value / 100);
+                        RestoreResources();
+                        break;
+                    case LevelRewards.MaximumPower:
+                        ChangeAttribute(AttributeType.MaxPower, GetAttribute(AttributeType.MaxHitpoints) * reward.Value / 100);
+                        RestoreResources();
+                        break;
+                    case LevelRewards.HealthRegeneration:
+                        ChangeHealthRegeneration(1 * reward.Value);
+                        break;
+                    case LevelRewards.PowerRegeneration:
+                        ChangePowerRegeneration(1 * reward.Value);
+                        break;
+                    case LevelRewards.TotalControlllableMinions:
+                        AddControllableMinions(1 * reward.Value);
+                        break;
+                    case LevelRewards.ElementalAffinity:
+                        ChangeAffinity(GetHighestAffinity(), 10 * reward.Value);
+                        break;
+                    default:
+                        Debug.LogWarning($"There is no behavior implimented for the level up reward {reward}");
+                        break;
+                }
+            }
+        }
     }
 
 
     public override void Die()
     {
-        //Logging.Info($"{Name} died");
 
         if (HasStatusEffect(StatusEffectType.ExplodeOnDeath)) ViciousDeathExplosion();
         SetDead(true);
         EventDeclarer.PlayerDead?.Invoke(true);
-        //Destroy(gameObject);
     }
 
 
     public void ResurrectMinion(GameObject minion)
     {
-        Debug.Log($" {Name} Wants to resurrect a minion.");
         StartCoroutine(CheckResurrection(minion));
     }
 
@@ -112,4 +195,6 @@ public class PlayerStats : LivingBeing
             }
         }
     }
+
+
 }

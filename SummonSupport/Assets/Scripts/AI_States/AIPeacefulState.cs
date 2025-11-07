@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Build.Pipeline;
 
 
 public class AIPeacefulState : AIState
@@ -43,7 +44,6 @@ public class AIPeacefulState : AIState
     {
         LivingBeing target = CheckTargetInRange();
 
-
         if (target != null && !CheckVisionBlocked(target))
         {
             stateHandler.lastSeenLoc = target.transform.position;
@@ -66,26 +66,37 @@ public class AIPeacefulState : AIState
         Collider2D[] rangeChecks = Physics2D.OverlapCircleAll(transform.position, stateHandler.DetectionRadius, stateHandler.targetMask);
         //Debug.Log($"checking target in range: Looking for target of target mask {stateHandler.targetMask.value}");
         LivingBeing target = null;
+        CharacterTag preferedTargetType = GetTargetPreference();
         if (rangeChecks.Length != 0)
         {
             for (int i = 0; i < rangeChecks.Length; i++)
             {
+
                 GameObject detectedObject = rangeChecks[i].transform.gameObject;
                 if (detectedObject == gameObject) continue;
-                if (detectedObject.TryGetComponent<LivingBeing>(out LivingBeing targetLivingBeing) && targetLivingBeing.GetAttribute(AttributeType.CurrentHitpoints) > 0)
+                if (detectedObject.TryGetComponent<LivingBeing>(out LivingBeing targetLivingBeing))
                 {
-                    stateHandler.SetTarget(targetLivingBeing);
-
-                    target = targetLivingBeing;
+                    if (targetLivingBeing.CharacterTag == preferedTargetType || rangeChecks.Length == 1)
+                    {
+                        if (targetLivingBeing.GetAttribute(AttributeType.CurrentHitpoints) > 0)
+                        {
+                            stateHandler.SetTarget(targetLivingBeing);
+                            target = targetLivingBeing;
+                        }
+                    }
                 }
             }
+            if (stateHandler.minionStats != null && target != null) Debug.Log($"Check target in range func returning {target.Name}");
         }
-        //Debug.Log($"Check target in range with target mask {stateHandler.targetMask.value} target found = {target}. number of objects with this layer found = {rangeChecks.Length}");
         return target;
 
     }
 
-
+    private CharacterTag GetTargetPreference()
+    {
+        return Random.Range(0, 100) > 90 ? CharacterTag.Player : CharacterTag.Minion;
+    }
+    // if pref minion, look for minion, if prefers player, look player. if finds return. else returnnother.
 
 
 
@@ -118,6 +129,8 @@ public class AIPeacefulState : AIState
     public override AIState RunCurrentState()
     {
         //("Run current state: peaceful state says 'running peaceful state'");
+        if (stateHandler.minionStats != null) { Debug.Log($"{stateHandler.minionStats} is maybe peacefully looking around"); }
+
         if (canSeeTarget)
         {
             //Debug.Log("Run current state: peaceful state says 'Requesting chase state'");

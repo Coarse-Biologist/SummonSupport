@@ -4,8 +4,6 @@ using UnityEngine;
 public class AuraAbility : Ability
 {
     [field: SerializeField, Header("Aura settings"), Tooltip("time in [seconds]")]
-    public float Duration { get; protected set; }
-    [field: SerializeField]
     public float Radius { get; protected set; } = 2f;
 
     [field: SerializeField] public GameObject AuraObject { get; protected set; }

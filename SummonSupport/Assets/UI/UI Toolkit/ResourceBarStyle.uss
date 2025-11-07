@@ -88,6 +88,7 @@
 .AbilityProgressbar .unity-progress-bar__progress {
     background-color: rgba(32, 0, 190, 0.77);
     border-radius: 4px;
+    -unity-font-definition: url("project://database/Assets/UI/Fonts/Jersey10-Regular.ttf?fileID=12800000&guid=3bf54017e8857c1428c5b414e1701729&type=3#Jersey10-Regular");
 }
 
 .AbilityProgressbar .unity-progress-bar__background {
@@ -95,4 +96,5 @@
     border-radius: 4px;
     border-width: 1px;
     border-color: rgb(0, 0, 0);
+    -unity-font-definition: url("project://database/Assets/UI/Fonts/Jersey10-Regular.ttf?fileID=12800000&guid=3bf54017e8857c1428c5b414e1701729&type=3#Jersey10-Regular");
 }

@@ -1,10 +1,7 @@
 using UnityEngine;
 using TMPro;
-using UnityEngine.Events;
-using UnityEngine.Tilemaps;
 using System.Collections;
-using UnityEditor.Rendering.Canvas.ShaderGraph;
-using System;
+
 using SummonSupportEvents;
 
 public class InteractCanvasHandler : MonoBehaviour
@@ -13,6 +10,8 @@ public class InteractCanvasHandler : MonoBehaviour
     private GameObject canvasInstance;
     [SerializeField] GameObject interactCanvas;
     [field: SerializeField] public float slowDisplaySpeed = .8f;
+
+    [field: SerializeField] GameObject xpTextGUI;
 
     public void Awake()
     {
@@ -48,12 +47,13 @@ public class InteractCanvasHandler : MonoBehaviour
 
     }
 
-    public void DisplayIncrementalText(Vector2 spawnLoc, string temporaryText)
+    public void DisplayIncrementalText(Vector2 spawnLoc, string temporaryText, float duration)
     {
-        StartCoroutine(SlowlyDisplayCanvasText(spawnLoc, temporaryText));
+        StartCoroutine(SlowlyDisplayCanvasText(spawnLoc, temporaryText, duration));
     }
-    public IEnumerator SlowlyDisplayCanvasText(Vector2 spawnLoc, string temporaryText)
+    public IEnumerator SlowlyDisplayCanvasText(Vector2 spawnLoc, string temporaryText, float totalDuration = 4f)
     {
+        int chars = temporaryText.Length;
         if (canvasInstance == null) canvasInstance = Instantiate(interactCanvas, spawnLoc, Quaternion.identity);
         else canvasInstance.SetActive(true);
         TextMeshProUGUI canvasGUI = canvasInstance.GetComponentInChildren<TextMeshProUGUI>();
@@ -63,20 +63,24 @@ public class InteractCanvasHandler : MonoBehaviour
             string currentText = temporaryText.Substring(0, textUpdateProgress + 1);
             canvasGUI.text = $"{currentText}";
             textUpdateProgress++;
-            yield return new WaitForSeconds(slowDisplaySpeed);
+            yield return new WaitForSeconds(totalDuration / chars);
         }
         HideInteractionOption();
     }
 
     public void DisplayXPGain(EnemyStats enemyStats)
     {
-        Vector2 loc = enemyStats.transform.position;
+        Vector2 loc = PlayerStats.Instance.transform.position;
         loc = new Vector2(loc.x, loc.y + 1);
-        int XPgained = (int)enemyStats.XP_OnDeath;
-        GameObject xpCanvas = Instantiate(interactCanvas, loc, Quaternion.identity);
-        TextMeshProUGUI canvasGUI = xpCanvas.GetComponentInChildren<TextMeshProUGUI>();
-        canvasGUI.text = $"{XPgained} XP gained!";
-        Destroy(xpCanvas, 2f);
+        GameObject xpCanvas = Instantiate(xpTextGUI, loc, Quaternion.identity);
+        if (xpCanvas.TryGetComponent(out TextMeshProUGUI canvasGUI))
+            canvasGUI.text = $"{(int)enemyStats.XP_OnDeath} XP";
+        if (xpCanvas.TryGetComponent(out Rigidbody2D rb))
+        {
+            rb.AddForce(new Vector2(((Random.Range(0f, 1f) > 0.5f) ? 1 : -1) * 2, 4), ForceMode2D.Impulse);
+            //the X parameter of the func is 1 or -1, dependin gon whether random range is > .5 or not
+        }
+        Destroy(xpCanvas, .8f);
     }
 
 

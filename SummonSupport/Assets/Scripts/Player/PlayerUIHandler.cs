@@ -42,7 +42,7 @@ public class PlayerUIHandler : MonoBehaviour
         {
             AlchemyHandler.Instance.newMinionAdded.AddListener(AddMinionHP);
         }
-        EventDeclarer.minionDied?.AddListener(RemoveMinionHP);
+        EventDeclarer.minionRecycled?.AddListener(RemoveMinionHP);
 
     }
 
@@ -54,7 +54,7 @@ public class PlayerUIHandler : MonoBehaviour
         {
             AlchemyHandler.Instance.newMinionAdded.RemoveListener(AddMinionHP);
         }
-        EventDeclarer.minionDied.RemoveListener(RemoveMinionHP);
+        EventDeclarer.minionRecycled.RemoveListener(RemoveMinionHP);
 
     }
 
@@ -217,7 +217,7 @@ public class PlayerUIHandler : MonoBehaviour
     }
     public void SetPlayerXP(float playerXP)
     {
-        Debug.Log($"player xp = {playerXP}");
+        //Debug.Log($"player xp = {playerXP}");
         playerXP_Bar.value = playerStats.CurrentXP;
         playerXP_Bar.highValue = playerStats.MaxXP;
     }

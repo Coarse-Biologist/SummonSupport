@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using SummonSupportEvents;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -17,18 +18,24 @@ public class PauseGameHandler : MonoBehaviour
     private Button ResumeButton;
     private Button RestartButton;
     private Button OptionsButton;
+    private Label InfoElement;
 
     private Button QuitButton;
     void OnEnable()
     {
         EventDeclarer.TogglePauseGame?.AddListener(ToggleGamePause);
         EventDeclarer.PlayerDead?.AddListener(DeathPause);
+        EventDeclarer.PlayerLevelUp?.AddListener(LevelUpPause);
+
+
 
     }
     void OnDisable()
     {
         EventDeclarer.TogglePauseGame?.RemoveListener(ToggleGamePause);
         EventDeclarer.PlayerDead?.RemoveListener(DeathPause);
+        EventDeclarer.PlayerLevelUp?.RemoveListener(LevelUpPause);
+
 
     }
 
@@ -42,6 +49,8 @@ public class PauseGameHandler : MonoBehaviour
         OptionsButton = PauseMenu.Q<Button>("Options");
         RestartButton = PauseMenu.Q<Button>("Restart");
         QuitButton = PauseMenu.Q<Button>("Quit");
+        InfoElement = PauseMenu.Q<Label>("Info");
+
         ResumeButton.RegisterCallback<ClickEvent>(e => Resume());
         RestartButton.RegisterCallback<ClickEvent>(e => Restart());
         //QuitButton.RegisterCallback<ClickEvent>(e => Quit());
@@ -67,6 +76,14 @@ public class PauseGameHandler : MonoBehaviour
     {
         PauseMenu.SetEnabled(true);
         PauseMenu.style.display = DisplayStyle.Flex;
+        ResumeButton.style.display = DisplayStyle.Flex;
+        ResumeButton.style.width = StyleKeyword.Auto;
+
+        InfoElement.style.display = DisplayStyle.None;
+        OptionsButton.style.display = DisplayStyle.Flex;
+        QuitButton.style.display = DisplayStyle.Flex;
+        RestartButton.style.display = DisplayStyle.Flex;
+
 
         Time.timeScale = 0f;
     }
@@ -88,8 +105,35 @@ public class PauseGameHandler : MonoBehaviour
     {
         PauseMenu.SetEnabled(true);
         PauseMenu.style.display = DisplayStyle.Flex;
+        QuitButton.style.display = DisplayStyle.Flex;
+        RestartButton.style.display = DisplayStyle.Flex;
         ResumeButton.style.display = DisplayStyle.None;
         OptionsButton.style.display = DisplayStyle.None;
+        InfoElement.text = "You have fallen asleep in death";
+
+
+        Time.timeScale = 0f;
+    }
+
+    private void LevelUpPause(List<string> ImprovedAttributesList)
+    {
+        PauseMenu.SetEnabled(true);
+        PauseMenu.style.display = DisplayStyle.Flex;
+        ResumeButton.text = "Continue";
+        ResumeButton.style.display = DisplayStyle.Flex;
+        OptionsButton.style.display = DisplayStyle.None;
+        QuitButton.style.display = DisplayStyle.None;
+        RestartButton.style.display = DisplayStyle.None;
+        ResumeButton.style.width = Length.Percent(30);
+
+        InfoElement.style.display = DisplayStyle.Flex;
+
+        InfoElement.text = $"Level {PlayerStats.Instance.CurrentLevel}! \n";
+
+        foreach (string rewardDescription in ImprovedAttributesList)
+        {
+            InfoElement.text += $"{rewardDescription} \n";
+        }
 
 
         Time.timeScale = 0f;

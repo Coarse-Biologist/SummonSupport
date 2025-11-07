@@ -52,7 +52,6 @@ public class LootSpawnHandler : MonoBehaviour
     {
 
         if (etherPrefab == null) return;
-        Debug.Log($"A {etherPrefab.name} will be spawned for {enemyStats.Name}");
 
         GameObject instance = Instantiate(etherPrefab, enemyStats.transform.position, Quaternion.identity);
         if (instance.TryGetComponent(out LootableAlchemyMaterial lootScript))
@@ -67,7 +66,7 @@ public class LootSpawnHandler : MonoBehaviour
 
     private GameObject GetEtherType(float etherValue)
     {
-        float lootRoll = Random.Range(0, 150) + (etherValue * LootScaler);
+        float lootRoll = Random.Range(0, 120) + (etherValue * LootScaler);
 
         if (lootRoll < 50) return null;
         if (lootRoll > 50 && lootRoll < 100) return FaintEtherPrefab;
@@ -78,7 +77,6 @@ public class LootSpawnHandler : MonoBehaviour
 
     private void SpawnOrgans(EnemyStats enemy, AlchemyLoot organType)
     {
-        Debug.Log($"A {organType} will be spawned for {enemy}");
 
         if (organType == AlchemyLoot.WeakCore) return;
         Instantiate(OrganPrefab, enemy.transform.position, Quaternion.identity);
@@ -90,7 +88,7 @@ public class LootSpawnHandler : MonoBehaviour
 
     private AlchemyLoot GetOrganType(float HP)
     {
-        float lootRoll = Random.Range(0, 150) + (HP * LootScaler);
+        float lootRoll = Random.Range(0, 120) + (HP * LootScaler);
 
         if (lootRoll < 50) return AlchemyLoot.WeakCore;
         if (lootRoll > 50 && lootRoll < 100) return AlchemyLoot.WretchedOrgans;
@@ -102,7 +100,6 @@ public class LootSpawnHandler : MonoBehaviour
     private void SpawnCores(EnemyStats enemy, AlchemyLoot coreType)
     {
         if (coreType == AlchemyLoot.WretchedOrgans) return;
-        Debug.Log($"A {coreType} will be spawned for {enemy.Name}");
         GameObject instance = Instantiate(CorePrefab, enemy.transform.position, Quaternion.identity);
         if (instance.TryGetComponent<LootableAlchemyMaterial>(out LootableAlchemyMaterial lootScript))
         {
@@ -134,7 +131,7 @@ public class LootSpawnHandler : MonoBehaviour
 
     private AlchemyLoot GetCoreType(float power)
     {
-        float lootRoll = Random.Range(0, 150) + (power * LootScaler);
+        float lootRoll = Random.Range(0, 120) + (power * LootScaler);
         if (lootRoll < 50) return AlchemyLoot.WretchedOrgans;
         if (lootRoll > 40 && lootRoll < 80) return AlchemyLoot.WeakCore;
         if (lootRoll > 80 && lootRoll < 120) return AlchemyLoot.SolidCore;

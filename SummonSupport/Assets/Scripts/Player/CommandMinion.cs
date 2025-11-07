@@ -71,12 +71,16 @@ public static class CommandMinion
     {
         foreach (GameObject minion in SelectedMinions)
         {
-            MinionStats stats = minion.GetComponent<MinionStats>();
-            AIObedienceState obedienceState = minion.GetComponent<AIObedienceState>();
-            minion.GetComponent<MinionInteractionHandler>().SetCommandToInteract(true);
-            obedienceState.SetCommandLoc(loc);
-            stats.SetCommand(MinionCommands.GoTo);
-            //Logging.Info($"{stats.Name} is going to location {obedienceState.commandLoc} to interact");
+            if (minion != null)
+            {
+                MinionStats stats = minion.GetComponent<MinionStats>();
+                AIObedienceState obedienceState = minion.GetComponent<AIObedienceState>();
+                minion.GetComponent<MinionInteractionHandler>().SetCommandToInteract(true); // null minion
+                obedienceState.SetCommandLoc(loc);
+                stats.SetCommand(MinionCommands.GoTo);
+                //Logging.Info($"{stats.Name} is going to location {obedienceState.commandLoc} to interact");
+            }
+            else SelectedMinions.Remove(minion);
         }
 
     }
@@ -84,6 +88,11 @@ public static class CommandMinion
     {
         foreach (GameObject minion in SelectedMinions)
         {
+            if (minion == null)
+            {
+                SelectedMinions.Remove(minion);
+                return;
+            }
             MinionStats stats = minion.GetComponent<MinionStats>();
             AIObedienceState obedienceState = minion.GetComponent<AIObedienceState>();
             obedienceState.SetCommandLoc(loc);

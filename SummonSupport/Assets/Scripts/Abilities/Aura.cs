@@ -9,6 +9,10 @@ public class Aura : MonoBehaviour
 {
     LivingBeing caster;
     Ability ability;
+
+    private AbilityModHandler modHandler;
+    private Mod_Base abilityMod;
+
     List<LivingBeing> listLivingBeingsInAura = new();
     [SerializeField] public float ActivationTime { get; private set; } = .5f;
     private bool Active = false;
@@ -19,6 +23,8 @@ public class Aura : MonoBehaviour
     private SplineAnimate splineAnimator;
 
     private UnityEngine.Rendering.Universal.Light2D lightScript;
+
+
     private bool SetSplineAnimator()
     {
         if (TryGetComponent<SplineAnimate>(out SplineAnimate spline))
@@ -32,7 +38,7 @@ public class Aura : MonoBehaviour
 
     void Start()
     {
-        Debug.Log("Aura script starts here and now");
+        //Debug.Log("Aura script starts here and now");
         if (SetSplineAnimator())
         {
             if (TryGetComponent<CircleCollider2D>(out CircleCollider2D colliderCito))
@@ -44,28 +50,16 @@ public class Aura : MonoBehaviour
             }
         }
         Invoke("Activate", ActivationTime);
-        if (TryGetComponent<Light2D>(out Light2D FoundlightScript))
-        {
-            Debug.Log("Light script detected");
-            lightScript = FoundlightScript;
-            StartCoroutine(LightManager.MakeLightOscillate(lightScript));
-            if (TryGetComponent<ParticleSystem>(out ParticleSystem ps))
-            {
-                Debug.Log("changing color to color");
-                lightScript.color = Color.green;
-                lightScript.intensity = 3;
-                Debug.Log($"changing color to {lightScript.color}");
 
-            }
-        }
-        else Debug.Log("No light script found");
     }
     public void HandleInstantiation(LivingBeing caster, LivingBeing target, Ability ability, float radius, float duration)
     {
+        SetAuraStats(caster, target, ability, duration);
+
         if (TryGetComponent<CircleCollider2D>(out CircleCollider2D collider))
             collider.radius = radius;
-        SetAuraStats(caster, target, ability, duration);
-        CombatStatHandler.HandleEffectPackages(ability, caster, caster, true);
+        if (abilityMod != null) collider.radius += abilityMod.GetModdedAttribute(AbilityModTypes.Size);
+        CombatStatHandler.HandleEffectPackage(ability, caster, caster, ability.SelfEffects);
         if (ability is ConjureAbility)
         {
             conjureAbility = (ConjureAbility)ability;
@@ -82,7 +76,11 @@ public class Aura : MonoBehaviour
         this.caster = caster;
         this.ability = ability;
         this.target = target;
-        SetAuraTimer(duration);
+        modHandler = caster.GetComponent<AbilityModHandler>();
+        if (modHandler != null)
+        {
+        }
+        SetAuraTimer(duration + modHandler.GetModAttributeByType(ability, AbilityModTypes.Duration));
         Activate();
         //transform.Rotate(new Vector3(-110f, 0, 0));
 
@@ -120,13 +118,13 @@ public class Aura : MonoBehaviour
                 if (ability.ListUsableOn.Contains(RelationshipHandler.GetRelationshipType(caster.CharacterTag, otherLivingBeing.CharacterTag)))
                 {
                     //Debug.Log($"usable on {otherLivingBeing.Name}");
-                    if (ability is ConjureAbility)
+                    if(ability.OnHitEffect != null)
                     {
-                        SpawnOnHitEffect(otherLivingBeing, conjureAbility.SpawnEffectOnHit);
+                        SpawnOnHitEffect(otherLivingBeing, ability.OnHitEffect);
                     }
                     otherLivingBeing.AlterAbilityList(ability, true);
-                    Debug.Log($"Effects of {ability.Name} is being handled.");
-                    CombatStatHandler.HandleEffectPackages(ability, caster, otherLivingBeing, false);
+                    //Debug.Log($"Effects of {ability.Name} is being handled.");
+                    CombatStatHandler.HandleEffectPackage(ability, caster, otherLivingBeing, ability.TargetEffects);
                 }
             }
             else Debug.Log($"NOT usable on {other.gameObject.name}");
@@ -189,3 +187,20 @@ public class Aura : MonoBehaviour
         }
     }
 }
+
+
+//if (TryGetComponent<Light2D>(out Light2D FoundlightScript))
+//        {
+//            //Debug.Log("Light script detected");
+//            lightScript = FoundlightScript;
+//            StartCoroutine(LightManager.MakeLightOscillate(lightScript));
+//            if (TryGetComponent<ParticleSystem>(out ParticleSystem ps))
+//            {
+//                //Debug.Log("changing color to color");
+//                lightScript.color = Color.green;
+//                lightScript.intensity = 3;
+//                //Debug.Log($"changing color to {lightScript.color}");
+//
+//            }
+//        }
+//        else Debug.Log("No light script found");

@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -13,6 +14,14 @@ public class ChargeAbilityMono : MonoBehaviour
     private AbilityHandler abilityHandler;
     private LivingBeing caster;
     private WaitForSeconds chargeTickRate = new WaitForSeconds(.01f);
+    public GameObject trailEffect { private set; get; }
+    private AbilityModHandler modHandler;
+    private float speed = 0;
+    private float range = 0;
+    private int alreadypierced = 0;
+    private int maxPierce = 0;
+
+
     [field: SerializeField] public StatusEffects attackAnimationCC;
 
     public void Charge(ChargeAbility assignedAbility)
@@ -23,18 +32,40 @@ public class ChargeAbilityMono : MonoBehaviour
         abilityHandler = user.GetComponentInParent<AbilityHandler>();
         abilityHandler.SetCharging(true);
         caster = user.GetComponentInParent<LivingBeing>();
+        modHandler = caster.GetComponent<AbilityModHandler>();
+        if (caster.gameObject.TryGetComponent(out MovementScript movementScript))
+        {
+            speed = movementScript.MovementSpeed;
+        }
+        range = chargeAbility.range;
+
+        if (modHandler != null)
+        {
+            maxPierce = modHandler.GetModAttributeByType(chargeAbility.ActivateOnHit, AbilityModTypes.MaxPierce);
+        }
+        Debug.Log($"Max pierce = {maxPierce}");
+
         originTransform = abilityHandler.abilityDirection.transform;
         rb = user.GetComponentInParent<Rigidbody2D>();
         chargeCoroutine = StartCoroutine(ChargeWhileLogical());
     }
     private IEnumerator ChargeWhileLogical()
     {
+        if (chargeAbility.chargeTrail != null)
+        {
+            trailEffect = Instantiate(chargeAbility.chargeTrail, transform.position, originTransform.rotation, transform);
+        }
+        if (modHandler != null)
+        {
+            speed += modHandler.GetModAttributeByType(chargeAbility, AbilityModTypes.Speed);
+            range += modHandler.GetModAttributeByType(chargeAbility, AbilityModTypes.Range);
+        }
         bool stillCharging = true;
         startLoc = transform.position;
         while (stillCharging)
         {
-            rb.linearVelocity = originTransform.right * GetComponent<MovementScript>().MovementSpeed * 20;
-            if (((Vector2)gameObject.transform.position - startLoc).magnitude > chargeAbility.range)
+            rb.linearVelocity = originTransform.right * speed * 35;
+            if (((Vector2)gameObject.transform.position - startLoc).magnitude > range)
             {
                 EndCharge();
             }
@@ -44,16 +75,24 @@ public class ChargeAbilityMono : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-        Ability abilityToCast = chargeAbility.ability;
+        if(collision is EdgeCollider2D wall) EndCharge();
+        Ability abilityToCast = chargeAbility.ActivateOnHit;
         bool success = abilityToCast.Activate(transform.parent.gameObject);
         if (success)
         {
-            EndCharge();
+            if (chargeAbility.HitEffect != null)
+            {
+                Instantiate(chargeAbility.HitEffect, collision.transform.position, quaternion.identity, collision.transform);
+                alreadypierced++;
+            }
+            if (alreadypierced > maxPierce)
+                EndCharge();
         }
     }
 
     private void EndCharge()
     {
+        if (trailEffect != null) Destroy(trailEffect);
         if (chargeCoroutine != null) StopCoroutine(chargeCoroutine);
         abilityHandler.SetCharging(false);
         ToggleStuckInAbilityAnimation(transform.parent.gameObject, false);

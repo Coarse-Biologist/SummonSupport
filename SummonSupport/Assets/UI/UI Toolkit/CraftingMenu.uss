@@ -8,6 +8,7 @@
     border-bottom-color: rgb(0, 0, 0);
     color: rgb(255, 255, 255);
     text-shadow: 0 0 0 rgba(0, 140, 3, 0);
+    -unity-font-definition: url("project://database/Assets/UI/Fonts/Jersey10-Regular.ttf?fileID=12800000&guid=3bf54017e8857c1428c5b414e1701729&type=3#Jersey10-Regular");
 }
 
 .button:hover {
@@ -17,6 +18,7 @@
     background-color: rgba(255, 255, 255, 0);
     -unity-background-image-tint-color: rgb(184, 177, 177);
     background-image: url("project://database/Assets/PixelArt/UI_Sprites/StoneButton.png?fileID=2800000&guid=52e3837347aeec24e8388f9a62608186&type=3#StoneButton");
+    -unity-font-definition: url("project://database/Assets/UI/Fonts/Jersey10-Regular.ttf?fileID=12800000&guid=3bf54017e8857c1428c5b414e1701729&type=3#Jersey10-Regular");
 }
 
 .button:active {
@@ -29,11 +31,13 @@
     transition-duration: 0.2s;
     transition-timing-function: ease-in-out;
     background-image: url("project://database/Assets/PixelArt/UI_Sprites/StoneButton.png?fileID=2800000&guid=52e3837347aeec24e8388f9a62608186&type=3#StoneButton");
+    -unity-font-definition: url("project://database/Assets/UI/Fonts/Jersey10-Regular.ttf?fileID=12800000&guid=3bf54017e8857c1428c5b414e1701729&type=3#Jersey10-Regular");
 }
 
 .toggle {
     background-image: url("project://database/Assets/PixelArt/UI_Sprites/StoneButton.png?fileID=2800000&guid=52e3837347aeec24e8388f9a62608186&type=3#StoneButton");
     background-color: rgba(255, 255, 255, 0);
+    -unity-font-definition: url("project://database/Assets/UI/Fonts/Jersey10-Regular.ttf?fileID=12800000&guid=3bf54017e8857c1428c5b414e1701729&type=3#Jersey10-Regular");
 }
 
 .toggle .unity-toggle__checkmark {
@@ -41,6 +45,7 @@
     border-radius: 6px;
     background-size: 103% 100%;
     background-image: url("project://database/Assets/PixelArt/UI_Sprites/StoneButton.png?fileID=2800000&guid=52e3837347aeec24e8388f9a62608186&type=3#StoneButton");
+    -unity-font-definition: url("project://database/Assets/UI/Fonts/Jersey10-Regular.ttf?fileID=12800000&guid=3bf54017e8857c1428c5b414e1701729&type=3#Jersey10-Regular");
 }
 
 .toggle:hover {
@@ -50,6 +55,7 @@
     background-image: url("project://database/Assets/PixelArt/UI_Sprites/StoneButton.png?fileID=2800000&guid=52e3837347aeec24e8388f9a62608186&type=3#StoneButton");
     background-color: rgba(255, 255, 255, 0);
     -unity-background-image-tint-color: rgb(184, 177, 177);
+    -unity-font-definition: url("project://database/Assets/UI/Fonts/Jersey10-Regular.ttf?fileID=12800000&guid=3bf54017e8857c1428c5b414e1701729&type=3#Jersey10-Regular");
 }
 
 .toggle:active {
@@ -58,6 +64,7 @@
     transition-timing-function: ease-in-out;
     -unity-background-image-tint-color: rgb(184, 177, 177);
     background-color: rgba(255, 255, 255, 0);
+    -unity-font-definition: url("project://database/Assets/UI/Fonts/Jersey10-Regular.ttf?fileID=12800000&guid=3bf54017e8857c1428c5b414e1701729&type=3#Jersey10-Regular");
 }
 
 .buttonPrefab {
@@ -73,6 +80,7 @@
     text-shadow: 0 0 0 rgba(0, 134, 16, 0);
     color: rgb(0, 0, 0);
     background-image: url("project://database/Assets/PixelArt/UI_Sprites/StoneButton.png?fileID=2800000&guid=52e3837347aeec24e8388f9a62608186&type=3#StoneButton");
+    -unity-font-definition: url("project://database/Assets/UI/Fonts/Jersey10-Regular.ttf?fileID=12800000&guid=3bf54017e8857c1428c5b414e1701729&type=3#Jersey10-Regular");
 }
 
 .buttonPrefab:hover {
@@ -80,6 +88,7 @@
     background-color: rgba(255, 255, 255, 0);
     background-image: url("project://database/Assets/PixelArt/UI_Sprites/StoneButton.png?fileID=2800000&guid=52e3837347aeec24e8388f9a62608186&type=3#StoneButton");
     -unity-background-image-tint-color: rgb(184, 177, 177);
+    -unity-font-definition: url("project://database/Assets/UI/Fonts/Jersey10-Regular.ttf?fileID=12800000&guid=3bf54017e8857c1428c5b414e1701729&type=3#Jersey10-Regular");
 }
 
 .buttonPrefab:active {
@@ -96,6 +105,7 @@
     transition-duration: 0.3s;
     transition-timing-function: ease-in-out;
     background-image: url("project://database/Assets/PixelArt/UI_Sprites/StoneButton.png?fileID=2800000&guid=52e3837347aeec24e8388f9a62608186&type=3#StoneButton");
+    -unity-font-definition: url("project://database/Assets/UI/Fonts/Jersey10-Regular.ttf?fileID=12800000&guid=3bf54017e8857c1428c5b414e1701729&type=3#Jersey10-Regular");
 }
 
 .AbilityProgressbar {
@@ -109,6 +119,7 @@
     width: 50%;
     scale: 0.7 3;
     rotate: -90deg;
+    -unity-font-definition: url("project://database/Assets/UI/Fonts/Jersey10-Regular.ttf?fileID=12800000&guid=3bf54017e8857c1428c5b414e1701729&type=3#Jersey10-Regular");
 }
 
 .Xpbar {

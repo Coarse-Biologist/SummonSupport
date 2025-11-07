@@ -18,24 +18,44 @@ MonoBehaviour:
   <Cooldown>k__BackingField: 6
   <CostType>k__BackingField: 4
   <Cost>k__BackingField: 30
+  <Range>k__BackingField: 20
+  <Duration>k__BackingField: 0
+  <AbilityTypeTag>k__BackingField: 1
   <ListUsableOn>k__BackingField: 01000000
-  <TargetTypeAndEffects>k__BackingField:
-  - <EffectDescription>k__BackingField: heals
-    <TargetType>k__BackingField: 0
+  <TargetEffects>k__BackingField:
+    <EffectDescription>k__BackingField: Teleport strike
     <Heal>k__BackingField:
-      <Value>k__BackingField: 40
+      <Value>k__BackingField: 0
+      <ValueType>k__BackingField: 0
     <HealOverTime>k__BackingField:
       <Value>k__BackingField: 0
-      <Duration>k__BackingField: 0
+      <ValueType>k__BackingField: 0
+    <Damage>k__BackingField:
+      <Value>k__BackingField: 50
+    <DamageOverTime>k__BackingField:
+      <Value>k__BackingField: 0
     <AttributeUp>k__BackingField: []
     <AttributeDown>k__BackingField: []
-    <Damage>k__BackingField: []
-    <DamageOverTime>k__BackingField: []
+    <StatusEffects>k__BackingField: []
+    <SpecialAbilityAttribute>k__BackingField: 0
+  <SelfEffects>k__BackingField:
+    <EffectDescription>k__BackingField: 
+    <Heal>k__BackingField:
+      <Value>k__BackingField: 0
+      <ValueType>k__BackingField: 0
+    <HealOverTime>k__BackingField:
+      <Value>k__BackingField: 0
+      <ValueType>k__BackingField: 0
+    <Damage>k__BackingField:
+      <Value>k__BackingField: 0
+    <DamageOverTime>k__BackingField:
+      <Value>k__BackingField: 0
+    <AttributeUp>k__BackingField: []
+    <AttributeDown>k__BackingField: []
     <StatusEffects>k__BackingField: []
     <SpecialAbilityAttribute>k__BackingField: 0
   <ElementTypes>k__BackingField: 
-  <AbilityTypeTag>k__BackingField: 1
-  <Range>k__BackingField: 20
+  <PhysicalType>k__BackingField: 3
   <ActivateOnUse>k__BackingField: []
   <ActivateOnArrive>k__BackingField:
   - {fileID: 11400000, guid: 946e5f54d23bbc24e9bf9696f3cf93c2, type: 2}

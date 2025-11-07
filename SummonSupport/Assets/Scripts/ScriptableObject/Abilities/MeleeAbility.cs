@@ -23,6 +23,7 @@ public class MeleeAbility : Ability
     private LivingBeing Caster;
     private LivingBeing Target;
     private AbilityHandler abilityHandler;
+    private AbilityModHandler modHandler;
 
     private WaitForSeconds movementWait = new WaitForSeconds(.1f);
 
@@ -35,6 +36,7 @@ public class MeleeAbility : Ability
     {
         Caster = user.GetComponent<LivingBeing>();
         abilityHandler = user.GetComponent<AbilityHandler>();
+        modHandler = user.GetComponent<AbilityModHandler>();
         if (originTransform == null)
         {
             //Debug.Log($"the user: {user}.");
@@ -61,7 +63,7 @@ public class MeleeAbility : Ability
                     Target = collider.GetComponent<LivingBeing>();
 
                     SetEffects(Caster, Target);
-                    CombatStatHandler.HandleEffectPackages(this, Caster, Target);
+                    CombatStatHandler.HandleEffectPackage(this, Caster, Target, this.TargetEffects);
                     SpawnHitEffect(Target);
                     activated = true;
                 }
@@ -107,8 +109,12 @@ public class MeleeAbility : Ability
 
     private bool VerifyWithinShape(GameObject user, Collider2D collider)
     {
-
-        DebugAbilityShape(originTransform);
+        float totalWidth = Width;
+        if (modHandler != null)
+        {
+            totalWidth += modHandler.GetModAttributeByType(this, AbilityModTypes.Size);
+        }
+        DebugAbilityShape(originTransform, totalWidth);
         Vector2 hitLocation = collider.transform.position;
         if ((hitLocation - (Vector2)originTransform.position).magnitude <= .2)
             return true;
@@ -126,7 +132,7 @@ public class MeleeAbility : Ability
         }
         if (Shape == AreaOfEffectShape.Rectangle)
         {
-            DebugAbilityShape(originTransform);
+            DebugAbilityShape(originTransform, totalWidth);
             Vector2 origin = originTransform.position;
             Vector2 forward = originTransform.right.normalized; // direction player is facing
             Vector2 side = originTransform.up.normalized;       // perpendicular to forward
@@ -138,7 +144,7 @@ public class MeleeAbility : Ability
             float sideDistance = Vector2.Dot(toHit, side);       // Side offset (left/right)
 
             // Check if point is inside the rectangle
-            bool isInside = forwardDistance <= Range && (Mathf.Abs(sideDistance) <= Width / 2f); //forwardDistance >= 0 &&
+            bool isInside = forwardDistance <= Range && (Mathf.Abs(sideDistance) <= totalWidth / 2f); //forwardDistance >= 0 &&
 
             //Logging.Info($"isInside? = {isInside}");
             if (isInside)
@@ -149,24 +155,24 @@ public class MeleeAbility : Ability
     }
 
 
-    private void DebugAbilityShape(Transform AbilityRotation)
+    private void DebugAbilityShape(Transform AbilityRotation, float totalWidth)
 
     {
 
         Transform AR = AbilityRotation.transform;
-        Debug.DrawRay(AR.position, AR.up * Width / 2, Color.black, .8f); // char to right corner
+        Debug.DrawRay(AR.position, AR.up * totalWidth / 2, Color.black, .8f); // char to right corner
 
-        Debug.DrawRay(AR.position, -AR.up * Width / 2, Color.black, .8f); // char to leftcorner
+        Debug.DrawRay(AR.position, -AR.up * totalWidth / 2, Color.black, .8f); // char to leftcorner
 
         Debug.DrawRay(AR.position, AR.right * Range / 2, Color.black, .8f); // char to top center
 
-        Debug.DrawRay(AR.right * Width / 2 + AR.position, AR.up * Range, Color.black, .8f); // top center to top right corner
+        Debug.DrawRay(AR.right * totalWidth / 2 + AR.position, AR.up * Range, Color.black, .8f); // top center to top right corner
 
-        Debug.DrawRay(AR.right * Width / 2 + AR.position, -AR.up * Range, Color.black, .8f); // top center to top left corner
+        Debug.DrawRay(AR.right * totalWidth / 2 + AR.position, -AR.up * Range, Color.black, .8f); // top center to top left corner
 
-        Debug.DrawRay(AR.up * Width / 2 + AR.position, AR.right * Range, Color.black, .8f); //right corner to top right corner
+        Debug.DrawRay(AR.up * totalWidth / 2 + AR.position, AR.right * Range, Color.black, .8f); //right corner to top right corner
 
-        Debug.DrawRay(-AR.up * Width / 2 + AR.position, AR.right * Range, Color.black, .8f); //left corner to top left corner
+        Debug.DrawRay(-AR.up * totalWidth / 2 + AR.position, AR.right * Range, Color.black, .8f); //left corner to top left corner
     }
 
     private void SpawnHitEffect(LivingBeing targetLivingBeing)

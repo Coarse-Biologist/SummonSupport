@@ -19,29 +19,39 @@ MonoBehaviour:
   <CostType>k__BackingField: 4
   <Cost>k__BackingField: 20
   <Range>k__BackingField: 20
+  <Duration>k__BackingField: 0
   <AbilityTypeTag>k__BackingField: 1
   <ListUsableOn>k__BackingField: 01000000
-  <TargetTypeAndEffects>k__BackingField:
-  - <EffectDescription>k__BackingField: Poisons
-    <TargetType>k__BackingField: 1
+  <TargetEffects>k__BackingField:
+    <EffectDescription>k__BackingField: 
     <Heal>k__BackingField:
       <Value>k__BackingField: 0
+      <ValueType>k__BackingField: 0
     <HealOverTime>k__BackingField:
       <Value>k__BackingField: 0
-      <Duration>k__BackingField: 0
+      <ValueType>k__BackingField: 0
+    <Damage>k__BackingField:
+      <Value>k__BackingField: 30
+    <DamageOverTime>k__BackingField:
+      <Value>k__BackingField: 0
     <AttributeUp>k__BackingField: []
     <AttributeDown>k__BackingField: []
+    <StatusEffects>k__BackingField: []
+    <SpecialAbilityAttribute>k__BackingField: 0
+  <SelfEffects>k__BackingField:
+    <EffectDescription>k__BackingField: 
+    <Heal>k__BackingField:
+      <Value>k__BackingField: 0
+      <ValueType>k__BackingField: 0
+    <HealOverTime>k__BackingField:
+      <Value>k__BackingField: 0
+      <ValueType>k__BackingField: 0
     <Damage>k__BackingField:
-    - <Value>k__BackingField: 20
-      <Element>k__BackingField: 7
-      <Physical>k__BackingField: 0
-      <ValueType>k__BackingField: 0
+      <Value>k__BackingField: 0
     <DamageOverTime>k__BackingField:
-    - <Value>k__BackingField: 2
-      <Element>k__BackingField: 7
-      <Physical>k__BackingField: 0
-      <ValueType>k__BackingField: 0
-      <Duration>k__BackingField: 5
+      <Value>k__BackingField: 0
+    <AttributeUp>k__BackingField: []
+    <AttributeDown>k__BackingField: []
     <StatusEffects>k__BackingField: []
     <SpecialAbilityAttribute>k__BackingField: 0
   <ElementTypes>k__BackingField: 07000000
@@ -51,9 +61,9 @@ MonoBehaviour:
     type: 3}
   <MaxRange>k__BackingField: 150
   <Lifetime>k__BackingField: 5
-  <PiercingMode>k__BackingField: 3
+  <PiercingMode>k__BackingField: 0
   <MaxPierce>k__BackingField: 0
-  <MaxSplit>k__BackingField: 3
+  <MaxSplit>k__BackingField: 0
   <SplitAngleOffset>k__BackingField: 45
   <ProjectileParticleSystem>k__BackingField: {fileID: 5647196156128557912, guid: 7bac37a7bc2e89544b7da4dfb1247474,
     type: 3}

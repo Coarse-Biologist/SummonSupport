@@ -97,12 +97,13 @@ public class AI_CC_State : AIState
         beingKnockedInAir = true;
         if (CCToCaster.TryGetValue(StatusEffectType.KnockInTheAir, out LivingBeing caster) && timeElapsed <= knockDuration)
         {
+            // add logic which can use relevant mods or character based stats to affect things
             rb.linearDamping = 40;
             if (timeElapsed <= knockDuration * .8)
                 rb.AddForce(((Vector2)transform.position - (Vector2)caster.transform.position).normalized, ForceMode2D.Impulse);
             if (timeElapsed <= knockDuration * .5)
-                rb.AddForce(new Vector2(0, 2f), ForceMode2D.Impulse);
-            if (timeElapsed > knockDuration * .5 && timeElapsed <= .8 * knockDuration) rb.AddForce(new Vector2(0, -2), ForceMode2D.Impulse);
+                rb.AddForce(new Vector2(0, 4f), ForceMode2D.Impulse);
+            if (timeElapsed > knockDuration * .5 && timeElapsed <= .8 * knockDuration) rb.AddForce(new Vector2(0, -4), ForceMode2D.Impulse);
             return true;
         }
         else

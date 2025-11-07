@@ -159,7 +159,7 @@ public class AbilityHandler : MonoBehaviour
 
     bool HandleProjectile(ProjectileAbility ability)
     {
-        return ability.Activate(gameObject, abilitySpawn, abilityDirection.transform);
+        return ability.Activate(gameObject, abilityDirection.transform);
     }
 
     bool HandlePointAndClick(TargetMouseAbility ability)

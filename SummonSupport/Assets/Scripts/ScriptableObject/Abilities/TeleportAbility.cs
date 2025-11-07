@@ -8,8 +8,8 @@ public class TeleportAbility : Ability
 {
     [Header("Teleport settings")]
 
-    [field: SerializeField] public List<Ability> ActivateOnUse { get; private set; }
-    [field: SerializeField] public List<Ability> ActivateOnArrive { get; private set; }
+    [field: SerializeField] public Ability ActivateOnUse { get; private set; }
+    [field: SerializeField] public Ability ActivateOnArrive { get; private set; }
     [field: SerializeField] public GameObject EffectOnActivate { get; private set; }
     [field: SerializeField] public float ActivationSpeed { get; private set; } = .3f;
 
@@ -50,18 +50,25 @@ public class TeleportAbility : Ability
 
     public IEnumerator TeleportToBeing(GameObject user, GameObject target)
     {
-        GameObject onHitEffectInstance = Instantiate(EffectOnActivate, user.transform.position, Quaternion.identity, user.transform);
-
-        EffectColorChanger.ChangeObjectsParticleSystemColor(user.GetComponent<LivingBeing>(), onHitEffectInstance);
-
-        yield return new WaitForSeconds(ActivationSpeed);
-
-        user.transform.position = target.transform.position;
-
-        foreach (Ability ability in ActivateOnArrive)
+        if (target != null && user != null)
         {
-            ability.Activate(user);
+            if (!user.TryGetComponent<LivingBeing>(out LivingBeing livingBeing)) yield return new WaitForSeconds(ActivationSpeed);
+            else
+            {
+                GameObject onHitEffectInstance = Instantiate(EffectOnActivate, user.transform.position, Quaternion.identity, user.transform);
+
+                EffectColorChanger.ChangeObjectsParticleSystemColor(livingBeing, onHitEffectInstance);
+
+                yield return new WaitForSeconds(ActivationSpeed);
+
+                user.transform.position = target.transform.position;
+
+
+                ActivateOnArrive.Activate(user);
+
+            }
         }
+        else yield return new WaitForSeconds(ActivationSpeed);
 
     }
 }

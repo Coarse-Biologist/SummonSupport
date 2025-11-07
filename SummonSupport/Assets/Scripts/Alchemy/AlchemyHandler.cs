@@ -92,6 +92,8 @@ public class AlchemyHandler : MonoBehaviour
 
     public static void HandleMinionRecycling(GameObject minion)
     {
+        EventDeclarer.minionRecycled?.Invoke(minion);
+
         if (minion.TryGetComponent<MinionStats>(out MinionStats stats))
         {
             float minionPower = stats.MaxHP - 100f;

@@ -83,7 +83,7 @@ public class EnemySpawnHandler : MonoBehaviour
         }
         if (creature.TryGetComponent<Collider2D>(out Collider2D collider))
         {
-            collider.isTrigger = true;
+            collider.isTrigger = true; // turned to false in the one way barrier script
         }
     }
 

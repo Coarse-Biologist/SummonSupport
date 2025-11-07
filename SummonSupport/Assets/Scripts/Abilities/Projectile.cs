@@ -1,17 +1,31 @@
+using System;
 using System.Collections.Generic;
+using System.Data.Common;
+using System.Linq;
 using UnityEngine;
 
+[RequireComponent(typeof(Collider2D))]
 public class Projectile : MonoBehaviour
 {
+    [field: SerializeField]
+    public Collider2D physicsCollider { private set; get; } = null;
     List<GameObject> ignoreGameObjects = new List<GameObject>();
     public GameObject SpawnEffectOnHit { get; set; }
 
     public ProjectileAbility ability;
-    public int piercedAlready = 0;
-    public int splitAlready = 0;
+    public int piercedAlready { private set; get; } = 0;
+    public int ricochedAlready { private set; get; } = 0;
+    public bool splitAlready = false;
+
+    int split = 0;
+    int pierce = 0;
+    int ricochet = 0;
     LivingBeing userLivingBeing = null;
     private bool active = false;
 
+    public AbilityModHandler modHandler { private set; get; }
+    public Mod_Base projectileMod { private set; get; }
+    Rigidbody2D rb;
 
 
 
@@ -19,50 +33,126 @@ public class Projectile : MonoBehaviour
     {
         if (user.TryGetComponent(out LivingBeing livingBeing))
             userLivingBeing = livingBeing;
+        if (user.TryGetComponent(out AbilityModHandler handler))
+        {
+            modHandler = handler;
+        }
         //else
         //Debug.Log($"user isnt a living being, weird right?");
         ignoreGameObjects.Add(user);
         SetProjectilePhysics(spawnAt, lookAt);
         Destroy(gameObject, ability.Lifetime); // TODO: change from lifetime to range
-        SetActive();
     }
-    private void SetActive()
+    public void SetActive(ProjectileAbility ab, LivingBeing lb, AbilityModHandler handler = null)
     {
+        ability = ab;
+
+        userLivingBeing = lb;
+        modHandler = handler;
+        if (modHandler != null)
+        {
+            projectileMod = modHandler.GetAbilityMod(ability);
+        }
+        // set ricochet properties if it should.
+        if (ability.PiercingMode == OnHitBehaviour.Ricochet || (projectileMod != null && projectileMod.GetModdedAttribute(AbilityModTypes.MaxRicochet) > 0))
+        {
+            if (physicsCollider != null)
+            {
+                if (ricochedAlready < projectileMod.GetModdedAttribute(AbilityModTypes.MaxRicochet))
+                {
+                    Debug.Log($"physics mat is being assigned");
+                    PhysicsMaterial2D mat = new PhysicsMaterial2D();
+                    mat.bounciness = 2f;
+                    mat.friction = 0f;
+                    physicsCollider.sharedMaterial = mat;
+                }
+            }
+        }
+        ignoreGameObjects.Add(lb.gameObject);
         active = true;
+
     }
 
 
-
-    void SetProjectilePhysics(GameObject spawnPoint)
-    {
-        SetProjectilePhysics(spawnPoint, Vector3.zero);
-    }
-    void SetProjectilePhysics(GameObject spawnPoint, Vector3 newDirection)
+    public void SetProjectilePhysics(GameObject spawnPoint, Vector3 newDirection)
     {
         if (newDirection == Vector3.zero)
             newDirection = spawnPoint.transform.right;
-        Rigidbody2D rb = GetComponent<Rigidbody2D>();
-        rb.linearVelocity = newDirection * ability.Speed;
+        rb = GetComponent<Rigidbody2D>();
+        float speed = ability.Speed;
+        if (modHandler != null)
+        {
+            speed += modHandler.GetModAttributeByType(ability, AbilityModTypes.Speed);
+        }
+        rb.linearVelocity = newDirection * speed;
 
         float angle = Mathf.Atan2(newDirection.y, newDirection.x) * Mathf.Rad2Deg;
 
         transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
+
     }
     public void SetEffects(GameObject effectOnHit)
     {
         SpawnEffectOnHit = effectOnHit;
     }
 
-    private void SpawnEffect(LivingBeing targetLivingBeing, GameObject SpawnEffectOnHit)
+    public void HandleRicochet()
+    {
+        if (projectileMod == null)
+        {
+            Destroy(gameObject);
+        }
+        else if (ricochedAlready >= projectileMod.GetModdedAttribute(AbilityModTypes.MaxRicochet))
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            SpawnEffect(transform.position);
+            ReorientSpin();
+            ricochedAlready++;
+        }
+    }
+    private void ReorientSpin()
+    {
+        Vector2 v = rb.linearVelocity;
+        if (v.sqrMagnitude > 0.01f)
+        {
+            float angle = Mathf.Atan2(v.y, v.x) * Mathf.Rad2Deg;
+            transform.rotation = Quaternion.Euler(0, 0, angle);
+        }
+
+        ParticleSystem ps = GetComponentInChildren<ParticleSystem>();
+        if (ps != null)
+        {
+            Debug.Log("resetting particle system");
+            ps.Simulate(0f, true, true);
+            ps.Play();
+        }
+        else Debug.Log($"game object {gameObject} has no particle system");
+    }
+
+    private void SpawnEffect(LivingBeing targetLivingBeing)
     {
         GameObject instance;
-        if (SpawnEffectOnHit != null)
+        if (ability.SpawnEffectOnHit != null)
         {
-            //Debug.Log("This happens, excellent");
+            Debug.Log($"The on hit effect for {ability.Name} is being spawned");
             instance = Instantiate(ability.SpawnEffectOnHit, targetLivingBeing.transform.position, Quaternion.identity, targetLivingBeing.transform.transform);
             Destroy(instance, instance.GetComponent<ParticleSystem>().main.duration);
         }
-        //else Debug.Log("This happens but is null");
+        else Debug.Log($"there is no on hit effect for {ability.Name}");
+    }
+    private void SpawnEffect(Vector2 loc)
+    {
+        GameObject instance;
+        if (ability.SpawnEffectOnHit != null)
+        {
+            Debug.Log($"The on hit effect for {ability.Name} is being spawned");
+            instance = Instantiate(ability.SpawnEffectOnHit, loc, Quaternion.identity);
+            Destroy(instance, instance.GetComponent<ParticleSystem>().main.duration);
+        }
+        else Debug.Log($"there is no on hit effect for {ability.Name}");
     }
     public void SetParticleTrailEffects(Vector2 direction) // -user.transform.right
     {
@@ -83,6 +173,7 @@ public class Projectile : MonoBehaviour
     {
         if (active)
         {
+
             if (other.gameObject.CompareTag("Projectile") || ignoreGameObjects.Contains(other.gameObject))
                 return;
 
@@ -95,66 +186,83 @@ public class Projectile : MonoBehaviour
             if (!userLivingBeing || (!Ability.HasElementalSynergy(ability, otherLivingBeing) && !ability.ThoroughIsUsableOn(userLivingBeing, otherLivingBeing)))
                 return;
 
-            SpawnEffect(otherLivingBeing, ability.SpawnEffectOnHit);
-            CombatStatHandler.HandleEffectPackages(ability, userLivingBeing, otherLivingBeing, false);
+            SpawnEffect(otherLivingBeing);
+            CombatStatHandler.HandleEffectPackage(ability, userLivingBeing, otherLivingBeing, ability.TargetEffects);
             HandleOnHitBehaviour(otherLivingBeing);
         }
+        else Debug.Log("Not active and therefore just a moving sprite");
 
     }
 
     void HandleOnHitBehaviour(LivingBeing other)
     {
-        switch (ability.PiercingMode)
+        Debug.Log("Handling On hit behaviour");
+        if (modHandler != null)
         {
-            case OnHitBehaviour.Ricochet:
-                break;
-            case OnHitBehaviour.Pierce:
-                piercedAlready++;
-                if (piercedAlready == ability.MaxPierce)
-                    DestroyProjectile(other);
-                break;
-            case OnHitBehaviour.Split:
-                SplitProjectile(other);
-                break;
-            case OnHitBehaviour.Destroy:
-                DestroyProjectile(other);
-                break;
+            split = modHandler.GetModAttributeByType(ability, AbilityModTypes.MaxSplit);
+            pierce = modHandler.GetModAttributeByType(ability, AbilityModTypes.MaxPierce);
+            ricochet = modHandler.GetModAttributeByType(ability, AbilityModTypes.MaxRicochet);
         }
-    }
 
-    void DestroyProjectile(LivingBeing other = null)
-    {
-        //probably casue effects if hitting an acceptable enemy?
-
-        Destroy(gameObject);
-    }
-    void SplitProjectile(LivingBeing other)
-    {
-        if (splitAlready >= ability.MaxSplit)
-            DestroyProjectile(other);
-        else
+        if (!splitAlready && (ability.PiercingMode == OnHitBehaviour.Split || split > 0))
         {
-            splitAlready++;
-            for (int i = -1; i <= 1; i += 2) // -1 and +1
+            Debug.Log("Trying to split");
+            SplitProjectile(other, split);
+        }
+        else if (piercedAlready < ability.MaxPierce + pierce)
+        {
+            Debug.Log("Trying to pierce");
+
+            piercedAlready++;
+        }
+        else if (ability.PiercingMode == OnHitBehaviour.Ricochet || ricochet > 0)
+        {
+            if (ricochedAlready < ricochet)
             {
-                Quaternion rotation = Quaternion.Euler(0, 0, i * ability.SplitAngleOffset);
-                Vector3 direction = rotation * transform.right;
+                Debug.Log("Trying to ricochet");
 
-                GameObject newProjectile = Instantiate(ability.Projectile, transform.position, Quaternion.identity);
-                Projectile projectileScript = newProjectile.GetComponent<Projectile>();
-                projectileScript.ignoreGameObjects = new List<GameObject>(ignoreGameObjects) { other.gameObject };
-                projectileScript.ability = ability;
-                projectileScript.splitAlready = this.splitAlready;
-                projectileScript.SetProjectilePhysics(gameObject, direction);
-                projectileScript.SetParticleTrailEffects(direction);
-                Destroy(newProjectile, ability.Lifetime);
-
-
+                HandleRicochet();
             }
         }
-        DestroyProjectile(other);
+        else
+        {
+            Debug.Log("Trying to destroy");
+
+            Destroy(gameObject);
+        }
     }
 
 
 
+
+    void SplitProjectile(LivingBeing other, int splits)
+    {
+        splitAlready = true;
+        int maxSplit = ability.MaxSplit + splits + 1;
+
+        //int left = -1;
+        for (int i = 0; i < maxSplit; i += 1) // i starts at -1, code block is completed as long as i is less than or equal to one. upon completion it goes up by 2. the code block will therefore happen once?
+        {
+
+            Debug.Log("for loop is being carried out in the split func of the projectile script");
+            Quaternion rotation;
+            rotation = Quaternion.Euler(0, 0, (float)Math.Sin(45 * i) * (30 + 5 * i));
+
+            Vector3 direction = rotation * transform.right;
+            GameObject newProjectile = Instantiate(ability.Projectile, transform.position, Quaternion.identity);
+            Projectile projectileScript = newProjectile.GetComponent<Projectile>();
+            projectileScript.ignoreGameObjects = new List<GameObject>(ignoreGameObjects) { other.gameObject };
+
+            projectileScript.splitAlready = this.splitAlready;
+            projectileScript.SetActive(ability, userLivingBeing, modHandler);
+            projectileScript.SetProjectilePhysics(gameObject, direction);
+            projectileScript.SetParticleTrailEffects(direction);
+            Destroy(newProjectile, ability.Lifetime);
+        }
+    }
+
 }
+
+
+
+

@@ -19,30 +19,45 @@ MonoBehaviour:
   <CostType>k__BackingField: 4
   <Cost>k__BackingField: 10
   <Range>k__BackingField: 3
+  <Duration>k__BackingField: 8
   <AbilityTypeTag>k__BackingField: 0
   <ListUsableOn>k__BackingField: 01000000
-  <TargetTypeAndEffects>k__BackingField:
-  - <EffectDescription>k__BackingField: Plant Cloud on target or self
-    <TargetType>k__BackingField: 1
+  <TargetEffects>k__BackingField:
+    <EffectDescription>k__BackingField: 
     <Heal>k__BackingField:
       <Value>k__BackingField: 0
+      <ValueType>k__BackingField: 0
     <HealOverTime>k__BackingField:
       <Value>k__BackingField: 0
-      <Duration>k__BackingField: 0
+      <ValueType>k__BackingField: 0
+    <Damage>k__BackingField:
+      <Value>k__BackingField: 10
+    <DamageOverTime>k__BackingField:
+      <Value>k__BackingField: 30
     <AttributeUp>k__BackingField: []
     <AttributeDown>k__BackingField: []
-    <Damage>k__BackingField: []
-    <DamageOverTime>k__BackingField:
-    - <Value>k__BackingField: 4
-      <Element>k__BackingField: 11
-      <Physical>k__BackingField: 0
+    <StatusEffects>k__BackingField: []
+    <SpecialAbilityAttribute>k__BackingField: 0
+  <SelfEffects>k__BackingField:
+    <EffectDescription>k__BackingField: 
+    <Heal>k__BackingField:
+      <Value>k__BackingField: 0
       <ValueType>k__BackingField: 0
-      <Duration>k__BackingField: 10
+    <HealOverTime>k__BackingField:
+      <Value>k__BackingField: 0
+      <ValueType>k__BackingField: 0
+    <Damage>k__BackingField:
+      <Value>k__BackingField: 0
+    <DamageOverTime>k__BackingField:
+      <Value>k__BackingField: 0
+    <AttributeUp>k__BackingField: []
+    <AttributeDown>k__BackingField: []
     <StatusEffects>k__BackingField: []
     <SpecialAbilityAttribute>k__BackingField: 0
   <ElementTypes>k__BackingField: 0f000000
   <PhysicalType>k__BackingField: 0
-  <Uptime>k__BackingField: 10
+  <OnHitEffect>k__BackingField: {fileID: 5005864844744066183, guid: 4abfee1134a924843a0c2d8f0b92357e,
+    type: 3}
   <Radius>k__BackingField: 3
   <AuraObject>k__BackingField: {fileID: 1699087696372334086, guid: 67774f96cfac0fa4abd75840750bb8aa,
     type: 3}

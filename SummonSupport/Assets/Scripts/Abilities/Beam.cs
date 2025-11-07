@@ -40,7 +40,7 @@ public class Beam : MonoBehaviour
                 Destroy(hitEffect, 5f);
                 StartCoroutine(DelayedDeletion(targetStatsHandler));
                 if (Ability.ThoroughIsUsableOn(Caster, targetStatsHandler))
-                    CombatStatHandler.HandleEffectPackages(Ability, Caster, targetStatsHandler, false);
+                    CombatStatHandler.HandleEffectPackage(Ability, Caster, targetStatsHandler, Ability.TargetEffects);
             }
         }
     }

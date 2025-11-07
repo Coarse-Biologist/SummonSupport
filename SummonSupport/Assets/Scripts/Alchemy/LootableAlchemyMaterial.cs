@@ -16,7 +16,6 @@ public class LootableAlchemyMaterial : MonoBehaviour, I_LootInterface
             {
                 int knowledgeGain = (int)(num * AlchemyHandler.knowledgeGainRate);
                 AlchemyInventory.IncemementElementalKnowledge(Element, (int)(num * AlchemyHandler.knowledgeGainRate));
-                Debug.Log($"Knowledge gain = {knowledgeGain} for element {Element}");
             }
         }
         Destroy(gameObject);

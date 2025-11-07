@@ -25,7 +25,7 @@ public class WeaponMono : MonoBehaviour
         if (gameObject.TryGetComponent<SplineAnimate>(out SplineAnimate animator))
         {
             splineAnimator = animator;
-            Debug.Log($"animator's spline = {animator.Container.name}");
+            //Debug.Log($"animator's spline = {animator.Container.name}");
 
             if (gameObject.TryGetComponent<SpriteRenderer>(out SpriteRenderer spriteRenderer))
             {
@@ -39,7 +39,7 @@ public class WeaponMono : MonoBehaviour
 
     private void EndWeaponUse()
     {
-        Debug.Log("Ending weapon use");
+        //Debug.Log("Ending weapon use");
         splineAnimator.Restart(true);
         splineAnimator.Container.transform.rotation = Quaternion.identity;
         transform.localPosition = startLoc;

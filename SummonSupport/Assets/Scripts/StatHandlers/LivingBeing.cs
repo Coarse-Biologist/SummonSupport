@@ -30,7 +30,7 @@ public abstract class LivingBeing : MonoBehaviour
     [field: Header("Attributes - Regenerations")]
     private WaitForSeconds regenTickRate;
     [field: SerializeField] public float TickRateRegenerationInSeconds { get; private set; } = .2f;
-    [field: SerializeField] public float HealthRegeneration { get; private set; } = 0;
+    [field: SerializeField] public float HealthRegeneration { get; private set; } = 1;
     [field: SerializeField] public float PowerRegeneration { get; private set; } = 1;
     [field: SerializeField] public float TotalHealthRegeneration { get; private set; } = 0; // i think this is / should be a private variable since it is only used for local calculations? or at least i think it doesnt need to be serialized since it would never be used (it is instantluy set to the value of HealthRegeneration)
     [field: SerializeField] public float TotalPowerRegeneration { get; private set; } = 0;
@@ -137,7 +137,7 @@ public abstract class LivingBeing : MonoBehaviour
         {
             Affinities[element].Set(newAffinity);
         }
-        Debug.Log($"Change affinity: current Affinity = {newAffinity}");
+        //Debug.Log($"Change affinity: current Affinity = {newAffinity}");
 
     }
     public void SetAffinity(Element element, float amount)
@@ -150,7 +150,7 @@ public abstract class LivingBeing : MonoBehaviour
         {
             Affinities[element].Set(newAffinity);
         }
-        Debug.Log($"SetAffinity: Affinity = {newAffinity}");
+        //Debug.Log($"SetAffinity: Affinity = {newAffinity}");
     }
     public int GetAffinity(Element element)
     {
@@ -196,6 +196,18 @@ public abstract class LivingBeing : MonoBehaviour
     {
         Dead = isDead;
     }
+    public void ChangeHealthRegeneration(float Value)
+    {
+        HealthRegeneration = Math.Max(0, HealthRegeneration + Value);
+        Debug.Log($"Changing health regen. new total: {HealthRegeneration}");
+
+    }
+    public void ChangePowerRegeneration(float Value)
+    {
+        HealthRegeneration = Math.Max(0, PowerRegeneration + Value);
+        Debug.Log($"Changing power regen. new total: {PowerRegeneration}");
+
+    }
 
     public float GetAttribute(AttributeType attribute)
     {
@@ -212,7 +224,7 @@ public abstract class LivingBeing : MonoBehaviour
 
         if (ResourceAttributesDict != null && ResourceAttributesDict.ContainsKey(attributeType))
             ResourceAttributesDict[attributeType].Set(value);
-        HandleEventInvokes(attributeType, value);
+        HandleEventInvokes(attributeType, value); // make overrides for minions, players and enemies
         if (GetAttribute(AttributeType.CurrentHitpoints) <= 0)
             Die();
         else if (attributeType == AttributeType.CurrentPower && value <= 0)
