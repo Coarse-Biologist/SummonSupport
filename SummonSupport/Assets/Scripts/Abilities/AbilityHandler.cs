@@ -24,7 +24,7 @@ public class AbilityHandler : MonoBehaviour
         if (statsHandler == null)
             statsHandler = gameObject.GetComponent<LivingBeing>();
         if (abilityDirection == null)
-            abilityDirection = gameObject.transform.GetChild(0).gameObject;
+            abilityDirection = gameObject;
         foreach (Ability ability in Abilities)
         {
             abilitiesOnCooldown.Add(false);

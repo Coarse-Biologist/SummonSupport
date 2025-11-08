@@ -22,19 +22,26 @@ public class PlayerMovement : MovementScript
     Vector3 moveDirection;
     [field: SerializeField] public GameObject DashDust { private set; get; }
 
-    private Rigidbody2D rb;
+    private Rigidbody rb;
     private bool dashing = false;
     private bool canDash = true;
     GameObject DashDustInstance = null;
     private bool lockedInUI = false;
     private bool StuckInAbilityAnimation = false;
 
+    //
+    [SerializeField] float sensitivity = 50f;
+    [SerializeField] float rotationX = 20f;
+    [SerializeField] float rotationY = 20f;
+    //
+
+
     #endregion
 
     private void Awake()
     {
         spriteController = GetComponentInChildren<CreatureSpriteController>();
-        rb = GetComponent<Rigidbody2D>();
+        rb = GetComponent<Rigidbody>();
         mainCamera = Camera.main;
         inputActions = new PlayerInputActions();
         playerStats = GetComponent<LivingBeing>();
@@ -125,7 +132,7 @@ public class PlayerMovement : MovementScript
             calculatedSpeed = MovementSpeed;
 
         moveDirection = new Vector3(moveInput.x, moveInput.y, 0).normalized;
-        rb.linearVelocity = moveDirection * calculatedSpeed * 10;
+        rb.AddForce(moveDirection * calculatedSpeed * 10, ForceMode.Force);
     }
 
 
@@ -138,13 +145,28 @@ public class PlayerMovement : MovementScript
     }
     private Quaternion HandleLook()
     {
-        worldPosition = mainCamera.ScreenToWorldPoint(lookInput);
-        direction = (worldPosition - (Vector2)transform.position).normalized;
-        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-        AbilityRotation.transform.rotation = Quaternion.Euler(0, 0, angle);
-        spriteController.SetSpriteDirection(angle);
+        //Vector2 lookInput = controls.Player.LookControl.ReadValue<Vector2>();
+        float mouseX = lookInput.x * sensitivity * Time.deltaTime;
+        float mouseY = lookInput.y * sensitivity * Time.deltaTime;
 
-        //DebugAbilityShape();
+        // Adjust the rotation based on mouse movement
+        rotationX += mouseX;// can you change this so that it smoothly lerps to rotation and location/ 
+        rotationY -= mouseY; // Invert to feel more natural
+
+        // Clamp vertical rotation to prevent flipping
+        rotationY = Mathf.Clamp(rotationY, -10f, 30f);
+
+        // Apply the rotation to the rigidbody
+
+        UnityEngine.Quaternion playerRotation = mainCamera.transform.rotation; //UnityEngine.Quaternion.Euler(0f, rotationX, 0f);
+        rb.MoveRotation(playerRotation);
+
+        //worldPosition = mainCamera.ScreenToWorldPoint(lookInput);
+        //direction = (worldPosition - (Vector2)transform.position).normalized;
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        transform.rotation = Quaternion.Euler(0, angle, 0);
+        //spriteController.SetSpriteDirection(angle);
+
 
         return transform.rotation;
     }
