@@ -22,7 +22,7 @@ public class PlayerMovement : MovementScript
     Vector3 moveDirection;
     [field: SerializeField] public GameObject DashDust { private set; get; }
 
-    private Rigidbody2D rb;
+    private Rigidbody rb;
     private bool dashing = false;
     private bool canDash = true;
     GameObject DashDustInstance = null;
@@ -34,10 +34,10 @@ public class PlayerMovement : MovementScript
     private void Awake()
     {
         spriteController = GetComponentInChildren<CreatureSpriteController>();
-        rb = GetComponent<Rigidbody2D>();
+        rb = GetComponent<Rigidbody>();
         mainCamera = Camera.main;
         inputActions = new PlayerInputActions();
-        playerStats = GetComponent<LivingBeing>();
+        //playerStats = GetComponent<LivingBeing>();
 
     }
 
@@ -48,9 +48,9 @@ public class PlayerMovement : MovementScript
         inputActions ??= new PlayerInputActions();
         EventDeclarer.SpeedAttributeChanged?.AddListener(SetMovementAttribute);
         inputActions.Player.Enable();
-        inputActions.Player.Move.performed += OnMove;
-        inputActions.Player.Move.canceled += OnMove;
-        inputActions.Player.Dash.performed += OnDash;
+        inputActions.Player.Move.performed += OnWASD;
+        inputActions.Player.Move.canceled += OnWASD;
+        inputActions.Player.Dash.performed += OnUseDash;
         inputActions.Player.LookDirection.performed += OnLook;
         inputActions.Player.CommandMinion.performed += SendMinionCommandContext;
         inputActions.Player.TogglePauseGame.performed += ToggleGamePause;
@@ -62,9 +62,9 @@ public class PlayerMovement : MovementScript
         //AlchemyBenchUI.Instance.playerUsingUI.RemoveListener(ToggleLockedInUI);
 
         EventDeclarer.SpeedAttributeChanged?.RemoveListener(SetMovementAttribute);
-        inputActions.Player.Move.performed -= OnMove;
-        inputActions.Player.Move.canceled -= OnMove;
-        inputActions.Player.Dash.performed -= OnDash;
+        inputActions.Player.Move.performed -= OnWASD;
+        inputActions.Player.Move.canceled -= OnWASD;
+        inputActions.Player.Dash.performed -= OnUseDash;
         inputActions.Player.LookDirection.performed -= OnLook;
         inputActions.Player.CommandMinion.performed -= SendMinionCommandContext;
         inputActions.Player.TogglePauseGame.performed -= ToggleGamePause;
@@ -74,9 +74,9 @@ public class PlayerMovement : MovementScript
     #endregion
 
     #region Dash logic
-    private void OnDash(InputAction.CallbackContext context)
+    private void OnUseDash(InputAction.CallbackContext context)
     {
-        if (playerStats.Dead) return;
+        //if (playerStats.Dead) return;
 
         //EventDeclarer.SpawnEnemies?.Invoke(this.gameObject);
         if (canDash)
@@ -112,7 +112,7 @@ public class PlayerMovement : MovementScript
     #endregion
 
     #region WASD logic
-    private void OnMove(InputAction.CallbackContext context)
+    private void OnWASD(InputAction.CallbackContext context)
     {
         moveInput = context.ReadValue<Vector2>();
     }
@@ -124,8 +124,9 @@ public class PlayerMovement : MovementScript
         else
             calculatedSpeed = MovementSpeed;
 
-        moveDirection = new Vector3(moveInput.x, moveInput.y, 0).normalized;
-        rb.linearVelocity = moveDirection * calculatedSpeed * 10;
+        Vector3 moveDirection = transform.TransformDirection(new Vector3(moveInput.x, 0, moveInput.y)).normalized;
+
+        rb.AddForce(moveDirection * calculatedSpeed * 100f, ForceMode.Acceleration);
     }
 
 
@@ -136,17 +137,18 @@ public class PlayerMovement : MovementScript
     {
         lookInput = context.ReadValue<Vector2>();
     }
-    private Quaternion HandleLook()
+    private void HandleLook()
     {
-        worldPosition = mainCamera.ScreenToWorldPoint(lookInput);
-        direction = (worldPosition - (Vector2)transform.position).normalized;
-        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-        AbilityRotation.transform.rotation = Quaternion.Euler(0, 0, angle);
-        spriteController.SetSpriteDirection(angle);
+        //worldPosition = mainCamera.ScreenToWorldPoint(lookInput);
+        //direction = (worldPosition - (Vector2)transform.position).normalized;
+        //float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        //Debug.Log(mainCamera.transform.rotation.y);
+        transform.rotation = Quaternion.Euler(0f, mainCamera.transform.eulerAngles.y, 0f);
+        //spriteController.SetSpriteDirection(angle);
 
         //DebugAbilityShape();
 
-        return transform.rotation;
+        //return transform.rotation;
     }
     private void DebugAbilityShape()
     {
@@ -169,7 +171,7 @@ public class PlayerMovement : MovementScript
 
     private void SendMinionCommandContext(InputAction.CallbackContext context)
     {
-        if (playerStats.Dead) return;
+        //if (playerStats.Dead) return;
 
         worldPosition = mainCamera.ScreenToWorldPoint(lookInput);
         Debug.DrawLine(new Vector3(0, 0, 0), worldPosition, Color.green);
@@ -178,7 +180,7 @@ public class PlayerMovement : MovementScript
 
     private void FixedUpdate()
     {
-        if (playerStats.Dead) return;
+        //if (playerStats.Dead) return;
 
         if (!lockedInUI && !StuckInAbilityAnimation)
         {
