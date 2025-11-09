@@ -145,6 +145,9 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     }
     public void Interact(GameObject Player)//WithWorkBench()
     {
+        UnityEngine.Cursor.lockState = CursorLockMode.None;   // Locks the cursor to the center of the screen
+        UnityEngine.Cursor.visible = true;
+
         if (Player.TryGetComponent(out PlayerAbilityHandler abilityHandler))
             playerAbilityHandler = abilityHandler;
         else return;
@@ -297,7 +300,8 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
         ResetVars();
         HideUI(craftingUI);
         Time.timeScale = 1f;
-
+        UnityEngine.Cursor.lockState = CursorLockMode.Locked;   // Locks the cursor to the center of the screen
+        UnityEngine.Cursor.visible = false;
         PlayerUsingUI();
     }
 

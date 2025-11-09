@@ -45,7 +45,7 @@ public class ChargeAbilityMono : MonoBehaviour
         }
         Debug.Log($"Max pierce = {maxPierce}");
 
-        originTransform = abilityHandler.abilityDirection.transform;
+        originTransform = user.transform;
         rb = user.GetComponentInParent<Rigidbody2D>();
         chargeCoroutine = StartCoroutine(ChargeWhileLogical());
     }
@@ -75,7 +75,7 @@ public class ChargeAbilityMono : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision is EdgeCollider2D wall) EndCharge();
+        if (collision is EdgeCollider2D wall) EndCharge();
         Ability abilityToCast = chargeAbility.ActivateOnHit;
         bool success = abilityToCast.Activate(transform.parent.gameObject);
         if (success)

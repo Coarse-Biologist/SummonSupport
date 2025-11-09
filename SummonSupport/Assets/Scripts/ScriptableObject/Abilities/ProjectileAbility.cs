@@ -29,8 +29,9 @@ public class ProjectileAbility : Ability
 
         return Activate(user, spawnPoint.transform);
     }
-    public bool Activate(GameObject user, Transform direction)
+    public bool Activate(GameObject user, Transform spawnPoint)
     {
+        Debug.Log($"spawnpoint rotation = {spawnPoint.rotation.y}");
         int shots = 1;
         if (user.TryGetComponent(out AbilityModHandler modHandler))
         {
@@ -38,15 +39,15 @@ public class ProjectileAbility : Ability
         }
         for (int i = 0; i < shots; i += 1)
         {
-            GameObject projectile = Instantiate(Projectile, user.transform.position, Quaternion.identity);
+            GameObject projectile = Instantiate(Projectile, spawnPoint.position, Quaternion.identity);
             Projectile projectileScript = projectile.GetComponent<Projectile>();
-            float rotZ = (float)Math.Sin(45 * i) * (10 + 5 * i);
-            Quaternion rotation = Quaternion.Euler(0, 0, rotZ);
-            Vector3 newDirection = rotation * direction.right;
+            //float rotY = (float)Math.Sin(45 * i) * (10 + 5 * i);
+            //Quaternion rotation = Quaternion.Euler(0, rotY, 0);
+            //Vector3 newDirection = rotation * spawnPoint.forward;
 
             projectileScript.SetActive(this, user.GetComponent<LivingBeing>(), modHandler);
-            projectileScript.SetProjectilePhysics(projectile, newDirection);
-            projectileScript.SetParticleTrailEffects(newDirection);
+            projectileScript.SetProjectilePhysics(spawnPoint.forward);
+            projectileScript.SetParticleTrailEffects(spawnPoint.forward);
 
             Destroy(projectile, Lifetime);
         }

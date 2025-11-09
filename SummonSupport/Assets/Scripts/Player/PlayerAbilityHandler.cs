@@ -87,7 +87,7 @@ public class PlayerAbilityHandler : AbilityHandler
             if (!abilitiesOnCooldown[index])
             {
 
-                if (CastAbility(index, GetMousePosition(), abilityDirection.transform.rotation))
+                if (CastAbility(index, GetMousePosition(), transform.rotation))
                     EventDeclarer.AbilityUsed?.Invoke(index);
 
             }

@@ -4,11 +4,11 @@ using System.Data.Common;
 using System.Linq;
 using UnityEngine;
 
-[RequireComponent(typeof(Collider2D))]
+[RequireComponent(typeof(Collider))]
 public class Projectile : MonoBehaviour
 {
     [field: SerializeField]
-    public Collider2D physicsCollider { private set; get; } = null;
+    public Collider physicsCollider { private set; get; } = null;
     List<GameObject> ignoreGameObjects = new List<GameObject>();
     public GameObject SpawnEffectOnHit { get; set; }
 
@@ -25,24 +25,11 @@ public class Projectile : MonoBehaviour
 
     public AbilityModHandler modHandler { private set; get; }
     public Mod_Base projectileMod { private set; get; }
-    Rigidbody2D rb;
+    Rigidbody rb;
 
 
 
-    public void Shoot(GameObject user, GameObject spawnAt = null, Vector3 lookAt = default(Vector3))
-    {
-        if (user.TryGetComponent(out LivingBeing livingBeing))
-            userLivingBeing = livingBeing;
-        if (user.TryGetComponent(out AbilityModHandler handler))
-        {
-            modHandler = handler;
-        }
-        //else
-        //Debug.Log($"user isnt a living being, weird right?");
-        ignoreGameObjects.Add(user);
-        SetProjectilePhysics(spawnAt, lookAt);
-        Destroy(gameObject, ability.Lifetime); // TODO: change from lifetime to range
-    }
+
     public void SetActive(ProjectileAbility ab, LivingBeing lb, AbilityModHandler handler = null)
     {
         ability = ab;
@@ -61,9 +48,9 @@ public class Projectile : MonoBehaviour
                 if (ricochedAlready < projectileMod.GetModdedAttribute(AbilityModTypes.MaxRicochet))
                 {
                     Debug.Log($"physics mat is being assigned");
-                    PhysicsMaterial2D mat = new PhysicsMaterial2D();
+                    PhysicsMaterial mat = new PhysicsMaterial();
                     mat.bounciness = 2f;
-                    mat.friction = 0f;
+                    mat.frictionCombine = 0f; //??
                     physicsCollider.sharedMaterial = mat;
                 }
             }
@@ -74,22 +61,29 @@ public class Projectile : MonoBehaviour
     }
 
 
-    public void SetProjectilePhysics(GameObject spawnPoint, Vector3 newDirection)
+    public void SetProjectilePhysics(Vector3 newDirection)
     {
-        if (newDirection == Vector3.zero)
-            newDirection = spawnPoint.transform.right;
-        rb = GetComponent<Rigidbody2D>();
+
+        rb = GetComponent<Rigidbody>();
         float speed = ability.Speed;
         if (modHandler != null)
         {
             speed += modHandler.GetModAttributeByType(ability, AbilityModTypes.Speed);
         }
+
+        IgnoreCasterCollider();
+
         rb.linearVelocity = newDirection * speed;
 
-        float angle = Mathf.Atan2(newDirection.y, newDirection.x) * Mathf.Rad2Deg;
+        float angle = Mathf.Atan2(newDirection.x, newDirection.z) * Mathf.Rad2Deg;
 
-        transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
+        transform.rotation = Quaternion.Euler(new Vector3(0, angle + 90, 0));
 
+    }
+
+    private void IgnoreCasterCollider()
+    {
+        Physics.IgnoreCollision(rb.GetComponent<Collider>(), userLivingBeing.GetComponent<Collider>(), true);
     }
     public void SetEffects(GameObject effectOnHit)
     {
@@ -115,10 +109,10 @@ public class Projectile : MonoBehaviour
     }
     private void ReorientSpin()
     {
-        Vector2 v = rb.linearVelocity;
+        Vector3 v = rb.linearVelocity;
         if (v.sqrMagnitude > 0.01f)
         {
-            float angle = Mathf.Atan2(v.y, v.x) * Mathf.Rad2Deg;
+            float angle = Mathf.Atan2(v.x, v.z) * Mathf.Rad2Deg;
             transform.rotation = Quaternion.Euler(0, 0, angle);
         }
 
@@ -154,9 +148,9 @@ public class Projectile : MonoBehaviour
         }
         else Debug.Log($"there is no on hit effect for {ability.Name}");
     }
-    public void SetParticleTrailEffects(Vector2 direction) // -user.transform.right
+    public void SetParticleTrailEffects(Vector3 direction) // -user.transform.right
     {
-        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        float angle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
         GameObject particleSystem;
         if (ability.ProjectileParticleSystem != null)
         {
@@ -248,14 +242,14 @@ public class Projectile : MonoBehaviour
             Quaternion rotation;
             rotation = Quaternion.Euler(0, 0, (float)Math.Sin(45 * i) * (30 + 5 * i));
 
-            Vector3 direction = rotation * transform.right;
+            Vector3 direction = rotation * transform.forward;
             GameObject newProjectile = Instantiate(ability.Projectile, transform.position, Quaternion.identity);
             Projectile projectileScript = newProjectile.GetComponent<Projectile>();
             projectileScript.ignoreGameObjects = new List<GameObject>(ignoreGameObjects) { other.gameObject };
 
             projectileScript.splitAlready = this.splitAlready;
             projectileScript.SetActive(ability, userLivingBeing, modHandler);
-            projectileScript.SetProjectilePhysics(gameObject, direction);
+            projectileScript.SetProjectilePhysics(direction);
             projectileScript.SetParticleTrailEffects(direction);
             Destroy(newProjectile, ability.Lifetime);
         }

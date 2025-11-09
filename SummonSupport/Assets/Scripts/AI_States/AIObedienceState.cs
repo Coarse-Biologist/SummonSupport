@@ -8,7 +8,7 @@ public class AIObedienceState : AIState
     private AIStateHandler stateHandler;
     private AIChaseState chaseState;
     private AIPeacefulState peaceState;
-    private Rigidbody2D rb;
+    private Rigidbody rb;
     public MinionCommands currentCommand;
     public Vector2 commandLoc { private set; get; }
     public LivingBeing commandTarget { private set; get; }
@@ -22,7 +22,7 @@ public class AIObedienceState : AIState
         peaceState = GetComponent<AIPeacefulState>();
         minionStats = GetComponent<MinionStats>();
 
-        rb = GetComponent<Rigidbody2D>();
+        rb = GetComponent<Rigidbody>();
     }
 
     public override AIState RunCurrentState()

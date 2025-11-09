@@ -118,7 +118,7 @@ public class CreatureAbilityHandler : AbilityHandler
         if (ability != null)
         {
             //UnityEngine.Debug.Log($"{ability} = ability selected by {GetComponent<LivingBeing>().Name} against {target}");
-            CastAbility(Abilities.IndexOf(ability), target.transform.position, abilityDirection.transform.rotation);
+            CastAbility(Abilities.IndexOf(ability), target.transform.position, transform.rotation);
         }
     }
 

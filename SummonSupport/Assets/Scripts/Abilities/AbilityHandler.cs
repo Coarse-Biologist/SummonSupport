@@ -5,7 +5,6 @@ using System.Collections.Generic;
 public class AbilityHandler : MonoBehaviour
 {
     [SerializeField] protected GameObject abilitySpawn;
-    [SerializeField] public GameObject abilityDirection { get; private set; }
     [SerializeField] protected LivingBeing statsHandler;
     [field: SerializeField] public List<Ability> Abilities { private set; get; } = new();
     [SerializeField] protected List<bool> abilitiesOnCooldown = new();
@@ -23,8 +22,6 @@ public class AbilityHandler : MonoBehaviour
 
         if (statsHandler == null)
             statsHandler = gameObject.GetComponent<LivingBeing>();
-        if (abilityDirection == null)
-            abilityDirection = gameObject.transform.GetChild(0).gameObject;
         foreach (Ability ability in Abilities)
         {
             abilitiesOnCooldown.Add(false);
@@ -32,7 +29,7 @@ public class AbilityHandler : MonoBehaviour
         }
         if (gameObject.TryGetComponent(out AbilityModHandler modScript))
             modHandler = modScript;
-        else throw new System.Exception("NOPENOPENOPENOPENOPENOPENOPE");
+        else throw new System.Exception("No Ability mod handler found, and now im throwing a fit");
     }
 
     public void LearnAbility(Ability ability)
@@ -125,7 +122,7 @@ public class AbilityHandler : MonoBehaviour
         }
         else
         {
-            beamInstance = beamAbility.ToggleBeam(statsHandler.gameObject, abilityDirection.transform);
+            beamInstance = beamAbility.ToggleBeam(statsHandler.gameObject, transform);
             toggledAbilitiesDict.TryAdd(beamAbility, beamInstance);
             statsHandler.ChangeRegeneration(beamAbility.CostType, -beamAbility.Cost);
 
@@ -159,7 +156,7 @@ public class AbilityHandler : MonoBehaviour
 
     bool HandleProjectile(ProjectileAbility ability)
     {
-        return ability.Activate(gameObject, abilityDirection.transform);
+        return ability.Activate(gameObject, abilitySpawn);
     }
 
     bool HandlePointAndClick(TargetMouseAbility ability)

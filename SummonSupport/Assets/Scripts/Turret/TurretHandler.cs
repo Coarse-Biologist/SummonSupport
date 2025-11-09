@@ -78,16 +78,16 @@ public class TurretHandler : AbilityHandler
         Quaternion targetRotation = Quaternion.Euler(0, 0, angle);
 
         float timeElapsed = 0f;
-        Quaternion startingRotation = abilityDirection.transform.rotation;
+        Quaternion startingRotation = transform.rotation;
 
         while (timeElapsed < 1f)
         {
             timeElapsed += Time.deltaTime * rotationSpeed;
-            abilityDirection.transform.rotation = Quaternion.Slerp(startingRotation, targetRotation, timeElapsed);
+            transform.rotation = Quaternion.Slerp(startingRotation, targetRotation, timeElapsed);
             yield return null;
         }
 
-        abilityDirection.transform.rotation = targetRotation;
+        transform.rotation = targetRotation;
     }
 
     void ShootTarget(GameObject target)

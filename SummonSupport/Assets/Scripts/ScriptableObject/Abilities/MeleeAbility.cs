@@ -40,7 +40,7 @@ public class MeleeAbility : Ability
         if (originTransform == null)
         {
             //Debug.Log($"the user: {user}.");
-            originTransform = abilityHandler.abilityDirection.transform;
+            originTransform = user.transform;
         }
 
         return AttemptActivation(user);
@@ -191,11 +191,11 @@ public class MeleeAbility : Ability
     {
         GameObject particleSystem;
         abilityHandler = caster.GetComponent<AbilityHandler>();
-        originTransform = abilityHandler.abilityDirection.transform;
+        originTransform = caster.transform;
 
         if (MeleeParticleSystem != null)
         {
-            float angle = Mathf.Atan2(-originTransform.transform.up.y, -originTransform.transform.up.x) * Mathf.Rad2Deg;
+            float angle = Mathf.Atan2(-originTransform.up.y, -originTransform.up.x) * Mathf.Rad2Deg;
 
             if (abilityHandler.WeaponInfo == null)
             {

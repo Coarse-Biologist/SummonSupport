@@ -1,4 +1,3 @@
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class InteractHandler : MonoBehaviour
@@ -7,7 +6,7 @@ public class InteractHandler : MonoBehaviour
     private bool checkingForTab = false;
 
 
-    void OnTriggerEnter2D(Collider2D collision)
+    void OnTriggerEnter(Collider collision)
     {
         //InvokeRepeating("AttemptInteraction", 0f, .05f);
         checkingForTab = true;
@@ -20,7 +19,7 @@ public class InteractHandler : MonoBehaviour
 
     }
 
-    void OnTriggerExit2D(Collider2D collision)
+    void OnTriggerExit(Collider collision)
     {
         checkingForTab = false;
         //CancelInvoke("AttemptInteraction");

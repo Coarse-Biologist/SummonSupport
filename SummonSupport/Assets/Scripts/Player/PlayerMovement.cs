@@ -33,6 +33,8 @@ public class PlayerMovement : MovementScript
 
     private void Awake()
     {
+        Cursor.lockState = CursorLockMode.Locked;   // Locks the cursor to the center of the screen
+        Cursor.visible = false;
         spriteController = GetComponentInChildren<CreatureSpriteController>();
         rb = GetComponent<Rigidbody>();
         mainCamera = Camera.main;

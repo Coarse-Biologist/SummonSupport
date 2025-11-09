@@ -20,7 +20,7 @@ public class AI_CC_State : AIState
     public Dictionary<StatusEffectType, StatusEffects> typeToCC = new();
 
 
-    private Rigidbody2D rb;
+    private Rigidbody rb;
     private float waitTime = .1f;
     WaitForSeconds wait;// = new WaitForSeconds(0.1f);
     private float knockDuration = 2f;
@@ -40,7 +40,7 @@ public class AI_CC_State : AIState
         peaceState = GetComponent<AIPeacefulState>();
         stateHandler = GetComponent<AIStateHandler>();
         chaseState = GetComponent<AIChaseState>();
-        rb = GetComponent<Rigidbody2D>();
+        rb = GetComponent<Rigidbody>();
     }
     public override AIState RunCurrentState()
     {
@@ -100,10 +100,10 @@ public class AI_CC_State : AIState
             // add logic which can use relevant mods or character based stats to affect things
             rb.linearDamping = 40;
             if (timeElapsed <= knockDuration * .8)
-                rb.AddForce(((Vector2)transform.position - (Vector2)caster.transform.position).normalized, ForceMode2D.Impulse);
+                rb.AddForce(((Vector2)transform.position - (Vector2)caster.transform.position).normalized, ForceMode.Impulse);
             if (timeElapsed <= knockDuration * .5)
-                rb.AddForce(new Vector2(0, 4f), ForceMode2D.Impulse);
-            if (timeElapsed > knockDuration * .5 && timeElapsed <= .8 * knockDuration) rb.AddForce(new Vector2(0, -4), ForceMode2D.Impulse);
+                rb.AddForce(new Vector2(0, 4f), ForceMode.Impulse);
+            if (timeElapsed > knockDuration * .5 && timeElapsed <= .8 * knockDuration) rb.AddForce(new Vector2(0, -4), ForceMode.Impulse);
             return true;
         }
         else
@@ -112,7 +112,7 @@ public class AI_CC_State : AIState
             timeElapsed = 0f;
             RemoveCC(StatusEffectType.KnockInTheAir);
             rb.linearDamping = 10;
-            rb.bodyType = RigidbodyType2D.Dynamic;
+            //rb.isKinematic = RigidbodyType.Dynamic;
             return false;
         }
     }

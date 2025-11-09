@@ -10,7 +10,7 @@ public class AIChaseState : AIState
     private AIObedienceState obedienceState;
     private CreatureAbilityHandler abilityHandler;
     private bool targetIsInRange;
-    private Rigidbody2D rb;
+    private Rigidbody rb;
     private LivingBeing statScript;
     [SerializeField] GameObject rotationObject;
     private Coroutine attackCoroutine;
@@ -28,7 +28,7 @@ public class AIChaseState : AIState
         peaceState = gameObject.GetComponent<AIPeacefulState>();
         obedienceState = gameObject.GetComponent<AIObedienceState>();
 
-        rb = gameObject.GetComponent<Rigidbody2D>();
+        rb = gameObject.GetComponent<Rigidbody>();
         statScript = GetComponent<LivingBeing>();
 
         abilityHandler = GetComponent<CreatureAbilityHandler>();
@@ -82,7 +82,7 @@ public class AIChaseState : AIState
 
     public bool CheckInRange()
     {
-        Rigidbody2D target = stateHandler.target.GetComponent<Rigidbody2D>();
+        Rigidbody target = stateHandler.target.GetComponent<Rigidbody>();
 
         Vector3 direction = target.transform.position - transform.position;
 

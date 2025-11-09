@@ -12,7 +12,7 @@ public class AIPeacefulState : AIState
     private AIChaseState chaseState;
     private GameObject player;
     private bool closeToPlayer = false;
-    private Rigidbody2D rb;
+    private Rigidbody rb;
     #region Support ability use handling
     private bool runningSupportLoop = false;
     private WaitForSeconds supportSpeed = new WaitForSeconds(1);
@@ -26,7 +26,7 @@ public class AIPeacefulState : AIState
         player = PlayerStats.Instance.gameObject;
         stateHandler = gameObject.GetComponent<AIStateHandler>();
         chaseState = gameObject.GetComponent<AIChaseState>();
-        rb = GetComponent<Rigidbody2D>();
+        rb = GetComponent<Rigidbody>();
         StartCoroutine(FOVRoutine());
     }
 
