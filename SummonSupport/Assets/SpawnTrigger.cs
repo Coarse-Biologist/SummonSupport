@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class SpawnTrigger : MonoBehaviour
 {
-    void OnTriggerEnter2D(Collider2D collision)
+    void OnTriggerEnter(Collider collision)
     {
         if (collision.gameObject.TryGetComponent<PlayerMovement>(out PlayerMovement pm))
             EventDeclarer.SpawnEnemies?.Invoke(transform.parent.GetComponent<SpawnLocationInfo>());

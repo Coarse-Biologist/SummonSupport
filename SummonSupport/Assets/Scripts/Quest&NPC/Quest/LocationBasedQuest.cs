@@ -8,7 +8,7 @@ public class LocationBasedQuest : MonoBehaviour, IQuest
     [SerializeField] public Quest_SO grantsQuest;
 
 
-    void OnTriggerEnter2D(Collider2D collision)
+    void OnTriggerEnter(Collider collision)
     {
         if (collision.gameObject.CompareTag("Player"))
         {

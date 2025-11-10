@@ -6,7 +6,7 @@ public class PortalDoor : MonoBehaviour
     [field: SerializeField] public Transform DestinationDoor { get; protected set; }
 
 
-    void OnTriggerEnter2D(Collider2D collision)
+    void OnTriggerEnter(Collider collision)
     {
         Logging.Info(collision.gameObject.name.ToString());
         if (collision.gameObject.GetComponent<PlayerStats>() != null)

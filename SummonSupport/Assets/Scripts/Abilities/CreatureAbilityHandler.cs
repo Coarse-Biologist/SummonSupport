@@ -118,6 +118,9 @@ public class CreatureAbilityHandler : AbilityHandler
         if (ability != null)
         {
             //UnityEngine.Debug.Log($"{ability} = ability selected by {GetComponent<LivingBeing>().Name} against {target}");
+            Vector3 direction = (target.transform.position - transform.position).normalized;
+            float angle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
+            transform.rotation = Quaternion.Euler(0, angle, 0);
             CastAbility(Abilities.IndexOf(ability), target.transform.position, transform.rotation);
         }
     }

@@ -109,7 +109,7 @@ public class Aura : MonoBehaviour
     }
 
 
-    void OnTriggerEnter2D(Collider2D other)
+    void OnTriggerEnter(Collider other)
     {
         if (Active)
         {
@@ -118,7 +118,7 @@ public class Aura : MonoBehaviour
                 if (ability.ListUsableOn.Contains(RelationshipHandler.GetRelationshipType(caster.CharacterTag, otherLivingBeing.CharacterTag)))
                 {
                     //Debug.Log($"usable on {otherLivingBeing.Name}");
-                    if(ability.OnHitEffect != null)
+                    if (ability.OnHitEffect != null)
                     {
                         SpawnOnHitEffect(otherLivingBeing, ability.OnHitEffect);
                     }
@@ -132,7 +132,7 @@ public class Aura : MonoBehaviour
         else Debug.Log($"OnTrigger Enter func called but the trigger object is not active");
     }
 
-    void OnTriggerExit2D(Collider2D other)
+    void OnTriggerExit(Collider other)
     {
         if (other.gameObject.TryGetComponent<LivingBeing>(out LivingBeing otherLivingBeing))
             otherLivingBeing.AlterAbilityList(ability, false);
@@ -161,8 +161,8 @@ public class Aura : MonoBehaviour
     private LivingBeing FindTarget(float SearchRadius)
     {
         LivingBeing target = null;
-        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, SearchRadius);
-        foreach (Collider2D collider in colliders)
+        Collider[] colliders = Physics.OverlapSphere(transform.position, SearchRadius);
+        foreach (Collider collider in colliders)
         {
             if (!collider.TryGetComponent<LivingBeing>(out LivingBeing targetStats))
                 continue;
@@ -188,19 +188,3 @@ public class Aura : MonoBehaviour
     }
 }
 
-
-//if (TryGetComponent<Light2D>(out Light2D FoundlightScript))
-//        {
-//            //Debug.Log("Light script detected");
-//            lightScript = FoundlightScript;
-//            StartCoroutine(LightManager.MakeLightOscillate(lightScript));
-//            if (TryGetComponent<ParticleSystem>(out ParticleSystem ps))
-//            {
-//                //Debug.Log("changing color to color");
-//                lightScript.color = Color.green;
-//                lightScript.intensity = 3;
-//                //Debug.Log($"changing color to {lightScript.color}");
-//
-//            }
-//        }
-//        else Debug.Log("No light script found");

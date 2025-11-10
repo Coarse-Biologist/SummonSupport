@@ -31,7 +31,7 @@ public class ProjectileAbility : Ability
     }
     public bool Activate(GameObject user, Transform spawnPoint)
     {
-        Debug.Log($"spawnpoint rotation = {spawnPoint.rotation.y}");
+        //Debug.Log($"spawnpoint rotation = {spawnPoint.rotation.y}");
         int shots = 1;
         if (user.TryGetComponent(out AbilityModHandler modHandler))
         {

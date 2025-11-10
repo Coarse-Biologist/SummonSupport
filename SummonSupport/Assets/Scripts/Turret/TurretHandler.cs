@@ -19,7 +19,7 @@ public class TurretHandler : AbilityHandler
         shootTargetIndexNext = 0;
     }
 
-    void OnTriggerEnter2D(Collider2D other)
+    void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Minion") && (!listTargets.Contains(other.gameObject)))
         {
@@ -32,7 +32,7 @@ public class TurretHandler : AbilityHandler
         }
     }
 
-    void OnTriggerExit2D(Collider2D other)
+    void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("Minion") && listTargets.Contains(other.gameObject))
         {

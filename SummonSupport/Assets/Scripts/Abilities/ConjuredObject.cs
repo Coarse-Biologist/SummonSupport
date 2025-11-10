@@ -16,16 +16,17 @@ public class ConjuredObject : MonoBehaviour
     }
     void Awake()
     {
-        Collider2D collider = Physics2D.OverlapCircle(transform.position, radius);
-        HandleCollision(collider);
+        Collider[] colliders = Physics.OverlapSphere(transform.position, radius);
+        foreach (Collider collider in colliders)
+            HandleCollision(collider);
     }
 
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnTriggerEnter(Collider collision)
     {
         HandleCollision(collision);
     }
-    private void HandleCollision(Collider2D collision)
+    private void HandleCollision(Collider collision)
     {
         if (collision.gameObject.TryGetComponent(out LivingBeing livingBeing))
         {

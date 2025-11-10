@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using Unity.VisualScripting.Antlr3.Runtime.Misc;
+using UnityEngine.AI;
 
 public class AIStateHandler : MonoBehaviour
 {
@@ -21,6 +22,7 @@ public class AIStateHandler : MonoBehaviour
     public LayerMask friendlyMask { private set; get; }
     public LayerMask belligerantMask { private set; get; }
     public LayerMask obstructionMask { private set; get; }
+    public NavMeshAgent navAgent { private set; get; }
     public AIState currentState { get; private set; }
     [SerializeField] public AI_CC_State ccState;
     [SerializeField] public AIState peaceState { private set; get; }
@@ -33,6 +35,7 @@ public class AIStateHandler : MonoBehaviour
     public GameObject player { protected set; get; }
     public LivingBeing playerStats { protected set; get; }
     public LivingBeing target { protected set; get; }
+    public CharacterTag charType { protected set; get; }
 
 
     public Vector2 lastSeenLoc;
@@ -53,7 +56,7 @@ public class AIStateHandler : MonoBehaviour
     {
         startLocation = transform.position;
         obstructionMask = LayerMask.GetMask("Obstruction");
-
+        navAgent = GetComponent<NavMeshAgent>();
 
         currentState = GetComponentInChildren<AIPeacefulState>();
         obedienceState = GetComponent<AIObedienceState>();
@@ -61,10 +64,11 @@ public class AIStateHandler : MonoBehaviour
         movementScript = GetComponent<MovementScript>();
         minionStats = GetComponent<MinionStats>();
         ccState = GetComponent<AI_CC_State>();
-        InvokeRepeating("RunStateMachine", 0f, .1f);
+        InvokeRepeating("RunStateMachine", 0f, .3f);
         abilityHandler = GetComponent<CreatureAbilityHandler>();
         SetMasks();
         SetTargetMask();
+        SetCharType(livingBeing.CharacterTag);
 
     }
     void Start()
@@ -84,6 +88,11 @@ public class AIStateHandler : MonoBehaviour
         friendlyMask = LayerMask.GetMask("Player", "Minion");                           // used by enemies
 
     }
+    private void SetCharType(CharacterTag tag)
+    {
+        charType = tag;
+    }
+
 
     public void SetTargetMask(StatusEffectType statusEffect = StatusEffectType.None)
     {
