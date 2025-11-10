@@ -205,7 +205,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AIStateHandler
   FollowRadius: 5
-  DetectionRadius: 50
+  DetectionRadius: 1000
   AngleOfSight: 360
   InterestRadius: 80
   Cowardice: 0

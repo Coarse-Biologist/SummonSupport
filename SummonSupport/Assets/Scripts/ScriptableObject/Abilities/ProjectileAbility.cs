@@ -41,13 +41,13 @@ public class ProjectileAbility : Ability
         {
             GameObject projectile = Instantiate(Projectile, spawnPoint.position, Quaternion.identity);
             Projectile projectileScript = projectile.GetComponent<Projectile>();
-            //float rotY = (float)Math.Sin(45 * i) * (10 + 5 * i);
-            //Quaternion rotation = Quaternion.Euler(0, rotY, 0);
-            //Vector3 newDirection = rotation * spawnPoint.forward;
+            float rotY = (float)Math.Sin(45 * i) * (10 + 5 * i);
+            Quaternion rotation = Quaternion.Euler(0, rotY, 0);
+            Vector3 newDirection = rotation * spawnPoint.forward;
 
             projectileScript.SetActive(this, user.GetComponent<LivingBeing>(), modHandler);
-            projectileScript.SetProjectilePhysics(spawnPoint.forward);
-            projectileScript.SetParticleTrailEffects(spawnPoint.forward);
+            projectileScript.SetProjectilePhysics(newDirection);
+            projectileScript.SetParticleTrailEffects(newDirection);
 
             Destroy(projectile, Lifetime);
         }
@@ -59,24 +59,3 @@ public class ProjectileAbility : Ability
 }
 
 
-
-//int shots = 1;
-//        if (user.TryGetComponent(out AbilityModHandler modHandler))
-//        {
-//            shots += modHandler.GetModAttributeByType(this, AbilityModTypes.ProjectileNumber);
-//        }
-//        for (int i = 0; i < shots; i += 1)
-//        {
-//            Debug.Log("for loop is being carried out in the Shoot multiple func of the projectile script");
-//            Quaternion rotation;
-//            float rotZ = (float)Math.Sin(45 * i) * (10 + 5 * i);
-//            rotation = Quaternion.Euler(0, 0, rotZ);
-//            Vector3 newDirection = rotation * direction.right;
-//
-//            GameObject projectile = Instantiate(Projectile, user.transform.position, Quaternion.identity);
-//            Projectile projectileScript = projectile.GetComponent<Projectile>();
-//            projectileScript.ability = this;
-//            projectileScript.SetParticleTrailEffects(newDirection);
-//            projectileScript.SetProjectilePhysics(projectile, newDirection);
-//
-//            Destroy(projectile, Lifetime);

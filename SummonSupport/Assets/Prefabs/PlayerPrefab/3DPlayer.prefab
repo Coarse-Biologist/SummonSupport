@@ -52,6 +52,7 @@ GameObject:
   - component: {fileID: 8215957815775318066}
   - component: {fileID: 2381431553521449507}
   - component: {fileID: 485068674075403870}
+  - component: {fileID: 4913614373251763327}
   m_Layer: 3
   m_Name: 3DPlayer
   m_TagString: Player
@@ -356,6 +357,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerUIHandler
   minions: []
+--- !u!114 &4913614373251763327
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5369172574488311089}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91e416cb491576246a305d5c2855e6aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AbilityUI_Handler
+  uiDoc: {fileID: 2592518243195304233, guid: cd22dbe4f165d3043a08400991a4fea0, type: 3}
 --- !u!1 &7538319549239340809
 GameObject:
   m_ObjectHideFlags: 0

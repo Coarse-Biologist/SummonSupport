@@ -53,8 +53,8 @@ GameObject:
   - component: {fileID: 2864372725038760086}
   - component: {fileID: 5620117910319506589}
   - component: {fileID: 6763551784643512798}
-  - component: {fileID: 6899368701623627617}
   - component: {fileID: 8583270847810614229}
+  - component: {fileID: 2003435291768612823}
   m_Layer: 3
   m_Name: WitchDoctor
   m_TagString: Player
@@ -135,6 +135,8 @@ MonoBehaviour:
   <AffectedByAbilities>k__BackingField: []
   <XP_OnDeath>k__BackingField: 3
   <SkillPoints>k__BackingField: 0
+  <TotalControlllableMinions>k__BackingField: 2
+  <AbilitySlots>k__BackingField: 2
 --- !u!114 &7725120615296775044
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -355,19 +357,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bba57bd9f058ded4f95386bcba947def, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &6899368701623627617
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3599053616304235129}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 91e416cb491576246a305d5c2855e6aa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  uiDoc: {fileID: 0}
 --- !u!114 &8583270847810614229
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -380,6 +369,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf6e2c2e7a35ed14a8e559a025cea79d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AbilityModHandler
+--- !u!114 &2003435291768612823
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3599053616304235129}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91e416cb491576246a305d5c2855e6aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AbilityUI_Handler
+  uiDoc: {fileID: 0}
 --- !u!1 &6620911330833019048
 GameObject:
   m_ObjectHideFlags: 0
