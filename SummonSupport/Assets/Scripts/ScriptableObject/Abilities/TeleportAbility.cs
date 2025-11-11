@@ -21,22 +21,20 @@ public class TeleportAbility : Ability
 
     public bool Activate(GameObject user, Vector2 targetLocation)
     {
-        //Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        RaycastHit2D hit = Physics2D.Raycast(targetLocation, Vector2.zero);
         GameObject target = null;
-        if (hit.collider != null && hit.collider.gameObject.GetComponent<LivingBeing>() != null)
+        RaycastHit[] hits = Physics.SphereCastAll(user.transform.position, Range, user.transform.forward, Range);
+        foreach (RaycastHit hit in hits)
         {
-            target = hit.collider.gameObject;
-
-            //Logging.Info($"there was a hit collider");
-            if (IsUsableOn(user.GetComponent<LivingBeing>().CharacterTag, target.GetComponent<LivingBeing>().CharacterTag))
+            //Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            if (hit.collider.gameObject.TryGetComponent(out LivingBeing targetStats))
             {
-                CoroutineManager.Instance.StartCustomCoroutine(TeleportToBeing(user, target));
+                if (IsUsableOn(user.GetComponent<LivingBeing>().CharacterTag, targetStats.CharacterTag))
+                {
+                    CoroutineManager.Instance.StartCustomCoroutine(TeleportToBeing(user, target));
 
-                return true;
+                    return true;
+                }
             }
-            // else Logging.Info($"the ability wasnt useable on sucha  being");
-
         }
         //else Logging.Info($"there was NO hit collider or it wasnt a living being at location {hit.point}");
 
@@ -52,7 +50,7 @@ public class TeleportAbility : Ability
     {
         if (target != null && user != null)
         {
-            if (!user.TryGetComponent<LivingBeing>(out LivingBeing livingBeing)) yield return new WaitForSeconds(ActivationSpeed);
+            if (!user.TryGetComponent(out LivingBeing livingBeing)) yield return new WaitForSeconds(ActivationSpeed);
             else
             {
                 GameObject onHitEffectInstance = Instantiate(EffectOnActivate, user.transform.position, Quaternion.identity, user.transform);
@@ -62,7 +60,6 @@ public class TeleportAbility : Ability
                 yield return new WaitForSeconds(ActivationSpeed);
 
                 user.transform.position = target.transform.position;
-
 
                 ActivateOnArrive.Activate(user);
 

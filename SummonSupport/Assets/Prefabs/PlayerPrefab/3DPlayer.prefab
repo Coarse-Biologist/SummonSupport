@@ -248,7 +248,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a1d757f5b75087c43b396ba3bf7177cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerAbilityHandler
-  abilitySpawn: {fileID: 7538319549239340809}
   statsHandler: {fileID: 5469552160048565923}
   <Abilities>k__BackingField:
   - {fileID: 11400000, guid: 6ecd8945d9da6ca4da64c6af3d43bf0f, type: 2}
@@ -276,15 +275,9 @@ MonoBehaviour:
   <MaxPower>k__BackingField: 100
   <PowerSurge>k__BackingField: 0
   <CurrentPower>k__BackingField: 100
-  <TickRateRegenerationInSeconds>k__BackingField: 0.2
+  <TickRateRegenerationInSeconds>k__BackingField: 1
   <HealthRegeneration>k__BackingField: 1
   <PowerRegeneration>k__BackingField: 1
-  <TotalHealthRegeneration>k__BackingField: 0
-  <TotalPowerRegeneration>k__BackingField: 0
-  <HealthRegenArrows>k__BackingField: 0
-  <PowerRegenArrows>k__BackingField: 0
-  <RegenCalcOffset>k__BackingField: 0.8
-  <MaxRegenArrows>k__BackingField: 6
   <Cold>k__BackingField: 0
   <Water>k__BackingField: 0
   <Earth>k__BackingField: 0

@@ -1572,16 +1572,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Minion
       objectReference: {fileID: 0}
-    - target: {fileID: 2038755144732919392, guid: deb0299c2f7c5ee468cb23755c8d92da,
-        type: 3}
-      propertyPath: <MaxHP>k__BackingField
-      value: 80
-      objectReference: {fileID: 0}
-    - target: {fileID: 2038755144732919392, guid: deb0299c2f7c5ee468cb23755c8d92da,
-        type: 3}
-      propertyPath: <CurrentHP>k__BackingField
-      value: 80
-      objectReference: {fileID: 0}
     - target: {fileID: 4428025582669882376, guid: deb0299c2f7c5ee468cb23755c8d92da,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1772,11 +1762,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Player
-      objectReference: {fileID: 0}
-    - target: {fileID: 5469552160048565923, guid: 29cc623553c0c3d4aa9548ba52efed1b,
-        type: 3}
-      propertyPath: <TickRateRegenerationInSeconds>k__BackingField
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5700169036039766404, guid: 29cc623553c0c3d4aa9548ba52efed1b,
         type: 3}

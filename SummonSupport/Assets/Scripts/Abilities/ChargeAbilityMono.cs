@@ -8,7 +8,7 @@ public class ChargeAbilityMono : MonoBehaviour
     private ChargeAbility chargeAbility;
 
     private Coroutine chargeCoroutine;
-    private Rigidbody2D rb;
+    private Rigidbody rb;
     private Transform originTransform;
     private Vector2 startLoc;
     private AbilityHandler abilityHandler;
@@ -16,7 +16,7 @@ public class ChargeAbilityMono : MonoBehaviour
     private WaitForSeconds chargeTickRate = new WaitForSeconds(.01f);
     public GameObject trailEffect { private set; get; }
     private AbilityModHandler modHandler;
-    private float speed = 0;
+    private float speedBoost = 35;
     private float range = 0;
     private int alreadypierced = 0;
     private int maxPierce = 0;
@@ -35,7 +35,7 @@ public class ChargeAbilityMono : MonoBehaviour
         modHandler = caster.GetComponent<AbilityModHandler>();
         if (caster.gameObject.TryGetComponent(out MovementScript movementScript))
         {
-            speed = movementScript.MovementSpeed;
+            speedBoost += movementScript.MovementSpeed;
         }
         range = chargeAbility.Range;
 
@@ -43,13 +43,13 @@ public class ChargeAbilityMono : MonoBehaviour
         {
             maxPierce = modHandler.GetModAttributeByType(chargeAbility.ActivateOnHit, AbilityModTypes.MaxPierce);
             range += modHandler.GetModAttributeByType(chargeAbility.ActivateOnHit, AbilityModTypes.Range);
-            speed += modHandler.GetModAttributeByType(chargeAbility, AbilityModTypes.Speed);
+            speedBoost += modHandler.GetModAttributeByType(chargeAbility, AbilityModTypes.Speed);
 
         }
         Debug.Log($"Max pierce = {maxPierce}");
 
         originTransform = user.transform;
-        rb = user.GetComponentInParent<Rigidbody2D>();
+        rb = user.GetComponentInParent<Rigidbody>();
         chargeCoroutine = StartCoroutine(ChargeWhileLogical());
     }
     private IEnumerator ChargeWhileLogical()
@@ -63,7 +63,7 @@ public class ChargeAbilityMono : MonoBehaviour
         startLoc = transform.position;
         while (stillCharging)
         {
-            rb.linearVelocity = originTransform.right * speed * 35;
+            rb.linearVelocity = originTransform.forward * speedBoost;
             if (((Vector2)gameObject.transform.position - startLoc).magnitude > chargeAbility.Range)
             {
                 EndCharge();
@@ -74,7 +74,7 @@ public class ChargeAbilityMono : MonoBehaviour
 
     void OnTriggerEnter(Collider collision)
     {
-        if (collision is BoxCollider wall) EndCharge();
+        //if (collision is BoxCollider wall) EndCharge();
         Ability abilityToCast = chargeAbility.ActivateOnHit;
         bool success = abilityToCast.Activate(transform.parent.gameObject);
         if (success)

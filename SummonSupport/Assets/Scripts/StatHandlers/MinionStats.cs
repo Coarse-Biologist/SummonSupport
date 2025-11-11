@@ -28,9 +28,8 @@ public class MinionStats : LivingBeing
 
     public override void Die()
     {
-        Logging.Info($"{gameObject.name} died");
         EventDeclarer.minionDied?.Invoke(gameObject);
-
+        SetRegeneration(AttributeType.CurrentHitpoints, 0);
         if (HasStatusEffect(StatusEffectType.ExplodeOnDeath)) ViciousDeathExplosion();
         //Destroy(gameObject);
         ToggleDeath(true);
@@ -41,24 +40,24 @@ public class MinionStats : LivingBeing
         if (dead)
         {
             gameObject.AddComponent<I_InteractMinionResurrect>();
-            if (TryGetComponent<Collider>(out Collider collider))
+            if (TryGetComponent(out Collider collider))
             {
                 collider.isTrigger = true;
             }
-            if (gameObject.TryGetComponent<AIStateHandler>(out AIStateHandler stateHandler))
+            if (gameObject.TryGetComponent(out AIStateHandler stateHandler))
             {
                 stateHandler.SetDead(true);
             }
         }
         else
         {
-            if (gameObject.TryGetComponent<I_InteractMinionResurrect>(out I_InteractMinionResurrect resurrectScript))
+            if (gameObject.TryGetComponent(out I_InteractMinionResurrect resurrectScript))
                 Destroy(resurrectScript);
-            if (TryGetComponent<Collider>(out Collider collider))
+            if (TryGetComponent(out Collider collider))
             {
                 collider.isTrigger = false;
             }
-            if (gameObject.TryGetComponent<AIStateHandler>(out AIStateHandler stateHandler))
+            if (gameObject.TryGetComponent(out AIStateHandler stateHandler))
             {
                 stateHandler.SetDead(false);
                 Debug.Log("Setting state handler death to false");

@@ -3,9 +3,7 @@ using System;
 using UnityEngine;
 using System.Collections;
 using SummonSupportEvents;
-using UnityEditor.Build.Pipeline.Tasks;
 using System.Linq;
-using NUnit.Framework.Constraints;
 public abstract class LivingBeing : MonoBehaviour
 {
     #region Declarations
@@ -32,12 +30,9 @@ public abstract class LivingBeing : MonoBehaviour
     [field: SerializeField] public float TickRateRegenerationInSeconds { get; private set; } = .2f;
     [field: SerializeField] public float HealthRegeneration { get; private set; } = 1;
     [field: SerializeField] public float PowerRegeneration { get; private set; } = 1;
-    [field: SerializeField] public float TotalHealthRegeneration { get; private set; } = 0; // i think this is / should be a private variable since it is only used for local calculations? or at least i think it doesnt need to be serialized since it would never be used (it is instantluy set to the value of HealthRegeneration)
-    [field: SerializeField] public float TotalPowerRegeneration { get; private set; } = 0;
-    [field: SerializeField] public int HealthRegenArrows { get; private set; } = 0;
-    [field: SerializeField] public int PowerRegenArrows { get; private set; } = 0;
-    [field: SerializeField] public float RegenCalcOffset { get; private set; } = .8f;
-    [field: SerializeField] public int MaxRegenArrows { get; private set; } = 6;
+    private float TotalHealthRegeneration = 0;
+    private float TotalPowerRegeneration = 0;
+
     #endregion
 
     //TODO:
@@ -275,12 +270,7 @@ public abstract class LivingBeing : MonoBehaviour
                 break;
             default:
                 break;
-                //case AttributeType.MovementSpeed:
-                //case AttributeType.DashBoost:
-                //case AttributeType.DashCooldown:
-                //case AttributeType.DashDuration:
-                //EventDeclarer.SpeedAttributeChanged.Invoke(attributeType, newValue);
-                //break;
+
         }
     }
 
@@ -336,29 +326,27 @@ public abstract class LivingBeing : MonoBehaviour
         if (attributeType == AttributeType.CurrentHitpoints)
         {
             TotalHealthRegeneration += value;
-            HealthRegenArrows = GetRegenerationIndicatorAmount(MaxHP, TotalHealthRegeneration);
+            //HealthRegenArrows = GetRegenerationIndicatorAmount(MaxHP, TotalHealthRegeneration);
         }
         else if (attributeType == AttributeType.CurrentPower)
         {
             TotalPowerRegeneration += value;
-            PowerRegenArrows = GetRegenerationIndicatorAmount(MaxPower, TotalPowerRegeneration);
+            //PowerRegenArrows = GetRegenerationIndicatorAmount(MaxPower, TotalPowerRegeneration);
+        }
+    }
+    public void SetRegeneration(AttributeType attributeType, float value)
+    {
+        if (attributeType == AttributeType.CurrentHitpoints)
+        {
+            TotalHealthRegeneration = value;
+        }
+        else if (attributeType == AttributeType.CurrentPower)
+        {
+            TotalPowerRegeneration = value;
         }
     }
 
-    int GetRegenerationIndicatorAmount(float maxValue, float regeneration)
-    {
-        float regenerationIndicatorStep = maxValue * (1 - RegenCalcOffset) / MaxRegenArrows;
-        float arrows = regeneration / regenerationIndicatorStep;
-        float clampedArrows;
-        if (arrows > 0)
-            clampedArrows = Mathf.Clamp(arrows, 1f, MaxRegenArrows); // 0.1 arrows should be 1, 100 arrows schould be value of MaxRegenArrows
-        else if (arrows < 0)
-            clampedArrows = Mathf.Clamp(arrows, -MaxRegenArrows, -1f); // -0.1 arrows should be -1, -100 arrows schould be value of -MaxRegenArrows
-        else
-            clampedArrows = 0;
-        int roundedArrows = Mathf.RoundToInt(clampedArrows);
-        return roundedArrows;
-    }
+
     #endregion
 
     #region Niche attribute changes

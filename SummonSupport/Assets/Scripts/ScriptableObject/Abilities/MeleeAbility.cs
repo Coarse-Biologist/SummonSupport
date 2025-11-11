@@ -39,7 +39,7 @@ public class MeleeAbility : Ability
         modHandler = user.GetComponent<AbilityModHandler>();
         if (originTransform == null)
         {
-            //Debug.Log($"the user: {user}.");
+            Debug.Log($"the user: {user} of this {Name}.");
             originTransform = user.transform;
         }
 
@@ -77,31 +77,31 @@ public class MeleeAbility : Ability
     private bool VerifyActivate(Collider collider, GameObject user)
     {
 
-        if (!collider.TryGetComponent<LivingBeing>(out LivingBeing targetStats))
+        if (!collider.TryGetComponent(out LivingBeing targetStats))
         {
-            //Logging.Info("oof, 1");
+            Logging.Info("oof, 1");
 
             return false;
         }
         Target = targetStats;
 
-        //Logging.Info($"User = {user} collider = {collider.gameObject}");
+        Logging.Info($"User = {user} collider = {collider.gameObject}");
 
         if (!IsUsableOn(Caster.CharacterTag, Target.CharacterTag))
         {
             if (!HasElementalSynergy(this, Target) || !user.TryGetComponent<AI_CC_State>(out AI_CC_State ccState) || !ccState.isCharmed)
                 return false;
         }
-        //else Debug.Log($"usable on {collider.gameObject}");
+        else Debug.Log($"usable on {collider.gameObject}");
         if (VerifyWithinShape(user, collider))
         {
-            //Logging.Info("yay, 3");
+            Logging.Info("yay, 3");
 
             return true;
         }
         else
         {
-            //Logging.Info("oof, 4");
+            Logging.Info("oof, 4");
 
             return false;
         }
@@ -146,7 +146,7 @@ public class MeleeAbility : Ability
             // Check if point is inside the rectangle
             bool isInside = forwardDistance <= Range && (Mathf.Abs(sideDistance) <= totalWidth / 2f); //forwardDistance >= 0 &&
 
-            //Logging.Info($"isInside? = {isInside}");
+            Logging.Info($"isInside? = {isInside}");
             if (isInside)
                 return true;
             else return false;
