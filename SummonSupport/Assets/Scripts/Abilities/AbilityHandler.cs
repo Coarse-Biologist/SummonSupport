@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class AbilityHandler : MonoBehaviour
 {
-    [SerializeField] protected GameObject abilitySpawn;
+    [SerializeField] public GameObject abilitySpawn { private set; get; }
     [SerializeField] protected LivingBeing statsHandler;
     [field: SerializeField] public List<Ability> Abilities { private set; get; } = new();
     [SerializeField] protected List<bool> abilitiesOnCooldown = new();
@@ -74,7 +74,6 @@ public class AbilityHandler : MonoBehaviour
             case ProjectileAbility projectile:
                 usedAbility = HandleProjectile(projectile);
                 break;
-
             case TargetMouseAbility pointAndClickAbility:
                 usedAbility = HandlePointAndClick(pointAndClickAbility);
                 break;
@@ -112,17 +111,16 @@ public class AbilityHandler : MonoBehaviour
     }
     private bool HandleBeamAbility(BeamAbility beamAbility, LivingBeing statsHandler)
     {
-        GameObject beamInstance = null;
+        GameObject beamInstance;
 
         if (toggledAbilitiesDict.TryGetValue(beamAbility, out GameObject activeAbility))
         {
             StopToggledAbility(beamAbility, activeAbility);
-
             return false;
         }
         else
         {
-            beamInstance = beamAbility.ToggleBeam(statsHandler.gameObject, transform);
+            beamInstance = beamAbility.ToggleBeam(statsHandler.gameObject, abilitySpawn.transform);
             toggledAbilitiesDict.TryAdd(beamAbility, beamInstance);
             statsHandler.ChangeRegeneration(beamAbility.CostType, -beamAbility.Cost);
 

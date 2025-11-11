@@ -18,7 +18,7 @@ public class BeamAbility : Ability
         Beam beamScript = SpawnBeam(user, abilityDirection).GetComponent<Beam>();
         //Debug.Log($"{abilityDirection} = ability direction object");
 
-        beamScript.SetAbilitysettings(user.GetComponent<LivingBeing>(), this, abilityDirection);
+        beamScript.SetAbilitySettings(user.GetComponent<LivingBeing>(), this, abilityDirection);
 
         return beamScript.gameObject;
     }

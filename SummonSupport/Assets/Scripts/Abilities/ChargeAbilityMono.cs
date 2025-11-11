@@ -37,11 +37,14 @@ public class ChargeAbilityMono : MonoBehaviour
         {
             speed = movementScript.MovementSpeed;
         }
-        range = chargeAbility.range;
+        range = chargeAbility.Range;
 
         if (modHandler != null)
         {
             maxPierce = modHandler.GetModAttributeByType(chargeAbility.ActivateOnHit, AbilityModTypes.MaxPierce);
+            range += modHandler.GetModAttributeByType(chargeAbility.ActivateOnHit, AbilityModTypes.Range);
+            speed += modHandler.GetModAttributeByType(chargeAbility, AbilityModTypes.Speed);
+
         }
         Debug.Log($"Max pierce = {maxPierce}");
 
@@ -55,17 +58,13 @@ public class ChargeAbilityMono : MonoBehaviour
         {
             trailEffect = Instantiate(chargeAbility.chargeTrail, transform.position, originTransform.rotation, transform);
         }
-        if (modHandler != null)
-        {
-            speed += modHandler.GetModAttributeByType(chargeAbility, AbilityModTypes.Speed);
-            range += modHandler.GetModAttributeByType(chargeAbility, AbilityModTypes.Range);
-        }
+
         bool stillCharging = true;
         startLoc = transform.position;
         while (stillCharging)
         {
             rb.linearVelocity = originTransform.right * speed * 35;
-            if (((Vector2)gameObject.transform.position - startLoc).magnitude > range)
+            if (((Vector2)gameObject.transform.position - startLoc).magnitude > chargeAbility.Range)
             {
                 EndCharge();
             }

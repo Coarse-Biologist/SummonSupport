@@ -81,7 +81,7 @@ public class EnemySpawnHandler : MonoBehaviour
             stateHandler.SetTarget(PlayerStats.Instance);
             stateHandler.SetCurrentState(creature.GetComponent<AIChaseState>());
         }
-        if (creature.TryGetComponent<Collider2D>(out Collider2D collider))
+        if (creature.TryGetComponent(out Collider collider))
         {
             collider.isTrigger = true; // turned to false in the one way barrier script
         }

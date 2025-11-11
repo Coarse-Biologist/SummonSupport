@@ -21,7 +21,7 @@
             <ui:VisualElement name="PlayerOptions" style="flex-grow: 1; top: 0%; left: 50%; right: 0%; bottom: 0%; width: 50%; min-width: 50%; max-width: 50%; height: 100%; min-height: 100%; max-height: 0%; position: absolute; -unity-font-definition: url(&quot;project://database/Assets/UI/Fonts/Jersey10-Regular.ttf?fileID=12800000&amp;guid=3bf54017e8857c1428c5b414e1701729&amp;type=3#Jersey10-Regular&quot;);" />
         </ui:VisualElement>
         <ui:VisualElement name="ResourceBars" enabled="true" style="flex-grow: 1; width: 30%; height: 15%; top: 85%; bottom: 0; left: 0%; position: absolute; flex-wrap: wrap; align-items: stretch; align-self: center; flex-direction: column; align-content: stretch; justify-content: flex-start; background-color: rgba(255, 0, 0, 0); border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; flex-basis: 0%;">
-            <ui:ProgressBar value="22" name="HealthBar" class="healthbar" style="height: 10%;" />
+            <ui:ProgressBar value="88" name="HealthBar" class="healthbar" style="height: 10%;" />
             <ui:ProgressBar value="44" name="PowerBar" class="powerbar" style="height: 10%;" />
             <ui:ProgressBar value="66" name="XP_Bar" class="Xpbar" style="height: 10%;" />
         </ui:VisualElement>

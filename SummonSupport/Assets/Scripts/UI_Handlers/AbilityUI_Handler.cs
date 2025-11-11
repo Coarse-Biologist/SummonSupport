@@ -61,7 +61,6 @@ public class AbilityUI_Handler : MonoBehaviour
     private void GetAllProgressBars()
     {
         root = uiDoc.rootVisualElement;
-        Debug.Log($"ui doc = {uiDoc}. root visual element {root}");
 
         VisualElement leftSlots = root.Q<VisualElement>("AbilitySlotsL");
         VisualElement rightSlots = root.Q<VisualElement>("AbilitySlotsR");
@@ -104,7 +103,6 @@ public class AbilityUI_Handler : MonoBehaviour
     #region Ability slot changed invoke response
     public void SetAbilitySlot(int slotIndex, Ability ability)
     {
-        Debug.Log($"set ability Slot {ability.Name}!!!!!!!!!!");
 
         if (ability == null) return;
         else if (slotIndex <= abilityProgressBarDict.Keys.Count) // check if the index is usable
@@ -112,26 +110,18 @@ public class AbilityUI_Handler : MonoBehaviour
             abilityProgressBarDict[slotIndex] = ability; // set ability to the slot
             SetAbilityIcon(slotIndex, ability);
         }
-        else Debug.Log("OOFJKJWCNKCNOWJOWCO!!!!!!!!!!");
     }
 
     private void SetAbilityIcon(int slotIndex, Ability ability)
     {
-        Debug.Log("set ability icon!!!!!!!!!!");
         if (ability == null)
-        {
-            Debug.Log("ability is null!!!!!!!!!!");
-
             return;
-        }
+
         if (ProgressBarDict.TryGetValue(slotIndex, out ProgressBar bar))
         {
-            Debug.Log($"setting ability name to {bar}!!!!!!!!!!");
-
             bar.title = ability.Name;
             bar.style.backgroundImage = new StyleBackground(ability.Icon);
         }
-        else Debug.Log("cant find ability in dictionary!!!!!!!!!!");
 
     }
 

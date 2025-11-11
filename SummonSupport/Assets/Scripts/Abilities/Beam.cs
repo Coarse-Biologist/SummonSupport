@@ -54,12 +54,12 @@ public class Beam : MonoBehaviour
     {
         ParticleSystem = GetComponent<ParticleSystem>();
         var collision = ParticleSystem.collision;
-        collision.mode = ParticleSystemCollisionMode.Collision2D; // Use 2D collisions
+        collision.mode = ParticleSystemCollisionMode.Collision3D; // Use 3D collisions
         InvokeRepeating("UpdateRotation", 0f, .1f);
 
     }
 
-    public void SetAbilitysettings(LivingBeing caster, BeamAbility ability, Transform rotationObject)
+    public void SetAbilitySettings(LivingBeing caster, BeamAbility ability, Transform rotationObject)
     {
         TickRate = ability.TickRate;
         Range = ability.Range;

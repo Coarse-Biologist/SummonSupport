@@ -119,11 +119,11 @@ public class Projectile : MonoBehaviour
         ParticleSystem ps = GetComponentInChildren<ParticleSystem>();
         if (ps != null)
         {
-            Debug.Log("resetting particle system");
+            //Debug.Log("resetting particle system");
             ps.Simulate(0f, true, true);
             ps.Play();
         }
-        else Debug.Log($"game object {gameObject} has no particle system");
+        //else Debug.Log($"game object {gameObject} has no particle system");
     }
 
     private void SpawnEffect(LivingBeing targetLivingBeing)
@@ -131,11 +131,11 @@ public class Projectile : MonoBehaviour
         GameObject instance;
         if (ability.SpawnEffectOnHit != null)
         {
-            Debug.Log($"The on hit effect for {ability.Name} is being spawned");
+            //Debug.Log($"The on hit effect for {ability.Name} is being spawned");
             instance = Instantiate(ability.SpawnEffectOnHit, targetLivingBeing.transform.position, Quaternion.identity, targetLivingBeing.transform.transform);
             Destroy(instance, instance.GetComponent<ParticleSystem>().main.duration);
         }
-        else Debug.Log($"there is no on hit effect for {ability.Name}");
+        //else Debug.Log($"there is no on hit effect for {ability.Name}");
     }
     private void SpawnEffect(Vector2 loc)
     {
@@ -184,13 +184,13 @@ public class Projectile : MonoBehaviour
             CombatStatHandler.HandleEffectPackage(ability, userLivingBeing, otherLivingBeing, ability.TargetEffects);
             HandleOnHitBehaviour(otherLivingBeing);
         }
-        else Debug.Log("Not active and therefore just a moving sprite");
+        //else Debug.Log("Not active and therefore just a moving sprite");
 
     }
 
     void HandleOnHitBehaviour(LivingBeing other)
     {
-        Debug.Log("Handling On hit behaviour");
+        //Debug.Log("Handling On hit behaviour");
         if (modHandler != null)
         {
             split = modHandler.GetModAttributeByType(ability, AbilityModTypes.MaxSplit);
@@ -200,12 +200,12 @@ public class Projectile : MonoBehaviour
 
         if (!splitAlready && (ability.PiercingMode == OnHitBehaviour.Split || split > 0))
         {
-            Debug.Log("Trying to split");
+            //Debug.Log("Trying to split");
             SplitProjectile(other, split);
         }
         else if (piercedAlready < ability.MaxPierce + pierce)
         {
-            Debug.Log("Trying to pierce");
+            //Debug.Log("Trying to pierce");
 
             piercedAlready++;
         }

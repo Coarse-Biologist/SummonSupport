@@ -29,7 +29,7 @@ public static class CombatStatHandler
         currentCaster = caster;
         currentTarget = target;
         modHandler = caster.GetComponent<AbilityModHandler>();
-        UnityEngine.Debug.Log($"caster = {caster.Name}, target = {target.Name} mod handler = {modHandler}");
+        //UnityEngine.Debug.Log($"caster = {caster.Name}, target = {target.Name} mod handler = {modHandler}");
 
         if (effectPackage.Heal.Value > 0)
         {
@@ -64,12 +64,12 @@ public static class CombatStatHandler
         }
         //currentStatusEffects.Add(AbilityLibrary.GetStatusEffectLibrary().entries[0].Effect);
         SetAllCurrentStatusEffects(ability, effectPackage);
-        UnityEngine.Debug.Log($"current status effect list = {currentStatusEffects}");
+        //UnityEngine.Debug.Log($"current status effect list = {currentStatusEffects}");
         if (currentStatusEffects != null && currentStatusEffects.Count > 0)
         {
             foreach (StatusEffects status in currentStatusEffects)
             {
-                UnityEngine.Debug.Log("The endgame of status effects has been reached?");
+                //UnityEngine.Debug.Log("The endgame of status effects has been reached?");
 
                 target.AlterStatusEffectList(status.EffectType, true);
                 target.StartCoroutine(RemoveStatusEffect(status));
@@ -248,7 +248,7 @@ public static class CombatStatHandler
     private static void HandleApplyDOT(AttributeType attributeType, float changeValue, AbilityModTypes modType)
     {
         float duration = currentAbility.Duration;
-        if(modHandler != null)
+        if (modHandler != null)
         {
             duration += modHandler.GetModAttributeByType(currentAbility, AbilityModTypes.Duration);
         }

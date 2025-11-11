@@ -12,7 +12,7 @@ public class DoorHandler : MonoBehaviour, I_Interactable
 
     [SerializeField] public Element elementalRequisite;
     [SerializeField] public int difficulty = 1;
-    private EdgeCollider2D doorCollider;
+    private Collider doorCollider;
     [field: SerializeField] public Transform DestinationDoor { get; protected set; }
 
 
@@ -20,7 +20,7 @@ public class DoorHandler : MonoBehaviour, I_Interactable
 
     public void Awake()
     {
-        doorCollider = GetComponent<EdgeCollider2D>();
+        doorCollider = GetComponent<Collider>();
         minionsSpriteRenderer = GetComponentInChildren<SpriteRenderer>();
     }
 

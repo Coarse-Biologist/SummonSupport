@@ -52,9 +52,9 @@ public class MeleeAbility : Ability
 
     private bool AttemptActivation(GameObject user)
     {
-        Collider2D[] hits = Physics2D.OverlapCircleAll(user.transform.position, Range);
+        Collider[] hits = Physics.OverlapSphere(user.transform.position, Range);
         bool activated = false;
-        foreach (Collider2D collider in hits)
+        foreach (Collider collider in hits)
         {
             if (collider != null && collider.gameObject != user)
             {
@@ -74,7 +74,7 @@ public class MeleeAbility : Ability
     }
 
 
-    private bool VerifyActivate(Collider2D collider, GameObject user)
+    private bool VerifyActivate(Collider collider, GameObject user)
     {
 
         if (!collider.TryGetComponent<LivingBeing>(out LivingBeing targetStats))
@@ -107,7 +107,7 @@ public class MeleeAbility : Ability
         }
     }
 
-    private bool VerifyWithinShape(GameObject user, Collider2D collider)
+    private bool VerifyWithinShape(GameObject user, Collider collider)
     {
         float totalWidth = Width;
         if (modHandler != null)

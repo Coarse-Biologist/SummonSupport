@@ -53,7 +53,7 @@ public class AIChaseState : AIState
 
             else
             {
-                Debug.Log($"trying to stop attack coroutine because target is null {stateHandler.target}");
+                //Debug.Log($"trying to stop attack coroutine because target is null {stateHandler.target}");
 
                 EndAttackRoutine();
                 Chase(stateHandler.lastSeenLoc, true);
@@ -62,7 +62,7 @@ public class AIChaseState : AIState
         }
         else
         {
-            Debug.Log($"trying to stop attack coroutine because target is null {stateHandler.target}");
+            //Debug.Log($"trying to stop attack coroutine because target is null {stateHandler.target}");
             EndAttackRoutine();
             return peaceState;
         }
@@ -119,7 +119,7 @@ public class AIChaseState : AIState
     }
     private void StrafeMovement(Vector3 targetLoc, float distance)
     {
-        Debug.Log("Strafe movement called");
+        //Debug.Log("Strafe movement called");
 
         float a = -60f * distance;
         Vector3 offset = transform.position - targetLoc;

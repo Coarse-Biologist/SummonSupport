@@ -1,7 +1,6 @@
-using System;
 using System.Collections.Generic;
+
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 [CreateAssetMenu(menuName = "Abilities/Target Mouse Ability")]
 public class TargetMouseAbility : Ability
@@ -11,31 +10,51 @@ public class TargetMouseAbility : Ability
     [field: SerializeField] public EffectOrientation EffectOrientation { get; set; } = EffectOrientation.Identity;
 
 
+    private List<LivingBeing> GetTargets(LivingBeing caster)
+    {
+        CharacterTag desiredTag;
 
+        float targetNum = 1;
+        List<LivingBeing> targets = new();
+        if (caster.TryGetComponent(out AbilityModHandler modHandler))
+        {
+            targetNum += modHandler.GetModAttributeByType(this, AbilityModTypes.ProjectileNumber);
+        }
+
+        if (AbilityTypeTag == AbilityTypeTag.BuffsTarget) // logic assumes that only players will be using this ability type.
+        {
+            desiredTag = CharacterTag.Minion;
+        }
+        else desiredTag = CharacterTag.Enemy;
+        Transform spawnPoint = caster.GetComponent<AbilityHandler>().abilitySpawn.transform;
+        RaycastHit[] hits = Physics.SphereCastAll(spawnPoint.position, Range, spawnPoint.transform.forward, Range);
+        foreach (RaycastHit hit in hits)
+        {
+            if (!hit.collider.TryGetComponent(out LivingBeing hitStats)) continue;
+            if (hitStats.CharacterTag == desiredTag)
+            {
+                targets.Add(hitStats);
+            }
+            if (targets.Count >= targetNum) break;
+        }
+
+        //Debug.Log($"number of Targets found: {targets.Count}. max targets = {targetNum}");
+        return targets;
+    }
 
     public override bool Activate(GameObject user)
     {
-        Debug.Log($"Activating the targetMouse ability {this.Name}");
+        //Debug.Log($"Activating the targetMouse ability {this.Name}");
         LivingBeing casterStats = user.GetComponent<LivingBeing>();
-        Vector2 mousePos;
-        if (casterStats.CharacterTag == CharacterTag.Player) mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        else mousePos = user.GetComponent<AIStateHandler>().target.transform.position;
-        int layerMask = ~LayerMask.GetMask("Obstruction"); // Alle außer "Obstruction"
-        RaycastHit2D hit = Physics2D.Raycast(mousePos, Vector2.zero, Mathf.Infinity, layerMask);
+
         bool usedAbility = false;
-        if (hit.collider != null)
+        foreach (LivingBeing target in GetTargets(casterStats))
         {
-            if (hit.collider.TryGetComponent<LivingBeing>(out var target))
+            if (target != null)
             {
-                Debug.Log($"target was a living being : {target}");
-                
-                usedAbility = ActivateAbility(user, target, mousePos);
+                usedAbility = ActivateAbility(user, target);
 
-                Debug.Log($"success in activating ability = {usedAbility}");
-                
-
-            }
-
+                //Debug.Log($"success in activating ability = {usedAbility}");
                 if (usedAbility)
                 {
                     SpawnEffect(target, user);
@@ -48,16 +67,17 @@ public class TargetMouseAbility : Ability
                         CombatStatHandler.HandleEffectPackage(this, casterStats, target, TargetEffects);
                     }
                 }
+            }
         }
         return usedAbility;
     }
 
 
-    public bool ActivateAbility(GameObject user, LivingBeing targetLivingBeing, Vector2 mousePos)
+    public bool ActivateAbility(GameObject user, LivingBeing targetLivingBeing)
     {
-        if (user.TryGetComponent<AI_CC_State>(out AI_CC_State ccState) && ccState.isCharmed) 
+        if (user.TryGetComponent<AI_CC_State>(out AI_CC_State ccState) && ccState.isCharmed)
         {
-            Debug.Log($"returning false");
+            //Debug.Log($"returning false");
             return true;
         }
 
@@ -65,24 +85,24 @@ public class TargetMouseAbility : Ability
         {
             if (!IsUsableOn(userLivingBeing.CharacterTag, targetLivingBeing.CharacterTag))
             {
-                Debug.Log($"returning false");
+                //Debug.Log($"returning false");
                 return false;
             }
-            else 
-            {                
-                Debug.Log($"returning true");
+            else
+            {
+                //Debug.Log($"returning true");
                 return true;
             }
         }
-        else 
+        else
         {
-            Debug.Log($"returning false");
+            //Debug.Log($"returning false");
             return false;
         }
     }
-    
-    
-    
+
+
+
 
 
     private void SpawnEffect(LivingBeing targetLivingBeing, GameObject Caster)
@@ -112,7 +132,16 @@ public class TargetMouseAbility : Ability
         }
     }
 }
-    
 
+//if (AlchemyHandler.Instance.activeMinions.Count != 0)
+//                for (int i = 0; i < targetNum;)
+//                {
+//                    GameObject minionObject = minions[UnityEngine.Random.Range(0, minionNum)];
+//                    if (!targets.Contains(minionObject.GetComponent<LivingBeing>()))
+//                    {
+//                        targets.Add(minionObject.GetComponent<LivingBeing>());
+//                        i++;
+//                    }
+//                }
 
 

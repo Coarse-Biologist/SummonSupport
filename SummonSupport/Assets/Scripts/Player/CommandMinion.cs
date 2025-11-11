@@ -24,7 +24,7 @@ public static class CommandMinion
 
         if (SelectedMinions != null)
         {
-            Collider2D[] enemyHits = Physics2D.OverlapCircleAll(loc, 1, LayerMask.GetMask("Enemy"));
+            Collider[] enemyHits = Physics.OverlapSphere(loc, 1, LayerMask.GetMask("Enemy"));
             //Logging.Info($"{enemyHits.Length} colliders in click area.");
 
             if (enemyHits.Length > 0)
@@ -35,12 +35,12 @@ public static class CommandMinion
                     CommandMinionToAttack(targetLivingbeing);
             }
 
-            Collider2D[] interactHits = Physics2D.OverlapCircleAll(loc, 1);
+            Collider[] interactHits = Physics.OverlapSphere(loc, 1);
             //Logging.Info($"{interactHits.Length} colliders in click area.");
 
             if (interactHits.Length > 0)
             {
-                foreach (Collider2D collider in interactHits)
+                foreach (Collider collider in interactHits)
                 {
                     I_Interactable interactable = collider.gameObject.GetComponent<I_Interactable>();
                     if (interactable != null)

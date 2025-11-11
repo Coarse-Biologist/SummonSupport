@@ -7,7 +7,7 @@ public class OneWayBarrier : MonoBehaviour
     //private List<GameObject> RecentlyEnteredCreatures = new();
 
     private WaitForSeconds waitTime = new WaitForSeconds(1f);
-    private List<Collider2D> triggersToDeactivate = new();
+    private List<Collider> triggersToDeactivate = new();
 
     void OnCollisionEnter(Collision collision)
     {
@@ -26,7 +26,7 @@ public class OneWayBarrier : MonoBehaviour
         }
         //else Debug.Log($"{collider.gameObject} does not have a charStats (it is {charStats})");
     }
-    void OnTriggerExit2D(Collider2D collider)
+    void OnTriggerExit(Collider collider)
     {
         //Debug.Log($"on exit function is called. the collider culprit was {collider}");
         if (collider.gameObject.TryGetComponent<EnemyStats>(out EnemyStats enemyStats))
@@ -38,7 +38,7 @@ public class OneWayBarrier : MonoBehaviour
         //else Debug.Log($"{collider.gameObject} does not have a charStats (it is {charStats})");
 
     }
-    private IEnumerator DelayedTriggerDeactivation(Collider2D collider)
+    private IEnumerator DelayedTriggerDeactivation(Collider collider)
     {
         yield return waitTime;
         //if (triggersToDeactivate.Count > 0)

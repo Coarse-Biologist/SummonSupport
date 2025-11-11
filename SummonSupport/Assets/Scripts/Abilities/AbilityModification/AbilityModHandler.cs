@@ -90,7 +90,7 @@ public class AbilityModHandler : MonoBehaviour
         {
             mod = new Mod_Base();
             ModdedAbilities.Add(abilityToAdd, mod);
-            Debug.Log($"Adding {abilityToAdd.Name} to the modded abilities list with the mod {mod}");
+            //Debug.Log($"Adding {abilityToAdd.Name} to the modded abilities list with the mod {mod}");
             return mod;
         }
         else return existingMod;
@@ -118,22 +118,22 @@ public class AbilityModHandler : MonoBehaviour
         {
             foreach (KeyValuePair<Ability, Mod_Base> kvp in ModdedAbilities)
             {
-                Debug.Log($"ability = {kvp.Key}. mod = {kvp.Value}");
+                //Debug.Log($"ability = {kvp.Key}. mod = {kvp.Value}");
 
             }
-            Debug.Log("REturning Null like no 0nes business");
+            //Debug.Log("REturning Null like no 0nes business");
             return new();
         }
         else
         {
-            Debug.Log($"REturning a dope ass list of length{existingMod.GetStatusEffects().Count}");
+            //Debug.Log($"REturning a dope ass list of length{existingMod.GetStatusEffects().Count}");
 
             return existingMod.GetStatusEffects();
         }
     }
     public void AddStatusEffectToAbility(Ability ability, StatusEffects effectType)
     {
-        Debug.Log($"Modding to add {effectType} to {ability}!");
+        //Debug.Log($"Modding to add {effectType} to {ability}!");
         Mod_Base mod = TryAddNewAbilityMod(ability);
         mod.Mod_AddStatusEffect(effectType);
     }

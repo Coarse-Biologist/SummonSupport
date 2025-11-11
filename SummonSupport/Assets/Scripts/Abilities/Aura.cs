@@ -16,7 +16,7 @@ public class Aura : MonoBehaviour
     List<LivingBeing> listLivingBeingsInAura = new();
     [SerializeField] public float ActivationTime { get; private set; } = .5f;
     private bool Active = false;
-    private CircleCollider2D circleCollider;
+    private Collider sphereCollider;
 
     private LivingBeing target;
     private ConjureAbility conjureAbility;
@@ -41,11 +41,10 @@ public class Aura : MonoBehaviour
         //Debug.Log("Aura script starts here and now");
         if (SetSplineAnimator())
         {
-            if (TryGetComponent<CircleCollider2D>(out CircleCollider2D colliderCito))
+            if (TryGetComponent(out Collider colliderCito))
             {
-                circleCollider = colliderCito;
-                circleCollider.enabled = false;
-                //Debug.Log($"Disabling {circleCollider}"); 
+                sphereCollider = colliderCito;
+                sphereCollider.enabled = false;
                 InvokeRepeating("CheckEndNear", .5f, .01f);
             }
         }
@@ -56,7 +55,7 @@ public class Aura : MonoBehaviour
     {
         SetAuraStats(caster, target, ability, duration);
 
-        if (TryGetComponent<CircleCollider2D>(out CircleCollider2D collider))
+        if (TryGetComponent(out CapsuleCollider collider))
             collider.radius = radius;
         if (abilityMod != null) collider.radius += abilityMod.GetModdedAttribute(AbilityModTypes.Size);
         CombatStatHandler.HandleEffectPackage(ability, caster, caster, ability.SelfEffects);
@@ -91,7 +90,7 @@ public class Aura : MonoBehaviour
 
         if (splineAnimator.NormalizedTime > .75)
         {
-            circleCollider.enabled = true;
+            sphereCollider.enabled = true;
             //Debug.Log($"Enabling {circleCollider}");
             CancelInvoke("CheckEndNear");
         }
@@ -177,7 +176,7 @@ public class Aura : MonoBehaviour
     {
         WaitForSeconds waitFor = new WaitForSeconds(.4f);
         Vector2 directionToTarget = target.transform.position - transform.position;
-        TryGetComponent<Rigidbody2D>(out Rigidbody2D rb);
+        TryGetComponent(out Rigidbody rb);
 
         while (directionToTarget.sqrMagnitude > conjureAbility.Radius)
         {

@@ -11,7 +11,7 @@ public class ConjuredObject : MonoBehaviour
     public void SetAbility(ConjureAbility ability)
     {
         Ability = ability;
-        GetComponent<CircleCollider2D>().radius = radius;
+        GetComponent<CapsuleCollider>().radius = radius;
 
     }
     void Awake()
