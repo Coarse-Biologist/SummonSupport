@@ -21,23 +21,19 @@ public class TeleportAbility : Ability
 
     public bool Activate(GameObject user, Vector2 targetLocation)
     {
-        GameObject target = null;
         RaycastHit[] hits = Physics.SphereCastAll(user.transform.position, Range, user.transform.forward, Range);
         foreach (RaycastHit hit in hits)
         {
-            //Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             if (hit.collider.gameObject.TryGetComponent(out LivingBeing targetStats))
             {
                 if (IsUsableOn(user.GetComponent<LivingBeing>().CharacterTag, targetStats.CharacterTag))
                 {
-                    CoroutineManager.Instance.StartCustomCoroutine(TeleportToBeing(user, target));
+                    CoroutineManager.Instance.StartCustomCoroutine(TeleportToBeing(user, targetStats));
 
                     return true;
                 }
             }
         }
-        //else Logging.Info($"there was NO hit collider or it wasnt a living being at location {hit.point}");
-
         return false;
     }
 
@@ -46,25 +42,20 @@ public class TeleportAbility : Ability
         throw new System.NotImplementedException();
     }
 
-    public IEnumerator TeleportToBeing(GameObject user, GameObject target)
+    public IEnumerator TeleportToBeing(GameObject user, LivingBeing target)
     {
         if (target != null && user != null)
         {
-            if (!user.TryGetComponent(out LivingBeing livingBeing)) yield return new WaitForSeconds(ActivationSpeed);
-            else
-            {
-                GameObject onHitEffectInstance = Instantiate(EffectOnActivate, user.transform.position, Quaternion.identity, user.transform);
+            Instantiate(EffectOnActivate, user.transform.position, Quaternion.identity, user.transform);
 
-                EffectColorChanger.ChangeObjectsParticleSystemColor(livingBeing, onHitEffectInstance);
+            yield return new WaitForSeconds(ActivationSpeed);
 
-                yield return new WaitForSeconds(ActivationSpeed);
+            user.transform.position = target.transform.position;
 
-                user.transform.position = target.transform.position;
+            if (ActivateOnArrive != null) ActivateOnArrive.Activate(user);
 
-                ActivateOnArrive.Activate(user);
-
-            }
         }
+
         else yield return new WaitForSeconds(ActivationSpeed);
 
     }

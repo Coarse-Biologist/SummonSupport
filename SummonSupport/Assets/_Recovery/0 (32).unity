@@ -605,11 +605,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: -313098299385096099, guid: 6eb2daf00740bba47aac2befdc6b070e,
-        type: 3}
-      propertyPath: <Bacteria>k__BackingField
-      value: 150
-      objectReference: {fileID: 0}
     - target: {fileID: 810306928598971056, guid: 6eb2daf00740bba47aac2befdc6b070e,
         type: 3}
       propertyPath: m_Name

@@ -1,6 +1,7 @@
 using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.AI;
 
 
 public class AIChaseState : AIState
@@ -15,7 +16,6 @@ public class AIChaseState : AIState
     [SerializeField] GameObject rotationObject;
     private Coroutine attackCoroutine;
     private bool runningAttackLoop = false;
-    private CreatureSpriteController spriteController;
     private WaitForSeconds attackSpeed = new WaitForSeconds(1);
     public float SelectedAbilityAttackRange { private set; get; } = 20f;
 
@@ -23,7 +23,6 @@ public class AIChaseState : AIState
 
     void Start()
     {
-        spriteController = GetComponentInChildren<CreatureSpriteController>();
         stateHandler = gameObject.GetComponent<AIStateHandler>();
         peaceState = gameObject.GetComponent<AIPeacefulState>();
         obedienceState = gameObject.GetComponent<AIObedienceState>();
@@ -53,7 +52,7 @@ public class AIChaseState : AIState
 
             else
             {
-                //Debug.Log($"trying to stop attack coroutine because target is null {stateHandler.target}");
+                Debug.Log($"trying to stop attack coroutine because target is null {stateHandler.target}");
 
                 EndAttackRoutine();
                 Chase(stateHandler.lastSeenLoc, true);
@@ -62,7 +61,7 @@ public class AIChaseState : AIState
         }
         else
         {
-            //Debug.Log($"trying to stop attack coroutine because target is null {stateHandler.target}");
+            Debug.Log($"trying to stop attack coroutine because target is null {stateHandler.target}");
             EndAttackRoutine();
             return peaceState;
         }
@@ -106,11 +105,14 @@ public class AIChaseState : AIState
             {
                 if (direction.sqrMagnitude > SelectedAbilityAttackRange)
                 {
-                    stateHandler.navAgent.SetDestination(targetLoc);// direction* stateHandler.movementScript.MovementSpeed;
+                    if (stateHandler.target == null) return;
+                    else
+                        stateHandler.navAgent.SetDestination(targetLoc);// direction* stateHandler.movementScript.MovementSpeed;
                 }
                 else
                 {
-                    stateHandler.navAgent.ResetPath();
+                    if (stateHandler.navAgent != null)
+                        stateHandler.navAgent.ResetPath();
                 }
             }
             else StrafeMovement(targetLoc, direction.sqrMagnitude);

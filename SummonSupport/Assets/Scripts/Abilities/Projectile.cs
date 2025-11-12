@@ -213,14 +213,14 @@ public class Projectile : MonoBehaviour
         {
             if (ricochedAlready < ricochet)
             {
-                Debug.Log("Trying to ricochet");
+                //Debug.Log("Trying to ricochet");
 
                 HandleRicochet();
             }
         }
         else
         {
-            Debug.Log("Trying to destroy");
+            //Debug.Log("Trying to destroy");
 
             Destroy(gameObject);
         }

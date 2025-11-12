@@ -12,10 +12,10 @@ public class PlayerMovement : MovementScript
     #region class Variables
     private Vector2 moveInput;
     public Camera mainCamera;
-    private CreatureSpriteController spriteController;
     private LivingBeing playerStats;
     [SerializeField] private PlayerInputActions inputActions;
     [SerializeField] public GameObject AbilityRotation;
+    [field: SerializeField] public bool CameraFreeRotate = false;
     private Vector2 lookInput;
     private Vector2 worldPosition;
     private Vector2 direction;
@@ -27,7 +27,9 @@ public class PlayerMovement : MovementScript
     private bool canDash = true;
     GameObject DashDustInstance = null;
     private bool lockedInUI = false;
+    private bool paused = false;
     private bool StuckInAbilityAnimation = false;
+
 
     #endregion
 
@@ -35,11 +37,10 @@ public class PlayerMovement : MovementScript
     {
         Cursor.lockState = CursorLockMode.Locked;   // Locks the cursor to the center of the screen
         Cursor.visible = false;
-        spriteController = GetComponentInChildren<CreatureSpriteController>();
         rb = GetComponent<Rigidbody>();
         mainCamera = Camera.main;
         inputActions = new PlayerInputActions();
-        //playerStats = GetComponent<LivingBeing>();
+        playerStats = GetComponent<LivingBeing>();
 
     }
 
@@ -78,9 +79,8 @@ public class PlayerMovement : MovementScript
     #region Dash logic
     private void OnUseDash(InputAction.CallbackContext context)
     {
-        //if (playerStats.Dead) return;
+        if (playerStats.Dead) return;
 
-        //EventDeclarer.SpawnEnemies?.Invoke(this.gameObject);
         if (canDash)
         {
             canDash = false;
@@ -141,39 +141,14 @@ public class PlayerMovement : MovementScript
     }
     private void HandleLook()
     {
-        //worldPosition = mainCamera.ScreenToWorldPoint(lookInput);
-        //direction = (worldPosition - (Vector2)transform.position).normalized;
-        //float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-        //Debug.Log(mainCamera.transform.rotation.y);
         transform.rotation = Quaternion.Euler(0f, mainCamera.transform.eulerAngles.y, 0f);
-        //spriteController.SetSpriteDirection(angle);
-
-        //DebugAbilityShape();
-
-        //return transform.rotation;
-    }
-    private void DebugAbilityShape()
-    {
-        Transform AR = AbilityRotation.transform;
-        Debug.DrawRay(AR.position, AR.up * 2, Color.black, .1f);
-
-        Debug.DrawRay(AR.position, -AR.up * 2, Color.black, .1f);
-
-        Debug.DrawRay(AR.position, AR.right * 2, Color.black, .1f);
-
-        Debug.DrawRay(AR.right * 2 + AR.position, AR.up * 2, Color.black, .1f);
-
-        Debug.DrawRay(AR.right * 2 + AR.position, -AR.up * 2, Color.black, .1f);
-        Debug.DrawRay(AR.up * 2 + AR.position, AR.right * 2, Color.black, .1f);
-
-        Debug.DrawRay(-AR.up * 2 + AR.position, AR.right * 2, Color.black, .1f);
     }
 
     #endregion
 
     private void SendMinionCommandContext(InputAction.CallbackContext context)
     {
-        //if (playerStats.Dead) return;
+        if (playerStats.Dead) return;
 
         worldPosition = mainCamera.ScreenToWorldPoint(lookInput);
         Debug.DrawLine(new Vector3(0, 0, 0), worldPosition, Color.green);
@@ -182,7 +157,7 @@ public class PlayerMovement : MovementScript
 
     private void FixedUpdate()
     {
-        //if (playerStats.Dead) return;
+        if (playerStats.Dead) return;
 
         if (!lockedInUI && !StuckInAbilityAnimation)
         {
@@ -211,19 +186,19 @@ public class PlayerMovement : MovementScript
     {
         if (!lockedInUI)
         {
-            //paused = !paused;
+            paused = !paused;
             EventDeclarer.TogglePauseGame?.Invoke();
 
-            //if (paused)
-            //{
-            //    Debug.Log("Pausing");
-            //    Time.timeScale = 0f;
-            //}
-            //else
-            //{
-            //    Debug.Log("Unpausing");
-            //    Time.timeScale = 1f;
-            //}
+            if (paused)
+            {
+                Debug.Log("Pausing");
+                Time.timeScale = 0f;
+            }
+            else
+            {
+                Debug.Log("Unpausing");
+                Time.timeScale = 1f;
+            }
         }
     }
 

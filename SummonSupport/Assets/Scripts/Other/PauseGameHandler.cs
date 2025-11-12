@@ -74,6 +74,9 @@ public class PauseGameHandler : MonoBehaviour
 
     private void Pause()
     {
+        UnityEngine.Cursor.lockState = CursorLockMode.None;   // Locks the cursor to the center of the screen
+        UnityEngine.Cursor.visible = true;
+
         PauseMenu.SetEnabled(true);
         PauseMenu.style.display = DisplayStyle.Flex;
         ResumeButton.style.display = DisplayStyle.Flex;
@@ -90,6 +93,9 @@ public class PauseGameHandler : MonoBehaviour
 
     private void Resume()
     {
+        UnityEngine.Cursor.lockState = CursorLockMode.Locked;   // Locks the cursor to the center of the screen
+        UnityEngine.Cursor.visible = false;
+
         PauseMenu.SetEnabled(false);
         PauseMenu.style.display = DisplayStyle.None;
 
@@ -97,12 +103,16 @@ public class PauseGameHandler : MonoBehaviour
     }
     private void Restart()
     {
+        UnityEngine.Cursor.lockState = CursorLockMode.Locked;   // Locks the cursor to the center of the screen
+        UnityEngine.Cursor.visible = false;
         Time.timeScale = 1f;
         SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex);
     }
 
     private void DeathPause(bool dead)
     {
+        UnityEngine.Cursor.lockState = CursorLockMode.None;   // Locks the cursor to the center of the screen
+        UnityEngine.Cursor.visible = true;
         PauseMenu.SetEnabled(true);
         PauseMenu.style.display = DisplayStyle.Flex;
         QuitButton.style.display = DisplayStyle.Flex;
@@ -117,6 +127,9 @@ public class PauseGameHandler : MonoBehaviour
 
     private void LevelUpPause(List<string> ImprovedAttributesList)
     {
+        UnityEngine.Cursor.lockState = CursorLockMode.None;   // Locks the cursor to the center of the screen
+        UnityEngine.Cursor.visible = true;
+
         PauseMenu.SetEnabled(true);
         PauseMenu.style.display = DisplayStyle.Flex;
         ResumeButton.text = "Continue";

@@ -10,7 +10,6 @@ public class EnemyStats : LivingBeing
 
     public override void Die()
     {
-        //Logging.Info($"{Name} died");
         EventDeclarer.EnemyDefeated.Invoke(this);
         if (HasStatusEffect(StatusEffectType.ExplodeOnDeath)) ViciousDeathExplosion();
         Destroy(gameObject);

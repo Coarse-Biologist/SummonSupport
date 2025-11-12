@@ -56,9 +56,10 @@ MonoBehaviour:
     <SpecialAbilityAttribute>k__BackingField: 0
   <ElementTypes>k__BackingField: 
   <PhysicalType>k__BackingField: 3
-  <ActivateOnUse>k__BackingField: []
-  <ActivateOnArrive>k__BackingField:
-  - {fileID: 11400000, guid: 946e5f54d23bbc24e9bf9696f3cf93c2, type: 2}
+  <OnHitEffect>k__BackingField: {fileID: 0}
+  <ActivateOnUse>k__BackingField: {fileID: 0}
+  <ActivateOnArrive>k__BackingField: {fileID: 11400000, guid: 946e5f54d23bbc24e9bf9696f3cf93c2,
+    type: 2}
   <EffectOnActivate>k__BackingField: {fileID: 7070092032033159829, guid: 8c5912fef6503924483bcc35bc5bc08e,
     type: 3}
   <ActivationSpeed>k__BackingField: 0.8

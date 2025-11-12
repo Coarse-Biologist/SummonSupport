@@ -50,10 +50,13 @@ public class LootSpawnHandler : MonoBehaviour
     }
     private void SpawnEther(EnemyStats enemyStats, GameObject etherPrefab)
     {
+        Debug.Log("Spawning ether");
 
         if (etherPrefab == null) return;
 
         GameObject instance = Instantiate(etherPrefab, enemyStats.transform.position, Quaternion.identity);
+        Debug.Log("Indeed, Spawning organ");
+
         if (instance.TryGetComponent(out LootableAlchemyMaterial lootScript))
         {
             lootScript.SetElement(enemyStats.GetHighestAffinity());
@@ -77,9 +80,11 @@ public class LootSpawnHandler : MonoBehaviour
 
     private void SpawnOrgans(EnemyStats enemy, AlchemyLoot organType)
     {
-
+        Debug.Log("Spawning organ!");
         if (organType == AlchemyLoot.WeakCore) return;
         Instantiate(OrganPrefab, enemy.transform.position, Quaternion.identity);
+        Debug.Log("Indeed, Spawning organ");
+
         if (OrganPrefab.TryGetComponent(out LootableAlchemyMaterial lootScript))
         {
             lootScript.SetAlchemyMaterial(organType);
@@ -99,8 +104,12 @@ public class LootSpawnHandler : MonoBehaviour
 
     private void SpawnCores(EnemyStats enemy, AlchemyLoot coreType)
     {
+        Debug.Log("Spawning core?");
+
         if (coreType == AlchemyLoot.WretchedOrgans) return;
         GameObject instance = Instantiate(CorePrefab, enemy.transform.position, Quaternion.identity);
+        Debug.Log("Indeed, Spawning Core");
+
         if (instance.TryGetComponent<LootableAlchemyMaterial>(out LootableAlchemyMaterial lootScript))
         {
             lootScript.SetAlchemyMaterial(coreType);
