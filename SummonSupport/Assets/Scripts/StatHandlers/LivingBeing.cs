@@ -102,6 +102,7 @@ public abstract class LivingBeing : MonoBehaviour
         InitializeRegenerationValues();
         StartCoroutine(RegenerateRoutine());
         abilityHandler = GetComponent<AbilityHandler>();
+        ColorChanger.ChangeMatByAffinity(this);
     }
 
     private void InitializeRegenerationValues()

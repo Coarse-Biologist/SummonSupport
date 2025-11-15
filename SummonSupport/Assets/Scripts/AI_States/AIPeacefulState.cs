@@ -15,7 +15,7 @@ public class AIPeacefulState : AIState
     private Rigidbody rb;
     #region Support ability use handling
     private bool runningSupportLoop = false;
-    private WaitForSeconds supportSpeed = new WaitForSeconds(1);
+    private WaitForSeconds supportSpeed = new WaitForSeconds(5);
     private Coroutine supportCoroutine;
     private LivingBeing peaceStateTarget;
     #endregion
@@ -47,7 +47,6 @@ public class AIPeacefulState : AIState
         {
             stateHandler.lastSeenLoc = peaceStateTarget.transform.position;
             canSeeTarget = true;
-
             return true;
         }
         else
@@ -73,9 +72,11 @@ public class AIPeacefulState : AIState
                     {
                         if (targetLivingBeing.GetAttribute(AttributeType.CurrentHitpoints) > 0)
                         {
-                            stateHandler.SetTarget(targetLivingBeing);
+                            if (stateHandler.target != targetLivingBeing)
+                            {
+                                stateHandler.SetTarget(targetLivingBeing);
+                            }
                             target = targetLivingBeing;
-
                         }
                     }
                 }
@@ -173,7 +174,7 @@ public class AIPeacefulState : AIState
                 friendlies.Add(minion.GetComponent<LivingBeing>());
             }
         }
-        LivingBeing selectedFriend = friendlies[UnityEngine.Random.Range(0, friendlies.Count)];
+        LivingBeing selectedFriend = friendlies[Random.Range(0, friendlies.Count)];
         return selectedFriend;
     }
 

@@ -80,8 +80,8 @@ public class CreatureSpriteController : MonoBehaviour
 
     public void AlterColorByAffinity(Element strongestElement)
     {
-        SetColor(EffectColorChanger.GetColorFromElement(strongestElement));
-        SetGlow(EffectColorChanger.GetGlowByElement(strongestElement));
+        SetColor(ColorChanger.GetColorFromElement(strongestElement));
+        SetGlow(ColorChanger.GetGlowByElement(strongestElement));
     }
     public void SetColor(float[] rgbaValues)
     {

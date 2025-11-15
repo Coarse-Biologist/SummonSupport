@@ -26,7 +26,7 @@ public class AuraAbility : Ability
                 {
                     GameObject auraInstance = Instantiate(AuraObject, caster.transform.position, AuraObject.transform.rotation, caster.transform);
                     Aura auraMonoScript = auraInstance.GetComponent<Aura>();
-                    if (auraMonoScript != null) auraMonoScript.HandleInstantiation(caster.GetComponent<LivingBeing>(), null, this, Radius, Duration);
+                    if (auraMonoScript != null) auraMonoScript.HandleInstantiation(caster.GetComponent<LivingBeing>(), null, this);
                 }
             }
         }
@@ -34,7 +34,7 @@ public class AuraAbility : Ability
         {
             GameObject auraInstance = Instantiate(AuraObject, caster.transform.position, AuraObject.transform.rotation, caster.transform);
             Aura auraMonoScript = auraInstance.GetComponent<Aura>();
-            if (auraMonoScript != null) auraMonoScript.HandleInstantiation(caster.GetComponent<LivingBeing>(), null, this, Radius, Duration);
+            if (auraMonoScript != null) auraMonoScript.HandleInstantiation(caster.GetComponent<LivingBeing>(), null, this);
         }
         return true;
     }

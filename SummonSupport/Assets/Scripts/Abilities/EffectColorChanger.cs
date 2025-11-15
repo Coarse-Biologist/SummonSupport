@@ -6,13 +6,14 @@ using NUnit.Framework.Constraints;
 using UnityEditor;
 using UnityEngine;
 
-public static class EffectColorChanger
+public static class ColorChanger
 {
     private static ParticleSystem BleedEffect;
     private static GradientLibraryAsset colorGradientLibrary;
     private static bool ready = false;
     public static Dictionary<Element, float[]> ElementToColorDict = new();
     public static Material[] GlowMaterials;
+
 
     public static void Setup(ParticleSystem bE, GradientLibraryAsset cGL, Material[] glowMaterials)
     {
@@ -87,15 +88,15 @@ public static class EffectColorChanger
     public static float[] GetColorFromElement(Element element)
     {
         if (ElementToColorDict.TryGetValue(element, out float[] colorArray)) return colorArray;
-        else throw new Exception("element not found in find color by element function");
+        else throw new Exception($"element not found in find color by element function {element}");
     }
-    public static void SetColor(SpriteRenderer sr, float[] rgbaValues)
+    public static void SetColor(Material mat, float[] rgbaValues)
     {
         float r = rgbaValues[0];
         float g = rgbaValues[1];
         float b = rgbaValues[2];
         float a = rgbaValues[3];
-        sr.color = new Color(r, g, b, a);
+        mat.color = new Color(r, g, b, a);
     }
     public static Material GetGlowByElement(Element element)
     {
@@ -116,6 +117,29 @@ public static class EffectColorChanger
         else
         {
             return GlowMaterials[3];
+        }
+    }
+    public static void ChangeMatByAffinity(LivingBeing livingBeing)
+    {
+        Element element = livingBeing.GetHighestAffinity();
+        if (element == Element.None) return;
+        Material newMaterial = new(GetGlowByElement(element));
+        MeshRenderer meshRenderer = livingBeing.GetComponentInChildren<MeshRenderer>();
+        SetColor(newMaterial, GetColorFromElement(element));
+
+        if (meshRenderer != null)
+        {
+            Material[] mats = meshRenderer.materials;
+            for (int i = 0; i < mats.Length; i++)
+            {
+                if (mats[i].name.StartsWith("ElementalIndicator"))  // Unity adds "(Instance)"
+                {
+                    Debug.Log($"Material found: {mats[i].name}, assigning material {newMaterial} which has color {newMaterial.color}");
+                    mats[i] = newMaterial;
+
+                }
+            }
+            meshRenderer.materials = mats;
         }
     }
 }

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Abilities/Conjure Ability")]
@@ -27,6 +28,8 @@ public class ConjureAbility : Ability
 
     public override bool Activate(GameObject user)
     {
+
+        Debug.Log("Activating conjure ability");
         Vector3 spawnPosition = user.transform.position + (Vector3)SpawnOffset;
         Quaternion rotation = user.transform.rotation;
         return Activate(user, spawnPosition, rotation);
@@ -34,25 +37,45 @@ public class ConjureAbility : Ability
 
     public bool Activate(GameObject user, Vector3 spawnPosition, Quaternion rotation)
     {
-        Quaternion newRotation = Quaternion.identity;
-        if (!LeaveRotation)
-            newRotation = rotation * Quaternion.Euler(0, 0, RotationOffset);
-        GameObject spawnedObject = Instantiate(ObjectToSpawn, spawnPosition, newRotation);
+        CharacterTag desiredTag = CharacterTag.Enemy;
+        if (user.TryGetComponent(out EnemyStats enemyStats))
+        {
+            desiredTag = CharacterTag.Minion;
+        }
 
-        if (IsDecaying)
-            Destroy(spawnedObject, Duration);
-        if (spawnedObject.TryGetComponent(out Aura aura))
+        int targetNum = 1;
+        float duration = Duration;
+        if (user.TryGetComponent(out AbilityModHandler modHandler))
         {
-            aura.HandleInstantiation(user.GetComponent<LivingBeing>(), null, this, Radius, this.Duration);
+            targetNum += modHandler.GetModAttributeByType(this, AbilityModTypes.ProjectileNumber);
+            duration += modHandler.GetModAttributeByType(this, AbilityModTypes.Duration);
+
         }
-        else
+
+        List<LivingBeing> targets = GetTargetfromSphereCast(this, user.GetComponent<AbilityHandler>().abilitySpawn.transform, targetNum, desiredTag);
+        int targetsFound = 0;
+        foreach (LivingBeing target in targets)
         {
-            Aura auraInChildren = spawnedObject.GetComponentInChildren<Aura>();
-            if (auraInChildren != null)
+            if (targetsFound < targetNum)
             {
-                auraInChildren.HandleInstantiation(user.GetComponent<LivingBeing>(), null, this, Radius, this.Duration);
+                Quaternion newRotation = Quaternion.identity;
+                if (!LeaveRotation)
+                    newRotation = rotation * Quaternion.Euler(0, 0, RotationOffset);
+                GameObject spawnedObject = Instantiate(ObjectToSpawn, target.transform.position, newRotation);
+
+                if (IsDecaying)
+                    Destroy(spawnedObject, duration);
+
+                Aura auraInChildren = spawnedObject.GetComponentInChildren<Aura>();
+                if (auraInChildren != null)
+                {
+                    auraInChildren.HandleInstantiation(user.GetComponent<LivingBeing>(), null, this);
+                }
             }
+            else return true;
+
         }
+
 
 
         return true;

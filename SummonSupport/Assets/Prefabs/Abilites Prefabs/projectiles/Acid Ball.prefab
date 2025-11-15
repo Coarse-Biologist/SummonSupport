@@ -47,7 +47,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13400c3fa81f46549a3f6498c7d5e16e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <physicsCollider>k__BackingField: {fileID: 0}
+  <physicsCollider>k__BackingField: {fileID: 157230072402122885}
   ability: {fileID: 0}
   splitAlready: 0
 --- !u!212 &6807858634492449281

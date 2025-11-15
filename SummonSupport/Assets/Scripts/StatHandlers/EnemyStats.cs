@@ -12,6 +12,23 @@ public class EnemyStats : LivingBeing
     {
         EventDeclarer.EnemyDefeated.Invoke(this);
         if (HasStatusEffect(StatusEffectType.ExplodeOnDeath)) ViciousDeathExplosion();
+        //if(TryGetComponent(out UnityEngine.AI.NavMeshAgent navAgent))
+        //{
+        //    navAgent.ResetPath();
+        //}
+        //if(TryGetComponent(out AIStateHandler stateHandler))
+        //{
+        //    stateHandler.CancelInvoke("RunStateMachine");
+        //}
+        //transform.position = new Vector3 (99, 99, 99);
+        Debug.Log("Delayed test death being called now");
+
+        Invoke("DelayedTestDeath", .1f);
+    }
+
+    private void DelayedTestDeath()
+    {
+        Debug.Log("Delayed test death happening now");
         Destroy(gameObject);
     }
 

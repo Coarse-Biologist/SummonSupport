@@ -31,7 +31,7 @@ public class MinionStats : LivingBeing
         EventDeclarer.minionDied?.Invoke(gameObject);
         SetRegeneration(AttributeType.CurrentHitpoints, 0);
         if (HasStatusEffect(StatusEffectType.ExplodeOnDeath)) ViciousDeathExplosion();
-        //Destroy(gameObject);
+        
         ToggleDeath(true);
     }
 

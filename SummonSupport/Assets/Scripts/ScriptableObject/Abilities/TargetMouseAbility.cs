@@ -14,7 +14,7 @@ public class TargetMouseAbility : Ability
     {
         CharacterTag desiredTag;
 
-        float targetNum = 1;
+        int targetNum = 1;
         List<LivingBeing> targets = new();
         if (caster.TryGetComponent(out AbilityModHandler modHandler))
         {
@@ -27,19 +27,10 @@ public class TargetMouseAbility : Ability
         }
         else desiredTag = CharacterTag.Enemy;
         Transform spawnPoint = caster.GetComponent<AbilityHandler>().abilitySpawn.transform;
-        RaycastHit[] hits = Physics.SphereCastAll(spawnPoint.position, Range, spawnPoint.transform.forward, Range);
-        foreach (RaycastHit hit in hits)
-        {
-            if (!hit.collider.TryGetComponent(out LivingBeing hitStats)) continue;
-            if (hitStats.CharacterTag == desiredTag)
-            {
-                targets.Add(hitStats);
-            }
-            if (targets.Count >= targetNum) break;
-        }
+
 
         //Debug.Log($"number of Targets found: {targets.Count}. max targets = {targetNum}");
-        return targets;
+        return GetTargetfromSphereCast(this, spawnPoint, targetNum, desiredTag);
     }
 
     public override bool Activate(GameObject user)

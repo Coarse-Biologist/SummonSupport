@@ -56,6 +56,23 @@ public abstract class Ability : ScriptableObject
         return (int)ability.Cooldown * (int)ability.Cost;
     }
 
+    public List<LivingBeing> GetTargetfromSphereCast(Ability ability, Transform directionTransform, int desiredTargetNum, CharacterTag targetType)
+    {
+        List<LivingBeing> targets = new();
+
+        RaycastHit[] hits = Physics.SphereCastAll(directionTransform.position, ability.Range, directionTransform.transform.forward, Range);
+        foreach (RaycastHit hit in hits)
+        {
+            if (!hit.collider.TryGetComponent(out LivingBeing hitStats)) continue;
+            if (hitStats.CharacterTag == targetType)
+            {
+                targets.Add(hitStats);
+            }
+            if (targets.Count >= desiredTargetNum) break;
+        }
+        return targets;
+    }
+
 
 }
 

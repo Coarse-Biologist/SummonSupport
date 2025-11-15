@@ -87,15 +87,22 @@ public class PlayerAbilityHandler : AbilityHandler
             if (!abilitiesOnCooldown[index])
             {
 
-                if (CastAbility(index, GetMousePosition(), transform.rotation))
+                if (CastAbility(index, GetCenterOfScreen(100f), transform.rotation))
                     EventDeclarer.AbilityUsed?.Invoke(index);
 
             }
 
         }
     }
-    Vector2 GetMousePosition()
+
+    Vector2 GetCenterOfScreen(float distance)
     {
-        return Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector3 screenCenter = new Vector3(
+                Screen.width * 0.5f,
+                Screen.height * 0.5f,
+                distance
+            );
+
+        return Camera.main.ScreenToWorldPoint(screenCenter);
     }
 }

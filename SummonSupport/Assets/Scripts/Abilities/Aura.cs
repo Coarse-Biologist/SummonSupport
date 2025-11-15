@@ -51,24 +51,28 @@ public class Aura : MonoBehaviour
         Invoke("Activate", ActivationTime);
 
     }
-    public void HandleInstantiation(LivingBeing caster, LivingBeing target, Ability ability, float radius, float duration)
+    public void HandleInstantiation(LivingBeing caster, LivingBeing target, Ability ability)
     {
-        SetAuraStats(caster, target, ability, duration);
-
-        if (TryGetComponent(out CapsuleCollider collider))
-            collider.radius = radius;
-        if (abilityMod != null) collider.radius += abilityMod.GetModdedAttribute(AbilityModTypes.Size);
-        CombatStatHandler.HandleEffectPackage(ability, caster, caster, ability.SelfEffects);
-        if (ability is ConjureAbility)
+        SetAuraStats(caster, target, ability, ability.Duration);
+        float radius = 1;
+        if (ability is ConjureAbility conjureAbility)
         {
-            conjureAbility = (ConjureAbility)ability;
+            radius = conjureAbility.Radius;
             if (conjureAbility.SeeksTarget)
             {
                 this.target = FindTarget(conjureAbility.SearchRadius);
                 if (this.target != null) StartCoroutine(SeekTarget(this.target.gameObject));
             }
         }
-        Destroy(gameObject, duration);
+        else if (ability is AuraAbility auraAbility)
+            radius = auraAbility.Radius;
+
+        if (TryGetComponent(out CapsuleCollider collider))
+            collider.radius = radius;
+        if (abilityMod != null) collider.radius += abilityMod.GetModdedAttribute(AbilityModTypes.Size);
+        CombatStatHandler.HandleEffectPackage(ability, caster, caster, ability.SelfEffects);
+
+        Destroy(gameObject, ability.Duration);
     }
     public void SetAuraStats(LivingBeing caster, LivingBeing target, Ability ability, float duration)
     {

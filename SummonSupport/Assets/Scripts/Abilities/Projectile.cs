@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Linq;
+//using System.Numerics;
 using UnityEngine;
 
 [RequireComponent(typeof(Collider))]
@@ -11,6 +12,7 @@ public class Projectile : MonoBehaviour
     public Collider physicsCollider { private set; get; } = null;
     List<GameObject> ignoreGameObjects = new List<GameObject>();
     public GameObject SpawnEffectOnHit { get; set; }
+    private GameObject particleTrailSystem;
 
     public ProjectileAbility ability;
     public int piercedAlready { private set; get; } = 0;
@@ -19,14 +21,14 @@ public class Projectile : MonoBehaviour
 
     int split = 0;
     int pierce = 0;
-    int ricochet = 0;
+    int ricochet = 5;
     LivingBeing userLivingBeing = null;
     private bool active = false;
 
     public AbilityModHandler modHandler { private set; get; }
     public Mod_Base projectileMod { private set; get; }
     Rigidbody rb;
-
+    float speed;
 
 
 
@@ -40,21 +42,7 @@ public class Projectile : MonoBehaviour
         {
             projectileMod = modHandler.GetAbilityMod(ability);
         }
-        // set ricochet properties if it should.
-        if (ability.PiercingMode == OnHitBehaviour.Ricochet || (projectileMod != null && projectileMod.GetModdedAttribute(AbilityModTypes.MaxRicochet) > 0))
-        {
-            if (physicsCollider != null)
-            {
-                if (ricochedAlready < projectileMod.GetModdedAttribute(AbilityModTypes.MaxRicochet))
-                {
-                    Debug.Log($"physics mat is being assigned");
-                    PhysicsMaterial mat = new PhysicsMaterial();
-                    mat.bounciness = 2f;
-                    mat.frictionCombine = 0f; //??
-                    physicsCollider.sharedMaterial = mat;
-                }
-            }
-        }
+
         ignoreGameObjects.Add(lb.gameObject);
         active = true;
 
@@ -65,7 +53,7 @@ public class Projectile : MonoBehaviour
     {
 
         rb = GetComponent<Rigidbody>();
-        float speed = ability.Speed;
+        speed = ability.Speed;
         if (modHandler != null)
         {
             speed += modHandler.GetModAttributeByType(ability, AbilityModTypes.Speed);
@@ -89,50 +77,42 @@ public class Projectile : MonoBehaviour
     {
         SpawnEffectOnHit = effectOnHit;
     }
-
     public void HandleRicochet()
     {
-        if (projectileMod == null)
+
+
+        if (Physics.Raycast(transform.position, rb.linearVelocity.normalized, out RaycastHit hit, 1f))
         {
-            Destroy(gameObject);
-        }
-        else if (ricochedAlready >= projectileMod.GetModdedAttribute(AbilityModTypes.MaxRicochet))
-        {
-            Destroy(gameObject);
-        }
-        else
-        {
+            Vector3 normal = hit.normal;
+            Vector3 incomingV = rb.linearVelocity;
+            Vector3 reflectDir = Vector3.Reflect(incomingV.normalized, normal);
+            rb.linearVelocity = reflectDir * speed;
             SpawnEffect(transform.position);
             ReorientSpin();
             ricochedAlready++;
         }
+
+
     }
     private void ReorientSpin()
     {
-        Vector3 v = rb.linearVelocity;
-        if (v.sqrMagnitude > 0.01f)
-        {
-            float angle = Mathf.Atan2(v.x, v.z) * Mathf.Rad2Deg;
-            transform.rotation = Quaternion.Euler(0, 0, angle);
-        }
+        if (particleTrailSystem != null) Destroy(particleTrailSystem);
 
-        ParticleSystem ps = GetComponentInChildren<ParticleSystem>();
-        if (ps != null)
-        {
-            //Debug.Log("resetting particle system");
-            ps.Simulate(0f, true, true);
-            ps.Play();
-        }
-        //else Debug.Log($"game object {gameObject} has no particle system");
+        SetParticleTrailEffects(rb.linearVelocity);
     }
 
-    private void SpawnEffect(LivingBeing targetLivingBeing)
+    private void SpawnEffect(Transform targetTransform = null)
     {
         GameObject instance;
         if (ability.SpawnEffectOnHit != null)
         {
             //Debug.Log($"The on hit effect for {ability.Name} is being spawned");
-            instance = Instantiate(ability.SpawnEffectOnHit, targetLivingBeing.transform.position, Quaternion.identity, targetLivingBeing.transform.transform);
+            if (targetTransform == transform)
+                instance = Instantiate(ability.SpawnEffectOnHit, targetTransform.position, Quaternion.identity);
+            else
+            {
+                instance = Instantiate(ability.SpawnEffectOnHit, targetTransform.position, Quaternion.identity, targetTransform);
+            }
             Destroy(instance, instance.GetComponent<ParticleSystem>().main.duration);
         }
         //else Debug.Log($"there is no on hit effect for {ability.Name}");
@@ -148,10 +128,9 @@ public class Projectile : MonoBehaviour
         }
         else Debug.Log($"there is no on hit effect for {ability.Name}");
     }
-    public void SetParticleTrailEffects(Vector3 direction) // -user.transform.right
+    public GameObject SetParticleTrailEffects(Vector3 direction) // -user.transform.right
     {
-        float angle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
-        GameObject particleSystem;
+        GameObject particleSystem = null;
         if (ability.ProjectileParticleSystem != null)
         {
             particleSystem = Instantiate(ability.ProjectileParticleSystem, gameObject.transform.position, Quaternion.identity, gameObject.transform);
@@ -160,15 +139,26 @@ public class Projectile : MonoBehaviour
             particleSystem.transform.rotation = rotation;
 
         }
-
+        particleTrailSystem = particleSystem;
+        return particleSystem;
     }
 
     void OnTriggerEnter(Collider other)
     {
+        Debug.Log($"Will maybe hope to ricochet1");
+
         if (active)
         {
+            if (other.gameObject.TryGetComponent(out BoxCollider boxCollider))
+            {
+                Debug.Log($"Will maybe hope to ricochet2");
 
-            if (other.gameObject.CompareTag("Projectile") || ignoreGameObjects.Contains(other.gameObject))
+                HandleRicochet();
+                //ReorientSpin();
+                SpawnEffect(transform);
+                //Destroy(gameObject);
+            }
+            if (other.gameObject.TryGetComponent(out Projectile otherProjectileScript) || ignoreGameObjects.Contains(other.gameObject))
                 return;
 
             if (!other.TryGetComponent(out LivingBeing otherLivingBeing))
@@ -180,7 +170,7 @@ public class Projectile : MonoBehaviour
             if (!userLivingBeing || (!Ability.HasElementalSynergy(ability, otherLivingBeing) && !ability.ThoroughIsUsableOn(userLivingBeing, otherLivingBeing)))
                 return;
 
-            SpawnEffect(otherLivingBeing);
+            SpawnEffect(otherLivingBeing.transform);
             CombatStatHandler.HandleEffectPackage(ability, userLivingBeing, otherLivingBeing, ability.TargetEffects);
             HandleOnHitBehaviour(otherLivingBeing);
         }
@@ -188,9 +178,9 @@ public class Projectile : MonoBehaviour
 
     }
 
-    void HandleOnHitBehaviour(LivingBeing other)
+    void HandleOnHitBehaviour(LivingBeing other, Collision col = null)
     {
-        //Debug.Log("Handling On hit behaviour");
+        Debug.Log("Handling On hit behaviour");
         if (modHandler != null)
         {
             split = modHandler.GetModAttributeByType(ability, AbilityModTypes.MaxSplit);
@@ -213,9 +203,9 @@ public class Projectile : MonoBehaviour
         {
             if (ricochedAlready < ricochet)
             {
-                //Debug.Log("Trying to ricochet");
+                Debug.Log("Trying to ricochet");
 
-                HandleRicochet();
+                //HandleRicochet();
             }
         }
         else

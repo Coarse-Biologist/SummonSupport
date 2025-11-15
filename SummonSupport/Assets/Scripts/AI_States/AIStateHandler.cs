@@ -64,7 +64,7 @@ public class AIStateHandler : MonoBehaviour
         movementScript = GetComponent<MovementScript>();
         minionStats = GetComponent<MinionStats>();
         ccState = GetComponent<AI_CC_State>();
-        InvokeRepeating("RunStateMachine", 0f, .3f);
+        InvokeRepeating("RunStateMachine", 0f, 1f);
         abilityHandler = GetComponent<CreatureAbilityHandler>();
         SetMasks();
         SetTargetMask();
@@ -78,8 +78,8 @@ public class AIStateHandler : MonoBehaviour
     }
     public void SetTarget(LivingBeing theTarget)
     {
-        //Debug.Log($"target of {this} is now {target}");
         target = theTarget;
+
     }
     private void SetMasks()
     {

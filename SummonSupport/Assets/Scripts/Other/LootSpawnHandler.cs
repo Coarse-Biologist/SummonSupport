@@ -63,7 +63,7 @@ public class LootSpawnHandler : MonoBehaviour
         }
         if (instance.TryGetComponent(out ParticleSystem ps))
         {
-            EffectColorChanger.ChangeParticleSystemColor(enemyStats, ps);
+            ColorChanger.ChangeParticleSystemColor(enemyStats, ps);
         }
     }
 
@@ -132,8 +132,8 @@ public class LootSpawnHandler : MonoBehaviour
                     break;
             }
             Element strongestElement = enemy.GetHighestAffinity();
-            EffectColorChanger.SetColor(sr, EffectColorChanger.GetColorFromElement(strongestElement));
-            Material glowMaterial = EffectColorChanger.GetGlowByElement(strongestElement);
+            //ColorChanger.SetColor(sr, ColorChanger.GetColorFromElement(strongestElement));
+            Material glowMaterial = ColorChanger.GetGlowByElement(strongestElement);
             sr.material = glowMaterial;
         }
     }

@@ -52,7 +52,7 @@ public class AIChaseState : AIState
 
             else
             {
-                Debug.Log($"trying to stop attack coroutine because target is null {stateHandler.target}");
+                Debug.Log($"trying to stop attack coroutine because target {stateHandler.target} is not in view");
 
                 EndAttackRoutine();
                 Chase(stateHandler.lastSeenLoc, true);
@@ -61,7 +61,7 @@ public class AIChaseState : AIState
         }
         else
         {
-            Debug.Log($"trying to stop attack coroutine because target is null {stateHandler.target}");
+            Debug.Log($"trying to stop attack coroutine because target ({stateHandler.target} )is null ");
             EndAttackRoutine();
             return peaceState;
         }
@@ -105,9 +105,15 @@ public class AIChaseState : AIState
             {
                 if (direction.sqrMagnitude > SelectedAbilityAttackRange)
                 {
-                    if (stateHandler.target == null) return;
+                    if (stateHandler.navAgent == null || stateHandler.target == null || targetLoc == null || stateHandler.target is null)
+                    {
+                        Debug.Log("target was null, not moving toward them.");
+                        return;
+                    }
                     else
-                        stateHandler.navAgent.SetDestination(targetLoc);// direction* stateHandler.movementScript.MovementSpeed;
+                    {
+                        stateHandler.navAgent.SetDestination(stateHandler.target.transform.position);// direction* stateHandler.movementScript.MovementSpeed;
+                    }
                 }
                 else
                 {

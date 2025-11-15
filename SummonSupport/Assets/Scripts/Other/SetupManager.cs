@@ -33,7 +33,7 @@ public class SetupManager : MonoBehaviour
     {
         if (colorGradientLibrary != null && BleedEffect != null && GlowMaterials.Count() == 4)
         {
-            EffectColorChanger.Setup(BleedEffect, colorGradientLibrary, GlowMaterials);
+            ColorChanger.Setup(BleedEffect, colorGradientLibrary, GlowMaterials);
         }
         else throw new System.Exception("there were too few Glow shaders to initialize");
 
