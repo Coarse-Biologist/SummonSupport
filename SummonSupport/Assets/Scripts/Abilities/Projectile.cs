@@ -106,7 +106,6 @@ public class Projectile : MonoBehaviour
         GameObject instance;
         if (ability.SpawnEffectOnHit != null)
         {
-            //Debug.Log($"The on hit effect for {ability.Name} is being spawned");
             if (targetTransform == transform)
                 instance = Instantiate(ability.SpawnEffectOnHit, targetTransform.position, Quaternion.identity);
             else
@@ -115,18 +114,15 @@ public class Projectile : MonoBehaviour
             }
             Destroy(instance, instance.GetComponent<ParticleSystem>().main.duration);
         }
-        //else Debug.Log($"there is no on hit effect for {ability.Name}");
     }
     private void SpawnEffect(Vector2 loc)
     {
         GameObject instance;
         if (ability.SpawnEffectOnHit != null)
         {
-            Debug.Log($"The on hit effect for {ability.Name} is being spawned");
             instance = Instantiate(ability.SpawnEffectOnHit, loc, Quaternion.identity);
             Destroy(instance, instance.GetComponent<ParticleSystem>().main.duration);
         }
-        else Debug.Log($"there is no on hit effect for {ability.Name}");
     }
     public GameObject SetParticleTrailEffects(Vector3 direction) // -user.transform.right
     {
@@ -145,25 +141,21 @@ public class Projectile : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        Debug.Log($"Will maybe hope to ricochet1");
 
         if (active)
         {
             if (other.gameObject.TryGetComponent(out BoxCollider boxCollider))
             {
-                Debug.Log($"Will maybe hope to ricochet2");
 
                 HandleRicochet();
-                //ReorientSpin();
                 SpawnEffect(transform);
-                //Destroy(gameObject);
             }
             if (other.gameObject.TryGetComponent(out Projectile otherProjectileScript) || ignoreGameObjects.Contains(other.gameObject))
                 return;
 
             if (!other.TryGetComponent(out LivingBeing otherLivingBeing))
             {
-                //DestroyProjectile();
+                Destroy(gameObject);
                 return;
             }
 
@@ -174,13 +166,11 @@ public class Projectile : MonoBehaviour
             CombatStatHandler.HandleEffectPackage(ability, userLivingBeing, otherLivingBeing, ability.TargetEffects);
             HandleOnHitBehaviour(otherLivingBeing);
         }
-        //else Debug.Log("Not active and therefore just a moving sprite");
 
     }
 
     void HandleOnHitBehaviour(LivingBeing other, Collision col = null)
     {
-        Debug.Log("Handling On hit behaviour");
         if (modHandler != null)
         {
             split = modHandler.GetModAttributeByType(ability, AbilityModTypes.MaxSplit);
@@ -190,27 +180,22 @@ public class Projectile : MonoBehaviour
 
         if (!splitAlready && (ability.PiercingMode == OnHitBehaviour.Split || split > 0))
         {
-            //Debug.Log("Trying to split");
             SplitProjectile(other, split);
         }
         else if (piercedAlready < ability.MaxPierce + pierce)
         {
-            //Debug.Log("Trying to pierce");
-
             piercedAlready++;
         }
         else if (ability.PiercingMode == OnHitBehaviour.Ricochet || ricochet > 0)
         {
             if (ricochedAlready < ricochet)
             {
-                Debug.Log("Trying to ricochet");
 
-                //HandleRicochet();
+                HandleRicochet();
             }
         }
         else
         {
-            //Debug.Log("Trying to destroy");
 
             Destroy(gameObject);
         }
@@ -228,7 +213,6 @@ public class Projectile : MonoBehaviour
         for (int i = 0; i < maxSplit; i += 1) // i starts at -1, code block is completed as long as i is less than or equal to one. upon completion it goes up by 2. the code block will therefore happen once?
         {
 
-            Debug.Log("for loop is being carried out in the split func of the projectile script");
             Quaternion rotation;
             rotation = Quaternion.Euler(0, 0, (float)Math.Sin(45 * i) * (30 + 5 * i));
 

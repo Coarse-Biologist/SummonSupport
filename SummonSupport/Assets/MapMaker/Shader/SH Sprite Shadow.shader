@@ -36,7 +36,7 @@ Shader "Cainos/Pixel Art Top Down - Basic/Sprite Default - Shadow"
 
 		Cull Off
 		Lighting Off
-		ZWrite Off
+		ZWrite On
 		Blend One OneMinusSrcAlpha
 
 		Pass

@@ -52,7 +52,6 @@ public class AIChaseState : AIState
 
             else
             {
-                Debug.Log($"trying to stop attack coroutine because target {stateHandler.target} is not in view");
 
                 EndAttackRoutine();
                 Chase(stateHandler.lastSeenLoc, true);
@@ -61,7 +60,6 @@ public class AIChaseState : AIState
         }
         else
         {
-            Debug.Log($"trying to stop attack coroutine because target ({stateHandler.target} )is null ");
             EndAttackRoutine();
             return peaceState;
         }
@@ -107,7 +105,6 @@ public class AIChaseState : AIState
                 {
                     if (stateHandler.navAgent == null || stateHandler.target == null || targetLoc == null || stateHandler.target is null)
                     {
-                        Debug.Log("target was null, not moving toward them.");
                         return;
                     }
                     else

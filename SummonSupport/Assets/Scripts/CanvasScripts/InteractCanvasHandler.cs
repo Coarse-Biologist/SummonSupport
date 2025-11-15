@@ -32,7 +32,11 @@ public class InteractCanvasHandler : MonoBehaviour
     public void ShowInteractionOption(Vector2 spawnLoc, string interactMessage)
     {
         if (canvasInstance == null) canvasInstance = Instantiate(interactCanvas, spawnLoc, Quaternion.identity);
-        else canvasInstance.SetActive(true);
+        else
+        {
+            canvasInstance.SetActive(true);
+            canvasInstance.transform.position = spawnLoc;
+        }
 
         canvasInstance.GetComponentInChildren<TextMeshProUGUI>().text = interactMessage;
     }
