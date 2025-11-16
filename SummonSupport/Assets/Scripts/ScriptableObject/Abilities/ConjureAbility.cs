@@ -8,7 +8,7 @@ public class ConjureAbility : Ability
     [field: SerializeField] public GameObject ObjectToSpawn { get; protected set; }
     [field: SerializeField] public GameObject SpawnEffectOnHit { get; set; } = null;
 
-    [field: SerializeField] public Vector2 SpawnOffset { get; protected set; }
+    [field: SerializeField] public Vector3 SpawnOffset { get; protected set; }
     [field: SerializeField] public float RotationOffset { get; protected set; } = 0;
     [field: SerializeField] public float Radius = 1f;
 

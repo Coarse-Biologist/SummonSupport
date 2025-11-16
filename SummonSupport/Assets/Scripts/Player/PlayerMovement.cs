@@ -17,8 +17,7 @@ public class PlayerMovement : MovementScript
     [SerializeField] public GameObject AbilityRotation;
     [field: SerializeField] public bool CameraFreeRotate = false;
     private Vector2 lookInput;
-    private Vector2 worldPosition;
-    private Vector2 direction;
+    private Vector3 worldPosition;
     Vector3 moveDirection;
     [field: SerializeField] public GameObject DashDust { private set; get; }
 
@@ -151,7 +150,15 @@ public class PlayerMovement : MovementScript
         if (playerStats.Dead) return;
 
         worldPosition = mainCamera.ScreenToWorldPoint(lookInput);
-        Debug.DrawLine(new Vector3(0, 0, 0), worldPosition, Color.green);
+        RaycastHit[] hits = Physics.SphereCastAll(transform.position, 5f, transform.forward, 30f);
+        foreach (RaycastHit hit in hits)
+        {
+            if (hit.transform.TryGetComponent(out MinionStats minionStats))
+            {
+                Debug.Log($"Adding {minionStats.Name} to  selected minions");
+                CommandMinion.SetSelectedMinion(hit.transform.gameObject);
+            }
+        }
         CommandMinion.HandleCommand(worldPosition);
     }
 

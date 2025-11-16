@@ -19,7 +19,7 @@ public class TeleportAbility : Ability
 
 
 
-    public bool Activate(GameObject user, Vector2 targetLocation)
+    public bool Activate(GameObject user, Vector3 targetLocation)
     {
         RaycastHit[] hits = Physics.SphereCastAll(user.transform.position, Range, user.transform.forward, Range);
         foreach (RaycastHit hit in hits)

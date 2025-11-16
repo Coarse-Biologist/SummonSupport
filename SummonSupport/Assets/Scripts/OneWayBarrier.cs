@@ -13,7 +13,7 @@ public class OneWayBarrier : MonoBehaviour
     {
         if (collision.gameObject.TryGetComponent(out Projectile projectile))
         {
-            projectile.HandleRicochet();
+            //projectile.HandleRicochet();
         }
     }
     void OnTriggerEnter(Collider collider)

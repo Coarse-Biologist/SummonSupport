@@ -19,7 +19,7 @@ public static class CommandMinion
         activeMinions = activeMinionsList;
     }
 
-    public static void HandleCommand(Vector2 loc)
+    public static void HandleCommand(Vector3 loc)
     {
 
         if (SelectedMinions != null)

@@ -29,7 +29,7 @@ public class InteractCanvasHandler : MonoBehaviour
         EventDeclarer.EnemyDefeated?.RemoveListener(DisplayXPGain);
     }
 
-    public void ShowInteractionOption(Vector2 spawnLoc, string interactMessage)
+    public void ShowInteractionOption(Vector3 spawnLoc, string interactMessage)
     {
         if (canvasInstance == null) canvasInstance = Instantiate(interactCanvas, spawnLoc, Quaternion.identity);
         else
@@ -53,11 +53,11 @@ public class InteractCanvasHandler : MonoBehaviour
 
     }
 
-    public void DisplayIncrementalText(Vector2 spawnLoc, string temporaryText, float duration)
+    public void DisplayIncrementalText(Vector3 spawnLoc, string temporaryText, float duration)
     {
         StartCoroutine(SlowlyDisplayCanvasText(spawnLoc, temporaryText, duration));
     }
-    public IEnumerator SlowlyDisplayCanvasText(Vector2 spawnLoc, string temporaryText, float totalDuration = 4f)
+    public IEnumerator SlowlyDisplayCanvasText(Vector3 spawnLoc, string temporaryText, float totalDuration = 4f)
     {
         int chars = temporaryText.Length;
         if (canvasInstance == null) canvasInstance = Instantiate(interactCanvas, spawnLoc, Quaternion.identity);
@@ -82,14 +82,14 @@ public class InteractCanvasHandler : MonoBehaviour
     public void DisplayGoldenLetters(string loot, float duration = .8f)
     {
         Transform playerTransform = PlayerStats.Instance.transform;
-        Vector2 pos = new Vector2(playerTransform.position.x, playerTransform.position.y + 1);
+        Vector3 pos = new Vector3(playerTransform.position.x, playerTransform.position.y + 2, playerTransform.position.z);
         GameObject xpCanvas = Instantiate(xpTextGUI, pos, Quaternion.identity);
         xpCanvas.transform.rotation = playerTransform.rotation;
         if (xpCanvas.TryGetComponent(out TextMeshProUGUI canvasGUI))
             canvasGUI.text = $"{loot}";
-        if (xpCanvas.TryGetComponent(out Rigidbody2D rb))
+        if (xpCanvas.TryGetComponent(out Rigidbody rb))
         {
-            rb.AddForce(new Vector3(Random.Range(-1f, 1f), 2f, Random.Range(-1f, 1f)), ForceMode2D.Impulse);
+            rb.AddForce(new Vector3(Random.Range(-1f, 1f), 2f, Random.Range(-1f, 1f)), ForceMode.Impulse);
         }
         Destroy(xpCanvas, duration);
     }

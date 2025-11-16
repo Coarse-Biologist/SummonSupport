@@ -115,8 +115,8 @@ public class MeleeAbility : Ability
             totalWidth += modHandler.GetModAttributeByType(this, AbilityModTypes.Size);
         }
         DebugAbilityShape(originTransform, totalWidth);
-        Vector2 hitLocation = collider.transform.position;
-        if ((hitLocation - (Vector2)originTransform.position).magnitude <= .2)
+        Vector3 hitLocation = collider.transform.position;
+        if ((hitLocation - originTransform.position).magnitude <= .2)
             return true;
         if (Shape == AreaOfEffectShape.Sphere)
         {
@@ -125,7 +125,7 @@ public class MeleeAbility : Ability
         }
         if (Shape == AreaOfEffectShape.Cone)
         {
-            if (Vector2.Angle(hitLocation, originTransform.position) <= Angle)
+            if (Vector3.Angle(hitLocation, originTransform.position) <= Angle)
                 return true;
 
             else return false;
@@ -133,15 +133,15 @@ public class MeleeAbility : Ability
         if (Shape == AreaOfEffectShape.Rectangle)
         {
             DebugAbilityShape(originTransform, totalWidth);
-            Vector2 origin = originTransform.position;
-            Vector2 forward = originTransform.right.normalized; // direction player is facing
-            Vector2 side = originTransform.up.normalized;       // perpendicular to forward
+            Vector3 origin = originTransform.position;
+            Vector3 forward = originTransform.right.normalized; // direction player is facing
+            Vector3 side = originTransform.up.normalized;       // perpendicular to forward
 
-            Vector2 toHit = hitLocation - origin;
+            Vector3 toHit = hitLocation - origin;
 
             // Project hit position into local space of the rectangle
-            float forwardDistance = Vector2.Dot(toHit, forward); // Distance in front of player
-            float sideDistance = Vector2.Dot(toHit, side);       // Side offset (left/right)
+            float forwardDistance = Vector3.Dot(toHit, forward); // Distance in front of player
+            float sideDistance = Vector3.Dot(toHit, side);       // Side offset (left/right)
 
             // Check if point is inside the rectangle
             bool isInside = forwardDistance <= Range && (Mathf.Abs(sideDistance) <= totalWidth / 2f); //forwardDistance >= 0 &&
