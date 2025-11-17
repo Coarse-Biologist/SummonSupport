@@ -26,6 +26,28 @@ public class EnemyStats : LivingBeing
         Invoke("DelayedTestDeath", .1f);
     }
 
+    public override void HandleUIAttrDisplay(AttributeType attributeType, float newValue)
+    {
+        switch (attributeType)
+        {
+            case AttributeType.CurrentHitpoints:
+                resourceBarInterface?.SetHealthBarValue(GetAttribute(attributeType));
+                break;
+            case AttributeType.CurrentPower:
+                resourceBarInterface?.SetPowerBarValue(GetAttribute(attributeType));
+                break;
+            case AttributeType.MaxHitpoints:
+                resourceBarInterface?.SetHealthBarMaxValue(GetAttribute(attributeType));
+                break;
+            case AttributeType.MaxPower:
+                resourceBarInterface?.SetPowerBarMaxValue(GetAttribute(attributeType));
+                break;
+            default:
+                break;
+
+        }
+    }
+
     private void DelayedTestDeath()
     {
         Debug.Log("Delayed test death happening now");

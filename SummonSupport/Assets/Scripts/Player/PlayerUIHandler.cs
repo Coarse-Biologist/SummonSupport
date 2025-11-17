@@ -103,17 +103,21 @@ public class PlayerUIHandler : MonoBehaviour
     public void AddMinionHP(LivingBeing livingBeing)
     {
         TemplateContainer prefabContainer = UIPrefabAssets.Instantiate();
+
         ProgressBar minionHP = prefabContainer.Q<ProgressBar>("HealthbarPrefab");
 
-        if (minionHP == null) minionHP = new ProgressBar();
-        float hp = livingBeing.GetAttribute(AttributeType.CurrentHitpoints);
-        HPDict.TryAdd(livingBeing, minionHP);
-        minionHP.title = $"{livingBeing.Name} HP: {hp}";
-        minionHP.highValue = hp;
-        minionHP.value = hp;
-        if (minionHPBars == null) Logging.Error("minion HP visual element doesnt exist");
-        minionHPBars.Add(minionHP);
-        minionHP.RegisterCallback<ClickEvent>(evt => OnMinionSelect(minionHP));
+        if (HPDict.TryAdd(livingBeing, minionHP))
+        {
+            if (minionHP == null) minionHP = new ProgressBar();
+            float hp = livingBeing.GetAttribute(AttributeType.CurrentHitpoints);
+            minionHP.title = $"{livingBeing.Name} HP: {hp}";
+            minionHP.highValue = hp;
+            minionHP.value = hp;
+            if (minionHPBars == null) Logging.Error("minion HP visual element doesnt exist");
+            minionHPBars.Add(minionHP);
+            minionHP.RegisterCallback<ClickEvent>(evt => OnMinionSelect(minionHP));
+        }
+        else Debug.Log("The minion HP progress bar is already present ");
     }
 
 
@@ -154,6 +158,13 @@ public class PlayerUIHandler : MonoBehaviour
     private void OnMinionSelect(ProgressBar minionHP)
     {
         LivingBeing minionStats = GetLivingBeingFromHPBar(minionHP);
+        ToggleHPGlow(minionHP);
+
+        CommandMinion.SetSelectedMinion(minionStats.gameObject);
+    }
+
+    private void ToggleHPGlow(ProgressBar minionHP)
+    {
         if (minionHP.style.borderBottomColor != Color.yellow)
         {
             minionHP.style.borderBottomColor = Color.yellow;
@@ -168,13 +179,10 @@ public class PlayerUIHandler : MonoBehaviour
             minionHP.style.borderLeftColor = Color.clear;
             minionHP.style.borderTopColor = Color.clear;
         }
-
-        CommandMinion.SetSelectedMinion(minionStats.gameObject);
     }
 
     public void UpdateResourceBar(LivingBeing livingBeing, AttributeType attributeType)
     {
-
         if (livingBeing.CharacterTag == CharacterTag.Player)
         {
             SetPlayerAttribute(attributeType);

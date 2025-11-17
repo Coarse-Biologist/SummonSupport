@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
 using SummonSupportEvents;
+using System;
 
 public class MinionStats : LivingBeing
 {
@@ -10,6 +11,31 @@ public class MinionStats : LivingBeing
     [SerializeField] public MinionCommands CurrentCommand { private set; get; } = MinionCommands.None;
     //private I_HealthBar healthbarInterface;
 
+    public override void HandleUIAttrDisplay(AttributeType attributeType, float newValue)
+    {
+        PlayerStats.Instance.UiHandler.UpdateResourceBar(this, attributeType);
+        switch (attributeType)
+        {
+            case AttributeType.MaxHitpoints:
+                resourceBarInterface?.SetHealthBarMaxValue(GetAttribute(attributeType));
+                break;
+
+            case AttributeType.CurrentHitpoints:
+                resourceBarInterface?.SetHealthBarValue(GetAttribute(attributeType));
+                break;
+
+            case AttributeType.MaxPower:
+                resourceBarInterface?.SetPowerBarMaxValue(GetAttribute(attributeType));
+                break;
+
+            case AttributeType.CurrentPower:
+                resourceBarInterface?.SetPowerBarValue(GetAttribute(attributeType));
+                break;
+            default:
+                break;
+
+        }
+    }
 
     public void SetCommand(MinionCommands command)
     {
@@ -31,7 +57,7 @@ public class MinionStats : LivingBeing
         EventDeclarer.minionDied?.Invoke(gameObject);
         SetRegeneration(AttributeType.CurrentHitpoints, 0);
         if (HasStatusEffect(StatusEffectType.ExplodeOnDeath)) ViciousDeathExplosion();
-        
+
         ToggleDeath(true);
     }
 

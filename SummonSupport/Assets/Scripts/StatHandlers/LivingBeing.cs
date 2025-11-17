@@ -80,7 +80,7 @@ public abstract class LivingBeing : MonoBehaviour
     public Dictionary<AttributeType, (Func<float> Get, Action<float> Set)> ResourceAttributesDict { private set; get; } = new();
 
 
-    private I_ResourceBar resourceBarInterface;
+    public I_ResourceBar resourceBarInterface { protected set; get; }
     private AbilityHandler abilityHandler;
 
     #endregion
@@ -220,7 +220,7 @@ public abstract class LivingBeing : MonoBehaviour
 
         if (ResourceAttributesDict != null && ResourceAttributesDict.ContainsKey(attributeType))
             ResourceAttributesDict[attributeType].Set(value);
-        HandleEventInvokes(attributeType, value); // make overrides for minions, players and enemies
+        HandleUIAttrDisplay(attributeType, value); // make overrides for minions, players and enemies
         if (GetAttribute(AttributeType.CurrentHitpoints) <= 0)
             Die();
         else if (attributeType == AttributeType.CurrentPower && value <= 0)
@@ -229,11 +229,11 @@ public abstract class LivingBeing : MonoBehaviour
 
     public float ChangeAttribute(AttributeType attributeType, float value)
     {
-        //if (GetAttribute(AttributeType.CurrentHitpoints) <= 0) // do nothing if dead
-        //    return 0f;
-
-        if (ResourceAttributesDict == null || !ResourceAttributesDict.ContainsKey(attributeType))
-            throw new Exception("Attribute not found or invalid setter");
+        ////if (GetAttribute(AttributeType.CurrentHitpoints) <= 0) // do nothing if dead
+        ////    return 0f;
+        //
+        //if (ResourceAttributesDict == null || !ResourceAttributesDict.ContainsKey(attributeType))
+        //    throw new Exception("Attribute not found or invalid setter");
 
         SetAttribute(attributeType, GetAttribute(attributeType) + value);
 
@@ -242,38 +242,7 @@ public abstract class LivingBeing : MonoBehaviour
         return GetAttribute(attributeType) + value;
     }
 
-    public void HandleEventInvokes(AttributeType attributeType, float newValue)
-    {
-        switch (attributeType)
-        {
-            case AttributeType.MaxHitpoints:
-                if (CharacterTag != CharacterTag.Enemy)
-                    EventDeclarer.maxAttributeChanged?.Invoke(this, attributeType);
-                resourceBarInterface?.SetHealthBarMaxValue(GetAttribute(attributeType));
-                break;
-
-            case AttributeType.CurrentHitpoints:
-                if (CharacterTag != CharacterTag.Enemy)
-                    EventDeclarer.attributeChanged?.Invoke(this, attributeType);
-                resourceBarInterface?.SetHealthBarValue(GetAttribute(attributeType));
-                break;
-
-            case AttributeType.MaxPower:
-                if (CharacterTag != CharacterTag.Enemy)
-                    EventDeclarer.maxAttributeChanged?.Invoke(this, attributeType);
-                resourceBarInterface?.SetPowerBarMaxValue(GetAttribute(attributeType));
-                break;
-
-            case AttributeType.CurrentPower:
-                if (CharacterTag != CharacterTag.Enemy)
-                    EventDeclarer.attributeChanged?.Invoke(this, attributeType);
-                resourceBarInterface?.SetPowerBarValue(GetAttribute(attributeType));
-                break;
-            default:
-                break;
-
-        }
-    }
+    public abstract void HandleUIAttrDisplay(AttributeType attributeType, float newValue);
 
 
     #endregion

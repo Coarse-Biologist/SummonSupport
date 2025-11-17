@@ -150,15 +150,15 @@ public class PlayerMovement : MovementScript
         if (playerStats.Dead) return;
 
         worldPosition = mainCamera.ScreenToWorldPoint(lookInput);
-        RaycastHit[] hits = Physics.SphereCastAll(transform.position, 5f, transform.forward, 30f);
-        foreach (RaycastHit hit in hits)
-        {
-            if (hit.transform.TryGetComponent(out MinionStats minionStats))
-            {
-                Debug.Log($"Adding {minionStats.Name} to  selected minions");
-                CommandMinion.SetSelectedMinion(hit.transform.gameObject);
-            }
-        }
+        // RaycastHit[] hits = Physics.SphereCastAll(transform.position, 5f, transform.forward, 30f);
+        // foreach (RaycastHit hit in hits)
+        // {
+        //     if (hit.transform.TryGetComponent(out MinionStats minionStats))
+        //     {
+        //         Debug.Log($"Adding {minionStats.Name} to  selected minions");
+        //         CommandMinion.SetSelectedMinion(hit.transform.gameObject);
+        //     }
+        // }
         CommandMinion.HandleCommand(worldPosition);
     }
 
