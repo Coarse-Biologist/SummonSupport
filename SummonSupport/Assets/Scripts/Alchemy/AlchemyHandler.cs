@@ -26,7 +26,6 @@ public class AlchemyHandler : MonoBehaviour
 
 
     [SerializeField] public List<GameObject> activeMinions = new List<GameObject>();
-    public UnityEvent<LivingBeing> newMinionAdded;
     public static AlchemyHandler Instance { get; private set; }
 
     public static Dictionary<AlchemyLoot, int> AlchemyLootValueDict = new();
@@ -225,7 +224,7 @@ public class AlchemyHandler : MonoBehaviour
         if (!activeMinions.Contains(minion))
         {
             activeMinions.Add(minion);
-            newMinionAdded?.Invoke(livingBeing);
+            EventDeclarer.newMinionAdded?.Invoke(livingBeing);
         }
         CommandMinion.SetActiveMinions(activeMinions);
     }

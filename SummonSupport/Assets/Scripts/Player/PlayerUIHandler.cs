@@ -36,26 +36,14 @@ public class PlayerUIHandler : MonoBehaviour
 
     void OnEnable()
     {
-        EventDeclarer.attributeChanged.AddListener(UpdateResourceBar);
-        EventDeclarer.maxAttributeChanged.AddListener(UpdateMaxValueResourceBar);
-        if (AlchemyHandler.Instance != null)
-        {
-            AlchemyHandler.Instance.newMinionAdded.AddListener(AddMinionHP);
-        }
+        EventDeclarer.newMinionAdded?.AddListener(AddMinionHP);
         EventDeclarer.minionRecycled?.AddListener(RemoveMinionHP);
-
     }
 
     void OnDisable()
     {
-        EventDeclarer.attributeChanged.RemoveListener(UpdateResourceBar);
-        EventDeclarer.maxAttributeChanged.RemoveListener(UpdateMaxValueResourceBar);
-        if (AlchemyHandler.Instance != null)
-        {
-            AlchemyHandler.Instance.newMinionAdded.RemoveListener(AddMinionHP);
-        }
-        EventDeclarer.minionRecycled.RemoveListener(RemoveMinionHP);
-
+        EventDeclarer.newMinionAdded?.RemoveListener(AddMinionHP);
+        EventDeclarer.minionRecycled?.RemoveListener(RemoveMinionHP);
     }
 
     void Start()

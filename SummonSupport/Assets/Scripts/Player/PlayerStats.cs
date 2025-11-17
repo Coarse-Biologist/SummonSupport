@@ -37,6 +37,7 @@ public class PlayerStats : LivingBeing
     void OnEnable()
     {
         EventDeclarer.EnemyDefeated?.AddListener(GainXP);
+
     }
     void OnDisable()
     {

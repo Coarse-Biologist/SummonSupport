@@ -7,7 +7,6 @@ namespace SummonSupportEvents
 {
     public static class EventDeclarer
     {
-        public static UnityEvent<LivingBeing, AttributeType> attributeChanged = new UnityEvent<LivingBeing, AttributeType>();
         public static UnityEvent<LivingBeing, AttributeType> maxAttributeChanged = new();
 
         #region Quests
@@ -19,6 +18,7 @@ namespace SummonSupportEvents
         #endregion
         public static UnityEvent<GameObject> minionDied = new();
         public static UnityEvent<GameObject> minionRecycled = new();
+        public static UnityEvent<LivingBeing> newMinionAdded = new();
 
         public static UnityEvent<MinionStats> SetActiveMinion = new();
         public static UnityEvent<MovementAttributes, float> SpeedAttributeChanged = new();

@@ -60,6 +60,11 @@ public class MinionStats : LivingBeing
 
         ToggleDeath(true);
     }
+    private void DelayedTestDeath()
+    {
+        Debug.Log("Delayed test death happening now");
+        Destroy(gameObject);
+    }
 
     private void ToggleDeath(bool dead)
     {

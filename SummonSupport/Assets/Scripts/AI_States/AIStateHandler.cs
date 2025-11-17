@@ -38,9 +38,9 @@ public class AIStateHandler : MonoBehaviour
     public CharacterTag charType { protected set; get; }
 
 
-    public Vector2 lastSeenLoc;
+    public Vector3 lastSeenLoc;
 
-    private Vector2 startLocation;
+    private Vector3 startLocation;
 
     public void SetCurrentState(AIState state)
     {

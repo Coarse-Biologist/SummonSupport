@@ -1,7 +1,6 @@
-using System;
-using System.Collections.Generic;
-using Unity.VisualScripting;
+
 using UnityEngine;
+using UnityEngine.AI;
 
 public class AIObedienceState : AIState
 {
@@ -10,10 +9,11 @@ public class AIObedienceState : AIState
     private AIPeacefulState peaceState;
     private Rigidbody rb;
     public MinionCommands currentCommand;
-    public Vector2 commandLoc { private set; get; }
+    public Vector3 commandLoc { private set; get; }
     public LivingBeing commandTarget { private set; get; }
     private MinionStats minionStats;
     //can be command + game object, command + location
+    private NavMeshAgent navMesh;
 
     public void Awake()
     {
@@ -21,6 +21,7 @@ public class AIObedienceState : AIState
         chaseState = GetComponent<AIChaseState>();
         peaceState = GetComponent<AIPeacefulState>();
         minionStats = GetComponent<MinionStats>();
+        navMesh = GetComponent<NavMeshAgent>();
 
         rb = GetComponent<Rigidbody>();
     }
@@ -30,6 +31,7 @@ public class AIObedienceState : AIState
         if (stateHandler.minionStats != null) { Debug.Log($"{stateHandler.minionStats.Name} is obeying"); }
 
         currentCommand = minionStats.CurrentCommand;
+        Debug.Log($"current command  is {currentCommand}");
         States state = ObeyCommand(currentCommand);
 
         if (state == States.Obedience) return this;
@@ -64,7 +66,7 @@ public class AIObedienceState : AIState
 
 
     }
-    public void SetCommandLoc(Vector2 loc)
+    public void SetCommandLoc(Vector3 loc)
     {
         commandLoc = loc;
     }
@@ -75,16 +77,18 @@ public class AIObedienceState : AIState
 
     private States GoToLocation()
     {
-        Vector2 currentLoc = new Vector2(transform.position.x, transform.position.y);
+        float distanceToTarget = (transform.position - commandLoc).sqrMagnitude;
         if (currentCommand == MinionCommands.FocusTarget) commandLoc = commandTarget.transform.position;
-        Vector2 direction = commandLoc - currentLoc;
-        if (direction.sqrMagnitude > 4)
+        if (distanceToTarget > 4)
         {
-            rb.linearVelocity = direction * stateHandler.movementScript.MovementSpeed * 3;
+            Debug.Log("Setting destination to commanded loc");
+            navMesh.SetDestination(commandLoc);
             return States.Obedience;
         }
         else
         {
+            Debug.Log("no longer setting destination to the commanded loc because sufficiently close");
+            navMesh.ResetPath();
             minionStats.SetCommand(MinionCommands.None);
             if (currentCommand == MinionCommands.GoTo) stateHandler.SetTarget(null); // is this good?
             return States.Peace; // Is this good?...

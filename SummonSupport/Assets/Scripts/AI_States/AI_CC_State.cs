@@ -30,7 +30,7 @@ public class AI_CC_State : AIState
     public bool isMad { private set; get; } = false;
     public bool beingPulled { private set; get; } = false;
 
-    public Vector2 PullEpicenter { private set; get; } = new Vector2(-1, -1);
+    public Vector3 PullEpicenter { private set; get; } = new Vector3(-1, -1, -1);
 
 
 
@@ -87,23 +87,19 @@ public class AI_CC_State : AIState
         CCToCaster.Remove(CC);
         typeToCC.Remove(CC);
     }
-    public void SetPullEpicenter(Vector2 loc)
+    public void SetPullEpicenter(Vector3 loc)
     {
         PullEpicenter = loc;
     }
 
     private bool KnockInTheAir()
     {
+        Debug.Log("Doing knock in the air");
         beingKnockedInAir = true;
         if (CCToCaster.TryGetValue(StatusEffectType.KnockInTheAir, out LivingBeing caster) && timeElapsed <= knockDuration)
         {
-            // add logic which can use relevant mods or character based stats to affect things
-            rb.linearDamping = 40;
-            if (timeElapsed <= knockDuration * .8)
-                rb.AddForce(((Vector2)transform.position - (Vector2)caster.transform.position).normalized, ForceMode.Impulse);
-            if (timeElapsed <= knockDuration * .5)
-                rb.AddForce(new Vector2(0, 4f), ForceMode.Impulse);
-            if (timeElapsed > knockDuration * .5 && timeElapsed <= .8 * knockDuration) rb.AddForce(new Vector2(0, -4), ForceMode.Impulse);
+            rb.AddForce((transform.position - caster.transform.position).normalized * 20, ForceMode.Impulse);
+
             return true;
         }
         else
@@ -111,8 +107,6 @@ public class AI_CC_State : AIState
             beingKnockedInAir = false;
             timeElapsed = 0f;
             RemoveCC(StatusEffectType.KnockInTheAir);
-            rb.linearDamping = 10;
-            //rb.isKinematic = RigidbodyType.Dynamic;
             return false;
         }
     }
@@ -120,18 +114,18 @@ public class AI_CC_State : AIState
     {
         float pullDuration = typeToCC[StatusEffectType.Pulled].Duration;
         beingPulled = true;
-        if (PullEpicenter == Vector2.zero) PullEpicenter = new Vector2(transform.position.x, transform.position.y - 2);
+        if (PullEpicenter == Vector3.zero) PullEpicenter = new Vector3(transform.position.x, transform.position.y - 2);
         bool stillPulling = true;
         while (stillPulling)
         {
             yield return wait;
             pullDuration -= waitTime;
             transform.position = Vector3.MoveTowards(transform.position, PullEpicenter, .1f);
-            if (pullDuration <= 0) //((Vector2)transform.position - PullEpicenter).sqrMagnitude < .3f )
+            if (pullDuration <= 0) //((Vector3)transform.position - PullEpicenter).sqrMagnitude < .3f )
             {
                 stillPulling = false;
                 RemoveCC(StatusEffectType.Pulled);
-                PullEpicenter = new Vector2(0, 0);
+                PullEpicenter = Vector3.down;
                 beingPulled = false;
             }
         }

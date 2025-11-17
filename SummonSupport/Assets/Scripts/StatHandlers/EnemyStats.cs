@@ -23,7 +23,7 @@ public class EnemyStats : LivingBeing
         //transform.position = new Vector3 (99, 99, 99);
         Debug.Log("Delayed test death being called now");
 
-        Invoke("DelayedTestDeath", .1f);
+        Invoke("DelayedTestDeath", 1f);
     }
 
     public override void HandleUIAttrDisplay(AttributeType attributeType, float newValue)

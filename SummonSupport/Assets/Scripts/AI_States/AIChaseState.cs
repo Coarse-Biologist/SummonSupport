@@ -97,7 +97,7 @@ public class AIChaseState : AIState
         if (!stateHandler.StuckInAbilityAnimation)
         {
             Vector3 direction = targetLoc - transform.position;
-            bool uniqueMovement = false;
+            bool uniqueMovement = true;
 
             if (!uniqueMovement || cantSeeTarget)
             {
@@ -132,8 +132,10 @@ public class AIChaseState : AIState
 
         float dx = a * Mathf.Cos(theta) - a * theta * Mathf.Sin(theta);
         float dy = a * Mathf.Sin(theta) + a * theta * Mathf.Cos(theta);
+        float dz = a * Mathf.Tan(theta) + a * theta * Mathf.Tan(theta);
 
-        rb.linearVelocity = new Vector2(dx, dy).normalized * stateHandler.movementScript.GetMovementAttribute(MovementAttributes.MovementSpeed) * 3;
+
+        rb.linearVelocity = new Vector3(dx, dy, dz).normalized * stateHandler.movementScript.GetMovementAttribute(MovementAttributes.MovementSpeed) * 3;
 
     }
 

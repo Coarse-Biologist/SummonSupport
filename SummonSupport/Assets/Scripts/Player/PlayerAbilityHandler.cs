@@ -95,7 +95,7 @@ public class PlayerAbilityHandler : AbilityHandler
         }
     }
 
-    Vector2 GetCenterOfScreen(float distance)
+    public Vector3 GetCenterOfScreen(float distance)
     {
         Vector3 screenCenter = new Vector3(
                 Screen.width * 0.5f,
