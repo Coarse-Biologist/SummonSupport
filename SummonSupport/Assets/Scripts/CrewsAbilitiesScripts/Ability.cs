@@ -73,6 +73,15 @@ public abstract class Ability : ScriptableObject
         return targets;
     }
 
+    public void KnockInTheAir(LivingBeing caster, Rigidbody target)
+    {
+        if (target != null)
+        {
+            Vector3 pos = caster.transform.position;
+            target.AddForce((target.transform.position - new Vector3(pos.x, pos.y - 10, pos.z)).normalized * 30, ForceMode.Impulse);
+        }
+    }
+
 
 }
 

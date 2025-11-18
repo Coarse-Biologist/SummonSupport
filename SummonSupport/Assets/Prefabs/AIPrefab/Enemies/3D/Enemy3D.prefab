@@ -73,6 +73,8 @@ MonoBehaviour:
   <TickRateRegenerationInSeconds>k__BackingField: 1
   <HealthRegeneration>k__BackingField: 1
   <PowerRegeneration>k__BackingField: 1
+  locSphere: {fileID: 2348392144360596245, guid: 0eadd3dda22abf8478968ace02e90721,
+    type: 3}
   <Cold>k__BackingField: 0
   <Water>k__BackingField: 0
   <Earth>k__BackingField: 0
@@ -125,11 +127,11 @@ MonoBehaviour:
   FollowRadius: 5
   DetectionRadius: 999
   AngleOfSight: 360
-  InterestRadius: 10
+  InterestRadius: 200
   Cowardice: 0
   Dead: 0
   ccState: {fileID: 0}
-  lastSeenLoc: {x: 0, y: 0}
+  lastSeenLoc: {x: 0, y: 0, z: 0}
 --- !u!114 &5432671304295933325
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -293,7 +295,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 1
-  m_Speed: 3.5
+  m_Speed: 10
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120

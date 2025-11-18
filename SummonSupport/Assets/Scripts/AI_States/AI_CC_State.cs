@@ -23,9 +23,7 @@ public class AI_CC_State : AIState
     private Rigidbody rb;
     private float waitTime = .1f;
     WaitForSeconds wait;// = new WaitForSeconds(0.1f);
-    private float knockDuration = 2f;
-    private float timeElapsed = 0f;
-    private bool beingKnockedInAir = false;
+
     public bool isCharmed { private set; get; } = false;
     public bool isMad { private set; get; } = false;
     public bool beingPulled { private set; get; } = false;
@@ -48,11 +46,7 @@ public class AI_CC_State : AIState
         {
             return peaceState;
         }
-        if (!beingKnockedInAir && typeToCC.Keys.Contains(StatusEffectType.KnockInTheAir))
-        {
-            StartCoroutine(KnockRoutine());
-            return this;
-        }
+
         if (!beingPulled && typeToCC.Keys.Contains(StatusEffectType.Pulled))
         {
             StartCoroutine(PullRoutine());
@@ -74,7 +68,6 @@ public class AI_CC_State : AIState
         }
 
         return peaceState;
-
     }
 
     public void RecieveCC(StatusEffects CC, LivingBeing caster)
@@ -92,24 +85,6 @@ public class AI_CC_State : AIState
         PullEpicenter = loc;
     }
 
-    private bool KnockInTheAir()
-    {
-        Debug.Log("Doing knock in the air");
-        beingKnockedInAir = true;
-        if (CCToCaster.TryGetValue(StatusEffectType.KnockInTheAir, out LivingBeing caster) && timeElapsed <= knockDuration)
-        {
-            rb.AddForce((transform.position - caster.transform.position).normalized * 20, ForceMode.Impulse);
-
-            return true;
-        }
-        else
-        {
-            beingKnockedInAir = false;
-            timeElapsed = 0f;
-            RemoveCC(StatusEffectType.KnockInTheAir);
-            return false;
-        }
-    }
     private IEnumerator PullRoutine()
     {
         float pullDuration = typeToCC[StatusEffectType.Pulled].Duration;
@@ -154,18 +129,9 @@ public class AI_CC_State : AIState
     {
         stateHandler.SetTargetMask();
         isMad = false;
-        //RemoveCC(StatusEffectType.Madness);
+        RemoveCC(StatusEffectType.Madness);
     }
-    private IEnumerator KnockRoutine()
-    {
-        bool repeat = true;
-        while (repeat)
-        {
-            yield return wait;
-            repeat = KnockInTheAir();
-            timeElapsed += .1f;
-        }
-    }
+
 
 
 }

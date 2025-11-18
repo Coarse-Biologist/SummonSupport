@@ -14,13 +14,20 @@ public static class CommandMinion
         if (activeMinions.Contains(minionObject))
             activeMinions.Remove(minionObject);
     }
+    public static void AddActiveMinions(GameObject minionObject)
+    {
+        if (!activeMinions.Contains(minionObject))
+            activeMinions.Add(minionObject);
+    }
+
     public static void SetActiveMinions(List<GameObject> activeMinionsList)
     {
         activeMinions = activeMinionsList;
     }
 
-    public static void HandleCommand(Vector3 loc)
+    public static void HandleCommand(RaycastHit hit)
     {
+        Vector3 loc = hit.point;
         Debug.Log($"handling command. target loc = {loc}");
         if (activeMinions != null)
         {
@@ -38,7 +45,7 @@ public static class CommandMinion
             }
 
             Collider[] interactHits = Physics.OverlapSphere(loc, 100);
-
+            bool interactableFound = false;
             if (interactHits.Length > 0)
             {
                 foreach (Collider collider in interactHits)
@@ -47,13 +54,17 @@ public static class CommandMinion
 
                     I_Interactable interactable = collider.gameObject.GetComponent<I_Interactable>();
                     if (interactable != null)
+                    {
                         SendMinionToInteract(loc);
+                    }
+                }
+                if (!interactableFound)
+                {
+                    Debug.Log($"Going to command loc");
+                    CommandMinionToGoToLoc(loc);
                 }
             }
-            else
-            {
-                CommandMinionToGoToLoc(loc);
-            }
+
         }
         else Logging.Error("You talking to yourself, Bud? no minion is selected!");
     }
@@ -65,7 +76,6 @@ public static class CommandMinion
             if (!SelectedMinions.Contains(minion))
                 SelectedMinions.Add(minion);
             else SelectedMinions.Remove(minion);
-
         }
         else Logging.Error("Oh, you want to control that nobody? Select an actual minion!");
     }
@@ -76,6 +86,7 @@ public static class CommandMinion
         {
             if (minion != null)
             {
+
                 MinionStats stats = minion.GetComponent<MinionStats>();
                 AIObedienceState obedienceState = minion.GetComponent<AIObedienceState>();
                 minion.GetComponent<MinionInteractionHandler>().SetCommandToInteract(true); // null minion

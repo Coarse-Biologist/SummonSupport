@@ -149,7 +149,7 @@ public class PlayerMovement : MovementScript
     {
         if (playerStats.Dead) return;
 
-        worldPosition = mainCamera.ScreenToWorldPoint(lookInput);
+        //worldPosition = mainCamera.ScreenToWorldPoint(lookInput);
         // RaycastHit[] hits = Physics.SphereCastAll(transform.position, 5f, transform.forward, 30f);
         // foreach (RaycastHit hit in hits)
         // {
@@ -159,7 +159,15 @@ public class PlayerMovement : MovementScript
         //         CommandMinion.SetSelectedMinion(hit.transform.gameObject);
         //     }
         // }
-        CommandMinion.HandleCommand(worldPosition);
+        //
+        Vector3 screenCenter = new Vector3(Screen.width * 0.5f, Screen.height * 0.5f, 0f);
+        Ray ray = Camera.main.ScreenPointToRay(screenCenter);
+        Debug.DrawRay(ray.origin, ray.direction * 300, Color.cyan, 0.1f);
+
+        if (Physics.Raycast(ray, out RaycastHit hit, 300))
+        {
+            CommandMinion.HandleCommand(hit);
+        }
     }
 
     private void FixedUpdate()

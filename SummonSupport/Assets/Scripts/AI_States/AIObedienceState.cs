@@ -68,6 +68,7 @@ public class AIObedienceState : AIState
     }
     public void SetCommandLoc(Vector3 loc)
     {
+        //Instantiate(minionStats.locSphere, loc, Quaternion.identity);
         commandLoc = loc;
     }
     public void SetCommandTarget(LivingBeing target)
@@ -77,12 +78,13 @@ public class AIObedienceState : AIState
 
     private States GoToLocation()
     {
-        float distanceToTarget = (transform.position - commandLoc).sqrMagnitude;
+        Vector3 direction = commandLoc - transform.position;
         if (currentCommand == MinionCommands.FocusTarget) commandLoc = commandTarget.transform.position;
-        if (distanceToTarget > 4)
+        if (direction.magnitude > stateHandler.navAgent.stoppingDistance)
         {
-            Debug.Log("Setting destination to commanded loc");
+            Debug.Log($"traveling to commanded loc {commandLoc}. distance to target = {direction.sqrMagnitude}");
             navMesh.SetDestination(commandLoc);
+            //rb.linearVelocity = direction * 5;
             return States.Obedience;
         }
         else

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.Build.Pipeline;
 using UnityEngine.AI;
+using Unity.VisualScripting;
 
 
 public class AIPeacefulState : AIState
@@ -148,9 +149,8 @@ public class AIPeacefulState : AIState
         while (true)
         {
             targetStats = SelectFriendlyTarget();
-            //chaseState.LookAtTarget(targetStats.transform.position);
             stateHandler.SetTarget(targetStats);
-            Ability ability = GetComponent<CreatureAbilityHandler>().GetAbilityForTarget(targetStats, targetStats == stateHandler.minionStats);
+            Ability ability = stateHandler.abilityHandler.GetAbilityForTarget(targetStats, targetStats == stateHandler.minionStats);
             if (ability != null)
             {
                 chaseState.SetAbilityRange(ability.Range);
@@ -164,22 +164,20 @@ public class AIPeacefulState : AIState
     }
     private LivingBeing SelectFriendlyTarget()
     {
-        List<LivingBeing> friendlies = new();
-        if (player.TryGetComponent<LivingBeing>(out var playerStats))
+        List<LivingBeing> friendlies = new() { stateHandler.playerStats, stateHandler.livingBeing };
+        foreach (GameObject minion in CommandMinion.activeMinions)
         {
-            friendlies.Add(playerStats);
-            friendlies.Add(gameObject.GetComponent<LivingBeing>());
-            foreach (GameObject minion in CommandMinion.activeMinions)
-            {
-                friendlies.Add(minion.GetComponent<LivingBeing>());
-            }
+            friendlies.Add(minion.GetComponent<LivingBeing>());
         }
+
         LivingBeing selectedFriend = friendlies[Random.Range(0, friendlies.Count)];
         return selectedFriend;
     }
 
     public void GoToPlayer()
     {
+        Debug.Log("Wants to  go to payer");
         stateHandler.navAgent.SetDestination(player.transform.position);
+        //rb.linearVelocity = (player.transform.position - transform.position) * 10;
     }
 }

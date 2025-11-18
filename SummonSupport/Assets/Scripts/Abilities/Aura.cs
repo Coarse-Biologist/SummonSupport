@@ -179,7 +179,7 @@ public class Aura : MonoBehaviour
     private IEnumerator SeekTarget(GameObject target)
     {
         WaitForSeconds waitFor = new WaitForSeconds(.4f);
-        Vector2 directionToTarget = target.transform.position - transform.position;
+        Vector3 directionToTarget = target.transform.position - transform.position;
         TryGetComponent(out Rigidbody rb);
 
         while (directionToTarget.sqrMagnitude > conjureAbility.Radius)

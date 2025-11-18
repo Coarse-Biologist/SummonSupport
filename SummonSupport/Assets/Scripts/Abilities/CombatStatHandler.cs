@@ -80,6 +80,7 @@ public static class CombatStatHandler
                 {
                     ccState.RecieveCC(status, currentCaster);
                     if (status.EffectType == StatusEffectType.Pulled) ccState.SetPullEpicenter(Camera.main.ScreenToWorldPoint(Input.mousePosition));
+                    if (status.EffectType == StatusEffectType.KnockInTheAir) ability.KnockInTheAir(caster, target.GetComponent<Rigidbody>());
                     //UnityEngine.Debug.Log($"elapsed time in the combat handler package handler function: {stopwatch.ElapsedMilliseconds}");
                 }
             }

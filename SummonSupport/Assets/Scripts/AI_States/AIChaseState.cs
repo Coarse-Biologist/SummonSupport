@@ -43,7 +43,6 @@ public class AIChaseState : AIState
             Vector3 targetLoc = stateHandler.target.transform.position;
             if (peaceState.FieldOfViewCheck() == true)
             {
-
                 Chase(targetLoc);
 
                 if (!runningAttackLoop)
@@ -54,7 +53,7 @@ public class AIChaseState : AIState
             {
 
                 EndAttackRoutine();
-                Chase(stateHandler.lastSeenLoc, true);
+                Chase(stateHandler.lastSeenLoc);
             }
             return this;
         }
@@ -80,90 +79,61 @@ public class AIChaseState : AIState
         return direction.sqrMagnitude <= 150;
 
     }
-    //public void LookAtTarget(Vector3 targetLoc)
-    //{
-    //    if (rotationObject != null)
-    //    {
-    //        Vector3 direction = (targetLoc - transform.position).normalized;
-    //        float angle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
-    //        rotationObject.transform.rotation = Quaternion.Euler(0, angle, 0);
-    //        if (spriteController != null)
-    //            spriteController.SetSpriteDirection(angle);
-    //    }
-    //}
 
-    public void Chase(Vector3 targetLoc, bool cantSeeTarget = false)
+    public void Chase(Vector3 targetLoc)
     {
         if (!stateHandler.StuckInAbilityAnimation)
         {
             Vector3 direction = targetLoc - transform.position;
-            bool uniqueMovement = true;
 
-            if (!uniqueMovement || cantSeeTarget)
+            if (direction.sqrMagnitude > SelectedAbilityAttackRange)
             {
-                if (direction.sqrMagnitude > SelectedAbilityAttackRange)
-                {
-                    if (stateHandler.navAgent == null || stateHandler.target == null || targetLoc == null || stateHandler.target is null)
-                    {
-                        return;
-                    }
-                    else
-                    {
-                        stateHandler.navAgent.SetDestination(stateHandler.target.transform.position);// direction* stateHandler.movementScript.MovementSpeed;
-                    }
-                }
-                else
-                {
-                    if (stateHandler.navAgent != null)
-                        stateHandler.navAgent.ResetPath();
-                }
+                //if (livingBeing.locSphere != null)
+                //{
+                //    Instantiate(livingBeing.locSphere, stateHandler.target.transform.position, Quaternion.identity);
+                //}
+                stateHandler.navAgent.SetDestination(stateHandler.target.transform.position);
             }
-            else StrafeMovement(targetLoc, direction.sqrMagnitude);
-
+            else
+            {
+                stateHandler.navAgent.ResetPath();
+            }
         }
-    }
-    private void StrafeMovement(Vector3 targetLoc, float distance)
-    {
-        //Debug.Log("Strafe movement called");
-
-        float a = -60f * distance;
-        Vector3 offset = transform.position - targetLoc;
-        float theta = Mathf.Atan2(offset.y, offset.x);
-
-        float dx = a * Mathf.Cos(theta) - a * theta * Mathf.Sin(theta);
-        float dy = a * Mathf.Sin(theta) + a * theta * Mathf.Cos(theta);
-        float dz = a * Mathf.Tan(theta) + a * theta * Mathf.Tan(theta);
-
-
-        rb.linearVelocity = new Vector3(dx, dy, dz).normalized * stateHandler.movementScript.GetMovementAttribute(MovementAttributes.MovementSpeed) * 3;
-
     }
 
     private IEnumerator HandleAttack(LivingBeing target)
     {
         runningAttackLoop = true;
-        while (true)
+
+        // Exit immediately if target is null
+        if (target == null)
+        {
+            runningAttackLoop = false;
+            yield break;
+        }
+
+        while (runningAttackLoop)
         {
             if (stateHandler.Dead)
             {
-                EndAttackRoutine();
+                runningAttackLoop = false;
+                yield break;
             }
-            if (target != null)
+
+            Ability ability = stateHandler.abilityHandler.GetAbilityForTarget(target);
+
+            if (ability != null)
             {
-                Ability ability = GetComponent<CreatureAbilityHandler>().GetAbilityForTarget(target);
-                if (ability != null)
+                SetAbilityRange(ability.Range);
+
+                if ((transform.position - target.transform.position).sqrMagnitude <
+                    SelectedAbilityAttackRange * SelectedAbilityAttackRange)
                 {
-                    SetAbilityRange(ability.Range);
-                    if ((transform.position - target.transform.position).magnitude < SelectedAbilityAttackRange)
-                    {
-                        abilityHandler.UseAbility(target, ability);
-                    }
+                    abilityHandler.UseAbility(target, ability);
                 }
-                //else Debug.Log("The ability was null during the Handl attack function of the ai chase state");
-
-                yield return attackSpeed;
-
             }
+
+            yield return attackSpeed;
         }
     }
 

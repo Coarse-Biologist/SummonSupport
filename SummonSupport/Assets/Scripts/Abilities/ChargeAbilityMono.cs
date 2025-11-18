@@ -10,7 +10,7 @@ public class ChargeAbilityMono : MonoBehaviour
     private Coroutine chargeCoroutine;
     private Rigidbody rb;
     private Transform originTransform;
-    private Vector2 startLoc;
+    private Vector3 startLoc;
     private AbilityHandler abilityHandler;
     private LivingBeing caster;
     private WaitForSeconds chargeTickRate = new WaitForSeconds(.01f);
@@ -64,7 +64,7 @@ public class ChargeAbilityMono : MonoBehaviour
         while (stillCharging)
         {
             rb.linearVelocity = originTransform.forward * speedBoost;
-            if (((Vector2)gameObject.transform.position - startLoc).magnitude > chargeAbility.Range)
+            if ((gameObject.transform.position - startLoc).magnitude > chargeAbility.Range)
             {
                 EndCharge();
             }

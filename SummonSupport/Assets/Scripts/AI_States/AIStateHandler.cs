@@ -21,7 +21,6 @@ public class AIStateHandler : MonoBehaviour
     public LayerMask enemyMask { private set; get; }
     public LayerMask friendlyMask { private set; get; }
     public LayerMask belligerantMask { private set; get; }
-    public LayerMask obstructionMask { private set; get; }
     public NavMeshAgent navAgent { private set; get; }
     public AIState currentState { get; private set; }
     [SerializeField] public AI_CC_State ccState;
@@ -37,10 +36,8 @@ public class AIStateHandler : MonoBehaviour
     public LivingBeing target { protected set; get; }
     public CharacterTag charType { protected set; get; }
 
-
     public Vector3 lastSeenLoc;
 
-    private Vector3 startLocation;
 
     public void SetCurrentState(AIState state)
     {
@@ -54,8 +51,6 @@ public class AIStateHandler : MonoBehaviour
 
     public void Awake()
     {
-        startLocation = transform.position;
-        obstructionMask = LayerMask.GetMask("Obstruction");
         navAgent = GetComponent<NavMeshAgent>();
 
         currentState = GetComponentInChildren<AIPeacefulState>();
@@ -64,11 +59,15 @@ public class AIStateHandler : MonoBehaviour
         movementScript = GetComponent<MovementScript>();
         minionStats = GetComponent<MinionStats>();
         ccState = GetComponent<AI_CC_State>();
-        InvokeRepeating("RunStateMachine", 0f, 1f);
         abilityHandler = GetComponent<CreatureAbilityHandler>();
+
         SetMasks();
         SetTargetMask();
         SetCharType(livingBeing.CharacterTag);
+
+        InvokeRepeating("RunStateMachine", 0f, 1f);
+
+
 
     }
     void Start()
@@ -86,7 +85,6 @@ public class AIStateHandler : MonoBehaviour
         belligerantMask = LayerMask.GetMask("Enemy", "Player", "Minion", "Guard");      // used for madness
         enemyMask = LayerMask.GetMask("Enemy");                                         // used by allies
         friendlyMask = LayerMask.GetMask("Player", "Minion");                           // used by enemies
-
     }
     private void SetCharType(CharacterTag tag)
     {
@@ -136,9 +134,9 @@ public class AIStateHandler : MonoBehaviour
         {
             if (livingBeing.CharacterTag == CharacterTag.Minion)
             {
+                Debug.Log("I will run yee old obedience state");
                 AIState nextState = obedienceState.RunCurrentState();
                 SwitchToNextState(nextState);
-
             }
             else
             {

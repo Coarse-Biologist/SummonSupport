@@ -33,6 +33,9 @@ public abstract class LivingBeing : MonoBehaviour
     private float TotalHealthRegeneration = 0;
     private float TotalPowerRegeneration = 0;
 
+    public GameObject locSphere;
+
+
     #endregion
 
     //TODO:

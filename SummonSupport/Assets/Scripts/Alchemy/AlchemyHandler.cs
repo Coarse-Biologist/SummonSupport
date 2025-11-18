@@ -8,8 +8,7 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 using System;
 //using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using SummonSupportEvents;
-using UnityEditor.EditorTools;
-using Unity.Collections.LowLevel.Unsafe;
+
 
 #endregion
 public class AlchemyHandler : MonoBehaviour
@@ -76,7 +75,8 @@ public class AlchemyHandler : MonoBehaviour
         {
             if (minionPrefab != null)
             {
-                craftedMinion = Instantiate(minionPrefab, transform.position, Quaternion.identity);
+                Vector3 playerPos = PlayerStats.Instance.transform.position;
+                craftedMinion = Instantiate(minionPrefab, new Vector3(playerPos.x + 10, playerPos.y, playerPos.z + 10), Quaternion.identity);
 
                 UpgradeMinion(craftedMinion, combinedIngredients, elementList);
                 AddActiveMinion(craftedMinion);
