@@ -17,8 +17,6 @@ public class PlayerMovement : MovementScript
     public Camera mainCamera;
     private LivingBeing playerStats;
     [SerializeField] private PlayerInputActions inputActions;
-    [SerializeField] public GameObject AbilityRotation;
-    [field: SerializeField] public bool CameraFreeRotate = false;
     private Vector2 lookInput;
     private Vector3 worldPosition;
     Vector3 moveDirection;
@@ -166,9 +164,7 @@ public class PlayerMovement : MovementScript
     {
         if (playerStats.Dead) return;
 
-        Vector3 screenCenter = new Vector3(Screen.width * 0.5f, Screen.height * 0.5f, 0f);
-        Ray ray = Camera.main.ScreenPointToRay(screenCenter);
-        Debug.DrawRay(ray.origin, ray.direction * 300, Color.cyan, 0.1f);
+        Ray ray = new Ray(transform.position, transform.forward.normalized);
 
         if (Physics.Raycast(ray, out RaycastHit hit, 300))
         {
@@ -190,21 +186,6 @@ public class PlayerMovement : MovementScript
 
             HandleLook();
         }
-    }
-
-    private void UpdatePositionForEntities()
-    {
-        EntityManager entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
-        EntityQuery entityQuery = new EntityQueryBuilder(Allocator.Temp).WithAll<SeesTargetComponent>().Build(entityManager);
-        NativeArray<Entity> entityArray = entityQuery.ToEntityArray(Allocator.Temp);
-        NativeArray<SeesTargetComponent> seesTargetCompArray = entityQuery.ToComponentDataArray<SeesTargetComponent>(Allocator.Temp);
-        for (int i = 0; i < seesTargetCompArray.Length; i++)
-        {
-            SeesTargetComponent seesTargetComponent = seesTargetCompArray[i];
-            seesTargetComponent.targetLocation = transform.position;
-            seesTargetCompArray[i] = seesTargetComponent;
-        }
-        entityQuery.CopyFromComponentDataArray(seesTargetCompArray);
     }
 
     private void ToggleGamePause(InputAction.CallbackContext context)

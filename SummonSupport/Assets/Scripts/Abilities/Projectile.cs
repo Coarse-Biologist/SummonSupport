@@ -146,7 +146,6 @@ public class Projectile : MonoBehaviour
         {
             if (other.gameObject.TryGetComponent(out BoxCollider boxCollider))
             {
-
                 HandleRicochet();
                 SpawnEffect(transform);
             }

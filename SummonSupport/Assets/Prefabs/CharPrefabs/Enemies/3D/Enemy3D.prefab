@@ -107,6 +107,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b3038df873d7b648ae2dc7e3851cef6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CreatureAbilityHandler
+  <abilitySpawn>k__BackingField: {fileID: 8925903879776759123}
   statsHandler: {fileID: 0}
   <Abilities>k__BackingField:
   - {fileID: 11400000, guid: 5605a5e8027c4e94691ae731bacfcb5a, type: 2}
@@ -332,7 +333,7 @@ Transform:
   m_GameObject: {fileID: 8925903879776759123}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.459, z: -3.04}
+  m_LocalPosition: {x: 0, y: 1.459, z: 4.95}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class AbilityHandler : MonoBehaviour
 {
-    [SerializeField] public GameObject abilitySpawn { private set; get; }
+    [field: SerializeField] public GameObject abilitySpawn { private set; get; }
     [SerializeField] protected LivingBeing statsHandler;
     [field: SerializeField] public List<Ability> Abilities { private set; get; } = new();
     [SerializeField] protected List<bool> abilitiesOnCooldown = new();

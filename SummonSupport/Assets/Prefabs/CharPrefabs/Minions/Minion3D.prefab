@@ -74,6 +74,8 @@ MonoBehaviour:
   <TickRateRegenerationInSeconds>k__BackingField: 1
   <HealthRegeneration>k__BackingField: 1
   <PowerRegeneration>k__BackingField: 1
+  locSphere: {fileID: 2348392144360596245, guid: 0eadd3dda22abf8478968ace02e90721,
+    type: 3}
   <Cold>k__BackingField: 0
   <Water>k__BackingField: 0
   <Earth>k__BackingField: 0
@@ -94,8 +96,6 @@ MonoBehaviour:
   <Slashing>k__BackingField: 0
   <AffectedByAbilities>k__BackingField: []
   <XP_OnDeath>k__BackingField: 5
-  locSphere: {fileID: 2348392144360596245, guid: 0eadd3dda22abf8478968ace02e90721,
-    type: 3}
 --- !u!114 &6420015540202892481
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -108,6 +108,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b3038df873d7b648ae2dc7e3851cef6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CreatureAbilityHandler
+  <abilitySpawn>k__BackingField: {fileID: 0}
   statsHandler: {fileID: 0}
   <Abilities>k__BackingField:
   - {fileID: 11400000, guid: 5d20d6cc1fa7eb547ba5d0f9aefcc225, type: 2}
@@ -257,8 +258,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 3.848845, y: 3.4831417, z: 7.523379}
-  m_Center: {x: 0.065457106, y: 0.5405153, z: -0.025504827}
+  m_Size: {x: 3.848845, y: 2.8430686, z: 6.81926}
+  m_Center: {x: 0.065457106, y: 0.22047877, z: -0.24475408}
 --- !u!54 &8380647337846140276
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -359,6 +360,21 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 4428025582669882376}
     m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: 270378ed11bfded42960f2988f6151e9,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 270378ed11bfded42960f2988f6151e9,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 270378ed11bfded42960f2988f6151e9,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.8
+      objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 270378ed11bfded42960f2988f6151e9,
         type: 3}
       propertyPath: m_LocalPosition.x

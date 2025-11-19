@@ -4,8 +4,7 @@ public class DoorHandler : MonoBehaviour, I_Interactable
 {
     [SerializeField] public bool Open { get; private set; } = false;
 
-    public Sprite ClosedSprite;// { private set; get; }
-    public Sprite OpenSprite;// { private set; get; }
+
     private int readyCooldownTime = 1;
     private bool ready = true;
     [SerializeField] public bool Locked = false;
@@ -87,11 +86,10 @@ public class DoorHandler : MonoBehaviour, I_Interactable
     {
         if (DestinationDoor != null)
             PlayerStats.Instance.gameObject.transform.position = DestinationDoor.position;
-        if (OpenSprite != null)
-            minionsSpriteRenderer.sprite = OpenSprite;
+
         if (doorCollider != null)
             doorCollider.enabled = false;
-
+        transform.rotation = new Quaternion(0, 90, 0, 0);
         NotReadyToInteract();
         Open = true;
     }
@@ -100,10 +98,11 @@ public class DoorHandler : MonoBehaviour, I_Interactable
     {
         if (doorCollider != null)
             doorCollider.enabled = true;
+        transform.rotation = Quaternion.identity;
+
         NotReadyToInteract();
         Open = false;
-        if (ClosedSprite != null)
-            minionsSpriteRenderer.sprite = ClosedSprite;
+
     }
 
     private void RequestCanvasText(string temporaryText)

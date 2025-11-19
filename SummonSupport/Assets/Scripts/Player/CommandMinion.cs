@@ -28,46 +28,29 @@ public static class CommandMinion
     public static void HandleCommand(RaycastHit hit)
     {
         Vector3 loc = hit.point;
-        Debug.Log($"handling command. target loc = {loc}");
         if (activeMinions != null)
         {
-            Collider[] enemyHits = Physics.OverlapSphere(loc, 100, LayerMask.GetMask("Enemy"));
-            Logging.Info($"enemy {enemyHits.Length} colliders in click area.");
-
-            if (enemyHits.Length > 0)
+            if (hit.collider.TryGetComponent(out EnemyStats targetLivingBeing))
             {
-                Debug.Log("enemy found while handling command.");
-
-                GameObject enemy = enemyHits[0].gameObject;
-                if (enemy.TryGetComponent<LivingBeing>(out LivingBeing targetLivingbeing))
-
-                    CommandMinionToAttack(targetLivingbeing);
+                SetupManager.Instance.DebugLocation(targetLivingBeing.transform.position, Color.green);
+                CommandMinionToAttack(targetLivingBeing);
             }
 
-            Collider[] interactHits = Physics.OverlapSphere(loc, 100);
-            bool interactableFound = false;
-            if (interactHits.Length > 0)
+            else if (hit.collider.TryGetComponent(out I_Interactable interactable))
             {
-                foreach (Collider collider in interactHits)
-                {
-                    Debug.Log($"{interactHits.Length} interactable found while handling command.");
-
-                    I_Interactable interactable = collider.gameObject.GetComponent<I_Interactable>();
-                    if (interactable != null)
-                    {
-                        SendMinionToInteract(loc);
-                    }
-                }
-                if (!interactableFound)
-                {
-                    Debug.Log($"Going to command loc");
-                    CommandMinionToGoToLoc(loc);
-                }
+                SetupManager.Instance.DebugLocation(hit.collider.transform.position, Color.violet);
+                SendMinionToInteract(hit.collider.gameObject.transform.position);
             }
 
+            else
+            {
+                SetupManager.Instance.DebugLocation(loc, Color.yellow);
+                CommandMinionToGoToLoc(loc);
+            }
         }
-        else Logging.Error("You talking to yourself, Bud? no minion is selected!");
+
     }
+
 
     public static void SetSelectedMinion(GameObject minion)
     {
@@ -77,7 +60,6 @@ public static class CommandMinion
                 SelectedMinions.Add(minion);
             else SelectedMinions.Remove(minion);
         }
-        else Logging.Error("Oh, you want to control that nobody? Select an actual minion!");
     }
 
     private static void SendMinionToInteract(Vector3 loc)
@@ -92,7 +74,6 @@ public static class CommandMinion
                 minion.GetComponent<MinionInteractionHandler>().SetCommandToInteract(true); // null minion
                 obedienceState.SetCommandLoc(loc);
                 stats.SetCommand(MinionCommands.GoTo);
-                Logging.Info($"{stats.Name} is going to location {obedienceState.commandLoc} to interact");
             }
             else activeMinions.Remove(minion);
         }

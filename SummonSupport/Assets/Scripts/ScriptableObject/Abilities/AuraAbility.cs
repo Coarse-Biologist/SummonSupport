@@ -16,15 +16,14 @@ public class AuraAbility : Ability
             Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             RaycastHit2D hit = Physics2D.Raycast(mousePos, Vector3.zero);
             {
-                if (hit.collider != null && hit.collider.TryGetComponent<LivingBeing>(out LivingBeing livingBeing))
+                if (hit.collider != null && hit.collider.TryGetComponent(out LivingBeing livingBeing))
                 {
-                    GameObject auraInstance = Instantiate(AuraObject, hit.collider.transform.position, AuraObject.transform.rotation, hit.collider.transform);
+                    GameObject auraInstance = Instantiate(AuraObject, livingBeing.transform.position, AuraObject.transform.rotation, hit.collider.transform);
                     auraInstance.GetComponent<Aura>().SetAuraStats(caster.GetComponent<LivingBeing>(), livingBeing, this, Duration);
-
                 }
                 else
                 {
-                    GameObject auraInstance = Instantiate(AuraObject, caster.transform.position, AuraObject.transform.rotation, caster.transform);
+                    GameObject auraInstance = Instantiate(AuraObject, caster.GetComponent<AbilityHandler>().abilitySpawn.transform.position, AuraObject.transform.rotation, caster.transform);
                     Aura auraMonoScript = auraInstance.GetComponent<Aura>();
                     if (auraMonoScript != null) auraMonoScript.HandleInstantiation(caster.GetComponent<LivingBeing>(), null, this);
                 }
