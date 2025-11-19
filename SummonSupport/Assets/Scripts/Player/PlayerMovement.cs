@@ -5,6 +5,9 @@ using Unity.Collections;
 using SummonSupportEvents;
 using Unity.Mathematics;
 using UnityEngine.SceneManagement;
+using Unity.VisualScripting;
+using System;
+using System.Collections.Generic;
 
 
 public class PlayerMovement : MovementScript
@@ -28,6 +31,10 @@ public class PlayerMovement : MovementScript
     private bool lockedInUI = false;
     private bool paused = false;
     private bool StuckInAbilityAnimation = false;
+    private AnimationControllerScript anim;
+
+
+
 
 
     #endregion
@@ -40,6 +47,9 @@ public class PlayerMovement : MovementScript
         mainCamera = Camera.main;
         inputActions = new PlayerInputActions();
         playerStats = GetComponent<LivingBeing>();
+        anim = GetComponent<AnimationControllerScript>();
+        if (anim == null) throw new System.Exception($"Animation controller is null. it was not found among children objects.");
+
 
     }
 
@@ -119,16 +129,22 @@ public class PlayerMovement : MovementScript
     }
     private void HandleMove()
     {
-        float calculatedSpeed;
-        if (dashing)
-            calculatedSpeed = MovementSpeed + DashBoost;
-        else
-            calculatedSpeed = MovementSpeed;
+        if (Math.Abs(moveInput.x) > .01 || Math.Abs(moveInput.y) > .01)
+        {
+            float calculatedSpeed;
+            if (dashing)
+                calculatedSpeed = MovementSpeed + DashBoost;
+            else
+                calculatedSpeed = MovementSpeed;
 
-        Vector3 moveDirection = transform.TransformDirection(new Vector3(moveInput.x, 0, moveInput.y)).normalized;
+            Vector3 moveDirection = transform.TransformDirection(new Vector3(moveInput.x, 0, moveInput.y)).normalized;
+            anim.ChangeMovementAnimation(moveInput.x, moveInput.y);
+            rb.AddForce(moveDirection * calculatedSpeed * 100f, ForceMode.Acceleration);
+        }
+        else anim.ChangeAnimation("Idle", .2f);
 
-        rb.AddForce(moveDirection * calculatedSpeed * 100f, ForceMode.Acceleration);
     }
+
 
 
     #endregion

@@ -25,7 +25,7 @@ Transform:
   m_GameObject: {fileID: 3520453241000834684}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 2.76, z: 0}
+  m_LocalPosition: {x: 0, y: 2.6, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -43,7 +43,6 @@ GameObject:
   - component: {fileID: 8485429338424738276}
   - component: {fileID: 1549572368035487864}
   - component: {fileID: 3587660070194886959}
-  - component: {fileID: 5094339020759155991}
   - component: {fileID: 5700169036039766404}
   - component: {fileID: 5469552160048565923}
   - component: {fileID: 8875079696745540598}
@@ -51,6 +50,8 @@ GameObject:
   - component: {fileID: 2381431553521449507}
   - component: {fileID: 485068674075403870}
   - component: {fileID: 4913614373251763327}
+  - component: {fileID: 1259026463883460064}
+  - component: {fileID: 5094339020759155991}
   m_Layer: 3
   m_Name: 3DPlayer
   m_TagString: Player
@@ -95,10 +96,10 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.5000001
+  m_Radius: 1
   m_Height: 2
   m_Direction: 1
-  m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &1549572368035487864
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -109,7 +110,7 @@ Rigidbody:
   serializedVersion: 5
   m_Mass: 1
   m_LinearDamping: 5
-  m_AngularDamping: 0.5
+  m_AngularDamping: 5
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -125,7 +126,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 80
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!114 &3587660070194886959
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -140,7 +141,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
   <MovementSpeed>k__BackingField: 0.5
   <AttackSpeed>k__BackingField: 1
-  <DashBoost>k__BackingField: 10
+  <DashBoost>k__BackingField: 5
   <DashCoolDown>k__BackingField: 1
   <DashDuration>k__BackingField: 0.1
   <Weight>k__BackingField: 0.1
@@ -149,37 +150,6 @@ MonoBehaviour:
   CameraFreeRotate: 0
   <DashDust>k__BackingField: {fileID: 169964125273157245, guid: 86f911b403dc6d84a85da2e9d6e6b234,
     type: 3}
---- !u!114 &5094339020759155991
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5369172574488311089}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.InputSystem::UnityEngine.InputSystem.PlayerInput
-  m_Actions: {fileID: -944628639613478452, guid: ef3d4caf026ae934c96527d8bf4c055a,
-    type: 3}
-  m_NotificationBehavior: 0
-  m_UIInputModule: {fileID: 0}
-  m_DeviceLostEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_DeviceRegainedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_ControlsChangedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_ActionEvents: []
-  m_NeverAutoSwitchControlSchemes: 0
-  m_DefaultControlScheme: 
-  m_DefaultActionMap: Player
-  m_SplitScreenIndex: -1
-  m_Camera: {fileID: 0}
 --- !u!114 &5700169036039766404
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -194,9 +164,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerAbilityHandler
   statsHandler: {fileID: 5469552160048565923}
   <Abilities>k__BackingField:
-  - {fileID: 11400000, guid: 6ecd8945d9da6ca4da64c6af3d43bf0f, type: 2}
+  - {fileID: 11400000, guid: 5d20d6cc1fa7eb547ba5d0f9aefcc225, type: 2}
+  - {fileID: 11400000, guid: 893aad7fae2993c4da43dc50c4147674, type: 2}
+  - {fileID: 11400000, guid: 17cfcd0e9993daf4eb59fd52a95814f2, type: 2}
+  - {fileID: 11400000, guid: 3426d86dfddd8b342b4b8164207c3157, type: 2}
   abilitiesOnCooldown: 
   <WeaponInfo>k__BackingField: {fileID: 0}
+  currentAnimation: 
 --- !u!114 &5469552160048565923
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -216,12 +190,13 @@ MonoBehaviour:
   <MaxHP>k__BackingField: 100
   <Overshield>k__BackingField: 0
   <CurrentHP>k__BackingField: 100
-  <MaxPower>k__BackingField: 100
+  <MaxPower>k__BackingField: 500
   <PowerSurge>k__BackingField: 0
-  <CurrentPower>k__BackingField: 100
+  <CurrentPower>k__BackingField: 500
   <TickRateRegenerationInSeconds>k__BackingField: 1
   <HealthRegeneration>k__BackingField: 1
   <PowerRegeneration>k__BackingField: 1
+  locSphere: {fileID: 0}
   <Cold>k__BackingField: 0
   <Water>k__BackingField: 0
   <Earth>k__BackingField: 0
@@ -306,7 +281,51 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91e416cb491576246a305d5c2855e6aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AbilityUI_Handler
-  uiDoc: {fileID: 2592518243195304233, guid: cd22dbe4f165d3043a08400991a4fea0, type: 3}
+  uiDoc: {fileID: 0}
+--- !u!114 &1259026463883460064
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5369172574488311089}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 16bef7c66a308e74cb5949517c590f19, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AnimationControllerScript
+  currentMovementAnimation: 
+--- !u!114 &5094339020759155991
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5369172574488311089}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.InputSystem::UnityEngine.InputSystem.PlayerInput
+  m_Actions: {fileID: -944628639613478452, guid: ef3d4caf026ae934c96527d8bf4c055a,
+    type: 3}
+  m_NotificationBehavior: 0
+  m_UIInputModule: {fileID: 0}
+  m_DeviceLostEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_DeviceRegainedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ControlsChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ActionEvents: []
+  m_NeverAutoSwitchControlSchemes: 0
+  m_DefaultControlScheme: 
+  m_DefaultActionMap: Player
+  m_SplitScreenIndex: -1
+  m_Camera: {fileID: 0}
 --- !u!1 &7538319549239340809
 GameObject:
   m_ObjectHideFlags: 0

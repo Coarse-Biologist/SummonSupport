@@ -13,10 +13,15 @@ public class AbilityHandler : MonoBehaviour
     [field: SerializeField] public WeaponInfo WeaponInfo { get; private set; }
     private bool charging = false;
     private AbilityModHandler modHandler;
+    private AnimationControllerScript anim;
+
 
 
     protected virtual void Awake()
     {
+        anim = GetComponent<AnimationControllerScript>();
+        if (anim == null) throw new System.Exception($"Animation controller is null. it was not found among children objects.");
+
         if (abilitySpawn == null)
             abilitySpawn = gameObject;
 
