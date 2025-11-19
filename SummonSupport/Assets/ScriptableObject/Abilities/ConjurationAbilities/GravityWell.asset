@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f72222c874821e41bccb5f49eee621c, type: 3}
   m_Name: GravityWell
   m_EditorClassIdentifier: 
-  <Name>k__BackingField: 
+  <Name>k__BackingField: Gravity Well
   <Icon>k__BackingField: {fileID: 0}
   <Cooldown>k__BackingField: 5
   <CostType>k__BackingField: 4
@@ -61,7 +61,7 @@ MonoBehaviour:
   <ObjectToSpawn>k__BackingField: {fileID: 6725234854290891213, guid: 23052f4373add044e8afe3b7eae99b51,
     type: 3}
   <SpawnEffectOnHit>k__BackingField: {fileID: 0}
-  <SpawnOffset>k__BackingField: {x: 0, y: 0}
+  <SpawnOffset>k__BackingField: {x: 0, y: 0, z: 0}
   <RotationOffset>k__BackingField: 0
   Radius: 4
   <IsDecaying>k__BackingField: 1

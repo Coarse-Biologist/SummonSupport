@@ -49,9 +49,7 @@ public class PlayerAbilityHandler : AbilityHandler
     {
         base.Awake();
         inputActions ??= new PlayerInputActions();
-        anim = GetComponent<AnimationControllerScript>();
-        if (anim == null) throw new System.Exception($"Animation controller is null. it was not found among children objects.");
-        Debug.Log($"animation script = {anim}");
+
     }
 
     void OnEnable()
@@ -87,7 +85,6 @@ public class PlayerAbilityHandler : AbilityHandler
     void OnAbility(InputAction.CallbackContext context)
     {
         if (playerStats.Dead) return;
-        anim.ChangeLayerAnimation(1, "GetHit", 1f);
         if (inputActionToIndex.TryGetValue(context.action.name, out int index) && index < Abilities.Count)
         {
             if (!abilitiesOnCooldown[index])

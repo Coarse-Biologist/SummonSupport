@@ -165,7 +165,13 @@ public class PlayerStats : LivingBeing
 
         if (HasStatusEffect(StatusEffectType.ExplodeOnDeath)) ViciousDeathExplosion();
         SetDead(true);
+        Invoke("DelayedDeath", 2f);
+    }
+
+    private void DelayedDeath()
+    {
         EventDeclarer.PlayerDead?.Invoke(true);
+
     }
 
 

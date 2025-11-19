@@ -20,7 +20,7 @@ public class AbilityHandler : MonoBehaviour
     protected virtual void Awake()
     {
         anim = GetComponent<AnimationControllerScript>();
-        if (anim == null) throw new System.Exception($"Animation controller is null. it was not found among children objects.");
+        //if (anim == null) throw new System.Exception($"Animation controller is null. it was not found among children objects.");
 
         if (abilitySpawn == null)
             abilitySpawn = gameObject;
@@ -50,6 +50,7 @@ public class AbilityHandler : MonoBehaviour
 
     protected bool CastAbility(int abilityIndex, Vector2 targetPosition, Quaternion rotation)
     {
+
         //Logging.Info($"Ability at index {abilityIndex} trying to be used by {statsHandler.Name}!!!!");
         Ability ability = Abilities[abilityIndex];
 
@@ -135,6 +136,8 @@ public class AbilityHandler : MonoBehaviour
     }
     public void SetCharging(bool alreadyCharging)
     {
+        if (anim != null) anim.ChangeLayerAnimation("Sprint", 1, .1f);
+
         charging = alreadyCharging;
     }
     private void StopToggledAbility(BeamAbility beamAbility, GameObject activeAbility)
@@ -159,25 +162,34 @@ public class AbilityHandler : MonoBehaviour
 
     bool HandleProjectile(ProjectileAbility ability)
     {
+        if (anim != null) anim.ChangeLayerAnimation("SpellCast", 1, 1f);
+
         return ability.Activate(gameObject, abilitySpawn);
     }
 
     bool HandlePointAndClick(TargetMouseAbility ability)
     {
+        if (anim != null) anim.ChangeLayerAnimation("SpellCast", 1, 1f);
+
         return ability.Activate(gameObject);
     }
 
     bool HandleConjureAbility(ConjureAbility ability, Vector2 targetPosition, Quaternion rotation)
     {
+        if (anim != null) anim.ChangeLayerAnimation("SpellCast", 1, 1f);
+
         return ability.Activate(gameObject, targetPosition, rotation);
     }
 
     bool HandleDashAbility(DashAbility dashAbility)
     {
+        if (anim != null) anim.ChangeLayerAnimation("Sprint", 1, .1f);
         return dashAbility.Activate(gameObject);
     }
     bool HandleAuraAbility(AuraAbility auraAbility, LivingBeing statsHandler)
     {
+        if (anim != null) anim.ChangeLayerAnimation("Buff", 1, 1f);
+
         return auraAbility.Activate(statsHandler.gameObject);
     }
 

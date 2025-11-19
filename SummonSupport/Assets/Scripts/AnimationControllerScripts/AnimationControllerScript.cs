@@ -60,7 +60,7 @@ public class AnimationControllerScript : MonoBehaviour
     }
 
 
-    public void ChangeLayerAnimation(int layerIndex, string animationName, float animationDuration = 1f)
+    public void ChangeLayerAnimation(string animationName, int layerIndex, float animationDuration = 1f)
     {
         StartCoroutine(ChangeLayerRoutine(layerIndex, animationName, animationDuration));
     }

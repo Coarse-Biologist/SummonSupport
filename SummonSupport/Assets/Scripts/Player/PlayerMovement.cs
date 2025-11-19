@@ -99,9 +99,10 @@ public class PlayerMovement : MovementScript
             if (PlayerAbilityHandler.DashAbility != null) PlayerAbilityHandler.DashAbility.Activate(gameObject);
             else
             {
-                DashDustInstance = Instantiate(DashDust, transform.position, Quaternion.identity, transform);
-                float angle = Mathf.Atan2(-moveDirection.y, -moveDirection.x) * Mathf.Rad2Deg;
-                DashDustInstance.transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
+                DashDustInstance = Instantiate(DashDust, transform.position, Quaternion.identity);
+                Vector3 moveDirection = new Vector3(moveInput.x, 0, moveInput.y);
+                // make dash dust instance face the opposite direction of player movement. 
+                DashDustInstance.transform.rotation = Quaternion.LookRotation(-moveDirection, Vector3.right);
                 Destroy(DashDustInstance, DashDuration);
             }
         }
@@ -165,17 +166,6 @@ public class PlayerMovement : MovementScript
     {
         if (playerStats.Dead) return;
 
-        //worldPosition = mainCamera.ScreenToWorldPoint(lookInput);
-        // RaycastHit[] hits = Physics.SphereCastAll(transform.position, 5f, transform.forward, 30f);
-        // foreach (RaycastHit hit in hits)
-        // {
-        //     if (hit.transform.TryGetComponent(out MinionStats minionStats))
-        //     {
-        //         Debug.Log($"Adding {minionStats.Name} to  selected minions");
-        //         CommandMinion.SetSelectedMinion(hit.transform.gameObject);
-        //     }
-        // }
-        //
         Vector3 screenCenter = new Vector3(Screen.width * 0.5f, Screen.height * 0.5f, 0f);
         Ray ray = Camera.main.ScreenPointToRay(screenCenter);
         Debug.DrawRay(ray.origin, ray.direction * 300, Color.cyan, 0.1f);
@@ -188,7 +178,11 @@ public class PlayerMovement : MovementScript
 
     private void FixedUpdate()
     {
-        if (playerStats.Dead) return;
+        if (playerStats.Dead)
+        {
+            anim.ChangeAnimation("Death", 1f);
+            return;
+        }
 
         if (!lockedInUI && !StuckInAbilityAnimation)
         {
@@ -233,22 +227,4 @@ public class PlayerMovement : MovementScript
         }
     }
 
-    //private void SetMovementAttribute(MovementAttributes attribute, float newValue)
-    //{
-    //    switch (attribute)
-    //    {
-    //        case MovementAttributes.MovementSpeed:
-    //            movementSpeed = newValue;
-    //            break;
-    //        case MovementAttributes.DashBoost:
-    //            dashBoost = newValue;
-    //            break;
-    //        case MovementAttributes.DashCooldown:
-    //            dashCoolDown = newValue;
-    //            break;
-    //        case MovementAttributes.DashDuration:
-    //            dashDuration = newValue;
-    //            break;
-    //    }
-    //}
 }
