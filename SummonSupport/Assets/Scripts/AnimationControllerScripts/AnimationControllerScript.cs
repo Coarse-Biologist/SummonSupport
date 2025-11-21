@@ -1,27 +1,45 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Animations;
 using UnityEngine;
 
 public class AnimationControllerScript : MonoBehaviour
 {
     public Animator anim { get; private set; }
+    [field: SerializeField] string AnimatorStringLine;
     public string currentMovementAnimation;
-    private List<int> layersToChange = new();
-    private List<float> animationDurations = new();
+
 
     void Start()
     {
         anim = GetComponentInChildren<Animator>();
         if (anim == null) throw new System.Exception($"Animation controller is null. it was not found among children objects.");
+
     }
+    private void PrintStateMachine(AnimatorStateMachine sm, string layerName)
+    {
+        foreach (var state in sm.states)
+        {
+            Debug.Log($"{gameObject.name} Layer: {layerName} | State: {state.state.name}");
+        }
+
+        foreach (var sub in sm.stateMachines)
+        {
+            PrintStateMachine(sub.stateMachine, layerName);
+        }
+    }
+
+
     public void ChangeAnimation(string animationName, float crossFadeDuration = .2f)
     {
-        if (currentMovementAnimation != animationName)
-        {
-            currentMovementAnimation = animationName;
-            anim.CrossFade(animationName, crossFadeDuration);
-        }
+        if (anim != null)
+            if (currentMovementAnimation != animationName)
+            {
+
+                currentMovementAnimation = animationName;
+                anim.CrossFade(animationName, crossFadeDuration);
+            }
     }
     public void ChangeMovementAnimation(float moveInputX, float moveInputY)
     {

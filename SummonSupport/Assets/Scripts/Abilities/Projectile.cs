@@ -21,7 +21,7 @@ public class Projectile : MonoBehaviour
 
     int split = 0;
     int pierce = 0;
-    int ricochet = 5;
+    int ricochet = 0;
     LivingBeing userLivingBeing = null;
     private bool active = false;
 
@@ -79,10 +79,9 @@ public class Projectile : MonoBehaviour
     }
     public void HandleRicochet()
     {
-
-
         if (Physics.Raycast(transform.position, rb.linearVelocity.normalized, out RaycastHit hit, 1f))
         {
+            Debug.Log("ray cast hits in handle ricochet func");
             Vector3 normal = hit.normal;
             Vector3 incomingV = rb.linearVelocity;
             Vector3 reflectDir = Vector3.Reflect(incomingV.normalized, normal);
@@ -91,8 +90,12 @@ public class Projectile : MonoBehaviour
             ReorientSpin();
             ricochedAlready++;
         }
+        if(ricochedAlready == ricochet)
+        {
+            Debug.Log($"destroying because: ricocheted already = {ricochedAlready}. max ricochet = {ricochet}");
+            Destroy(gameObject);
 
-
+        }
     }
     private void ReorientSpin()
     {
@@ -130,7 +133,6 @@ public class Projectile : MonoBehaviour
         if (ability.ProjectileParticleSystem != null)
         {
             particleSystem = Instantiate(ability.ProjectileParticleSystem, gameObject.transform.position, Quaternion.identity, gameObject.transform);
-            //particleSystem.transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
             Quaternion rotation = Quaternion.LookRotation(-direction);
             particleSystem.transform.rotation = rotation;
 
@@ -146,24 +148,27 @@ public class Projectile : MonoBehaviour
         {
             if (other.gameObject.TryGetComponent(out BoxCollider boxCollider))
             {
+                Debug.Log("Box collider entered");
                 HandleRicochet();
                 SpawnEffect(transform);
             }
-            if (other.gameObject.TryGetComponent(out Projectile otherProjectileScript) || ignoreGameObjects.Contains(other.gameObject))
+            else if (other.gameObject.TryGetComponent(out Projectile otherProjectileScript) || ignoreGameObjects.Contains(other.gameObject))
                 return;
 
-            if (!other.TryGetComponent(out LivingBeing otherLivingBeing))
+            else if (!other.TryGetComponent(out LivingBeing otherLivingBeing))
             {
                 Destroy(gameObject);
                 return;
             }
 
-            if (!userLivingBeing || (!Ability.HasElementalSynergy(ability, otherLivingBeing) && !ability.ThoroughIsUsableOn(userLivingBeing, otherLivingBeing)))
+            else if (!userLivingBeing || (!Ability.HasElementalSynergy(ability, otherLivingBeing) && !ability.ThoroughIsUsableOn(userLivingBeing, otherLivingBeing)))
                 return;
-
-            SpawnEffect(otherLivingBeing.transform);
-            CombatStatHandler.HandleEffectPackage(ability, userLivingBeing, otherLivingBeing, ability.TargetEffects);
-            HandleOnHitBehaviour(otherLivingBeing);
+            else 
+            {
+                SpawnEffect(otherLivingBeing.transform);
+                CombatStatHandler.HandleEffectPackage(ability, userLivingBeing, otherLivingBeing, ability.TargetEffects);
+                HandleOnHitBehaviour(otherLivingBeing);
+            }
         }
 
     }

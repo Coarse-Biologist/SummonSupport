@@ -93,10 +93,18 @@ public class AIChaseState : AIState
                 //    Instantiate(livingBeing.locSphere, stateHandler.target.transform.position, Quaternion.identity);
                 //}
                 stateHandler.navAgent.SetDestination(stateHandler.target.transform.position);
+                if (stateHandler.anim != null)
+                {
+                    stateHandler.anim.ChangeAnimation("Run", .2f);
+                }
             }
             else
             {
                 stateHandler.navAgent.ResetPath();
+                if (stateHandler.anim != null)
+                {
+                    stateHandler.anim.ChangeAnimation("Idle", .2f);
+                }
             }
         }
     }

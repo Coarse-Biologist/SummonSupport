@@ -136,6 +136,10 @@ public class AIPeacefulState : AIState
             else
             {
                 stateHandler.navAgent.ResetPath();
+                if (stateHandler.anim != null)
+                {
+                    stateHandler.anim.ChangeAnimation("Idle", .2f);
+                }
             }
             return this;
         }
@@ -178,6 +182,12 @@ public class AIPeacefulState : AIState
     {
         Debug.Log("Wants to  go to payer");
         stateHandler.navAgent.SetDestination(player.transform.position);
+        if (stateHandler.anim != null)
+        {
+            stateHandler.anim.ChangeAnimation("Run", .2f);
+            //Debug.Log($"{stateHandler.anim.anim.parameters[0]} + {stateHandler.anim.anim.parameters[1]}");
+            //stateHandler.anim.anim.SetFloat("Vert", 1f);
+        }
         //rb.linearVelocity = (player.transform.position - transform.position) * 10;
     }
 }

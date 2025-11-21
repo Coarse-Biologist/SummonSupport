@@ -14,6 +14,7 @@ public class AIObedienceState : AIState
     private MinionStats minionStats;
     //can be command + game object, command + location
     private NavMeshAgent navMesh;
+    private AnimationControllerScript anim;
 
     public void Awake()
     {
@@ -24,6 +25,7 @@ public class AIObedienceState : AIState
         navMesh = GetComponent<NavMeshAgent>();
 
         rb = GetComponent<Rigidbody>();
+        anim = GetComponent<AnimationControllerScript>();
     }
 
     public override AIState RunCurrentState()
@@ -84,11 +86,14 @@ public class AIObedienceState : AIState
         {
             Debug.Log($"traveling to commanded loc {commandLoc}. distance to target = {direction.sqrMagnitude}");
             navMesh.SetDestination(commandLoc);
-            //rb.linearVelocity = direction * 5;
+            if (anim != null) anim.ChangeAnimation("Run", .2f);
+
             return States.Obedience;
         }
         else
         {
+            if (anim != null) anim.ChangeAnimation("Idle", .2f);
+
             Debug.Log("no longer setting destination to the commanded loc because sufficiently close");
             navMesh.ResetPath();
             minionStats.SetCommand(MinionCommands.None);

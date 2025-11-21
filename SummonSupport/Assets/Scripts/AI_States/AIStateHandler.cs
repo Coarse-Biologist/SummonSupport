@@ -37,6 +37,7 @@ public class AIStateHandler : MonoBehaviour
     public CharacterTag charType { protected set; get; }
 
     public Vector3 lastSeenLoc;
+    public AnimationControllerScript anim;
 
 
     public void SetCurrentState(AIState state)
@@ -66,8 +67,9 @@ public class AIStateHandler : MonoBehaviour
         SetCharType(livingBeing.CharacterTag);
 
         InvokeRepeating("RunStateMachine", 0f, 1f);
-
-
+        anim = GetComponent<AnimationControllerScript>();
+        //anim.ChangeAnimation("State", 0f)
+        ;
 
     }
     void Start()
