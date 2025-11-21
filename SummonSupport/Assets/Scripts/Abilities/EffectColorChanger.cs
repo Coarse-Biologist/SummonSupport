@@ -124,7 +124,9 @@ public static class ColorChanger
         Element element = livingBeing.GetHighestAffinity();
         if (element == Element.None) return;
         Material newMaterial = new(GetGlowByElement(element));
-        MeshRenderer meshRenderer = livingBeing.GetComponentInChildren<MeshRenderer>();
+        Renderer meshRenderer = livingBeing.GetComponentInChildren<Renderer>();
+        //SkinnedMeshRenderer skinnedMeshRenderer = livingBeing.GetComponentInChildren<SkinnedMeshRenderer>();
+
         SetColor(newMaterial, GetColorFromElement(element));
 
         if (meshRenderer != null)
@@ -141,6 +143,8 @@ public static class ColorChanger
             }
             meshRenderer.materials = mats;
         }
+        Debug.Log($"No mesh renderer found for {livingBeing.Name}");
+
     }
 }
 

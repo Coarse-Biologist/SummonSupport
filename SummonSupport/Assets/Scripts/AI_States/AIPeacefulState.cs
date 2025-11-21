@@ -123,7 +123,6 @@ public class AIPeacefulState : AIState
         }
         else if (stateHandler.charType == CharacterTag.Minion)
         {
-
             Vector3 direction = player.transform.position - transform.position;
             stateHandler.SetTarget(stateHandler.playerStats);
             if (direction.sqrMagnitude > stateHandler.navAgent.stoppingDistance)
