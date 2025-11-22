@@ -7,7 +7,6 @@ public class ChargeAbility : Ability
     //[field: SerializeField] public float range { private set; get; }
     [field: SerializeField] public GameObject chargeMonoObject { private set; get; } // object which will handleMonoBehaviors for the charge
     [field: SerializeField] public GameObject chargeTrail { private set; get; }
-    [field: SerializeField] public GameObject HitEffect { private set; get; }
 
 
 

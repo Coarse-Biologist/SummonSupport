@@ -79,9 +79,9 @@ public class ChargeAbilityMono : MonoBehaviour
         bool success = abilityToCast.Activate(transform.parent.gameObject);
         if (success)
         {
-            if (chargeAbility.HitEffect != null)
+            if (chargeAbility.OnHitEffect != null)
             {
-                Instantiate(chargeAbility.HitEffect, collision.transform.position, quaternion.identity, collision.transform);
+                Instantiate(chargeAbility.OnHitEffect, collision.transform.position, quaternion.identity, collision.transform);
                 alreadypierced++;
             }
             if (alreadypierced > maxPierce)

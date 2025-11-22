@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEditor.Animations;
 using UnityEngine;
 
@@ -11,7 +10,7 @@ public class AnimationControllerScript : MonoBehaviour
     public string currentMovementAnimation;
 
 
-    void Start()
+    void Awake()
     {
         anim = GetComponentInChildren<Animator>();
         if (anim == null) throw new System.Exception($"Animation controller is null. it was not found among children objects.");
@@ -77,10 +76,10 @@ public class AnimationControllerScript : MonoBehaviour
         }
     }
 
-
     public void ChangeLayerAnimation(string animationName, int layerIndex, float animationDuration = 1f)
     {
-        StartCoroutine(ChangeLayerRoutine(layerIndex, animationName, animationDuration));
+        if (anim.layerCount != 1)
+            StartCoroutine(ChangeLayerRoutine(layerIndex, animationName, animationDuration));
     }
 
     private IEnumerator ChangeLayerRoutine(int layerIndex, string animationName, float duration)

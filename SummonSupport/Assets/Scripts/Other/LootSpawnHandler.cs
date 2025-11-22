@@ -43,7 +43,7 @@ public class LootSpawnHandler : MonoBehaviour
         {
             SpawnOrgans(enemyStats, GetOrganType(enemyStats.MaxHP));
         }
-        if (enemyStats.MaxPower > 150)
+        if (enemyStats.MaxPower > 0)
         {
             SpawnCores(enemyStats, GetCoreType(enemyStats.MaxPower));
         }
@@ -110,31 +110,17 @@ public class LootSpawnHandler : MonoBehaviour
         GameObject instance = Instantiate(CorePrefab, enemy.transform.position, Quaternion.identity);
         Debug.Log("Indeed, Spawning Core");
 
-        if (instance.TryGetComponent<LootableAlchemyMaterial>(out LootableAlchemyMaterial lootScript))
+        if (instance.TryGetComponent(out LootableAlchemyMaterial lootScript))
         {
             lootScript.SetAlchemyMaterial(coreType);
         }
-        if (instance.TryGetComponent<SpriteRenderer>(out SpriteRenderer sr))
+        Renderer renderer = instance.GetComponentInChildren<Renderer>();
+        if (renderer != null)
         {
-            switch (coreType)
-            {
-                case AlchemyLoot.WeakCore:
-                    sr.sprite = WeakCoreSprite;
-                    break;
-                case AlchemyLoot.SolidCore:
-                    sr.sprite = WorkingCoreSprite;
-                    break;
-                case AlchemyLoot.PowerfulCore:
-                    sr.sprite = PowerfulCoreSprite;
-                    break;
-                case AlchemyLoot.HulkingCore:
-                    sr.sprite = HulkingCoreSprite;
-                    break;
-            }
+            Debug.Log("trying to change core color");
             Element strongestElement = enemy.GetHighestAffinity();
-            //ColorChanger.SetColor(sr, ColorChanger.GetColorFromElement(strongestElement));
             Material glowMaterial = ColorChanger.GetGlowByElement(strongestElement);
-            sr.material = glowMaterial;
+            ColorChanger.ChangeMatByAffinity(renderer, glowMaterial);
         }
     }
 

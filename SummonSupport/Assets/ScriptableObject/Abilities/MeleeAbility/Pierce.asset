@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d7d1854101543804bb043f80b060a821, type: 3}
-  m_Name: Slash
+  m_Name: Pierce
   m_EditorClassIdentifier: 
-  <Name>k__BackingField: Slash
+  <Name>k__BackingField: Pierce
   <Icon>k__BackingField: {fileID: 0}
   <Cooldown>k__BackingField: 3
   <CostType>k__BackingField: 4
   <Cost>k__BackingField: 20
-  <Range>k__BackingField: 3
+  <Range>k__BackingField: 10
   <Duration>k__BackingField: 0
   <AbilityTypeTag>k__BackingField: 1
   <ListUsableOn>k__BackingField: 01000000
@@ -58,8 +58,9 @@ MonoBehaviour:
   <OnHitEffect>k__BackingField: {fileID: 4439306374306288678, guid: ad3ebfe5da0c21f43a7253ff8277fd9c,
     type: 3}
   <Angle>k__BackingField: 0
-  <Width>k__BackingField: 3
-  <SpawnLocEnum>k__BackingField: 1
+  <Width>k__BackingField: 2
   <Shape>k__BackingField: 2
-  <MeleeParticleSystem>k__BackingField: {fileID: 134935324219964725, guid: 5c33c778bf848f540a0ad9ded58e9b9f,
+  <SpawnEffectOnHit>k__BackingField: {fileID: 4439306374306288678, guid: ad3ebfe5da0c21f43a7253ff8277fd9c,
+    type: 3}
+  <MeleeParticleSystem>k__BackingField: {fileID: 3833596520723288618, guid: 63d70ca71f984254aa100f374d860057,
     type: 3}

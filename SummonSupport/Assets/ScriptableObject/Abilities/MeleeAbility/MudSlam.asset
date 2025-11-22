@@ -55,10 +55,10 @@ MonoBehaviour:
     <SpecialAbilityAttribute>k__BackingField: 0
   <ElementTypes>k__BackingField: 03000000
   <PhysicalType>k__BackingField: 0
+  <OnHitEffect>k__BackingField: {fileID: 0}
   <Angle>k__BackingField: 0
   <Width>k__BackingField: 3
+  <SpawnLocEnum>k__BackingField: 2
   <Shape>k__BackingField: 1
-  <SpawnEffectOnHit>k__BackingField: {fileID: 5647196156128557912, guid: ef1808408a91fa0408f32d644044be96,
-    type: 3}
   <MeleeParticleSystem>k__BackingField: {fileID: 4791784787350965432, guid: 1ffba3ca69bd177419346e316f083471,
     type: 3}

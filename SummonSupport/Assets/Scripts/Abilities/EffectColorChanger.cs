@@ -47,7 +47,6 @@ public static class ColorChanger
 
     public static void SetImmersiveBleedEffect(ParticleSystem particleSystem, LivingBeing livingBeing)
     {
-
         if (!ready || particleSystem == null) return;
         {
             if (colorGradientLibrary != null)
@@ -78,7 +77,7 @@ public static class ColorChanger
 
     private static void SetGradient(ParticleSystem ps, Gradient colorGradient)
     {
-        var main = ps.main;           // get a copy of the main module
+        var main = ps.main;                 // get a copy of the main module
         main.startColor = Color.white;
         var col = ps.colorOverLifetime;
         col.enabled = true;
@@ -138,12 +137,31 @@ public static class ColorChanger
                 {
                     Debug.Log($"Material found: {mats[i].name}, assigning material {newMaterial} which has color {newMaterial.color}");
                     mats[i] = newMaterial;
-
                 }
             }
             meshRenderer.materials = mats;
         }
-        Debug.Log($"No mesh renderer found for {livingBeing.Name}");
+        else
+            Debug.Log($"No renderer found for {livingBeing.Name}");
+
+    }
+    public static void ChangeMatByAffinity(Renderer meshRenderer, Material material)
+    {
+        if (meshRenderer != null)
+        {
+            Material[] mats = meshRenderer.materials;
+            for (int i = 0; i < mats.Length; i++)
+            {
+                if (mats[i].name.StartsWith("ElementalIndicator"))  // Unity adds "(Instance)"
+                {
+                    Debug.Log($"Material found: {mats[i].name}, assigning material {material} which has color {material.color}");
+                    mats[i] = material;
+                }
+            }
+            meshRenderer.materials = mats;
+        }
+        else
+            Debug.Log($"No renderer found for {meshRenderer.name}");
 
     }
 }

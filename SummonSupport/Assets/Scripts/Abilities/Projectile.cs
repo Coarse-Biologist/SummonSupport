@@ -4,6 +4,7 @@ using System.Data.Common;
 using System.Linq;
 //using System.Numerics;
 using UnityEngine;
+using UnityEngine.AI;
 
 [RequireComponent(typeof(Collider))]
 public class Projectile : MonoBehaviour
@@ -20,7 +21,7 @@ public class Projectile : MonoBehaviour
     public bool splitAlready = false;
 
     int split = 0;
-    int pierce = 0;
+    int pierce = 5;
     int ricochet = 0;
     LivingBeing userLivingBeing = null;
     private bool active = false;
@@ -79,7 +80,13 @@ public class Projectile : MonoBehaviour
     }
     public void HandleRicochet()
     {
-        if (Physics.Raycast(transform.position, rb.linearVelocity.normalized, out RaycastHit hit, 1f))
+        if (ricochedAlready >= ricochet)
+        {
+            Debug.Log($"destroying because: ricocheted already = {ricochedAlready}. max ricochet = {ricochet}");
+            Destroy(gameObject);
+
+        }
+        else if (Physics.Raycast(transform.position, rb.linearVelocity.normalized, out RaycastHit hit, 1f))
         {
             Debug.Log("ray cast hits in handle ricochet func");
             Vector3 normal = hit.normal;
@@ -90,12 +97,7 @@ public class Projectile : MonoBehaviour
             ReorientSpin();
             ricochedAlready++;
         }
-        if(ricochedAlready == ricochet)
-        {
-            Debug.Log($"destroying because: ricocheted already = {ricochedAlready}. max ricochet = {ricochet}");
-            Destroy(gameObject);
 
-        }
     }
     private void ReorientSpin()
     {
@@ -146,7 +148,7 @@ public class Projectile : MonoBehaviour
 
         if (active)
         {
-            if (other.gameObject.TryGetComponent(out BoxCollider boxCollider))
+            if (other.gameObject.TryGetComponent(out NavMeshObstacle obstacle))
             {
                 Debug.Log("Box collider entered");
                 HandleRicochet();
@@ -163,7 +165,7 @@ public class Projectile : MonoBehaviour
 
             else if (!userLivingBeing || (!Ability.HasElementalSynergy(ability, otherLivingBeing) && !ability.ThoroughIsUsableOn(userLivingBeing, otherLivingBeing)))
                 return;
-            else 
+            else
             {
                 SpawnEffect(otherLivingBeing.transform);
                 CombatStatHandler.HandleEffectPackage(ability, userLivingBeing, otherLivingBeing, ability.TargetEffects);
