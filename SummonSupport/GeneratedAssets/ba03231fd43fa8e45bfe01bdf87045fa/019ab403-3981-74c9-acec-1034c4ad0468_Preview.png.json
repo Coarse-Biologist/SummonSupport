@@ -1,0 +1,11 @@
+{
+    "asset": "ba03231fd43fa8e45bfe01bdf87045fa",
+    "fileName": "019ab403-3981-74c9-acec-1034c4ad0468_Preview.png",
+    "prompt": "Mossy dark Stone Texture",
+    "negativePrompt": "",
+    "model": "44ec3749-963a-44b1-aa54-dc19f6ed8ab2",
+    "modelName": "Unity Texture2D",
+    "customSeed": 57661302,
+    "w3CTraceId": "1c0e676c666fcb398c47758a1998f722",
+    "refinementMode": "Generation"
+}

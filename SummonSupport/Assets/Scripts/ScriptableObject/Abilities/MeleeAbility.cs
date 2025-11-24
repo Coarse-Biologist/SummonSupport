@@ -142,6 +142,8 @@ public class MeleeAbility : Ability
             {
                 Debug.Log("going to instantiate el chico maldito");
                 particleSystem = Instantiate(MeleeParticleSystem, spawnLoc, Quaternion.identity);
+                Quaternion rotation = Quaternion.LookRotation(originTransform.transform.forward);
+                particleSystem.transform.rotation = rotation;
                 Destroy(particleSystem, 2); //particleSystem.GetComponent<ParticleSystem>().main.duration);
 
             }
