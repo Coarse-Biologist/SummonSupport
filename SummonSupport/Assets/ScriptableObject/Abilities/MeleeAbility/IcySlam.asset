@@ -65,5 +65,5 @@ MonoBehaviour:
   <Width>k__BackingField: 10
   <SpawnLocEnum>k__BackingField: 2
   <Shape>k__BackingField: 2
-  <MeleeParticleSystem>k__BackingField: {fileID: 4791784787350965432, guid: 04833d211c97fe94a9e3ed82c5bb8ccc,
+  <MeleeParticleSystem>k__BackingField: {fileID: 4791784787350965432, guid: dc529ca59c4b8f54f825f5a816672c01,
     type: 3}

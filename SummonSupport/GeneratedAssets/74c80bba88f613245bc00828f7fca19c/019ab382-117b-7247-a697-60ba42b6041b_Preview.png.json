@@ -1,0 +1,11 @@
+{
+    "asset": "74c80bba88f613245bc00828f7fca19c",
+    "fileName": "019ab382-117b-7247-a697-60ba42b6041b_Preview.png",
+    "prompt": "dark oak bark",
+    "negativePrompt": "",
+    "model": "44ec3749-963a-44b1-aa54-dc19f6ed8ab2",
+    "modelName": "Unity Texture2D",
+    "customSeed": 2024675861,
+    "w3CTraceId": "97faad0029cd7618c06e6b46116a4a7a",
+    "refinementMode": "Generation"
+}

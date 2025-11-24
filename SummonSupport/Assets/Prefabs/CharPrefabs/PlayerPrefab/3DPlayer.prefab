@@ -68,7 +68,7 @@ CapsuleCollider:
   m_Radius: 1
   m_Height: 2.2
   m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!54 &1549572368035487864
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -486,6 +486,11 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 22e7fb49e2b49e0418ef97b61b1c8db5, type: 2}
+    - target: {fileID: 3748359892381204692, guid: de13a7420582ded45a8d7d3f96889aca,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5783510580130820291, guid: de13a7420582ded45a8d7d3f96889aca,
         type: 3}
       propertyPath: 'm_Materials.Array.data[0]'

@@ -86,24 +86,21 @@ public class AIChaseState : AIState
         {
             Vector3 direction = targetLoc - transform.position;
 
-            if (direction.sqrMagnitude > SelectedAbilityAttackRange)
-            {
-                //if (livingBeing.locSphere != null)
-                //{
-                //    Instantiate(livingBeing.locSphere, stateHandler.target.transform.position, Quaternion.identity);
-                //}
-                stateHandler.navAgent.SetDestination(stateHandler.target.transform.position);
-                if (stateHandler.anim != null)
-                {
-                    stateHandler.anim.ChangeAnimation("Run", .2f);
-                }
-            }
-            else
+            if (direction.sqrMagnitude < SelectedAbilityAttackRange || direction.sqrMagnitude < stateHandler.navAgent.stoppingDistance) // if distance to target is more than ability range
             {
                 stateHandler.navAgent.ResetPath();
                 if (stateHandler.anim != null)
                 {
                     stateHandler.anim.ChangeAnimation("Idle", .2f);
+                }
+
+            }
+            else // if distance to target is less than or equal to ability range
+            {
+                stateHandler.navAgent.SetDestination(stateHandler.target.transform.position);
+                if (stateHandler.anim != null)
+                {
+                    stateHandler.anim.ChangeAnimation("Run", .2f);
                 }
             }
         }
@@ -111,7 +108,13 @@ public class AIChaseState : AIState
 
     private IEnumerator HandleAttack(LivingBeing target)
     {
+        if (stateHandler.anim != null)
+        {
+            stateHandler.anim.ChangeAnimation("Idle", .2f);
+        }
+
         runningAttackLoop = true;
+
 
         // Exit immediately if target is null
         if (target == null)
