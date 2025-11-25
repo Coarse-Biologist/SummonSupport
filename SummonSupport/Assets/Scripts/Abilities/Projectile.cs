@@ -225,6 +225,10 @@ public class Projectile : MonoBehaviour
             Vector3 direction = rotation * transform.forward;
             GameObject newProjectile = Instantiate(ability.Projectile, transform.position, Quaternion.identity);
             Projectile projectileScript = newProjectile.GetComponent<Projectile>();
+
+            Material glowMaterial = ColorChanger.GetGlowByElement(ability.ElementTypes[0]);
+
+            ColorChanger.ChangeMatByAffinity(newProjectile.GetComponent<Renderer>(), glowMaterial);
             projectileScript.ignoreGameObjects = new List<GameObject>(ignoreGameObjects) { other.gameObject };
 
             projectileScript.splitAlready = this.splitAlready;

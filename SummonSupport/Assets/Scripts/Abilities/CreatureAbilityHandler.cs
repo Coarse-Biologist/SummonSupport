@@ -90,8 +90,11 @@ public class CreatureAbilityHandler : AbilityHandler
 
     public void SetAbilityLists()
     {
+        UnityEngine.Debug.Log($"setting ability lists. {Abilities.Count}. to handle");
+
         foreach (Ability ability in Abilities) // make list of support and attack abilities
         {
+            UnityEngine.Debug.Log($"handling {ability}");
             if (ability.AbilityTypeTag == AbilityTypeTag.DebuffsTarget)
                 attackAbilities.Add(ability);
             else if (ability.AbilityTypeTag == AbilityTypeTag.BuffsTarget)
@@ -112,6 +115,7 @@ public class CreatureAbilityHandler : AbilityHandler
     }
     public new void LearnAbility(Ability ability)
     {
+        UnityEngine.Debug.Log($"ability being learned = {ability}");
         if (!Abilities.Contains(ability) && ability != null)
         {
             Abilities.Add(ability);

@@ -176,9 +176,12 @@ public class EnemySpawnHandler : MonoBehaviour
     }
     private void AddElementalAbilities(int level, LivingBeing livingBeing, Element element)
     {
+        Debug.Log($"Adding elemental abilities for {livingBeing}? ");
         //Ability elementalAbility = SetupManager.Instance.ElementToAbilityLibrary_SO.GetAbilityOfElementType(element);
-        foreach (Ability ability in AbilityLibrary.GetRandomAbilities(element, level))
+        foreach (Ability ability in AbilityLibrary.GetRandomAbilities(element, level + 1))
         {
+            Debug.Log($"Adding elemental abilities for {livingBeing}? yes, {ability}");
+
             Debug.Log($"learning {ability}");
             livingBeing.GetComponent<CreatureAbilityHandler>().LearnAbility(ability);
         }

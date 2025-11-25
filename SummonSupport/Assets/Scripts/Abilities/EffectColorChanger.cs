@@ -86,16 +86,18 @@ public static class ColorChanger
 
     public static float[] GetColorFromElement(Element element)
     {
+
         if (ElementToColorDict.TryGetValue(element, out float[] colorArray)) return colorArray;
         else throw new Exception($"element not found in find color by element function {element}");
     }
-    public static void SetColor(Material mat, float[] rgbaValues)
+    public static Material SetColor(Material mat, float[] rgbaValues)
     {
         float r = rgbaValues[0];
         float g = rgbaValues[1];
         float b = rgbaValues[2];
         float a = rgbaValues[3];
         mat.color = new Color(r, g, b, a);
+        return mat;
     }
     public static Material GetGlowByElement(Element element)
     {
@@ -103,19 +105,19 @@ public static class ColorChanger
             throw new Exception("There are no glow materials to be assigned to minions.");
         if (element == Element.Light || element == Element.Electricity || element == Element.Radiation)
         {
-            return GlowMaterials[0];
+            return SetColor(new Material(GlowMaterials[0]), GetColorFromElement(element));
         }
         else if (element == Element.Heat || element == Element.Psychic)
         {
-            return GlowMaterials[1];
+            return SetColor(new Material(GlowMaterials[1]), GetColorFromElement(element));
         }
         else if (element == Element.Cold || element == Element.Water || element == Element.Acid)
         {
-            return GlowMaterials[2];
+            return SetColor(new Material(GlowMaterials[2]), GetColorFromElement(element));
         }
         else
         {
-            return GlowMaterials[3];
+            return SetColor(new Material(GlowMaterials[3]), GetColorFromElement(element));
         }
     }
     public static void ChangeMatByAffinity(LivingBeing livingBeing)
@@ -123,6 +125,7 @@ public static class ColorChanger
         Element element = livingBeing.GetHighestAffinity();
         if (element == Element.None) return;
         Material newMaterial = new(GetGlowByElement(element));
+        SetColor(newMaterial, GetColorFromElement(element));
         Renderer meshRenderer = livingBeing.GetComponentInChildren<Renderer>();
         //SkinnedMeshRenderer skinnedMeshRenderer = livingBeing.GetComponentInChildren<SkinnedMeshRenderer>();
 
@@ -147,6 +150,7 @@ public static class ColorChanger
     }
     public static void ChangeMatByAffinity(Renderer meshRenderer, Material material)
     {
+
         if (meshRenderer != null)
         {
             Material[] mats = meshRenderer.materials;

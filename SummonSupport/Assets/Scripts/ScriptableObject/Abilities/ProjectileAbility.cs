@@ -41,10 +41,19 @@ public class ProjectileAbility : Ability
         {
             GameObject projectile = Instantiate(Projectile, spawnPoint.position, Quaternion.identity);
             Projectile projectileScript = projectile.GetComponent<Projectile>();
+
+            Material glowMaterial = ColorChanger.GetGlowByElement(ElementTypes[0]);
+            ColorChanger.ChangeMatByAffinity(projectile.GetComponent<Renderer>(), glowMaterial);
+
             float rotY = (float)Math.Sin(45 * i) * (10 + 5 * i);
             Quaternion rotation = Quaternion.Euler(0, rotY, 0);
             Vector3 newDirection = rotation * spawnPoint.forward;
-
+            Debug.Log(
+                $"SetActive called with:\n" +
+                //$"  ability: {this}\n" +
+                $"  user: {user.GetComponent<LivingBeing>()}\n" +
+                $"  modHandler: {modHandler}"
+            );
             projectileScript.SetActive(this, user.GetComponent<LivingBeing>(), modHandler);
             projectileScript.SetProjectilePhysics(newDirection);
             projectileScript.SetParticleTrailEffects(newDirection);
