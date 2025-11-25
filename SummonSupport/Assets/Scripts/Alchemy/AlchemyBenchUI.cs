@@ -129,7 +129,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     public void ShowInteractionOption()
     {
         Debug.Log($"position of {this} = {transform.position}");
-        InteractCanvasHandler.Instance.ShowInteractionOption(new Vector3(transform.position.x, transform.position.y + 5, transform.position.z), "Tab to use alchemy bench");
+        InteractCanvasHandler.Instance.ShowInteractionOption(new Vector3(transform.position.x, transform.position.y + 2, transform.position.z), "Tab to use alchemy bench");
     }
 
     public void HideInteractionOption()

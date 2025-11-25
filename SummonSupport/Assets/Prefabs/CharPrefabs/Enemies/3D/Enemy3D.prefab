@@ -110,8 +110,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CreatureAbilityHandler
   <abilitySpawn>k__BackingField: {fileID: 8925903879776759123}
   statsHandler: {fileID: 0}
-  <Abilities>k__BackingField:
-  - {fileID: 11400000, guid: 5605a5e8027c4e94691ae731bacfcb5a, type: 2}
+  <Abilities>k__BackingField: []
   abilitiesOnCooldown: 
   <WeaponInfo>k__BackingField: {fileID: 0}
 --- !u!114 &4224478794472677734

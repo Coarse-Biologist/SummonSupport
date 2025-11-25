@@ -71,6 +71,7 @@ MonoBehaviour:
   elementalRequisite: 0
   difficulty: 1
   <DestinationDoor>k__BackingField: {fileID: 0}
+  <canvasSpawnLoc>k__BackingField: {fileID: 6291404421807658110}
 --- !u!1 &8312159956539418933
 GameObject:
   m_ObjectHideFlags: 0

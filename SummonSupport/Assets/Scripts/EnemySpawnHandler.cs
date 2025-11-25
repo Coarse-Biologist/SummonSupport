@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using SummonSupportEvents;
 using Unity.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
+using static AbilityLibrary_SO;
 
 public class EnemySpawnHandler : MonoBehaviour
 {
@@ -38,6 +40,7 @@ public class EnemySpawnHandler : MonoBehaviour
     void Start()
     {
         SetSpawnProbabilities(Difficulty.Novice);
+        InvokeRepeating("SpawnEnemies", 0f, 10f);
     }
 
 
@@ -52,16 +55,19 @@ public class EnemySpawnHandler : MonoBehaviour
 
     private void SpawnEnemies(SpawnLocationInfo spawnInfo = null)
     {
-        List<GameObject> spawnedCreatures = new();
+        if (spawnInfo == null) spawnInfo = SpawnCenter.GetComponent<SpawnLocationInfo>();
         if (spawnInfo != null & spawnInfo.Creatures.Count > 0)
         {
+            List<GameObject> spawnedCreatures = new();
+
             List<Vector2> spawnLocs = GetSpawnLocations(SpawnCenter.transform.position, spawnInfo.Radius, spawnInfo.DesiredSpawns);
             foreach (Vector2 loc in spawnLocs)
             {
                 GameObject SpawnedCreature = Instantiate(spawnInfo.Creatures[UnityEngine.Random.Range(0, spawnInfo.Creatures.Count)], loc, Quaternion.identity);
                 int level = GetCreatureLevel();
-                ModifyCreatureStats(level, SpawnedCreature.GetComponent<LivingBeing>());
+                ModifyCreatureStats(level, SpawnedCreature.GetComponent<LivingBeing>(), spawnInfo);
                 spawnedCreatures.Add(SpawnedCreature);
+                Debug.Log($"{SpawnedCreature} lives and breathes");
             }
             if (spawnInfo.MoveTowardLocation && spawnInfo.TargetLocation != null)
             {
@@ -73,18 +79,43 @@ public class EnemySpawnHandler : MonoBehaviour
         }
         else Debug.Log($"The invoked spawn center {spawnInfo} contains no creatures.");
     }
+    private void SpawnEnemies()
+    {
+        SpawnLocationInfo spawnInfo = SpawnCenter.GetComponent<SpawnLocationInfo>();
+        if (spawnInfo != null & spawnInfo.Creatures.Count > 0)
+        {
+            List<GameObject> spawnedCreatures = new();
+
+            List<Vector2> spawnLocs = GetSpawnLocations(SpawnCenter.transform.position, spawnInfo.Radius, spawnInfo.DesiredSpawns);
+            foreach (Vector2 loc in spawnLocs)
+            {
+                GameObject SpawnedCreature = Instantiate(spawnInfo.Creatures[UnityEngine.Random.Range(0, spawnInfo.Creatures.Count)], loc, Quaternion.identity);
+                int level = GetCreatureLevel();
+                ModifyCreatureStats(level, SpawnedCreature.GetComponent<LivingBeing>(), spawnInfo);
+                spawnedCreatures.Add(SpawnedCreature);
+                Debug.Log($"{SpawnedCreature} lives and breathes");
+            }
+            if (spawnInfo.MoveTowardLocation && spawnInfo.TargetLocation != null)
+            {
+                foreach (GameObject creature in spawnedCreatures)
+                {
+                    MoveTowardTarget(creature, spawnInfo.TargetLocation.position);
+                }
+            }
+        }
+    }
     private void MoveTowardTarget(GameObject creature, Vector2 loc)
     {
-        if (creature.TryGetComponent<AIStateHandler>(out AIStateHandler stateHandler))
+        if (creature.TryGetComponent(out AIStateHandler stateHandler))
         {
-            stateHandler.lastSeenLoc = PlayerStats.Instance.transform.position;
+            stateHandler.lastSeenLoc = loc;
             stateHandler.SetTarget(PlayerStats.Instance);
             stateHandler.SetCurrentState(creature.GetComponent<AIChaseState>());
         }
-        if (creature.TryGetComponent(out Collider collider))
-        {
-            collider.isTrigger = true; // turned to false in the one way barrier script
-        }
+        //if (creature.TryGetComponent(out Collider collider))
+        //{
+        //    collider.isTrigger = true; // turned to false in the one way barrier script
+        //}
     }
 
     private List<Vector2> GetSpawnLocations(Vector2 origin, float radius, int desiredSpawns)
@@ -106,8 +137,10 @@ public class EnemySpawnHandler : MonoBehaviour
         return UnityEngine.Random.Range(-radius, radius);
     }
 
-    public void ModifyCreatureStats(int level, LivingBeing originalCreatureStats) // should pass the stats of a creature which has already been instantiated
+    public void ModifyCreatureStats(int level, LivingBeing originalCreatureStats, SpawnLocationInfo spawnInfo = null) // should pass the stats of a creature which has already been instantiated
     {
+        Element element = SelectCreatureElement(spawnInfo);
+        PhysicalType physical = SelectCreaturePhysical(spawnInfo);
         if (level > 0)
         {
             //Debug.Log($"modifying stats to be {level}");
@@ -116,15 +149,46 @@ public class EnemySpawnHandler : MonoBehaviour
             originalCreatureStats.RestoreResources();
             originalCreatureStats.ChangeRegeneration(AttributeType.CurrentHitpoints, originalCreatureStats.HealthRegeneration * Regen_Scalar * level);
             originalCreatureStats.ChangeRegeneration(AttributeType.CurrentPower, originalCreatureStats.PowerRegeneration * Regen_Scalar * level);
-
-            Element strongestElement = originalCreatureStats.GetHighestAffinity();
-
-            if (originalCreatureStats.Affinities[strongestElement].Get() > 0) // if the strongest affinity is non-zero
-            {
-                originalCreatureStats.ChangeAffinity(strongestElement, level * Affinity_Scalar);
-            }
-
+            originalCreatureStats.ChangePhysicalResistance(physical, 2 * level * Affinity_Scalar);
+            originalCreatureStats.ChangeAffinity(element, 2 * level * Affinity_Scalar);
         }
+        ModifyCreatureAbilties(level, originalCreatureStats, element, physical);
+
+
+    }
+    private Element SelectCreatureElement(SpawnLocationInfo spawnInfo = null)
+    {
+        if (spawnInfo == null || spawnInfo.PreferedElement == Element.None)
+            return Element.None;
+        else return spawnInfo.PreferedElement;
+    }
+    private PhysicalType SelectCreaturePhysical(SpawnLocationInfo spawnInfo = null)
+    {
+        if (spawnInfo == null || spawnInfo.PreferedPhysical == PhysicalType.None)
+            return PhysicalType.None;
+        else return spawnInfo.PreferedPhysical;
+    }
+    public void ModifyCreatureAbilties(int level, LivingBeing livingBeing, Element element, PhysicalType physical)
+    {
+        if (element != Element.None) AddElementalAbilities(level, livingBeing, element);
+        else if (physical != PhysicalType.None) AddPhysicalAbilities(level, livingBeing, physical);
+        else livingBeing.GetComponent<CreatureAbilityHandler>().LearnAbility(AbilityLibrary.abilityLibrary.defaultAttack);
+    }
+    private void AddElementalAbilities(int level, LivingBeing livingBeing, Element element)
+    {
+        //Ability elementalAbility = SetupManager.Instance.ElementToAbilityLibrary_SO.GetAbilityOfElementType(element);
+        foreach (Ability ability in AbilityLibrary.GetRandomAbilities(element, level))
+        {
+            Debug.Log($"learning {ability}");
+            livingBeing.GetComponent<CreatureAbilityHandler>().LearnAbility(ability);
+        }
+
+    }
+    private void AddPhysicalAbilities(int level, LivingBeing livingBeing, PhysicalType physical)
+    {
+        //Ability elementalAbility = SetupManager.Instance.ElementToAbilityLibrary_SO.GetAbilityOfPhysicalType(physical);
+        foreach (Ability ability in AbilityLibrary.GetRandomAbilities(physical, level + 1))
+            livingBeing.GetComponent<AbilityHandler>().LearnAbility(ability);
     }
 
     private void SetSpawnProbabilities(Difficulty gameDifficulty)

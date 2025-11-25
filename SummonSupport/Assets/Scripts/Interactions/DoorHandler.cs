@@ -13,14 +13,13 @@ public class DoorHandler : MonoBehaviour, I_Interactable
     [SerializeField] public int difficulty = 1;
     private Collider doorCollider;
     [field: SerializeField] public Transform DestinationDoor { get; protected set; }
+    [field: SerializeField] public Transform canvasSpawnLoc { get; private set; }
 
-
-    private SpriteRenderer minionsSpriteRenderer;
 
     public void Awake()
     {
         doorCollider = GetComponent<Collider>();
-        minionsSpriteRenderer = GetComponentInChildren<SpriteRenderer>();
+        if (canvasSpawnLoc == null) canvasSpawnLoc = transform;
     }
 
     public void Interact(GameObject interactor)
@@ -31,8 +30,8 @@ public class DoorHandler : MonoBehaviour, I_Interactable
 
     public void ShowInteractionOption()
     {
-        if (!Open) InteractCanvasHandler.Instance.ShowInteractionOption(transform.position, "Tab to Open");
-        else InteractCanvasHandler.Instance.ShowInteractionOption(transform.position, "Tab to Close");
+        if (!Open) InteractCanvasHandler.Instance.ShowInteractionOption(canvasSpawnLoc.position, "Tab to Open");
+        else InteractCanvasHandler.Instance.ShowInteractionOption(canvasSpawnLoc.position, "Tab to Close");
     }
 
     public void HideInteractionOption()

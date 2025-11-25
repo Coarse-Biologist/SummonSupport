@@ -9,8 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7765434297030881640}
-  - component: {fileID: 1536362124031072233}
   - component: {fileID: 8096112045269841424}
+  - component: {fileID: 6470473322735889626}
   m_Layer: 0
   m_Name: SpawnTrigger
   m_TagString: Untagged
@@ -33,42 +33,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 7032026368989075315}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!58 &1536362124031072233
-CircleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1807539186084978291}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_CompositeOperation: 0
-  m_CompositeOrder: 0
-  m_Offset: {x: 1.3357296, y: 0}
-  m_Radius: 1.8357296
 --- !u!114 &8096112045269841424
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -81,6 +45,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36e2fda549f54044ca7083d0c750aba9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!136 &6470473322735889626
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1807539186084978291}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 0
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 1
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &2175035393188830479
 GameObject:
   m_ObjectHideFlags: 0
@@ -91,7 +78,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7032026368989075315}
   - component: {fileID: 7869144613869010447}
-  - component: {fileID: 5346902603508771770}
+  - component: {fileID: 7321158315880275276}
   m_Layer: 0
   m_Name: SpawnCenter
   m_TagString: Untagged
@@ -133,19 +120,16 @@ MonoBehaviour:
   <MoveTowardLocation>k__BackingField: 1
   <PreferedElement>k__BackingField: 0
   <Creatures>k__BackingField:
-  - {fileID: 4138005708704936932, guid: 6687344da03022b4ba38fb5b7001ca11, type: 3}
+  - {fileID: 810306928598971056, guid: 6eb2daf00740bba47aac2befdc6b070e, type: 3}
   <TargetLocation>k__BackingField: {fileID: 7762288698868103776}
   <Trigger>k__BackingField: {fileID: 8096112045269841424}
---- !u!58 &5346902603508771770
-CircleCollider2D:
+--- !u!136 &7321158315880275276
+CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2175035393188830479}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Density: 1
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -154,24 +138,14 @@ CircleCollider2D:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_CompositeOperation: 0
-  m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
   m_Radius: 3
+  m_Height: 3
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &2255546765737656330
 GameObject:
   m_ObjectHideFlags: 0

@@ -130,6 +130,7 @@ public abstract class LivingBeing : MonoBehaviour
     #region Affinity handling
     public void ChangeAffinity(Element element, float amount)
     {
+        if (element == Element.None) return;
         float newAffinity = Mathf.Min(amount + Affinities[element].Get(), 200);
 
         if (Affinities.TryGetValue(element, out (Func<float> Get, Action<float> Set) func))
@@ -180,6 +181,7 @@ public abstract class LivingBeing : MonoBehaviour
 
     public void ChangePhysicalResistance(PhysicalType physicalType, float amount)
     {
+        if (physicalType == PhysicalType.None) return;
         float newResistance = Mathf.Min(amount + PhysicalDict[physicalType].Get(), 200);
 
         if (PhysicalDict.TryGetValue(physicalType, out (Func<float> Get, Action<float> Set) func))

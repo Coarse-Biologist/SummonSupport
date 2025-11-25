@@ -10,12 +10,7 @@ public class LootSpawnHandler : MonoBehaviour
 
     #region Cores
     [field: SerializeField] GameObject CorePrefab;
-    [field: SerializeField] public Sprite WeakCoreSprite { get; private set; }
-    [field: SerializeField] public Sprite WorkingCoreSprite { get; private set; }
 
-    [field: SerializeField] public Sprite PowerfulCoreSprite { get; private set; }
-
-    [field: SerializeField] public Sprite HulkingCoreSprite { get; private set; }
 
 
     #endregion

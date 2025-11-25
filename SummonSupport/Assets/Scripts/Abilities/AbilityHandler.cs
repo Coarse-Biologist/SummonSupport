@@ -46,7 +46,9 @@ public class AbilityHandler : MonoBehaviour
             abilitiesOnCooldownCrew.Add(ability, false);
             abilitiesOnCooldown.Add(false);
         }
+
     }
+
 
     protected bool CastAbility(int abilityIndex, Vector2 targetPosition, Quaternion rotation)
     {

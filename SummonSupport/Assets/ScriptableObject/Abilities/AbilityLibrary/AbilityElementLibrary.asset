@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a772c285c2b047846b6639997efc71f4, type: 3}
   m_Name: AbilityElementLibrary
   m_EditorClassIdentifier: 
+  defaultAttack: {fileID: 11400000, guid: 946e5f54d23bbc24e9bf9696f3cf93c2, type: 2}
   entries:
   - Element: 1
     Abilities:
@@ -81,6 +82,17 @@ MonoBehaviour:
     Abilities:
     - {fileID: 11400000, guid: a34fec9bcb32b274da2b5227eef299b0, type: 2}
     - {fileID: 11400000, guid: a1d92caf1a989f045afb6724af236c41, type: 2}
+  PhysicalEntries:
+  - PhysicalType: 1
+    Abilities:
+    - {fileID: 11400000, guid: ae651ce5b00295c48b77e564bcfefe75, type: 2}
+  - PhysicalType: 2
+    Abilities:
+    - {fileID: 11400000, guid: 6750601c70df4bb48a110f53f824cf77, type: 2}
+  - PhysicalType: 3
+    Abilities:
+    - {fileID: 11400000, guid: 946e5f54d23bbc24e9bf9696f3cf93c2, type: 2}
+    - {fileID: 11400000, guid: 996489c834f79a74fb51758838eabbcd, type: 2}
   abilitiesByLevelEntries:
   - Level: 0
     Abilities:

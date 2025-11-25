@@ -27,6 +27,7 @@ public class CreatureAbilityHandler : AbilityHandler
 
     public Ability GetAbilityForTarget(LivingBeing target, bool forSelf = false)
     {
+        UnityEngine.Debug.Log($"Attack abilities available = {attackAbilities.Count}");
         Stopwatch stopwatch = Stopwatch.StartNew();
         selectedAbility = null;
         bool targetIsFriendly = false;
@@ -60,13 +61,13 @@ public class CreatureAbilityHandler : AbilityHandler
             {
                 allSupportAbilities.Add(ability);
                 synergyAbilities.Add(ability);
-                //UnityEngine.Debug.Log($"{ability.name} added");
+                UnityEngine.Debug.Log($"{ability.name} added");
             }
             //else UnityEngine.Debug.Log($"{ability.name} would not synergize with {target}");
         }
         if (friendlyTarget)
         {
-            //UnityEngine.Debug.Log($"numnber of all support abilities= {allSupportAbilities.Count}");
+            UnityEngine.Debug.Log($"numnber of all support abilities= {allSupportAbilities.Count}");
             if (allSupportAbilities.Count == 0) return null;
 
             selectedAbility = allSupportAbilities[Random.Range(0, allSupportAbilities.Count)];
@@ -108,6 +109,16 @@ public class CreatureAbilityHandler : AbilityHandler
         if (attackAbilities.Count == 0) return false;
         else
             return UnityEngine.Random.Range(0, 100) < AI_Hostility;
+    }
+    public new void LearnAbility(Ability ability)
+    {
+        if (!Abilities.Contains(ability) && ability != null)
+        {
+            Abilities.Add(ability);
+            abilitiesOnCooldownCrew.Add(ability, false);
+            abilitiesOnCooldown.Add(false);
+        }
+        SetAbilityLists();
     }
 
 
