@@ -110,7 +110,10 @@ public class MeleeAbility : Ability
         }
         if (Shape == AreaOfEffectShape.Rectangle)
         {
-            return Physics.OverlapBox(originTransform.position, new Vector3(Width + sizeMod, Width, Range + sizeMod), originTransform.rotation).Contains(collider);
+            Vector3 halfExtents = new Vector3(Width + sizeMod, Width, Range + sizeMod);
+            Vector3 offset = originTransform.forward * halfExtents.z;
+
+            return Physics.OverlapBox(originTransform.position + offset, halfExtents, originTransform.rotation).Contains(collider);
         }
         else return false;
     }

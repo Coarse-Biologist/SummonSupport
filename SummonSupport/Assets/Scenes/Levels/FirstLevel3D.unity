@@ -199,6 +199,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7869144613869010447, guid: ac788a31b3c87bf43bcc0387b0238bab,
         type: 3}
+      propertyPath: <DesiredSpawns>k__BackingField
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7869144613869010447, guid: ac788a31b3c87bf43bcc0387b0238bab,
+        type: 3}
       propertyPath: <PreferedElement>k__BackingField
       value: 7
       objectReference: {fileID: 0}
