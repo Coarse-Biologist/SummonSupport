@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using UnityEngine;
+using UnityEngine.Rendering.VirtualTexturing;
 
 public class SetupManager : MonoBehaviour
 {
@@ -55,11 +56,15 @@ public class SetupManager : MonoBehaviour
     {
         return StatusEffectsLibrary;
     }
-    public void DebugLocation(Vector3 loc, Color specialColorRequest)
+    public void DebugLocation(Vector3 loc, Color specialColorRequest, int duration = 2)
     {
+        if (loc == Vector3.negativeInfinity) return;
+        Debug.Log($"Debugging location. {Instance.transform.position}");
         GameObject instance = Instantiate(LocSphere, loc, Quaternion.identity);
         instance.GetComponent<MeshRenderer>().material.color = specialColorRequest;
-        Destroy(instance, 3f);
+        Debug.Log($"Debugging location. {Instance.transform.position}");
+
+        Destroy(instance, duration);
     }
 
     //public static StatusEffects GetStatusEffect(StatusEffectType type)

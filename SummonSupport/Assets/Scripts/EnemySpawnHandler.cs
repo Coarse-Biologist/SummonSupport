@@ -9,6 +9,8 @@ using static AbilityLibrary_SO;
 
 public class EnemySpawnHandler : MonoBehaviour
 {
+    [field: SerializeField] public bool Active { get; private set; } = false;
+
     [field: SerializeField] public GameObject enemyPrefab { get; private set; } = null;
     [field: SerializeField] public GameObject SpawnCenter { get; private set; } = null;
     [field: SerializeField] public List<GameObject> AllCreatures { get; private set; } = new();
@@ -40,7 +42,7 @@ public class EnemySpawnHandler : MonoBehaviour
     void Start()
     {
         SetSpawnProbabilities(Difficulty.Novice);
-        InvokeRepeating("SpawnEnemies", 0f, 10f);
+        if (Active) InvokeRepeating("SpawnEnemies", 0f, 10f);
     }
 
 
