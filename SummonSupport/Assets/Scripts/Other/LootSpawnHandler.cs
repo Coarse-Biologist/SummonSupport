@@ -38,7 +38,7 @@ public class LootSpawnHandler : MonoBehaviour
         {
             SpawnOrgans(enemyStats, GetOrganType(enemyStats.MaxHP));
         }
-        if (enemyStats.MaxPower > 0)
+        if (enemyStats.MaxPower > 150)
         {
             SpawnCores(enemyStats, GetCoreType(enemyStats.MaxPower));
         }
@@ -110,10 +110,11 @@ public class LootSpawnHandler : MonoBehaviour
             lootScript.SetAlchemyMaterial(coreType);
         }
         Renderer renderer = instance.GetComponentInChildren<Renderer>();
-        if (renderer != null)
+        Element strongestElement = enemy.GetHighestAffinity();
+
+        if (renderer != null && strongestElement != Element.None)
         {
             Debug.Log("trying to change core color");
-            Element strongestElement = enemy.GetHighestAffinity();
             Material glowMaterial = ColorChanger.GetGlowByElement(strongestElement);
             ColorChanger.ChangeMatByAffinity(renderer, glowMaterial);
         }
