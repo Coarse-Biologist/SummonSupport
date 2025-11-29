@@ -1,0 +1,11 @@
+{
+    "asset": "ba03231fd43fa8e45bfe01bdf87045fa",
+    "fileName": "019ac8ff-13f1-7062-a7a3-645d3ce7bea6_Preview.png",
+    "prompt": "Light colored stone",
+    "negativePrompt": "",
+    "model": "44ec3749-963a-44b1-aa54-dc19f6ed8ab2",
+    "modelName": "Unity Texture2D",
+    "customSeed": 1535681482,
+    "w3CTraceId": "8ea37f932a8535b66d09560949ddfe3f",
+    "refinementMode": "Generation"
+}

@@ -164,7 +164,8 @@ public class AbilityHandler : MonoBehaviour
 
     bool HandleProjectile(ProjectileAbility ability)
     {
-        if (anim != null) anim.ChangeLayerAnimation("SpellCast", 1, 1f);
+        Debug.Log("Time to see the heavy throw animation");
+        if (anim != null) anim.ChangeLayerAnimation("OneArmedThrow", 1, 2f);
 
         return ability.Activate(gameObject, abilitySpawn);
     }
@@ -178,7 +179,7 @@ public class AbilityHandler : MonoBehaviour
 
     bool HandleConjureAbility(ConjureAbility ability, Vector2 targetPosition, Quaternion rotation)
     {
-        if (anim != null) anim.ChangeLayerAnimation("SpellCast", 1, 1f);
+        if (anim != null) anim.ChangeLayerAnimation("HeavyThrow", 1, 1f);
 
         return ability.Activate(gameObject, targetPosition, rotation);
     }
