@@ -202,8 +202,7 @@ public class Projectile : MonoBehaviour
         }
         else
         {
-
-            Destroy(gameObject);
+            Destroy(gameObject, .1f);
         }
     }
 
@@ -236,6 +235,7 @@ public class Projectile : MonoBehaviour
             projectileScript.SetProjectilePhysics(direction);
             projectileScript.SetParticleTrailEffects(direction);
             Destroy(newProjectile, ability.Lifetime);
+
         }
     }
 
