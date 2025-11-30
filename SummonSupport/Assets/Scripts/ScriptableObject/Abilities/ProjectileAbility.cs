@@ -49,10 +49,7 @@ public class ProjectileAbility : Ability
             Quaternion rotation = Quaternion.Euler(0, rotY, 0);
             Vector3 newDirection = rotation * spawnPoint.forward;
             Debug.Log(
-                $"SetActive called with:\n" +
-                //$"  ability: {this}\n" +
-                $"  user: {user.GetComponent<LivingBeing>()}\n" +
-                $"  modHandler: {modHandler}"
+                $"  user: {user.GetComponent<LivingBeing>().Name} is using the ability {projectileScript.name}"
             );
             projectileScript.SetActive(this, user.GetComponent<LivingBeing>(), modHandler);
             projectileScript.SetProjectilePhysics(newDirection);

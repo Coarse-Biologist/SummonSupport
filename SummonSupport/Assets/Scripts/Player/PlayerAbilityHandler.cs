@@ -87,12 +87,11 @@ public class PlayerAbilityHandler : AbilityHandler
         if (playerStats.Dead) return;
         if (inputActionToIndex.TryGetValue(context.action.name, out int index) && index < Abilities.Count)
         {
-            if (!abilitiesOnCooldown[index])
+            if (!abilitiesOnCooldownCrew[Abilities[index]]) // Checks if the value is true. Abilities[index] is the ability at the InputActions context index.
             {
                 if (CastAbility(index, GetCenterOfScreen(100f), transform.rotation))
                     EventDeclarer.AbilityUsed?.Invoke(index);
             }
-
         }
     }
 

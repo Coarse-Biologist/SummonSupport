@@ -46,19 +46,27 @@ public class AbilityHandler : MonoBehaviour
             abilitiesOnCooldownCrew.Add(ability, false);
             abilitiesOnCooldown.Add(false);
         }
-
     }
 
+    protected bool CastAbility(Ability ability, Vector2 targetPosition, Quaternion rotation)
+    {
+        bool usedAbility = HandleAbilityType(ability, targetPosition, rotation);
+
+        if (!usedAbility)
+            return false;
+
+        StartCoroutine(SetOnCooldown(ability));
+        int costMod = modHandler.GetModAttributeByType(ability, AbilityModTypes.Cost);
+        statsHandler?.ChangeAttribute(AttributeType.CurrentPower, -ability.Cost + costMod);
+        return true;
+    }
 
     protected bool CastAbility(int abilityIndex, Vector2 targetPosition, Quaternion rotation)
     {
-
-        //Logging.Info($"Ability at index {abilityIndex} trying to be used by {statsHandler.Name}!!!!");
         Ability ability = Abilities[abilityIndex];
 
         if (Abilities.Count <= 0 || abilitiesOnCooldown[abilityIndex])
             return false;
-
 
         if (!HasEnoughPower(ability.Cost))
             return false;
@@ -68,7 +76,7 @@ public class AbilityHandler : MonoBehaviour
         if (!usedAbility)
             return false;
 
-        StartCoroutine(SetOnCooldown(abilityIndex));
+        StartCoroutine(SetOnCooldown(ability));
         int costMod = modHandler.GetModAttributeByType(ability, AbilityModTypes.Cost);
         statsHandler?.ChangeAttribute(AttributeType.CurrentPower, -ability.Cost + costMod);
         return true;
@@ -109,11 +117,8 @@ public class AbilityHandler : MonoBehaviour
                     SetCharging(true);
                     usedAbility = chargeAbility.Activate(gameObject);
                 }
-
                 break;
         }
-        //Logging.Info($"able to use {ability.Name} = {usedAbility}");
-        if (usedAbility) StartCoroutine(SetOnCooldown(Abilities.IndexOf(ability)));
 
         return usedAbility;
     }
@@ -196,19 +201,31 @@ public class AbilityHandler : MonoBehaviour
         return auraAbility.Activate(statsHandler.gameObject);
     }
 
-    public IEnumerator SetOnCooldown(int abilityIndex)
+    //public IEnumerator SetOnCooldown(int abilityIndex)
+    //{
+    //    Ability ability = Abilities[abilityIndex];
+    //    try
+    //    {
+    //        abilitiesOnCooldownCrew[ability] = true;
+    //        abilitiesOnCooldown[abilityIndex] = true;
+    //        yield return new WaitForSeconds(ability.Cooldown + modHandler.GetModAttributeByType(ability, AbilityModTypes.Cooldown));
+    //    }
+    //    finally
+    //    {
+    //        abilitiesOnCooldownCrew[ability] = false;
+    //        abilitiesOnCooldown[abilityIndex] = false;
+    //    }
+    //}
+    public IEnumerator SetOnCooldown(Ability ability)
     {
-        Ability ability = Abilities[abilityIndex];
         try
         {
             abilitiesOnCooldownCrew[ability] = true;
-            abilitiesOnCooldown[abilityIndex] = true;
             yield return new WaitForSeconds(ability.Cooldown + modHandler.GetModAttributeByType(ability, AbilityModTypes.Cooldown));
         }
         finally
         {
             abilitiesOnCooldownCrew[ability] = false;
-            abilitiesOnCooldown[abilityIndex] = false;
         }
     }
     protected bool IsOnCoolDown(Ability ability)

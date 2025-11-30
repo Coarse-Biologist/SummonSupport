@@ -6,7 +6,7 @@ public class CreatureHPCanvasHandler : MonoBehaviour, I_ResourceBar
 
     private LivingBeing livingBeing;
     private Slider hpSlider;
-    private Slider manaSlider;
+    //private Slider manaSlider;
 
     void Awake()
     {
@@ -14,7 +14,7 @@ public class CreatureHPCanvasHandler : MonoBehaviour, I_ResourceBar
         Slider[] sliders = GetComponentsInChildren<Slider>();
         hpSlider = sliders[0];
 
-        manaSlider = sliders[1];
+        // manaSlider = sliders[1];
 
 
 
@@ -39,11 +39,11 @@ public class CreatureHPCanvasHandler : MonoBehaviour, I_ResourceBar
 
     public void SetPowerBarValue(float value = 1)
     {
-        manaSlider.value = livingBeing.GetAttribute(AttributeType.CurrentPower);
+        //manaSlider.value = livingBeing.GetAttribute(AttributeType.CurrentPower);
     }
 
     public void SetPowerBarMaxValue(float value = 1)
     {
-        manaSlider.maxValue = livingBeing.GetAttribute(AttributeType.MaxPower);
+        //manaSlider.maxValue = livingBeing.GetAttribute(AttributeType.MaxPower);
     }
 }

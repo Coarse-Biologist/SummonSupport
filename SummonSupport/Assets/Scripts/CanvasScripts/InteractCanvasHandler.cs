@@ -82,7 +82,7 @@ public class InteractCanvasHandler : MonoBehaviour
     public void DisplayGoldenLetters(string loot, float duration = .8f)
     {
         Transform playerTransform = PlayerStats.Instance.transform;
-        Vector3 pos = new Vector3(playerTransform.position.x, playerTransform.position.y + 2, playerTransform.position.z);
+        Vector3 pos = new Vector3(playerTransform.position.x, playerTransform.position.y + 3, playerTransform.position.z);
         GameObject xpCanvas = Instantiate(xpTextGUI, pos, Quaternion.identity);
         xpCanvas.transform.rotation = playerTransform.rotation;
         if (xpCanvas.TryGetComponent(out TextMeshProUGUI canvasGUI))

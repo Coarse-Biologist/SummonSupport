@@ -27,7 +27,6 @@ public class CreatureAbilityHandler : AbilityHandler
 
     public Ability GetAbilityForTarget(LivingBeing target, bool forSelf = false)
     {
-        UnityEngine.Debug.Log($"Attack abilities available = {attackAbilities.Count}");
         Stopwatch stopwatch = Stopwatch.StartNew();
         selectedAbility = null;
         bool targetIsFriendly = false;
@@ -40,7 +39,6 @@ public class CreatureAbilityHandler : AbilityHandler
         if (RelationshipHandler.GetRelationshipType(target.CharacterTag, casterStats.CharacterTag) == RelationshipType.Friendly)
         {
             targetIsFriendly = true;
-            //if (supportAbilities.Count == 0) return null;
         }
         if (RelationshipHandler.GetRelationshipType(target.CharacterTag, casterStats.CharacterTag) == RelationshipType.Hostile)
         {
@@ -61,13 +59,11 @@ public class CreatureAbilityHandler : AbilityHandler
             {
                 allSupportAbilities.Add(ability);
                 synergyAbilities.Add(ability);
-                UnityEngine.Debug.Log($"{ability.name} added");
             }
             //else UnityEngine.Debug.Log($"{ability.name} would not synergize with {target}");
         }
         if (friendlyTarget)
         {
-            UnityEngine.Debug.Log($"numnber of all support abilities= {allSupportAbilities.Count}");
             if (allSupportAbilities.Count == 0) return null;
 
             selectedAbility = allSupportAbilities[Random.Range(0, allSupportAbilities.Count)];
@@ -90,11 +86,8 @@ public class CreatureAbilityHandler : AbilityHandler
 
     public void SetAbilityLists()
     {
-        UnityEngine.Debug.Log($"setting ability lists. {Abilities.Count}. to handle");
-
         foreach (Ability ability in Abilities) // make list of support and attack abilities
         {
-            UnityEngine.Debug.Log($"handling {ability}");
             if (ability.AbilityTypeTag == AbilityTypeTag.DebuffsTarget)
                 attackAbilities.Add(ability);
             else if (ability.AbilityTypeTag == AbilityTypeTag.BuffsTarget)
@@ -115,7 +108,6 @@ public class CreatureAbilityHandler : AbilityHandler
     }
     public new void LearnAbility(Ability ability)
     {
-        UnityEngine.Debug.Log($"ability being learned = {ability}");
         if (!Abilities.Contains(ability) && ability != null)
         {
             Abilities.Add(ability);
@@ -129,14 +121,12 @@ public class CreatureAbilityHandler : AbilityHandler
 
     public void UseAbility(LivingBeing target, Ability ability)
     {
-        float range = ability.Range;
         if (ability != null)
         {
-            //UnityEngine.Debug.Log($"{ability} = ability selected by {GetComponent<LivingBeing>().Name} against {target}");
             Vector3 direction = (target.transform.position - transform.position).normalized;
             float angle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
             transform.rotation = Quaternion.Euler(0, angle, 0);
-            CastAbility(Abilities.IndexOf(ability), target.transform.position, transform.rotation);
+            CastAbility(ability, target.transform.position, transform.rotation);
         }
     }
 

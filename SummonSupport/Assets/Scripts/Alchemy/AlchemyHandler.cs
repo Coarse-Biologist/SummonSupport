@@ -8,6 +8,7 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 using System;
 //using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using SummonSupportEvents;
+using Unity.VisualScripting;
 
 
 #endregion
@@ -17,16 +18,13 @@ public class AlchemyHandler : MonoBehaviour
     public string minionPrefabAddress { private set; get; } = "Assets/Prefabs/AIPrefab/MinionPrefab2.prefab";
     private GameObject craftedMinion;
     public GameObject minionPrefab;
-    public UnityEvent<GameObject> requestInstantiation = new UnityEvent<GameObject>();
-    [field: Tooltip("The amount of minion HP per new extra ability they can use.")]
+    //[field: Tooltip("The amount of minion HP per new extra ability they can use.")]
     [field: SerializeField] public int HPToAbilityRatio { get; private set; } = 50;
-    [field: SerializeField] public static float recycleExchangeRate { get; private set; } = .05f;
-    [field: SerializeField] public static float knowledgeGainRate { get; private set; } = 1f;
-
-
+    [field: SerializeField] public float RecycleExchangeRate { get; private set; } = .05f;
+    [field: SerializeField] public float KnowledgeGainRate { get; private set; } = 1f;
+    [field: SerializeField] public int SizeScalar { get; private set; } = 20;
     [SerializeField] public List<GameObject> activeMinions = new List<GameObject>();
     public static AlchemyHandler Instance { get; private set; }
-
     public static Dictionary<AlchemyLoot, int> AlchemyLootValueDict = new();
 
 
@@ -99,9 +97,9 @@ public class AlchemyHandler : MonoBehaviour
             float minionHP = stats.MaxHP - 100f;
             float minionAffinity = GetCombinedElementValues(stats);
 
-            AlchemyInventory.AlterIngredientNum(AlchemyLoot.WeakCore, (int)(minionPower * recycleExchangeRate));
-            AlchemyInventory.AlterIngredientNum(AlchemyLoot.FaintEther, (int)(minionAffinity * recycleExchangeRate));
-            AlchemyInventory.AlterIngredientNum(AlchemyLoot.WretchedOrgans, (int)(minionHP * recycleExchangeRate));
+            AlchemyInventory.AlterIngredientNum(AlchemyLoot.WeakCore, (int)(minionPower * Instance.RecycleExchangeRate));
+            AlchemyInventory.AlterIngredientNum(AlchemyLoot.FaintEther, (int)(minionAffinity * Instance.RecycleExchangeRate));
+            AlchemyInventory.AlterIngredientNum(AlchemyLoot.WretchedOrgans, (int)(minionHP * Instance.RecycleExchangeRate));
         }
         EventDeclarer.minionDied?.Invoke(minion);
         CommandMinion.RemoveActiveMinions(minion);
@@ -126,8 +124,18 @@ public class AlchemyHandler : MonoBehaviour
             EventDeclarer.RepeatableQuestCompleted?.Invoke(Quest.RepeatableAccomplishments.UseOrgans, num);
             stats.ChangeAttribute(AttributeType.MaxHitpoints, num * organKvp.Value);
             healthUpgrade += num * organKvp.Value;
+            AlterSizeByOrganNum(stats, num * organKvp.Value);
         }
         return healthUpgrade;
+    }
+    private void AlterSizeByOrganNum(LivingBeing stats, int organValue)
+    {
+        float sizeChangeScalar = organValue / SizeScalar;
+        if (sizeChangeScalar > 1)
+        {
+            Debug.Log($"changing sie of {stats.Name} by {sizeChangeScalar}");
+            stats.gameObject.transform.localScale *= organValue / SizeScalar;
+        }
     }
     private int HandleCoreUse(LivingBeing stats, KeyValuePair<AlchemyLoot, int> coreKvp)
     {
