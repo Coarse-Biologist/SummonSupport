@@ -80,7 +80,7 @@ public class AIStateHandler : MonoBehaviour
     public void SetTarget(LivingBeing theTarget)
     {
         target = theTarget;
-
+        Debug.Log($"the target being set is {theTarget.Name}");
     }
     private void SetMasks()
     {

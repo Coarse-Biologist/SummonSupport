@@ -1664,6 +1664,11 @@ PrefabInstance:
       propertyPath: m_BaseOffset
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7876922258442859149, guid: 6eb2daf00740bba47aac2befdc6b070e,
+        type: 3}
+      propertyPath: m_StoppingDistance
+      value: 5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1996,6 +2001,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6420015540202892481, guid: deb0299c2f7c5ee468cb23755c8d92da,
+        type: 3}
+      propertyPath: <abilitySpawn>k__BackingField
+      value: 
+      objectReference: {fileID: 1351926278}
     - target: {fileID: 7173906857914730221, guid: deb0299c2f7c5ee468cb23755c8d92da,
         type: 3}
       propertyPath: m_AnchorMax.x
@@ -4116,6 +4126,12 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 683437599140056830, guid: c5feb562ef2fbe24fa22279e19522d2b,
     type: 3}
   m_PrefabInstance: {fileID: 1341400235}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1351926278 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8925903879776759123, guid: 6eb2daf00740bba47aac2befdc6b070e,
+    type: 3}
+  m_PrefabInstance: {fileID: 390132619}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1355882204
 GameObject:

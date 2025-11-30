@@ -19,7 +19,7 @@ public class AlchemyHandler : MonoBehaviour
     private GameObject craftedMinion;
     public GameObject minionPrefab;
     //[field: Tooltip("The amount of minion HP per new extra ability they can use.")]
-    [field: SerializeField] public int HPToAbilityRatio { get; private set; } = 50;
+    [field: SerializeField] public int ManaToAbilityRatio { get; private set; } = 50;
     [field: SerializeField] public float RecycleExchangeRate { get; private set; } = .05f;
     [field: SerializeField] public float KnowledgeGainRate { get; private set; } = 1f;
     [field: SerializeField] public int SizeScalar { get; private set; } = 20;
@@ -193,7 +193,7 @@ public class AlchemyHandler : MonoBehaviour
         Element strongestElement = livingBeing.GetHighestAffinity();
         if (strongestElement != Element.None)
         {
-            List<Ability> abilities = AbilityLibrary.GetRandomAbilities(strongestElement, (int)(livingBeing.GetAttribute(AttributeType.MaxHitpoints) / HPToAbilityRatio));
+            List<Ability> abilities = AbilityLibrary.GetRandomAbilities(strongestElement, (int)(livingBeing.GetAttribute(AttributeType.MaxPower) / ManaToAbilityRatio));
 
             if (abilities != null)
             {

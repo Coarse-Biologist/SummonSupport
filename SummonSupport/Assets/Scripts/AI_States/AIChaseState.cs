@@ -6,6 +6,7 @@ using UnityEngine.AI;
 
 public class AIChaseState : AIState
 {
+    #region Class variables
     private AIStateHandler stateHandler;
     private AIPeacefulState peaceState;
     private AIObedienceState obedienceState;
@@ -19,7 +20,7 @@ public class AIChaseState : AIState
     private WaitForSeconds attackSpeed = new WaitForSeconds(1);
     public float SelectedAbilityAttackRange { private set; get; } = 20f;
 
-
+    #endregion
 
     void Start()
     {
@@ -33,25 +34,22 @@ public class AIChaseState : AIState
         abilityHandler = GetComponent<CreatureAbilityHandler>();
     }
 
-
-
     public override AIState RunCurrentState()
     {
         if (stateHandler.minionStats != null && stateHandler.minionStats.CurrentCommand == MinionCommands.FocusTarget) stateHandler.SetTarget(obedienceState.commandTarget.GetComponent<LivingBeing>());
-        if (stateHandler.target != null)
+        // if minion and has a command to focus a target, set target to be the commanded target 
+        if (stateHandler.target != null) // still has a target?
         {
-            Vector3 targetLoc = stateHandler.target.transform.position;
-            if (peaceState.FieldOfViewCheck() == true)
+            if (peaceState.FieldOfViewCheck() == true) //is target visible?
             {
-                Chase(targetLoc);
-
+                //Debug.Log($"Chasing because field of view check was false. going to last seen location: {stateHandler.target.transform.position}");
+                Chase(stateHandler.target.transform.position);
                 if (!runningAttackLoop)
                     attackCoroutine = StartCoroutine(HandleAttack(stateHandler.target));
             }
-
             else
             {
-
+                //Debug.Log($"Chasing because field of view check was false. going to last seen location: {stateHandler.lastSeenLoc}");
                 EndAttackRoutine();
                 Chase(stateHandler.lastSeenLoc);
             }
@@ -63,6 +61,7 @@ public class AIChaseState : AIState
             return peaceState;
         }
     }
+
     private void EndAttackRoutine()
     {
         runningAttackLoop = false;
@@ -70,58 +69,54 @@ public class AIChaseState : AIState
             StopCoroutine(attackCoroutine);
     }
 
-    public bool CheckInRange()
-    {
-        Rigidbody target = stateHandler.target.GetComponent<Rigidbody>();
-
-        Vector3 direction = target.transform.position - transform.position;
-
-        return direction.sqrMagnitude <= 150;
-
-    }
-
     public void Chase(Vector3 targetLoc)
     {
+
         if (!stateHandler.StuckInAbilityAnimation)
         {
-            Vector3 direction = targetLoc - transform.position;
+            float distance = (stateHandler.target.transform.position - transform.position).sqrMagnitude;
 
-            if (direction.sqrMagnitude < SelectedAbilityAttackRange || direction.sqrMagnitude < stateHandler.navAgent.stoppingDistance) // if distance to target is more than ability range
+            if (distance <= SelectedAbilityAttackRange || stateHandler.navAgent.stoppingDistance >= distance * distance) // if distance to target is more than ability range
             {
-                stateHandler.navAgent.ResetPath();
-                if (stateHandler.anim != null)
-                {
-                    stateHandler.anim.ChangeAnimation("Idle", .2f);
-                }
-
+                IdleAndResetPath();
             }
             else // if distance to target is less than or equal to ability range
             {
-                stateHandler.navAgent.SetDestination(stateHandler.target.transform.position);
-                if (stateHandler.anim != null)
-                {
-                    stateHandler.anim.ChangeAnimation("Run", .2f);
-                }
+                SetDestinationandAnimation(targetLoc);
             }
+        }
+    }
+    private void SetDestinationandAnimation(Vector3 targetLoc)
+    {
+        stateHandler.navAgent.SetDestination(targetLoc);
+
+        if (stateHandler.anim != null)
+        {
+            stateHandler.anim.ChangeAnimation("Run", .2f);
+        }
+    }
+    private void IdleAndResetPath()
+    {
+        stateHandler.navAgent.ResetPath();
+        if (stateHandler.anim != null)
+        {
+            stateHandler.anim.ChangeAnimation("Idle", .2f);
         }
     }
 
     private IEnumerator HandleAttack(LivingBeing target)
     {
+        if (target == null)
+        {
+            runningAttackLoop = false;
+            yield break;
+        }
         if (stateHandler.anim != null)
         {
             stateHandler.anim.ChangeAnimation("Idle", .2f);
         }
 
         runningAttackLoop = true;
-
-
-        // Exit immediately if target is null
-        if (target == null)
-        {
-            runningAttackLoop = false;
-            yield break;
-        }
 
         while (runningAttackLoop)
         {

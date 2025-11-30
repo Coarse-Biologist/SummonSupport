@@ -83,7 +83,6 @@ public class CreatureAbilityHandler : AbilityHandler
             return selectedAbility;
     }
 
-
     public void SetAbilityLists()
     {
         foreach (Ability ability in Abilities) // make list of support and attack abilities

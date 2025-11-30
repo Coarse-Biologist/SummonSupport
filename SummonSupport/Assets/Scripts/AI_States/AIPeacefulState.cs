@@ -64,28 +64,19 @@ public class AIPeacefulState : AIState
         CharacterTag preferedTargetType = GetTargetPreference();
         if (rangeChecks.Length != 0)
         {
-            for (int i = 0; i < rangeChecks.Length; i++)
+            foreach (Collider collider in rangeChecks)
             {
-                GameObject detectedObject = rangeChecks[i].transform.gameObject;
+                GameObject detectedObject = collider.gameObject;
                 if (detectedObject.TryGetComponent(out LivingBeing targetLivingBeing))
-                {
                     if (targetLivingBeing.CharacterTag == preferedTargetType || rangeChecks.Length == 1)
-                    {
                         if (targetLivingBeing.GetAttribute(AttributeType.CurrentHitpoints) > 0)
                         {
-                            if (stateHandler.target != targetLivingBeing)
-                            {
-                                stateHandler.SetTarget(targetLivingBeing);
-                            }
+                            stateHandler.SetTarget(targetLivingBeing);
                             target = targetLivingBeing;
                         }
-                    }
-                }
             }
         }
-
         return target;
-
     }
     //Returns either player, or more likely a minion if this script is attached to an enemy. if attached to a minion it will return either player or minion
     private CharacterTag GetTargetPreference()
@@ -96,8 +87,6 @@ public class AIPeacefulState : AIState
             return CharacterTag.Enemy;
     }
 
-
-
     public bool CheckVisionBlocked(LivingBeing target, float angleOffset = 0)
     {
         bool blocked = NavMesh.Raycast(stateHandler.navAgent.transform.position, target.transform.position, out NavMeshHit hit, NavMesh.AllAreas);
@@ -106,8 +95,6 @@ public class AIPeacefulState : AIState
 
     }
 
-
-
     public override AIState RunCurrentState()
     {
         if (canSeeTarget)
@@ -115,31 +102,17 @@ public class AIPeacefulState : AIState
             if (runningSupportLoop)
             {
                 runningSupportLoop = false;
-
                 StopCoroutine(supportCoroutine);
             }
-
             return chaseState;
         }
         else if (stateHandler.charType == CharacterTag.Minion)
         {
-            Vector3 direction = player.transform.position - transform.position;
             stateHandler.SetTarget(stateHandler.playerStats);
-            if (direction.sqrMagnitude > stateHandler.navAgent.stoppingDistance)
-            {
-                GoToPlayer();
+            GoToPlayer();
+            if (!runningSupportLoop)
+                supportCoroutine = StartCoroutine(HandleSupportloop());
 
-                if (!runningSupportLoop)
-                    supportCoroutine = StartCoroutine(HandleSupportloop());
-            }
-            else
-            {
-                stateHandler.navAgent.ResetPath();
-                if (stateHandler.anim != null)
-                {
-                    stateHandler.anim.ChangeAnimation("Idle", .2f);
-                }
-            }
             return this;
         }
         else return this;
@@ -148,12 +121,13 @@ public class AIPeacefulState : AIState
     private IEnumerator HandleSupportloop()
     {
         LivingBeing targetStats;
+        Ability ability;
         runningSupportLoop = true;
         while (true)
         {
             targetStats = SelectFriendlyTarget();
             stateHandler.SetTarget(targetStats);
-            Ability ability = stateHandler.abilityHandler.GetAbilityForTarget(targetStats, targetStats == stateHandler.minionStats);
+            ability = stateHandler.abilityHandler.GetAbilityForTarget(targetStats, targetStats == stateHandler.minionStats);
             if (ability != null)
             {
                 chaseState.SetAbilityRange(ability.Range);
@@ -179,14 +153,27 @@ public class AIPeacefulState : AIState
 
     public void GoToPlayer()
     {
-        Debug.Log("Wants to  go to payer");
-        stateHandler.navAgent.SetDestination(player.transform.position);
-        if (stateHandler.anim != null)
+        Debug.Log("Going to player function called");
+        float distance = (player.transform.position - transform.position).sqrMagnitude;
+        if (distance >= stateHandler.navAgent.stoppingDistance || distance >= chaseState.SelectedAbilityAttackRange)
         {
-            stateHandler.anim.ChangeAnimation("Run", .2f);
-            //Debug.Log($"{stateHandler.anim.anim.parameters[0]} + {stateHandler.anim.anim.parameters[1]}");
-            //stateHandler.anim.anim.SetFloat("Vert", 1f);
+            Debug.Log($"Going to player becuase: Distance = {distance}. stopping distance = {stateHandler.navAgent.stoppingDistance}. chase state selected ability = {chaseState.SelectedAbilityAttackRange}");
+
+            stateHandler.navAgent.SetDestination(player.transform.position);
+            if (stateHandler.anim != null)
+            {
+                stateHandler.anim.ChangeAnimation("Run", .2f);
+            }
         }
-        //rb.linearVelocity = (player.transform.position - transform.position) * 10;
+        else
+        {
+            Debug.Log($"NOToing to player becuase: Distance = {distance}. stopping distance = {stateHandler.navAgent.stoppingDistance}. chase state selected ability = {chaseState.SelectedAbilityAttackRange}");
+
+            stateHandler.navAgent.ResetPath();
+            if (stateHandler.anim != null)
+            {
+                stateHandler.anim.ChangeAnimation("Idle", .2f);
+            }
+        }
     }
 }
