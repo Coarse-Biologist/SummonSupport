@@ -4,6 +4,7 @@ using System.Diagnostics;
 using UnityEngine.InputSystem;
 using Unity.VisualScripting;
 using System.Collections.Generic;
+using SummonSupportEvents;
 
 public static class CombatStatHandler
 {
@@ -41,6 +42,7 @@ public static class CombatStatHandler
         }
         if (effectPackage.Damage.Value > 0)
         {
+            EventDeclarer.ShakeCamera?.Invoke(1f);
             AdjustDamageValue(effectPackage.Damage, effectPackage.SpecialAbilityAttribute);
         }
         if (effectPackage.DamageOverTime.Value > 0)

@@ -19,7 +19,7 @@ public class AuraAbility : Ability
                 if (hit.collider != null && hit.collider.TryGetComponent(out LivingBeing livingBeing))
                 {
                     GameObject auraInstance = Instantiate(AuraObject, livingBeing.transform.position, AuraObject.transform.rotation, hit.collider.transform);
-                    auraInstance.GetComponent<Aura>().SetAuraStats(caster.GetComponent<LivingBeing>(), livingBeing, this, Duration);
+                    auraInstance.GetComponent<Aura>().SetAuraStats(caster.GetComponent<LivingBeing>(), livingBeing, this);
                 }
                 else
                 {

@@ -68,8 +68,7 @@ public class AIStateHandler : MonoBehaviour
 
         InvokeRepeating("RunStateMachine", 0f, 1f);
         anim = GetComponent<AnimationControllerScript>();
-        //anim.ChangeAnimation("State", 0f)
-        ;
+
 
     }
     void Start()
@@ -80,7 +79,6 @@ public class AIStateHandler : MonoBehaviour
     public void SetTarget(LivingBeing theTarget)
     {
         target = theTarget;
-        Debug.Log($"the target being set is {theTarget.Name}");
     }
     private void SetMasks()
     {

@@ -19,7 +19,7 @@ MonoBehaviour:
   <CostType>k__BackingField: 4
   <Cost>k__BackingField: 70
   <Range>k__BackingField: 15
-  <Duration>k__BackingField: 3
+  <Duration>k__BackingField: 6
   <AbilityTypeTag>k__BackingField: 1
   <ListUsableOn>k__BackingField: 01000000
   <TargetEffects>k__BackingField:
@@ -62,11 +62,11 @@ MonoBehaviour:
     type: 3}
   <SpawnEffectOnHit>k__BackingField: {fileID: 1847413739128325886, guid: 442943b449157d84997cfa1dee2332fc,
     type: 3}
-  <SpawnOffset>k__BackingField: {x: 0, y: 0}
+  <SpawnOffset>k__BackingField: {x: 0, y: 10, z: 0}
   <RotationOffset>k__BackingField: 0
   Radius: 1
   <IsDecaying>k__BackingField: 1
   <LeaveRotation>k__BackingField: 1
-  <SeeksTarget>k__BackingField: 0
-  <Speed>k__BackingField: 2
+  <SeeksTarget>k__BackingField: 1
+  <Speed>k__BackingField: 7
   <SearchRadius>k__BackingField: 10

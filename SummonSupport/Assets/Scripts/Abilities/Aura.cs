@@ -19,98 +19,76 @@ public class Aura : MonoBehaviour
     private Collider sphereCollider;
 
     private LivingBeing target;
-    private ConjureAbility conjureAbility;
+    private ConjureAbility ConjureAbility;
     private SplineAnimate splineAnimator;
+    private float radius = 1;
+    private float speed = 1;
+    private float duration;
 
-    private UnityEngine.Rendering.Universal.Light2D lightScript;
 
-
-    private bool SetSplineAnimator()
-    {
-        if (TryGetComponent<SplineAnimate>(out SplineAnimate spline))
-        {
-            splineAnimator = spline;
-            return true;
-        }
-        else return false;
-    }
 
 
     void Start()
     {
-        //Debug.Log("Aura script starts here and now");
-        if (SetSplineAnimator())
-        {
-            if (TryGetComponent(out Collider colliderCito))
-            {
-                sphereCollider = colliderCito;
-                sphereCollider.enabled = false;
-                InvokeRepeating("CheckEndNear", .5f, .01f);
-            }
-        }
         Invoke("Activate", ActivationTime);
-
     }
     public void HandleInstantiation(LivingBeing caster, LivingBeing target, Ability ability)
     {
-        SetAuraStats(caster, target, ability, ability.Duration);
-        float radius = 1;
-        if (ability is ConjureAbility conjureAbility)
-        {
-            radius = conjureAbility.Radius;
-            if (conjureAbility.SeeksTarget)
-            {
-                this.target = FindTarget(conjureAbility.SearchRadius);
-                if (this.target != null) StartCoroutine(SeekTarget(this.target.gameObject));
-            }
-        }
-        else if (ability is AuraAbility auraAbility)
+        SetAuraStats(caster, target, ability);
+
+        HandleConjureAbilitySpecifics();
+
+        AddMods();
+
+        if (ability is AuraAbility auraAbility)
             radius = auraAbility.Radius;
 
         if (TryGetComponent(out CapsuleCollider collider))
             collider.radius = radius;
-        if (abilityMod != null) collider.radius += abilityMod.GetModdedAttribute(AbilityModTypes.Size);
-        CombatStatHandler.HandleEffectPackage(ability, caster, caster, ability.SelfEffects);
 
-        Destroy(gameObject, ability.Duration);
+        CombatStatHandler.HandleEffectPackage(ability, caster, caster, ability.SelfEffects);
     }
-    public void SetAuraStats(LivingBeing caster, LivingBeing target, Ability ability, float duration)
+    private void HandleConjureAbilitySpecifics()
     {
+        if (ability is ConjureAbility conjureAbility)
+        {
+            ConjureAbility = conjureAbility;
+            radius = conjureAbility.Radius;
+            speed = conjureAbility.Speed;
+            if (conjureAbility.SeeksTarget)
+            {
+                if (target != null) StartCoroutine(SeekTarget(target.gameObject));
+            }
+        }
+    }
+    public void SetAuraStats(LivingBeing caster, LivingBeing target, Ability ability)
+    {
+        duration = ability.Duration;
         this.caster = caster;
         this.ability = ability;
         this.target = target;
+
+        Destroy(gameObject, duration);
+
+        Activate();
+
+    }
+
+    private void AddMods()
+    {
         modHandler = caster.GetComponent<AbilityModHandler>();
         if (modHandler != null)
         {
+            duration += modHandler.GetModAttributeByType(ability, AbilityModTypes.Duration);
+            radius += modHandler.GetModAttributeByType(ability, AbilityModTypes.Size);
+            speed += modHandler.GetModAttributeByType(ability, AbilityModTypes.Speed);
         }
-        SetAuraTimer(duration + modHandler.GetModAttributeByType(ability, AbilityModTypes.Duration));
-        Activate();
-        //transform.Rotate(new Vector3(-110f, 0, 0));
-
-    }
-    private void CheckEndNear()
-    {
-        //Debug.Log($"Spline animator normalized  time =  {splineAnimator.NormalizedTime}");
-
-        if (splineAnimator.NormalizedTime > .75)
-        {
-            sphereCollider.enabled = true;
-            //Debug.Log($"Enabling {circleCollider}");
-            CancelInvoke("CheckEndNear");
-        }
-
     }
 
     private void Activate()
     {
         Active = true;
     }
-
-    public void SetAuraTimer(float timeUp)
-    {
-        Destroy(gameObject, timeUp);
-    }
-
 
     void OnTriggerEnter(Collider other)
     {
@@ -137,29 +115,18 @@ public class Aura : MonoBehaviour
 
     void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.TryGetComponent<LivingBeing>(out LivingBeing otherLivingBeing))
+        if (other.gameObject.TryGetComponent(out LivingBeing otherLivingBeing))
             otherLivingBeing.AlterAbilityList(ability, false);
-
     }
     private void SpawnOnHitEffect(LivingBeing targetLivingBeing, GameObject SpawnEffectOnHit)
     {
         GameObject instance;
         if (SpawnEffectOnHit != null)
         {
-            //Debug.Log("This happens, excellent");
             instance = Instantiate(SpawnEffectOnHit, targetLivingBeing.transform.position, Quaternion.identity, targetLivingBeing.transform.transform);
             Destroy(instance, instance.GetComponent<ParticleSystem>().main.duration);
         }
-        //else Debug.Log("This happens but is null");
     }
-
-
-    void OnDestroy()
-    {
-        //foreach (LivingBeing livingBeing in listLivingBeingsInAura.ToList())
-        // remove status effects ?
-    }
-
 
     private LivingBeing FindTarget(float SearchRadius)
     {
@@ -178,16 +145,27 @@ public class Aura : MonoBehaviour
 
     private IEnumerator SeekTarget(GameObject target)
     {
-        WaitForSeconds waitFor = new WaitForSeconds(.4f);
-        Vector3 directionToTarget = target.transform.position - transform.position;
         TryGetComponent(out Rigidbody rb);
+        Debug.Log("Im here");
 
-        while (directionToTarget.sqrMagnitude > conjureAbility.Radius)
+        while (true)
         {
-            yield return waitFor;
-            if (rb != null) rb.linearVelocity = (target.transform.position - transform.position) * conjureAbility.Speed;
-            //transform.position = Vector2.Lerp(transform.position, target.transform.position, conjureAbility.Speed);
+            if (target == null) yield break;
+
+            Vector3 directionToTarget = target.transform.position - transform.position;
+
+            if (directionToTarget.sqrMagnitude <= radius * radius)
+                yield break;
+
+            if (rb != null)
+            {
+                rb.linearVelocity = directionToTarget.normalized * speed;
+                transform.LookAt(directionToTarget);
+            }
+
+            yield return null;
         }
     }
+
 }
 

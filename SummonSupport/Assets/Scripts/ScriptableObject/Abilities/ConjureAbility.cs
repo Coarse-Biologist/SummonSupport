@@ -56,12 +56,14 @@ public class ConjureAbility : Ability
         int targetsFound = 0;
         foreach (LivingBeing target in targets)
         {
+            Debug.Log($"{target.Name} found in GetTarget from spherecast function");
             if (targetsFound < targetNum)
             {
                 Quaternion newRotation = Quaternion.identity;
                 if (!LeaveRotation)
                     newRotation = rotation * Quaternion.Euler(0, 0, RotationOffset);
-                GameObject spawnedObject = Instantiate(ObjectToSpawn, target.transform.position, newRotation);
+                Vector3 SpawnLoc = target.transform.position + SpawnOffset;
+                GameObject spawnedObject = Instantiate(ObjectToSpawn, SpawnLoc, newRotation);
 
                 if (IsDecaying)
                     Destroy(spawnedObject, duration);
@@ -69,7 +71,7 @@ public class ConjureAbility : Ability
                 Aura auraInChildren = spawnedObject.GetComponentInChildren<Aura>();
                 if (auraInChildren != null)
                 {
-                    auraInChildren.HandleInstantiation(user.GetComponent<LivingBeing>(), null, this);
+                    auraInChildren.HandleInstantiation(user.GetComponent<LivingBeing>(), target, this);
                 }
             }
             else return true;

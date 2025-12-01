@@ -31,7 +31,7 @@ namespace SummonSupportEvents
 
         public static UnityEvent<Ability> PlayerLearnedAbility = new();
         public static UnityEvent TogglePauseGame = new();
-
+        public static UnityEvent<float> ShakeCamera = new();
 
     }
 }

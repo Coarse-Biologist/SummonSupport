@@ -57,7 +57,7 @@ MonoBehaviour:
   <ElementTypes>k__BackingField: 02000000
   <PhysicalType>k__BackingField: 0
   <OnHitEffect>k__BackingField: {fileID: 0}
-  <Speed>k__BackingField: 5
+  <Speed>k__BackingField: 9
   <Projectile>k__BackingField: {fileID: 6033447785082643316, guid: 706fd26b292fae4488c9b19eec3811fc,
     type: 3}
   <MaxRange>k__BackingField: 150
