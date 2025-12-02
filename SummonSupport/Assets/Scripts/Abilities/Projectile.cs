@@ -109,13 +109,13 @@ public class Projectile : MonoBehaviour
     private void SpawnEffect(Transform targetTransform = null)
     {
         GameObject instance;
-        if (ability.SpawnEffectOnHit != null)
+        if (ability.OnHitEffect != null)
         {
             if (targetTransform == transform)
-                instance = Instantiate(ability.SpawnEffectOnHit, targetTransform.position, Quaternion.identity);
+                instance = Instantiate(ability.OnHitEffect, targetTransform.position, Quaternion.identity);
             else
             {
-                instance = Instantiate(ability.SpawnEffectOnHit, targetTransform.position, Quaternion.identity, targetTransform);
+                instance = Instantiate(ability.OnHitEffect, targetTransform.position, Quaternion.identity, targetTransform);
             }
             Destroy(instance, instance.GetComponent<ParticleSystem>().main.duration);
         }
@@ -123,9 +123,9 @@ public class Projectile : MonoBehaviour
     private void SpawnEffect(Vector2 loc)
     {
         GameObject instance;
-        if (ability.SpawnEffectOnHit != null)
+        if (ability.OnHitEffect != null)
         {
-            instance = Instantiate(ability.SpawnEffectOnHit, loc, Quaternion.identity);
+            instance = Instantiate(ability.OnHitEffect, loc, Quaternion.identity);
             Destroy(instance, instance.GetComponent<ParticleSystem>().main.duration);
         }
     }

@@ -16,7 +16,6 @@ public class ProjectileAbility : Ability
     [field: SerializeField] public int MaxSplit { get; protected set; }
     [field: SerializeField] public int SplitAngleOffset { get; protected set; }
     [field: SerializeField] public GameObject ProjectileParticleSystem { get; protected set; }
-    [field: SerializeField] public GameObject SpawnEffectOnHit { get; set; } = null;
 
 
 

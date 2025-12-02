@@ -209,13 +209,12 @@ public class AlchemyHandler : MonoBehaviour
     private void AlterMinionByElement(GameObject minion)
     {
         LivingBeing stats = minion.GetComponent<LivingBeing>();
-        CreatureSpriteController spriteControl = minion.GetComponentInChildren<CreatureSpriteController>();
         Element strongestElement = stats.GetHighestAffinity();
-        string nameModifier = "";
+        string nameModifier;
 
-        if (strongestElement != Element.None && stats.Affinities[strongestElement].Get() > 50)
+        if (strongestElement != Element.None && stats.GetAffinity(strongestElement) > 50)
         {
-            spriteControl.AlterColorByAffinity(strongestElement);
+            ColorChanger.ChangeMatByAffinity(stats);
             nameModifier = strongestElement.ToString();
             stats.SetName(nameModifier + " Elemental");
         }
