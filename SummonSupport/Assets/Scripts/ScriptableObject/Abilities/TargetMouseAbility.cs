@@ -12,25 +12,15 @@ public class TargetMouseAbility : Ability
 
     private List<LivingBeing> GetTargets(LivingBeing caster)
     {
-        CharacterTag desiredTag;
-
         int targetNum = 1;
-        List<LivingBeing> targets = new();
         if (caster.TryGetComponent(out AbilityModHandler modHandler))
         {
-            targetNum += modHandler.GetModAttributeByType(this, AbilityModTypes.ProjectileNumber);
+            targetNum += modHandler.GetModAttributeByType(this, AbilityModTypes.Number);
         }
-
-        if (AbilityTypeTag == AbilityTypeTag.BuffsTarget) // logic assumes that only players will be using this ability type.
-        {
-            desiredTag = CharacterTag.Minion;
-        }
-        else desiredTag = CharacterTag.Enemy;
+        TeamType desiredTargetType = GetTargetPreference(caster);
         Transform spawnPoint = caster.GetComponent<AbilityHandler>().abilitySpawn.transform;
-
-
         //Debug.Log($"number of Targets found: {targets.Count}. max targets = {targetNum}");
-        return GetTargetfromSphereCast(this, spawnPoint, targetNum, desiredTag);
+        return GetTargetfromSphereCast(spawnPoint, targetNum, desiredTargetType);
     }
 
     public override bool Activate(GameObject user)
@@ -123,16 +113,4 @@ public class TargetMouseAbility : Ability
         }
     }
 }
-
-//if (AlchemyHandler.Instance.activeMinions.Count != 0)
-//                for (int i = 0; i < targetNum;)
-//                {
-//                    GameObject minionObject = minions[UnityEngine.Random.Range(0, minionNum)];
-//                    if (!targets.Contains(minionObject.GetComponent<LivingBeing>()))
-//                    {
-//                        targets.Add(minionObject.GetComponent<LivingBeing>());
-//                        i++;
-//                    }
-//                }
-
 

@@ -49,4 +49,22 @@ public static class CrewsRelationshipHandler
         if (attacker.TryGetComponent<AI_CC_State>(out AI_CC_State ccState) && ccState.isCharmed) return RelationshipType.Hostile;
         return (isAlly1 == isAlly2) ? RelationshipType.Friendly : RelationshipType.Hostile;
     }
+
+    public static List<CharacterTag> TargetTypeToCharTab(TeamType teamType)
+    {
+        List<CharacterTag> targetTypes = new List<CharacterTag>();
+        if (teamType == TeamType.Enemy)
+        {
+            targetTypes.Add(CharacterTag.Enemy);
+        }
+        else if (teamType == TeamType.Ally)
+        {
+            targetTypes = CrewsRelationshipHandler.Allies;
+        }
+        else if (teamType == TeamType.Either)
+        {
+            targetTypes.Add(CharacterTag.Enemy);
+        }
+        return targetTypes;
+    }
 }

@@ -19,8 +19,7 @@ public class Aura : MonoBehaviour
     private Collider sphereCollider;
 
     private LivingBeing target;
-    private ConjureAbility ConjureAbility;
-    private SplineAnimate splineAnimator;
+    private ConjureAbility ConjureAbility = null;
     private float radius = 1;
     private float speed = 1;
     private float duration;
@@ -34,6 +33,8 @@ public class Aura : MonoBehaviour
     }
     public void HandleInstantiation(LivingBeing caster, LivingBeing target, Ability ability)
     {
+
+        if (ability.AlterParticleSystemGradient) ColorChanger.ChangeObjectsParticleSystemColor(ability.ElementTypes[0], gameObject);
         SetAuraStats(caster, target, ability);
 
         HandleConjureAbilitySpecifics();
@@ -43,10 +44,13 @@ public class Aura : MonoBehaviour
         if (ability is AuraAbility auraAbility)
             radius = auraAbility.Radius;
 
+
         if (TryGetComponent(out CapsuleCollider collider))
             collider.radius = radius;
 
         CombatStatHandler.HandleEffectPackage(ability, caster, caster, ability.SelfEffects);
+        Destroy(gameObject, duration);
+
     }
     private void HandleConjureAbilitySpecifics()
     {
@@ -68,7 +72,6 @@ public class Aura : MonoBehaviour
         this.ability = ability;
         this.target = target;
 
-        Destroy(gameObject, duration);
 
         Activate();
 
@@ -106,6 +109,7 @@ public class Aura : MonoBehaviour
                     otherLivingBeing.AlterAbilityList(ability, true);
                     //Debug.Log($"Effects of {ability.Name} is being handled.");
                     CombatStatHandler.HandleEffectPackage(ability, caster, otherLivingBeing, ability.TargetEffects);
+                    if (ConjureAbility != null && ConjureAbility.SeeksTarget) Destroy(gameObject, .2f);
                 }
             }
             else Debug.Log($"NOT usable on {other.gameObject.name}");

@@ -7,7 +7,6 @@ public class AbilityHandler : MonoBehaviour
     [field: SerializeField] public GameObject abilitySpawn { private set; get; }
     [SerializeField] protected LivingBeing statsHandler;
     [field: SerializeField] public List<Ability> Abilities { private set; get; } = new();
-    [SerializeField] protected List<bool> abilitiesOnCooldown = new();
     public Dictionary<Ability, bool> abilitiesOnCooldownCrew = new();
     private Dictionary<BeamAbility, GameObject> toggledAbilitiesDict = new();
     [field: SerializeField] public WeaponInfo WeaponInfo { get; private set; }
@@ -29,7 +28,6 @@ public class AbilityHandler : MonoBehaviour
             statsHandler = gameObject.GetComponent<LivingBeing>();
         foreach (Ability ability in Abilities)
         {
-            abilitiesOnCooldown.Add(false);
             abilitiesOnCooldownCrew.Add(ability, false);
         }
         if (gameObject.TryGetComponent(out AbilityModHandler modScript))
@@ -44,7 +42,6 @@ public class AbilityHandler : MonoBehaviour
         {
             Abilities.Add(ability);
             abilitiesOnCooldownCrew.Add(ability, false);
-            abilitiesOnCooldown.Add(false);
         }
     }
 
@@ -65,7 +62,7 @@ public class AbilityHandler : MonoBehaviour
     {
         Ability ability = Abilities[abilityIndex];
 
-        if (Abilities.Count <= 0 || abilitiesOnCooldown[abilityIndex])
+        if (Abilities.Count <= 0 || abilitiesOnCooldownCrew[ability])
             return false;
 
         if (!HasEnoughPower(ability.Cost))
@@ -75,7 +72,6 @@ public class AbilityHandler : MonoBehaviour
 
         if (!usedAbility)
             return false;
-
         StartCoroutine(SetOnCooldown(ability));
         int costMod = modHandler.GetModAttributeByType(ability, AbilityModTypes.Cost);
         statsHandler?.ChangeAttribute(AttributeType.CurrentPower, -ability.Cost + costMod);
@@ -119,7 +115,6 @@ public class AbilityHandler : MonoBehaviour
                 }
                 break;
         }
-
         return usedAbility;
     }
     private bool HandleBeamAbility(BeamAbility beamAbility, LivingBeing statsHandler)
@@ -139,7 +134,6 @@ public class AbilityHandler : MonoBehaviour
 
             return true;
         }
-
     }
     public void SetCharging(bool alreadyCharging)
     {
@@ -153,8 +147,6 @@ public class AbilityHandler : MonoBehaviour
         toggledAbilitiesDict.Remove(beamAbility);
         Destroy(activeAbility);
     }
-
-
 
     public bool HasEnoughPower(float powerCost, AttributeType costType = AttributeType.CurrentPower)
     {
@@ -201,21 +193,6 @@ public class AbilityHandler : MonoBehaviour
         return auraAbility.Activate(statsHandler.gameObject);
     }
 
-    //public IEnumerator SetOnCooldown(int abilityIndex)
-    //{
-    //    Ability ability = Abilities[abilityIndex];
-    //    try
-    //    {
-    //        abilitiesOnCooldownCrew[ability] = true;
-    //        abilitiesOnCooldown[abilityIndex] = true;
-    //        yield return new WaitForSeconds(ability.Cooldown + modHandler.GetModAttributeByType(ability, AbilityModTypes.Cooldown));
-    //    }
-    //    finally
-    //    {
-    //        abilitiesOnCooldownCrew[ability] = false;
-    //        abilitiesOnCooldown[abilityIndex] = false;
-    //    }
-    //}
     public IEnumerator SetOnCooldown(Ability ability)
     {
         try

@@ -35,7 +35,7 @@ public class ProjectileAbility : Ability
         int shots = 1;
         if (user.TryGetComponent(out AbilityModHandler modHandler))
         {
-            shots += modHandler.GetModAttributeByType(this, AbilityModTypes.ProjectileNumber);
+            shots += modHandler.GetModAttributeByType(this, AbilityModTypes.Number);
         }
         for (int i = 0; i < shots; i += 1)
         {

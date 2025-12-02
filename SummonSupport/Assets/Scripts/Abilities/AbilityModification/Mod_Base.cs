@@ -43,7 +43,7 @@ public class Mod_Base
             { AbilityModTypes.MaxPierce, (() => MaxPierce_Mod, v => MaxPierce_Mod = v) },
             { AbilityModTypes.MaxSplit, (() => MaxSplit_Mod, v => MaxSplit_Mod = v) },
             { AbilityModTypes.MaxRicochet, (() => MaxRicochet_Mod, v => MaxRicochet_Mod = v) },
-            { AbilityModTypes.ProjectileNumber, (() => ProjectileNumber_Mod, v => ProjectileNumber_Mod = v) },
+            { AbilityModTypes.Number, (() => ProjectileNumber_Mod, v => ProjectileNumber_Mod = v) },
         };
     }
 

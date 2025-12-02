@@ -6,7 +6,6 @@ public class ConjureAbility : Ability
 {
     [field: Header("Conjure settings"), Tooltip("Ability prefab")]
     [field: SerializeField] public GameObject ObjectToSpawn { get; protected set; }
-    [field: SerializeField] public GameObject SpawnEffectOnHit { get; set; } = null;
 
     [field: SerializeField] public Vector3 SpawnOffset { get; protected set; }
     [field: SerializeField] public float RotationOffset { get; protected set; } = 0;
@@ -28,7 +27,6 @@ public class ConjureAbility : Ability
 
     public override bool Activate(GameObject user)
     {
-
         Debug.Log("Activating conjure ability");
         Vector3 spawnPosition = user.transform.position + (Vector3)SpawnOffset;
         Quaternion rotation = user.transform.rotation;
@@ -37,48 +35,37 @@ public class ConjureAbility : Ability
 
     public bool Activate(GameObject user, Vector3 spawnPosition, Quaternion rotation)
     {
-        CharacterTag desiredTag = CharacterTag.Enemy;
-        if (user.TryGetComponent(out EnemyStats enemyStats))
-        {
-            desiredTag = CharacterTag.Minion;
-        }
+        LivingBeing casterStats = user.GetComponent<LivingBeing>();
 
         int targetNum = 1;
         float duration = Duration;
+
         if (user.TryGetComponent(out AbilityModHandler modHandler))
         {
-            targetNum += modHandler.GetModAttributeByType(this, AbilityModTypes.ProjectileNumber);
+            targetNum += modHandler.GetModAttributeByType(this, AbilityModTypes.Number);
             duration += modHandler.GetModAttributeByType(this, AbilityModTypes.Duration);
-
         }
+        TeamType desiredTargetType = this.GetTargetPreference(casterStats);
 
-        List<LivingBeing> targets = GetTargetfromSphereCast(this, user.GetComponent<AbilityHandler>().abilitySpawn.transform, targetNum, desiredTag);
-        int targetsFound = 0;
+        List<LivingBeing> targets = GetTargetfromSphereCast(user.GetComponent<AbilityHandler>().abilitySpawn.transform, targetNum, desiredTargetType);
         foreach (LivingBeing target in targets)
         {
             Debug.Log($"{target.Name} found in GetTarget from spherecast function");
-            if (targetsFound < targetNum)
+
+            Quaternion newRotation = Quaternion.identity;
+            if (!LeaveRotation)
+                newRotation = rotation * Quaternion.Euler(0, 0, RotationOffset);
+
+            Vector3 SpawnLoc = target.transform.position + SpawnOffset;
+
+            GameObject spawnedObject = Instantiate(ObjectToSpawn, SpawnLoc, newRotation);
+
+            Aura auraInChildren = spawnedObject.GetComponentInChildren<Aura>();
+            if (auraInChildren != null)
             {
-                Quaternion newRotation = Quaternion.identity;
-                if (!LeaveRotation)
-                    newRotation = rotation * Quaternion.Euler(0, 0, RotationOffset);
-                Vector3 SpawnLoc = target.transform.position + SpawnOffset;
-                GameObject spawnedObject = Instantiate(ObjectToSpawn, SpawnLoc, newRotation);
-
-                if (IsDecaying)
-                    Destroy(spawnedObject, duration);
-
-                Aura auraInChildren = spawnedObject.GetComponentInChildren<Aura>();
-                if (auraInChildren != null)
-                {
-                    auraInChildren.HandleInstantiation(user.GetComponent<LivingBeing>(), target, this);
-                }
+                auraInChildren.HandleInstantiation(user.GetComponent<LivingBeing>(), target, this);
             }
-            else return true;
-
         }
-
-
 
         return true;
     }

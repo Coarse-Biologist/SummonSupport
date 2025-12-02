@@ -111,7 +111,6 @@ public class CreatureAbilityHandler : AbilityHandler
         {
             Abilities.Add(ability);
             abilitiesOnCooldownCrew.Add(ability, false);
-            abilitiesOnCooldown.Add(false);
         }
         SetAbilityLists();
     }

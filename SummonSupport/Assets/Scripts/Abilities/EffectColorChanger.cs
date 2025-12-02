@@ -42,22 +42,7 @@ public static class ColorChanger
         ElementToColorDict.Add(Element.Fungi, Color.slateGray);
         ElementToColorDict.Add(Element.Air, Color.lightGray);
         ElementToColorDict.Add(Element.Light, Color.lightGoldenRodYellow);
-        //else { Debug.Log("initializing color dict"); }
-        //ElementToColorDict.Add(Element.Cold, new float[4] { 0.3f, 0.7f, 1f, 1f });   // icy blue
-        //ElementToColorDict.Add(Element.Water, new float[4] { 0f, 0.4f, 1f, 1f });     // deep water blue
-        //ElementToColorDict.Add(Element.Plant, new float[4] { 0.1f, 0.6f, 0.1f, 1f }); // natural green
-        //ElementToColorDict.Add(Element.Bacteria, new float[4] { 0.4f, 0.6f, 0.2f, 1f }); // swampy green
-        //ElementToColorDict.Add(Element.Poison, new float[4] { 0.3f, 0.6f, 0.2f, 1f }); // swampy green with less blue
-        //ElementToColorDict.Add(Element.Virus, new float[4] { 0.2f, 0.8f, 0.4f, 1f }); // sickly neon green
-        //ElementToColorDict.Add(Element.Acid, new float[4] { 0.6f, 1f, 0.2f, 1f });   // toxic yellow-green
-        //ElementToColorDict.Add(Element.Heat, new float[4] { 1f, 0.3f, 0f, 1f });     // fiery red-orange
-        //ElementToColorDict.Add(Element.Radiation, new float[4] { 1f, 0.5f, 0f, 1f });     // stunning orange
-        //ElementToColorDict.Add(Element.Electricity, new float[4] { 1f, 1f, 0.2f, 1f });     // bright yellow
-        //ElementToColorDict.Add(Element.Psychic, new float[4] { 0.6f, 0.2f, 0.8f, 1f }); // deep purple
-        //ElementToColorDict.Add(Element.Earth, new float[4] { 0.5f, 0.3f, 0.1f, 1f }); // earthy brown
-        //ElementToColorDict.Add(Element.Fungi, new float[4] { 0.5f, 0.6f, 0.6f, 1f }); // sporey grey
-        //ElementToColorDict.Add(Element.Air, new float[4] { 0.6f, 0.6f, 0.6f, 1f }); // sporey grey
-        //ElementToColorDict.Add(Element.Light, new float[4] { 1f, 1f, 0.85f, 1f });    // radiant soft white-yellow
+
     }
 
     public static void SetImmersiveBleedEffect(ParticleSystem particleSystem, LivingBeing livingBeing)
@@ -75,19 +60,25 @@ public static class ColorChanger
         ParticleSystem ps = potentialParticleSystemObject.GetComponentInChildren<ParticleSystem>();
         if (ps != null) ChangeParticleSystemColor(livingBeing, ps);
     }
+    public static void ChangeObjectsParticleSystemColor(Element element, GameObject potentialParticleSystemObject)
+    {
+        ParticleSystem ps = potentialParticleSystemObject.GetComponentInChildren<ParticleSystem>();
+        if (ps != null) ChangeParticleSystemColor(element, ps);
+    }
 
     public static void ChangeParticleSystemColor(LivingBeing livingBeing, ParticleSystem particleSystem)
     {
-        //Debug.Log($"Trying to change color of {particleSystem} to match {livingBeing}s resistences.");
         Element strongestElement = livingBeing.GetHighestAffinity();
         if (livingBeing.Affinities[strongestElement].Get() > 0)
         {
             var colorGradient = colorGradientLibrary.GetGradientByElement(strongestElement);
             SetGradient(particleSystem, colorGradient);
-            //Debug.Log($"color gradient selected: {colorGradient.colorKeys[0]}");
         }
-        //else Debug.Log("NO GRADIENT SELECTED");
-
+    }
+    public static void ChangeParticleSystemColor(Element element, ParticleSystem particleSystem)
+    {
+        var colorGradient = colorGradientLibrary.GetGradientByElement(element);
+        SetGradient(particleSystem, colorGradient);
     }
 
     private static void SetGradient(ParticleSystem ps, Gradient colorGradient)
