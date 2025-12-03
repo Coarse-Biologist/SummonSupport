@@ -126,6 +126,8 @@ public class AIChaseState : AIState
                 yield break;
             }
 
+            Debug.Log($"target selected : {target}.");
+
             Ability ability = stateHandler.abilityHandler.GetAbilityForTarget(target);
             Debug.Log($"Ability selected : {ability}.");
             if (ability != null)

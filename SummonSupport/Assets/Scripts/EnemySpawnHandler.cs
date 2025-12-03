@@ -236,6 +236,8 @@ public class EnemySpawnHandler : MonoBehaviour
     }
     private void AddElementalAbilities(int level, LivingBeing livingBeing, Element element)
     {
+        CreatureAbilityHandler abilityHandler = livingBeing.GetComponent<CreatureAbilityHandler>();
+
         //Ability elementalAbility = SetupManager.Instance.ElementToAbilityLibrary_SO.GetAbilityOfElementType(element);
         foreach (Ability ability in AbilityLibrary.GetRandomAbilities(element, level + 1))
         {
@@ -245,9 +247,10 @@ public class EnemySpawnHandler : MonoBehaviour
     }
     private void AddPhysicalAbilities(int level, LivingBeing livingBeing, PhysicalType physical)
     {
-        //Ability elementalAbility = SetupManager.Instance.ElementToAbilityLibrary_SO.GetAbilityOfPhysicalType(physical);
+        CreatureAbilityHandler abilityHandler = livingBeing.GetComponent<CreatureAbilityHandler>();
+        Debug.Log($"learning a new ability for {livingBeing.Name}");
         foreach (Ability ability in AbilityLibrary.GetRandomAbilities(physical, level + 1))
-            livingBeing.GetComponent<AbilityHandler>().LearnAbility(ability);
+            livingBeing.GetComponent<CreatureAbilityHandler>().LearnAbility(ability);
     }
 
     private int GetCreatureLevel()

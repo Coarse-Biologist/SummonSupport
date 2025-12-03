@@ -141,25 +141,13 @@ public class MeleeAbility : Ability
         Vector3 spawnLoc = GetSpawnLoc(target);
         if (MeleeParticleSystem != null)
         {
-            if (abilityHandler.WeaponInfo == null)
-            {
-                Debug.Log("going to instantiate el chico maldito");
-                particleSystem = Instantiate(MeleeParticleSystem, spawnLoc, Quaternion.identity);
-                Quaternion rotation = Quaternion.LookRotation(originTransform.transform.forward);
-                particleSystem.transform.rotation = rotation;
-                Destroy(particleSystem, 2); //particleSystem.GetComponent<ParticleSystem>().main.duration);
 
-            }
-            else
-            {
-                HandleUseMeleeWeapon();
-            }
+            Debug.Log("going to instantiate el chico maldito");
+            particleSystem = Instantiate(MeleeParticleSystem, spawnLoc, Quaternion.identity, caster.transform);
+            Quaternion rotation = Quaternion.LookRotation(originTransform.transform.forward);
+            particleSystem.transform.rotation = rotation;
+            Destroy(particleSystem, particleSystem.GetComponentInChildren<ParticleSystem>().main.duration);
 
-            //if (Shape != AreaOfEffectShape.Sphere)
-            //{
-            //    particleSystem.transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
-            //    //you sure about this big dog?
-            //}
         }
     }
     private Vector3 GetSpawnLoc(LivingBeing target)
@@ -170,26 +158,7 @@ public class MeleeAbility : Ability
         return spawnLoc;
     }
 
-    private void HandleUseMeleeWeapon()
-    {
-        float angle = Mathf.Atan2(-originTransform.up.y, -originTransform.up.x) * Mathf.Rad2Deg;
 
-        GameObject particleSystem = Instantiate(abilityHandler.WeaponInfo.animationSplineObject, originTransform.position, Quaternion.identity);
-
-        SpriteRenderer spriteRenderer = particleSystem.GetComponentInChildren<SpriteRenderer>();
-        if (spriteRenderer != null)
-        {
-            spriteRenderer.sprite = abilityHandler.WeaponInfo.WeaponSprite;
-        }
-        else { Debug.Log("There must be an error here"); }
-        SplineAnimate animator = abilityHandler.WeaponInfo.animationSplineObject.GetComponentInChildren<SplineAnimate>();
-
-        animator.Play();
-
-        particleSystem.transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
-
-        Destroy(particleSystem, animator.Duration);
-    }
 
 }
 

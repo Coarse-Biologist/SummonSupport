@@ -34,16 +34,25 @@ public class CreatureAbilityHandler : AbilityHandler
         LivingBeing casterStats = GetComponent<LivingBeing>();
 
         if (target == null)
+        {
+
             return null;
+        }
 
         if (RelationshipHandler.GetRelationshipType(target.CharacterTag, casterStats.CharacterTag) == RelationshipType.Friendly)
         {
+
             targetIsFriendly = true;
         }
         if (RelationshipHandler.GetRelationshipType(target.CharacterTag, casterStats.CharacterTag) == RelationshipType.Hostile)
         {
+
             targetIsFriendly = false;
-            if (attackAbilities.Count == 0) return null;
+            if (attackAbilities.Count == 0)
+            {
+
+                return null;
+            }
         }
         //Logging.Info($" elapsed time : {stopwatch.ElapsedMilliseconds}");
 
@@ -60,7 +69,6 @@ public class CreatureAbilityHandler : AbilityHandler
                 allSupportAbilities.Add(ability);
                 synergyAbilities.Add(ability);
             }
-            //else UnityEngine.Debug.Log($"{ability.name} would not synergize with {target}");
         }
         if (friendlyTarget)
         {
@@ -74,7 +82,6 @@ public class CreatureAbilityHandler : AbilityHandler
 
         if (IsOnCoolDown(selectedAbility))
         {
-            //UnityEngine.Debug.Log($"Returning null insytead of an ability");
             return null;
         }
         if (forSelf && selectedAbility is ProjectileAbility)
@@ -85,12 +92,18 @@ public class CreatureAbilityHandler : AbilityHandler
 
     public void SetAbilityLists()
     {
+
         foreach (Ability ability in Abilities) // make list of support and attack abilities
         {
+
             if (ability.AbilityTypeTag == AbilityTypeTag.DebuffsTarget)
+            {
+
                 attackAbilities.Add(ability);
+            }
             else if (ability.AbilityTypeTag == AbilityTypeTag.BuffsTarget)
             {
+
                 supportAbilities.Add(ability);
             }
         }

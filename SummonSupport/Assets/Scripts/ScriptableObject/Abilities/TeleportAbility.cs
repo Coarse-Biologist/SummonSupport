@@ -21,18 +21,22 @@ public class TeleportAbility : Ability
 
     public bool Activate(GameObject user, Vector3 targetLocation)
     {
-        RaycastHit[] hits = Physics.SphereCastAll(user.transform.position, Range, user.transform.forward, Range);
-        foreach (RaycastHit hit in hits)
-        {
-            if (hit.collider.gameObject.TryGetComponent(out LivingBeing targetStats))
-            {
-                if (IsUsableOn(user.GetComponent<LivingBeing>().CharacterTag, targetStats.CharacterTag))
-                {
-                    CoroutineManager.Instance.StartCustomCoroutine(TeleportToBeing(user, targetStats));
+        LivingBeing casterStats = user.GetComponent<LivingBeing>();
+        //RaycastHit[] hits = Physics.SphereCastAll(user.transform.position, Range, user.transform.forward, Range);
+        TeamType desiredTargetType = this.GetTargetPreference(casterStats);
 
-                    return true;
-                }
+        List<LivingBeing> targets = GetTargetfromSphereCast(user.GetComponent<AbilityHandler>().abilitySpawn.transform, 1, desiredTargetType);
+
+        foreach (LivingBeing target in targets)
+        {
+
+            if (IsUsableOn(casterStats.CharacterTag, target.CharacterTag))
+            {
+                CoroutineManager.Instance.StartCustomCoroutine(TeleportToBeing(user, target));
+
+                return true;
             }
+
         }
         return false;
     }
@@ -50,7 +54,7 @@ public class TeleportAbility : Ability
 
             yield return new WaitForSeconds(ActivationSpeed);
 
-            user.transform.position = target.transform.position;
+            user.transform.position = target.transform.position + (user.transform.position * .1f);
 
             if (ActivateOnArrive != null) ActivateOnArrive.Activate(user);
 
