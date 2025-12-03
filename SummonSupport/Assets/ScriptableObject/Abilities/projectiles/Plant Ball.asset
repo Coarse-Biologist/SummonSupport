@@ -56,7 +56,9 @@ MonoBehaviour:
     <SpecialAbilityAttribute>k__BackingField: 0
   <ElementTypes>k__BackingField: 0b000000
   <PhysicalType>k__BackingField: 0
-  <OnHitEffect>k__BackingField: {fileID: 0}
+  <OnHitEffect>k__BackingField: {fileID: 5005864844744066183, guid: 4abfee1134a924843a0c2d8f0b92357e,
+    type: 3}
+  <AlterParticleSystemGradient>k__BackingField: 0
   <Speed>k__BackingField: 9
   <Projectile>k__BackingField: {fileID: 6033447785082643316, guid: 706fd26b292fae4488c9b19eec3811fc,
     type: 3}
@@ -67,6 +69,4 @@ MonoBehaviour:
   <MaxSplit>k__BackingField: 0
   <SplitAngleOffset>k__BackingField: 45
   <ProjectileParticleSystem>k__BackingField: {fileID: 7835954012570137276, guid: e2dbb580cd984ab44bc7316340096e8e,
-    type: 3}
-  <SpawnEffectOnHit>k__BackingField: {fileID: 5005864844744066183, guid: 4abfee1134a924843a0c2d8f0b92357e,
     type: 3}

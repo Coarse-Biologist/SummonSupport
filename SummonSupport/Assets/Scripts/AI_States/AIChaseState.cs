@@ -127,13 +127,13 @@ public class AIChaseState : AIState
             }
 
             Ability ability = stateHandler.abilityHandler.GetAbilityForTarget(target);
-
+            Debug.Log($"Ability selected : {ability}.");
             if (ability != null)
             {
                 SetAbilityRange(ability.Range);
 
                 if ((transform.position - target.transform.position).sqrMagnitude <
-                    SelectedAbilityAttackRange * SelectedAbilityAttackRange)
+                    SelectedAbilityAttackRange * SelectedAbilityAttackRange || ability is AuraAbility)
                 {
                     abilityHandler.UseAbility(target, ability);
                 }

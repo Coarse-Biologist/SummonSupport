@@ -23,12 +23,6 @@ public class SetupManager : MonoBehaviour
 
 
 
-
-
-
-
-
-
     void Awake()
     {
         if (Instance != null) Destroy(this);
@@ -67,11 +61,5 @@ public class SetupManager : MonoBehaviour
         Destroy(instance, duration);
     }
 
-    //public static StatusEffects GetStatusEffect(StatusEffectType type)
-    //{
-    //    //if (StatusEffectDict.TryGetValue(type, out StatusEffects status)) return status;
-    //    //else throw new System.Exception($"The status effect type {type} you have tried to search was  ot present in tge setup manager script");
-    //
-    //}
 
 }

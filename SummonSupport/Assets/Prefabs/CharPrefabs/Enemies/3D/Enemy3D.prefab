@@ -41,7 +41,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5964188555912298956}
@@ -111,7 +111,6 @@ MonoBehaviour:
   <abilitySpawn>k__BackingField: {fileID: 8925903879776759123}
   statsHandler: {fileID: 0}
   <Abilities>k__BackingField: []
-  abilitiesOnCooldown: 
   <WeaponInfo>k__BackingField: {fileID: 0}
 --- !u!114 &4224478794472677734
 MonoBehaviour:
@@ -146,7 +145,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44ab2ba03c11b4e42ab351bacab08390, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AIChaseState
-  rotationObject: {fileID: 0}
+  rotationObject: {fileID: 8925903879776759123}
 --- !u!114 &3635743163126103005
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -258,8 +257,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.6350589, y: 1.5, z: 1.4854755}
-  m_Center: {x: -0.00050605834, y: 0.7, z: 0.0264858}
+  m_Size: {x: 0.6350589, y: 1, z: 1.4854755}
+  m_Center: {x: -0.00050605834, y: 0.3, z: 0.0264858}
 --- !u!54 &8380647337846140276
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -305,7 +304,7 @@ NavMeshAgent:
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
-  m_Height: 2
+  m_Height: 1
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 2
@@ -348,7 +347,7 @@ Transform:
   m_GameObject: {fileID: 8925903879776759123}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.57, z: 0.65}
+  m_LocalPosition: {x: 0, y: 0.57, z: 0.743}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

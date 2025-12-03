@@ -20,7 +20,7 @@ MonoBehaviour:
   <Cost>k__BackingField: 10
   <Range>k__BackingField: 3
   <Duration>k__BackingField: 8
-  <AbilityTypeTag>k__BackingField: 0
+  <AbilityTypeTag>k__BackingField: 1
   <ListUsableOn>k__BackingField: 01000000
   <TargetEffects>k__BackingField:
     <EffectDescription>k__BackingField: 
@@ -58,6 +58,7 @@ MonoBehaviour:
   <PhysicalType>k__BackingField: 0
   <OnHitEffect>k__BackingField: {fileID: 6254874057816512933, guid: 933cfe8c2862c75499ef399a089d01f4,
     type: 3}
+  <AlterParticleSystemGradient>k__BackingField: 0
   <Radius>k__BackingField: 3
   <AuraObject>k__BackingField: {fileID: 1699087696372334086, guid: fb28606cc754ca443ab8317690353969,
     type: 3}

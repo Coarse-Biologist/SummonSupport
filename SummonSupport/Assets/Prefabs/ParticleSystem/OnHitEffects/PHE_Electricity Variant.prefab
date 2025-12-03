@@ -71,7 +71,7 @@ PrefabInstance:
     - target: {fileID: 5814940159913737704, guid: e6fb8b5d969da8241baaff1bd374c273,
         type: 3}
       propertyPath: ShapeModule.m_Rotation.x
-      value: 0
+      value: -90
       objectReference: {fileID: 0}
     - target: {fileID: 5814940159913737704, guid: e6fb8b5d969da8241baaff1bd374c273,
         type: 3}
@@ -86,7 +86,7 @@ PrefabInstance:
     - target: {fileID: 5814940159913737704, guid: e6fb8b5d969da8241baaff1bd374c273,
         type: 3}
       propertyPath: ShapeModule.radius.value
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5814940159913737704, guid: e6fb8b5d969da8241baaff1bd374c273,
         type: 3}

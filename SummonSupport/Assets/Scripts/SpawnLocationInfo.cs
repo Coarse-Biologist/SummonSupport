@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class SpawnLocationInfo : MonoBehaviour
 {
-    [field: SerializeField] public int DesiredSpawns { get; private set; } = 3;
+    [field: SerializeField] public int CreaturesPerWave { get; private set; } = 3;
+    [field: SerializeField] public int Waves { get; private set; } = 3;
+    [field: SerializeField] public int SecondsPerWave { get; private set; } = 20;
     [field: SerializeField] public float Radius { get; private set; } = 3;
     [field: SerializeField] public bool MoveTowardLocation { get; private set; } = false;
 

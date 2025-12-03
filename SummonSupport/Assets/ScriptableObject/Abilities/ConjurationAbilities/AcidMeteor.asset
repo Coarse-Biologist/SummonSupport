@@ -56,12 +56,10 @@ MonoBehaviour:
     <SpecialAbilityAttribute>k__BackingField: 0
   <ElementTypes>k__BackingField: 08000000
   <PhysicalType>k__BackingField: 0
-  <OnHitEffect>k__BackingField: {fileID: 1847413739128325886, guid: 704913a3a10ed9a45bdca983af7ed99f,
+  <OnHitEffect>k__BackingField: {fileID: 5705030685624713920, guid: 1cf207986de988e47adade098e6119ca,
     type: 3}
   <AlterParticleSystemGradient>k__BackingField: 1
   <ObjectToSpawn>k__BackingField: {fileID: 1142077846852881211, guid: 92f7eebcf2302cd4b95a8d2467921c88,
-    type: 3}
-  <SpawnEffectOnHit>k__BackingField: {fileID: 1847413739128325886, guid: 704913a3a10ed9a45bdca983af7ed99f,
     type: 3}
   <SpawnOffset>k__BackingField: {x: 0, y: 10, z: 0}
   <RotationOffset>k__BackingField: 0

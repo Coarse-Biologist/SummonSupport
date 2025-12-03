@@ -71,12 +71,10 @@ public static class CombatStatHandler
         {
             foreach (StatusEffects status in currentStatusEffects)
             {
-                //UnityEngine.Debug.Log("The endgame of status effects has been reached?");
-
                 target.AlterStatusEffectList(status.EffectType, true);
                 target.StartCoroutine(RemoveStatusEffect(status));
             }
-            if (target.TryGetComponent<AI_CC_State>(out AI_CC_State ccState))
+            if (target.TryGetComponent(out AI_CC_State ccState))
             {
                 foreach (StatusEffects status in currentStatusEffects)
                 {
@@ -144,7 +142,7 @@ public static class CombatStatHandler
     }
     public static float AdjustAndApplyTempChange(TempAttrChange tempAttr)
     {
-        //UnityEngine.Debug.Log("Adjusting and applying tempchange");
+        UnityEngine.Debug.Log("Adjusting and applying tempchange");
         float changeValue = tempAttr.Value;
         float duration = currentAbility.Duration;
         if (tempAttr is TempAttrDecrease_AT) changeValue = -changeValue; // set to negative if it decreases
@@ -153,7 +151,7 @@ public static class CombatStatHandler
             if (currentAbility.ElementTypes.Count > 0) changeValue = AdjustBasedOnAffinity(currentAbility.ElementTypes[0], changeValue);
             if (currentAbility.PhysicalType != PhysicalType.None) changeValue = AdjustBasedOnArmor(currentAbility.PhysicalType, changeValue);
         }
-        //UnityEngine.Debug.Log($"the change value = {changeValue}. tempAttr.PhysicalResistance = {tempAttr.ElementalAffinity}");
+        UnityEngine.Debug.Log($"the change value = {changeValue}. tempAttr.PhysicalResistance = {tempAttr.ElementalAffinity}");
 
         if (tempAttr.ResourceAttribute != AttributeType.None) ApplyTempValue(tempAttr.ResourceAttribute, changeValue, duration);
         if (tempAttr.PhysicalResistance != PhysicalType.None) ApplyTempValue(tempAttr.PhysicalResistance, changeValue, duration);
@@ -292,17 +290,18 @@ public static class CombatStatHandler
     public static void ApplyTempValue(AttributeType attributeType, float newValue, float duration)
     {
         currentTarget.SetAttribute(attributeType, currentTarget.GetAttribute(attributeType) + newValue);
-        currentTarget.StartCoroutine(ResetTempAttribute(attributeType, newValue, duration));
+        currentTarget.StartCoroutine(ResetTempAttribute(attributeType, -newValue, duration));
     }
     #region temp movement change
 
-    public static void ApplyTempValue(MovementAttributes movementAttribute, float newValue, float duration)
+    public static void ApplyTempValue(MovementAttributes movementAttribute, float tempValue, float duration)
     {
-        //Logging.Info($"{target.name} has had {attributeType} changed by {newValue}");
+        Logging.Info($"{currentTarget.name} has had {movementAttribute} changed by {tempValue}");
         if (currentTarget.TryGetComponent<MovementScript>(out MovementScript movementScript))
         {
-            movementScript.SetMovementAttribute(movementAttribute, movementScript.GetMovementAttribute(movementAttribute) + newValue);
-            movementScript.StartCoroutine(ResetTempMovementAttribute(movementScript, movementAttribute, newValue, duration));
+            float preChangeValue = movementScript.GetMovementAttribute(movementAttribute);
+            movementScript.StartCoroutine(ResetTempMovementAttribute(movementScript, movementAttribute, preChangeValue, duration));
+            movementScript.SetMovementAttribute(movementAttribute, preChangeValue + tempValue);
         }
     }
 
@@ -381,7 +380,6 @@ public static class CombatStatHandler
 
     private static IEnumerator RemoveStatusEffect(StatusEffects status)
     {
-        UnityEngine.Debug.Log("The endgame of status effects has been reached?");
         yield return new WaitForSeconds(status.Duration);
         currentTarget.AlterStatusEffectList(status.EffectType, false);
 
@@ -399,7 +397,8 @@ public static class CombatStatHandler
                 elapsed += tickRateFloat;
             }
         }
-        ApplyValue(attributeType, -changeValue); // resets by adding the opposite of what was added before (which may have been negative)
+        UnityEngine.Debug.Log($"attribute type {attributeType} is being reset by adding {changeValue}");
+        ApplyValue(attributeType, changeValue); // resets by adding the opposite of what was added before (which may have been negative)
         currentTarget.AlterAbilityList(currentAbility, false);
     }
     #endregion

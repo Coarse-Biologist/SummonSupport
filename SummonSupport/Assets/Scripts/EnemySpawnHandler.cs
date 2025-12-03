@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using SummonSupportEvents;
@@ -39,6 +40,7 @@ public class EnemySpawnHandler : MonoBehaviour
 
     #endregion
 
+    #region Setup
     void Start()
     {
         SetSpawnProbabilities(Difficulty.Novice);
@@ -54,29 +56,82 @@ public class EnemySpawnHandler : MonoBehaviour
     {
         EventDeclarer.SpawnEnemies.RemoveListener(SpawnEnemies);
     }
+    private void SetSpawnProbabilities(Difficulty gameDifficulty)
+    {
+        switch (gameDifficulty)
+        {
+            case Difficulty.Novice:
+                lvl1_creatureProbability = 90;
+                lvl2_creatureProbability = 94;
+                lvl3_creatureProbability = 97;
+                lvl4_creatureProbability = 100;
+                break;
+            case Difficulty.Apprentice:
+                lvl1_creatureProbability = 80;
+                lvl2_creatureProbability = 85;
+                lvl3_creatureProbability = 95;
+                lvl4_creatureProbability = 100;
+                break;
 
-    private void SpawnEnemies(SpawnLocationInfo spawnInfo = null)
+            case Difficulty.Journeyman:
+                lvl1_creatureProbability = 70;
+                lvl2_creatureProbability = 80;
+                lvl3_creatureProbability = 90;
+                lvl4_creatureProbability = 100;
+                break;
+            case Difficulty.Master:
+                lvl1_creatureProbability = 60;
+                lvl2_creatureProbability = 70;
+                lvl3_creatureProbability = 80;
+                lvl4_creatureProbability = 100;
+                break;
+            case Difficulty.Legend:
+                lvl1_creatureProbability = 50;
+                lvl2_creatureProbability = 65;
+                lvl3_creatureProbability = 75;
+                lvl4_creatureProbability = 100;
+                break;
+            default:
+                lvl1_creatureProbability = 90;
+                lvl2_creatureProbability = 94;
+                lvl3_creatureProbability = 97;
+                lvl4_creatureProbability = 100;
+                break;
+        }
+    }
+    #endregion
+
+    #region Spawn logic
+    public void SpawnEnemies(SpawnLocationInfo spawnInfo = null)
+    {
+        StartCoroutine(SpawnWavesOfEnemies(spawnInfo));
+    }
+    private IEnumerator SpawnWavesOfEnemies(SpawnLocationInfo spawnInfo = null)
     {
         if (spawnInfo == null) spawnInfo = SpawnCenter.GetComponent<SpawnLocationInfo>();
         if (spawnInfo != null & spawnInfo.Creatures.Count > 0)
         {
-            List<GameObject> spawnedCreatures = new();
+            for (int i = spawnInfo.Waves; i > 0; i--)
+            {
+                Debug.Log($"Spawning wave {i}");
+                List<GameObject> spawnedCreatures = new();
 
-            List<Vector2> spawnLocs = GetSpawnLocations(SpawnCenter.transform.position, spawnInfo.Radius, spawnInfo.DesiredSpawns);
-            foreach (Vector2 loc in spawnLocs)
-            {
-                GameObject SpawnedCreature = Instantiate(spawnInfo.Creatures[UnityEngine.Random.Range(0, spawnInfo.Creatures.Count)], loc, Quaternion.identity);
-                int level = GetCreatureLevel();
-                ModifyCreatureStats(level, SpawnedCreature.GetComponent<LivingBeing>(), spawnInfo);
-                spawnedCreatures.Add(SpawnedCreature);
-                Debug.Log($"{SpawnedCreature} lives and breathes");
-            }
-            if (spawnInfo.MoveTowardLocation && spawnInfo.TargetLocation != null)
-            {
-                foreach (GameObject creature in spawnedCreatures)
+                List<Vector2> spawnLocs = GetSpawnLocations(SpawnCenter.transform.position, spawnInfo.Radius, spawnInfo.CreaturesPerWave);
+                foreach (Vector2 loc in spawnLocs)
                 {
-                    MoveTowardTarget(creature, spawnInfo.TargetLocation.position);
+                    GameObject SpawnedCreature = Instantiate(spawnInfo.Creatures[UnityEngine.Random.Range(0, spawnInfo.Creatures.Count)], loc, Quaternion.identity);
+                    int level = GetCreatureLevel();
+                    ModifyCreatureStats(level, SpawnedCreature.GetComponent<LivingBeing>(), spawnInfo);
+                    spawnedCreatures.Add(SpawnedCreature);
                 }
+                if (spawnInfo.MoveTowardLocation && spawnInfo.TargetLocation != null)
+                {
+                    foreach (GameObject creature in spawnedCreatures)
+                    {
+                        MoveTowardTarget(creature, spawnInfo.TargetLocation.position);
+                    }
+                }
+                yield return new WaitForSeconds(spawnInfo.SecondsPerWave);
             }
         }
         else Debug.Log($"The invoked spawn center {spawnInfo} contains no creatures.");
@@ -88,7 +143,7 @@ public class EnemySpawnHandler : MonoBehaviour
         {
             List<GameObject> spawnedCreatures = new();
 
-            List<Vector2> spawnLocs = GetSpawnLocations(SpawnCenter.transform.position, spawnInfo.Radius, spawnInfo.DesiredSpawns);
+            List<Vector2> spawnLocs = GetSpawnLocations(SpawnCenter.transform.position, spawnInfo.Radius, spawnInfo.CreaturesPerWave);
             foreach (Vector2 loc in spawnLocs)
             {
                 GameObject SpawnedCreature = Instantiate(spawnInfo.Creatures[UnityEngine.Random.Range(0, spawnInfo.Creatures.Count)], loc, Quaternion.identity);
@@ -139,6 +194,9 @@ public class EnemySpawnHandler : MonoBehaviour
         return UnityEngine.Random.Range(-radius, radius);
     }
 
+    #endregion
+
+    #region Creature Modification and Specialization
     public void ModifyCreatureStats(int level, LivingBeing originalCreatureStats, SpawnLocationInfo spawnInfo = null) // should pass the stats of a creature which has already been instantiated
     {
         Element element = SelectCreatureElement(spawnInfo);
@@ -178,13 +236,9 @@ public class EnemySpawnHandler : MonoBehaviour
     }
     private void AddElementalAbilities(int level, LivingBeing livingBeing, Element element)
     {
-        Debug.Log($"Adding elemental abilities for {livingBeing}? ");
         //Ability elementalAbility = SetupManager.Instance.ElementToAbilityLibrary_SO.GetAbilityOfElementType(element);
         foreach (Ability ability in AbilityLibrary.GetRandomAbilities(element, level + 1))
         {
-            Debug.Log($"Adding elemental abilities for {livingBeing}? yes, {ability}");
-
-            Debug.Log($"learning {ability}");
             livingBeing.GetComponent<CreatureAbilityHandler>().LearnAbility(ability);
         }
 
@@ -194,50 +248,6 @@ public class EnemySpawnHandler : MonoBehaviour
         //Ability elementalAbility = SetupManager.Instance.ElementToAbilityLibrary_SO.GetAbilityOfPhysicalType(physical);
         foreach (Ability ability in AbilityLibrary.GetRandomAbilities(physical, level + 1))
             livingBeing.GetComponent<AbilityHandler>().LearnAbility(ability);
-    }
-
-    private void SetSpawnProbabilities(Difficulty gameDifficulty)
-    {
-        switch (gameDifficulty)
-        {
-            case Difficulty.Novice:
-                lvl1_creatureProbability = 90;
-                lvl2_creatureProbability = 94;
-                lvl3_creatureProbability = 97;
-                lvl4_creatureProbability = 100;
-                break;
-            case Difficulty.Apprentice:
-                lvl1_creatureProbability = 80;
-                lvl2_creatureProbability = 85;
-                lvl3_creatureProbability = 95;
-                lvl4_creatureProbability = 100;
-                break;
-
-            case Difficulty.Journeyman:
-                lvl1_creatureProbability = 70;
-                lvl2_creatureProbability = 80;
-                lvl3_creatureProbability = 90;
-                lvl4_creatureProbability = 100;
-                break;
-            case Difficulty.Master:
-                lvl1_creatureProbability = 60;
-                lvl2_creatureProbability = 70;
-                lvl3_creatureProbability = 80;
-                lvl4_creatureProbability = 100;
-                break;
-            case Difficulty.Legend:
-                lvl1_creatureProbability = 50;
-                lvl2_creatureProbability = 65;
-                lvl3_creatureProbability = 75;
-                lvl4_creatureProbability = 100;
-                break;
-            default:
-                lvl1_creatureProbability = 90;
-                lvl2_creatureProbability = 94;
-                lvl3_creatureProbability = 97;
-                lvl4_creatureProbability = 100;
-                break;
-        }
     }
 
     private int GetCreatureLevel()
@@ -250,5 +260,7 @@ public class EnemySpawnHandler : MonoBehaviour
         if (roll < lvl4_creatureProbability) return 3;
         else return 0;
     }
+
+    #endregion
 }
 

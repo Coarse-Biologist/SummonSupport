@@ -20,6 +20,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3103053559705213641, guid: e2dbb580cd984ab44bc7316340096e8e,
         type: 3}
+      propertyPath: ShapeModule.m_Rotation.x
+      value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 3103053559705213641, guid: e2dbb580cd984ab44bc7316340096e8e,
+        type: 3}
+      propertyPath: ShapeModule.radius.value
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3103053559705213641, guid: e2dbb580cd984ab44bc7316340096e8e,
+        type: 3}
       propertyPath: EmissionModule.m_BurstCount
       value: 1
       objectReference: {fileID: 0}

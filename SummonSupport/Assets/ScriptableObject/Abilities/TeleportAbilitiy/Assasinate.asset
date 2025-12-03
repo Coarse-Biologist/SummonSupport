@@ -56,7 +56,9 @@ MonoBehaviour:
     <SpecialAbilityAttribute>k__BackingField: 0
   <ElementTypes>k__BackingField: 
   <PhysicalType>k__BackingField: 3
-  <OnHitEffect>k__BackingField: {fileID: 0}
+  <OnHitEffect>k__BackingField: {fileID: 4439306374306288678, guid: ad3ebfe5da0c21f43a7253ff8277fd9c,
+    type: 3}
+  <AlterParticleSystemGradient>k__BackingField: 0
   <ActivateOnUse>k__BackingField: {fileID: 0}
   <ActivateOnArrive>k__BackingField: {fileID: 11400000, guid: 946e5f54d23bbc24e9bf9696f3cf93c2,
     type: 2}
