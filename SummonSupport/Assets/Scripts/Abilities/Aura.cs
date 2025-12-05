@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,20 +16,25 @@ public class Aura : MonoBehaviour
 
     List<LivingBeing> listLivingBeingsInAura = new();
     [SerializeField] public float ActivationTime { get; private set; } = .5f;
+    [field: SerializeField] public float SizeScalar = .1f;
     private bool Active = false;
     private Collider sphereCollider;
 
     private LivingBeing target;
     private ConjureAbility ConjureAbility = null;
-    private float radius = 1;
+    private ParticleSystem ps;
+    private float radius = 0;
     private float speed = 1;
     private float duration;
-
+    private int maxPierce = 0;
+    private int piercedAlready = 0;
 
 
 
     void Start()
     {
+        if (gameObject.TryGetComponent(out ParticleSystem systemParticular))
+            ps = systemParticular;
         Invoke("Activate", ActivationTime);
     }
     public void HandleInstantiation(LivingBeing caster, LivingBeing target, Ability ability)
@@ -39,18 +45,25 @@ public class Aura : MonoBehaviour
 
         HandleConjureAbilitySpecifics();
 
-        AddMods();
 
         if (ability is AuraAbility auraAbility)
             radius = auraAbility.Radius;
+        AddMods();
 
 
-        if (TryGetComponent(out CapsuleCollider collider))
-            collider.radius = radius;
+        //if (TryGetComponent(out CapsuleCollider collider))
+        //collider.radius = Math.Max(radius, 1);
+        AlterApparentRadius();
 
         CombatStatHandler.HandleEffectPackage(ability, caster, caster, ability.SelfEffects);
         Destroy(gameObject, duration);
 
+    }
+    private void AlterApparentRadius()
+    {
+        //gameObject.transform.localScale = new Vector3(gameObject.transform.localScale.x + radius, gameObject.transform.localScale.y, gameObject.transform.localScale.z + radius);
+        gameObject.transform.localScale *= 1 + radius * SizeScalar;// + radius, gameObject.transform.localScale.y + radius, gameObject.transform.localScale.z + radius);
+        Debug.Log($" radius = {radius}");
     }
     private void HandleConjureAbilitySpecifics()
     {
@@ -85,6 +98,9 @@ public class Aura : MonoBehaviour
             duration += modHandler.GetModAttributeByType(ability, AbilityModTypes.Duration);
             radius += modHandler.GetModAttributeByType(ability, AbilityModTypes.Size);
             speed += modHandler.GetModAttributeByType(ability, AbilityModTypes.Speed);
+            maxPierce += modHandler.GetModAttributeByType(ability, AbilityModTypes.MaxPierce);
+            Debug.Log($"ability = {ability.Name}. size mod value = {radius}");
+
         }
     }
 
@@ -109,7 +125,8 @@ public class Aura : MonoBehaviour
                     otherLivingBeing.AlterAbilityList(ability, true);
                     //Debug.Log($"Effects of {ability.Name} is being handled.");
                     CombatStatHandler.HandleEffectPackage(ability, caster, otherLivingBeing, ability.TargetEffects);
-                    if (ConjureAbility != null && ConjureAbility.SeeksTarget) Destroy(gameObject, .2f);
+                    piercedAlready += 1;
+                    if (ConjureAbility != null && ConjureAbility.SeeksTarget && piercedAlready >= maxPierce) Destroy(gameObject, .2f);
                 }
             }
             else Debug.Log($"NOT usable on {other.gameObject.name}");

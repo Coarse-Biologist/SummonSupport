@@ -54,10 +54,12 @@ public class TeleportAbility : Ability
 
             yield return new WaitForSeconds(ActivationSpeed);
 
-            user.transform.position = target.transform.position + (user.transform.position * .1f);
+            if (target != null && user != null)
+            {
+                user.transform.position = target.transform.position + (user.transform.position * .1f);
 
-            if (ActivateOnArrive != null) ActivateOnArrive.Activate(user);
-
+                if (ActivateOnArrive != null) ActivateOnArrive.Activate(user);
+            }
         }
 
         else yield return new WaitForSeconds(ActivationSpeed);

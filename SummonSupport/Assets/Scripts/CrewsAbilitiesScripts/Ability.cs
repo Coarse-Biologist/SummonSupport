@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 
@@ -62,8 +64,10 @@ public abstract class Ability : ScriptableObject
         List<LivingBeing> targets = new();
 
         RaycastHit[] hits = Physics.SphereCastAll(directionTransform.position, Range, directionTransform.transform.forward, Range);
+        hits = ArrangeByDistanceFromCenter(hits, directionTransform, desiredTargetNum);
         foreach (RaycastHit hit in hits)
         {
+            SetupManager.Instance.DebugLocation(hit.point, Color.darkGoldenRod);
             if (!hit.collider.TryGetComponent(out LivingBeing hitStats)) continue;
             if (targetTypes.Contains(hitStats.CharacterTag))
             {
@@ -73,6 +77,13 @@ public abstract class Ability : ScriptableObject
         }
         return targets;
     }
+
+    public RaycastHit[] ArrangeByDistanceFromCenter(RaycastHit[] hits, Transform lookRotation, int desiredTargetNum = 1)
+    {
+        if (hits == null || hits.Count() <= desiredTargetNum) return hits;
+        return hits.OrderBy(g => Vector3.Angle(lookRotation.forward, g.point)).ToArray();
+    }
+
     public TeamType GetTargetPreference(LivingBeing caster)
     {
         if (caster.HasStatusEffect(StatusEffectType.Madness)) return TeamType.Either; // if mad, simply use ability on whoever

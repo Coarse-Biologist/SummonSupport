@@ -9,17 +9,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a284ac289eac5874ca5ee64e83ba096e, type: 3}
-  m_Name: Cold Aura
+  m_Script: {fileID: 11500000, guid: 6f72222c874821e41bccb5f49eee621c, type: 3}
+  m_Name: Tornado
   m_EditorClassIdentifier: 
-  <Name>k__BackingField: Cold Aura
-  <Icon>k__BackingField: {fileID: -8172051240425876022, guid: d46d43f87ef93d3448c986a15737f67a,
+  <Name>k__BackingField: Wind Meteor
+  <Icon>k__BackingField: {fileID: 8095344145157262792, guid: c3bce2abce0ec0e47ba9c908fd690f04,
     type: 3}
-  <Cooldown>k__BackingField: 10
+  <Cooldown>k__BackingField: 5
   <CostType>k__BackingField: 4
-  <Cost>k__BackingField: 10
-  <Range>k__BackingField: 3
-  <Duration>k__BackingField: 20
+  <Cost>k__BackingField: 70
+  <Range>k__BackingField: 15
+  <Duration>k__BackingField: 10
   <AbilityTypeTag>k__BackingField: 1
   <ListUsableOn>k__BackingField: 01000000
   <TargetEffects>k__BackingField:
@@ -31,9 +31,9 @@ MonoBehaviour:
       <Value>k__BackingField: 0
       <ValueType>k__BackingField: 0
     <Damage>k__BackingField:
-      <Value>k__BackingField: 10
+      <Value>k__BackingField: 100
     <DamageOverTime>k__BackingField:
-      <Value>k__BackingField: 30
+      <Value>k__BackingField: 2
     <AttributeUp>k__BackingField: []
     <AttributeDown>k__BackingField: []
     <StatusEffects>k__BackingField: []
@@ -54,12 +54,18 @@ MonoBehaviour:
     <AttributeDown>k__BackingField: []
     <StatusEffects>k__BackingField: []
     <SpecialAbilityAttribute>k__BackingField: 0
-  <ElementTypes>k__BackingField: 01000000
+  <ElementTypes>k__BackingField: 05000000
   <PhysicalType>k__BackingField: 0
-  <OnHitEffect>k__BackingField: {fileID: 8554696951228805582, guid: 04a0e3d9ceed1e0489e4f5e4785af120,
+  <OnHitEffect>k__BackingField: {fileID: 9018438208592869522, guid: c5fd21a9f6e4d654cb82200a0fb3e341,
     type: 3}
-  <AlterParticleSystemGradient>k__BackingField: 0
-  <Radius>k__BackingField: 1
-  <AuraObject>k__BackingField: {fileID: 1699087696372334086, guid: d37548799cfa1a14ab18c94281137b73,
+  <AlterParticleSystemGradient>k__BackingField: 1
+  <ObjectToSpawn>k__BackingField: {fileID: 1142077846852881211, guid: 92f7eebcf2302cd4b95a8d2467921c88,
     type: 3}
-  <LeaveRotation>k__BackingField: 1
+  <SpawnOffset>k__BackingField: {x: 10, y: 0, z: 5}
+  <RotationOffset>k__BackingField: 0
+  Radius: 1
+  <IsDecaying>k__BackingField: 0
+  <LeaveRotation>k__BackingField: 0
+  <SeeksTarget>k__BackingField: 1
+  <Speed>k__BackingField: 20
+  <SearchRadius>k__BackingField: 50
