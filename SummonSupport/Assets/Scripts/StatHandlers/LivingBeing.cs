@@ -4,6 +4,7 @@ using UnityEngine;
 using System.Collections;
 using SummonSupportEvents;
 using System.Linq;
+using Unity.Entities.UniversalDelegates;
 public abstract class LivingBeing : MonoBehaviour
 {
     #region Declarations
@@ -84,6 +85,7 @@ public abstract class LivingBeing : MonoBehaviour
 
 
     public I_ResourceBar resourceBarInterface { protected set; get; }
+    public I_Destruction ragdollScript;
     private AbilityHandler abilityHandler;
 
     #endregion
@@ -106,6 +108,7 @@ public abstract class LivingBeing : MonoBehaviour
         StartCoroutine(RegenerateRoutine());
         abilityHandler = GetComponent<AbilityHandler>();
         ColorChanger.ChangeMatByAffinity(this);
+        ragdollScript = GetComponent<I_Destruction>();
     }
 
     private void InitializeRegenerationValues()

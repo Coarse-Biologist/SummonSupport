@@ -105,6 +105,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1938587648727523851, guid: 67c953d8ecb373d4d9255c187ba5bef9,
+        type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 69e44e2d936cf204596f942f41af8ce7, type: 2}
+    - target: {fileID: 1938587648727523851, guid: 67c953d8ecb373d4d9255c187ba5bef9,
+        type: 3}
+      propertyPath: 'm_Materials.Array.data[1]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 13e18070330577e458479dfcf1a92331, type: 2}
     - target: {fileID: 2420984725825010411, guid: 67c953d8ecb373d4d9255c187ba5bef9,
         type: 3}
       propertyPath: m_LocalScale.x
@@ -130,6 +140,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: PT_LavaPortal
       objectReference: {fileID: 0}
+    - target: {fileID: 8773999901916420829, guid: 67c953d8ecb373d4d9255c187ba5bef9,
+        type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: d79d1b5259721574eb39eda0fa125112, type: 2}
+    - target: {fileID: 8773999901916420829, guid: 67c953d8ecb373d4d9255c187ba5bef9,
+        type: 3}
+      propertyPath: 'm_Materials.Array.data[1]'
+      value: 
+      objectReference: {fileID: 2100000, guid: d79d1b5259721574eb39eda0fa125112, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

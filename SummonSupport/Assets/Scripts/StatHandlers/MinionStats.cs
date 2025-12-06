@@ -58,7 +58,7 @@ public class MinionStats : LivingBeing
         EventDeclarer.minionDied?.Invoke(gameObject);
         SetRegeneration(AttributeType.CurrentHitpoints, 0);
         if (HasStatusEffect(StatusEffectType.ExplodeOnDeath)) ViciousDeathExplosion();
-
+        if (ragdollScript != null) ragdollScript.CauseDestruction();
         ToggleDeath(true);
     }
     private void DelayedTestDeath()
@@ -103,6 +103,7 @@ public class MinionStats : LivingBeing
         Debug.Log($"Resurrecting minion {Name}");
         ToggleDeath(false);
         ChangeAttribute(AttributeType.CurrentHitpoints, 50f);
+        if (ragdollScript != null) ragdollScript.ReverseDestruction();
     }
 
 }
