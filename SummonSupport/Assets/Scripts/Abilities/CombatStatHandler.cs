@@ -47,7 +47,7 @@ public static class CombatStatHandler
         }
         if (effectPackage.DamageOverTime.Value > 0)
         {
-            UnityEngine.Debug.Log($"effectPackage.DamageOverTime.Value = {effectPackage.DamageOverTime.Value}.");
+            //UnityEngine.Debug.Log($"effectPackage.DamageOverTime.Value = {effectPackage.DamageOverTime.Value}.");
             AdjustAndApplyDOT(effectPackage.DamageOverTime);
         }
         if (effectPackage.AttributeUp.Count > 0)
@@ -296,7 +296,7 @@ public static class CombatStatHandler
 
     public static void ApplyTempValue(MovementAttributes movementAttribute, float tempValue, float duration)
     {
-        Logging.Info($"{currentTarget.name} has had {movementAttribute} changed by {tempValue}");
+        //Logging.Info($"{currentTarget.name} has had {movementAttribute} changed by {tempValue}");
         if (currentTarget.TryGetComponent<MovementScript>(out MovementScript movementScript))
         {
             float preChangeValue = movementScript.GetMovementAttribute(movementAttribute);
@@ -325,7 +325,7 @@ public static class CombatStatHandler
 
     public static void ApplyTempValue(PhysicalType physicalType, float newValue, float duration)
     {
-        Logging.Info($"{currentTarget.name} has had {physicalType} changed by {newValue}");
+        //Logging.Info($"{currentTarget.name} has had {physicalType} changed by {newValue}");
         currentTarget.SetPhysicalResist(physicalType, currentTarget.PhysicalDict[physicalType].Get() + newValue);
         currentTarget.StartCoroutine(ResetTempPhysicalResist(physicalType, newValue, duration));
     }
@@ -350,7 +350,7 @@ public static class CombatStatHandler
 
     public static void ApplyTempValue(Element affinity, float changeValue, float duration)
     {
-        Logging.Info($"{currentTarget.name} has had {affinity} changed by {changeValue}");
+        //Logging.Info($"{currentTarget.name} has had {affinity} changed by {changeValue}");
         float preAffinityValue = currentTarget.Affinities[affinity].Get();
         currentTarget.ChangeAffinity(affinity, changeValue);
         currentTarget.StartCoroutine(ResetTempAffinity(affinity, preAffinityValue, duration));
@@ -367,7 +367,7 @@ public static class CombatStatHandler
                 elapsed += tickRateFloat;
             }
         }
-        Logging.Info($"{currentTarget.name} has had {elementalAffinity} changed back to {preChangeValue}");
+        //Logging.Info($"{currentTarget.name} has had {elementalAffinity} changed back to {preChangeValue}");
 
         currentTarget.SetAffinity(elementalAffinity, preChangeValue);
 

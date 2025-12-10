@@ -53,10 +53,9 @@ public class SetupManager : MonoBehaviour
     public void DebugLocation(Vector3 loc, Color specialColorRequest, int duration = 2)
     {
         if (loc == Vector3.negativeInfinity) return;
-        Debug.Log($"Debugging location. {Instance.transform.position}");
+        //Debug.Log($"Debugging location. {Instance.transform.position}");
         GameObject instance = Instantiate(LocSphere, loc, Quaternion.identity);
         instance.GetComponent<MeshRenderer>().material.color = specialColorRequest;
-        Debug.Log($"Debugging location. {Instance.transform.position}");
 
         Destroy(instance, duration);
     }

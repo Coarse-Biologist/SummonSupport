@@ -37,7 +37,7 @@ public class AbilityHandler : MonoBehaviour
 
     public void LearnAbility(Ability ability)
     {
-        Debug.Log($"Learning ability {ability}");
+        //Debug.Log($"Learning ability {ability}");
         if (!Abilities.Contains(ability) && ability != null)
         {
             Abilities.Add(ability);
@@ -161,7 +161,7 @@ public class AbilityHandler : MonoBehaviour
 
     bool HandleProjectile(ProjectileAbility ability)
     {
-        Debug.Log("Time to see the heavy throw animation");
+        //Debug.Log("Time to see the heavy throw animation");
         if (anim != null) anim.ChangeLayerAnimation("OneArmedThrow", 1, 2f);
 
         return ability.Activate(gameObject, abilitySpawn);

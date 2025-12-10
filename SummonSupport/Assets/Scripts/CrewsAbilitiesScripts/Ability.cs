@@ -67,7 +67,6 @@ public abstract class Ability : ScriptableObject
         hits = ArrangeByDistanceFromCenter(hits, directionTransform, desiredTargetNum);
         foreach (RaycastHit hit in hits)
         {
-            SetupManager.Instance.DebugLocation(hit.point, Color.darkGoldenRod);
             if (!hit.collider.TryGetComponent(out LivingBeing hitStats)) continue;
             if (targetTypes.Contains(hitStats.CharacterTag))
             {

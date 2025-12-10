@@ -21,9 +21,14 @@ public class EnemyStats : LivingBeing
         //    stateHandler.CancelInvoke("RunStateMachine");
         //}
         //transform.position = new Vector3 (99, 99, 99);
-        Debug.Log("Delayed test death being called now");
+        //Debug.Log("Delayed test death being called now");
+        if (gameObject.TryGetComponent(out AIStateHandler stateHandler))
+        {
+            stateHandler.SetDead(true);
+        }
+        if (ragdollScript != null) ragdollScript.CauseDestruction(false);
 
-        Invoke("DelayedTestDeath", 1f);
+        //Invoke("DelayedTestDeath", 2f);
     }
 
     public override void HandleUIAttrDisplay(AttributeType attributeType, float newValue)

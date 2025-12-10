@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Linq;
+using Unity.InferenceEngine;
+
 //using System.Numerics;
 using UnityEngine;
 using UnityEngine.AI;
@@ -145,7 +147,6 @@ public class Projectile : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-
         if (active)
         {
             if (other.gameObject.TryGetComponent(out NavMeshObstacle obstacle))

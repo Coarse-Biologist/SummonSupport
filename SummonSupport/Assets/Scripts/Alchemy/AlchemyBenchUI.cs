@@ -128,7 +128,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
 
     public void ShowInteractionOption()
     {
-        Debug.Log($"position of {this} = {transform.position}");
+        //Debug.Log($"position of {this} = {transform.position}");
         InteractCanvasHandler.Instance.ShowInteractionOption(new Vector3(transform.position.x, transform.position.y + 2, transform.position.z), "Tab to use alchemy bench");
     }
 
@@ -237,7 +237,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
 
     private void SetPlayerUpgradeInfo()
     {
-        Debug.Log($"trying to add text info");
+        //Debug.Log($"trying to add text info");
 
         string text = $"Select upgrades. Remaining Skill-Points: {PlayerStats.Instance.SkillPoints - selectedUpgradeCost}. Currently selected upgrades:";
         foreach (var rewardKvp in selectedPlayerUpgrades)
@@ -694,7 +694,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
                 foreach (Ability ability in abilityLibraryEntry.Abilities)
                 {
                     Button abilityButton = AddButtonToPanel($"{ability.Name} : {Ability.GetCoreCraftingCost(ability)} Core Power", bottomLeftPanel, 70, 5);
-                    Debug.Log("made it this far2");
+                    //Debug.Log("made it this far2");
 
                     abilityButton.RegisterCallback<ClickEvent>(e => SetSelectedAbility(ability));
                     abilityButton.RegisterCallback<ClickEvent>(e => ShowAbilityCraftingInfo());

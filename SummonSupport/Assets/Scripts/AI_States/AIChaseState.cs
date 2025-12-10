@@ -92,6 +92,7 @@ public class AIChaseState : AIState
 
         if (stateHandler.anim != null)
         {
+            //Debug.Log("Going to run!");
             stateHandler.anim.ChangeAnimation("Run", .2f);
         }
     }
@@ -100,6 +101,8 @@ public class AIChaseState : AIState
         stateHandler.navAgent.ResetPath();
         if (stateHandler.anim != null)
         {
+            //Debug.Log("Going to idle!");
+
             stateHandler.anim.ChangeAnimation("Idle", .2f);
         }
     }
@@ -126,10 +129,8 @@ public class AIChaseState : AIState
                 yield break;
             }
 
-            Debug.Log($"target selected : {target}.");
 
             Ability ability = stateHandler.abilityHandler.GetAbilityForTarget(target);
-            Debug.Log($"Ability selected : {ability}.");
             if (ability != null)
             {
                 SetAbilityRange(ability.Range);
@@ -137,6 +138,12 @@ public class AIChaseState : AIState
                 if ((transform.position - target.transform.position).sqrMagnitude <
                     SelectedAbilityAttackRange * SelectedAbilityAttackRange || ability is AuraAbility)
                 {
+                    if (stateHandler.anim != null)
+                    {
+                        if (ability is ProjectileAbility) stateHandler.anim.ChangeAnimation("Projectile");
+                        else stateHandler.anim.ChangeAnimation("Melee");
+                    }
+
                     abilityHandler.UseAbility(target, ability);
                 }
             }

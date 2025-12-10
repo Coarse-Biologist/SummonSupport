@@ -47,7 +47,7 @@ public class ProjectileAbility : Ability
             float rotY = (float)Math.Sin(45 * i) * (10 + 5 * i);
             Quaternion rotation = Quaternion.Euler(0, rotY, 0);
             Vector3 newDirection = rotation * spawnPoint.forward;
-            Debug.Log($"  user: {user.GetComponent<LivingBeing>().Name} is using the ability {projectileScript.name}");
+            //Debug.Log($"  user: {user.GetComponent<LivingBeing>().Name} is using the ability {projectileScript.name}");
             projectileScript.SetActive(this, user.GetComponent<LivingBeing>(), modHandler);
             projectileScript.SetProjectilePhysics(newDirection);
             projectileScript.SetParticleTrailEffects(newDirection);

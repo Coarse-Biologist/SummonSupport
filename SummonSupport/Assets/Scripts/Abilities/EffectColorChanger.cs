@@ -168,7 +168,7 @@ public static class ColorChanger
             {
                 if (mats[i].name.StartsWith("ElementalIndicator"))  // Unity adds "(Instance)"
                 {
-                    Debug.Log($"Material found: {mats[i].name}, assigning material {material} which has color {material.color}");
+                    //Debug.Log($"Material found: {mats[i].name}, assigning material {material} which has color {material.color}");
                     mats[i] = material;
                 }
             }

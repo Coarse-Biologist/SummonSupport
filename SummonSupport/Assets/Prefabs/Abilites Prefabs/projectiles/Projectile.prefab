@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 8272502956860064039}
   - component: {fileID: 1233865181786667647}
   - component: {fileID: 8831213649649861828}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Projectile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -103,7 +103,7 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 456
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0

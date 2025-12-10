@@ -29,7 +29,7 @@ public static class AbilityLibrary
 
     public static List<Ability> GetRandomAbilities(Element element, int number = 1)
     {
-        Debug.Log($"will be attempting to retrieve {number} abilities available for {element}");
+        //Debug.Log($"will be attempting to retrieve {number} abilities available for {element}");
 
         List<Ability> abilitiesList = new();
         Ability randomAbility = null;
@@ -41,23 +41,23 @@ public static class AbilityLibrary
                 if (elementCategory.Element == element)
                 {
                     number = Math.Min(number, elementCategory.Abilities.Count);
-                    Debug.Log($"will be attempting to retrieve {number} abilities. {elementCategory.Abilities.Count} are available for {element}");
+                    //Debug.Log($"will be attempting to retrieve {number} abilities. {elementCategory.Abilities.Count} are available for {element}");
                     for (int i = number; i > 0; i--)
                     {
                         maxAttempts--;
                         randomAbility = elementCategory.Abilities[UnityEngine.Random.Range(0, elementCategory.Abilities.Count)];
                         if (!abilitiesList.Contains(randomAbility))
                         {
-                            Debug.Log($"Adding {randomAbility}");
+                            //Debug.Log($"Adding {randomAbility}");
                             abilitiesList.Add(randomAbility);
                         }
                         if (maxAttempts == 0 || abilitiesList.Count == number)
                         {
-                            Debug.Log($"breaking because max attempts reached");
+                            //Debug.Log($"breaking because max attempts reached");
                             break;
                         }
                     }
-                    Debug.Log("returning abilities list");
+                    //Debug.Log("returning abilities list");
 
                     return abilitiesList;
                 }

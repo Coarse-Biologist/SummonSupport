@@ -45,12 +45,12 @@ public class LootSpawnHandler : MonoBehaviour
     }
     private void SpawnEther(EnemyStats enemyStats, GameObject etherPrefab)
     {
-        Debug.Log("Spawning ether");
+        //Debug.Log("Spawning ether");
 
         if (etherPrefab == null) return;
 
         GameObject instance = Instantiate(etherPrefab, enemyStats.transform.position, Quaternion.identity);
-        Debug.Log("Indeed, Spawning organ");
+        //Debug.Log("Indeed, Spawning organ");
 
         if (instance.TryGetComponent(out LootableAlchemyMaterial lootScript))
         {
@@ -75,10 +75,10 @@ public class LootSpawnHandler : MonoBehaviour
 
     private void SpawnOrgans(EnemyStats enemy, AlchemyLoot organType)
     {
-        Debug.Log("Spawning organ!");
+        //        //Debug.Log("Spawning organ!");
         if (organType == AlchemyLoot.WeakCore) return;
         Instantiate(OrganPrefab, enemy.transform.position, Quaternion.identity);
-        Debug.Log("Indeed, Spawning organ");
+        //Debug.Log("Indeed, Spawning organ");
 
         if (OrganPrefab.TryGetComponent(out LootableAlchemyMaterial lootScript))
         {
@@ -99,11 +99,11 @@ public class LootSpawnHandler : MonoBehaviour
 
     private void SpawnCores(EnemyStats enemy, AlchemyLoot coreType)
     {
-        Debug.Log("Spawning core?");
+        //Debug.Log("Spawning core?");
 
         if (coreType == AlchemyLoot.WretchedOrgans) return;
         GameObject instance = Instantiate(CorePrefab, enemy.transform.position, Quaternion.identity);
-        Debug.Log("Indeed, Spawning Core");
+        //Debug.Log("Indeed, Spawning Core");
 
         if (instance.TryGetComponent(out LootableAlchemyMaterial lootScript))
         {
@@ -114,7 +114,7 @@ public class LootSpawnHandler : MonoBehaviour
 
         if (renderer != null && strongestElement != Element.None)
         {
-            Debug.Log("trying to change core color");
+            //Debug.Log("trying to change core color");
             Material glowMaterial = ColorChanger.GetGlowByElement(strongestElement);
             ColorChanger.ChangeMatByAffinity(renderer, glowMaterial);
         }

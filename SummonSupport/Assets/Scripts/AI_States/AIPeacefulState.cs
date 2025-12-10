@@ -153,11 +153,11 @@ public class AIPeacefulState : AIState
 
     public void GoToPlayer()
     {
-        Debug.Log("Going to player function called");
+        //Debug.Log("Going to player function called");
         float distance = (player.transform.position - transform.position).sqrMagnitude;
         if (distance >= stateHandler.navAgent.stoppingDistance || distance >= chaseState.SelectedAbilityAttackRange)
         {
-            Debug.Log($"Going to player becuase: Distance = {distance}. stopping distance = {stateHandler.navAgent.stoppingDistance}. chase state selected ability = {chaseState.SelectedAbilityAttackRange}");
+            //Debug.Log($"Going to player becuase: Distance = {distance}. stopping distance = {stateHandler.navAgent.stoppingDistance}. chase state selected ability = {chaseState.SelectedAbilityAttackRange}");
 
             stateHandler.navAgent.SetDestination(player.transform.position);
             if (stateHandler.anim != null)
@@ -167,7 +167,7 @@ public class AIPeacefulState : AIState
         }
         else
         {
-            Debug.Log($"NOToing to player becuase: Distance = {distance}. stopping distance = {stateHandler.navAgent.stoppingDistance}. chase state selected ability = {chaseState.SelectedAbilityAttackRange}");
+            //Debug.Log($"NOToing to player becuase: Distance = {distance}. stopping distance = {stateHandler.navAgent.stoppingDistance}. chase state selected ability = {chaseState.SelectedAbilityAttackRange}");
 
             stateHandler.navAgent.ResetPath();
             if (stateHandler.anim != null)

@@ -11,9 +11,10 @@ public class Ragdoll : MonoBehaviour, I_Destruction
     [field: SerializeField] public Collider mainCollider;
     [field: SerializeField] public List<Rigidbody> rigidbodies = new();
     [field: SerializeField] public List<Collider> colliders = new();
-    public void CauseDestruction()
+    
+    public void CauseDestruction(bool SaveTransformData = false)
     {
-        SavePreRagdollTransformData();
+        if (SaveTransformData) SavePreRagdollTransformData();
 
         RagDoll(true);
     }
@@ -22,6 +23,7 @@ public class Ragdoll : MonoBehaviour, I_Destruction
     {
         if (animator != null)
             animator.enabled = !isRagdoll;
+        if (mainCollider != null) mainCollider.enabled = false;
 
         Invoke("EnableMainCollider", 1f);
 

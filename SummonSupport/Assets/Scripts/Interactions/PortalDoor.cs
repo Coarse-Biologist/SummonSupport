@@ -8,11 +8,11 @@ public class PortalDoor : MonoBehaviour
 
     void OnTriggerEnter(Collider collision)
     {
-        Logging.Info(collision.gameObject.name.ToString());
-        if (collision.gameObject.GetComponent<PlayerStats>() != null)
+        //Debug.Log($"Someone or something collided with {collision.gameObject.name}");
+        if (collision.gameObject.GetComponent<PlayerStats>() != null && DestinationDoor != null)
         {
             collision.gameObject.transform.position = DestinationDoor.position;
         }
-        //else Logging.Info($"{collision.gameObject.name} was not a player");
+        //else Debug.Log($"Something collided with a  portaldoor script contatining object, but it wasnt an object containing a Player stats script");
     }
 }

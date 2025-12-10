@@ -63,7 +63,7 @@ public class Aura : MonoBehaviour
     {
         //gameObject.transform.localScale = new Vector3(gameObject.transform.localScale.x + radius, gameObject.transform.localScale.y, gameObject.transform.localScale.z + radius);
         gameObject.transform.localScale *= 1 + radius * SizeScalar;// + radius, gameObject.transform.localScale.y + radius, gameObject.transform.localScale.z + radius);
-        Debug.Log($" radius = {radius}");
+        //Debug.Log($" radius = {radius}");
     }
     private void HandleConjureAbilitySpecifics()
     {
@@ -99,7 +99,7 @@ public class Aura : MonoBehaviour
             radius += modHandler.GetModAttributeByType(ability, AbilityModTypes.Size);
             speed += modHandler.GetModAttributeByType(ability, AbilityModTypes.Speed);
             maxPierce += modHandler.GetModAttributeByType(ability, AbilityModTypes.MaxPierce);
-            Debug.Log($"ability = {ability.Name}. size mod value = {radius}");
+            //Debug.Log($"ability = {ability.Name}. size mod value = {radius}");
 
         }
     }
@@ -167,7 +167,6 @@ public class Aura : MonoBehaviour
     private IEnumerator SeekTarget(GameObject target)
     {
         TryGetComponent(out Rigidbody rb);
-        Debug.Log("Im here");
 
         while (true)
         {

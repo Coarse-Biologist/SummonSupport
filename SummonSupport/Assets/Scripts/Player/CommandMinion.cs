@@ -32,19 +32,16 @@ public static class CommandMinion
         {
             if (hit.collider.TryGetComponent(out EnemyStats targetLivingBeing))
             {
-                SetupManager.Instance.DebugLocation(targetLivingBeing.transform.position, Color.green);
                 CommandMinionToAttack(targetLivingBeing);
             }
 
             else if (hit.collider.TryGetComponent(out I_Interactable interactable))
             {
-                SetupManager.Instance.DebugLocation(hit.collider.transform.position, Color.violet);
                 SendMinionToInteract(hit.collider.gameObject.transform.position);
             }
 
             else
             {
-                SetupManager.Instance.DebugLocation(loc, Color.yellow);
                 CommandMinionToGoToLoc(loc);
             }
         }
@@ -105,7 +102,7 @@ public static class CommandMinion
             AIObedienceState obedienceState = minion.GetComponent<AIObedienceState>();
             obedienceState.SetCommandTarget(enemy);
             stats.SetCommand(MinionCommands.FocusTarget);
-            Logging.Info($"{stats.Name} is seeking {obedienceState.commandTarget} at location {obedienceState.commandLoc}");
+            //Logging.Info($"{stats.Name} is seeking {obedienceState.commandTarget} at location {obedienceState.commandLoc}");
         }
     }
 

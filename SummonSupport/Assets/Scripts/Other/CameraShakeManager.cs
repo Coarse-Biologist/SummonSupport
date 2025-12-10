@@ -19,7 +19,7 @@ public class CameraShakeManager : MonoBehaviour
         if (virtualCamera == null) throw new System.Exception("Camera not assigned to camera shaker script.");
         if (virtualCamera.TryGetComponent(out CinemachineBasicMultiChannelPerlin cameraShakeComponent))
         {
-            Debug.Log("Mission accomplished");
+            // Debug.Log("Mission accomplished");
             cameraShaker = cameraShakeComponent;
         }
     }
