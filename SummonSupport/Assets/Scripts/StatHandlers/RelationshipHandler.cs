@@ -59,7 +59,7 @@ public static class CrewsRelationshipHandler
         }
         else if (teamType == TeamType.Ally)
         {
-            targetTypes = CrewsRelationshipHandler.Allies;
+            targetTypes = Allies;
         }
         else if (teamType == TeamType.Either)
         {

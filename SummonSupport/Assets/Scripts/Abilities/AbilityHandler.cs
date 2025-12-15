@@ -178,7 +178,7 @@ public class AbilityHandler : MonoBehaviour
     {
         if (anim != null) anim.ChangeLayerAnimation("HeavyThrow", 1, 1f);
 
-        return ability.Activate(gameObject, targetPosition, rotation);
+        return ability.Activate(gameObject, rotation);
     }
 
     bool HandleDashAbility(DashAbility dashAbility)

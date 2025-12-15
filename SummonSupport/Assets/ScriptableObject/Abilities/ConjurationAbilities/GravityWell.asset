@@ -58,14 +58,15 @@ MonoBehaviour:
   <PhysicalType>k__BackingField: 0
   <OnHitEffect>k__BackingField: {fileID: 1847413739128325886, guid: af3daea78fb84b541a9b871b3917d9a9,
     type: 3}
+  <AlterParticleSystemGradient>k__BackingField: 0
   <ObjectToSpawn>k__BackingField: {fileID: 6725234854290891213, guid: 23052f4373add044e8afe3b7eae99b51,
     type: 3}
-  <SpawnEffectOnHit>k__BackingField: {fileID: 0}
   <SpawnOffset>k__BackingField: {x: 0, y: 0, z: 0}
   <RotationOffset>k__BackingField: 0
   Radius: 4
   <IsDecaying>k__BackingField: 1
   <LeaveRotation>k__BackingField: 0
+  <SpawnsOnTarget>k__BackingField: 1
   <SeeksTarget>k__BackingField: 0
   <Speed>k__BackingField: 2
   <SearchRadius>k__BackingField: 10
