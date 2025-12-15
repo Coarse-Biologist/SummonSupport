@@ -1,0 +1,2301 @@
+fileFormatVersion: 2
+guid: d051895638e9c044d833811c0948303a
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -540834573045080264
+    second: rainstreaktexture_0
+  - first:
+      213: -1371135194505741168
+    second: rainstreaktexture_1
+  - first:
+      213: 3352466185409316651
+    second: rainstreaktexture_2
+  - first:
+      213: 1389777633166929267
+    second: rainstreaktexture_3
+  - first:
+      213: 8373991900331854293
+    second: rainstreaktexture_4
+  - first:
+      213: 7366083491418086049
+    second: rainstreaktexture_5
+  - first:
+      213: -5431251680700721967
+    second: rainstreaktexture_6
+  - first:
+      213: 3908659906154461894
+    second: rainstreaktexture_7
+  - first:
+      213: 3149736488575198732
+    second: rainstreaktexture_8
+  - first:
+      213: 6345787025590575436
+    second: rainstreaktexture_9
+  - first:
+      213: -8557296265366168400
+    second: rainstreaktexture_10
+  - first:
+      213: -2561438724637483026
+    second: rainstreaktexture_11
+  - first:
+      213: -1328853399826573520
+    second: rainstreaktexture_12
+  - first:
+      213: -6086556064841957772
+    second: rainstreaktexture_13
+  - first:
+      213: 5920541576685887955
+    second: rainstreaktexture_14
+  - first:
+      213: 5543760557474633613
+    second: rainstreaktexture_15
+  - first:
+      213: -1078766709226249465
+    second: rainstreaktexture_16
+  - first:
+      213: 4425673900213503192
+    second: rainstreaktexture_17
+  - first:
+      213: -3556066612937190204
+    second: rainstreaktexture_18
+  - first:
+      213: -5864346177860980829
+    second: rainstreaktexture_19
+  - first:
+      213: 6438873463522829922
+    second: rainstreaktexture_20
+  - first:
+      213: -391057223982665542
+    second: rainstreaktexture_21
+  - first:
+      213: 2289841925765068336
+    second: rainstreaktexture_22
+  - first:
+      213: 4472667422600130385
+    second: rainstreaktexture_23
+  - first:
+      213: -7293154143560036671
+    second: rainstreaktexture_24
+  - first:
+      213: -7544008201256522907
+    second: rainstreaktexture_25
+  - first:
+      213: 6033648184741637474
+    second: rainstreaktexture_26
+  - first:
+      213: -2717961166707064192
+    second: rainstreaktexture_27
+  - first:
+      213: 8963042136192121577
+    second: rainstreaktexture_28
+  - first:
+      213: -1363213872651812680
+    second: rainstreaktexture_29
+  - first:
+      213: -6169932265878882492
+    second: rainstreaktexture_30
+  - first:
+      213: -8072875540963876058
+    second: rainstreaktexture_31
+  - first:
+      213: 5456162400763754043
+    second: rainstreaktexture_32
+  - first:
+      213: 2188834623652906603
+    second: rainstreaktexture_33
+  - first:
+      213: 7831234667971088737
+    second: rainstreaktexture_34
+  - first:
+      213: -1456249857575366206
+    second: rainstreaktexture_35
+  - first:
+      213: -6754840544001914629
+    second: rainstreaktexture_36
+  - first:
+      213: -5386402022551032577
+    second: rainstreaktexture_37
+  - first:
+      213: -4686901324995613374
+    second: rainstreaktexture_38
+  - first:
+      213: 6599696986418780873
+    second: rainstreaktexture_39
+  - first:
+      213: 2208781277559718953
+    second: rainstreaktexture_40
+  - first:
+      213: 3374048882416714751
+    second: rainstreaktexture_41
+  - first:
+      213: 4961016463929788118
+    second: rainstreaktexture_42
+  - first:
+      213: 2070625658801812634
+    second: rainstreaktexture_43
+  - first:
+      213: 3786857958512683355
+    second: rainstreaktexture_44
+  - first:
+      213: 433216299748202983
+    second: rainstreaktexture_45
+  - first:
+      213: 4025171228479904488
+    second: rainstreaktexture_46
+  - first:
+      213: 8949735207114348504
+    second: rainstreaktexture_47
+  - first:
+      213: -7573531555346257875
+    second: rainstreaktexture_48
+  - first:
+      213: 7603440184754399811
+    second: rainstreaktexture_49
+  - first:
+      213: -8231304057239676920
+    second: rainstreaktexture_50
+  - first:
+      213: 7515192849750468892
+    second: rainstreaktexture_51
+  - first:
+      213: 5924921271046571742
+    second: rainstreaktexture_52
+  - first:
+      213: 2944460591283114186
+    second: rainstreaktexture_53
+  - first:
+      213: -6486935060967845597
+    second: rainstreaktexture_54
+  - first:
+      213: 1248269358731619992
+    second: rainstreaktexture_55
+  - first:
+      213: 3695186752115103990
+    second: rainstreaktexture_56
+  - first:
+      213: 7918674968548930922
+    second: rainstreaktexture_57
+  - first:
+      213: -2713548835436164694
+    second: rainstreaktexture_58
+  - first:
+      213: 7552235549505168508
+    second: rainstreaktexture_59
+  - first:
+      213: 1584031693966686910
+    second: rainstreaktexture_60
+  - first:
+      213: -6907372755812671738
+    second: rainstreaktexture_61
+  - first:
+      213: -7249728709586941136
+    second: rainstreaktexture_62
+  - first:
+      213: 5287291422136417406
+    second: rainstreaktexture_63
+  - first:
+      213: -5539917222776486723
+    second: rainstreaktexture_64
+  - first:
+      213: 8662799181406451053
+    second: rainstreaktexture_65
+  - first:
+      213: 226642084577170050
+    second: rainstreaktexture_66
+  - first:
+      213: 3004867484026723359
+    second: rainstreaktexture_67
+  - first:
+      213: -3901357938534135137
+    second: rainstreaktexture_68
+  - first:
+      213: -4447474940464238311
+    second: rainstreaktexture_69
+  - first:
+      213: -5341337747406525926
+    second: rainstreaktexture_70
+  - first:
+      213: 207436855828467220
+    second: rainstreaktexture_71
+  - first:
+      213: -7748852329875965119
+    second: rainstreaktexture_72
+  - first:
+      213: 972514741980825727
+    second: rainstreaktexture_73
+  - first:
+      213: 9154060421682054226
+    second: rainstreaktexture_74
+  - first:
+      213: 7854661774158474244
+    second: rainstreaktexture_75
+  - first:
+      213: 2159556252313805391
+    second: rainstreaktexture_76
+  - first:
+      213: 2989921480431275482
+    second: rainstreaktexture_77
+  - first:
+      213: 2922535206762490629
+    second: rainstreaktexture_78
+  - first:
+      213: -8159085177024650604
+    second: rainstreaktexture_79
+  - first:
+      213: -2436363451114278075
+    second: rainstreaktexture_80
+  - first:
+      213: 6541892496444146076
+    second: rainstreaktexture_81
+  - first:
+      213: 8604291851502594679
+    second: rainstreaktexture_82
+  - first:
+      213: -7069032093497275423
+    second: rainstreaktexture_83
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: rainstreaktexture_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 231
+        height: 1024
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 83fd56f32d19e78f0800000000000000
+      internalID: -540834573045080264
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rainstreaktexture_1
+      rect:
+        serializedVersion: 2
+        x: 81
+        y: 974
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 09cf2702ecfb8fce0800000000000000
+      internalID: -1371135194505741168
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rainstreaktexture_2
+      rect:
+        serializedVersion: 2
+        x: 81
+        y: 734
+        width: 8
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b27c4d6cb3a568e20800000000000000
+      internalID: 3352466185409316651
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rainstreaktexture_3
+      rect:
+        serializedVersion: 2
+        x: 81
+        y: 652
+        width: 7
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 37da2bdd46b794310800000000000000
+      internalID: 1389777633166929267
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rainstreaktexture_4
+      rect:
+        serializedVersion: 2
+        x: 81
+        y: 430
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5d9474b1445663470800000000000000
+      internalID: 8373991900331854293
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rainstreaktexture_5
+      rect:
+        serializedVersion: 2
+        x: 81
+        y: 396
+        width: 8
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1aa18d388e5993660800000000000000
+      internalID: 7366083491418086049
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rainstreaktexture_6
+      rect:
+        serializedVersion: 2
+        x: 81
+        y: 323
+        width: 8
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1d417165f5150a4b0800000000000000
+      internalID: -5431251680700721967
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rainstreaktexture_7
+      rect:
+        serializedVersion: 2
+        x: 81
+        y: 310
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6caf526c9795e3630800000000000000
+      internalID: 3908659906154461894
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rainstreaktexture_8
+      rect:
+        serializedVersion: 2
+        x: 81
+        y: 286
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c066c99f5ac16bb20800000000000000
+      internalID: 3149736488575198732
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rainstreaktexture_9
+      rect:
+        serializedVersion: 2
+        x: 81
+        y: 172
+        width: 7
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c41eb98ada3c01850800000000000000
+      internalID: 6345787025590575436
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rainstreaktexture_10
+      rect:
+        serializedVersion: 2
+        x: 81
+        y: 140
+        width: 8
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0bc921992606e3980800000000000000
+      internalID: -8557296265366168400
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rainstreaktexture_11
+      rect:
+        serializedVersion: 2
+        x: 81
+        y: 100
+        width: 8
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: eef9d001d01f37cd0800000000000000
+      internalID: -2561438724637483026
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rainstreaktexture_12
+      rect:
+        serializedVersion: 2
+        x: 81
+        y: 91
+        width: 8
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 03754c89fd6fe8de0800000000000000
+      internalID: -1328853399826573520
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rainstreaktexture_13
+      rect:
+        serializedVersion: 2
+        x: 81
+        y: 86
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 47e7899c185388ba0800000000000000
+      internalID: -6086556064841957772
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rainstreaktexture_14
+      rect:
+        serializedVersion: 2
+        x: 81
+        y: 36
+        width: 8
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3d12b44123df92250800000000000000
+      internalID: 5920541576685887955
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rainstreaktexture_15
+      rect:
+        serializedVersion: 2
+        x: 82
+        y: 956
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d87d81cdad46fec40800000000000000
+      internalID: 5543760557474633613
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rainstreaktexture_16
+      rect:
+        serializedVersion: 2
+        x: 82
+        y: 820
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7036d0db4637701f0800000000000000
+      internalID: -1078766709226249465
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rainstreaktexture_17
+      rect:
+        serializedVersion: 2
+        x: 82
+        y: 710
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8d481f9c6f62b6d30800000000000000
+      internalID: 4425673900213503192
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rainstreaktexture_18
+      rect:
+        serializedVersion: 2
+        x: 82
+        y: 638
+        width: 6
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4c49042a14056aec0800000000000000
+      internalID: -3556066612937190204
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rainstreaktexture_19
+      rect:
+        serializedVersion: 2
+        x: 82
+        y: 620
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3af2dacc838ad9ea0800000000000000
+      internalID: -5864346177860980829
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rainstreaktexture_20
+      rect:
+        serializedVersion: 2
+        x: 82
+        y: 470
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 266a7faec497b5950800000000000000
+      internalID: 6438873463522829922
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rainstreaktexture_21
+      rect:
+        serializedVersion: 2
+        x: 82
+        y: 423
+        width: 7
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ab0b9a5d68fa29af0800000000000000
+      internalID: -391057223982665542
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rainstreaktexture_22
+      rect:
+        serializedVersion: 2
+        x: 82
+        y: 390
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 036f501791727cf10800000000000000
+      internalID: 2289841925765068336
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rainstreaktexture_23
+      rect:
+        serializedVersion: 2
+        x: 82
+        y: 350
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 15fea8ad25b121e30800000000000000
+      internalID: 4472667422600130385
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rainstreaktexture_24
+      rect:
+        serializedVersion: 2
+        x: 82
+        y: 332
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1ce8fec72f289ca90800000000000000
+      internalID: -7293154143560036671
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rainstreaktexture_25
+      rect:
+        serializedVersion: 2
+        x: 82
+        y: 70
+        width: 7
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 56ba875c28c4e4790800000000000000
+      internalID: -7544008201256522907
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rainstreaktexture_26
+      rect:
+        serializedVersion: 2
+        x: 82
+        y: 60
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 26da43f6e03dbb350800000000000000
+      internalID: 6033648184741637474
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rainstreaktexture_27
+      rect:
+        serializedVersion: 2
+        x: 82
+        y: 54
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0828e1128bcd74ad0800000000000000
+      internalID: -2717961166707064192
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rainstreaktexture_28
+      rect:
+        serializedVersion: 2
+        x: 82
+        y: 30
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9eaf69aa55f136c70800000000000000
+      internalID: 8963042136192121577
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rainstreaktexture_29
+      rect:
+        serializedVersion: 2
+        x: 82
+        y: 12
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8b044b79434e41de0800000000000000
+      internalID: -1363213872651812680
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rainstreaktexture_30
+      rect:
+        serializedVersion: 2
+        x: 83
+        y: 406
+        width: 6
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 447711c3b4fff5aa0800000000000000
+      internalID: -6169932265878882492
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rainstreaktexture_31
+      rect:
+        serializedVersion: 2
+        x: 250
+        y: 0
+        width: 757
+        height: 1024
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 623a8e8a77267ff80800000000000000
+      internalID: -8072875540963876058
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rainstreaktexture_32
+      rect:
+        serializedVersion: 2
+        x: 992
+        y: 448
+        width: 9
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b36bd56abce28bb40800000000000000
+      internalID: 5456162400763754043
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rainstreaktexture_33
+      rect:
+        serializedVersion: 2
+        x: 993
+        y: 408
+        width: 8
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b6648e64e7d406e10800000000000000
+      internalID: 2188834623652906603
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rainstreaktexture_34
+      rect:
+        serializedVersion: 2
+        x: 994
+        y: 768
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 161142950722eac60800000000000000
+      internalID: 7831234667971088737
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rainstreaktexture_35
+      rect:
+        serializedVersion: 2
+        x: 994
+        y: 743
+        width: 6
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2c1d107587c5acbe0800000000000000
+      internalID: -1456249857575366206
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rainstreaktexture_36
+      rect:
+        serializedVersion: 2
+        x: 994
+        y: 495
+        width: 6
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bf80c5c505cf142a0800000000000000
+      internalID: -6754840544001914629
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rainstreaktexture_37
+      rect:
+        serializedVersion: 2
+        x: 994
+        y: 457
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ffc666c16e7af35b0800000000000000
+      internalID: -5386402022551032577
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rainstreaktexture_38
+      rect:
+        serializedVersion: 2
+        x: 994
+        y: 438
+        width: 7
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 24d2452c318c4feb0800000000000000
+      internalID: -4686901324995613374
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rainstreaktexture_39
+      rect:
+        serializedVersion: 2
+        x: 994
+        y: 400
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9ca15b44175d69b50800000000000000
+      internalID: 6599696986418780873
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rainstreaktexture_40
+      rect:
+        serializedVersion: 2
+        x: 994
+        y: 320
+        width: 7
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9240b7b8eda27ae10800000000000000
+      internalID: 2208781277559718953
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rainstreaktexture_41
+      rect:
+        serializedVersion: 2
+        x: 994
+        y: 270
+        width: 7
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ff38043059703de20800000000000000
+      internalID: 3374048882416714751
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rainstreaktexture_42
+      rect:
+        serializedVersion: 2
+        x: 994
+        y: 198
+        width: 7
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6d64669703219d440800000000000000
+      internalID: 4961016463929788118
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rainstreaktexture_43
+      rect:
+        serializedVersion: 2
+        x: 994
+        y: 176
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a94f0b7e0175cbc10800000000000000
+      internalID: 2070625658801812634
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rainstreaktexture_44
+      rect:
+        serializedVersion: 2
+        x: 994
+        y: 103
+        width: 6
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b596208ef3f9d8430800000000000000
+      internalID: 3786857958512683355
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rainstreaktexture_45
+      rect:
+        serializedVersion: 2
+        x: 994
+        y: 91
+        width: 7
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7e99669ede7130600800000000000000
+      internalID: 433216299748202983
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rainstreaktexture_46
+      rect:
+        serializedVersion: 2
+        x: 994
+        y: 35
+        width: 7
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8eadaa1f7e74cd730800000000000000
+      internalID: 4025171228479904488
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rainstreaktexture_47
+      rect:
+        serializedVersion: 2
+        x: 994
+        y: 23
+        width: 7
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8d79bddc0c8d33c70800000000000000
+      internalID: 8949735207114348504
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rainstreaktexture_48
+      rect:
+        serializedVersion: 2
+        x: 995
+        y: 672
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d28ef5c3d2965e690800000000000000
+      internalID: -7573531555346257875
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rainstreaktexture_49
+      rect:
+        serializedVersion: 2
+        x: 995
+        y: 374
+        width: 6
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 34a67333098d48960800000000000000
+      internalID: 7603440184754399811
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rainstreaktexture_50
+      rect:
+        serializedVersion: 2
+        x: 995
+        y: 281
+        width: 6
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8085ffd329884cd80800000000000000
+      internalID: -8231304057239676920
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rainstreaktexture_51
+      rect:
+        serializedVersion: 2
+        x: 995
+        y: 234
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c19aee364145b4860800000000000000
+      internalID: 7515192849750468892
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rainstreaktexture_52
+      rect:
+        serializedVersion: 2
+        x: 995
+        y: 169
+        width: 6
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ed603e2218c893250800000000000000
+      internalID: 5924921271046571742
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rainstreaktexture_53
+      rect:
+        serializedVersion: 2
+        x: 995
+        y: 10
+        width: 6
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ac0119eae43dcd820800000000000000
+      internalID: 2944460591283114186
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rainstreaktexture_54
+      rect:
+        serializedVersion: 2
+        x: 1011
+        y: 0
+        width: 518
+        height: 1024
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3211cf96ee6c9f5a0800000000000000
+      internalID: -6486935060967845597
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rainstreaktexture_55
+      rect:
+        serializedVersion: 2
+        x: 1041
+        y: 959
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 89ee33f3e5eb25110800000000000000
+      internalID: 1248269358731619992
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rainstreaktexture_56
+      rect:
+        serializedVersion: 2
+        x: 1041
+        y: 943
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6f8dc8ae5c0f74330800000000000000
+      internalID: 3695186752115103990
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rainstreaktexture_57
+      rect:
+        serializedVersion: 2
+        x: 1041
+        y: 895
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a65f220dde8c4ed60800000000000000
+      internalID: 7918674968548930922
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rainstreaktexture_58
+      rect:
+        serializedVersion: 2
+        x: 1041
+        y: 871
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: aa9072f06b9875ad0800000000000000
+      internalID: -2713548835436164694
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rainstreaktexture_59
+      rect:
+        serializedVersion: 2
+        x: 1041
+        y: 863
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c742554083eeec860800000000000000
+      internalID: 7552235549505168508
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rainstreaktexture_60
+      rect:
+        serializedVersion: 2
+        x: 1041
+        y: 775
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: eba38dfde6c9bf510800000000000000
+      internalID: 1584031693966686910
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rainstreaktexture_61
+      rect:
+        serializedVersion: 2
+        x: 1041
+        y: 768
+        width: 6
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 60f139e43151420a0800000000000000
+      internalID: -6907372755812671738
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rainstreaktexture_62
+      rect:
+        serializedVersion: 2
+        x: 1041
+        y: 759
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 03b8e1b362ac36b90800000000000000
+      internalID: -7249728709586941136
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rainstreaktexture_63
+      rect:
+        serializedVersion: 2
+        x: 1041
+        y: 735
+        width: 6
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e7c3960098b306940800000000000000
+      internalID: 5287291422136417406
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rainstreaktexture_64
+      rect:
+        serializedVersion: 2
+        x: 1041
+        y: 719
+        width: 6
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: db4c65b33a24e13b0800000000000000
+      internalID: -5539917222776486723
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rainstreaktexture_65
+      rect:
+        serializedVersion: 2
+        x: 1041
+        y: 693
+        width: 6
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d65b64045f1783870800000000000000
+      internalID: 8662799181406451053
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rainstreaktexture_66
+      rect:
+        serializedVersion: 2
+        x: 1041
+        y: 647
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 282506e66c1352300800000000000000
+      internalID: 226642084577170050
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rainstreaktexture_67
+      rect:
+        serializedVersion: 2
+        x: 1041
+        y: 589
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f1cd8866e0f63b920800000000000000
+      internalID: 3004867484026723359
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rainstreaktexture_68
+      rect:
+        serializedVersion: 2
+        x: 1041
+        y: 567
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f9ac50c00a79bd9c0800000000000000
+      internalID: -3901357938534135137
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rainstreaktexture_69
+      rect:
+        serializedVersion: 2
+        x: 1041
+        y: 533
+        width: 6
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9117d2afa156742c0800000000000000
+      internalID: -4447474940464238311
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rainstreaktexture_70
+      rect:
+        serializedVersion: 2
+        x: 1041
+        y: 528
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a1ae27c4e91cfd5b0800000000000000
+      internalID: -5341337747406525926
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rainstreaktexture_71
+      rect:
+        serializedVersion: 2
+        x: 1041
+        y: 446
+        width: 6
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 41ecaf8a8b6f0e200800000000000000
+      internalID: 207436855828467220
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rainstreaktexture_72
+      rect:
+        serializedVersion: 2
+        x: 1041
+        y: 439
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 14bf8c47cdb867490800000000000000
+      internalID: -7748852329875965119
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rainstreaktexture_73
+      rect:
+        serializedVersion: 2
+        x: 1041
+        y: 429
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f78099651011f7d00800000000000000
+      internalID: 972514741980825727
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rainstreaktexture_74
+      rect:
+        serializedVersion: 2
+        x: 1041
+        y: 359
+        width: 6
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 25442d60471c90f70800000000000000
+      internalID: 9154060421682054226
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rainstreaktexture_75
+      rect:
+        serializedVersion: 2
+        x: 1041
+        y: 303
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 40c2e8f844d510d60800000000000000
+      internalID: 7854661774158474244
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rainstreaktexture_76
+      rect:
+        serializedVersion: 2
+        x: 1041
+        y: 269
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f4263ab38f848fd10800000000000000
+      internalID: 2159556252313805391
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rainstreaktexture_77
+      rect:
+        serializedVersion: 2
+        x: 1041
+        y: 216
+        width: 6
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: add8a63ceb55e7920800000000000000
+      internalID: 2989921480431275482
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rainstreaktexture_78
+      rect:
+        serializedVersion: 2
+        x: 1041
+        y: 151
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 50ba6aa494eee8820800000000000000
+      internalID: 2922535206762490629
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rainstreaktexture_79
+      rect:
+        serializedVersion: 2
+        x: 1041
+        y: 71
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4926a4b924b15ce80800000000000000
+      internalID: -8159085177024650604
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rainstreaktexture_80
+      rect:
+        serializedVersion: 2
+        x: 1041
+        y: 39
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 543b690895c403ed0800000000000000
+      internalID: -2436363451114278075
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rainstreaktexture_81
+      rect:
+        serializedVersion: 2
+        x: 1042
+        y: 311
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c91c859a09879ca50800000000000000
+      internalID: 6541892496444146076
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rainstreaktexture_82
+      rect:
+        serializedVersion: 2
+        x: 1042
+        y: 222
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 77aa998f9d5986770800000000000000
+      internalID: 8604291851502594679
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rainstreaktexture_83
+      rect:
+        serializedVersion: 2
+        x: 1042
+        y: 46
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1eb4249a3c0c5ed90800000000000000
+      internalID: -7069032093497275423
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      rainstreaktexture_0: -540834573045080264
+      rainstreaktexture_1: -1371135194505741168
+      rainstreaktexture_10: -8557296265366168400
+      rainstreaktexture_11: -2561438724637483026
+      rainstreaktexture_12: -1328853399826573520
+      rainstreaktexture_13: -6086556064841957772
+      rainstreaktexture_14: 5920541576685887955
+      rainstreaktexture_15: 5543760557474633613
+      rainstreaktexture_16: -1078766709226249465
+      rainstreaktexture_17: 4425673900213503192
+      rainstreaktexture_18: -3556066612937190204
+      rainstreaktexture_19: -5864346177860980829
+      rainstreaktexture_2: 3352466185409316651
+      rainstreaktexture_20: 6438873463522829922
+      rainstreaktexture_21: -391057223982665542
+      rainstreaktexture_22: 2289841925765068336
+      rainstreaktexture_23: 4472667422600130385
+      rainstreaktexture_24: -7293154143560036671
+      rainstreaktexture_25: -7544008201256522907
+      rainstreaktexture_26: 6033648184741637474
+      rainstreaktexture_27: -2717961166707064192
+      rainstreaktexture_28: 8963042136192121577
+      rainstreaktexture_29: -1363213872651812680
+      rainstreaktexture_3: 1389777633166929267
+      rainstreaktexture_30: -6169932265878882492
+      rainstreaktexture_31: -8072875540963876058
+      rainstreaktexture_32: 5456162400763754043
+      rainstreaktexture_33: 2188834623652906603
+      rainstreaktexture_34: 7831234667971088737
+      rainstreaktexture_35: -1456249857575366206
+      rainstreaktexture_36: -6754840544001914629
+      rainstreaktexture_37: -5386402022551032577
+      rainstreaktexture_38: -4686901324995613374
+      rainstreaktexture_39: 6599696986418780873
+      rainstreaktexture_4: 8373991900331854293
+      rainstreaktexture_40: 2208781277559718953
+      rainstreaktexture_41: 3374048882416714751
+      rainstreaktexture_42: 4961016463929788118
+      rainstreaktexture_43: 2070625658801812634
+      rainstreaktexture_44: 3786857958512683355
+      rainstreaktexture_45: 433216299748202983
+      rainstreaktexture_46: 4025171228479904488
+      rainstreaktexture_47: 8949735207114348504
+      rainstreaktexture_48: -7573531555346257875
+      rainstreaktexture_49: 7603440184754399811
+      rainstreaktexture_5: 7366083491418086049
+      rainstreaktexture_50: -8231304057239676920
+      rainstreaktexture_51: 7515192849750468892
+      rainstreaktexture_52: 5924921271046571742
+      rainstreaktexture_53: 2944460591283114186
+      rainstreaktexture_54: -6486935060967845597
+      rainstreaktexture_55: 1248269358731619992
+      rainstreaktexture_56: 3695186752115103990
+      rainstreaktexture_57: 7918674968548930922
+      rainstreaktexture_58: -2713548835436164694
+      rainstreaktexture_59: 7552235549505168508
+      rainstreaktexture_6: -5431251680700721967
+      rainstreaktexture_60: 1584031693966686910
+      rainstreaktexture_61: -6907372755812671738
+      rainstreaktexture_62: -7249728709586941136
+      rainstreaktexture_63: 5287291422136417406
+      rainstreaktexture_64: -5539917222776486723
+      rainstreaktexture_65: 8662799181406451053
+      rainstreaktexture_66: 226642084577170050
+      rainstreaktexture_67: 3004867484026723359
+      rainstreaktexture_68: -3901357938534135137
+      rainstreaktexture_69: -4447474940464238311
+      rainstreaktexture_7: 3908659906154461894
+      rainstreaktexture_70: -5341337747406525926
+      rainstreaktexture_71: 207436855828467220
+      rainstreaktexture_72: -7748852329875965119
+      rainstreaktexture_73: 972514741980825727
+      rainstreaktexture_74: 9154060421682054226
+      rainstreaktexture_75: 7854661774158474244
+      rainstreaktexture_76: 2159556252313805391
+      rainstreaktexture_77: 2989921480431275482
+      rainstreaktexture_78: 2922535206762490629
+      rainstreaktexture_79: -8159085177024650604
+      rainstreaktexture_8: 3149736488575198732
+      rainstreaktexture_80: -2436363451114278075
+      rainstreaktexture_81: 6541892496444146076
+      rainstreaktexture_82: 8604291851502594679
+      rainstreaktexture_83: -7069032093497275423
+      rainstreaktexture_9: 6345787025590575436
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
