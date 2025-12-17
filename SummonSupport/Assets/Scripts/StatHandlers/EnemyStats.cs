@@ -28,7 +28,7 @@ public class EnemyStats : LivingBeing
         }
         if (ragdollScript != null) ragdollScript.CauseDestruction(false);
 
-        //Invoke("DelayedTestDeath", .8f);
+        Invoke("DelayedTestDeath", .3f);
     }
 
     public override void HandleUIAttrDisplay(AttributeType attributeType, float newValue)

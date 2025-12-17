@@ -18,7 +18,7 @@ public class Aura : MonoBehaviour
     [SerializeField] public float ActivationTime { get; private set; } = .5f;
     [field: SerializeField] public float SizeScalar = .1f;
     private bool Active = false;
-    private Collider sphereCollider;
+    private Collider capsuleCollider;
 
     private LivingBeing target;
     private ConjureAbility ConjureAbility = null;
@@ -35,24 +35,34 @@ public class Aura : MonoBehaviour
     {
         if (gameObject.TryGetComponent(out ParticleSystem systemParticular))
             ps = systemParticular;
-        Invoke("Activate", ActivationTime);
+        //Invoke("Activate", ActivationTime);
     }
     public void HandleInstantiation(LivingBeing caster, LivingBeing target, Ability ability)
     {
 
-        if (ability.AlterParticleSystemGradient) ColorChanger.ChangeObjectsParticleSystemColor(ability.ElementTypes[0], gameObject);
+
+        if (ability.AlterParticleSystemGradient)
+        {
+            ColorChanger.ChangeObjectsParticleSystemColor(ability.ElementTypes[0], gameObject);
+        }
+
         SetAuraStats(caster, target, ability);
+
+
 
         HandleConjureAbilitySpecifics();
 
+        if (TryGetComponent(out Collider collider))
+        {
+            collider.enabled = true;
+        }
 
         if (ability is AuraAbility auraAbility)
             radius = auraAbility.Radius;
+
         AddMods();
 
 
-        //if (TryGetComponent(out CapsuleCollider collider))
-        //collider.radius = Math.Max(radius, 1);
         AlterApparentRadius();
 
         CombatStatHandler.HandleEffectPackage(ability, caster, caster, ability.SelfEffects);
@@ -61,9 +71,7 @@ public class Aura : MonoBehaviour
     }
     private void AlterApparentRadius()
     {
-        //gameObject.transform.localScale = new Vector3(gameObject.transform.localScale.x + radius, gameObject.transform.localScale.y, gameObject.transform.localScale.z + radius);
-        gameObject.transform.localScale *= 1 + radius * SizeScalar;// + radius, gameObject.transform.localScale.y + radius, gameObject.transform.localScale.z + radius);
-        //Debug.Log($" radius = {radius}");
+        gameObject.transform.localScale *= 1 + radius * SizeScalar;
     }
     private void HandleConjureAbilitySpecifics()
     {
@@ -80,6 +88,8 @@ public class Aura : MonoBehaviour
     }
     public void SetAuraStats(LivingBeing caster, LivingBeing target, Ability ability)
     {
+        Debug.Log($"Setting aura stats. ability = {ability}");
+
         duration = ability.Duration;
         this.caster = caster;
         this.ability = ability;
@@ -107,6 +117,9 @@ public class Aura : MonoBehaviour
     private void Activate()
     {
         Active = true;
+        //if (capsuleCollider != null)
+        //    capsuleCollider.enabled = true;
+
     }
 
     void OnTriggerEnter(Collider other)
@@ -115,23 +128,11 @@ public class Aura : MonoBehaviour
         {
             if (other.gameObject.TryGetComponent(out LivingBeing otherLivingBeing))
             {
-                if (ability.ListUsableOn.Contains(RelationshipHandler.GetRelationshipType(caster.CharacterTag, otherLivingBeing.CharacterTag)))
-                {
-                    //Debug.Log($"usable on {otherLivingBeing.Name}");
-                    if (ability.OnHitEffect != null)
-                    {
-                        SpawnOnHitEffect(otherLivingBeing, ability.OnHitEffect);
-                    }
-                    otherLivingBeing.AlterAbilityList(ability, true);
-                    //Debug.Log($"Effects of {ability.Name} is being handled.");
-                    CombatStatHandler.HandleEffectPackage(ability, caster, otherLivingBeing, ability.TargetEffects);
-                    piercedAlready += 1;
-                    if (ConjureAbility != null && ConjureAbility.SeeksTarget && piercedAlready >= maxPierce) Destroy(gameObject, .2f);
-                }
+                listLivingBeingsInAura.Add(otherLivingBeing);
             }
-            else Debug.Log($"NOT usable on {other.gameObject.name}");
+            Invoke("HandleTriggerEntered", .1f);
         }
-        else Debug.Log($"OnTrigger Enter func called but the trigger object is not active");
+        else Debug.Log($"OnTrigger Enter func called but the trigger object {ability} is not active");
     }
 
     void OnTriggerExit(Collider other)
@@ -162,6 +163,27 @@ public class Aura : MonoBehaviour
             else return targetStats;
         }
         return target;
+    }
+
+    private void HandleTriggerEntered()
+    {
+        foreach (LivingBeing otherLivingBeing in listLivingBeingsInAura)
+        {
+            if (ability.ListUsableOn.Contains(RelationshipHandler.GetRelationshipType(caster.CharacterTag, otherLivingBeing.CharacterTag)))
+            {
+                //Debug.Log($"usable on {otherLivingBeing.Name}");
+                if (ability.OnHitEffect != null)
+                {
+                    SpawnOnHitEffect(otherLivingBeing, ability.OnHitEffect);
+                }
+                otherLivingBeing.AlterAbilityList(ability, true);
+                //Debug.Log($"Effects of {ability.Name} is being handled.");
+                CombatStatHandler.HandleEffectPackage(ability, caster, otherLivingBeing, ability.TargetEffects);
+                piercedAlready += 1;
+                if (ConjureAbility != null && ConjureAbility.SeeksTarget && piercedAlready >= maxPierce) Destroy(gameObject, .2f);
+            }
+        }
+        listLivingBeingsInAura.Clear();
     }
 
     private IEnumerator SeekTarget(GameObject target)

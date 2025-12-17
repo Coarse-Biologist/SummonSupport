@@ -111,69 +111,6 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""UseAbility1"",
-                    ""type"": ""Button"",
-                    ""id"": ""ad2ad408-19cc-40d5-ad32-2e65611377d2"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": true
-                },
-                {
-                    ""name"": ""Ability1"",
-                    ""type"": ""Button"",
-                    ""id"": ""b118e8bf-0d7a-4287-a9ac-8379ba72ec03"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": true
-                },
-                {
-                    ""name"": ""Ability2"",
-                    ""type"": ""Button"",
-                    ""id"": ""b68be1c5-7745-4fbf-8c72-cd49b9daa44b"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": true
-                },
-                {
-                    ""name"": ""Ability3"",
-                    ""type"": ""Button"",
-                    ""id"": ""2c6230a5-ac82-4f74-b132-d50a1fd7749f"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": true
-                },
-                {
-                    ""name"": ""Ability4"",
-                    ""type"": ""Button"",
-                    ""id"": ""38bf7d5a-16c9-4c6c-aa2e-d2a122750ef9"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": true
-                },
-                {
-                    ""name"": ""Ability5"",
-                    ""type"": ""Button"",
-                    ""id"": ""deb16b9e-4106-4af9-92c9-1df1a3f41750"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": true
-                },
-                {
-                    ""name"": ""Ability6"",
-                    ""type"": ""Button"",
-                    ""id"": ""1979e86f-6523-4168-bf55-b1a2191e7cfa"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": true
-                },
-                {
                     ""name"": ""LookDirection"",
                     ""type"": ""Value"",
                     ""id"": ""7edf423f-7f5d-4826-9f5f-8988518f38ac"",
@@ -195,6 +132,69 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""name"": ""TogglePauseGame"",
                     ""type"": ""Button"",
                     ""id"": ""b457247d-de12-4c31-86c0-628b8858dcd5"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""UseSelectedAbility"",
+                    ""type"": ""Button"",
+                    ""id"": ""0685bba7-c3a2-4a16-aabd-7761a3f8ebc3"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Ability1"",
+                    ""type"": ""Button"",
+                    ""id"": ""4e572c99-60c0-4450-b0f0-0420689cf647"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Ability2"",
+                    ""type"": ""Button"",
+                    ""id"": ""68f72f09-0f74-4507-837b-5515e3e779eb"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Ability3"",
+                    ""type"": ""Button"",
+                    ""id"": ""f643f39e-ca4e-4e64-ad5d-75a03ff9ec66"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""AbilityQ"",
+                    ""type"": ""Button"",
+                    ""id"": ""15377f50-d972-4f3d-b18b-b3192221c7d7"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""AbilityE"",
+                    ""type"": ""Button"",
+                    ""id"": ""88df1d92-38d0-416c-8239-3064dd05751f"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""AbilityF"",
+                    ""type"": ""Button"",
+                    ""id"": ""af9cf025-6f07-4b89-8d94-cc28c8eb6ab0"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
@@ -270,83 +270,6 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""4d6e911d-1290-47ce-aefe-960bd58d7bdf"",
-                    ""path"": ""<Mouse>/leftButton"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""UseAbility1"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""cc3b5ffc-ef36-40c0-b71e-028de161b6dd"",
-                    ""path"": ""<Keyboard>/1"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Ability1"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""3709917f-0971-473b-9667-2e0c05c75655"",
-                    ""path"": ""<Keyboard>/2"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Ability2"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""edf6bb3a-4e3d-4d99-ae0a-b3be765b473d"",
-                    ""path"": ""<Keyboard>/3"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Ability3"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""3d62a1e1-9f40-485d-acc7-8f12429b6f80"",
-                    ""path"": ""<Keyboard>/4"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Ability4"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""f63dc40e-c79e-4743-a625-b25809be938f"",
-                    ""path"": ""<Keyboard>/5"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Ability5"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""2082e689-34a6-4da4-9643-e0c6f24adf15"",
-                    ""path"": ""<Keyboard>/6"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Ability6"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""6e8baadf-a341-40e7-b346-653643f0ef3d"",
                     ""path"": ""<Mouse>/position"",
                     ""interactions"": """",
@@ -388,6 +311,83 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""action"": ""TogglePauseGame"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""189ee065-ed00-4f8e-934d-4e467754111c"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""UseSelectedAbility"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0e798b57-259a-4d3e-81f6-7b973ac3a83e"",
+                    ""path"": ""<Keyboard>/1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Ability1"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6b2aa599-cd80-422a-92cf-05d992f82fc0"",
+                    ""path"": ""<Keyboard>/2"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Ability2"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e8ef2064-edca-4b1a-a137-117702840297"",
+                    ""path"": ""<Keyboard>/3"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Ability3"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""13a1e548-02c0-4970-89b7-f6689c9bce97"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AbilityQ"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c2d4d34f-08f4-436b-8d3b-e41556277db6"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AbilityE"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""69f84d34-5cce-4deb-96db-89edaeb864f6"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AbilityF"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -398,16 +398,16 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
         m_Player_Move = m_Player.FindAction("Move", throwIfNotFound: true);
         m_Player_Dash = m_Player.FindAction("Dash", throwIfNotFound: true);
-        m_Player_UseAbility1 = m_Player.FindAction("UseAbility1", throwIfNotFound: true);
-        m_Player_Ability1 = m_Player.FindAction("Ability1", throwIfNotFound: true);
-        m_Player_Ability2 = m_Player.FindAction("Ability2", throwIfNotFound: true);
-        m_Player_Ability3 = m_Player.FindAction("Ability3", throwIfNotFound: true);
-        m_Player_Ability4 = m_Player.FindAction("Ability4", throwIfNotFound: true);
-        m_Player_Ability5 = m_Player.FindAction("Ability5", throwIfNotFound: true);
-        m_Player_Ability6 = m_Player.FindAction("Ability6", throwIfNotFound: true);
         m_Player_LookDirection = m_Player.FindAction("LookDirection", throwIfNotFound: true);
         m_Player_CommandMinion = m_Player.FindAction("CommandMinion", throwIfNotFound: true);
         m_Player_TogglePauseGame = m_Player.FindAction("TogglePauseGame", throwIfNotFound: true);
+        m_Player_UseSelectedAbility = m_Player.FindAction("UseSelectedAbility", throwIfNotFound: true);
+        m_Player_Ability1 = m_Player.FindAction("Ability1", throwIfNotFound: true);
+        m_Player_Ability2 = m_Player.FindAction("Ability2", throwIfNotFound: true);
+        m_Player_Ability3 = m_Player.FindAction("Ability3", throwIfNotFound: true);
+        m_Player_AbilityQ = m_Player.FindAction("AbilityQ", throwIfNotFound: true);
+        m_Player_AbilityE = m_Player.FindAction("AbilityE", throwIfNotFound: true);
+        m_Player_AbilityF = m_Player.FindAction("AbilityF", throwIfNotFound: true);
     }
 
     ~@PlayerInputActions()
@@ -490,16 +490,16 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     private List<IPlayerActions> m_PlayerActionsCallbackInterfaces = new List<IPlayerActions>();
     private readonly InputAction m_Player_Move;
     private readonly InputAction m_Player_Dash;
-    private readonly InputAction m_Player_UseAbility1;
-    private readonly InputAction m_Player_Ability1;
-    private readonly InputAction m_Player_Ability2;
-    private readonly InputAction m_Player_Ability3;
-    private readonly InputAction m_Player_Ability4;
-    private readonly InputAction m_Player_Ability5;
-    private readonly InputAction m_Player_Ability6;
     private readonly InputAction m_Player_LookDirection;
     private readonly InputAction m_Player_CommandMinion;
     private readonly InputAction m_Player_TogglePauseGame;
+    private readonly InputAction m_Player_UseSelectedAbility;
+    private readonly InputAction m_Player_Ability1;
+    private readonly InputAction m_Player_Ability2;
+    private readonly InputAction m_Player_Ability3;
+    private readonly InputAction m_Player_AbilityQ;
+    private readonly InputAction m_Player_AbilityE;
+    private readonly InputAction m_Player_AbilityF;
     /// <summary>
     /// Provides access to input actions defined in input action map "Player".
     /// </summary>
@@ -520,9 +520,21 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         /// </summary>
         public InputAction @Dash => m_Wrapper.m_Player_Dash;
         /// <summary>
-        /// Provides access to the underlying input action "Player/UseAbility1".
+        /// Provides access to the underlying input action "Player/LookDirection".
         /// </summary>
-        public InputAction @UseAbility1 => m_Wrapper.m_Player_UseAbility1;
+        public InputAction @LookDirection => m_Wrapper.m_Player_LookDirection;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/CommandMinion".
+        /// </summary>
+        public InputAction @CommandMinion => m_Wrapper.m_Player_CommandMinion;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/TogglePauseGame".
+        /// </summary>
+        public InputAction @TogglePauseGame => m_Wrapper.m_Player_TogglePauseGame;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/UseSelectedAbility".
+        /// </summary>
+        public InputAction @UseSelectedAbility => m_Wrapper.m_Player_UseSelectedAbility;
         /// <summary>
         /// Provides access to the underlying input action "Player/Ability1".
         /// </summary>
@@ -536,29 +548,17 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         /// </summary>
         public InputAction @Ability3 => m_Wrapper.m_Player_Ability3;
         /// <summary>
-        /// Provides access to the underlying input action "Player/Ability4".
+        /// Provides access to the underlying input action "Player/AbilityQ".
         /// </summary>
-        public InputAction @Ability4 => m_Wrapper.m_Player_Ability4;
+        public InputAction @AbilityQ => m_Wrapper.m_Player_AbilityQ;
         /// <summary>
-        /// Provides access to the underlying input action "Player/Ability5".
+        /// Provides access to the underlying input action "Player/AbilityE".
         /// </summary>
-        public InputAction @Ability5 => m_Wrapper.m_Player_Ability5;
+        public InputAction @AbilityE => m_Wrapper.m_Player_AbilityE;
         /// <summary>
-        /// Provides access to the underlying input action "Player/Ability6".
+        /// Provides access to the underlying input action "Player/AbilityF".
         /// </summary>
-        public InputAction @Ability6 => m_Wrapper.m_Player_Ability6;
-        /// <summary>
-        /// Provides access to the underlying input action "Player/LookDirection".
-        /// </summary>
-        public InputAction @LookDirection => m_Wrapper.m_Player_LookDirection;
-        /// <summary>
-        /// Provides access to the underlying input action "Player/CommandMinion".
-        /// </summary>
-        public InputAction @CommandMinion => m_Wrapper.m_Player_CommandMinion;
-        /// <summary>
-        /// Provides access to the underlying input action "Player/TogglePauseGame".
-        /// </summary>
-        public InputAction @TogglePauseGame => m_Wrapper.m_Player_TogglePauseGame;
+        public InputAction @AbilityF => m_Wrapper.m_Player_AbilityF;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -591,27 +591,6 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Dash.started += instance.OnDash;
             @Dash.performed += instance.OnDash;
             @Dash.canceled += instance.OnDash;
-            @UseAbility1.started += instance.OnUseAbility1;
-            @UseAbility1.performed += instance.OnUseAbility1;
-            @UseAbility1.canceled += instance.OnUseAbility1;
-            @Ability1.started += instance.OnAbility1;
-            @Ability1.performed += instance.OnAbility1;
-            @Ability1.canceled += instance.OnAbility1;
-            @Ability2.started += instance.OnAbility2;
-            @Ability2.performed += instance.OnAbility2;
-            @Ability2.canceled += instance.OnAbility2;
-            @Ability3.started += instance.OnAbility3;
-            @Ability3.performed += instance.OnAbility3;
-            @Ability3.canceled += instance.OnAbility3;
-            @Ability4.started += instance.OnAbility4;
-            @Ability4.performed += instance.OnAbility4;
-            @Ability4.canceled += instance.OnAbility4;
-            @Ability5.started += instance.OnAbility5;
-            @Ability5.performed += instance.OnAbility5;
-            @Ability5.canceled += instance.OnAbility5;
-            @Ability6.started += instance.OnAbility6;
-            @Ability6.performed += instance.OnAbility6;
-            @Ability6.canceled += instance.OnAbility6;
             @LookDirection.started += instance.OnLookDirection;
             @LookDirection.performed += instance.OnLookDirection;
             @LookDirection.canceled += instance.OnLookDirection;
@@ -621,6 +600,27 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @TogglePauseGame.started += instance.OnTogglePauseGame;
             @TogglePauseGame.performed += instance.OnTogglePauseGame;
             @TogglePauseGame.canceled += instance.OnTogglePauseGame;
+            @UseSelectedAbility.started += instance.OnUseSelectedAbility;
+            @UseSelectedAbility.performed += instance.OnUseSelectedAbility;
+            @UseSelectedAbility.canceled += instance.OnUseSelectedAbility;
+            @Ability1.started += instance.OnAbility1;
+            @Ability1.performed += instance.OnAbility1;
+            @Ability1.canceled += instance.OnAbility1;
+            @Ability2.started += instance.OnAbility2;
+            @Ability2.performed += instance.OnAbility2;
+            @Ability2.canceled += instance.OnAbility2;
+            @Ability3.started += instance.OnAbility3;
+            @Ability3.performed += instance.OnAbility3;
+            @Ability3.canceled += instance.OnAbility3;
+            @AbilityQ.started += instance.OnAbilityQ;
+            @AbilityQ.performed += instance.OnAbilityQ;
+            @AbilityQ.canceled += instance.OnAbilityQ;
+            @AbilityE.started += instance.OnAbilityE;
+            @AbilityE.performed += instance.OnAbilityE;
+            @AbilityE.canceled += instance.OnAbilityE;
+            @AbilityF.started += instance.OnAbilityF;
+            @AbilityF.performed += instance.OnAbilityF;
+            @AbilityF.canceled += instance.OnAbilityF;
         }
 
         /// <summary>
@@ -638,27 +638,6 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Dash.started -= instance.OnDash;
             @Dash.performed -= instance.OnDash;
             @Dash.canceled -= instance.OnDash;
-            @UseAbility1.started -= instance.OnUseAbility1;
-            @UseAbility1.performed -= instance.OnUseAbility1;
-            @UseAbility1.canceled -= instance.OnUseAbility1;
-            @Ability1.started -= instance.OnAbility1;
-            @Ability1.performed -= instance.OnAbility1;
-            @Ability1.canceled -= instance.OnAbility1;
-            @Ability2.started -= instance.OnAbility2;
-            @Ability2.performed -= instance.OnAbility2;
-            @Ability2.canceled -= instance.OnAbility2;
-            @Ability3.started -= instance.OnAbility3;
-            @Ability3.performed -= instance.OnAbility3;
-            @Ability3.canceled -= instance.OnAbility3;
-            @Ability4.started -= instance.OnAbility4;
-            @Ability4.performed -= instance.OnAbility4;
-            @Ability4.canceled -= instance.OnAbility4;
-            @Ability5.started -= instance.OnAbility5;
-            @Ability5.performed -= instance.OnAbility5;
-            @Ability5.canceled -= instance.OnAbility5;
-            @Ability6.started -= instance.OnAbility6;
-            @Ability6.performed -= instance.OnAbility6;
-            @Ability6.canceled -= instance.OnAbility6;
             @LookDirection.started -= instance.OnLookDirection;
             @LookDirection.performed -= instance.OnLookDirection;
             @LookDirection.canceled -= instance.OnLookDirection;
@@ -668,6 +647,27 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @TogglePauseGame.started -= instance.OnTogglePauseGame;
             @TogglePauseGame.performed -= instance.OnTogglePauseGame;
             @TogglePauseGame.canceled -= instance.OnTogglePauseGame;
+            @UseSelectedAbility.started -= instance.OnUseSelectedAbility;
+            @UseSelectedAbility.performed -= instance.OnUseSelectedAbility;
+            @UseSelectedAbility.canceled -= instance.OnUseSelectedAbility;
+            @Ability1.started -= instance.OnAbility1;
+            @Ability1.performed -= instance.OnAbility1;
+            @Ability1.canceled -= instance.OnAbility1;
+            @Ability2.started -= instance.OnAbility2;
+            @Ability2.performed -= instance.OnAbility2;
+            @Ability2.canceled -= instance.OnAbility2;
+            @Ability3.started -= instance.OnAbility3;
+            @Ability3.performed -= instance.OnAbility3;
+            @Ability3.canceled -= instance.OnAbility3;
+            @AbilityQ.started -= instance.OnAbilityQ;
+            @AbilityQ.performed -= instance.OnAbilityQ;
+            @AbilityQ.canceled -= instance.OnAbilityQ;
+            @AbilityE.started -= instance.OnAbilityE;
+            @AbilityE.performed -= instance.OnAbilityE;
+            @AbilityE.canceled -= instance.OnAbilityE;
+            @AbilityF.started -= instance.OnAbilityF;
+            @AbilityF.performed -= instance.OnAbilityF;
+            @AbilityF.canceled -= instance.OnAbilityF;
         }
 
         /// <summary>
@@ -723,12 +723,33 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnDash(InputAction.CallbackContext context);
         /// <summary>
-        /// Method invoked when associated input action "UseAbility1" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// Method invoked when associated input action "LookDirection" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnUseAbility1(InputAction.CallbackContext context);
+        void OnLookDirection(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "CommandMinion" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnCommandMinion(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "TogglePauseGame" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnTogglePauseGame(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "UseSelectedAbility" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnUseSelectedAbility(InputAction.CallbackContext context);
         /// <summary>
         /// Method invoked when associated input action "Ability1" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
@@ -751,46 +772,25 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnAbility3(InputAction.CallbackContext context);
         /// <summary>
-        /// Method invoked when associated input action "Ability4" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// Method invoked when associated input action "AbilityQ" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnAbility4(InputAction.CallbackContext context);
+        void OnAbilityQ(InputAction.CallbackContext context);
         /// <summary>
-        /// Method invoked when associated input action "Ability5" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// Method invoked when associated input action "AbilityE" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnAbility5(InputAction.CallbackContext context);
+        void OnAbilityE(InputAction.CallbackContext context);
         /// <summary>
-        /// Method invoked when associated input action "Ability6" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// Method invoked when associated input action "AbilityF" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnAbility6(InputAction.CallbackContext context);
-        /// <summary>
-        /// Method invoked when associated input action "LookDirection" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-        /// </summary>
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnLookDirection(InputAction.CallbackContext context);
-        /// <summary>
-        /// Method invoked when associated input action "CommandMinion" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-        /// </summary>
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnCommandMinion(InputAction.CallbackContext context);
-        /// <summary>
-        /// Method invoked when associated input action "TogglePauseGame" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-        /// </summary>
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnTogglePauseGame(InputAction.CallbackContext context);
+        void OnAbilityF(InputAction.CallbackContext context);
     }
 }

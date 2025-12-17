@@ -4926,6 +4926,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 083b9a9303dd9674b87cc82013ef6e84, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  SizeScalar: 0.1
 --- !u!136 &71624742820431204
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -9876,6 +9877,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 083b9a9303dd9674b87cc82013ef6e84, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  SizeScalar: 0.1
 --- !u!136 &4931464841607882567
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -9893,7 +9895,7 @@ CapsuleCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 1
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Radius: 2
   m_Height: 2

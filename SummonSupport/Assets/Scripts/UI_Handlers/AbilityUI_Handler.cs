@@ -14,7 +14,8 @@ public class AbilityUI_Handler : MonoBehaviour
     public UIDocument uiDoc;
     private VisualElement root;
     private Dictionary<int, ProgressBar> ProgressBarDict = new();
-    private Dictionary<int, Ability> abilityProgressBarDict = new();
+    private Dictionary<int, Ability> abilityIntProgressBarDict = new();
+
 
     #region all ProgressBars
 
@@ -83,14 +84,14 @@ public class AbilityUI_Handler : MonoBehaviour
         ProgressBarDict.Add(4, ProgressBarL5);
         ProgressBarDict.Add(5, ProgressBarL6);
 
-        abilityProgressBarDict.Add(0, null);
-        abilityProgressBarDict.Add(1, null);
-        abilityProgressBarDict.Add(2, null);
-        abilityProgressBarDict.Add(3, null);
-        abilityProgressBarDict.Add(4, null);
-        abilityProgressBarDict.Add(5, null);
-    }
+        abilityIntProgressBarDict.Add(0, null);
+        abilityIntProgressBarDict.Add(1, null);
+        abilityIntProgressBarDict.Add(2, null);
+        abilityIntProgressBarDict.Add(3, null);
+        abilityIntProgressBarDict.Add(4, null);
+        abilityIntProgressBarDict.Add(5, null);
 
+    }
 
     private void Setup()
     {
@@ -105,9 +106,9 @@ public class AbilityUI_Handler : MonoBehaviour
     {
 
         if (ability == null) return;
-        else if (slotIndex <= abilityProgressBarDict.Keys.Count) // check if the index is usable
+        else if (slotIndex <= abilityIntProgressBarDict.Keys.Count) // check if the index is usable
         {
-            abilityProgressBarDict[slotIndex] = ability; // set ability to the slot
+            abilityIntProgressBarDict[slotIndex] = ability; // set ability to the slot
             SetAbilityIcon(slotIndex, ability);
         }
     }
@@ -126,11 +127,11 @@ public class AbilityUI_Handler : MonoBehaviour
     }
 
 
-    private void AbilityUsed(int slotIndex)
+    private void AbilityUsed(int index)
     {
-        ProgressBar abilityProgressBar = ProgressBarDict[slotIndex];
+        ProgressBar abilityProgressBar = ProgressBarDict[index];
+        Ability ability = abilityIntProgressBarDict[index];
         if (abilityProgressBar == null) return;
-        Ability ability = abilityProgressBarDict[slotIndex];
         if (ability == null) return;
         float cooldown = ability.Cooldown + modHandler.GetModAttributeByType(ability, AbilityModTypes.Cooldown);
         //Logging.Info($"Ability {ability.name} with cooldown {cooldown} has been used.");
@@ -139,12 +140,12 @@ public class AbilityUI_Handler : MonoBehaviour
         abilityProgressBar.value = cooldown;
 
 
-        StartCoroutine(DrainCooldown(slotIndex, cooldown));
+        StartCoroutine(DrainCooldown(index, cooldown));
     }
 
-    private IEnumerator DrainCooldown(int slotIndex, float duration)
+    private IEnumerator DrainCooldown(int index, float duration)
     {
-        ProgressBar progressBar = ProgressBarDict[slotIndex];
+        ProgressBar progressBar = ProgressBarDict[index];
         float elapsed = 0f;
 
         while (elapsed < duration)

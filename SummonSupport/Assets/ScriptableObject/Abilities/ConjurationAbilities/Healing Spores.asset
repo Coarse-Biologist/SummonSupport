@@ -66,7 +66,7 @@ MonoBehaviour:
   Radius: 1
   <IsDecaying>k__BackingField: 1
   <LeaveRotation>k__BackingField: 1
-  <SpawnsOnTarget>k__BackingField: 1
+  <SpawnsOnTarget>k__BackingField: 0
   <SeeksTarget>k__BackingField: 0
   <Speed>k__BackingField: 2
   <SearchRadius>k__BackingField: 10
