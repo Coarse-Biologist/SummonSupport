@@ -9,7 +9,6 @@ public enum StatusEffectType
     Pulled, //Plant
     AttackAnimation,
     ExplodeOnDeath,
-    Overheated, //Heat Explode On Death
     Chilled, //cold can escalate to frozen
     Whirlwind, //air catches creature in whirlwind/ tornado and carries them away from player
     Slipping, //water slows down Ai movment function call speed

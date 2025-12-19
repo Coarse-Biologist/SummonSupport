@@ -97,6 +97,8 @@ public abstract class LivingBeing : MonoBehaviour
         InitializeAttributeDict();
         InitializeAffinityDict();
         InitializePhysicalDict();
+        InitializeStatusEffectDict();
+
         resourceBarInterface = GetComponent<I_ResourceBar>();
         regenTickRate = new WaitForSeconds(TickRateRegenerationInSeconds);
 
@@ -276,18 +278,22 @@ public abstract class LivingBeing : MonoBehaviour
     }
     public void AlterStatusEffectList(StatusEffectType status, bool Add) // modifies the list of abilities by which one is affected
     {
-        bool contains = SufferedStatusEffects[status] > 0;
-        if (Add && !contains) SufferedStatusEffects[status] += 1;
-        if (!Add && contains) SufferedStatusEffects[status] -= 1;
+        //bool contains = SufferedStatusEffects[status] > 0;
+        if (Add) SufferedStatusEffects[status] += 1;
+        if (!Add) SufferedStatusEffects[status] -= 1;
     }
     public bool HasStatusEffect(StatusEffectType status)
     {
+
         return SufferedStatusEffects[status] > 0;
     }
 
     public int GetStatusEffectValue(StatusEffectType status)
     {
-        return SufferedStatusEffects[status];
+        int statusValue = SufferedStatusEffects[status];
+        Debug.Log($"Status effect {status} has value {statusValue}");
+
+        return statusValue;// SufferedStatusEffects[status];
     }
 
 
@@ -400,6 +406,15 @@ public abstract class LivingBeing : MonoBehaviour
                 { PhysicalType.Slashing,       (() => Slashing,        v => Slashing = v) }
             };
     }
+    void InitializeStatusEffectDict()
+    {
+        SufferedStatusEffects = new Dictionary<StatusEffectType, int>();
+
+        foreach (StatusEffectType effect in Enum.GetValues(typeof(StatusEffectType)))
+        {
+            SufferedStatusEffects[effect] = 0;
+        }
+    }
 
     #endregion
 
@@ -408,6 +423,6 @@ public abstract class LivingBeing : MonoBehaviour
 
     protected void ViciousDeathExplosion()
     {
-        Debug.Log("Softy died and caused chain reaction");
+        EventDeclarer.ViciousDeath?.Invoke(this);
     }
 }

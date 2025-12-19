@@ -90,7 +90,7 @@ public class Aura : MonoBehaviour
         Activate();
 
     }
-    private void CheckTargetsAtSpawnTime()
+    public void CheckTargetsAtSpawnTime(LivingBeing caster = null)
     {
         Collider[] hits = Physics.OverlapCapsule(caster.transform.position + Vector3.up, caster.transform.position - Vector3.up, radius);
         foreach (Collider hitObject in hits)

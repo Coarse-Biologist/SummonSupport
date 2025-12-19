@@ -9,13 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fceeef8cfafe41444bf6aa890ebad1b7, type: 3}
-  m_Name: Fire Ball
+  m_Script: {fileID: 11500000, guid: d3c13530f7208ff4eb2390a91d90efc5, type: 3}
+  m_Name: Explode
   m_EditorClassIdentifier: 
-  <Name>k__BackingField: Fire Ball
-  <Icon>k__BackingField: {fileID: 8095344145157262792, guid: c3bce2abce0ec0e47ba9c908fd690f04,
-    type: 3}
-  <Cooldown>k__BackingField: 2
+  <Name>k__BackingField: Explode
+  <Icon>k__BackingField: {fileID: 0}
+  <Cooldown>k__BackingField: 3
   <CostType>k__BackingField: 4
   <Cost>k__BackingField: 20
   <Range>k__BackingField: 20
@@ -23,7 +22,7 @@ MonoBehaviour:
   <AbilityTypeTag>k__BackingField: 1
   <ListUsableOn>k__BackingField: 01000000
   <TargetEffects>k__BackingField:
-    <EffectDescription>k__BackingField: 
+    <EffectDescription>k__BackingField: Explodes
     <Heal>k__BackingField:
       <Value>k__BackingField: 0
       <ValueType>k__BackingField: 0
@@ -31,13 +30,12 @@ MonoBehaviour:
       <Value>k__BackingField: 0
       <ValueType>k__BackingField: 0
     <Damage>k__BackingField:
-      <Value>k__BackingField: 30
+      <Value>k__BackingField: 50
     <DamageOverTime>k__BackingField:
       <Value>k__BackingField: 0
     <AttributeUp>k__BackingField: []
     <AttributeDown>k__BackingField: []
-    <StatusEffects>k__BackingField:
-    - {fileID: 11400000, guid: b4787caaf899c8d4bbe607486149e76e, type: 2}
+    <StatusEffects>k__BackingField: []
     <SpecialAbilityAttribute>k__BackingField: 0
   <SelfEffects>k__BackingField:
     <EffectDescription>k__BackingField: 
@@ -60,14 +58,6 @@ MonoBehaviour:
   <OnHitEffect>k__BackingField: {fileID: 1847413739128325886, guid: fdd6b57c8dce4ee4fb54dd00a49814ff,
     type: 3}
   <AlterParticleSystemGradient>k__BackingField: 0
-  <Speed>k__BackingField: 9
-  <Projectile>k__BackingField: {fileID: 6033447785082643316, guid: 706fd26b292fae4488c9b19eec3811fc,
+  <SpawnEffectOnHit>k__BackingField: {fileID: 1847413739128325886, guid: 704913a3a10ed9a45bdca983af7ed99f,
     type: 3}
-  <MaxRange>k__BackingField: 150
-  <Lifetime>k__BackingField: 5
-  <PiercingMode>k__BackingField: 0
-  <MaxPierce>k__BackingField: 0
-  <MaxSplit>k__BackingField: 0
-  <SplitAngleOffset>k__BackingField: 45
-  <ProjectileParticleSystem>k__BackingField: {fileID: 5647196156128557912, guid: bd1d5a2cef288fb4c87f1f0c1f18d32e,
-    type: 3}
+  <EffectOrientation>k__BackingField: 0

@@ -11,17 +11,8 @@ public class EnemyStats : LivingBeing
     public override void Die()
     {
         EventDeclarer.EnemyDefeated.Invoke(this);
-        if (HasStatusEffect(StatusEffectType.ExplodeOnDeath)) ViciousDeathExplosion();
-        //if(TryGetComponent(out UnityEngine.AI.NavMeshAgent navAgent))
-        //{
-        //    navAgent.ResetPath();
-        //}
-        //if(TryGetComponent(out AIStateHandler stateHandler))
-        //{
-        //    stateHandler.CancelInvoke("RunStateMachine");
-        //}
-        //transform.position = new Vector3 (99, 99, 99);
-        //Debug.Log("Delayed test death being called now");
+        if (GetStatusEffectValue(StatusEffectType.ExplodeOnDeath) > 4) ViciousDeathExplosion();
+
         if (gameObject.TryGetComponent(out AIStateHandler stateHandler))
         {
             stateHandler.SetDead(true);
