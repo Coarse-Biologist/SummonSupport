@@ -14,7 +14,7 @@ public class AbilityHandler : MonoBehaviour
     private AbilityModHandler modHandler;
     private AnimationControllerScript anim;
 
-
+    //#TODO Add status effect implimentations that should be handled here
 
     protected virtual void Awake()
     {
@@ -51,6 +51,10 @@ public class AbilityHandler : MonoBehaviour
 
         if (!usedAbility)
             return false;
+
+        //handle Ionization status effect
+        int ionizationValue = statsHandler.GetStatusEffectValue(StatusEffectType.Ionized);
+        if (ionizationValue > 0) statsHandler.ChangeAttributeByPercent(AttributeType.CurrentHitpoints, (float)-.01 * ionizationValue);
 
         StartCoroutine(SetOnCooldown(ability));
         int costMod = modHandler.GetModAttributeByType(ability, AbilityModTypes.Cost);

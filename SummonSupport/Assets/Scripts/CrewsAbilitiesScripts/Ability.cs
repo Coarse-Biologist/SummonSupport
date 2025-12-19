@@ -50,7 +50,6 @@ public abstract class Ability : ScriptableObject
         return false;
     }
 
-
     public static int GetCoreCraftingCost(Ability ability)
     {
         if (ability == null) throw new System.Exception("You are trying to access the core cost of an ability which is null.");

@@ -79,7 +79,6 @@ public class ConjureAbility : Ability
         if (auraInChildren != null)
         {
             auraInChildren.HandleInstantiation(user.GetComponent<LivingBeing>(), target, this);
-            Debug.Log($"handling instantiation");
         }
     }
     protected void SpawnConjuredObject(LivingBeing user, Quaternion rotation, int iterator)
@@ -96,7 +95,6 @@ public class ConjureAbility : Ability
         if (auraInChildren != null)
         {
             auraInChildren.HandleInstantiation(user.GetComponent<LivingBeing>(), null, this);
-            Debug.Log($"2 handling instantiation");
 
         }
     }

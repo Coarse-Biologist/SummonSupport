@@ -75,7 +75,7 @@ public abstract class LivingBeing : MonoBehaviour
 
     [Header("Other")]
     [field: SerializeField] public List<Ability> AffectedByAbilities { get; private set; } = new();
-    public List<StatusEffectType> SufferedStatusEffects { get; private set; } = new();
+    public Dictionary<StatusEffectType, int> SufferedStatusEffects { get; private set; } = new();
 
     [field: SerializeField] public float XP_OnDeath { get; private set; } = 5f;
     public bool Dead { get; private set; } = false;
@@ -237,17 +237,23 @@ public abstract class LivingBeing : MonoBehaviour
 
     public float ChangeAttribute(AttributeType attributeType, float value)
     {
-        ////if (GetAttribute(AttributeType.CurrentHitpoints) <= 0) // do nothing if dead
-        ////    return 0f;
-        //
-        //if (ResourceAttributesDict == null || !ResourceAttributesDict.ContainsKey(attributeType))
-        //    throw new Exception("Attribute not found or invalid setter");
-
         SetAttribute(attributeType, GetAttribute(attributeType) + value);
 
-        if (GetAttribute(AttributeType.CurrentHitpoints) <= 0)
+        if (attributeType == AttributeType.CurrentHitpoints && GetAttribute(AttributeType.CurrentHitpoints) <= 0)
             Die();
         return GetAttribute(attributeType) + value;
+    }
+
+    /// <summary>
+    ///percentChange should be a percentage. To decrease a value by 1%, percentChange should be -.01
+    /// </summary>
+    public void ChangeAttributeByPercent(AttributeType attributeType, float percentChange)
+    {
+        float current = GetAttribute(attributeType);
+        SetAttribute(attributeType, current + current * percentChange); // 100 + 100 * -1
+
+        if (attributeType == AttributeType.CurrentHitpoints && GetAttribute(AttributeType.CurrentHitpoints) <= 0)
+            Die();
     }
 
     public abstract void HandleUIAttrDisplay(AttributeType attributeType, float newValue);
@@ -270,14 +276,18 @@ public abstract class LivingBeing : MonoBehaviour
     }
     public void AlterStatusEffectList(StatusEffectType status, bool Add) // modifies the list of abilities by which one is affected
     {
-
-        bool contains = SufferedStatusEffects.Contains(status);
-        if (Add && !contains) SufferedStatusEffects.Add(status);
-        if (!Add && contains) SufferedStatusEffects.Remove(status);
+        bool contains = SufferedStatusEffects[status] > 0;
+        if (Add && !contains) SufferedStatusEffects[status] += 1;
+        if (!Add && contains) SufferedStatusEffects[status] -= 1;
     }
     public bool HasStatusEffect(StatusEffectType status)
     {
-        return SufferedStatusEffects.Contains(status);
+        return SufferedStatusEffects[status] > 0;
+    }
+
+    public int GetStatusEffectValue(StatusEffectType status)
+    {
+        return SufferedStatusEffects[status];
     }
 
 

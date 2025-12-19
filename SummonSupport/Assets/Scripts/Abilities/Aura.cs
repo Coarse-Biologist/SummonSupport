@@ -39,8 +39,6 @@ public class Aura : MonoBehaviour
     }
     public void HandleInstantiation(LivingBeing caster, LivingBeing target, Ability ability)
     {
-
-
         if (ability.AlterParticleSystemGradient)
         {
             ColorChanger.ChangeObjectsParticleSystemColor(ability.ElementTypes[0], gameObject);
@@ -49,23 +47,19 @@ public class Aura : MonoBehaviour
         SetAuraStats(caster, target, ability);
 
 
-
         HandleConjureAbilitySpecifics();
-
-        if (TryGetComponent(out Collider collider))
-        {
-            collider.enabled = true;
-        }
 
         if (ability is AuraAbility auraAbility)
             radius = auraAbility.Radius;
 
         AddMods();
 
-
         AlterApparentRadius();
 
         CombatStatHandler.HandleEffectPackage(ability, caster, caster, ability.SelfEffects);
+
+        CheckTargetsAtSpawnTime();
+
         Destroy(gameObject, duration);
 
     }
@@ -88,16 +82,25 @@ public class Aura : MonoBehaviour
     }
     public void SetAuraStats(LivingBeing caster, LivingBeing target, Ability ability)
     {
-        Debug.Log($"Setting aura stats. ability = {ability}");
-
         duration = ability.Duration;
         this.caster = caster;
         this.ability = ability;
         this.target = target;
 
-
         Activate();
 
+    }
+    private void CheckTargetsAtSpawnTime()
+    {
+        Collider[] hits = Physics.OverlapCapsule(caster.transform.position + Vector3.up, caster.transform.position - Vector3.up, radius);
+        foreach (Collider hitObject in hits)
+        {
+            if (hitObject.TryGetComponent(out LivingBeing livingBeing))
+            {
+                Debug.Log("IHave found a living being in this starting spherecast");
+                HandleTriggerEntered(livingBeing);
+            }
+        }
     }
 
     private void AddMods()
@@ -128,11 +131,10 @@ public class Aura : MonoBehaviour
         {
             if (other.gameObject.TryGetComponent(out LivingBeing otherLivingBeing))
             {
-                listLivingBeingsInAura.Add(otherLivingBeing);
+                HandleTriggerEntered(otherLivingBeing);
             }
-            Invoke("HandleTriggerEntered", .1f);
+            else Debug.Log($"OnTrigger Enter func called but the trigger object {ability} is not active");
         }
-        else Debug.Log($"OnTrigger Enter func called but the trigger object {ability} is not active");
     }
 
     void OnTriggerExit(Collider other)
@@ -165,25 +167,22 @@ public class Aura : MonoBehaviour
         return target;
     }
 
-    private void HandleTriggerEntered()
+    private void HandleTriggerEntered(LivingBeing otherLivingBeing)
     {
-        foreach (LivingBeing otherLivingBeing in listLivingBeingsInAura)
+
+        if (ability.ListUsableOn.Contains(RelationshipHandler.GetRelationshipType(caster.CharacterTag, otherLivingBeing.CharacterTag)))
         {
-            if (ability.ListUsableOn.Contains(RelationshipHandler.GetRelationshipType(caster.CharacterTag, otherLivingBeing.CharacterTag)))
+            //Debug.Log($"usable on {otherLivingBeing.Name}");
+            if (ability.OnHitEffect != null)
             {
-                //Debug.Log($"usable on {otherLivingBeing.Name}");
-                if (ability.OnHitEffect != null)
-                {
-                    SpawnOnHitEffect(otherLivingBeing, ability.OnHitEffect);
-                }
-                otherLivingBeing.AlterAbilityList(ability, true);
-                //Debug.Log($"Effects of {ability.Name} is being handled.");
-                CombatStatHandler.HandleEffectPackage(ability, caster, otherLivingBeing, ability.TargetEffects);
-                piercedAlready += 1;
-                if (ConjureAbility != null && ConjureAbility.SeeksTarget && piercedAlready >= maxPierce) Destroy(gameObject, .2f);
+                SpawnOnHitEffect(otherLivingBeing, ability.OnHitEffect);
             }
+            otherLivingBeing.AlterAbilityList(ability, true);
+            //Debug.Log($"Effects of {ability.Name} is being handled.");
+            CombatStatHandler.HandleEffectPackage(ability, caster, otherLivingBeing, ability.TargetEffects);
+            piercedAlready += 1;
+            if (ConjureAbility != null && ConjureAbility.SeeksTarget && piercedAlready >= maxPierce) Destroy(gameObject, .2f);
         }
-        listLivingBeingsInAura.Clear();
     }
 
     private IEnumerator SeekTarget(GameObject target)
