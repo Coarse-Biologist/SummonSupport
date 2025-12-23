@@ -66,7 +66,7 @@ public class AIStateHandler : MonoBehaviour
         SetTargetMask();
         SetCharType(livingBeing.CharacterTag);
 
-        InvokeRepeating("RunStateMachine", 0f, 1f);
+        InvokeRepeating("RunStateMachine", 0f, 1f); // if poisoned, foreach stack of poisoned, decrease by .X seconds
         anim = GetComponent<AnimationControllerScript>();
 
 
@@ -76,14 +76,15 @@ public class AIStateHandler : MonoBehaviour
         player = PlayerStats.Instance.gameObject;
         playerStats = PlayerStats.Instance;
     }
-    public void SetTarget(LivingBeing theTarget)
+    public void SetTarget(LivingBeing newlyAssignedTarget)
     {
-        target = theTarget;
+        Debug.Log($"Setting target to {newlyAssignedTarget.Name}");
+        target = newlyAssignedTarget;
     }
     private void SetMasks()
     {
         belligerantMask = LayerMask.GetMask("Enemy", "Player", "Minion", "Guard");      // used for madness
-        enemyMask = LayerMask.GetMask("Enemy");                                         // used by allies
+        enemyMask = LayerMask.GetMask("Enemy");                                         // used by allies or charmed enemies
         friendlyMask = LayerMask.GetMask("Player", "Minion");                           // used by enemies
     }
     private void SetCharType(CharacterTag tag)

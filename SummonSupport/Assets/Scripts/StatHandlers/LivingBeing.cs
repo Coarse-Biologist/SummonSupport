@@ -75,7 +75,6 @@ public abstract class LivingBeing : MonoBehaviour
 
     [Header("Other")]
     [field: SerializeField] public List<Ability> AffectedByAbilities { get; private set; } = new();
-    public Dictionary<StatusEffectType, int> SufferedStatusEffects { get; private set; } = new();
 
     [field: SerializeField] public float XP_OnDeath { get; private set; } = 5f;
     public bool Dead { get; private set; } = false;
@@ -87,6 +86,8 @@ public abstract class LivingBeing : MonoBehaviour
     public I_ResourceBar resourceBarInterface { protected set; get; }
     public I_Destruction ragdollScript;
     private AbilityHandler abilityHandler;
+    public StatusEffectHandler SE_Handler;
+
 
     #endregion
 
@@ -97,7 +98,6 @@ public abstract class LivingBeing : MonoBehaviour
         InitializeAttributeDict();
         InitializeAffinityDict();
         InitializePhysicalDict();
-        InitializeStatusEffectDict();
 
         resourceBarInterface = GetComponent<I_ResourceBar>();
         regenTickRate = new WaitForSeconds(TickRateRegenerationInSeconds);
@@ -111,6 +111,10 @@ public abstract class LivingBeing : MonoBehaviour
         abilityHandler = GetComponent<AbilityHandler>();
         ColorChanger.ChangeMatByAffinity(this);
         ragdollScript = GetComponent<I_Destruction>();
+        if (TryGetComponent(out StatusEffectHandler se))
+        {
+            SE_Handler = se;
+        }
     }
 
     private void InitializeRegenerationValues()
@@ -205,13 +209,11 @@ public abstract class LivingBeing : MonoBehaviour
     public void ChangeHealthRegeneration(float Value)
     {
         HealthRegeneration = Math.Max(0, HealthRegeneration + Value);
-        Debug.Log($"Changing health regen. new total: {HealthRegeneration}");
 
     }
     public void ChangePowerRegeneration(float Value)
     {
         HealthRegeneration = Math.Max(0, PowerRegeneration + Value);
-        Debug.Log($"Changing power regen. new total: {PowerRegeneration}");
 
     }
 
@@ -231,7 +233,7 @@ public abstract class LivingBeing : MonoBehaviour
         if (ResourceAttributesDict != null && ResourceAttributesDict.ContainsKey(attributeType))
             ResourceAttributesDict[attributeType].Set(value);
         HandleUIAttrDisplay(attributeType, value); // make overrides for minions, players and enemies
-        if (GetAttribute(AttributeType.CurrentHitpoints) <= 0)
+        if (GetAttribute(AttributeType.CurrentHitpoints) == 0)
             Die();
         else if (attributeType == AttributeType.CurrentPower && value <= 0)
             abilityHandler.HandleNoMana();
@@ -241,9 +243,11 @@ public abstract class LivingBeing : MonoBehaviour
     {
         SetAttribute(attributeType, GetAttribute(attributeType) + value);
 
-        if (attributeType == AttributeType.CurrentHitpoints && GetAttribute(AttributeType.CurrentHitpoints) <= 0)
-            Die();
         return GetAttribute(attributeType) + value;
+    }
+    public void ChangeMovementAttribute(MovementAttributes attr, float changeValue)
+    {
+
     }
 
     /// <summary>
@@ -276,25 +280,7 @@ public abstract class LivingBeing : MonoBehaviour
     {
         return AffectedByAbilities.Contains(ability);
     }
-    public void AlterStatusEffectList(StatusEffectType status, bool Add) // modifies the list of abilities by which one is affected
-    {
-        //bool contains = SufferedStatusEffects[status] > 0;
-        if (Add) SufferedStatusEffects[status] += 1;
-        if (!Add) SufferedStatusEffects[status] -= 1;
-    }
-    public bool HasStatusEffect(StatusEffectType status)
-    {
 
-        return SufferedStatusEffects[status] > 0;
-    }
-
-    public int GetStatusEffectValue(StatusEffectType status)
-    {
-        int statusValue = SufferedStatusEffects[status];
-        Debug.Log($"Status effect {status} has value {statusValue}");
-
-        return statusValue;// SufferedStatusEffects[status];
-    }
 
 
 
@@ -406,15 +392,6 @@ public abstract class LivingBeing : MonoBehaviour
                 { PhysicalType.Slashing,       (() => Slashing,        v => Slashing = v) }
             };
     }
-    void InitializeStatusEffectDict()
-    {
-        SufferedStatusEffects = new Dictionary<StatusEffectType, int>();
-
-        foreach (StatusEffectType effect in Enum.GetValues(typeof(StatusEffectType)))
-        {
-            SufferedStatusEffects[effect] = 0;
-        }
-    }
 
     #endregion
 
@@ -423,6 +400,6 @@ public abstract class LivingBeing : MonoBehaviour
 
     protected void ViciousDeathExplosion()
     {
-        EventDeclarer.ViciousDeath?.Invoke(this);
+        //EventDeclarer.ViciousDeath?.Invoke(this);
     }
 }

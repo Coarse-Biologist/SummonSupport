@@ -5,6 +5,7 @@ using UnityEngine.InputSystem;
 using Unity.VisualScripting;
 using System.Collections.Generic;
 using SummonSupportEvents;
+using UnityEngine.ResourceManagement.Profiling;
 
 public static class CombatStatHandler
 {
@@ -64,27 +65,28 @@ public static class CombatStatHandler
                 AdjustAndApplyTempChange(tempChange);
             }
         }
-        //currentStatusEffects.Add(AbilityLibrary.GetStatusEffectLibrary().entries[0].Effect);
+
         SetAllCurrentStatusEffects(ability, effectPackage);
-        //UnityEngine.Debug.Log($"current status effect list = {currentStatusEffects}");
         if (currentStatusEffects != null && currentStatusEffects.Count > 0)
         {
             foreach (StatusEffects status in currentStatusEffects)
             {
-                target.AlterStatusEffectList(status.EffectType, true);
-                target.StartCoroutine(RemoveStatusEffect(status));
+                currentTarget.SE_Handler.AlterStatusEffectList(status.EffectType, true);
+                currentTarget.StartCoroutine(RemoveStatusEffect(status));
             }
-            if (target.TryGetComponent(out AI_CC_State ccState))
-            {
-                foreach (StatusEffects status in currentStatusEffects)
-                {
-                    ccState.RecieveCC(status, currentCaster);
-                    if (status.EffectType == StatusEffectType.Pulled) ccState.SetPullEpicenter(Camera.main.ScreenToWorldPoint(Input.mousePosition));
-                    if (status.EffectType == StatusEffectType.KnockInTheAir) ability.KnockInTheAir(caster, target.GetComponent<Rigidbody>());
-                    //UnityEngine.Debug.Log($"elapsed time in the combat handler package handler function: {stopwatch.ElapsedMilliseconds}");
-                }
-            }
+            //if (target.TryGetComponent(out AI_CC_State ccState))
+            //{
+            //    foreach (StatusEffects status in currentStatusEffects)
+            //    {
+            //        //ccState.RecieveCC(status, currentCaster);
+            //        //if (status.EffectType == StatusEffectType.Pulled) ccState.SetPullEpicenter(Camera.main.ScreenToWorldPoint(Input.mousePosition));
+            //        //else if (status.EffectType == StatusEffectType.KnockInTheAir) ability.KnockInTheAir(caster, target.GetComponent<Rigidbody>());
+            //        //if (status.EffectType == StatusEffectType.Chilled) currentTarget.SE_Handler.ApplyStatusEffect(status.EffectType, true);
+            //        //UnityEngine.Debug.Log($"elapsed time in the combat handler package handler function: {stopwatch.ElapsedMilliseconds}");
+            //    }
+            //}
         }
+
     }
 
     private static void SetAllCurrentStatusEffects(Ability ability, EffectPackage effectPackage)
@@ -95,7 +97,8 @@ public static class CombatStatHandler
             {
                 foreach (StatusEffects status in effectPackage.StatusEffects)
                 {
-                    if (!currentStatusEffects.Contains(status)) currentStatusEffects.Add(status);
+                    //if (!currentStatusEffects.Contains(status)) //this allows modding to fully max the stacks of a status effect
+                    currentStatusEffects.Add(status);
                 }
             }
         }
@@ -380,9 +383,9 @@ public static class CombatStatHandler
 
     private static IEnumerator RemoveStatusEffect(StatusEffects status)
     {
-        yield return new WaitForSeconds(status.Duration);
-        currentTarget.AlterStatusEffectList(status.EffectType, false);
+        yield return new WaitForSeconds(currentAbility.Duration);
 
+        currentTarget.SE_Handler.AlterStatusEffectList(status.EffectType, false); // ill also need to undo whatever damage was done (0___0)
     }
     #endregion
 

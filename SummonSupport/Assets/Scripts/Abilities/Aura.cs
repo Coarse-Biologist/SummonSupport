@@ -58,7 +58,7 @@ public class Aura : MonoBehaviour
 
         CombatStatHandler.HandleEffectPackage(ability, caster, caster, ability.SelfEffects);
 
-        CheckTargetsAtSpawnTime();
+        CheckTargetsAtSpawnTime(caster);
 
         Destroy(gameObject, duration);
 

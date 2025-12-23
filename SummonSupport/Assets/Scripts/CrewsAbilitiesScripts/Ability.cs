@@ -36,7 +36,7 @@ public abstract class Ability : ScriptableObject
     }
     public bool ThoroughIsUsableOn(LivingBeing caster, LivingBeing target)
     {
-        if (caster.HasStatusEffect(StatusEffectType.Madness)) return true;
+        if (caster.SE_Handler != null && caster.SE_Handler.HasStatusEffect(StatusEffectType.Madness) || caster.SE_Handler.HasStatusEffect(StatusEffectType.Charmed)) return true;
         return ListUsableOn.Contains(CrewsRelationshipHandler.GetRelationshipType(caster, target));
     }
 
@@ -81,21 +81,30 @@ public abstract class Ability : ScriptableObject
         if (hits == null || hits.Count() <= desiredTargetNum) return hits;
         return hits.OrderBy(g => Vector3.Angle(lookRotation.forward, g.point)).ToArray();
     }
+    public TeamType GetTargetPreference(PlayerStats playerStats)
+    {
+        if (AbilityTypeTag == AbilityTypeTag.BuffsTarget)
+        {
+            return TeamType.Ally;
+        }
+        else return TeamType.Enemy;
+    }
 
     public TeamType GetTargetPreference(LivingBeing caster)
     {
-        if (caster.HasStatusEffect(StatusEffectType.Madness)) return TeamType.Either; // if mad, simply use ability on whoever
+
+        if (caster.SE_Handler.HasStatusEffect(StatusEffectType.Madness)) return TeamType.Either; // if mad, simply use ability on whoever
 
         if (AbilityTypeTag == AbilityTypeTag.DebuffsTarget) // if ability is an offensive ability
         {
             if (caster.CharacterTag == CharacterTag.Enemy)
             {
-                if (!caster.HasStatusEffect(StatusEffectType.Charmed)) return TeamType.Ally; // UNcharmed enemies will attack enemies
+                if (!caster.SE_Handler.HasStatusEffect(StatusEffectType.Charmed)) return TeamType.Ally; // UNcharmed enemies will attack enemies
                 else return TeamType.Enemy; // otherwise enemies attack Enemies
             }
             else
             {
-                if (!caster.HasStatusEffect(StatusEffectType.Charmed)) return TeamType.Enemy; // UNcharmed allies will attack enemies
+                if (!caster.SE_Handler.HasStatusEffect(StatusEffectType.Charmed)) return TeamType.Enemy; // UNcharmed allies will attack enemies
                 else return TeamType.Ally; // otherwise, being insane, allies will attack allies
             }
         }
@@ -103,12 +112,12 @@ public abstract class Ability : ScriptableObject
         {
             if (caster.CharacterTag == CharacterTag.Enemy)
             {
-                if (!caster.HasStatusEffect(StatusEffectType.Charmed)) return TeamType.Enemy; // UNcharmed enemies will buff enemies
+                if (!caster.SE_Handler.HasStatusEffect(StatusEffectType.Charmed)) return TeamType.Enemy; // UNcharmed enemies will buff enemies
                 else return TeamType.Ally; // otherwise theyll buff enemies
             }
             else // if not an enemy
             {
-                if (!caster.HasStatusEffect(StatusEffectType.Charmed)) return TeamType.Ally; // UNcharmed allies will buff allies
+                if (!caster.SE_Handler.HasStatusEffect(StatusEffectType.Charmed)) return TeamType.Ally; // UNcharmed allies will buff allies
                 else return TeamType.Enemy; // otherwise, being insane, allies will buff enemies
             }
         }

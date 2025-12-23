@@ -9,7 +9,7 @@ public class ExplosionHandler : MonoBehaviour
 
     void Awake()
     {
-        if (Instance != null) Destroy(this);
+        if (Instance != null) Destroy(gameObject);
         else Instance = this;
     }
     void OnEnable()
@@ -24,8 +24,8 @@ public class ExplosionHandler : MonoBehaviour
     {
         if (ExplosionObject != null)
         {
-            GameObject instance = Instantiate(ExplosionObject, livingBeing.transform.position, Quaternion.identity);
-            if (instance.TryGetComponent(out ViciousDeathExplosion explodeScript))
+            GameObject explosionInstance = Instantiate(ExplosionObject, livingBeing.transform.position, Quaternion.identity);
+            if (explosionInstance.TryGetComponent(out ViciousDeathExplosion explodeScript))
             {
                 explodeScript.CheckTargetToExplodeOn(livingBeing.CharacterTag);
             }

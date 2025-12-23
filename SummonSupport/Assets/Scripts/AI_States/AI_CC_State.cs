@@ -1,11 +1,9 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
-using UnityEditor.Rendering;
-using System.Runtime.InteropServices;
+
 using System.Linq;
 using System;
-using UnityEngine.Splines.Interpolators;
 
 
 
@@ -67,6 +65,7 @@ public class AI_CC_State : AIState
             return this;
         }
 
+
         return peaceState;
     }
 
@@ -109,6 +108,7 @@ public class AI_CC_State : AIState
     private void BecomeCharmed(float duration)
     {
         isCharmed = true;
+        Debug.Log($"{stateHandler.livingBeing.Name} been charmed.");
         RemoveCC(StatusEffectType.Charmed);
         stateHandler.SetTargetMask(StatusEffectType.Charmed);
         Invoke("EndEffectCharmed", duration);

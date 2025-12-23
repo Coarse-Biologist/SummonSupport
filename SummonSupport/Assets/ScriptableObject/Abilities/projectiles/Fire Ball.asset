@@ -19,7 +19,7 @@ MonoBehaviour:
   <CostType>k__BackingField: 4
   <Cost>k__BackingField: 20
   <Range>k__BackingField: 20
-  <Duration>k__BackingField: 0
+  <Duration>k__BackingField: 99
   <AbilityTypeTag>k__BackingField: 1
   <ListUsableOn>k__BackingField: 01000000
   <TargetEffects>k__BackingField:

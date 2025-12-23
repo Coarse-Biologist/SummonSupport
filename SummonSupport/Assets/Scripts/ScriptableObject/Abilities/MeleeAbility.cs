@@ -57,13 +57,15 @@ public class MeleeAbility : Ability
         {
             if (collider != null && collider.gameObject != user)
             {
-                if (VerifyActivate(collider, user))
+                if (!collider.TryGetComponent(out LivingBeing targetStats))
                 {
-                    Target = collider.GetComponent<LivingBeing>();
-
-                    SetEffects(Caster, Target);
-                    CombatStatHandler.HandleEffectPackage(this, Caster, Target, this.TargetEffects);
-                    SpawnHitEffect(Target);
+                    continue;
+                }
+                if (VerifyActivate(targetStats, user))
+                {
+                    SetEffects(Caster, targetStats);
+                    CombatStatHandler.HandleEffectPackage(this, Caster, targetStats, this.TargetEffects);
+                    SpawnHitEffect(targetStats);
                     activated = true;
                 }
             }
@@ -73,35 +75,32 @@ public class MeleeAbility : Ability
     }
 
 
-    private bool VerifyActivate(Collider collider, GameObject user)
+    private bool VerifyActivate(LivingBeing targetStats, GameObject user)
     {
-        if (!collider.TryGetComponent(out LivingBeing targetStats))
-        {
-            return false;
-        }
+
         Target = targetStats;
 
-        if (!IsUsableOn(Caster.CharacterTag, Target.CharacterTag))
+        if (!ThoroughIsUsableOn(Caster, Target))
         {
-            if (!HasElementalSynergy(this, Target) || !user.TryGetComponent<AI_CC_State>(out AI_CC_State ccState) || !ccState.isCharmed)
+            if (!HasElementalSynergy(this, Target))
                 return false;
         }
-        return VerifyWithinShape(user, collider);
+        return VerifyWithinShape(user, targetStats);
     }
 
-    private bool VerifyWithinShape(GameObject user, Collider collider)
+    private bool VerifyWithinShape(GameObject user, LivingBeing targetStats)
     {
         float sizeMod = Width;
         if (modHandler != null)
         {
             sizeMod = modHandler.GetModAttributeByType(this, AbilityModTypes.Size);
         }
-        Vector3 hitLocation = collider.transform.position;
+        Vector3 hitLocation = targetStats.transform.position;
         if ((hitLocation - originTransform.position).magnitude <= .2)
             return true;
         if (Shape == AreaOfEffectShape.Sphere)
         {
-            if ((user.transform.position - collider.transform.position).magnitude <= Range + sizeMod)
+            if ((user.transform.position - targetStats.transform.position).magnitude <= Range + sizeMod)
                 return true;
         }
         if (Shape == AreaOfEffectShape.Cone)
@@ -113,7 +112,7 @@ public class MeleeAbility : Ability
             Vector3 halfExtents = new Vector3(Width + sizeMod, Width, Range + sizeMod);
             Vector3 offset = originTransform.forward * halfExtents.z;
 
-            return Physics.OverlapBox(originTransform.position + offset, halfExtents, originTransform.rotation).Contains(collider);
+            return Physics.OverlapBox(originTransform.position + offset, halfExtents, originTransform.rotation).Contains(targetStats.gameObject.GetComponent<Collider>());
         }
         else return false;
     }

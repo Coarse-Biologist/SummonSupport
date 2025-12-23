@@ -61,19 +61,23 @@ public class AIPeacefulState : AIState
     {
         Collider[] rangeChecks = Physics.OverlapSphere(transform.position, stateHandler.DetectionRadius, stateHandler.targetMask);
         LivingBeing target = null;
-        CharacterTag preferedTargetType = GetTargetPreference();
         if (rangeChecks.Length != 0)
         {
             foreach (Collider collider in rangeChecks)
             {
                 GameObject detectedObject = collider.gameObject;
                 if (detectedObject.TryGetComponent(out LivingBeing targetLivingBeing))
-                    if (targetLivingBeing.CharacterTag == preferedTargetType || rangeChecks.Length == 1)
-                        if (targetLivingBeing.GetAttribute(AttributeType.CurrentHitpoints) > 0)
-                        {
-                            stateHandler.SetTarget(targetLivingBeing);
-                            target = targetLivingBeing;
-                        }
+                {
+
+                    if (targetLivingBeing.CharacterTag == CharacterTag.Enemy)
+                        Debug.Log($"{targetLivingBeing.Name} = target found in check target in raange func");
+                    if (targetLivingBeing.GetAttribute(AttributeType.CurrentHitpoints) > 0)
+                    {
+                        stateHandler.SetTarget(targetLivingBeing);
+                        target = targetLivingBeing;
+                        break;
+                    }
+                }
             }
         }
         return target;

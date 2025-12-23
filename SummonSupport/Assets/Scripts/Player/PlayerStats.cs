@@ -162,8 +162,6 @@ public class PlayerStats : LivingBeing
 
     public override void Die()
     {
-
-        if (GetStatusEffectValue(StatusEffectType.ExplodeOnDeath) > 4) ViciousDeathExplosion();
         SetDead(true);
         Invoke("DelayedDeath", 2f);
     }
@@ -229,4 +227,6 @@ public class PlayerStats : LivingBeing
 
         }
     }
+
+
 }

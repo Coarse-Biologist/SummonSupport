@@ -17,12 +17,15 @@ public class CreatureAbilityHandler : AbilityHandler
 
 
     private Ability selectedAbility { get; set; } = null;
+    private LivingBeing casterStats;
 
 
     new void Awake()
     {
         base.Awake();
         SetAbilityLists();
+        casterStats = GetComponent<LivingBeing>();
+
     }
 
     public Ability GetAbilityForTarget(LivingBeing target, bool forSelf = false)
@@ -31,29 +34,29 @@ public class CreatureAbilityHandler : AbilityHandler
         selectedAbility = null;
         bool targetIsFriendly = false;
 
-        LivingBeing casterStats = GetComponent<LivingBeing>();
-
         if (target == null)
         {
 
             return null;
         }
-
-        if (RelationshipHandler.GetRelationshipType(target.CharacterTag, casterStats.CharacterTag) == RelationshipType.Friendly)
+        if (casterStats.SE_Handler.HasStatusEffect(StatusEffectType.Charmed) || casterStats.SE_Handler.HasStatusEffect(StatusEffectType.Madness))
+        {
+            targetIsFriendly = false;
+        }
+        else if (RelationshipHandler.GetRelationshipType(target.CharacterTag, casterStats.CharacterTag) == RelationshipType.Hostile)
+        {
+            targetIsFriendly = false;
+            if (attackAbilities.Count == 0)
+            {
+                return null;
+            }
+        }
+        else if (RelationshipHandler.GetRelationshipType(target.CharacterTag, casterStats.CharacterTag) == RelationshipType.Friendly)
         {
 
             targetIsFriendly = true;
         }
-        if (RelationshipHandler.GetRelationshipType(target.CharacterTag, casterStats.CharacterTag) == RelationshipType.Hostile)
-        {
 
-            targetIsFriendly = false;
-            if (attackAbilities.Count == 0)
-            {
-
-                return null;
-            }
-        }
         //Logging.Info($" elapsed time : {stopwatch.ElapsedMilliseconds}");
 
         return SelectAbility(targetIsFriendly, target, forSelf);
@@ -132,11 +135,16 @@ public class CreatureAbilityHandler : AbilityHandler
 
     public void UseAbility(LivingBeing target, Ability ability)
     {
+        UnityEngine.Debug.Log($"Target is {target.Name} in use ability func");
+
         if (ability != null)
         {
-            Vector3 direction = (target.transform.position - transform.position).normalized;
-            float angle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
-            transform.rotation = Quaternion.Euler(0, angle, 0);
+            if (!casterStats.SE_Handler.HasStatusEffect(StatusEffectType.Blinded)) //if not blinded, rotate to face player
+            {
+                Vector3 direction = (target.transform.position - transform.position).normalized;
+                float angle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
+                transform.rotation = Quaternion.Euler(0, angle, 0);
+            }
             CastAbility(ability, target.transform.position, transform.rotation);
         }
     }

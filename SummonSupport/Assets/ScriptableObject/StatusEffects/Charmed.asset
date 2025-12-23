@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Name>k__BackingField: Charm
   <Icon>k__BackingField: {fileID: 0}
-  <EffectType>k__BackingField: 5
-  <Duration>k__BackingField: 20
+  <EffectType>k__BackingField: 4
+  <Duration>k__BackingField: 999

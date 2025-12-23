@@ -53,7 +53,7 @@ public class AbilityHandler : MonoBehaviour
             return false;
 
         //handle Ionization status effect
-        int ionizationValue = statsHandler.GetStatusEffectValue(StatusEffectType.Ionized);
+        int ionizationValue = statsHandler.SE_Handler.GetStatusEffectValue(StatusEffectType.Ionized);
         if (ionizationValue > 0) statsHandler.ChangeAttributeByPercent(AttributeType.CurrentHitpoints, (float)-.01 * ionizationValue);
 
         StartCoroutine(SetOnCooldown(ability));

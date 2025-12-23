@@ -42,14 +42,14 @@ public class AIChaseState : AIState
         {
             if (peaceState.FieldOfViewCheck() == true) //is target visible?
             {
-                //Debug.Log($"Chasing because field of view check was false. going to last seen location: {stateHandler.target.transform.position}");
+                Debug.Log($"Chasing target because field of view check was true. going to target: {stateHandler.target.Name}");
                 Chase(stateHandler.target.transform.position);
                 if (!runningAttackLoop)
-                    attackCoroutine = StartCoroutine(HandleAttack(stateHandler.target));
+                    attackCoroutine = StartCoroutine(HandleAttack());
             }
             else
             {
-                //Debug.Log($"Chasing because field of view check was false. going to last seen location: {stateHandler.lastSeenLoc}");
+                Debug.Log($"Chasing because field of view check was false. going to last seen location: {stateHandler.lastSeenLoc}");
                 EndAttackRoutine();
                 Chase(stateHandler.lastSeenLoc);
             }
@@ -71,10 +71,12 @@ public class AIChaseState : AIState
 
     public void Chase(Vector3 targetLoc)
     {
+        Debug.Log($"Chasing {stateHandler.target.Name}");
 
         if (!stateHandler.StuckInAbilityAnimation)
         {
             float distance = (stateHandler.target.transform.position - transform.position).sqrMagnitude;
+            Debug.Log($"Chasing {stateHandler.target.Name} and the distance is: {distance}");
 
             if (distance <= SelectedAbilityAttackRange || stateHandler.navAgent.stoppingDistance >= distance * distance) // if distance to target is more than ability range
             {
@@ -88,6 +90,10 @@ public class AIChaseState : AIState
     }
     private void SetDestinationandAnimation(Vector3 targetLoc)
     {
+        if (livingBeing.SE_Handler.HasStatusEffect(StatusEffectType.Blinded))
+        {
+            targetLoc = new Vector3(targetLoc.x + Random.Range(-10, 10), targetLoc.y, targetLoc.z + Random.Range(-10, 10));
+        }
         stateHandler.navAgent.SetDestination(targetLoc);
 
         if (stateHandler.anim != null)
@@ -107,9 +113,10 @@ public class AIChaseState : AIState
         }
     }
 
-    private IEnumerator HandleAttack(LivingBeing target)
+    private IEnumerator HandleAttack()
     {
-        if (target == null)
+        Debug.Log($"Target is {stateHandler.target.Name} before loop");
+        if (stateHandler.target == null)
         {
             runningAttackLoop = false;
             yield break;
@@ -129,13 +136,14 @@ public class AIChaseState : AIState
                 yield break;
             }
 
+            Debug.Log($"Target is {stateHandler.target.Name} during chse state attack loop");
 
-            Ability ability = stateHandler.abilityHandler.GetAbilityForTarget(target);
+            Ability ability = stateHandler.abilityHandler.GetAbilityForTarget(stateHandler.target);
             if (ability != null)
             {
                 SetAbilityRange(ability.Range);
 
-                if ((transform.position - target.transform.position).sqrMagnitude <
+                if ((transform.position - stateHandler.target.transform.position).sqrMagnitude <
                     SelectedAbilityAttackRange * SelectedAbilityAttackRange || ability is AuraAbility)
                 {
                     if (stateHandler.anim != null)
@@ -144,7 +152,7 @@ public class AIChaseState : AIState
                         else stateHandler.anim.ChangeAnimation("Melee");
                     }
 
-                    abilityHandler.UseAbility(target, ability);
+                    abilityHandler.UseAbility(stateHandler.target, ability);
                 }
             }
 

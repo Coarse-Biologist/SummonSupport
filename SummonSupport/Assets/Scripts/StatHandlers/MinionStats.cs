@@ -9,6 +9,7 @@ public class MinionStats : LivingBeing
     [SerializeField] public Dictionary<string, int> SlottedAbilities { private set; get; } = new Dictionary<string, int>(); //This will store the slot in which an ability is contained. the string is a placeholder until we decide the object type of an ability
     [SerializeField] public List<AlchemyLoot> Loot { private set; get; } = new List<AlchemyLoot>();
     [SerializeField] public MinionCommands CurrentCommand { private set; get; } = MinionCommands.None;
+
     //private I_HealthBar healthbarInterface;
 
     public override void HandleUIAttrDisplay(AttributeType attributeType, float newValue)
@@ -51,13 +52,14 @@ public class MinionStats : LivingBeing
         PlayerUIHandler.Instance.AddMinionHP(this);
         CommandMinion.AddActiveMinions(gameObject);
         base.Start();
+
+
     }
 
     public override void Die()
     {
         EventDeclarer.minionDied?.Invoke(gameObject);
         SetRegeneration(AttributeType.CurrentHitpoints, 0);
-        if (GetStatusEffectValue(StatusEffectType.ExplodeOnDeath) > 4) ViciousDeathExplosion();
         if (ragdollScript != null) ragdollScript.CauseDestruction(true);
         ToggleDeath(true);
     }
@@ -106,6 +108,10 @@ public class MinionStats : LivingBeing
         if (ragdollScript != null) ragdollScript.ReverseDestruction();
     }
 
+    public void ApplyStatusEffect(StatusEffectType status, bool apply)
+    {
+        //throw new NotImplementedException();
+    }
 }
 
 
