@@ -71,12 +71,12 @@ public class AIChaseState : AIState
 
     public void Chase(Vector3 targetLoc)
     {
-        Debug.Log($"Chasing {stateHandler.target.Name}");
+        //Debug.Log($"Chasing {stateHandler.target.Name}");
 
         if (!stateHandler.StuckInAbilityAnimation)
         {
             float distance = (stateHandler.target.transform.position - transform.position).sqrMagnitude;
-            Debug.Log($"Chasing {stateHandler.target.Name} and the distance is: {distance}");
+            //Debug.Log($"Chasing {stateHandler.target.Name} and the distance is: {distance}");
 
             if (distance <= SelectedAbilityAttackRange || stateHandler.navAgent.stoppingDistance >= distance * distance) // if distance to target is more than ability range
             {
@@ -136,7 +136,7 @@ public class AIChaseState : AIState
                 yield break;
             }
 
-            Debug.Log($"Target is {stateHandler.target.Name} during chse state attack loop");
+            //Debug.Log($"Target is {stateHandler.target.Name} during chse state attack loop");
 
             Ability ability = stateHandler.abilityHandler.GetAbilityForTarget(stateHandler.target);
             if (ability != null)

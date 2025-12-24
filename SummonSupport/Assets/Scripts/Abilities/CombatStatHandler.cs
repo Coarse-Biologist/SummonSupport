@@ -6,6 +6,7 @@ using Unity.VisualScripting;
 using System.Collections.Generic;
 using SummonSupportEvents;
 using UnityEngine.ResourceManagement.Profiling;
+using UnityEditor.Rendering;
 
 public static class CombatStatHandler
 {
@@ -66,44 +67,17 @@ public static class CombatStatHandler
             }
         }
 
-        SetAllCurrentStatusEffects(ability, effectPackage);
-        if (currentStatusEffects != null && currentStatusEffects.Count > 0)
+        if (effectPackage.StatusEffects.Count > 0)
         {
-            foreach (StatusEffects status in currentStatusEffects)
+            foreach (StatusEffects status in effectPackage.StatusEffects)
             {
-                currentTarget.SE_Handler.AlterStatusEffectList(status.EffectType, true);
-                currentTarget.StartCoroutine(RemoveStatusEffect(status));
+                currentTarget.SE_Handler.AlterStatusEffectList(status, true);
             }
-            //if (target.TryGetComponent(out AI_CC_State ccState))
-            //{
-            //    foreach (StatusEffects status in currentStatusEffects)
-            //    {
-            //        //ccState.RecieveCC(status, currentCaster);
-            //        //if (status.EffectType == StatusEffectType.Pulled) ccState.SetPullEpicenter(Camera.main.ScreenToWorldPoint(Input.mousePosition));
-            //        //else if (status.EffectType == StatusEffectType.KnockInTheAir) ability.KnockInTheAir(caster, target.GetComponent<Rigidbody>());
-            //        //if (status.EffectType == StatusEffectType.Chilled) currentTarget.SE_Handler.ApplyStatusEffect(status.EffectType, true);
-            //        //UnityEngine.Debug.Log($"elapsed time in the combat handler package handler function: {stopwatch.ElapsedMilliseconds}");
-            //    }
-            //}
+
         }
 
     }
 
-    private static void SetAllCurrentStatusEffects(Ability ability, EffectPackage effectPackage)
-    {
-        if (modHandler != null)
-        {
-            currentStatusEffects = modHandler.GetModStatusEffects(ability);
-            {
-                foreach (StatusEffects status in effectPackage.StatusEffects)
-                {
-                    //if (!currentStatusEffects.Contains(status)) //this allows modding to fully max the stacks of a status effect
-                    currentStatusEffects.Add(status);
-                }
-            }
-        }
-        else currentStatusEffects = effectPackage.StatusEffects;
-    }
 
 
     #region Adjust and apply damage, heal, temo attributes and damage over times
@@ -379,15 +353,6 @@ public static class CombatStatHandler
 
     #endregion
 
-    #region remove temp status effect
-
-    private static IEnumerator RemoveStatusEffect(StatusEffects status)
-    {
-        yield return new WaitForSeconds(currentAbility.Duration);
-
-        currentTarget.SE_Handler.AlterStatusEffectList(status.EffectType, false); // ill also need to undo whatever damage was done (0___0)
-    }
-    #endregion
 
     private static IEnumerator ResetTempAttribute(AttributeType attributeType, float changeValue, float duration)
     {
@@ -411,84 +376,3 @@ public static class CombatStatHandler
 
 }
 
-
-//public static void AdjustForOverValue(LivingBeing target, AttributeType attributeTypeTempMax, AttributeType attributeTypeMax, AttributeType typeCurrentValue, float changeValue)
-
-//can be for power or health.
-// the question:
-// how much current and over points should the target have?
-
-
-//Stopwatch stopwatch = new();
-//        //UnityEngine.Debug.Log($"ability = {ability.name}. caster = {caster.Name}. target = {target.Name}. for self? {forSelf}");
-//        LivingBeing casterStats = caster.GetComponent<LivingBeing>(); //#TODO NANI?
-//        LivingBeing targetStats = target.GetComponent<LivingBeing>();
-//        LivingBeing theTarget = casterStats;
-//        currentAbility = ability;
-//        modHandler = caster.gameObject.GetComponent<AbilityModHandler>();
-//        if (!forSelf) theTarget = targetStats;
-//
-//        mod = modHandler.GetAbilityMod(ability);
-//
-//        // handle self effects
-//        foreach (EffectPackage package in ability.TargetTypeAndEffects)
-//        {
-//            if (forSelf && package.TargetType == TargetType.Self || !forSelf && package.TargetType == TargetType.Target)
-//            {
-//                if (package.Heal.Value > 0)
-//                {
-//                    AdjustHealValue(package.Heal.Value, theTarget, casterStats);
-//                }
-//                if (package.HealOverTime.Value > 0)
-//                {
-//                    HandleApplyDOT(ability, target, AttributeType.CurrentHitpoints, package.HealOverTime.Value, package.HealOverTime.Duration, AbilityModTypes.HealOverTime);
-//                }
-//                if (package.Damage.Count > 0)
-//                {
-//                    foreach (Damage_AT damage in package.Damage)
-//                    {
-//                        AdjustDamageValue(damage, theTarget, casterStats, package.SpecialAbilityAttribute);
-//                    }
-//                }
-//                if (package.DamageOverTime.Count > 0)
-//                {
-//                    foreach (DamageoT_AT damage in package.DamageOverTime)
-//                    {
-//                        AdjustAndApplyDOT(ability, damage, theTarget, casterStats);
-//                    }
-//                }
-//                if (package.AttributeUp.Count > 0)
-//                {
-//                    foreach (TempAttrIncrease_AT tempChange in package.AttributeUp)
-//                    {
-//                        AdjustAndApplyTempChange(ability, tempChange, theTarget, casterStats);
-//                    }
-//                }
-//                if (package.AttributeDown.Count > 0)
-//                {
-//                    foreach (TempAttrDecrease_AT tempChange in package.AttributeDown)
-//                    {
-//                        AdjustAndApplyTempChange(ability, tempChange, theTarget, casterStats);
-//                    }
-//                }
-//
-//                if (package.StatusEffects.Count > 0)
-//                {
-//                    foreach (StatusEffects status in package.StatusEffects)
-//                    {
-//                        target.AlterStatusEffectList(status.EffectType, true);
-//                        target.StartCoroutine(RemoveStatusEffect(target, status));
-//                    }
-//                    if (target.TryGetComponent<AI_CC_State>(out AI_CC_State ccState))
-//                    {
-//                        foreach (StatusEffects status in package.StatusEffects)
-//                        {
-//                            ccState.RecieveCC(status, casterStats);
-//                            if (status.EffectType == StatusEffectType.Pulled) ccState.SetPullEpicenter(Camera.main.ScreenToWorldPoint(Input.mousePosition));
-//
-//                        }
-//                    }
-//                }
-//            }
-//
-//        }

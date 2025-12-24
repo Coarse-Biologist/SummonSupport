@@ -38,6 +38,16 @@ public class AIStateHandler : MonoBehaviour
 
     public Vector3 lastSeenLoc;
     public AnimationControllerScript anim;
+    public WaitForSeconds stateMachineSpeed1 = new WaitForSeconds(1);
+    public WaitForSeconds stateMachineSpeed2 = new WaitForSeconds(1.3f);
+    public WaitForSeconds stateMachineSpeed3 = new WaitForSeconds(1.6f);
+    public WaitForSeconds stateMachineSpeed4 = new WaitForSeconds(1.9f);
+    public WaitForSeconds stateMachineSpeed5 = new WaitForSeconds(2.2f);
+    public WaitForSeconds stateMachineDead = new WaitForSeconds(5f);
+
+
+
+    public WaitForSeconds currentMachineSpeed { private set; get; }
 
 
     public void SetCurrentState(AIState state)
@@ -66,8 +76,9 @@ public class AIStateHandler : MonoBehaviour
         SetTargetMask();
         SetCharType(livingBeing.CharacterTag);
 
-        InvokeRepeating("RunStateMachine", 0f, 1f); // if poisoned, foreach stack of poisoned, decrease by .X seconds
         anim = GetComponent<AnimationControllerScript>();
+        currentMachineSpeed = stateMachineSpeed1;
+        StartCoroutine(RunStateMachine());
 
 
     }
@@ -115,37 +126,67 @@ public class AIStateHandler : MonoBehaviour
     {
         Dead = dead;
     }
-
-    private void RunStateMachine()
+    public void SetStateMachineSpeed(int speed)
     {
-        //Debug.Log($"current state = {currentState}");
-        if (Dead) return;
-        // Called in Awake by using "Invoke repeating"
-        if (ccState != null && ccState.CCToCaster.Count != 0) SwitchToNextState(ccState);
-        if (minionStats == null || minionStats.CurrentCommand == MinionCommands.None)
+        switch (speed)
         {
-            AIState nextState = currentState?.RunCurrentState();
-            if (nextState != null)
-            {
-                SwitchToNextState(nextState);
-            }
-            else Debug.Log("nextState state was null");
+            case 1:
+                currentMachineSpeed = stateMachineSpeed1;
+                break;
+            case 2:
+                currentMachineSpeed = stateMachineSpeed2;
+                break;
+            case 3:
+                currentMachineSpeed = stateMachineSpeed3;
+                break;
+            case 4:
+                currentMachineSpeed = stateMachineSpeed4;
+                break;
+            case 5:
+                currentMachineSpeed = stateMachineSpeed5;
+                break;
+            default:
+                currentMachineSpeed = stateMachineSpeed1;
+                break;
         }
-        else
+    }
+
+    private IEnumerator RunStateMachine()
+    {
+        Debug.Log($"current state = {currentState}1");
+        while (!Dead)
         {
-            if (livingBeing.CharacterTag == CharacterTag.Minion)
+            Debug.Log($"current state = {currentState}2");
+
+            if (Dead) yield return stateMachineDead;
+
+            yield return currentMachineSpeed;
+
+            if (minionStats == null || minionStats.CurrentCommand == MinionCommands.None)
             {
-                Debug.Log("I will run yee old obedience state");
-                AIState nextState = obedienceState.RunCurrentState();
-                SwitchToNextState(nextState);
+                AIState nextState = currentState?.RunCurrentState();
+                if (nextState != null)
+                {
+                    SwitchToNextState(nextState);
+                }
+                else Debug.Log("nextState state was null");
             }
             else
             {
-                AIState nextState = peaceState.RunCurrentState();
-                SwitchToNextState(nextState);
-            }
-            //else Debug.Log("next state was null");
+                if (livingBeing.CharacterTag == CharacterTag.Minion)
+                {
+                    Debug.Log("I will run yee old obedience state");
+                    AIState nextState = obedienceState.RunCurrentState();
+                    SwitchToNextState(nextState);
+                }
+                else
+                {
+                    AIState nextState = peaceState.RunCurrentState();
+                    SwitchToNextState(nextState);
+                }
+                //else Debug.Log("next state was null");
 
+            }
         }
     }
 
