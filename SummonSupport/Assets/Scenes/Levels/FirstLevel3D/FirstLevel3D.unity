@@ -6564,7 +6564,7 @@ PrefabInstance:
     - target: {fileID: 856754605309222973, guid: 3388c2193e6a56841b1082aa7f3f5844,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2482741021012881781, guid: 3388c2193e6a56841b1082aa7f3f5844,
         type: 3}
@@ -6664,12 +6664,12 @@ PrefabInstance:
     - target: {fileID: 6075190451255648578, guid: 3388c2193e6a56841b1082aa7f3f5844,
         type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6075190451255648578, guid: 3388c2193e6a56841b1082aa7f3f5844,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6468714995252788812, guid: 3388c2193e6a56841b1082aa7f3f5844,
         type: 3}
@@ -7325,6 +7325,8 @@ MonoBehaviour:
   ExplosionObject: {fileID: 6168741503744869238, guid: 3d3fda254b1285f40be4cd3046f526e3,
     type: 3}
   IceCubeObject: {fileID: 7918154803457884069, guid: 394b1df6304c5ad41a304a195e69215c,
+    type: 3}
+  VineGrabObject: {fileID: 5484546440298584752, guid: c4fb597138e059a4b8e7050d8c2812ab,
     type: 3}
 --- !u!4 &1756227863 stripped
 Transform:
@@ -8845,7 +8847,7 @@ PrefabInstance:
     - target: {fileID: 856754605309222973, guid: 3388c2193e6a56841b1082aa7f3f5844,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2083273946984467676, guid: 3388c2193e6a56841b1082aa7f3f5844,
         type: 3}
@@ -8946,12 +8948,12 @@ PrefabInstance:
     - target: {fileID: 6075190451255648578, guid: 3388c2193e6a56841b1082aa7f3f5844,
         type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6075190451255648578, guid: 3388c2193e6a56841b1082aa7f3f5844,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6468714995252788812, guid: 3388c2193e6a56841b1082aa7f3f5844,
         type: 3}
@@ -10138,7 +10140,7 @@ PrefabInstance:
     - target: {fileID: 5700169036039766404, guid: 29cc623553c0c3d4aa9548ba52efed1b,
         type: 3}
       propertyPath: <Abilities>k__BackingField.Array.size
-      value: 5
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 5700169036039766404, guid: 29cc623553c0c3d4aa9548ba52efed1b,
         type: 3}
@@ -10174,7 +10176,7 @@ PrefabInstance:
         type: 3}
       propertyPath: '<Abilities>k__BackingField.Array.data[5]'
       value: 
-      objectReference: {fileID: 11400000, guid: b610699e92507244fb288cd3a669052c,
+      objectReference: {fileID: 11400000, guid: bb0b444e00a135545a1125115f2626f1,
         type: 2}
     - target: {fileID: 6707783455156688924, guid: 29cc623553c0c3d4aa9548ba52efed1b,
         type: 3}

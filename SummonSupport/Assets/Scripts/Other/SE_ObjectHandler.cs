@@ -6,6 +6,8 @@ public class SE_ObjectHandler : MonoBehaviour
 {
     [field: SerializeField] public GameObject ExplosionObject;
     [field: SerializeField] public GameObject IceCubeObject;
+    [field: SerializeField] public GameObject VineGrabObject;
+
 
     public static SE_ObjectHandler Instance;
 
@@ -18,6 +20,8 @@ public class SE_ObjectHandler : MonoBehaviour
     {
         EventDeclarer.ViciousDeath.AddListener(ViciousDeathExplosion);
         EventDeclarer.FrozenSolid?.AddListener(FrozenSolid);
+        EventDeclarer.GraspingVines?.AddListener(GraspingVines);
+
 
     }
     void OnDisable()
@@ -47,6 +51,20 @@ public class SE_ObjectHandler : MonoBehaviour
 
             IceCubeInstance.transform.position = new Vector3(spawnLoc.x, spawnLoc.y - 1, spawnLoc.z);
             Destroy(IceCubeInstance, 5f);
+        }
+    }
+    public void GraspingVines(LivingBeing livingBeing)
+    {
+        if (VineGrabObject != null)
+        {
+            Vector3 spawnLoc = new Vector3(livingBeing.transform.position.x, livingBeing.transform.position.y - 2, livingBeing.transform.position.z);
+            GameObject vines = Instantiate(VineGrabObject, spawnLoc, Quaternion.identity);
+            if (vines.TryGetComponent(out Animator anim))
+            {
+                Debug.Log("Congrats, kneeler");
+                anim.Play("VineGrab");
+            }
+            else Debug.Log("You wish, kneeler");
         }
     }
 }

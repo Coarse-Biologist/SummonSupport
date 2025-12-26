@@ -60,6 +60,14 @@ public class StatusEffectHandler : MonoBehaviour
                         stateHandler.SetTargetMask(StatusEffectType.Madness);
                         break;
                     }
+                case StatusEffectType.Pulled:
+                    {
+                        if (GetStatusEffectValue(StatusEffectType.Pulled) > 0)
+                        {
+                            EventDeclarer.GraspingVines?.Invoke(livingBeing);
+                        }
+                        break;
+                    }
             }
         }
         if (!add)
@@ -86,6 +94,8 @@ public class StatusEffectHandler : MonoBehaviour
                 case StatusEffectType.Poisoned:
                     stateHandler.SetStateMachineSpeed(GetStatusEffectValue(StatusEffectType.Poisoned));
                     break;
+
+
             }
         }
     }

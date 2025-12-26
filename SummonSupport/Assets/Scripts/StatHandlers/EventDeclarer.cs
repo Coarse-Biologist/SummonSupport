@@ -36,6 +36,8 @@ namespace SummonSupportEvents
         #region status effects
         public static UnityEvent<LivingBeing> ViciousDeath = new();
         public static UnityEvent<LivingBeing> FrozenSolid = new();
+        public static UnityEvent<LivingBeing> GraspingVines = new();
+
 
         #endregion
     }
