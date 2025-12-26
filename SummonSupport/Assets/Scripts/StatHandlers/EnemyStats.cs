@@ -37,6 +37,10 @@ public class EnemyStats : LivingBeing
         Destroy(gameObject);
         //Invoke("DelayedTestDeath", .3f);
     }
+    public void AddStatusEffectSymbol(StatusEffects status, int stacks)
+    {
+        resourceBarInterface?.AddStatusEffectSymbol(status, stacks);
+    }
 
     public override void HandleUIAttrDisplay(AttributeType attributeType, float newValue)
     {

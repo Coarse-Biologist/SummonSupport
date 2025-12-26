@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Overheated
   m_EditorClassIdentifier: Assembly-CSharp::StatusEffects
   <Name>k__BackingField: OverHeated
-  <Icon>k__BackingField: {fileID: 0}
+  <Icon>k__BackingField: {fileID: 21300000, guid: f5be0153cedc73845a41957c906bbf0a,
+    type: 3}
   <EffectType>k__BackingField: 8
   <Duration>k__BackingField: 99

@@ -32,7 +32,11 @@ namespace SummonSupportEvents
         public static UnityEvent<Ability> PlayerLearnedAbility = new();
         public static UnityEvent TogglePauseGame = new();
         public static UnityEvent<float> ShakeCamera = new();
-        public static UnityEvent<LivingBeing> ViciousDeath = new();
 
+        #region status effects
+        public static UnityEvent<LivingBeing> ViciousDeath = new();
+        public static UnityEvent<LivingBeing> FrozenSolid = new();
+
+        #endregion
     }
 }

@@ -6594,7 +6594,7 @@ PrefabInstance:
     - target: {fileID: 4444637023754417797, guid: 3388c2193e6a56841b1082aa7f3f5844,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -3.39
       objectReference: {fileID: 0}
     - target: {fileID: 4444637023754417797, guid: 3388c2193e6a56841b1082aa7f3f5844,
         type: 3}
@@ -6604,7 +6604,7 @@ PrefabInstance:
     - target: {fileID: 4444637023754417797, guid: 3388c2193e6a56841b1082aa7f3f5844,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -0.13
       objectReference: {fileID: 0}
     - target: {fileID: 4444637023754417797, guid: 3388c2193e6a56841b1082aa7f3f5844,
         type: 3}
@@ -6641,6 +6641,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5047136807383864246, guid: 3388c2193e6a56841b1082aa7f3f5844,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0.59
+      objectReference: {fileID: 0}
     - target: {fileID: 5741674900699775538, guid: 3388c2193e6a56841b1082aa7f3f5844,
         type: 3}
       propertyPath: m_LinearDamping
@@ -6650,6 +6655,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AngularDamping
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5915489079152431937, guid: 3388c2193e6a56841b1082aa7f3f5844,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.07
       objectReference: {fileID: 0}
     - target: {fileID: 6075190451255648578, guid: 3388c2193e6a56841b1082aa7f3f5844,
         type: 3}
@@ -7313,6 +7323,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ExplosionHandler
   ExplosionObject: {fileID: 6168741503744869238, guid: 3d3fda254b1285f40be4cd3046f526e3,
+    type: 3}
+  IceCubeObject: {fileID: 7918154803457884069, guid: 394b1df6304c5ad41a304a195e69215c,
     type: 3}
 --- !u!4 &1756227863 stripped
 Transform:
@@ -8835,6 +8847,12 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2083273946984467676, guid: 3388c2193e6a56841b1082aa7f3f5844,
+        type: 3}
+      propertyPath: statusEffectSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: ea0e134499cc85148b1546814547a616,
+        type: 3}
     - target: {fileID: 2482741021012881781, guid: 3388c2193e6a56841b1082aa7f3f5844,
         type: 3}
       propertyPath: m_Mass
@@ -8909,6 +8927,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5047136807383864246, guid: 3388c2193e6a56841b1082aa7f3f5844,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0.58
       objectReference: {fileID: 0}
     - target: {fileID: 5741674900699775538, guid: 3388c2193e6a56841b1082aa7f3f5844,
         type: 3}
@@ -9044,12 +9067,12 @@ PrefabInstance:
     - target: {fileID: 8897603083464362704, guid: 3388c2193e6a56841b1082aa7f3f5844,
         type: 3}
       propertyPath: <MaxHP>k__BackingField
-      value: 100
+      value: 250
       objectReference: {fileID: 0}
     - target: {fileID: 8897603083464362704, guid: 3388c2193e6a56841b1082aa7f3f5844,
         type: 3}
       propertyPath: <CurrentHP>k__BackingField
-      value: 100
+      value: 250
       objectReference: {fileID: 0}
     - target: {fileID: 8897603083464362704, guid: 3388c2193e6a56841b1082aa7f3f5844,
         type: 3}
@@ -10115,7 +10138,7 @@ PrefabInstance:
     - target: {fileID: 5700169036039766404, guid: 29cc623553c0c3d4aa9548ba52efed1b,
         type: 3}
       propertyPath: <Abilities>k__BackingField.Array.size
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 5700169036039766404, guid: 29cc623553c0c3d4aa9548ba52efed1b,
         type: 3}
@@ -10145,7 +10168,7 @@ PrefabInstance:
         type: 3}
       propertyPath: '<Abilities>k__BackingField.Array.data[4]'
       value: 
-      objectReference: {fileID: 11400000, guid: 63b0ad61041829940a6938c259cc8635,
+      objectReference: {fileID: 11400000, guid: 5e39961f19654e04bb7f41a70934544c,
         type: 2}
     - target: {fileID: 5700169036039766404, guid: 29cc623553c0c3d4aa9548ba52efed1b,
         type: 3}

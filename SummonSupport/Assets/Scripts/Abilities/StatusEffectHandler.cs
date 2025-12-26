@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using SummonSupportEvents;
 using UnityEngine;
 using UnityEngine.Animations;
 
@@ -8,6 +9,7 @@ public class StatusEffectHandler : MonoBehaviour
 {
     private LivingBeing livingBeing;
     private AIStateHandler stateHandler;
+    private float ai_Speed = 5;
     public Dictionary<StatusEffectType, int> SufferedStatusEffects { get; private set; } = new();
 
     void Awake()
@@ -23,10 +25,13 @@ public class StatusEffectHandler : MonoBehaviour
         if (gameObject.TryGetComponent(out AIStateHandler ai))
         {
             stateHandler = ai;
+            ai_Speed = stateHandler.navAgent.speed;
         }
     }
     public void HandleStatusEffect(StatusEffects status, bool add)
     {
+        Debug.Log($"Adding {status.EffectType} = {true}");
+
         if (stateHandler == null) return;
         if (add)
         {
@@ -34,7 +39,15 @@ public class StatusEffectHandler : MonoBehaviour
             {
                 case StatusEffectType.Chilled:
                     {
-                        stateHandler.navAgent.speed -= 5;
+                        Debug.Log($"Adding {status.EffectType} = {true} Decreasing speed by {.2f * ai_Speed}");
+                        stateHandler.navAgent.speed -= .2f * ai_Speed;
+                        stateHandler.anim.anim.speed -= .2f;
+                        if (GetStatusEffectValue(StatusEffectType.Chilled) > 4)
+                        {
+                            stateHandler.navAgent.speed = 0;
+                            stateHandler.anim.anim.speed = 0;
+                            EventDeclarer.FrozenSolid?.Invoke(livingBeing);
+                        }
                         break;
                     }
                 case StatusEffectType.Charmed:
@@ -55,7 +68,9 @@ public class StatusEffectHandler : MonoBehaviour
             {
                 case StatusEffectType.Chilled:
                     {
-                        stateHandler.navAgent.speed += 5;
+                        Debug.Log($"Increasing speed by {.2f * ai_Speed}");
+                        stateHandler.anim.anim.speed += .2f;
+                        stateHandler.navAgent.speed += .2f * ai_Speed;
                         break;
                     }
                 case StatusEffectType.Charmed:
@@ -78,9 +93,13 @@ public class StatusEffectHandler : MonoBehaviour
     {
         if (Add)
         {
+            if (livingBeing is EnemyStats enemyStats)
+            {
+                enemyStats.AddStatusEffectSymbol(status, 1);
+            }
             SufferedStatusEffects[status.EffectType] += 1;
             HandleStatusEffect(status, true);
-            RemoveStatusEffect(status, 20f);
+            StartCoroutine(RemoveStatusEffect(status, 2 * status.Duration));
         }
         if (!Add)
         {
@@ -93,7 +112,7 @@ public class StatusEffectHandler : MonoBehaviour
     {
         yield return new WaitForSeconds(duration);
 
-        AlterStatusEffectList(status, false); // ill also need to undo whatever damage was done (0___0)
+        AlterStatusEffectList(status, false);
     }
     public bool HasStatusEffect(StatusEffectType status)
     {

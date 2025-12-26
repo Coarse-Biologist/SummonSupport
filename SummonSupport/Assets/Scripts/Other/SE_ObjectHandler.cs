@@ -2,10 +2,12 @@ using SummonSupportEvents;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class ExplosionHandler : MonoBehaviour
+public class SE_ObjectHandler : MonoBehaviour
 {
     [field: SerializeField] public GameObject ExplosionObject;
-    public static ExplosionHandler Instance;
+    [field: SerializeField] public GameObject IceCubeObject;
+
+    public static SE_ObjectHandler Instance;
 
     void Awake()
     {
@@ -15,10 +17,14 @@ public class ExplosionHandler : MonoBehaviour
     void OnEnable()
     {
         EventDeclarer.ViciousDeath.AddListener(ViciousDeathExplosion);
+        EventDeclarer.FrozenSolid?.AddListener(FrozenSolid);
+
     }
     void OnDisable()
     {
         EventDeclarer.ViciousDeath.RemoveListener(ViciousDeathExplosion);
+        EventDeclarer.FrozenSolid?.RemoveListener(FrozenSolid);
+
     }
     public void ViciousDeathExplosion(LivingBeing livingBeing)
     {
@@ -29,6 +35,18 @@ public class ExplosionHandler : MonoBehaviour
             {
                 explodeScript.CheckTargetToExplodeOn(livingBeing.CharacterTag);
             }
+        }
+    }
+    public void FrozenSolid(LivingBeing livingBeing)
+    {
+        if (ExplosionObject != null)
+        {
+            Vector3 spawnLoc = livingBeing.transform.position;
+
+            GameObject IceCubeInstance = Instantiate(IceCubeObject, spawnLoc, Quaternion.identity);
+
+            IceCubeInstance.transform.position = new Vector3(spawnLoc.x, spawnLoc.y - 1, spawnLoc.z);
+            Destroy(IceCubeInstance, 5f);
         }
     }
 }

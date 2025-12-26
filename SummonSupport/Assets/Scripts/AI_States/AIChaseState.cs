@@ -77,8 +77,9 @@ public class AIChaseState : AIState
         {
             float distance = (stateHandler.target.transform.position - transform.position).sqrMagnitude;
             //Debug.Log($"Chasing {stateHandler.target.Name} and the distance is: {distance}");
+            if (stateHandler.navAgent.speed == 0) return;
 
-            if (distance <= SelectedAbilityAttackRange || stateHandler.navAgent.stoppingDistance >= distance * distance) // if distance to target is more than ability range
+            else if (distance <= SelectedAbilityAttackRange || stateHandler.navAgent.stoppingDistance >= distance * distance) // if distance to target is more than ability range
             {
                 IdleAndResetPath();
             }
