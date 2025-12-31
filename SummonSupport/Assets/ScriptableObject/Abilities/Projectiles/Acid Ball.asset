@@ -58,7 +58,7 @@ MonoBehaviour:
   <OnHitEffect>k__BackingField: {fileID: 5705030685624713920, guid: 1cf207986de988e47adade098e6119ca,
     type: 3}
   <AlterParticleSystemGradient>k__BackingField: 0
-  <Speed>k__BackingField: 9
+  <Speed>k__BackingField: 30
   <Projectile>k__BackingField: {fileID: 6033447785082643316, guid: 706fd26b292fae4488c9b19eec3811fc,
     type: 3}
   <MaxRange>k__BackingField: 150
