@@ -201,8 +201,11 @@ public class AbilityHandler : MonoBehaviour
     {
         try
         {
+            float coolDown = ability.Cooldown + modHandler.GetModAttributeByType(ability, AbilityModTypes.Cooldown) + statsHandler.SE_Handler.GetStatusEffectValue(StatusEffectType.Lethargic);
+            // default, plus modifier, plus lethargy value
+            //Debug.Log($"Cool down duration for {ability.Name} calculated to be {coolDown}");
             abilitiesOnCooldownCrew[ability] = true;
-            yield return new WaitForSeconds(ability.Cooldown + modHandler.GetModAttributeByType(ability, AbilityModTypes.Cooldown));
+            yield return new WaitForSeconds(coolDown);
         }
         finally
         {

@@ -9,6 +9,7 @@ public class StatusEffectHandler : MonoBehaviour
 {
     private LivingBeing livingBeing;
     private AIStateHandler stateHandler;
+    public Rigidbody rigidBody;
     private float ai_Speed = 5;
     public Dictionary<StatusEffectType, int> SufferedStatusEffects { get; private set; } = new();
 
@@ -27,6 +28,10 @@ public class StatusEffectHandler : MonoBehaviour
             stateHandler = ai;
             ai_Speed = stateHandler.navAgent.speed;
         }
+        if (gameObject.TryGetComponent(out Rigidbody rb))
+        {
+            rigidBody = rb;
+        }
     }
     public void HandleStatusEffect(StatusEffects status, bool add)
     {
@@ -39,7 +44,6 @@ public class StatusEffectHandler : MonoBehaviour
             {
                 case StatusEffectType.Chilled:
                     {
-                        Debug.Log($"Adding {status.EffectType} = {true} Decreasing speed by {.2f * ai_Speed}");
                         stateHandler.navAgent.speed -= .2f * ai_Speed;
                         stateHandler.anim.anim.speed -= .2f;
                         if (GetStatusEffectValue(StatusEffectType.Chilled) > 4)
@@ -53,6 +57,11 @@ public class StatusEffectHandler : MonoBehaviour
                 case StatusEffectType.Charmed:
                     {
                         stateHandler.SetTargetMask(StatusEffectType.Charmed);
+                        break;
+                    }
+                case StatusEffectType.KnockBack:
+                    {
+                        KnockInTheAir();
                         break;
                     }
                 case StatusEffectType.Madness:
@@ -144,6 +153,12 @@ public class StatusEffectHandler : MonoBehaviour
         {
             SufferedStatusEffects[effect] = 0;
         }
+    }
+    private void KnockInTheAir()
+    {
+        Debug.Log($"knocking in the air");
+
+        rigidBody.AddForce(-transform.forward * GetStatusEffectValue(StatusEffectType.KnockBack) * 20, ForceMode.Impulse);
     }
 
 

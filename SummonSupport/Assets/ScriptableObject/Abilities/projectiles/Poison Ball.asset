@@ -37,7 +37,7 @@ MonoBehaviour:
     <AttributeUp>k__BackingField: []
     <AttributeDown>k__BackingField: []
     <StatusEffects>k__BackingField:
-    - {fileID: 11400000, guid: a7cd492d4cd83a0489ee1d9d08f80f76, type: 2}
+    - {fileID: 11400000, guid: 61d84c3f9129bca499fa68ac5be438b5, type: 2}
     <SpecialAbilityAttribute>k__BackingField: 0
   <SelfEffects>k__BackingField:
     <EffectDescription>k__BackingField: 

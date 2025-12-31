@@ -22,7 +22,7 @@ public class EnemyStats : LivingBeing
     public override void Die()
     {
         EventDeclarer.EnemyDefeated.Invoke(this);
-        if (SE_Handler.GetStatusEffectValue(StatusEffectType.ExplodeOnDeath) > 4) EventDeclarer.ViciousDeath?.Invoke(this);
+        if (SE_Handler.GetStatusEffectValue(StatusEffectType.ExplodeOnDeath) > 1) EventDeclarer.ViciousDeath?.Invoke(this);
 
         if (gameObject.TryGetComponent(out AIStateHandler stateHandler))
         {

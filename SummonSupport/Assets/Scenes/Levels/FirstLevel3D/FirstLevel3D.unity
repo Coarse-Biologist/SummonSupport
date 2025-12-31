@@ -17,13 +17,13 @@ RenderSettings:
   m_Fog: 1
   m_FogColor: {r: 0.81886786, g: 0.81886786, b: 0.81886786, a: 1}
   m_FogMode: 2
-  m_FogDensity: 0.008
+  m_FogDensity: 0.001
   m_LinearFogStart: 0
   m_LinearFogEnd: 300
   m_AmbientSkyColor: {r: 0.212, g: 0.227, b: 0.259, a: 1}
   m_AmbientEquatorColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
   m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
-  m_AmbientIntensity: 0.97
+  m_AmbientIntensity: 1
   m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.22714838, g: 0.22800282, b: 0.23018861, a: 1}
   m_SkyboxMaterial: {fileID: 2100000, guid: 00672f2473172294d8947a42dea4e522, type: 2}
@@ -3883,6 +3883,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5bf0aa40a5c8c5340a0e99117006653a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StatusEffectHandler
+  rigidBody: {fileID: 0}
 --- !u!114 &1006284826
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3895,6 +3896,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5bf0aa40a5c8c5340a0e99117006653a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StatusEffectHandler
+  rigidBody: {fileID: 0}
 --- !u!4 &1042397107 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1229462029999028531, guid: aff31b32fc4eea5418f988c216c59a4a,
@@ -4693,6 +4695,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5bf0aa40a5c8c5340a0e99117006653a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StatusEffectHandler
+  rigidBody: {fileID: 0}
 --- !u!4 &1251025559 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1229462029999028531, guid: aff31b32fc4eea5418f988c216c59a4a,
@@ -6564,7 +6567,7 @@ PrefabInstance:
     - target: {fileID: 856754605309222973, guid: 3388c2193e6a56841b1082aa7f3f5844,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2482741021012881781, guid: 3388c2193e6a56841b1082aa7f3f5844,
         type: 3}
@@ -6664,12 +6667,12 @@ PrefabInstance:
     - target: {fileID: 6075190451255648578, guid: 3388c2193e6a56841b1082aa7f3f5844,
         type: 3}
       propertyPath: m_AnchorMax.x
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6075190451255648578, guid: 3388c2193e6a56841b1082aa7f3f5844,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6468714995252788812, guid: 3388c2193e6a56841b1082aa7f3f5844,
         type: 3}
@@ -7730,6 +7733,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5bf0aa40a5c8c5340a0e99117006653a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StatusEffectHandler
+  rigidBody: {fileID: 0}
 --- !u!1 &1863413858
 GameObject:
   m_ObjectHideFlags: 0
@@ -8847,7 +8851,7 @@ PrefabInstance:
     - target: {fileID: 856754605309222973, guid: 3388c2193e6a56841b1082aa7f3f5844,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2083273946984467676, guid: 3388c2193e6a56841b1082aa7f3f5844,
         type: 3}
@@ -8948,17 +8952,17 @@ PrefabInstance:
     - target: {fileID: 6075190451255648578, guid: 3388c2193e6a56841b1082aa7f3f5844,
         type: 3}
       propertyPath: m_AnchorMax.x
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6075190451255648578, guid: 3388c2193e6a56841b1082aa7f3f5844,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6468714995252788812, guid: 3388c2193e6a56841b1082aa7f3f5844,
         type: 3}
       propertyPath: <Abilities>k__BackingField.Array.size
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6468714995252788812, guid: 3388c2193e6a56841b1082aa7f3f5844,
         type: 3}
@@ -10140,43 +10144,43 @@ PrefabInstance:
     - target: {fileID: 5700169036039766404, guid: 29cc623553c0c3d4aa9548ba52efed1b,
         type: 3}
       propertyPath: <Abilities>k__BackingField.Array.size
-      value: 6
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 5700169036039766404, guid: 29cc623553c0c3d4aa9548ba52efed1b,
         type: 3}
       propertyPath: '<Abilities>k__BackingField.Array.data[0]'
       value: 
-      objectReference: {fileID: 11400000, guid: 5605a5e8027c4e94691ae731bacfcb5a,
+      objectReference: {fileID: 11400000, guid: a51fc697c016f874ba93dd993138f074,
         type: 2}
     - target: {fileID: 5700169036039766404, guid: 29cc623553c0c3d4aa9548ba52efed1b,
         type: 3}
       propertyPath: '<Abilities>k__BackingField.Array.data[1]'
       value: 
-      objectReference: {fileID: 11400000, guid: ff53d8b056b03f34d856d03b15608f36,
+      objectReference: {fileID: 11400000, guid: 6949278a1cdb58a478fa721871e6e803,
         type: 2}
     - target: {fileID: 5700169036039766404, guid: 29cc623553c0c3d4aa9548ba52efed1b,
         type: 3}
       propertyPath: '<Abilities>k__BackingField.Array.data[2]'
       value: 
-      objectReference: {fileID: 11400000, guid: 63b0ad61041829940a6938c259cc8635,
+      objectReference: {fileID: 11400000, guid: 5d20d6cc1fa7eb547ba5d0f9aefcc225,
         type: 2}
     - target: {fileID: 5700169036039766404, guid: 29cc623553c0c3d4aa9548ba52efed1b,
         type: 3}
       propertyPath: '<Abilities>k__BackingField.Array.data[3]'
       value: 
-      objectReference: {fileID: 11400000, guid: 6949278a1cdb58a478fa721871e6e803,
+      objectReference: {fileID: 11400000, guid: bb0b444e00a135545a1125115f2626f1,
         type: 2}
     - target: {fileID: 5700169036039766404, guid: 29cc623553c0c3d4aa9548ba52efed1b,
         type: 3}
       propertyPath: '<Abilities>k__BackingField.Array.data[4]'
       value: 
-      objectReference: {fileID: 11400000, guid: 5e39961f19654e04bb7f41a70934544c,
+      objectReference: {fileID: 11400000, guid: 50f97cd667dde2345a4e08bd5abdc79a,
         type: 2}
     - target: {fileID: 5700169036039766404, guid: 29cc623553c0c3d4aa9548ba52efed1b,
         type: 3}
       propertyPath: '<Abilities>k__BackingField.Array.data[5]'
       value: 
-      objectReference: {fileID: 11400000, guid: bb0b444e00a135545a1125115f2626f1,
+      objectReference: {fileID: 11400000, guid: 50f97cd667dde2345a4e08bd5abdc79a,
         type: 2}
     - target: {fileID: 6707783455156688924, guid: 29cc623553c0c3d4aa9548ba52efed1b,
         type: 3}
@@ -10601,17 +10605,17 @@ PrefabInstance:
     - target: {fileID: 2899146474158114613, guid: 86b9d37483a8c094f8ec87ff8006571c,
         type: 3}
       propertyPath: m_Color.g
-      value: 0.8505475
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2899146474158114613, guid: 86b9d37483a8c094f8ec87ff8006571c,
         type: 3}
       propertyPath: m_Color.r
-      value: 0.73018867
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2899146474158114613, guid: 86b9d37483a8c094f8ec87ff8006571c,
         type: 3}
       propertyPath: m_Intensity
-      value: 0.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2899146474158114613, guid: 86b9d37483a8c094f8ec87ff8006571c,
         type: 3}

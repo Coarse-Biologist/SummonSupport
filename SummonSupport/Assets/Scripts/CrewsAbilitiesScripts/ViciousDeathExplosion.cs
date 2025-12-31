@@ -22,8 +22,9 @@ public class ViciousDeathExplosion : MonoBehaviour
                         {
                             ExplosionDamage -= ExplosionDamage * livingBeing.GetAffinity(Element.Heat) / 100;
                             livingBeing.ChangeAttribute(AttributeType.CurrentHitpoints, -ExplosionDamage);
-                        }
+                            if (livingBeing.SE_Handler.rigidBody != null) livingBeing.SE_Handler.rigidBody.AddExplosionForce(10, Vector3.up, 5);
 
+                        }
                     }
                 }
             }

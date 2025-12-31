@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fceeef8cfafe41444bf6aa890ebad1b7, type: 3}
   m_Name: Bacteria Ball
   m_EditorClassIdentifier: 
-  <Name>k__BackingField: Psychic Ball
+  <Name>k__BackingField: Bacterial Ball
   <Icon>k__BackingField: {fileID: 3837697726249093711, guid: a949de51ac63b994784528b4e06be2b5,
     type: 3}
   <Cooldown>k__BackingField: 2
@@ -36,7 +36,8 @@ MonoBehaviour:
       <Value>k__BackingField: 0
     <AttributeUp>k__BackingField: []
     <AttributeDown>k__BackingField: []
-    <StatusEffects>k__BackingField: []
+    <StatusEffects>k__BackingField:
+    - {fileID: 11400000, guid: 61d84c3f9129bca499fa68ac5be438b5, type: 2}
     <SpecialAbilityAttribute>k__BackingField: 0
   <SelfEffects>k__BackingField:
     <EffectDescription>k__BackingField: 

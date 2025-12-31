@@ -1,7 +1,7 @@
 public enum StatusEffectType
 {
     None,
-    KnockInTheAir, //Earth
+    KnockBack, //Earth
     Stun,
     Confused, //
     Charmed, //Psychic
@@ -13,7 +13,7 @@ public enum StatusEffectType
     Whirlwind, //air catches creature in whirlwind/ tornado and carries them away from player
     Slipping, //water slows down Ai movment function call speed
     Poisoned, //poison slows all of the AI state loop
-    Diseased, //bacteria slows down all cooldowns
+    Lethargic, //bacteria slows down all cooldowns
     Infected, //virus spreads a DOT damage to nearby allies
     Dissolving, //acid lowers all physical resistences
     Blinded, //light blinds /// sorted but not tested

@@ -69,8 +69,8 @@ public class AIPeacefulState : AIState
                 if (detectedObject.TryGetComponent(out LivingBeing targetLivingBeing))
                 {
 
-                    if (targetLivingBeing.CharacterTag == CharacterTag.Enemy)
-                        Debug.Log($"{targetLivingBeing.Name} = target found in check target in raange func");
+                    //if (targetLivingBeing.CharacterTag == CharacterTag.Enemy)
+                    //Debug.Log($"{targetLivingBeing.Name} = target found in check target in raange func");
                     if (targetLivingBeing.GetAttribute(AttributeType.CurrentHitpoints) > 0)
                     {
                         stateHandler.SetTarget(targetLivingBeing);

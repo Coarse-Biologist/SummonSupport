@@ -80,7 +80,7 @@ public static class CombatStatHandler
 
 
 
-    #region Adjust and apply damage, heal, temo attributes and damage over times
+    #region Adjust and apply damage, heal, temp attributes and damage over times
     public static float AdjustDamageValue(Damage_AT damage_AT, SpecialAbilityAttribute specialAbilityAttribute = SpecialAbilityAttribute.None)
     {
         float damageValue = GetDamageByType(damage_AT);

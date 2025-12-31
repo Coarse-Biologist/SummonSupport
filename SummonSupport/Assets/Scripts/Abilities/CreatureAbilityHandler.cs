@@ -135,7 +135,7 @@ public class CreatureAbilityHandler : AbilityHandler
 
     public void UseAbility(LivingBeing target, Ability ability)
     {
-        UnityEngine.Debug.Log($"Target is {target.Name} in use ability func");
+        //UnityEngine.Debug.Log($"Target is {target.Name} in use ability func");
 
         if (ability != null)
         {

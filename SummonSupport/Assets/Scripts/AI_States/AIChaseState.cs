@@ -42,14 +42,14 @@ public class AIChaseState : AIState
         {
             if (peaceState.FieldOfViewCheck() == true) //is target visible?
             {
-                Debug.Log($"Chasing target because field of view check was true. going to target: {stateHandler.target.Name}");
+                //Debug.Log($"Chasing target because field of view check was true. going to target: {stateHandler.target.Name}");
                 Chase(stateHandler.target.transform.position);
                 if (!runningAttackLoop)
                     attackCoroutine = StartCoroutine(HandleAttack());
             }
             else
             {
-                Debug.Log($"Chasing because field of view check was false. going to last seen location: {stateHandler.lastSeenLoc}");
+                //Debug.Log($"Chasing because field of view check was false. going to last seen location: {stateHandler.lastSeenLoc}");
                 EndAttackRoutine();
                 Chase(stateHandler.lastSeenLoc);
             }
@@ -116,7 +116,6 @@ public class AIChaseState : AIState
 
     private IEnumerator HandleAttack()
     {
-        Debug.Log($"Target is {stateHandler.target.Name} before loop");
         if (stateHandler.target == null)
         {
             runningAttackLoop = false;

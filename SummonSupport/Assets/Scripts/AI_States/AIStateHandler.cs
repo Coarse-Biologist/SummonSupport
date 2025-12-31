@@ -89,7 +89,7 @@ public class AIStateHandler : MonoBehaviour
     }
     public void SetTarget(LivingBeing newlyAssignedTarget)
     {
-        Debug.Log($"Setting target to {newlyAssignedTarget.Name}");
+        //Debug.Log($"Setting target to {newlyAssignedTarget.Name}");
         target = newlyAssignedTarget;
     }
     private void SetMasks()
@@ -153,10 +153,10 @@ public class AIStateHandler : MonoBehaviour
 
     private IEnumerator RunStateMachine()
     {
-        Debug.Log($"current state = {currentState}1");
+        //Debug.Log($"current state = {currentState}1");
         while (!Dead)
         {
-            Debug.Log($"current state = {currentState}2");
+            //Debug.Log($"current state = {currentState}2");
 
             if (Dead) yield return stateMachineDead;
 
@@ -175,7 +175,7 @@ public class AIStateHandler : MonoBehaviour
             {
                 if (livingBeing.CharacterTag == CharacterTag.Minion)
                 {
-                    Debug.Log("I will run yee old obedience state");
+                    //Debug.Log("I will run yee old obedience state");
                     AIState nextState = obedienceState.RunCurrentState();
                     SwitchToNextState(nextState);
                 }

@@ -13,8 +13,7 @@ MonoBehaviour:
   m_Name: KnockInTheAir
   m_EditorClassIdentifier: 
   <Name>k__BackingField: Knock in the air
-  <Icon>k__BackingField: {fileID: 0}
+  <Icon>k__BackingField: {fileID: 21300000, guid: 7bd1c9fe50badaa4d8c022723c076baf,
+    type: 3}
   <EffectType>k__BackingField: 1
   <Duration>k__BackingField: 1
-  <Element>k__BackingField: 0
-  <PhysicalType>k__BackingField: 2
