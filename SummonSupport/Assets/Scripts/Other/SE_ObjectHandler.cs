@@ -6,7 +6,18 @@ public class SE_ObjectHandler : MonoBehaviour
     [field: SerializeField] public GameObject ExplosionObject;
     [field: SerializeField] public GameObject IceCubeObject;
     [field: SerializeField] public GameObject VineGrabObject;
+    [field: SerializeField] public GameObject PulledObject;
     [field: SerializeField] public GameObject VirusObject;
+    [field: SerializeField] public GameObject PoisonedEffect;
+    [field: SerializeField] public GameObject IonizedEffect;
+    [field: SerializeField] public GameObject ChilledEffect;
+    [field: SerializeField] public GameObject OverheatedEffect;
+    [field: SerializeField] public GameObject MadnessEffect;
+    [field: SerializeField] public GameObject CharmedEffect;
+    [field: SerializeField] public GameObject PlantEffect;
+
+
+
 
 
 
@@ -23,12 +34,24 @@ public class SE_ObjectHandler : MonoBehaviour
         EventDeclarer.FrozenSolid?.AddListener(FrozenSolid);
         EventDeclarer.GraspingVines?.AddListener(GraspingVines);
         EventDeclarer.SpreadVirus?.AddListener(SpreadVirus);
+        EventDeclarer.IonizedAttack?.AddListener(ShowIonization);
+        EventDeclarer.PlantAttack?.AddListener(ShowPlantEffect);
+        EventDeclarer.Overheating?.AddListener(ShowOverheatingEffect);
+
+
 
     }
     void OnDisable()
     {
         EventDeclarer.ViciousDeath.RemoveListener(ViciousDeathExplosion);
         EventDeclarer.FrozenSolid?.RemoveListener(FrozenSolid);
+        EventDeclarer.GraspingVines?.RemoveListener(GraspingVines);
+        EventDeclarer.SpreadVirus?.RemoveListener(SpreadVirus);
+        EventDeclarer.IonizedAttack?.RemoveListener(ShowIonization);
+        EventDeclarer.PlantAttack?.RemoveListener(ShowPlantEffect);
+        EventDeclarer.Overheating?.RemoveListener(ShowOverheatingEffect);
+
+
 
     }
     public void ViciousDeathExplosion(LivingBeing livingBeing)
@@ -72,10 +95,33 @@ public class SE_ObjectHandler : MonoBehaviour
             GameObject vines = Instantiate(VineGrabObject, spawnLoc, Quaternion.identity);
             if (vines.TryGetComponent(out Animator anim))
             {
-                Debug.Log("Congrats, kneeler");
                 anim.Play("VineGrab");
             }
-            else Debug.Log("You wish, kneeler");
+        }
+    }
+
+    public void ShowIonization(LivingBeing livingBeing)
+    {
+        if (IonizedEffect != null)
+        {
+            GameObject instance = Instantiate(IonizedEffect, livingBeing.transform.position, Quaternion.identity, livingBeing.transform);
+            Destroy(instance, .5f);
+        }
+    }
+    public void ShowPlantEffect(Rigidbody rb)
+    {
+        if (PlantEffect != null)
+        {
+            GameObject instance = Instantiate(PlantEffect, rb.transform.position, Quaternion.identity, rb.transform);
+            Destroy(instance, 3f);
+        }
+    }
+    public void ShowOverheatingEffect(LivingBeing livingBeing)
+    {
+        if (OverheatedEffect != null)
+        {
+            GameObject instance = Instantiate(OverheatedEffect, livingBeing.transform.position, Quaternion.identity, livingBeing.transform);
+            Destroy(instance, 6f);
         }
     }
 }

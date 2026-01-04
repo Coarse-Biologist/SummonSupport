@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using System.Collections.Generic;
+using SummonSupportEvents;
 
 public class AbilityHandler : MonoBehaviour
 {
@@ -54,8 +55,11 @@ public class AbilityHandler : MonoBehaviour
 
         //handle Ionization status effect
         int ionizationValue = statsHandler.SE_Handler.GetStatusEffectValue(StatusEffectType.Ionized);
-        if (ionizationValue > 0) statsHandler.ChangeAttributeByPercent(AttributeType.CurrentHitpoints, (float)-.01 * ionizationValue);
-
+        if (ionizationValue > 0)
+        {
+            statsHandler.ChangeAttributeByPercent(AttributeType.CurrentHitpoints, (float)-.01 * ionizationValue);
+            EventDeclarer.IonizedAttack?.Invoke(statsHandler);
+        }
         StartCoroutine(SetOnCooldown(ability));
         int costMod = modHandler.GetModAttributeByType(ability, AbilityModTypes.Cost);
         statsHandler?.ChangeAttribute(AttributeType.CurrentPower, -ability.Cost + costMod);

@@ -54,6 +54,11 @@ public class StatusEffectHandler : MonoBehaviour
                         }
                         break;
                     }
+                case StatusEffectType.Overheated:
+                    {
+                        EventDeclarer.Overheating?.Invoke(livingBeing);
+                        break;
+                    }
                 case StatusEffectType.Charmed:
                     {
                         stateHandler.SetTargetMask(StatusEffectType.Charmed);

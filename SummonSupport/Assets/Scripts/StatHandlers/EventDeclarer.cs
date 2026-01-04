@@ -38,6 +38,12 @@ namespace SummonSupportEvents
         public static UnityEvent<LivingBeing> FrozenSolid = new();
         public static UnityEvent<LivingBeing> GraspingVines = new();
         public static UnityEvent<LivingBeing> SpreadVirus = new();
+        public static UnityEvent<LivingBeing> IonizedAttack = new();
+        public static UnityEvent<Rigidbody> PlantAttack = new();
+        public static UnityEvent<LivingBeing> Overheating = new();
+
+
+
 
 
 

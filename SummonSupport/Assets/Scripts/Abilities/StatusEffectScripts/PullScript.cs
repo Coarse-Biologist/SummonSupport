@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using SummonSupportEvents;
 using Unity.AppUI.UI;
 using UnityEngine;
 
@@ -21,7 +22,10 @@ public class PullScript : MonoBehaviour
             if (col.gameObject.TryGetComponent(out Rigidbody rb))
             {
                 if (!targets.Contains(rb))
+                {
                     targets.Add(rb);
+                    EventDeclarer.PlantAttack?.Invoke(rb);
+                }
             }
         }
         StartCoroutine(PullTargets());

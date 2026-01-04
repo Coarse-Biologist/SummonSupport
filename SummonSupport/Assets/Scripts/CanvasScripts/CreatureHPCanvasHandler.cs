@@ -70,7 +70,7 @@ public class CreatureHPCanvasHandler : MonoBehaviour, I_ResourceBar
             // Configure RectTransform
             RectTransform rt = img.GetComponent<RectTransform>();
             rt.anchoredPosition = Vector2.zero;
-            rt.sizeDelta = new Vector2(1, 1);
+            rt.sizeDelta = new Vector2(.5f, .5f);
             Destroy(statusImage, 5f);
         }
     }
