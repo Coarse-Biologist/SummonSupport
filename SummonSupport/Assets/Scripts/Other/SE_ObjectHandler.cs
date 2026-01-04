@@ -44,7 +44,13 @@ public class SE_ObjectHandler : MonoBehaviour
     }
     public void SpreadVirus(LivingBeing livingBeing)
     {
-        Instantiate(VirusObject, livingBeing.transform.position, Quaternion.identity, livingBeing.transform);
+        GameObject virusObjectInstance = Instantiate(VirusObject, livingBeing.transform.position, Quaternion.identity, livingBeing.transform);
+
+        Destroy(virusObjectInstance, 5f);
+
+        SpreadEffectScript newEffectScript = virusObjectInstance.GetComponent<SpreadEffectScript>();
+
+        newEffectScript.HandleNewInstance(newEffectScript, null, livingBeing);
     }
     public void FrozenSolid(LivingBeing livingBeing)
     {

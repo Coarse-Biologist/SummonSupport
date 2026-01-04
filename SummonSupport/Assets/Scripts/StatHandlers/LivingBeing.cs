@@ -209,7 +209,10 @@ public abstract class LivingBeing : MonoBehaviour
     public void ChangeHealthRegeneration(float Value)
     {
         HealthRegeneration = Math.Max(0, HealthRegeneration + Value);
-
+    }
+    public void ChangeHealthRegeneration_Limitless(float Value)
+    {
+        HealthRegeneration += Value;
     }
     public void ChangePowerRegeneration(float Value)
     {
@@ -291,10 +294,10 @@ public abstract class LivingBeing : MonoBehaviour
     {
         while (true)
         {
-            float newHP = Mathf.Min(CurrentHP + TotalHealthRegeneration, MaxHP);
+            float newHP = Mathf.Min(CurrentHP + HealthRegeneration, MaxHP);
             if (newHP != CurrentHP)
                 SetAttribute(AttributeType.CurrentHitpoints, newHP);
-            float newPower = Mathf.Min(CurrentPower + TotalPowerRegeneration, MaxPower);
+            float newPower = Mathf.Min(CurrentPower + PowerRegeneration, MaxPower);
             if (newPower != CurrentPower)
                 SetAttribute(AttributeType.CurrentPower, newPower);
             yield return regenTickRate;

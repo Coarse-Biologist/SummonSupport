@@ -77,6 +77,16 @@ public class StatusEffectHandler : MonoBehaviour
                         }
                         break;
                     }
+                case StatusEffectType.Infected:
+                    {
+                        if (GetStatusEffectValue(StatusEffectType.Infected) > 4)
+                        {
+                            Debug.Log($"spreading virus from {livingBeing}");
+
+                            EventDeclarer.SpreadVirus?.Invoke(livingBeing);
+                        }
+                        break;
+                    }
             }
         }
         if (!add)
