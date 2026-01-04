@@ -72,7 +72,7 @@ public class QuestHandler : MonoBehaviour
 
     public void AddActiveQuest(Quest_SO quest)
     {
-        Logging.Info($"Active quest added {quest.QuestName}");
+        //debuf.Log($"Active quest added {quest.QuestName}");
         if (!ActiveQuests.Contains(quest)) ActiveQuests.Add(quest);
     }
 
@@ -98,18 +98,17 @@ public class QuestHandler : MonoBehaviour
     }
     public void IncrementIntQuest(RepeatableAccomplishments intQuest, int value = 1)
     {
-        Logging.Info($"Increment func called");
+        Debug.Log($"Increment func called");
 
         if (QuestRepTracker.TryGetValue(intQuest, out int reps))
         {
             QuestRepTracker[intQuest] += value;
-            Logging.Info($"quest: {intQuest} increased by {value} Current total num = {reps + value}");
-
+            Debug.Log($"quest: {intQuest} increased by {value} Current total num = {reps + value}");
         }
         else
         {
             QuestRepTracker.Add(intQuest, value);
-            Logging.Info($"quest: {intQuest} increased by {value}. Current total num = {value}");
+           Debug.Log($"quest: {intQuest} increased by {value}. Current total num = {value}");
         }
     }
     public void IncrementEnemyDefeated(LivingBeing livingBeing)

@@ -2,6 +2,8 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.Build.Pipeline;
+using UnityEngine.AI;
+using Unity.VisualScripting;
 
 
 public class AIPeacefulState : AIState
@@ -11,12 +13,12 @@ public class AIPeacefulState : AIState
     private AIStateHandler stateHandler;
     private AIChaseState chaseState;
     private GameObject player;
-    private bool closeToPlayer = false;
-    private Rigidbody2D rb;
+    private Rigidbody rb;
     #region Support ability use handling
     private bool runningSupportLoop = false;
-    private WaitForSeconds supportSpeed = new WaitForSeconds(1);
+    private WaitForSeconds supportSpeed = new WaitForSeconds(5);
     private Coroutine supportCoroutine;
+    private LivingBeing peaceStateTarget;
     #endregion
 
 
@@ -26,13 +28,12 @@ public class AIPeacefulState : AIState
         player = PlayerStats.Instance.gameObject;
         stateHandler = gameObject.GetComponent<AIStateHandler>();
         chaseState = gameObject.GetComponent<AIChaseState>();
-        rb = GetComponent<Rigidbody2D>();
+        rb = GetComponent<Rigidbody>();
         StartCoroutine(FOVRoutine());
     }
 
     private IEnumerator FOVRoutine()
     {
-
         while (true)
         {
             yield return FOVCheckFrequency;
@@ -42,19 +43,15 @@ public class AIPeacefulState : AIState
 
     public bool FieldOfViewCheck()
     {
-        LivingBeing target = CheckTargetInRange();
-
-        if (target != null && !CheckVisionBlocked(target))
+        peaceStateTarget = CheckTargetInRange();
+        if (peaceStateTarget != null && !CheckVisionBlocked(peaceStateTarget))
         {
-            stateHandler.lastSeenLoc = target.transform.position;
+            stateHandler.lastSeenLoc = peaceStateTarget.transform.position;
             canSeeTarget = true;
-            //Debug.Log($"Field of view Check setting canSeetarget to {canSeeTarget} ({target})");
-
             return true;
         }
         else
         {
-            //Debug.Log($"Field of view Check: result of vision block check: cant see target ({target})");
             canSeeTarget = false;
             return false;
         }
@@ -62,118 +59,79 @@ public class AIPeacefulState : AIState
 
     public LivingBeing CheckTargetInRange()
     {
-        //if (Vector3.Angle(transform.forward, directionToTarget) < angle / 2)
-        Collider2D[] rangeChecks = Physics2D.OverlapCircleAll(transform.position, stateHandler.DetectionRadius, stateHandler.targetMask);
-        //Debug.Log($"checking target in range: Looking for target of target mask {stateHandler.targetMask.value}");
+        Collider[] rangeChecks = Physics.OverlapSphere(transform.position, stateHandler.DetectionRadius, stateHandler.targetMask);
         LivingBeing target = null;
-        CharacterTag preferedTargetType = GetTargetPreference();
         if (rangeChecks.Length != 0)
         {
-            for (int i = 0; i < rangeChecks.Length; i++)
+            foreach (Collider collider in rangeChecks)
             {
-
-                GameObject detectedObject = rangeChecks[i].transform.gameObject;
-                if (detectedObject == gameObject) continue;
-                if (detectedObject.TryGetComponent<LivingBeing>(out LivingBeing targetLivingBeing))
+                GameObject detectedObject = collider.gameObject;
+                if (detectedObject.TryGetComponent(out LivingBeing targetLivingBeing))
                 {
-                    if (targetLivingBeing.CharacterTag == preferedTargetType || rangeChecks.Length == 1)
+
+                    //if (targetLivingBeing.CharacterTag == CharacterTag.Enemy)
+                    //Debug.Log($"{targetLivingBeing.Name} = target found in check target in raange func");
+                    if (targetLivingBeing.GetAttribute(AttributeType.CurrentHitpoints) > 0)
                     {
-                        if (targetLivingBeing.GetAttribute(AttributeType.CurrentHitpoints) > 0)
-                        {
-                            stateHandler.SetTarget(targetLivingBeing);
-                            target = targetLivingBeing;
-                        }
+                        stateHandler.SetTarget(targetLivingBeing);
+                        target = targetLivingBeing;
+                        break;
                     }
                 }
             }
-            if (stateHandler.minionStats != null && target != null) Debug.Log($"Check target in range func returning {target.Name}");
         }
         return target;
-
     }
-
+    //Returns either player, or more likely a minion if this script is attached to an enemy. if attached to a minion it will return either player or minion
     private CharacterTag GetTargetPreference()
     {
-        return Random.Range(0, 100) > 90 ? CharacterTag.Player : CharacterTag.Minion;
+        if (stateHandler.charType == CharacterTag.Enemy)
+            return Random.Range(0, 100) > 90 ? CharacterTag.Player : CharacterTag.Minion;
+        else
+            return CharacterTag.Enemy;
     }
-    // if pref minion, look for minion, if prefers player, look player. if finds return. else returnnother.
-
-
 
     public bool CheckVisionBlocked(LivingBeing target, float angleOffset = 0)
     {
-        Vector2 directionToTarget = (target.transform.position - transform.position).normalized;
+        bool blocked = NavMesh.Raycast(stateHandler.navAgent.transform.position, target.transform.position, out NavMeshHit hit, NavMesh.AllAreas);
 
-        float distanceToTarget = Vector2.Distance(transform.position, target.transform.position);
+        return blocked;
 
-        Debug.DrawLine(transform.position, target.transform.position, Color.red);
-
-        if (angleOffset != 0) directionToTarget = RotatePoint(directionToTarget, transform.position, angleOffset);
-
-        // Perform the raycast with direction and distance
-        return Physics2D.Raycast(transform.position, directionToTarget, distanceToTarget, stateHandler.obstructionMask);
     }
-    public Vector2 RotatePoint(Vector2 targetLoc, Vector2 origin, float angleDegrees)
-    {
-        float angleRad = angleDegrees * Mathf.Deg2Rad; // Convert degrees to radians
-        float cosTheta = Mathf.Cos(angleRad);
-        float sinTheta = Mathf.Sin(angleRad);
-
-        return new Vector2(
-            cosTheta * targetLoc.x - sinTheta * targetLoc.y,
-            sinTheta * targetLoc.x + cosTheta * targetLoc.y
-        ) + origin;
-    }
-
 
     public override AIState RunCurrentState()
     {
-        //("Run current state: peaceful state says 'running peaceful state'");
-        if (stateHandler.minionStats != null) { Debug.Log($"{stateHandler.minionStats} is maybe peacefully looking around"); }
-
         if (canSeeTarget)
         {
-            //Debug.Log("Run current state: peaceful state says 'Requesting chase state'");
             if (runningSupportLoop)
             {
                 runningSupportLoop = false;
-
                 StopCoroutine(supportCoroutine);
             }
-
             return chaseState;
         }
-        else if (player)
+        else if (stateHandler.charType == CharacterTag.Minion)
         {
-            Vector2 currentLoc = new Vector2(transform.position.x, transform.position.y);
-            Vector2 playerPos = player.transform.position;
-            Vector2 direction = playerPos - currentLoc;
             stateHandler.SetTarget(stateHandler.playerStats);
-            if (!closeToPlayer && CompareTag("Minion") && (direction.sqrMagnitude > stateHandler.FollowRadius))
-            {
-                GoToPlayer();
-                // function which will decide whether minion should try to use some buff or heal on player or fellow minions
-                if (!runningSupportLoop)
-                    supportCoroutine = StartCoroutine(HandleSupportloop());
-            }
-            chaseState.LookAtTarget(player.transform.position);
+            GoToPlayer();
+            if (!runningSupportLoop)
+                supportCoroutine = StartCoroutine(HandleSupportloop());
+
             return this;
         }
-        else
-        {
-            return this;
-        }
+        else return this;
+
     }
     private IEnumerator HandleSupportloop()
     {
         LivingBeing targetStats;
+        Ability ability;
         runningSupportLoop = true;
         while (true)
         {
             targetStats = SelectFriendlyTarget();
-            chaseState.LookAtTarget(targetStats.transform.position);
             stateHandler.SetTarget(targetStats);
-            Ability ability = GetComponent<CreatureAbilityHandler>().GetAbilityForTarget(targetStats, targetStats == stateHandler.minionStats);
+            ability = stateHandler.abilityHandler.GetAbilityForTarget(targetStats, targetStats == stateHandler.minionStats);
             if (ability != null)
             {
                 chaseState.SetAbilityRange(ability.Range);
@@ -184,31 +142,42 @@ public class AIPeacefulState : AIState
             }
             yield return supportSpeed;
         }
-
     }
     private LivingBeing SelectFriendlyTarget()
     {
-        List<LivingBeing> friendlies = new();
-        if (player.TryGetComponent<LivingBeing>(out var playerStats))
+        List<LivingBeing> friendlies = new() { stateHandler.playerStats, stateHandler.livingBeing };
+        foreach (GameObject minion in CommandMinion.activeMinions)
         {
-            friendlies.Add(playerStats);
-            friendlies.Add(gameObject.GetComponent<LivingBeing>());
-            foreach (GameObject minion in CommandMinion.activeMinions)
-            {
-                friendlies.Add(minion.GetComponent<LivingBeing>());
-            }
+            friendlies.Add(minion.GetComponent<LivingBeing>());
         }
-        LivingBeing selectedFriend = friendlies[UnityEngine.Random.Range(0, friendlies.Count)];
+
+        LivingBeing selectedFriend = friendlies[Random.Range(0, friendlies.Count)];
         return selectedFriend;
     }
 
     public void GoToPlayer()
     {
-        Vector2 currentLoc = new Vector2(transform.position.x, transform.position.y);
-        Vector2 playerPos = player.transform.position;
-        Vector2 direction = playerPos - currentLoc;
+        //Debug.Log("Going to player function called");
+        float distance = (player.transform.position - transform.position).sqrMagnitude;
+        if (distance >= stateHandler.navAgent.stoppingDistance || distance >= chaseState.SelectedAbilityAttackRange)
+        {
+            //Debug.Log($"Going to player becuase: Distance = {distance}. stopping distance = {stateHandler.navAgent.stoppingDistance}. chase state selected ability = {chaseState.SelectedAbilityAttackRange}");
 
-        rb.linearVelocity = direction * stateHandler.movementScript.GetMovementAttribute(MovementAttributes.MovementSpeed);
+            stateHandler.navAgent.SetDestination(player.transform.position);
+            if (stateHandler.anim != null)
+            {
+                stateHandler.anim.ChangeAnimation("Run", .2f);
+            }
+        }
+        else
+        {
+            //Debug.Log($"NOToing to player becuase: Distance = {distance}. stopping distance = {stateHandler.navAgent.stoppingDistance}. chase state selected ability = {chaseState.SelectedAbilityAttackRange}");
 
+            stateHandler.navAgent.ResetPath();
+            if (stateHandler.anim != null)
+            {
+                stateHandler.anim.ChangeAnimation("Idle", .2f);
+            }
+        }
     }
 }

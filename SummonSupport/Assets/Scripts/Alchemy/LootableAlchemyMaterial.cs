@@ -10,12 +10,12 @@ public class LootableAlchemyMaterial : MonoBehaviour, I_LootInterface
     public void Loot()
     {
         AlchemyInventory.AlterIngredientNum(alchemyMaterial, 1);
+        InteractCanvasHandler.Instance.DisplayGoldenLetters($"+1 {alchemyMaterial}!", 1.5f);
         if (alchemyMaterial.ToString().Contains("Ether"))
         {
             if (AlchemyHandler.AlchemyLootValueDict.TryGetValue(alchemyMaterial, out int num))
             {
-                int knowledgeGain = (int)(num * AlchemyHandler.knowledgeGainRate);
-                AlchemyInventory.IncemementElementalKnowledge(Element, (int)(num * AlchemyHandler.knowledgeGainRate));
+                AlchemyInventory.IncemementElementalKnowledge(Element, (int)(num * AlchemyHandler.Instance.KnowledgeGainRate));
             }
         }
         Destroy(gameObject);

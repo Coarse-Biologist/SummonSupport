@@ -61,6 +61,7 @@ public class AI_AttackDecisionHandler : MonoBehaviour
 
     private void SetAbilityLists(AbilityHandler caster)
     {
+        if (caster.Abilities.Count == 0) return;
         foreach (Ability ability in caster.Abilities) // make list of support and attack abilities
         {
             if (ability.AbilityTypeTag == AbilityTypeTag.DebuffsTarget)

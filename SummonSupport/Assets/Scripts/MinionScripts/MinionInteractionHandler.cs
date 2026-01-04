@@ -9,7 +9,7 @@ public class MinionInteractionHandler : MonoBehaviour
         CommandedToInteract = isCommanded;
     }
 
-    public void OnTriggerEnter2D(Collider2D collision)
+    public void OnTriggerEnter(Collider collision)
     {
         if (CommandedToInteract)
         {

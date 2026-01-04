@@ -26,7 +26,7 @@ public class AbilityModHandler : MonoBehaviour
         { AbilityModTypes.MaxPierce, 1 },
         { AbilityModTypes.MaxSplit, 1 },
         { AbilityModTypes.MaxRicochet, 1 },
-        { AbilityModTypes.ProjectileNumber, 1 } };
+        { AbilityModTypes.Number, 1 } };
 
 
     public static readonly Dictionary<AbilityModTypes, int> ModCosts = new()
@@ -44,14 +44,14 @@ public class AbilityModHandler : MonoBehaviour
         { AbilityModTypes.MaxPierce, 150 },
         { AbilityModTypes.MaxSplit, 150 },
         { AbilityModTypes.MaxRicochet, 150 },
-        { AbilityModTypes.ProjectileNumber, 400 } };
+        { AbilityModTypes.Number, 400 } };
 
     public static readonly Dictionary<Type, List<AbilityModTypes>> ModOptions = new()
         {
-            {typeof(ProjectileAbility), new List<AbilityModTypes>() { AbilityModTypes.ProjectileNumber, AbilityModTypes.MaxPierce, AbilityModTypes.MaxSplit, AbilityModTypes.MaxRicochet, AbilityModTypes.Cost, AbilityModTypes.Cooldown, AbilityModTypes.Damage, AbilityModTypes.DamageOverTime, AbilityModTypes.Heal, AbilityModTypes.HealOverTime } },
+            {typeof(ProjectileAbility), new List<AbilityModTypes>() { AbilityModTypes.Number, AbilityModTypes.MaxPierce, AbilityModTypes.MaxSplit, AbilityModTypes.MaxRicochet, AbilityModTypes.Cost, AbilityModTypes.Cooldown, AbilityModTypes.Damage, AbilityModTypes.DamageOverTime, AbilityModTypes.Heal, AbilityModTypes.HealOverTime } },
             {typeof(TargetMouseAbility),new List<AbilityModTypes>() { AbilityModTypes.Cost, AbilityModTypes.Cooldown, AbilityModTypes.Damage, AbilityModTypes.DamageOverTime, AbilityModTypes.Heal, AbilityModTypes.HealOverTime } },
-            {typeof(ConjureAbility), new List<AbilityModTypes>() { AbilityModTypes.Cost, AbilityModTypes.Cooldown, AbilityModTypes.Damage, AbilityModTypes.DamageOverTime, AbilityModTypes.Heal, AbilityModTypes.HealOverTime } },
-            {typeof(AuraAbility), new List<AbilityModTypes>() { AbilityModTypes.Cost, AbilityModTypes.Cooldown, AbilityModTypes.Damage, AbilityModTypes.DamageOverTime, AbilityModTypes.Heal, AbilityModTypes.HealOverTime } },
+            {typeof(ConjureAbility), new List<AbilityModTypes>() { AbilityModTypes.MaxPierce, AbilityModTypes.Number, AbilityModTypes.Cost, AbilityModTypes.Cooldown, AbilityModTypes.Damage, AbilityModTypes.DamageOverTime, AbilityModTypes.Heal, AbilityModTypes.HealOverTime } },
+            {typeof(AuraAbility), new List<AbilityModTypes>() { AbilityModTypes.Cost, AbilityModTypes.Cooldown, AbilityModTypes.Damage, AbilityModTypes.DamageOverTime, AbilityModTypes.Heal, AbilityModTypes.HealOverTime, AbilityModTypes.Size } },
             {typeof(TeleportAbility), new List<AbilityModTypes>() { AbilityModTypes.Cost, AbilityModTypes.Cooldown, AbilityModTypes.Damage, AbilityModTypes.DamageOverTime, AbilityModTypes.Heal, AbilityModTypes.HealOverTime } },
             {typeof(MeleeAbility), new List<AbilityModTypes>() { AbilityModTypes.Cost, AbilityModTypes.Cooldown, AbilityModTypes.Damage, AbilityModTypes.DamageOverTime, AbilityModTypes.Heal, AbilityModTypes.HealOverTime, AbilityModTypes.Size } },
             {typeof(BeamAbility), new List<AbilityModTypes>() { AbilityModTypes.Cost, AbilityModTypes.Cooldown, AbilityModTypes.Damage, AbilityModTypes.DamageOverTime, AbilityModTypes.Heal, AbilityModTypes.HealOverTime } },
@@ -90,7 +90,7 @@ public class AbilityModHandler : MonoBehaviour
         {
             mod = new Mod_Base();
             ModdedAbilities.Add(abilityToAdd, mod);
-            Debug.Log($"Adding {abilityToAdd.Name} to the modded abilities list with the mod {mod}");
+            //Debug.Log($"Adding {abilityToAdd.Name} to the modded abilities list with the mod {mod}");
             return mod;
         }
         else return existingMod;
@@ -102,6 +102,8 @@ public class AbilityModHandler : MonoBehaviour
     {
         Mod_Base mod = TryAddNewAbilityMod(ability);
         mod.Mod_Attribute(modType, changeValue);
+        Debug.Log($"ability = {ability.Name}. mod type = {modType}. change value = {changeValue}");
+
     }
 
 
@@ -118,22 +120,22 @@ public class AbilityModHandler : MonoBehaviour
         {
             foreach (KeyValuePair<Ability, Mod_Base> kvp in ModdedAbilities)
             {
-                Debug.Log($"ability = {kvp.Key}. mod = {kvp.Value}");
+                //Debug.Log($"ability = {kvp.Key}. mod = {kvp.Value}");
 
             }
-            Debug.Log("REturning Null like no 0nes business");
+            //Debug.Log("REturning Null like no 0nes business");
             return new();
         }
         else
         {
-            Debug.Log($"REturning a dope ass list of length{existingMod.GetStatusEffects().Count}");
+            //Debug.Log($"REturning a dope ass list of length{existingMod.GetStatusEffects().Count}");
 
             return existingMod.GetStatusEffects();
         }
     }
     public void AddStatusEffectToAbility(Ability ability, StatusEffects effectType)
     {
-        Debug.Log($"Modding to add {effectType} to {ability}!");
+        //Debug.Log($"Modding to add {effectType} to {ability}!");
         Mod_Base mod = TryAddNewAbilityMod(ability);
         mod.Mod_AddStatusEffect(effectType);
     }

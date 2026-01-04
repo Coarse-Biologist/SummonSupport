@@ -17,7 +17,7 @@ MonoBehaviour:
   <Cooldown>k__BackingField: 3
   <CostType>k__BackingField: 4
   <Cost>k__BackingField: 20
-  <Range>k__BackingField: 3
+  <Range>k__BackingField: 5
   <Duration>k__BackingField: 0
   <AbilityTypeTag>k__BackingField: 1
   <ListUsableOn>k__BackingField: 01000000
@@ -54,11 +54,13 @@ MonoBehaviour:
     <StatusEffects>k__BackingField: []
     <SpecialAbilityAttribute>k__BackingField: 0
   <ElementTypes>k__BackingField: 
-  <PhysicalType>k__BackingField: 0
-  <Angle>k__BackingField: 0
-  <Width>k__BackingField: 3
-  <Shape>k__BackingField: 2
-  <SpawnEffectOnHit>k__BackingField: {fileID: 4439306374306288678, guid: ad3ebfe5da0c21f43a7253ff8277fd9c,
+  <PhysicalType>k__BackingField: 3
+  <OnHitEffect>k__BackingField: {fileID: 4439306374306288678, guid: ad3ebfe5da0c21f43a7253ff8277fd9c,
     type: 3}
+  <AlterParticleSystemGradient>k__BackingField: 0
+  <Angle>k__BackingField: 0
+  <Width>k__BackingField: 5
+  <SpawnLocEnum>k__BackingField: 1
+  <Shape>k__BackingField: 2
   <MeleeParticleSystem>k__BackingField: {fileID: 134935324219964725, guid: 5c33c778bf848f540a0ad9ded58e9b9f,
     type: 3}

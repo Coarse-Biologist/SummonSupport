@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1578783334638668262}
   - component: {fileID: 2027817742223664059}
   - component: {fileID: 8105310033013969304}
-  - component: {fileID: 4513890305982711557}
+  - component: {fileID: 6616918955331107633}
   m_Layer: 0
   m_Name: SandCloudAura
   m_TagString: Untagged
@@ -28,14 +28,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1699087696372334086}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.579228, y: 0.579228, z: 0.4055798, w: 0.4055798}
+  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2537736742613803181}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: -110, y: 0, z: 90}
+  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!198 &1578783334638668262
 ParticleSystem:
   m_ObjectHideFlags: 0
@@ -118,9 +118,9 @@ ParticleSystem:
     enabled: 1
     startLifetime:
       serializedVersion: 2
-      minMaxState: 0
-      scalar: 1
-      minScalar: 5
+      minMaxState: 3
+      scalar: 4
+      minScalar: 1
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -289,9 +289,9 @@ ParticleSystem:
         m_NumAlphaKeys: 2
     startSize:
       serializedVersion: 2
-      minMaxState: 0
-      scalar: 1
-      minScalar: 1
+      minMaxState: 3
+      scalar: 0.8
+      minScalar: 0.5
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -342,7 +342,7 @@ ParticleSystem:
         m_RotationOrder: 4
     startSizeY:
       serializedVersion: 2
-      minMaxState: 0
+      minMaxState: 3
       scalar: 1
       minScalar: 1
       maxCurve:
@@ -395,7 +395,7 @@ ParticleSystem:
         m_RotationOrder: 4
     startSizeZ:
       serializedVersion: 2
-      minMaxState: 0
+      minMaxState: 3
       scalar: 1
       minScalar: 1
       maxCurve:
@@ -4785,7 +4785,7 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 57ebbdeaefcfc8845a3039bc45eda813, type: 2}
+  - {fileID: 2100000, guid: f76b3decb20f9fa4f989af85c6b0732d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -4851,16 +4851,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 083b9a9303dd9674b87cc82013ef6e84, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!58 &4513890305982711557
-CircleCollider2D:
+--- !u!136 &6616918955331107633
+CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1699087696372334086}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Density: 1
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -4869,24 +4866,14 @@ CircleCollider2D:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
   m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_CompositeOperation: 0
-  m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
-  m_Radius: 2.4
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 2
+  m_Height: 2
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &8091875083326609055
 GameObject:
   m_ObjectHideFlags: 0

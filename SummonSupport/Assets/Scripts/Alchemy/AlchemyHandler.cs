@@ -8,8 +8,8 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 using System;
 //using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using SummonSupportEvents;
-using UnityEditor.EditorTools;
-using Unity.Collections.LowLevel.Unsafe;
+using Unity.VisualScripting;
+
 
 #endregion
 public class AlchemyHandler : MonoBehaviour
@@ -18,17 +18,13 @@ public class AlchemyHandler : MonoBehaviour
     public string minionPrefabAddress { private set; get; } = "Assets/Prefabs/AIPrefab/MinionPrefab2.prefab";
     private GameObject craftedMinion;
     public GameObject minionPrefab;
-    public UnityEvent<GameObject> requestInstantiation = new UnityEvent<GameObject>();
-    [field: Tooltip("The amount of minion HP per new extra ability they can use.")]
-    [field: SerializeField] public int HPToAbilityRatio { get; private set; } = 50;
-    [field: SerializeField] public static float recycleExchangeRate { get; private set; } = .05f;
-    [field: SerializeField] public static float knowledgeGainRate { get; private set; } = 1f;
-
-
+    //[field: Tooltip("The amount of minion HP per new extra ability they can use.")]
+    [field: SerializeField] public int ManaToAbilityRatio { get; private set; } = 50;
+    [field: SerializeField] public float RecycleExchangeRate { get; private set; } = .05f;
+    [field: SerializeField] public float KnowledgeGainRate { get; private set; } = 1f;
+    [field: SerializeField] public int SizeScalar { get; private set; } = 20;
     [SerializeField] public List<GameObject> activeMinions = new List<GameObject>();
-    public UnityEvent<LivingBeing> newMinionAdded;
     public static AlchemyHandler Instance { get; private set; }
-
     public static Dictionary<AlchemyLoot, int> AlchemyLootValueDict = new();
 
 
@@ -77,7 +73,8 @@ public class AlchemyHandler : MonoBehaviour
         {
             if (minionPrefab != null)
             {
-                craftedMinion = Instantiate(minionPrefab, transform.position, Quaternion.identity);
+                Vector3 playerPos = PlayerStats.Instance.transform.position;
+                craftedMinion = Instantiate(minionPrefab, new Vector3(playerPos.x + 10, playerPos.y, playerPos.z + 10), Quaternion.identity);
 
                 UpgradeMinion(craftedMinion, combinedIngredients, elementList);
                 AddActiveMinion(craftedMinion);
@@ -100,9 +97,9 @@ public class AlchemyHandler : MonoBehaviour
             float minionHP = stats.MaxHP - 100f;
             float minionAffinity = GetCombinedElementValues(stats);
 
-            AlchemyInventory.AlterIngredientNum(AlchemyLoot.WeakCore, (int)(minionPower * recycleExchangeRate));
-            AlchemyInventory.AlterIngredientNum(AlchemyLoot.FaintEther, (int)(minionAffinity * recycleExchangeRate));
-            AlchemyInventory.AlterIngredientNum(AlchemyLoot.WretchedOrgans, (int)(minionHP * recycleExchangeRate));
+            AlchemyInventory.AlterIngredientNum(AlchemyLoot.WeakCore, (int)(minionPower * Instance.RecycleExchangeRate));
+            AlchemyInventory.AlterIngredientNum(AlchemyLoot.FaintEther, (int)(minionAffinity * Instance.RecycleExchangeRate));
+            AlchemyInventory.AlterIngredientNum(AlchemyLoot.WretchedOrgans, (int)(minionHP * Instance.RecycleExchangeRate));
         }
         EventDeclarer.minionDied?.Invoke(minion);
         CommandMinion.RemoveActiveMinions(minion);
@@ -127,8 +124,18 @@ public class AlchemyHandler : MonoBehaviour
             EventDeclarer.RepeatableQuestCompleted?.Invoke(Quest.RepeatableAccomplishments.UseOrgans, num);
             stats.ChangeAttribute(AttributeType.MaxHitpoints, num * organKvp.Value);
             healthUpgrade += num * organKvp.Value;
+            AlterSizeByOrganNum(stats, num * organKvp.Value);
         }
         return healthUpgrade;
+    }
+    private void AlterSizeByOrganNum(LivingBeing stats, int organValue)
+    {
+        float sizeChangeScalar = organValue / SizeScalar;
+        if (sizeChangeScalar > 1)
+        {
+            Debug.Log($"changing sie of {stats.Name} by {sizeChangeScalar}");
+            stats.gameObject.transform.localScale *= organValue / SizeScalar;
+        }
     }
     private int HandleCoreUse(LivingBeing stats, KeyValuePair<AlchemyLoot, int> coreKvp)
     {
@@ -186,7 +193,7 @@ public class AlchemyHandler : MonoBehaviour
         Element strongestElement = livingBeing.GetHighestAffinity();
         if (strongestElement != Element.None)
         {
-            List<Ability> abilities = AbilityLibrary.GetRandomAbilities(strongestElement, (int)(livingBeing.GetAttribute(AttributeType.MaxHitpoints) / HPToAbilityRatio));
+            List<Ability> abilities = AbilityLibrary.GetRandomAbilities(strongestElement, (int)(livingBeing.GetAttribute(AttributeType.MaxPower) / ManaToAbilityRatio));
 
             if (abilities != null)
             {
@@ -202,13 +209,12 @@ public class AlchemyHandler : MonoBehaviour
     private void AlterMinionByElement(GameObject minion)
     {
         LivingBeing stats = minion.GetComponent<LivingBeing>();
-        CreatureSpriteController spriteControl = minion.GetComponentInChildren<CreatureSpriteController>();
         Element strongestElement = stats.GetHighestAffinity();
-        string nameModifier = "";
+        string nameModifier;
 
-        if (strongestElement != Element.None && stats.Affinities[strongestElement].Get() > 50)
+        if (strongestElement != Element.None && stats.GetAffinity(strongestElement) > 50)
         {
-            spriteControl.AlterColorByAffinity(strongestElement);
+            ColorChanger.ChangeMatByAffinity(stats);
             nameModifier = strongestElement.ToString();
             stats.SetName(nameModifier + " Elemental");
         }
@@ -225,7 +231,7 @@ public class AlchemyHandler : MonoBehaviour
         if (!activeMinions.Contains(minion))
         {
             activeMinions.Add(minion);
-            newMinionAdded?.Invoke(livingBeing);
+            EventDeclarer.newMinionAdded?.Invoke(livingBeing);
         }
         CommandMinion.SetActiveMinions(activeMinions);
     }

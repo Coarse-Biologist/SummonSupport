@@ -14,46 +14,40 @@ public static class CommandMinion
         if (activeMinions.Contains(minionObject))
             activeMinions.Remove(minionObject);
     }
+    public static void AddActiveMinions(GameObject minionObject)
+    {
+        if (!activeMinions.Contains(minionObject))
+            activeMinions.Add(minionObject);
+    }
+
     public static void SetActiveMinions(List<GameObject> activeMinionsList)
     {
         activeMinions = activeMinionsList;
     }
 
-    public static void HandleCommand(Vector2 loc)
+    public static void HandleCommand(RaycastHit hit)
     {
-
-        if (SelectedMinions != null)
+        Vector3 loc = hit.point;
+        if (activeMinions != null)
         {
-            Collider2D[] enemyHits = Physics2D.OverlapCircleAll(loc, 1, LayerMask.GetMask("Enemy"));
-            //Logging.Info($"{enemyHits.Length} colliders in click area.");
-
-            if (enemyHits.Length > 0)
+            if (hit.collider.TryGetComponent(out EnemyStats targetLivingBeing))
             {
-                GameObject enemy = enemyHits[0].gameObject;
-                if (enemy.TryGetComponent<LivingBeing>(out LivingBeing targetLivingbeing))
-
-                    CommandMinionToAttack(targetLivingbeing);
+                CommandMinionToAttack(targetLivingBeing);
             }
 
-            Collider2D[] interactHits = Physics2D.OverlapCircleAll(loc, 1);
-            //Logging.Info($"{interactHits.Length} colliders in click area.");
-
-            if (interactHits.Length > 0)
+            else if (hit.collider.TryGetComponent(out I_Interactable interactable))
             {
-                foreach (Collider2D collider in interactHits)
-                {
-                    I_Interactable interactable = collider.gameObject.GetComponent<I_Interactable>();
-                    if (interactable != null)
-                        SendMinionToInteract(loc);
-                }
+                SendMinionToInteract(hit.collider.gameObject.transform.position);
             }
+
             else
             {
                 CommandMinionToGoToLoc(loc);
             }
         }
-        else Logging.Error("You talking to yourself, Bud? no minion is selected!");
+
     }
+
 
     public static void SetSelectedMinion(GameObject minion)
     {
@@ -62,35 +56,33 @@ public static class CommandMinion
             if (!SelectedMinions.Contains(minion))
                 SelectedMinions.Add(minion);
             else SelectedMinions.Remove(minion);
-
         }
-        else Logging.Error("Oh, you want to control that nobody? Select an actual minion!");
     }
 
-    private static void SendMinionToInteract(Vector2 loc)
+    private static void SendMinionToInteract(Vector3 loc)
     {
-        foreach (GameObject minion in SelectedMinions)
+        foreach (GameObject minion in activeMinions)
         {
             if (minion != null)
             {
+
                 MinionStats stats = minion.GetComponent<MinionStats>();
                 AIObedienceState obedienceState = minion.GetComponent<AIObedienceState>();
                 minion.GetComponent<MinionInteractionHandler>().SetCommandToInteract(true); // null minion
                 obedienceState.SetCommandLoc(loc);
                 stats.SetCommand(MinionCommands.GoTo);
-                //Logging.Info($"{stats.Name} is going to location {obedienceState.commandLoc} to interact");
             }
-            else SelectedMinions.Remove(minion);
+            else activeMinions.Remove(minion);
         }
 
     }
-    public static void CommandMinionToGoToLoc(Vector2 loc)
+    public static void CommandMinionToGoToLoc(Vector3 loc)
     {
-        foreach (GameObject minion in SelectedMinions)
+        foreach (GameObject minion in activeMinions)
         {
             if (minion == null)
             {
-                SelectedMinions.Remove(minion);
+                activeMinions.Remove(minion);
                 return;
             }
             MinionStats stats = minion.GetComponent<MinionStats>();
@@ -104,7 +96,7 @@ public static class CommandMinion
 
     public static void CommandMinionToAttack(LivingBeing enemy)
     {
-        foreach (GameObject minion in SelectedMinions)
+        foreach (GameObject minion in activeMinions)
         {
             MinionStats stats = minion.GetComponent<MinionStats>();
             AIObedienceState obedienceState = minion.GetComponent<AIObedienceState>();

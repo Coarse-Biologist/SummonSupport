@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fceeef8cfafe41444bf6aa890ebad1b7, type: 3}
   m_Name: Bacteria Ball
   m_EditorClassIdentifier: 
-  <Name>k__BackingField: Psychic Ball
+  <Name>k__BackingField: Bacterial Ball
   <Icon>k__BackingField: {fileID: 3837697726249093711, guid: a949de51ac63b994784528b4e06be2b5,
     type: 3}
   <Cooldown>k__BackingField: 2
@@ -36,7 +36,8 @@ MonoBehaviour:
       <Value>k__BackingField: 0
     <AttributeUp>k__BackingField: []
     <AttributeDown>k__BackingField: []
-    <StatusEffects>k__BackingField: []
+    <StatusEffects>k__BackingField:
+    - {fileID: 11400000, guid: 61d84c3f9129bca499fa68ac5be438b5, type: 2}
     <SpecialAbilityAttribute>k__BackingField: 0
   <SelfEffects>k__BackingField:
     <EffectDescription>k__BackingField: 
@@ -56,8 +57,11 @@ MonoBehaviour:
     <SpecialAbilityAttribute>k__BackingField: 0
   <ElementTypes>k__BackingField: 09000000
   <PhysicalType>k__BackingField: 0
-  <Speed>k__BackingField: 5
-  <Projectile>k__BackingField: {fileID: 1503869405188693834, guid: f994a434f18f9ef48a9f31ad92291dba,
+  <OnHitEffect>k__BackingField: {fileID: 9018438208592869522, guid: 53aa11c4626a52e45b54ea1689ad41de,
+    type: 3}
+  <AlterParticleSystemGradient>k__BackingField: 0
+  <Speed>k__BackingField: 30
+  <Projectile>k__BackingField: {fileID: 6033447785082643316, guid: 706fd26b292fae4488c9b19eec3811fc,
     type: 3}
   <MaxRange>k__BackingField: 150
   <Lifetime>k__BackingField: 5
@@ -66,6 +70,4 @@ MonoBehaviour:
   <MaxSplit>k__BackingField: 0
   <SplitAngleOffset>k__BackingField: 45
   <ProjectileParticleSystem>k__BackingField: {fileID: 5647196156128557912, guid: f9b7c2174d5918a45b21408216324872,
-    type: 3}
-  <SpawnEffectOnHit>k__BackingField: {fileID: 9018438208592869522, guid: 53aa11c4626a52e45b54ea1689ad41de,
     type: 3}

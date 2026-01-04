@@ -4,24 +4,22 @@ public class DoorHandler : MonoBehaviour, I_Interactable
 {
     [SerializeField] public bool Open { get; private set; } = false;
 
-    public Sprite ClosedSprite;// { private set; get; }
-    public Sprite OpenSprite;// { private set; get; }
+
     private int readyCooldownTime = 1;
     private bool ready = true;
     [SerializeField] public bool Locked = false;
 
     [SerializeField] public Element elementalRequisite;
     [SerializeField] public int difficulty = 1;
-    private EdgeCollider2D doorCollider;
+    private Collider doorCollider;
     [field: SerializeField] public Transform DestinationDoor { get; protected set; }
+    [field: SerializeField] public Transform canvasSpawnLoc { get; private set; }
 
-
-    private SpriteRenderer minionsSpriteRenderer;
 
     public void Awake()
     {
-        doorCollider = GetComponent<EdgeCollider2D>();
-        minionsSpriteRenderer = GetComponentInChildren<SpriteRenderer>();
+        doorCollider = GetComponent<Collider>();
+        if (canvasSpawnLoc == null) canvasSpawnLoc = transform;
     }
 
     public void Interact(GameObject interactor)
@@ -32,8 +30,8 @@ public class DoorHandler : MonoBehaviour, I_Interactable
 
     public void ShowInteractionOption()
     {
-        if (!Open) InteractCanvasHandler.Instance.ShowInteractionOption(transform.position, "Tab to Open");
-        else InteractCanvasHandler.Instance.ShowInteractionOption(transform.position, "Tab to Close");
+        if (!Open) InteractCanvasHandler.Instance.ShowInteractionOption(canvasSpawnLoc.position, "Tab to Open");
+        else InteractCanvasHandler.Instance.ShowInteractionOption(canvasSpawnLoc.position, "Tab to Close");
     }
 
     public void HideInteractionOption()
@@ -87,11 +85,10 @@ public class DoorHandler : MonoBehaviour, I_Interactable
     {
         if (DestinationDoor != null)
             PlayerStats.Instance.gameObject.transform.position = DestinationDoor.position;
-        if (OpenSprite != null)
-            minionsSpriteRenderer.sprite = OpenSprite;
+
         if (doorCollider != null)
             doorCollider.enabled = false;
-
+        transform.rotation = new Quaternion(0, 90, 0, 0);
         NotReadyToInteract();
         Open = true;
     }
@@ -100,10 +97,11 @@ public class DoorHandler : MonoBehaviour, I_Interactable
     {
         if (doorCollider != null)
             doorCollider.enabled = true;
+        transform.rotation = Quaternion.identity;
+
         NotReadyToInteract();
         Open = false;
-        if (ClosedSprite != null)
-            minionsSpriteRenderer.sprite = ClosedSprite;
+
     }
 
     private void RequestCanvasText(string temporaryText)

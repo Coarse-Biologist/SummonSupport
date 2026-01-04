@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9aea4a5536635d742ae35c809c15f9f8, type: 3}
+  m_Name: Chilled
+  m_EditorClassIdentifier: 
+  <Name>k__BackingField: Chilled
+  <Icon>k__BackingField: {fileID: 21300000, guid: 787f466796bbbbe4caa71f2cdd8d68fa,
+    type: 3}
+  <EffectType>k__BackingField: 9
+  <Duration>k__BackingField: 5

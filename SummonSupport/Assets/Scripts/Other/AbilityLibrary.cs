@@ -29,6 +29,8 @@ public static class AbilityLibrary
 
     public static List<Ability> GetRandomAbilities(Element element, int number = 1)
     {
+        //Debug.Log($"will be attempting to retrieve {number} abilities available for {element}");
+
         List<Ability> abilitiesList = new();
         Ability randomAbility = null;
         int maxAttempts = 10;
@@ -39,24 +41,67 @@ public static class AbilityLibrary
                 if (elementCategory.Element == element)
                 {
                     number = Math.Min(number, elementCategory.Abilities.Count);
-                    Debug.Log($"will be attempting to retrieve {number} abilities. {elementCategory.Abilities.Count} are available for {element}");
+                    //Debug.Log($"will be attempting to retrieve {number} abilities. {elementCategory.Abilities.Count} are available for {element}");
                     for (int i = number; i > 0; i--)
                     {
                         maxAttempts--;
                         randomAbility = elementCategory.Abilities[UnityEngine.Random.Range(0, elementCategory.Abilities.Count)];
                         if (!abilitiesList.Contains(randomAbility))
                         {
+                            //Debug.Log($"Adding {randomAbility}");
+                            abilitiesList.Add(randomAbility);
+                        }
+                        if (maxAttempts == 0 || abilitiesList.Count == number)
+                        {
+                            //Debug.Log($"breaking because max attempts reached");
+                            break;
+                        }
+                    }
+                    //Debug.Log("returning abilities list");
+
+                    return abilitiesList;
+                }
+            }
+            return null;
+        }
+        else
+        {
+            Debug.Log($"ability handler scriptable object is not placed in the Ability library.");
+            return null;
+        }
+    }
+    public static List<Ability> GetRandomAbilities(PhysicalType physical, int number = 1)
+    {
+        Debug.Log($"will be attempting to retrieve {number} abilities available for {physical}");
+
+        List<Ability> abilitiesList = new();
+        Ability randomAbility = null;
+        int maxAttempts = 10;
+        if (abilityLibrary != null)
+        {
+            foreach (PhysicalCategories physicalCategories in abilityLibrary.PhysicalEntries)
+            {
+                if (physicalCategories.PhysicalType == physical)
+                {
+                    number = Math.Min(number, physicalCategories.Abilities.Count);
+                    Debug.Log($"will be attempting to retrieve {number} abilities. {physicalCategories.Abilities.Count} are available for {physical}");
+                    for (int i = number; i > 0; i--)
+                    {
+                        maxAttempts--;
+                        randomAbility = physicalCategories.Abilities[UnityEngine.Random.Range(0, physicalCategories.Abilities.Count)];
+                        if (!abilitiesList.Contains(randomAbility))
+                        {
                             Debug.Log($"Adding {randomAbility}");
                             abilitiesList.Add(randomAbility);
-                            number--;
                         }
-                        if (maxAttempts == 0)
+                        if (maxAttempts == 0 || abilitiesList.Count == number)
                         {
-                            Debug.Log($"breaking because max attempts reached");
+                            Debug.Log($"breaking because max attempts reached or because all possible abilities are added");
                             break;
                         }
                     }
                     Debug.Log("returning abilities list");
+                    if (abilitiesList.Count == 0) abilitiesList.Add(abilityLibrary.defaultAttack);
                     return abilitiesList;
                 }
             }

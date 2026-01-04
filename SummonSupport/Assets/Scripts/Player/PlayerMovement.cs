@@ -5,6 +5,9 @@ using Unity.Collections;
 using SummonSupportEvents;
 using Unity.Mathematics;
 using UnityEngine.SceneManagement;
+using Unity.VisualScripting;
+using System;
+using System.Collections.Generic;
 
 
 public class PlayerMovement : MovementScript
@@ -12,32 +15,39 @@ public class PlayerMovement : MovementScript
     #region class Variables
     private Vector2 moveInput;
     public Camera mainCamera;
-    private CreatureSpriteController spriteController;
     private LivingBeing playerStats;
     [SerializeField] private PlayerInputActions inputActions;
-    [SerializeField] public GameObject AbilityRotation;
     private Vector2 lookInput;
-    private Vector2 worldPosition;
-    private Vector2 direction;
+    private Vector3 worldPosition;
     Vector3 moveDirection;
     [field: SerializeField] public GameObject DashDust { private set; get; }
 
-    private Rigidbody2D rb;
+    private Rigidbody rb;
     private bool dashing = false;
     private bool canDash = true;
     GameObject DashDustInstance = null;
     private bool lockedInUI = false;
+    private bool paused = false;
     private bool StuckInAbilityAnimation = false;
+    private AnimationControllerScript anim;
+
+
+
+
 
     #endregion
 
     private void Awake()
     {
-        spriteController = GetComponentInChildren<CreatureSpriteController>();
-        rb = GetComponent<Rigidbody2D>();
+        Cursor.lockState = CursorLockMode.Locked;   // Locks the cursor to the center of the screen
+        Cursor.visible = false;
+        rb = GetComponent<Rigidbody>();
         mainCamera = Camera.main;
         inputActions = new PlayerInputActions();
         playerStats = GetComponent<LivingBeing>();
+        anim = GetComponent<AnimationControllerScript>();
+        if (anim == null) throw new System.Exception($"Animation controller is null. it was not found among children objects.");
+
 
     }
 
@@ -48,9 +58,9 @@ public class PlayerMovement : MovementScript
         inputActions ??= new PlayerInputActions();
         EventDeclarer.SpeedAttributeChanged?.AddListener(SetMovementAttribute);
         inputActions.Player.Enable();
-        inputActions.Player.Move.performed += OnMove;
-        inputActions.Player.Move.canceled += OnMove;
-        inputActions.Player.Dash.performed += OnDash;
+        inputActions.Player.Move.performed += OnWASD;
+        inputActions.Player.Move.canceled += OnWASD;
+        inputActions.Player.Dash.performed += OnUseDash;
         inputActions.Player.LookDirection.performed += OnLook;
         inputActions.Player.CommandMinion.performed += SendMinionCommandContext;
         inputActions.Player.TogglePauseGame.performed += ToggleGamePause;
@@ -62,9 +72,9 @@ public class PlayerMovement : MovementScript
         //AlchemyBenchUI.Instance.playerUsingUI.RemoveListener(ToggleLockedInUI);
 
         EventDeclarer.SpeedAttributeChanged?.RemoveListener(SetMovementAttribute);
-        inputActions.Player.Move.performed -= OnMove;
-        inputActions.Player.Move.canceled -= OnMove;
-        inputActions.Player.Dash.performed -= OnDash;
+        inputActions.Player.Move.performed -= OnWASD;
+        inputActions.Player.Move.canceled -= OnWASD;
+        inputActions.Player.Dash.performed -= OnUseDash;
         inputActions.Player.LookDirection.performed -= OnLook;
         inputActions.Player.CommandMinion.performed -= SendMinionCommandContext;
         inputActions.Player.TogglePauseGame.performed -= ToggleGamePause;
@@ -74,11 +84,10 @@ public class PlayerMovement : MovementScript
     #endregion
 
     #region Dash logic
-    private void OnDash(InputAction.CallbackContext context)
+    private void OnUseDash(InputAction.CallbackContext context)
     {
         if (playerStats.Dead) return;
 
-        //EventDeclarer.SpawnEnemies?.Invoke(this.gameObject);
         if (canDash)
         {
             canDash = false;
@@ -88,9 +97,10 @@ public class PlayerMovement : MovementScript
             if (PlayerAbilityHandler.DashAbility != null) PlayerAbilityHandler.DashAbility.Activate(gameObject);
             else
             {
-                DashDustInstance = Instantiate(DashDust, transform.position, Quaternion.identity, transform);
-                float angle = Mathf.Atan2(-moveDirection.y, -moveDirection.x) * Mathf.Rad2Deg;
-                DashDustInstance.transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
+                DashDustInstance = Instantiate(DashDust, transform.position, Quaternion.identity);
+                Vector3 moveDirection = new Vector3(moveInput.x, 0, moveInput.y);
+                // make dash dust instance face the opposite direction of player movement. 
+                DashDustInstance.transform.rotation = Quaternion.LookRotation(-moveDirection, Vector3.right);
                 Destroy(DashDustInstance, DashDuration);
             }
         }
@@ -112,21 +122,28 @@ public class PlayerMovement : MovementScript
     #endregion
 
     #region WASD logic
-    private void OnMove(InputAction.CallbackContext context)
+    private void OnWASD(InputAction.CallbackContext context)
     {
         moveInput = context.ReadValue<Vector2>();
     }
     private void HandleMove()
     {
-        float calculatedSpeed;
-        if (dashing)
-            calculatedSpeed = MovementSpeed + DashBoost;
-        else
-            calculatedSpeed = MovementSpeed;
+        if (Math.Abs(moveInput.x) > .01 || Math.Abs(moveInput.y) > .01)
+        {
+            float calculatedSpeed;
+            if (dashing)
+                calculatedSpeed = MovementSpeed + DashBoost;
+            else
+                calculatedSpeed = MovementSpeed;
 
-        moveDirection = new Vector3(moveInput.x, moveInput.y, 0).normalized;
-        rb.linearVelocity = moveDirection * calculatedSpeed * 10;
+            Vector3 moveDirection = transform.TransformDirection(new Vector3(moveInput.x, 0, moveInput.y)).normalized;
+            anim.ChangeMovementAnimation(moveInput.x, moveInput.y);
+            rb.AddForce(moveDirection * calculatedSpeed * 100f, ForceMode.Acceleration);
+        }
+        else anim.ChangeAnimation("Idle", .2f);
+
     }
+
 
 
     #endregion
@@ -136,33 +153,9 @@ public class PlayerMovement : MovementScript
     {
         lookInput = context.ReadValue<Vector2>();
     }
-    private Quaternion HandleLook()
+    private void HandleLook()
     {
-        worldPosition = mainCamera.ScreenToWorldPoint(lookInput);
-        direction = (worldPosition - (Vector2)transform.position).normalized;
-        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-        AbilityRotation.transform.rotation = Quaternion.Euler(0, 0, angle);
-        spriteController.SetSpriteDirection(angle);
-
-        //DebugAbilityShape();
-
-        return transform.rotation;
-    }
-    private void DebugAbilityShape()
-    {
-        Transform AR = AbilityRotation.transform;
-        Debug.DrawRay(AR.position, AR.up * 2, Color.black, .1f);
-
-        Debug.DrawRay(AR.position, -AR.up * 2, Color.black, .1f);
-
-        Debug.DrawRay(AR.position, AR.right * 2, Color.black, .1f);
-
-        Debug.DrawRay(AR.right * 2 + AR.position, AR.up * 2, Color.black, .1f);
-
-        Debug.DrawRay(AR.right * 2 + AR.position, -AR.up * 2, Color.black, .1f);
-        Debug.DrawRay(AR.up * 2 + AR.position, AR.right * 2, Color.black, .1f);
-
-        Debug.DrawRay(-AR.up * 2 + AR.position, AR.right * 2, Color.black, .1f);
+        transform.rotation = Quaternion.Euler(0f, mainCamera.transform.eulerAngles.y, 0f);
     }
 
     #endregion
@@ -171,14 +164,21 @@ public class PlayerMovement : MovementScript
     {
         if (playerStats.Dead) return;
 
-        worldPosition = mainCamera.ScreenToWorldPoint(lookInput);
-        Debug.DrawLine(new Vector3(0, 0, 0), worldPosition, Color.green);
-        CommandMinion.HandleCommand(worldPosition);
+        Ray ray = new Ray(transform.position, transform.forward.normalized);
+
+        if (Physics.Raycast(ray, out RaycastHit hit, 300))
+        {
+            CommandMinion.HandleCommand(hit);
+        }
     }
 
     private void FixedUpdate()
     {
-        if (playerStats.Dead) return;
+        if (playerStats.Dead)
+        {
+            anim.ChangeAnimation("Death", 1f);
+            return;
+        }
 
         if (!lockedInUI && !StuckInAbilityAnimation)
         {
@@ -188,57 +188,24 @@ public class PlayerMovement : MovementScript
         }
     }
 
-    private void UpdatePositionForEntities()
-    {
-        EntityManager entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
-        EntityQuery entityQuery = new EntityQueryBuilder(Allocator.Temp).WithAll<SeesTargetComponent>().Build(entityManager);
-        NativeArray<Entity> entityArray = entityQuery.ToEntityArray(Allocator.Temp);
-        NativeArray<SeesTargetComponent> seesTargetCompArray = entityQuery.ToComponentDataArray<SeesTargetComponent>(Allocator.Temp);
-        for (int i = 0; i < seesTargetCompArray.Length; i++)
-        {
-            SeesTargetComponent seesTargetComponent = seesTargetCompArray[i];
-            seesTargetComponent.targetLocation = transform.position;
-            seesTargetCompArray[i] = seesTargetComponent;
-        }
-        entityQuery.CopyFromComponentDataArray(seesTargetCompArray);
-    }
-
     private void ToggleGamePause(InputAction.CallbackContext context)
     {
         if (!lockedInUI)
         {
-            //paused = !paused;
+            paused = !paused;
             EventDeclarer.TogglePauseGame?.Invoke();
 
-            //if (paused)
-            //{
-            //    Debug.Log("Pausing");
-            //    Time.timeScale = 0f;
-            //}
-            //else
-            //{
-            //    Debug.Log("Unpausing");
-            //    Time.timeScale = 1f;
-            //}
+            if (paused)
+            {
+                Debug.Log("Pausing");
+                Time.timeScale = 0f;
+            }
+            else
+            {
+                Debug.Log("Unpausing");
+                Time.timeScale = 1f;
+            }
         }
     }
 
-    //private void SetMovementAttribute(MovementAttributes attribute, float newValue)
-    //{
-    //    switch (attribute)
-    //    {
-    //        case MovementAttributes.MovementSpeed:
-    //            movementSpeed = newValue;
-    //            break;
-    //        case MovementAttributes.DashBoost:
-    //            dashBoost = newValue;
-    //            break;
-    //        case MovementAttributes.DashCooldown:
-    //            dashCoolDown = newValue;
-    //            break;
-    //        case MovementAttributes.DashDuration:
-    //            dashDuration = newValue;
-    //            break;
-    //    }
-    //}
 }

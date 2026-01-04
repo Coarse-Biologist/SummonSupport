@@ -128,7 +128,8 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
 
     public void ShowInteractionOption()
     {
-        InteractCanvasHandler.Instance.ShowInteractionOption(transform.position, "Tab to use alchemy bench  ");
+        //Debug.Log($"position of {this} = {transform.position}");
+        InteractCanvasHandler.Instance.ShowInteractionOption(new Vector3(transform.position.x, transform.position.y + 2, transform.position.z), "Tab to use alchemy bench");
     }
 
     public void HideInteractionOption()
@@ -145,6 +146,9 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     }
     public void Interact(GameObject Player)//WithWorkBench()
     {
+        UnityEngine.Cursor.lockState = CursorLockMode.None;   // Locks the cursor to the center of the screen
+        UnityEngine.Cursor.visible = true;
+
         if (Player.TryGetComponent(out PlayerAbilityHandler abilityHandler))
             playerAbilityHandler = abilityHandler;
         else return;
@@ -233,7 +237,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
 
     private void SetPlayerUpgradeInfo()
     {
-        Debug.Log($"trying to add text info");
+        //Debug.Log($"trying to add text info");
 
         string text = $"Select upgrades. Remaining Skill-Points: {PlayerStats.Instance.SkillPoints - selectedUpgradeCost}. Currently selected upgrades:";
         foreach (var rewardKvp in selectedPlayerUpgrades)
@@ -297,7 +301,8 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
         ResetVars();
         HideUI(craftingUI);
         Time.timeScale = 1f;
-
+        UnityEngine.Cursor.lockState = CursorLockMode.Locked;   // Locks the cursor to the center of the screen
+        UnityEngine.Cursor.visible = false;
         PlayerUsingUI();
     }
 
@@ -689,7 +694,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
                 foreach (Ability ability in abilityLibraryEntry.Abilities)
                 {
                     Button abilityButton = AddButtonToPanel($"{ability.Name} : {Ability.GetCoreCraftingCost(ability)} Core Power", bottomLeftPanel, 70, 5);
-                    Debug.Log("made it this far2");
+                    //Debug.Log("made it this far2");
 
                     abilityButton.RegisterCallback<ClickEvent>(e => SetSelectedAbility(ability));
                     abilityButton.RegisterCallback<ClickEvent>(e => ShowAbilityCraftingInfo());

@@ -19,7 +19,7 @@ MonoBehaviour:
   <CostType>k__BackingField: 4
   <Cost>k__BackingField: 20
   <Range>k__BackingField: 20
-  <Duration>k__BackingField: 0
+  <Duration>k__BackingField: 1
   <AbilityTypeTag>k__BackingField: 1
   <ListUsableOn>k__BackingField: 01000000
   <TargetEffects>k__BackingField:
@@ -36,7 +36,8 @@ MonoBehaviour:
       <Value>k__BackingField: 0
     <AttributeUp>k__BackingField: []
     <AttributeDown>k__BackingField: []
-    <StatusEffects>k__BackingField: []
+    <StatusEffects>k__BackingField:
+    - {fileID: 11400000, guid: 6ef243f4fc8d3fc49a992694220d85ee, type: 2}
     <SpecialAbilityAttribute>k__BackingField: 0
   <SelfEffects>k__BackingField:
     <EffectDescription>k__BackingField: 
@@ -56,8 +57,11 @@ MonoBehaviour:
     <SpecialAbilityAttribute>k__BackingField: 0
   <ElementTypes>k__BackingField: 03000000
   <PhysicalType>k__BackingField: 0
-  <Speed>k__BackingField: 5
-  <Projectile>k__BackingField: {fileID: 1503869405188693834, guid: 261924edee6f8fe46b9f097b886433f6,
+  <OnHitEffect>k__BackingField: {fileID: 5647196156128557912, guid: ef1808408a91fa0408f32d644044be96,
+    type: 3}
+  <AlterParticleSystemGradient>k__BackingField: 0
+  <Speed>k__BackingField: 30
+  <Projectile>k__BackingField: {fileID: 6033447785082643316, guid: 706fd26b292fae4488c9b19eec3811fc,
     type: 3}
   <MaxRange>k__BackingField: 150
   <Lifetime>k__BackingField: 5
@@ -66,6 +70,4 @@ MonoBehaviour:
   <MaxSplit>k__BackingField: 0
   <SplitAngleOffset>k__BackingField: 45
   <ProjectileParticleSystem>k__BackingField: {fileID: 5647196156128557912, guid: 1a03005f2c2a1c74eb21353ba6950fbb,
-    type: 3}
-  <SpawnEffectOnHit>k__BackingField: {fileID: 5647196156128557912, guid: ef1808408a91fa0408f32d644044be96,
     type: 3}

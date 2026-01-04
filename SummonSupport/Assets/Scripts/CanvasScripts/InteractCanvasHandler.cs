@@ -3,6 +3,7 @@ using TMPro;
 using System.Collections;
 
 using SummonSupportEvents;
+using UnityEngine.Rendering;
 
 public class InteractCanvasHandler : MonoBehaviour
 {
@@ -28,10 +29,15 @@ public class InteractCanvasHandler : MonoBehaviour
         EventDeclarer.EnemyDefeated?.RemoveListener(DisplayXPGain);
     }
 
-    public void ShowInteractionOption(Vector2 spawnLoc, string interactMessage)
+    public void ShowInteractionOption(Vector3 spawnLoc, string interactMessage)
     {
         if (canvasInstance == null) canvasInstance = Instantiate(interactCanvas, spawnLoc, Quaternion.identity);
-        else canvasInstance.SetActive(true);
+        else
+        {
+            canvasInstance.SetActive(true);
+            canvasInstance.transform.position = spawnLoc;
+        }
+
         canvasInstance.GetComponentInChildren<TextMeshProUGUI>().text = interactMessage;
     }
 
@@ -47,11 +53,11 @@ public class InteractCanvasHandler : MonoBehaviour
 
     }
 
-    public void DisplayIncrementalText(Vector2 spawnLoc, string temporaryText, float duration)
+    public void DisplayIncrementalText(Vector3 spawnLoc, string temporaryText, float duration)
     {
         StartCoroutine(SlowlyDisplayCanvasText(spawnLoc, temporaryText, duration));
     }
-    public IEnumerator SlowlyDisplayCanvasText(Vector2 spawnLoc, string temporaryText, float totalDuration = 4f)
+    public IEnumerator SlowlyDisplayCanvasText(Vector3 spawnLoc, string temporaryText, float totalDuration = 4f)
     {
         int chars = temporaryText.Length;
         if (canvasInstance == null) canvasInstance = Instantiate(interactCanvas, spawnLoc, Quaternion.identity);
@@ -70,17 +76,22 @@ public class InteractCanvasHandler : MonoBehaviour
 
     public void DisplayXPGain(EnemyStats enemyStats)
     {
-        Vector2 loc = PlayerStats.Instance.transform.position;
-        loc = new Vector2(loc.x, loc.y + 1);
-        GameObject xpCanvas = Instantiate(xpTextGUI, loc, Quaternion.identity);
+        DisplayGoldenLetters($"+{enemyStats.XP_OnDeath} xp");
+    }
+
+    public void DisplayGoldenLetters(string loot, float duration = .8f)
+    {
+        Transform playerTransform = PlayerStats.Instance.transform;
+        Vector3 pos = new Vector3(playerTransform.position.x, playerTransform.position.y + 3, playerTransform.position.z);
+        GameObject xpCanvas = Instantiate(xpTextGUI, pos, Quaternion.identity);
+        xpCanvas.transform.rotation = playerTransform.rotation;
         if (xpCanvas.TryGetComponent(out TextMeshProUGUI canvasGUI))
-            canvasGUI.text = $"{(int)enemyStats.XP_OnDeath} XP";
-        if (xpCanvas.TryGetComponent(out Rigidbody2D rb))
+            canvasGUI.text = $"{loot}";
+        if (xpCanvas.TryGetComponent(out Rigidbody rb))
         {
-            rb.AddForce(new Vector2(((Random.Range(0f, 1f) > 0.5f) ? 1 : -1) * 2, 4), ForceMode2D.Impulse);
-            //the X parameter of the func is 1 or -1, dependin gon whether random range is > .5 or not
+            rb.AddForce(new Vector3(Random.Range(-1f, 1f), 2f, Random.Range(-1f, 1f)), ForceMode.Impulse);
         }
-        Destroy(xpCanvas, .8f);
+        Destroy(xpCanvas, duration);
     }
 
 

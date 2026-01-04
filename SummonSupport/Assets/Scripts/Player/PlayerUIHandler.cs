@@ -36,26 +36,14 @@ public class PlayerUIHandler : MonoBehaviour
 
     void OnEnable()
     {
-        EventDeclarer.attributeChanged.AddListener(UpdateResourceBar);
-        EventDeclarer.maxAttributeChanged.AddListener(UpdateMaxValueResourceBar);
-        if (AlchemyHandler.Instance != null)
-        {
-            AlchemyHandler.Instance.newMinionAdded.AddListener(AddMinionHP);
-        }
+        EventDeclarer.newMinionAdded?.AddListener(AddMinionHP);
         EventDeclarer.minionRecycled?.AddListener(RemoveMinionHP);
-
     }
 
     void OnDisable()
     {
-        EventDeclarer.attributeChanged.RemoveListener(UpdateResourceBar);
-        EventDeclarer.maxAttributeChanged.RemoveListener(UpdateMaxValueResourceBar);
-        if (AlchemyHandler.Instance != null)
-        {
-            AlchemyHandler.Instance.newMinionAdded.RemoveListener(AddMinionHP);
-        }
-        EventDeclarer.minionRecycled.RemoveListener(RemoveMinionHP);
-
+        EventDeclarer.newMinionAdded?.RemoveListener(AddMinionHP);
+        EventDeclarer.minionRecycled?.RemoveListener(RemoveMinionHP);
     }
 
     void Start()
@@ -102,29 +90,24 @@ public class PlayerUIHandler : MonoBehaviour
 
     public void AddMinionHP(LivingBeing livingBeing)
     {
-        Debug.Log($"adding creature {livingBeing.name}");
         TemplateContainer prefabContainer = UIPrefabAssets.Instantiate();
+
         ProgressBar minionHP = prefabContainer.Q<ProgressBar>("HealthbarPrefab");
 
-        if (minionHP == null) minionHP = new ProgressBar();
-        float hp = livingBeing.GetAttribute(AttributeType.CurrentHitpoints);
-        HPDict.TryAdd(livingBeing, minionHP);
-        minionHP.title = $"{livingBeing.Name} HP: {hp}";
-        minionHP.highValue = hp;
-        minionHP.value = hp;
-        if (minionHPBars == null) Logging.Error("minion HP visual element doesnt exist");
-        minionHPBars.Add(minionHP);
-        minionHP.RegisterCallback<ClickEvent>(evt => OnMinionSelect(minionHP));
+        if (HPDict.TryAdd(livingBeing, minionHP))
+        {
+            if (minionHP == null) minionHP = new ProgressBar();
+            float hp = livingBeing.GetAttribute(AttributeType.CurrentHitpoints);
+            minionHP.title = $"{livingBeing.Name} HP: {hp}";
+            minionHP.highValue = hp;
+            minionHP.value = hp;
+            if (minionHPBars == null) Logging.Error("minion HP visual element doesnt exist");
+            minionHPBars.Add(minionHP);
+            minionHP.RegisterCallback<ClickEvent>(evt => OnMinionSelect(minionHP));
+        }
+        else Debug.Log("The minion HP progress bar is already present ");
     }
-    //void OnMinionHPSelect(ClickEvent evt, ProgressBar minionHP)
-    //{
-    //    Logging.Info($"MinionHP bar {minionHP} clicked");
-    //    //minionHP.AddToClassList("glow");
-    //    minionHP.style.borderLeftColor = Color.green;
-    //    MinionStats selectedMinion = GetLivingBeingHPBar(minionHP);
-    //    EventDeclarer.SetActiveMinion?.Invoke(selectedMinion);
-    //    CommandMinion.SetSelectedMinion(selectedMinion.gameObject);
-    //}
+
 
     public void RemoveMinionHP(GameObject minion)
     {
@@ -136,7 +119,6 @@ public class PlayerUIHandler : MonoBehaviour
                 HPDict.Remove(livingBeing);
                 minionHPBars.Remove(minionHP);
             }
-            else Debug.Log("Yeah the HP bar youre trying to delete/ remove is NULL");
         }
 
     }
@@ -158,13 +140,19 @@ public class PlayerUIHandler : MonoBehaviour
             return bar;
         else
         {
-            Debug.Log($"{minion} was not found in the HP progress bar dictionary");
             return null;
         }
     }
     private void OnMinionSelect(ProgressBar minionHP)
     {
         LivingBeing minionStats = GetLivingBeingFromHPBar(minionHP);
+        ToggleHPGlow(minionHP);
+
+        CommandMinion.SetSelectedMinion(minionStats.gameObject);
+    }
+
+    private void ToggleHPGlow(ProgressBar minionHP)
+    {
         if (minionHP.style.borderBottomColor != Color.yellow)
         {
             minionHP.style.borderBottomColor = Color.yellow;
@@ -179,9 +167,6 @@ public class PlayerUIHandler : MonoBehaviour
             minionHP.style.borderLeftColor = Color.clear;
             minionHP.style.borderTopColor = Color.clear;
         }
-        //.ToggleInClassList("selected");
-        //Logging.Info("Button Clicked");
-        CommandMinion.SetSelectedMinion(minionStats.gameObject);
     }
 
     public void UpdateResourceBar(LivingBeing livingBeing, AttributeType attributeType)
@@ -189,7 +174,6 @@ public class PlayerUIHandler : MonoBehaviour
         if (livingBeing.CharacterTag == CharacterTag.Player)
         {
             SetPlayerAttribute(attributeType);
-            ///SetPlayerXP(livingBeing.c)
         }
         else if (livingBeing.CharacterTag == CharacterTag.Minion)
         {
@@ -217,7 +201,6 @@ public class PlayerUIHandler : MonoBehaviour
     }
     public void SetPlayerXP(float playerXP)
     {
-        //Debug.Log($"player xp = {playerXP}");
         playerXP_Bar.value = playerStats.CurrentXP;
         playerXP_Bar.highValue = playerStats.MaxXP;
     }

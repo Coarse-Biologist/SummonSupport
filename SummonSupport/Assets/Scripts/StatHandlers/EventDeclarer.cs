@@ -7,7 +7,6 @@ namespace SummonSupportEvents
 {
     public static class EventDeclarer
     {
-        public static UnityEvent<LivingBeing, AttributeType> attributeChanged = new UnityEvent<LivingBeing, AttributeType>();
         public static UnityEvent<LivingBeing, AttributeType> maxAttributeChanged = new();
 
         #region Quests
@@ -19,6 +18,7 @@ namespace SummonSupportEvents
         #endregion
         public static UnityEvent<GameObject> minionDied = new();
         public static UnityEvent<GameObject> minionRecycled = new();
+        public static UnityEvent<LivingBeing> newMinionAdded = new();
 
         public static UnityEvent<MinionStats> SetActiveMinion = new();
         public static UnityEvent<MovementAttributes, float> SpeedAttributeChanged = new();
@@ -31,7 +31,16 @@ namespace SummonSupportEvents
 
         public static UnityEvent<Ability> PlayerLearnedAbility = new();
         public static UnityEvent TogglePauseGame = new();
+        public static UnityEvent<float> ShakeCamera = new();
+
+        #region status effects
+        public static UnityEvent<LivingBeing> ViciousDeath = new();
+        public static UnityEvent<LivingBeing> FrozenSolid = new();
+        public static UnityEvent<LivingBeing> GraspingVines = new();
+        public static UnityEvent<LivingBeing> SpreadVirus = new();
 
 
+
+        #endregion
     }
 }

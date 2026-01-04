@@ -1,5 +1,5 @@
 using UnityEngine;
-
+using System.Collections.Generic;
 [CreateAssetMenu(menuName = "Abilities/Aura Ability")]
 public class AuraAbility : Ability
 {
@@ -11,30 +11,26 @@ public class AuraAbility : Ability
 
     public override bool Activate(GameObject caster)
     {
-        if (caster.CompareTag("Player"))
-        {
-            Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            RaycastHit2D hit = Physics2D.Raycast(mousePos, Vector2.zero);
-            {
-                if (hit.collider != null && hit.collider.TryGetComponent<LivingBeing>(out LivingBeing livingBeing))
-                {
-                    GameObject auraInstance = Instantiate(AuraObject, hit.collider.transform.position, AuraObject.transform.rotation, hit.collider.transform);
-                    auraInstance.GetComponent<Aura>().SetAuraStats(caster.GetComponent<LivingBeing>(), livingBeing, this, Duration);
+        int targetNum = 1;
 
-                }
-                else
-                {
-                    GameObject auraInstance = Instantiate(AuraObject, caster.transform.position, AuraObject.transform.rotation, caster.transform);
-                    Aura auraMonoScript = auraInstance.GetComponent<Aura>();
-                    if (auraMonoScript != null) auraMonoScript.HandleInstantiation(caster.GetComponent<LivingBeing>(), null, this, Radius, Duration);
-                }
-            }
-        }
-        else
+        if (caster.TryGetComponent(out AbilityModHandler modHandler))
         {
-            GameObject auraInstance = Instantiate(AuraObject, caster.transform.position, AuraObject.transform.rotation, caster.transform);
-            Aura auraMonoScript = auraInstance.GetComponent<Aura>();
-            if (auraMonoScript != null) auraMonoScript.HandleInstantiation(caster.GetComponent<LivingBeing>(), null, this, Radius, Duration);
+            targetNum += modHandler.GetModAttributeByType(this, AbilityModTypes.Number);
+        }
+
+        LivingBeing casterStats = caster.GetComponent<LivingBeing>();
+        TeamType desiredTarget = this.GetTargetPreference(casterStats);
+        GameObject auraInstance = Instantiate(AuraObject, caster.transform.position, AuraObject.transform.rotation, caster.transform);
+        Aura auraMonoScript = auraInstance.GetComponent<Aura>();
+        if (auraMonoScript != null) auraMonoScript.HandleInstantiation(casterStats, null, this);
+
+        List<LivingBeing> targets = GetTargetfromSphereCast(caster.GetComponent<AbilityHandler>().abilitySpawn.transform, targetNum, desiredTarget);
+
+        foreach (LivingBeing target in targets)
+        {
+            auraInstance = Instantiate(AuraObject, caster.transform.position, AuraObject.transform.rotation, caster.transform);
+            auraMonoScript = auraInstance.GetComponent<Aura>();
+            if (auraMonoScript != null) auraMonoScript.HandleInstantiation(casterStats, null, this);
         }
         return true;
     }

@@ -16,7 +16,7 @@ public enum AbilityModTypes
     MaxPierce, //  implimented
     MaxRicochet, // rather implimented
     MaxSplit, // implimented
-    ProjectileNumber,
+    Number,
     StatusEffect,
 
 }

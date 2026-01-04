@@ -1,7 +1,6 @@
-using System;
 using System.Collections.Generic;
+
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 [CreateAssetMenu(menuName = "Abilities/Target Mouse Ability")]
 public class TargetMouseAbility : Ability
@@ -11,31 +10,32 @@ public class TargetMouseAbility : Ability
     [field: SerializeField] public EffectOrientation EffectOrientation { get; set; } = EffectOrientation.Identity;
 
 
-
+    private List<LivingBeing> GetTargets(LivingBeing caster)
+    {
+        int targetNum = 1;
+        if (caster.TryGetComponent(out AbilityModHandler modHandler))
+        {
+            targetNum += modHandler.GetModAttributeByType(this, AbilityModTypes.Number);
+        }
+        TeamType desiredTargetType = GetTargetPreference(caster);
+        Transform spawnPoint = caster.GetComponent<AbilityHandler>().abilitySpawn.transform;
+        //Debug.Log($"number of Targets found: {targets.Count}. max targets = {targetNum}");
+        return GetTargetfromSphereCast(spawnPoint, targetNum, desiredTargetType);
+    }
 
     public override bool Activate(GameObject user)
     {
-        Debug.Log($"Activating the targetMouse ability {this.Name}");
+        //Debug.Log($"Activating the targetMouse ability {this.Name}");
         LivingBeing casterStats = user.GetComponent<LivingBeing>();
-        Vector2 mousePos;
-        if (casterStats.CharacterTag == CharacterTag.Player) mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        else mousePos = user.GetComponent<AIStateHandler>().target.transform.position;
-        int layerMask = ~LayerMask.GetMask("Obstruction"); // Alle außer "Obstruction"
-        RaycastHit2D hit = Physics2D.Raycast(mousePos, Vector2.zero, Mathf.Infinity, layerMask);
+
         bool usedAbility = false;
-        if (hit.collider != null)
+        foreach (LivingBeing target in GetTargets(casterStats))
         {
-            if (hit.collider.TryGetComponent<LivingBeing>(out var target))
+            if (target != null)
             {
-                Debug.Log($"target was a living being : {target}");
-                
-                usedAbility = ActivateAbility(user, target, mousePos);
+                usedAbility = ActivateAbility(user, target);
 
-                Debug.Log($"success in activating ability = {usedAbility}");
-                
-
-            }
-
+                //Debug.Log($"success in activating ability = {usedAbility}");
                 if (usedAbility)
                 {
                     SpawnEffect(target, user);
@@ -48,16 +48,17 @@ public class TargetMouseAbility : Ability
                         CombatStatHandler.HandleEffectPackage(this, casterStats, target, TargetEffects);
                     }
                 }
+            }
         }
         return usedAbility;
     }
 
 
-    public bool ActivateAbility(GameObject user, LivingBeing targetLivingBeing, Vector2 mousePos)
+    public bool ActivateAbility(GameObject user, LivingBeing targetLivingBeing)
     {
-        if (user.TryGetComponent<AI_CC_State>(out AI_CC_State ccState) && ccState.isCharmed) 
+        if (user.TryGetComponent<AI_CC_State>(out AI_CC_State ccState) && ccState.isCharmed)
         {
-            Debug.Log($"returning false");
+            //Debug.Log($"returning false");
             return true;
         }
 
@@ -65,24 +66,24 @@ public class TargetMouseAbility : Ability
         {
             if (!IsUsableOn(userLivingBeing.CharacterTag, targetLivingBeing.CharacterTag))
             {
-                Debug.Log($"returning false");
+                //Debug.Log($"returning false");
                 return false;
             }
-            else 
-            {                
-                Debug.Log($"returning true");
+            else
+            {
+                //Debug.Log($"returning true");
                 return true;
             }
         }
-        else 
+        else
         {
-            Debug.Log($"returning false");
+            //Debug.Log($"returning false");
             return false;
         }
     }
-    
-    
-    
+
+
+
 
 
     private void SpawnEffect(LivingBeing targetLivingBeing, GameObject Caster)
@@ -112,7 +113,4 @@ public class TargetMouseAbility : Ability
         }
     }
 }
-    
-
-
 

@@ -4,6 +4,9 @@ using System.Diagnostics;
 using UnityEngine.InputSystem;
 using Unity.VisualScripting;
 using System.Collections.Generic;
+using SummonSupportEvents;
+using UnityEngine.ResourceManagement.Profiling;
+using UnityEditor.Rendering;
 
 public static class CombatStatHandler
 {
@@ -29,7 +32,7 @@ public static class CombatStatHandler
         currentCaster = caster;
         currentTarget = target;
         modHandler = caster.GetComponent<AbilityModHandler>();
-        UnityEngine.Debug.Log($"caster = {caster.Name}, target = {target.Name} mod handler = {modHandler}");
+        //UnityEngine.Debug.Log($"caster = {caster.Name}, target = {target.Name} mod handler = {modHandler}");
 
         if (effectPackage.Heal.Value > 0)
         {
@@ -41,11 +44,12 @@ public static class CombatStatHandler
         }
         if (effectPackage.Damage.Value > 0)
         {
+            EventDeclarer.ShakeCamera?.Invoke(1f);
             AdjustDamageValue(effectPackage.Damage, effectPackage.SpecialAbilityAttribute);
         }
         if (effectPackage.DamageOverTime.Value > 0)
         {
-            UnityEngine.Debug.Log($"effectPackage.DamageOverTime.Value = {effectPackage.DamageOverTime.Value}.");
+            //UnityEngine.Debug.Log($"effectPackage.DamageOverTime.Value = {effectPackage.DamageOverTime.Value}.");
             AdjustAndApplyDOT(effectPackage.DamageOverTime);
         }
         if (effectPackage.AttributeUp.Count > 0)
@@ -62,47 +66,21 @@ public static class CombatStatHandler
                 AdjustAndApplyTempChange(tempChange);
             }
         }
-        //currentStatusEffects.Add(AbilityLibrary.GetStatusEffectLibrary().entries[0].Effect);
-        SetAllCurrentStatusEffects(ability, effectPackage);
-        UnityEngine.Debug.Log($"current status effect list = {currentStatusEffects}");
-        if (currentStatusEffects != null && currentStatusEffects.Count > 0)
-        {
-            foreach (StatusEffects status in currentStatusEffects)
-            {
-                UnityEngine.Debug.Log("The endgame of status effects has been reached?");
 
-                target.AlterStatusEffectList(status.EffectType, true);
-                target.StartCoroutine(RemoveStatusEffect(status));
-            }
-            if (target.TryGetComponent<AI_CC_State>(out AI_CC_State ccState))
-            {
-                foreach (StatusEffects status in currentStatusEffects)
-                {
-                    ccState.RecieveCC(status, currentCaster);
-                    if (status.EffectType == StatusEffectType.Pulled) ccState.SetPullEpicenter(Camera.main.ScreenToWorldPoint(Input.mousePosition));
-                    //UnityEngine.Debug.Log($"elapsed time in the combat handler package handler function: {stopwatch.ElapsedMilliseconds}");
-                }
-            }
-        }
-    }
-
-    private static void SetAllCurrentStatusEffects(Ability ability, EffectPackage effectPackage)
-    {
-        if (modHandler != null)
+        if (effectPackage.StatusEffects.Count > 0)
         {
-            currentStatusEffects = modHandler.GetModStatusEffects(ability);
+            foreach (StatusEffects status in effectPackage.StatusEffects)
             {
-                foreach (StatusEffects status in effectPackage.StatusEffects)
-                {
-                    if (!currentStatusEffects.Contains(status)) currentStatusEffects.Add(status);
-                }
+                currentTarget.SE_Handler.AlterStatusEffectList(status, true);
             }
+
         }
-        else currentStatusEffects = effectPackage.StatusEffects;
+
     }
 
 
-    #region Adjust and apply damage, heal, temo attributes and damage over times
+
+    #region Adjust and apply damage, heal, temp attributes and damage over times
     public static float AdjustDamageValue(Damage_AT damage_AT, SpecialAbilityAttribute specialAbilityAttribute = SpecialAbilityAttribute.None)
     {
         float damageValue = GetDamageByType(damage_AT);
@@ -141,7 +119,7 @@ public static class CombatStatHandler
     }
     public static float AdjustAndApplyTempChange(TempAttrChange tempAttr)
     {
-        //UnityEngine.Debug.Log("Adjusting and applying tempchange");
+        UnityEngine.Debug.Log("Adjusting and applying tempchange");
         float changeValue = tempAttr.Value;
         float duration = currentAbility.Duration;
         if (tempAttr is TempAttrDecrease_AT) changeValue = -changeValue; // set to negative if it decreases
@@ -150,7 +128,7 @@ public static class CombatStatHandler
             if (currentAbility.ElementTypes.Count > 0) changeValue = AdjustBasedOnAffinity(currentAbility.ElementTypes[0], changeValue);
             if (currentAbility.PhysicalType != PhysicalType.None) changeValue = AdjustBasedOnArmor(currentAbility.PhysicalType, changeValue);
         }
-        //UnityEngine.Debug.Log($"the change value = {changeValue}. tempAttr.PhysicalResistance = {tempAttr.ElementalAffinity}");
+        UnityEngine.Debug.Log($"the change value = {changeValue}. tempAttr.PhysicalResistance = {tempAttr.ElementalAffinity}");
 
         if (tempAttr.ResourceAttribute != AttributeType.None) ApplyTempValue(tempAttr.ResourceAttribute, changeValue, duration);
         if (tempAttr.PhysicalResistance != PhysicalType.None) ApplyTempValue(tempAttr.PhysicalResistance, changeValue, duration);
@@ -248,7 +226,7 @@ public static class CombatStatHandler
     private static void HandleApplyDOT(AttributeType attributeType, float changeValue, AbilityModTypes modType)
     {
         float duration = currentAbility.Duration;
-        if(modHandler != null)
+        if (modHandler != null)
         {
             duration += modHandler.GetModAttributeByType(currentAbility, AbilityModTypes.Duration);
         }
@@ -289,17 +267,18 @@ public static class CombatStatHandler
     public static void ApplyTempValue(AttributeType attributeType, float newValue, float duration)
     {
         currentTarget.SetAttribute(attributeType, currentTarget.GetAttribute(attributeType) + newValue);
-        currentTarget.StartCoroutine(ResetTempAttribute(attributeType, newValue, duration));
+        currentTarget.StartCoroutine(ResetTempAttribute(attributeType, -newValue, duration));
     }
     #region temp movement change
 
-    public static void ApplyTempValue(MovementAttributes movementAttribute, float newValue, float duration)
+    public static void ApplyTempValue(MovementAttributes movementAttribute, float tempValue, float duration)
     {
-        //Logging.Info($"{target.name} has had {attributeType} changed by {newValue}");
+        //Logging.Info($"{currentTarget.name} has had {movementAttribute} changed by {tempValue}");
         if (currentTarget.TryGetComponent<MovementScript>(out MovementScript movementScript))
         {
-            movementScript.SetMovementAttribute(movementAttribute, movementScript.GetMovementAttribute(movementAttribute) + newValue);
-            movementScript.StartCoroutine(ResetTempMovementAttribute(movementScript, movementAttribute, newValue, duration));
+            float preChangeValue = movementScript.GetMovementAttribute(movementAttribute);
+            movementScript.StartCoroutine(ResetTempMovementAttribute(movementScript, movementAttribute, preChangeValue, duration));
+            movementScript.SetMovementAttribute(movementAttribute, preChangeValue + tempValue);
         }
     }
 
@@ -323,7 +302,7 @@ public static class CombatStatHandler
 
     public static void ApplyTempValue(PhysicalType physicalType, float newValue, float duration)
     {
-        Logging.Info($"{currentTarget.name} has had {physicalType} changed by {newValue}");
+        //Logging.Info($"{currentTarget.name} has had {physicalType} changed by {newValue}");
         currentTarget.SetPhysicalResist(physicalType, currentTarget.PhysicalDict[physicalType].Get() + newValue);
         currentTarget.StartCoroutine(ResetTempPhysicalResist(physicalType, newValue, duration));
     }
@@ -348,7 +327,7 @@ public static class CombatStatHandler
 
     public static void ApplyTempValue(Element affinity, float changeValue, float duration)
     {
-        Logging.Info($"{currentTarget.name} has had {affinity} changed by {changeValue}");
+        //Logging.Info($"{currentTarget.name} has had {affinity} changed by {changeValue}");
         float preAffinityValue = currentTarget.Affinities[affinity].Get();
         currentTarget.ChangeAffinity(affinity, changeValue);
         currentTarget.StartCoroutine(ResetTempAffinity(affinity, preAffinityValue, duration));
@@ -365,7 +344,7 @@ public static class CombatStatHandler
                 elapsed += tickRateFloat;
             }
         }
-        Logging.Info($"{currentTarget.name} has had {elementalAffinity} changed back to {preChangeValue}");
+        //Logging.Info($"{currentTarget.name} has had {elementalAffinity} changed back to {preChangeValue}");
 
         currentTarget.SetAffinity(elementalAffinity, preChangeValue);
 
@@ -374,16 +353,6 @@ public static class CombatStatHandler
 
     #endregion
 
-    #region remove temp status effect
-
-    private static IEnumerator RemoveStatusEffect(StatusEffects status)
-    {
-        UnityEngine.Debug.Log("The endgame of status effects has been reached?");
-        yield return new WaitForSeconds(status.Duration);
-        currentTarget.AlterStatusEffectList(status.EffectType, false);
-
-    }
-    #endregion
 
     private static IEnumerator ResetTempAttribute(AttributeType attributeType, float changeValue, float duration)
     {
@@ -396,7 +365,8 @@ public static class CombatStatHandler
                 elapsed += tickRateFloat;
             }
         }
-        ApplyValue(attributeType, -changeValue); // resets by adding the opposite of what was added before (which may have been negative)
+        UnityEngine.Debug.Log($"attribute type {attributeType} is being reset by adding {changeValue}");
+        ApplyValue(attributeType, changeValue); // resets by adding the opposite of what was added before (which may have been negative)
         currentTarget.AlterAbilityList(currentAbility, false);
     }
     #endregion
@@ -406,84 +376,3 @@ public static class CombatStatHandler
 
 }
 
-
-//public static void AdjustForOverValue(LivingBeing target, AttributeType attributeTypeTempMax, AttributeType attributeTypeMax, AttributeType typeCurrentValue, float changeValue)
-
-//can be for power or health.
-// the question:
-// how much current and over points should the target have?
-
-
-//Stopwatch stopwatch = new();
-//        //UnityEngine.Debug.Log($"ability = {ability.name}. caster = {caster.Name}. target = {target.Name}. for self? {forSelf}");
-//        LivingBeing casterStats = caster.GetComponent<LivingBeing>(); //#TODO NANI?
-//        LivingBeing targetStats = target.GetComponent<LivingBeing>();
-//        LivingBeing theTarget = casterStats;
-//        currentAbility = ability;
-//        modHandler = caster.gameObject.GetComponent<AbilityModHandler>();
-//        if (!forSelf) theTarget = targetStats;
-//
-//        mod = modHandler.GetAbilityMod(ability);
-//
-//        // handle self effects
-//        foreach (EffectPackage package in ability.TargetTypeAndEffects)
-//        {
-//            if (forSelf && package.TargetType == TargetType.Self || !forSelf && package.TargetType == TargetType.Target)
-//            {
-//                if (package.Heal.Value > 0)
-//                {
-//                    AdjustHealValue(package.Heal.Value, theTarget, casterStats);
-//                }
-//                if (package.HealOverTime.Value > 0)
-//                {
-//                    HandleApplyDOT(ability, target, AttributeType.CurrentHitpoints, package.HealOverTime.Value, package.HealOverTime.Duration, AbilityModTypes.HealOverTime);
-//                }
-//                if (package.Damage.Count > 0)
-//                {
-//                    foreach (Damage_AT damage in package.Damage)
-//                    {
-//                        AdjustDamageValue(damage, theTarget, casterStats, package.SpecialAbilityAttribute);
-//                    }
-//                }
-//                if (package.DamageOverTime.Count > 0)
-//                {
-//                    foreach (DamageoT_AT damage in package.DamageOverTime)
-//                    {
-//                        AdjustAndApplyDOT(ability, damage, theTarget, casterStats);
-//                    }
-//                }
-//                if (package.AttributeUp.Count > 0)
-//                {
-//                    foreach (TempAttrIncrease_AT tempChange in package.AttributeUp)
-//                    {
-//                        AdjustAndApplyTempChange(ability, tempChange, theTarget, casterStats);
-//                    }
-//                }
-//                if (package.AttributeDown.Count > 0)
-//                {
-//                    foreach (TempAttrDecrease_AT tempChange in package.AttributeDown)
-//                    {
-//                        AdjustAndApplyTempChange(ability, tempChange, theTarget, casterStats);
-//                    }
-//                }
-//
-//                if (package.StatusEffects.Count > 0)
-//                {
-//                    foreach (StatusEffects status in package.StatusEffects)
-//                    {
-//                        target.AlterStatusEffectList(status.EffectType, true);
-//                        target.StartCoroutine(RemoveStatusEffect(target, status));
-//                    }
-//                    if (target.TryGetComponent<AI_CC_State>(out AI_CC_State ccState))
-//                    {
-//                        foreach (StatusEffects status in package.StatusEffects)
-//                        {
-//                            ccState.RecieveCC(status, casterStats);
-//                            if (status.EffectType == StatusEffectType.Pulled) ccState.SetPullEpicenter(Camera.main.ScreenToWorldPoint(Input.mousePosition));
-//
-//                        }
-//                    }
-//                }
-//            }
-//
-//        }

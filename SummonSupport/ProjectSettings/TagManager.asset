@@ -9,6 +9,7 @@ TagManager:
   - Obstruction
   - AlchemyBench
   - Projectile
+  - AbilityIgnore
   layers:
   - Default
   - TransparentFX
@@ -23,7 +24,7 @@ TagManager:
   - Projectile
   - AuraTrigger
   - Camera
-  - 
+  - AbilityIgnore
   - 
   - 
   - 

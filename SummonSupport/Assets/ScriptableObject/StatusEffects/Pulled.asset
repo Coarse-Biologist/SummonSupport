@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Pulled
   m_EditorClassIdentifier: 
   <Name>k__BackingField: Pull
-  <Icon>k__BackingField: {fileID: 0}
-  <EffectType>k__BackingField: 7
-  <Duration>k__BackingField: 3
-  <UsesEffectLocation>k__BackingField: 1
+  <Icon>k__BackingField: {fileID: -6759531213810404388, guid: 87fd5a41827ad5e4eae32e065f01d8c4,
+    type: 3}
+  <EffectType>k__BackingField: 6
+  <Duration>k__BackingField: 5

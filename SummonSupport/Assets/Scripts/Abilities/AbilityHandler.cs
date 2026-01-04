@@ -4,56 +4,70 @@ using System.Collections.Generic;
 
 public class AbilityHandler : MonoBehaviour
 {
-    [SerializeField] protected GameObject abilitySpawn;
-    [SerializeField] public GameObject abilityDirection { get; private set; }
+    [field: SerializeField] public GameObject abilitySpawn { private set; get; }
     [SerializeField] protected LivingBeing statsHandler;
     [field: SerializeField] public List<Ability> Abilities { private set; get; } = new();
-    [SerializeField] protected List<bool> abilitiesOnCooldown = new();
     public Dictionary<Ability, bool> abilitiesOnCooldownCrew = new();
     private Dictionary<BeamAbility, GameObject> toggledAbilitiesDict = new();
     [field: SerializeField] public WeaponInfo WeaponInfo { get; private set; }
     private bool charging = false;
     private AbilityModHandler modHandler;
+    private AnimationControllerScript anim;
 
+    //#TODO Add status effect implimentations that should be handled here
 
     protected virtual void Awake()
     {
+        anim = GetComponent<AnimationControllerScript>();
+        //if (anim == null) throw new System.Exception($"Animation controller is null. it was not found among children objects.");
+
         if (abilitySpawn == null)
             abilitySpawn = gameObject;
 
         if (statsHandler == null)
             statsHandler = gameObject.GetComponent<LivingBeing>();
-        if (abilityDirection == null)
-            abilityDirection = gameObject.transform.GetChild(0).gameObject;
         foreach (Ability ability in Abilities)
         {
-            abilitiesOnCooldown.Add(false);
             abilitiesOnCooldownCrew.Add(ability, false);
         }
         if (gameObject.TryGetComponent(out AbilityModHandler modScript))
             modHandler = modScript;
-        else throw new System.Exception("NOPENOPENOPENOPENOPENOPENOPE");
+        else throw new System.Exception("No Ability mod handler found, and now im throwing a fit");
     }
 
     public void LearnAbility(Ability ability)
     {
-        Debug.Log($"Learning ability {ability}");
+        //Debug.Log($"Learning ability {ability}");
         if (!Abilities.Contains(ability) && ability != null)
         {
             Abilities.Add(ability);
             abilitiesOnCooldownCrew.Add(ability, false);
-            abilitiesOnCooldown.Add(false);
         }
+    }
+
+    protected bool CastAbility(Ability ability, Vector2 targetPosition, Quaternion rotation)
+    {
+        bool usedAbility = HandleAbilityType(ability, targetPosition, rotation);
+
+        if (!usedAbility)
+            return false;
+
+        //handle Ionization status effect
+        int ionizationValue = statsHandler.SE_Handler.GetStatusEffectValue(StatusEffectType.Ionized);
+        if (ionizationValue > 0) statsHandler.ChangeAttributeByPercent(AttributeType.CurrentHitpoints, (float)-.01 * ionizationValue);
+
+        StartCoroutine(SetOnCooldown(ability));
+        int costMod = modHandler.GetModAttributeByType(ability, AbilityModTypes.Cost);
+        statsHandler?.ChangeAttribute(AttributeType.CurrentPower, -ability.Cost + costMod);
+        return true;
     }
 
     protected bool CastAbility(int abilityIndex, Vector2 targetPosition, Quaternion rotation)
     {
-        //Logging.Info($"Ability at index {abilityIndex} trying to be used by {statsHandler.Name}!!!!");
         Ability ability = Abilities[abilityIndex];
 
-        if (Abilities.Count <= 0 || abilitiesOnCooldown[abilityIndex])
+        if (Abilities.Count <= 0 || abilitiesOnCooldownCrew[ability])
             return false;
-
 
         if (!HasEnoughPower(ability.Cost))
             return false;
@@ -62,8 +76,7 @@ public class AbilityHandler : MonoBehaviour
 
         if (!usedAbility)
             return false;
-
-        StartCoroutine(SetOnCooldown(abilityIndex));
+        StartCoroutine(SetOnCooldown(ability));
         int costMod = modHandler.GetModAttributeByType(ability, AbilityModTypes.Cost);
         statsHandler?.ChangeAttribute(AttributeType.CurrentPower, -ability.Cost + costMod);
         return true;
@@ -77,7 +90,6 @@ public class AbilityHandler : MonoBehaviour
             case ProjectileAbility projectile:
                 usedAbility = HandleProjectile(projectile);
                 break;
-
             case TargetMouseAbility pointAndClickAbility:
                 usedAbility = HandlePointAndClick(pointAndClickAbility);
                 break;
@@ -105,36 +117,32 @@ public class AbilityHandler : MonoBehaviour
                     SetCharging(true);
                     usedAbility = chargeAbility.Activate(gameObject);
                 }
-
                 break;
         }
-        //Logging.Info($"able to use {ability.Name} = {usedAbility}");
-        if (usedAbility) StartCoroutine(SetOnCooldown(Abilities.IndexOf(ability)));
-
         return usedAbility;
     }
     private bool HandleBeamAbility(BeamAbility beamAbility, LivingBeing statsHandler)
     {
-        GameObject beamInstance = null;
+        GameObject beamInstance;
 
         if (toggledAbilitiesDict.TryGetValue(beamAbility, out GameObject activeAbility))
         {
             StopToggledAbility(beamAbility, activeAbility);
-
             return false;
         }
         else
         {
-            beamInstance = beamAbility.ToggleBeam(statsHandler.gameObject, abilityDirection.transform);
+            beamInstance = beamAbility.ToggleBeam(statsHandler.gameObject, abilitySpawn.transform);
             toggledAbilitiesDict.TryAdd(beamAbility, beamInstance);
             statsHandler.ChangeRegeneration(beamAbility.CostType, -beamAbility.Cost);
 
             return true;
         }
-
     }
     public void SetCharging(bool alreadyCharging)
     {
+        if (anim != null) anim.ChangeLayerAnimation("Sprint", 1, .1f);
+
         charging = alreadyCharging;
     }
     private void StopToggledAbility(BeamAbility beamAbility, GameObject activeAbility)
@@ -143,8 +151,6 @@ public class AbilityHandler : MonoBehaviour
         toggledAbilitiesDict.Remove(beamAbility);
         Destroy(activeAbility);
     }
-
-
 
     public bool HasEnoughPower(float powerCost, AttributeType costType = AttributeType.CurrentPower)
     {
@@ -159,41 +165,51 @@ public class AbilityHandler : MonoBehaviour
 
     bool HandleProjectile(ProjectileAbility ability)
     {
-        return ability.Activate(gameObject, abilityDirection.transform);
+        //Debug.Log("Time to see the heavy throw animation");
+        if (anim != null) anim.ChangeLayerAnimation("OneArmedThrow", 1, 2f);
+
+        return ability.Activate(gameObject, abilitySpawn);
     }
 
     bool HandlePointAndClick(TargetMouseAbility ability)
     {
+        if (anim != null) anim.ChangeLayerAnimation("SpellCast", 1, 1f);
+
         return ability.Activate(gameObject);
     }
 
     bool HandleConjureAbility(ConjureAbility ability, Vector2 targetPosition, Quaternion rotation)
     {
-        return ability.Activate(gameObject, targetPosition, rotation);
+        if (anim != null) anim.ChangeLayerAnimation("HeavyThrow", 1, 1f);
+
+        return ability.Activate(gameObject, rotation);
     }
 
     bool HandleDashAbility(DashAbility dashAbility)
     {
+        if (anim != null) anim.ChangeLayerAnimation("Sprint", 1, .1f);
         return dashAbility.Activate(gameObject);
     }
     bool HandleAuraAbility(AuraAbility auraAbility, LivingBeing statsHandler)
     {
+        if (anim != null) anim.ChangeLayerAnimation("Buff", 1, 1f);
+
         return auraAbility.Activate(statsHandler.gameObject);
     }
 
-    public IEnumerator SetOnCooldown(int abilityIndex)
+    public IEnumerator SetOnCooldown(Ability ability)
     {
-        Ability ability = Abilities[abilityIndex];
         try
         {
+            float coolDown = ability.Cooldown + modHandler.GetModAttributeByType(ability, AbilityModTypes.Cooldown) + statsHandler.SE_Handler.GetStatusEffectValue(StatusEffectType.Lethargic);
+            // default, plus modifier, plus lethargy value
+            //Debug.Log($"Cool down duration for {ability.Name} calculated to be {coolDown}");
             abilitiesOnCooldownCrew[ability] = true;
-            abilitiesOnCooldown[abilityIndex] = true;
-            yield return new WaitForSeconds(ability.Cooldown + modHandler.GetModAttributeByType(ability, AbilityModTypes.Cooldown));
+            yield return new WaitForSeconds(coolDown);
         }
         finally
         {
             abilitiesOnCooldownCrew[ability] = false;
-            abilitiesOnCooldown[abilityIndex] = false;
         }
     }
     protected bool IsOnCoolDown(Ability ability)

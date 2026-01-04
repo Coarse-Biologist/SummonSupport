@@ -3,9 +3,8 @@ using System;
 using UnityEngine;
 using System.Collections;
 using SummonSupportEvents;
-using UnityEditor.Build.Pipeline.Tasks;
 using System.Linq;
-using NUnit.Framework.Constraints;
+using Unity.Entities.UniversalDelegates;
 public abstract class LivingBeing : MonoBehaviour
 {
     #region Declarations
@@ -32,12 +31,12 @@ public abstract class LivingBeing : MonoBehaviour
     [field: SerializeField] public float TickRateRegenerationInSeconds { get; private set; } = .2f;
     [field: SerializeField] public float HealthRegeneration { get; private set; } = 1;
     [field: SerializeField] public float PowerRegeneration { get; private set; } = 1;
-    [field: SerializeField] public float TotalHealthRegeneration { get; private set; } = 0; // i think this is / should be a private variable since it is only used for local calculations? or at least i think it doesnt need to be serialized since it would never be used (it is instantluy set to the value of HealthRegeneration)
-    [field: SerializeField] public float TotalPowerRegeneration { get; private set; } = 0;
-    [field: SerializeField] public int HealthRegenArrows { get; private set; } = 0;
-    [field: SerializeField] public int PowerRegenArrows { get; private set; } = 0;
-    [field: SerializeField] public float RegenCalcOffset { get; private set; } = .8f;
-    [field: SerializeField] public int MaxRegenArrows { get; private set; } = 6;
+    private float TotalHealthRegeneration = 0;
+    private float TotalPowerRegeneration = 0;
+
+    public GameObject locSphere;
+
+
     #endregion
 
     //TODO:
@@ -76,7 +75,6 @@ public abstract class LivingBeing : MonoBehaviour
 
     [Header("Other")]
     [field: SerializeField] public List<Ability> AffectedByAbilities { get; private set; } = new();
-    public List<StatusEffectType> SufferedStatusEffects { get; private set; } = new();
 
     [field: SerializeField] public float XP_OnDeath { get; private set; } = 5f;
     public bool Dead { get; private set; } = false;
@@ -85,8 +83,11 @@ public abstract class LivingBeing : MonoBehaviour
     public Dictionary<AttributeType, (Func<float> Get, Action<float> Set)> ResourceAttributesDict { private set; get; } = new();
 
 
-    private I_ResourceBar resourceBarInterface;
+    public I_ResourceBar resourceBarInterface { protected set; get; }
+    public I_Destruction ragdollScript;
     private AbilityHandler abilityHandler;
+    public StatusEffectHandler SE_Handler;
+
 
     #endregion
 
@@ -97,6 +98,7 @@ public abstract class LivingBeing : MonoBehaviour
         InitializeAttributeDict();
         InitializeAffinityDict();
         InitializePhysicalDict();
+
         resourceBarInterface = GetComponent<I_ResourceBar>();
         regenTickRate = new WaitForSeconds(TickRateRegenerationInSeconds);
 
@@ -107,6 +109,12 @@ public abstract class LivingBeing : MonoBehaviour
         InitializeRegenerationValues();
         StartCoroutine(RegenerateRoutine());
         abilityHandler = GetComponent<AbilityHandler>();
+        ColorChanger.ChangeMatByAffinity(this);
+        ragdollScript = GetComponent<I_Destruction>();
+        if (TryGetComponent(out StatusEffectHandler se))
+        {
+            SE_Handler = se;
+        }
     }
 
     private void InitializeRegenerationValues()
@@ -131,6 +139,7 @@ public abstract class LivingBeing : MonoBehaviour
     #region Affinity handling
     public void ChangeAffinity(Element element, float amount)
     {
+        if (element == Element.None) return;
         float newAffinity = Mathf.Min(amount + Affinities[element].Get(), 200);
 
         if (Affinities.TryGetValue(element, out (Func<float> Get, Action<float> Set) func))
@@ -181,6 +190,7 @@ public abstract class LivingBeing : MonoBehaviour
 
     public void ChangePhysicalResistance(PhysicalType physicalType, float amount)
     {
+        if (physicalType == PhysicalType.None) return;
         float newResistance = Mathf.Min(amount + PhysicalDict[physicalType].Get(), 200);
 
         if (PhysicalDict.TryGetValue(physicalType, out (Func<float> Get, Action<float> Set) func))
@@ -199,13 +209,14 @@ public abstract class LivingBeing : MonoBehaviour
     public void ChangeHealthRegeneration(float Value)
     {
         HealthRegeneration = Math.Max(0, HealthRegeneration + Value);
-        Debug.Log($"Changing health regen. new total: {HealthRegeneration}");
-
+    }
+    public void ChangeHealthRegeneration_Limitless(float Value)
+    {
+        HealthRegeneration += Value;
     }
     public void ChangePowerRegeneration(float Value)
     {
         HealthRegeneration = Math.Max(0, PowerRegeneration + Value);
-        Debug.Log($"Changing power regen. new total: {PowerRegeneration}");
 
     }
 
@@ -224,8 +235,8 @@ public abstract class LivingBeing : MonoBehaviour
 
         if (ResourceAttributesDict != null && ResourceAttributesDict.ContainsKey(attributeType))
             ResourceAttributesDict[attributeType].Set(value);
-        HandleEventInvokes(attributeType, value); // make overrides for minions, players and enemies
-        if (GetAttribute(AttributeType.CurrentHitpoints) <= 0)
+        HandleUIAttrDisplay(attributeType, value); // make overrides for minions, players and enemies
+        if (GetAttribute(AttributeType.CurrentHitpoints) == 0)
             Die();
         else if (attributeType == AttributeType.CurrentPower && value <= 0)
             abilityHandler.HandleNoMana();
@@ -233,56 +244,28 @@ public abstract class LivingBeing : MonoBehaviour
 
     public float ChangeAttribute(AttributeType attributeType, float value)
     {
-        //if (GetAttribute(AttributeType.CurrentHitpoints) <= 0) // do nothing if dead
-        //    return 0f;
-
-        if (ResourceAttributesDict == null || !ResourceAttributesDict.ContainsKey(attributeType))
-            throw new Exception("Attribute not found or invalid setter");
-
         SetAttribute(attributeType, GetAttribute(attributeType) + value);
 
-        if (GetAttribute(AttributeType.CurrentHitpoints) <= 0)
-            Die();
         return GetAttribute(attributeType) + value;
     }
-
-    public void HandleEventInvokes(AttributeType attributeType, float newValue)
+    public void ChangeMovementAttribute(MovementAttributes attr, float changeValue)
     {
-        switch (attributeType)
-        {
-            case AttributeType.MaxHitpoints:
-                if (CharacterTag != CharacterTag.Enemy)
-                    EventDeclarer.maxAttributeChanged?.Invoke(this, attributeType);
-                resourceBarInterface?.SetHealthBarMaxValue(GetAttribute(attributeType));
-                break;
 
-            case AttributeType.CurrentHitpoints:
-                if (CharacterTag != CharacterTag.Enemy)
-                    EventDeclarer.attributeChanged?.Invoke(this, attributeType);
-                resourceBarInterface?.SetHealthBarValue(GetAttribute(attributeType));
-                break;
-
-            case AttributeType.MaxPower:
-                if (CharacterTag != CharacterTag.Enemy)
-                    EventDeclarer.maxAttributeChanged?.Invoke(this, attributeType);
-                resourceBarInterface?.SetPowerBarMaxValue(GetAttribute(attributeType));
-                break;
-
-            case AttributeType.CurrentPower:
-                if (CharacterTag != CharacterTag.Enemy)
-                    EventDeclarer.attributeChanged?.Invoke(this, attributeType);
-                resourceBarInterface?.SetPowerBarValue(GetAttribute(attributeType));
-                break;
-            default:
-                break;
-                //case AttributeType.MovementSpeed:
-                //case AttributeType.DashBoost:
-                //case AttributeType.DashCooldown:
-                //case AttributeType.DashDuration:
-                //EventDeclarer.SpeedAttributeChanged.Invoke(attributeType, newValue);
-                //break;
-        }
     }
+
+    /// <summary>
+    ///percentChange should be a percentage. To decrease a value by 1%, percentChange should be -.01
+    /// </summary>
+    public void ChangeAttributeByPercent(AttributeType attributeType, float percentChange)
+    {
+        float current = GetAttribute(attributeType);
+        SetAttribute(attributeType, current + current * percentChange); // 100 + 100 * -1
+
+        if (attributeType == AttributeType.CurrentHitpoints && GetAttribute(AttributeType.CurrentHitpoints) <= 0)
+            Die();
+    }
+
+    public abstract void HandleUIAttrDisplay(AttributeType attributeType, float newValue);
 
 
     #endregion
@@ -300,17 +283,7 @@ public abstract class LivingBeing : MonoBehaviour
     {
         return AffectedByAbilities.Contains(ability);
     }
-    public void AlterStatusEffectList(StatusEffectType status, bool Add) // modifies the list of abilities by which one is affected
-    {
 
-        bool contains = SufferedStatusEffects.Contains(status);
-        if (Add && !contains) SufferedStatusEffects.Add(status);
-        if (!Add && contains) SufferedStatusEffects.Remove(status);
-    }
-    public bool HasStatusEffect(StatusEffectType status)
-    {
-        return SufferedStatusEffects.Contains(status);
-    }
 
 
 
@@ -321,10 +294,10 @@ public abstract class LivingBeing : MonoBehaviour
     {
         while (true)
         {
-            float newHP = Mathf.Min(CurrentHP + TotalHealthRegeneration, MaxHP);
+            float newHP = Mathf.Min(CurrentHP + HealthRegeneration, MaxHP);
             if (newHP != CurrentHP)
                 SetAttribute(AttributeType.CurrentHitpoints, newHP);
-            float newPower = Mathf.Min(CurrentPower + TotalPowerRegeneration, MaxPower);
+            float newPower = Mathf.Min(CurrentPower + PowerRegeneration, MaxPower);
             if (newPower != CurrentPower)
                 SetAttribute(AttributeType.CurrentPower, newPower);
             yield return regenTickRate;
@@ -336,29 +309,27 @@ public abstract class LivingBeing : MonoBehaviour
         if (attributeType == AttributeType.CurrentHitpoints)
         {
             TotalHealthRegeneration += value;
-            HealthRegenArrows = GetRegenerationIndicatorAmount(MaxHP, TotalHealthRegeneration);
+            //HealthRegenArrows = GetRegenerationIndicatorAmount(MaxHP, TotalHealthRegeneration);
         }
         else if (attributeType == AttributeType.CurrentPower)
         {
             TotalPowerRegeneration += value;
-            PowerRegenArrows = GetRegenerationIndicatorAmount(MaxPower, TotalPowerRegeneration);
+            //PowerRegenArrows = GetRegenerationIndicatorAmount(MaxPower, TotalPowerRegeneration);
+        }
+    }
+    public void SetRegeneration(AttributeType attributeType, float value)
+    {
+        if (attributeType == AttributeType.CurrentHitpoints)
+        {
+            TotalHealthRegeneration = value;
+        }
+        else if (attributeType == AttributeType.CurrentPower)
+        {
+            TotalPowerRegeneration = value;
         }
     }
 
-    int GetRegenerationIndicatorAmount(float maxValue, float regeneration)
-    {
-        float regenerationIndicatorStep = maxValue * (1 - RegenCalcOffset) / MaxRegenArrows;
-        float arrows = regeneration / regenerationIndicatorStep;
-        float clampedArrows;
-        if (arrows > 0)
-            clampedArrows = Mathf.Clamp(arrows, 1f, MaxRegenArrows); // 0.1 arrows should be 1, 100 arrows schould be value of MaxRegenArrows
-        else if (arrows < 0)
-            clampedArrows = Mathf.Clamp(arrows, -MaxRegenArrows, -1f); // -0.1 arrows should be -1, -100 arrows schould be value of -MaxRegenArrows
-        else
-            clampedArrows = 0;
-        int roundedArrows = Mathf.RoundToInt(clampedArrows);
-        return roundedArrows;
-    }
+
     #endregion
 
     #region Niche attribute changes
@@ -432,6 +403,6 @@ public abstract class LivingBeing : MonoBehaviour
 
     protected void ViciousDeathExplosion()
     {
-        Debug.Log("Softy died and caused chain reaction");
+        //EventDeclarer.ViciousDeath?.Invoke(this);
     }
 }

@@ -17,7 +17,7 @@ MonoBehaviour:
   <Cooldown>k__BackingField: 5
   <CostType>k__BackingField: 4
   <Cost>k__BackingField: 40
-  <Range>k__BackingField: 15
+  <Range>k__BackingField: 100
   <Duration>k__BackingField: 3
   <AbilityTypeTag>k__BackingField: 1
   <ListUsableOn>k__BackingField: 01000000
@@ -30,7 +30,7 @@ MonoBehaviour:
       <Value>k__BackingField: 0
       <ValueType>k__BackingField: 0
     <Damage>k__BackingField:
-      <Value>k__BackingField: 0
+      <Value>k__BackingField: 10
     <DamageOverTime>k__BackingField:
       <Value>k__BackingField: 0
     <AttributeUp>k__BackingField: []
@@ -40,8 +40,7 @@ MonoBehaviour:
       <ElementalAffinity>k__BackingField: 0
       <PhysicalResistance>k__BackingField: 0
       <Value>k__BackingField: 1
-    <StatusEffects>k__BackingField:
-    - {fileID: 11400000, guid: de217b777d75f0e4280c41fbaa010a5a, type: 2}
+    <StatusEffects>k__BackingField: []
     <SpecialAbilityAttribute>k__BackingField: 0
   <SelfEffects>k__BackingField:
     <EffectDescription>k__BackingField: 
@@ -63,14 +62,15 @@ MonoBehaviour:
   <PhysicalType>k__BackingField: 0
   <OnHitEffect>k__BackingField: {fileID: 5005864844744066183, guid: 4abfee1134a924843a0c2d8f0b92357e,
     type: 3}
+  <AlterParticleSystemGradient>k__BackingField: 0
   <ObjectToSpawn>k__BackingField: {fileID: 8391031001335865397, guid: ad5c749e71e416e408157d31bb913217,
     type: 3}
-  <SpawnEffectOnHit>k__BackingField: {fileID: 0}
-  <SpawnOffset>k__BackingField: {x: 0, y: 0}
+  <SpawnOffset>k__BackingField: {x: 0, y: 0, z: 0}
   <RotationOffset>k__BackingField: 0
   Radius: 4
   <IsDecaying>k__BackingField: 1
   <LeaveRotation>k__BackingField: 1
+  <SpawnsOnTarget>k__BackingField: 1
   <SeeksTarget>k__BackingField: 0
   <Speed>k__BackingField: 2
   <SearchRadius>k__BackingField: 10

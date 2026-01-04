@@ -1,11 +1,9 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
-using UnityEditor.Rendering;
-using System.Runtime.InteropServices;
+
 using System.Linq;
 using System;
-using UnityEngine.Splines.Interpolators;
 
 
 
@@ -20,17 +18,15 @@ public class AI_CC_State : AIState
     public Dictionary<StatusEffectType, StatusEffects> typeToCC = new();
 
 
-    private Rigidbody2D rb;
+    private Rigidbody rb;
     private float waitTime = .1f;
     WaitForSeconds wait;// = new WaitForSeconds(0.1f);
-    private float knockDuration = 2f;
-    private float timeElapsed = 0f;
-    private bool beingKnockedInAir = false;
+
     public bool isCharmed { private set; get; } = false;
     public bool isMad { private set; get; } = false;
     public bool beingPulled { private set; get; } = false;
 
-    public Vector2 PullEpicenter { private set; get; } = new Vector2(-1, -1);
+    public Vector3 PullEpicenter { private set; get; } = new Vector3(-1, -1, -1);
 
 
 
@@ -40,7 +36,7 @@ public class AI_CC_State : AIState
         peaceState = GetComponent<AIPeacefulState>();
         stateHandler = GetComponent<AIStateHandler>();
         chaseState = GetComponent<AIChaseState>();
-        rb = GetComponent<Rigidbody2D>();
+        rb = GetComponent<Rigidbody>();
     }
     public override AIState RunCurrentState()
     {
@@ -48,11 +44,7 @@ public class AI_CC_State : AIState
         {
             return peaceState;
         }
-        if (!beingKnockedInAir && typeToCC.Keys.Contains(StatusEffectType.KnockInTheAir))
-        {
-            StartCoroutine(KnockRoutine());
-            return this;
-        }
+
         if (!beingPulled && typeToCC.Keys.Contains(StatusEffectType.Pulled))
         {
             StartCoroutine(PullRoutine());
@@ -73,8 +65,8 @@ public class AI_CC_State : AIState
             return this;
         }
 
-        return peaceState;
 
+        return peaceState;
     }
 
     public void RecieveCC(StatusEffects CC, LivingBeing caster)
@@ -87,51 +79,27 @@ public class AI_CC_State : AIState
         CCToCaster.Remove(CC);
         typeToCC.Remove(CC);
     }
-    public void SetPullEpicenter(Vector2 loc)
+    public void SetPullEpicenter(Vector3 loc)
     {
         PullEpicenter = loc;
     }
 
-    private bool KnockInTheAir()
-    {
-        beingKnockedInAir = true;
-        if (CCToCaster.TryGetValue(StatusEffectType.KnockInTheAir, out LivingBeing caster) && timeElapsed <= knockDuration)
-        {
-            // add logic which can use relevant mods or character based stats to affect things
-            rb.linearDamping = 40;
-            if (timeElapsed <= knockDuration * .8)
-                rb.AddForce(((Vector2)transform.position - (Vector2)caster.transform.position).normalized, ForceMode2D.Impulse);
-            if (timeElapsed <= knockDuration * .5)
-                rb.AddForce(new Vector2(0, 4f), ForceMode2D.Impulse);
-            if (timeElapsed > knockDuration * .5 && timeElapsed <= .8 * knockDuration) rb.AddForce(new Vector2(0, -4), ForceMode2D.Impulse);
-            return true;
-        }
-        else
-        {
-            beingKnockedInAir = false;
-            timeElapsed = 0f;
-            RemoveCC(StatusEffectType.KnockInTheAir);
-            rb.linearDamping = 10;
-            rb.bodyType = RigidbodyType2D.Dynamic;
-            return false;
-        }
-    }
     private IEnumerator PullRoutine()
     {
         float pullDuration = typeToCC[StatusEffectType.Pulled].Duration;
         beingPulled = true;
-        if (PullEpicenter == Vector2.zero) PullEpicenter = new Vector2(transform.position.x, transform.position.y - 2);
+        if (PullEpicenter == Vector3.zero) PullEpicenter = new Vector3(transform.position.x, transform.position.y - 2);
         bool stillPulling = true;
         while (stillPulling)
         {
             yield return wait;
             pullDuration -= waitTime;
             transform.position = Vector3.MoveTowards(transform.position, PullEpicenter, .1f);
-            if (pullDuration <= 0) //((Vector2)transform.position - PullEpicenter).sqrMagnitude < .3f )
+            if (pullDuration <= 0) //((Vector3)transform.position - PullEpicenter).sqrMagnitude < .3f )
             {
                 stillPulling = false;
                 RemoveCC(StatusEffectType.Pulled);
-                PullEpicenter = new Vector2(0, 0);
+                PullEpicenter = Vector3.down;
                 beingPulled = false;
             }
         }
@@ -140,6 +108,7 @@ public class AI_CC_State : AIState
     private void BecomeCharmed(float duration)
     {
         isCharmed = true;
+        Debug.Log($"{stateHandler.livingBeing.Name} been charmed.");
         RemoveCC(StatusEffectType.Charmed);
         stateHandler.SetTargetMask(StatusEffectType.Charmed);
         Invoke("EndEffectCharmed", duration);
@@ -160,18 +129,9 @@ public class AI_CC_State : AIState
     {
         stateHandler.SetTargetMask();
         isMad = false;
-        //RemoveCC(StatusEffectType.Madness);
+        RemoveCC(StatusEffectType.Madness);
     }
-    private IEnumerator KnockRoutine()
-    {
-        bool repeat = true;
-        while (repeat)
-        {
-            yield return wait;
-            repeat = KnockInTheAir();
-            timeElapsed += .1f;
-        }
-    }
+
 
 
 }

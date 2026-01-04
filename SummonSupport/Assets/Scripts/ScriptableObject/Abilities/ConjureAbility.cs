@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using Unity.Entities.UniversalDelegates;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Abilities/Conjure Ability")]
@@ -5,9 +8,8 @@ public class ConjureAbility : Ability
 {
     [field: Header("Conjure settings"), Tooltip("Ability prefab")]
     [field: SerializeField] public GameObject ObjectToSpawn { get; protected set; }
-    [field: SerializeField] public GameObject SpawnEffectOnHit { get; set; } = null;
 
-    [field: SerializeField] public Vector2 SpawnOffset { get; protected set; }
+    [field: SerializeField] public Vector3 SpawnOffset { get; protected set; }
     [field: SerializeField] public float RotationOffset { get; protected set; } = 0;
     [field: SerializeField] public float Radius = 1f;
 
@@ -19,6 +21,7 @@ public class ConjureAbility : Ability
 
 
     [field: Header("Tracking Settings"), Tooltip("in seconds")]
+    [field: SerializeField] public bool SpawnsOnTarget { get; protected set; } = false;
     [field: SerializeField] public bool SeeksTarget { get; protected set; } = false;
     [field: SerializeField] public float Speed { get; private set; } = 2f;
     [field: SerializeField] public float SearchRadius { get; private set; } = 10f;
@@ -27,36 +30,75 @@ public class ConjureAbility : Ability
 
     public override bool Activate(GameObject user)
     {
-        Vector3 spawnPosition = user.transform.position + (Vector3)SpawnOffset;
         Quaternion rotation = user.transform.rotation;
-        return Activate(user, spawnPosition, rotation);
+        return Activate(user, rotation);
     }
 
-    public bool Activate(GameObject user, Vector3 spawnPosition, Quaternion rotation)
+    public bool Activate(GameObject user, Quaternion rotation)
     {
-        Quaternion newRotation = Quaternion.identity;
-        if (!LeaveRotation)
-            newRotation = rotation * Quaternion.Euler(0, 0, RotationOffset);
-        GameObject spawnedObject = Instantiate(ObjectToSpawn, spawnPosition, newRotation);
+        LivingBeing casterStats = user.GetComponent<LivingBeing>();
 
-        if (IsDecaying)
-            Destroy(spawnedObject, Duration);
-        if (spawnedObject.TryGetComponent(out Aura aura))
+        int targetNum = 1;
+        float duration = Duration;
+
+        if (user.TryGetComponent(out AbilityModHandler modHandler))
         {
-            aura.HandleInstantiation(user.GetComponent<LivingBeing>(), null, this, Radius, this.Duration);
+            targetNum += modHandler.GetModAttributeByType(this, AbilityModTypes.Number);
+            duration += modHandler.GetModAttributeByType(this, AbilityModTypes.Duration);
         }
-        else
+        if (SpawnsOnTarget)
         {
-            Aura auraInChildren = spawnedObject.GetComponentInChildren<Aura>();
-            if (auraInChildren != null)
+            TeamType desiredTargetType = this.GetTargetPreference(casterStats);
+
+            List<LivingBeing> targets = GetTargetfromSphereCast(user.GetComponent<AbilityHandler>().abilitySpawn.transform, targetNum, desiredTargetType);
+            foreach (LivingBeing target in targets)
             {
-                auraInChildren.HandleInstantiation(user.GetComponent<LivingBeing>(), null, this, Radius, this.Duration);
+                SpawnOnTarget(casterStats, target, rotation);
             }
+        }
+        else for (int i = targetNum; i > 0; i--)
+        {
+            SpawnConjuredObject(casterStats, rotation, i);
         }
 
 
         return true;
     }
+
+    private void SpawnOnTarget(LivingBeing user, LivingBeing target, Quaternion rotation)
+    {
+        Quaternion newRotation = Quaternion.identity;
+        if (!LeaveRotation)
+            newRotation = rotation * Quaternion.Euler(0, 0, RotationOffset);
+
+        Vector3 SpawnLoc = target.transform.position + SpawnOffset;
+
+        GameObject spawnedObject = Instantiate(ObjectToSpawn, SpawnLoc, newRotation);
+
+        Aura auraInChildren = spawnedObject.GetComponentInChildren<Aura>();
+        if (auraInChildren != null)
+        {
+            auraInChildren.HandleInstantiation(user.GetComponent<LivingBeing>(), target, this);
+        }
+    }
+    protected void SpawnConjuredObject(LivingBeing user, Quaternion rotation, int iterator)
+    {
+        Quaternion newRotation = Quaternion.identity;
+        if (!LeaveRotation)
+            newRotation = rotation * Quaternion.Euler(0, 0, RotationOffset);
+
+        Vector3 SpawnLoc = user.transform.position + user.transform.forward * Range;
+        Vector3 newSpawnOffset = new Vector3(SpawnOffset.x, SpawnOffset.y, SpawnOffset.z + iterator);
+        GameObject spawnedObject = Instantiate(ObjectToSpawn, SpawnLoc + newSpawnOffset, newRotation);
+
+        Aura auraInChildren = spawnedObject.GetComponentInChildren<Aura>();
+        if (auraInChildren != null)
+        {
+            auraInChildren.HandleInstantiation(user.GetComponent<LivingBeing>(), null, this);
+
+        }
+    }
+
 
 
 

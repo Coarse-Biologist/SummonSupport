@@ -26,16 +26,18 @@ public class PlayerStats : LivingBeing
     [field: SerializeField] public int TotalControlllableMinions { private set; get; } = 2;
     [field: SerializeField] public int AbilitySlots { private set; get; } = 2;
     [field: SerializeField] public Dictionary<string, int> SlottedAbilities { private set; get; } = new Dictionary<string, int>(); //This will store the slot in which an ability is contained. the string is a placeholder until we decide the object type of an ability
-
+    public PlayerUIHandler UiHandler { private set; get; }
     protected override void Awake()
     {
         base.Awake();
         Instance = this;
+        UiHandler = GetComponent<PlayerUIHandler>();
     }
 
     void OnEnable()
     {
         EventDeclarer.EnemyDefeated?.AddListener(GainXP);
+
     }
     void OnDisable()
     {
@@ -160,10 +162,14 @@ public class PlayerStats : LivingBeing
 
     public override void Die()
     {
-
-        if (HasStatusEffect(StatusEffectType.ExplodeOnDeath)) ViciousDeathExplosion();
         SetDead(true);
+        Invoke("DelayedDeath", 2f);
+    }
+
+    private void DelayedDeath()
+    {
         EventDeclarer.PlayerDead?.Invoke(true);
+
     }
 
 
@@ -193,6 +199,32 @@ public class PlayerStats : LivingBeing
                 if (minion.TryGetComponent<MinionStats>(out MinionStats minionStats)) minionStats.Resurrect();
                 break;
             }
+        }
+    }
+
+    public override void HandleUIAttrDisplay(AttributeType attributeType, float newValue)
+    {
+        UiHandler.UpdateResourceBar(this, attributeType);
+        switch (attributeType)
+        {
+            case AttributeType.MaxHitpoints:
+                resourceBarInterface?.SetHealthBarMaxValue(GetAttribute(attributeType));
+                break;
+
+            case AttributeType.CurrentHitpoints:
+                resourceBarInterface?.SetHealthBarValue(GetAttribute(attributeType));
+                break;
+
+            case AttributeType.MaxPower:
+                resourceBarInterface?.SetPowerBarMaxValue(GetAttribute(attributeType));
+                break;
+
+            case AttributeType.CurrentPower:
+                resourceBarInterface?.SetPowerBarValue(GetAttribute(attributeType));
+                break;
+            default:
+                break;
+
         }
     }
 

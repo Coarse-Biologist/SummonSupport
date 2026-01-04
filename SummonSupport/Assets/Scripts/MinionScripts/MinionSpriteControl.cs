@@ -27,7 +27,7 @@ public class MinionSpriteControl : MonoBehaviour
     #region color control
     public void AlterColorByAffinity(Element strongestElement)
     {
-        SetColor(EffectColorChanger.GetColorFromElement(strongestElement));
+        ColorChanger.SetColor(spriteRenderer.material, ColorChanger.GetColorFromElement(strongestElement));
     }
 
     public void SlideColor(RGBAEnum color, float range)

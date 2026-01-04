@@ -8,15 +8,15 @@ public class ChargeAbilityMono : MonoBehaviour
     private ChargeAbility chargeAbility;
 
     private Coroutine chargeCoroutine;
-    private Rigidbody2D rb;
+    private Rigidbody rb;
     private Transform originTransform;
-    private Vector2 startLoc;
+    private Vector3 startLoc;
     private AbilityHandler abilityHandler;
     private LivingBeing caster;
     private WaitForSeconds chargeTickRate = new WaitForSeconds(.01f);
     public GameObject trailEffect { private set; get; }
     private AbilityModHandler modHandler;
-    private float speed = 0;
+    private float speedBoost = 35;
     private float range = 0;
     private int alreadypierced = 0;
     private int maxPierce = 0;
@@ -35,18 +35,21 @@ public class ChargeAbilityMono : MonoBehaviour
         modHandler = caster.GetComponent<AbilityModHandler>();
         if (caster.gameObject.TryGetComponent(out MovementScript movementScript))
         {
-            speed = movementScript.MovementSpeed;
+            speedBoost += movementScript.MovementSpeed;
         }
-        range = chargeAbility.range;
+        range = chargeAbility.Range;
 
         if (modHandler != null)
         {
             maxPierce = modHandler.GetModAttributeByType(chargeAbility.ActivateOnHit, AbilityModTypes.MaxPierce);
+            range += modHandler.GetModAttributeByType(chargeAbility.ActivateOnHit, AbilityModTypes.Range);
+            speedBoost += modHandler.GetModAttributeByType(chargeAbility, AbilityModTypes.Speed);
+
         }
         Debug.Log($"Max pierce = {maxPierce}");
 
-        originTransform = abilityHandler.abilityDirection.transform;
-        rb = user.GetComponentInParent<Rigidbody2D>();
+        originTransform = user.transform;
+        rb = user.GetComponentInParent<Rigidbody>();
         chargeCoroutine = StartCoroutine(ChargeWhileLogical());
     }
     private IEnumerator ChargeWhileLogical()
@@ -55,17 +58,13 @@ public class ChargeAbilityMono : MonoBehaviour
         {
             trailEffect = Instantiate(chargeAbility.chargeTrail, transform.position, originTransform.rotation, transform);
         }
-        if (modHandler != null)
-        {
-            speed += modHandler.GetModAttributeByType(chargeAbility, AbilityModTypes.Speed);
-            range += modHandler.GetModAttributeByType(chargeAbility, AbilityModTypes.Range);
-        }
+
         bool stillCharging = true;
         startLoc = transform.position;
         while (stillCharging)
         {
-            rb.linearVelocity = originTransform.right * speed * 35;
-            if (((Vector2)gameObject.transform.position - startLoc).magnitude > range)
+            rb.linearVelocity = originTransform.forward * speedBoost;
+            if ((gameObject.transform.position - startLoc).magnitude > chargeAbility.Range)
             {
                 EndCharge();
             }
@@ -73,16 +72,16 @@ public class ChargeAbilityMono : MonoBehaviour
         }
     }
 
-    void OnTriggerEnter2D(Collider2D collision)
+    void OnTriggerEnter(Collider collision)
     {
-        if(collision is EdgeCollider2D wall) EndCharge();
+        //if (collision is BoxCollider wall) EndCharge();
         Ability abilityToCast = chargeAbility.ActivateOnHit;
         bool success = abilityToCast.Activate(transform.parent.gameObject);
         if (success)
         {
-            if (chargeAbility.HitEffect != null)
+            if (chargeAbility.OnHitEffect != null)
             {
-                Instantiate(chargeAbility.HitEffect, collision.transform.position, quaternion.identity, collision.transform);
+                Instantiate(chargeAbility.OnHitEffect, collision.transform.position, quaternion.identity, collision.transform);
                 alreadypierced++;
             }
             if (alreadypierced > maxPierce)

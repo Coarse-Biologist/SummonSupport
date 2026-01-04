@@ -16,7 +16,6 @@ public class ProjectileAbility : Ability
     [field: SerializeField] public int MaxSplit { get; protected set; }
     [field: SerializeField] public int SplitAngleOffset { get; protected set; }
     [field: SerializeField] public GameObject ProjectileParticleSystem { get; protected set; }
-    [field: SerializeField] public GameObject SpawnEffectOnHit { get; set; } = null;
 
 
 
@@ -29,23 +28,28 @@ public class ProjectileAbility : Ability
 
         return Activate(user, spawnPoint.transform);
     }
-    public bool Activate(GameObject user, Transform direction)
+    public bool Activate(GameObject user, Transform spawnPoint)
     {
+        //Debug.Log($"spawnpoint rotation = {spawnPoint.rotation.y}");
         int shots = 1;
         if (user.TryGetComponent(out AbilityModHandler modHandler))
         {
-            shots += modHandler.GetModAttributeByType(this, AbilityModTypes.ProjectileNumber);
+            shots += modHandler.GetModAttributeByType(this, AbilityModTypes.Number);
         }
         for (int i = 0; i < shots; i += 1)
         {
-            GameObject projectile = Instantiate(Projectile, user.transform.position, Quaternion.identity);
+            GameObject projectile = Instantiate(Projectile, spawnPoint.position, Quaternion.identity);
             Projectile projectileScript = projectile.GetComponent<Projectile>();
-            float rotZ = (float)Math.Sin(45 * i) * (10 + 5 * i);
-            Quaternion rotation = Quaternion.Euler(0, 0, rotZ);
-            Vector3 newDirection = rotation * direction.right;
 
+            Material glowMaterial = ColorChanger.GetGlowByElement(ElementTypes[0]);
+            ColorChanger.ChangeMatByAffinity(projectile.GetComponent<Renderer>(), glowMaterial);
+
+            float rotY = (float)Math.Sin(45 * i) * (10 + 5 * i);
+            Quaternion rotation = Quaternion.Euler(0, rotY, 0);
+            Vector3 newDirection = rotation * spawnPoint.forward;
+            //Debug.Log($"  user: {user.GetComponent<LivingBeing>().Name} is using the ability {projectileScript.name}");
             projectileScript.SetActive(this, user.GetComponent<LivingBeing>(), modHandler);
-            projectileScript.SetProjectilePhysics(projectile, newDirection);
+            projectileScript.SetProjectilePhysics(newDirection);
             projectileScript.SetParticleTrailEffects(newDirection);
 
             Destroy(projectile, Lifetime);
@@ -58,24 +62,3 @@ public class ProjectileAbility : Ability
 }
 
 
-
-//int shots = 1;
-//        if (user.TryGetComponent(out AbilityModHandler modHandler))
-//        {
-//            shots += modHandler.GetModAttributeByType(this, AbilityModTypes.ProjectileNumber);
-//        }
-//        for (int i = 0; i < shots; i += 1)
-//        {
-//            Debug.Log("for loop is being carried out in the Shoot multiple func of the projectile script");
-//            Quaternion rotation;
-//            float rotZ = (float)Math.Sin(45 * i) * (10 + 5 * i);
-//            rotation = Quaternion.Euler(0, 0, rotZ);
-//            Vector3 newDirection = rotation * direction.right;
-//
-//            GameObject projectile = Instantiate(Projectile, user.transform.position, Quaternion.identity);
-//            Projectile projectileScript = projectile.GetComponent<Projectile>();
-//            projectileScript.ability = this;
-//            projectileScript.SetParticleTrailEffects(newDirection);
-//            projectileScript.SetProjectilePhysics(projectile, newDirection);
-//
-//            Destroy(projectile, Lifetime);
