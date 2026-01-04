@@ -1,5 +1,4 @@
 using SummonSupportEvents;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class SE_ObjectHandler : MonoBehaviour
@@ -7,6 +6,8 @@ public class SE_ObjectHandler : MonoBehaviour
     [field: SerializeField] public GameObject ExplosionObject;
     [field: SerializeField] public GameObject IceCubeObject;
     [field: SerializeField] public GameObject VineGrabObject;
+    [field: SerializeField] public GameObject VirusObject;
+
 
 
     public static SE_ObjectHandler Instance;
@@ -21,7 +22,7 @@ public class SE_ObjectHandler : MonoBehaviour
         EventDeclarer.ViciousDeath.AddListener(ViciousDeathExplosion);
         EventDeclarer.FrozenSolid?.AddListener(FrozenSolid);
         EventDeclarer.GraspingVines?.AddListener(GraspingVines);
-
+        EventDeclarer.SpreadVirus?.AddListener(SpreadVirus);
 
     }
     void OnDisable()
@@ -40,6 +41,10 @@ public class SE_ObjectHandler : MonoBehaviour
                 explodeScript.CheckTargetToExplodeOn(livingBeing.CharacterTag);
             }
         }
+    }
+    public void SpreadVirus(LivingBeing livingBeing)
+    {
+        Instantiate(VirusObject, livingBeing.transform.position, Quaternion.identity, livingBeing.transform);
     }
     public void FrozenSolid(LivingBeing livingBeing)
     {

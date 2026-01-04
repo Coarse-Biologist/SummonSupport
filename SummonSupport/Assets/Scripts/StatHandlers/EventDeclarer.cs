@@ -37,6 +37,8 @@ namespace SummonSupportEvents
         public static UnityEvent<LivingBeing> ViciousDeath = new();
         public static UnityEvent<LivingBeing> FrozenSolid = new();
         public static UnityEvent<LivingBeing> GraspingVines = new();
+        public static UnityEvent<LivingBeing> SpreadVirus = new();
+
 
 
         #endregion
