@@ -112,7 +112,7 @@ public class PlayerStats : LivingBeing
                     AddControllableMinions(1);
                     break;
                 case LevelRewards.ElementalAffinity:
-                    ChangeAffinity(GetHighestAffinity(), 10);
+                    ChangeAffinity(GetHighestAffinity(out float value), 10);
                     break;
                 default:
                     Debug.LogWarning($"There is no behavior implimented for the level up reward {reward}");
@@ -149,7 +149,7 @@ public class PlayerStats : LivingBeing
                         AddControllableMinions(1 * reward.Value);
                         break;
                     case LevelRewards.ElementalAffinity:
-                        ChangeAffinity(GetHighestAffinity(), 10 * reward.Value);
+                        ChangeAffinity(GetHighestAffinity(out float value), 10 * reward.Value);
                         break;
                     default:
                         Debug.LogWarning($"There is no behavior implimented for the level up reward {reward}");

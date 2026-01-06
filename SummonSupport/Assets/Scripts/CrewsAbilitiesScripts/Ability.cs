@@ -53,7 +53,9 @@ public abstract class Ability : ScriptableObject
     public static int GetCoreCraftingCost(Ability ability)
     {
         if (ability == null) throw new System.Exception("You are trying to access the core cost of an ability which is null.");
-        return (int)ability.Cooldown * (int)ability.Cost;
+        int modifier = 1;
+        if (ability is BeamAbility beam) modifier += 10;
+        return (int)ability.Cooldown * (int)ability.Cost * modifier;
     }
 
     public List<LivingBeing> GetTargetfromSphereCast(Transform directionTransform, int desiredTargetNum, TeamType teamType)

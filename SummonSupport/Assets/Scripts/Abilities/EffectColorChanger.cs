@@ -68,7 +68,7 @@ public static class ColorChanger
 
     public static void ChangeParticleSystemColor(LivingBeing livingBeing, ParticleSystem particleSystem)
     {
-        Element strongestElement = livingBeing.GetHighestAffinity();
+        Element strongestElement = livingBeing.GetHighestAffinity(out float value);
         if (livingBeing.Affinities[strongestElement].Get() > 0)
         {
             var colorGradient = colorGradientLibrary.GetGradientByElement(strongestElement);
@@ -132,7 +132,7 @@ public static class ColorChanger
     }
     public static void ChangeMatByAffinity(LivingBeing livingBeing)
     {
-        Element element = livingBeing.GetHighestAffinity();
+        Element element = livingBeing.GetHighestAffinity(out float value);
         if (element == Element.None) return;
         Material newMaterial = new(GetGlowByElement(element));
         SetColor(newMaterial, GetColorFromElement(element));

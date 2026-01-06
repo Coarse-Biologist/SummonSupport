@@ -190,7 +190,7 @@ public class AlchemyHandler : MonoBehaviour
     {
         CreatureAbilityHandler abilityHandler = livingBeing.gameObject.GetComponent<CreatureAbilityHandler>();
         if (abilityHandler == null) return;
-        Element strongestElement = livingBeing.GetHighestAffinity();
+        Element strongestElement = livingBeing.GetHighestAffinity(out float value);
         if (strongestElement != Element.None)
         {
             List<Ability> abilities = AbilityLibrary.GetRandomAbilities(strongestElement, (int)(livingBeing.GetAttribute(AttributeType.MaxPower) / ManaToAbilityRatio));
@@ -209,7 +209,7 @@ public class AlchemyHandler : MonoBehaviour
     private void AlterMinionByElement(GameObject minion)
     {
         LivingBeing stats = minion.GetComponent<LivingBeing>();
-        Element strongestElement = stats.GetHighestAffinity();
+        Element strongestElement = stats.GetHighestAffinity(out float value);
         string nameModifier;
 
         if (strongestElement != Element.None && stats.GetAffinity(strongestElement) > 50)

@@ -30,6 +30,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2038755144732919392, guid: deb0299c2f7c5ee468cb23755c8d92da,
         type: 3}
+      propertyPath: <Air>k__BackingField
+      value: 200
+      objectReference: {fileID: 0}
+    - target: {fileID: 2038755144732919392, guid: deb0299c2f7c5ee468cb23755c8d92da,
+        type: 3}
       propertyPath: <MaxHP>k__BackingField
       value: 50
       objectReference: {fileID: 0}
@@ -151,7 +156,7 @@ PrefabInstance:
     - target: {fileID: 6420015540202892481, guid: deb0299c2f7c5ee468cb23755c8d92da,
         type: 3}
       propertyPath: <Abilities>k__BackingField.Array.size
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6420015540202892481, guid: deb0299c2f7c5ee468cb23755c8d92da,
         type: 3}

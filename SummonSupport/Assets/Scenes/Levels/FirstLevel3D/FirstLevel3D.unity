@@ -3883,7 +3883,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5bf0aa40a5c8c5340a0e99117006653a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StatusEffectHandler
-  rigidBody: {fileID: 0}
 --- !u!114 &1006284826
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3896,7 +3895,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5bf0aa40a5c8c5340a0e99117006653a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StatusEffectHandler
-  rigidBody: {fileID: 0}
 --- !u!4 &1042397107 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1229462029999028531, guid: aff31b32fc4eea5418f988c216c59a4a,
@@ -4695,7 +4693,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5bf0aa40a5c8c5340a0e99117006653a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StatusEffectHandler
-  rigidBody: {fileID: 0}
 --- !u!4 &1251025559 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1229462029999028531, guid: aff31b32fc4eea5418f988c216c59a4a,
@@ -7753,7 +7750,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5bf0aa40a5c8c5340a0e99117006653a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StatusEffectHandler
-  rigidBody: {fileID: 0}
 --- !u!1 &1863413858
 GameObject:
   m_ObjectHideFlags: 0
@@ -9106,7 +9102,8 @@ PrefabInstance:
       propertyPath: <HealthRegeneration>k__BackingField
       value: 1
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 1179809255851578806, guid: 3388c2193e6a56841b1082aa7f3f5844, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
@@ -10525,6 +10522,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 8138424183924678523}
+    - targetCorrespondingSourceObject: {fileID: 7643038678776894386, guid: 7328986a125173a4c8c04b292083f431,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8138424183924678524}
   m_SourcePrefab: {fileID: 100100000, guid: 7328986a125173a4c8c04b292083f431, type: 3}
 --- !u!1001 &6380157851561523352
 PrefabInstance:
@@ -10737,6 +10738,18 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 3, y: 3, z: 3}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &8138424183924678524
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 175044032}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf6e2c2e7a35ed14a8e559a025cea79d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AbilityModHandler
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
