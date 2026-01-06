@@ -53,8 +53,8 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     #region Runtime Variables
     private Dictionary<AlchemyLoot, int> selectedIngredients = new Dictionary<AlchemyLoot, int>();
     private List<Element> selectedElements = new List<Element>();
-    private GameObject minionToUpgrade;
-    private GameObject minionToRecycle;
+    private LivingBeing minionToUpgrade;
+    private LivingBeing minionToRecycle;
 
     #region ability modding
     private AbilityModHandler ModHandler;
@@ -370,7 +370,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
         clearButton.RegisterCallback<ClickEvent>(e => ClearCraftingSelection());
         clearButton.RegisterCallback<ClickEvent>(e => HandleUpgradeDisplay());
     }
-    private void HandleUpgradeMinion(GameObject minionToUpgrade)
+    private void HandleUpgradeMinion(LivingBeing minionToUpgrade)
     {
         if (minionToUpgrade == null) return;
         alchemyHandler.UpgradeMinion(minionToUpgrade, selectedIngredients, selectedElements);
@@ -380,16 +380,16 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     }
     private void ShowUpgradableMinions()
     {
-        foreach (GameObject minion in alchemyHandler.activeMinions)
+        foreach (LivingBeing minion in alchemyHandler.activeMinions)
         {
-            Button minionButton = AddButtonToPanel($"Upgrade {minion.GetComponent<LivingBeing>().Name}", bottomLeftPanel, 45, 5);
+            Button minionButton = AddButtonToPanel($"Upgrade {minion.Name}", bottomLeftPanel, 45, 5);
             minionButton.RegisterCallback<ClickEvent>(e => SetMinionToUpgrade(minion));
         }
     }
-    private void SetMinionToUpgrade(GameObject minion)
+    private void SetMinionToUpgrade(LivingBeing minion)
     {
         minionToUpgrade = minion;
-        instructions.text = $"Select ingredients and element with which to upgrade {minion.GetComponent<LivingBeing>().Name}.";
+        instructions.text = $"Select ingredients and element with which to upgrade {minion.Name}.";
         SpawnIngredientButtons();
         ShowElementToggles(bottomRightPanel);
     }
@@ -417,15 +417,14 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     {
 
         ShowUI(bottomLeftPanel);
-        if (PlayerStats.Instance.TryGetComponent(out AbilityHandler abilityHandler))
-            foreach (Ability ability in abilityHandler.Abilities)
-            {
-                ///Ability potentiallySelectedAbility = ability;
-                Button button = AddButtonToPanel($"{ability.Name}", bottomLeftPanel, 40, 5);
-                button.RegisterCallback<ClickEvent>(e => SetSelectedAbility(ability));
-                button.RegisterCallback<ClickEvent>(e => DisplayAbilityModOptions(ability));
-            }
-        foreach (GameObject minion in alchemyHandler.activeMinions)
+        foreach (Ability ability in playerAbilityHandler.Instance.Abilities)
+        {
+            ///Ability potentiallySelectedAbility = ability;
+            Button button = AddButtonToPanel($"{ability.Name}", bottomLeftPanel, 40, 5);
+            button.RegisterCallback<ClickEvent>(e => SetSelectedAbility(ability));
+            button.RegisterCallback<ClickEvent>(e => DisplayAbilityModOptions(ability));
+        }
+        foreach (LivingBeing minion in alchemyHandler.activeMinions)
         {
             if (minion.TryGetComponent(out CreatureAbilityHandler creatureAbilityHandler))
                 foreach (Ability ability in creatureAbilityHandler.Abilities)
@@ -639,15 +638,15 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
         Button clearButton = AddButtonToPanel("Clear Selection", topRightPanel, 50, 5);
         confirmButton.RegisterCallback<ClickEvent>(e => AlchemyHandler.HandleMinionRecycling(minionToRecycle));
         clearButton.RegisterCallback<ClickEvent>(e => SetMinionToRecycle(null));
-        foreach (GameObject minion in alchemyHandler.activeMinions)
+        foreach (LivingBeing minion in alchemyHandler.activeMinions)
         {
             Debug.Log("Minion should be shown in alchemy inventory panel");
-            Button minionButton = AddButtonToPanel($"Recycle {minion.GetComponent<LivingBeing>().Name}", bottomLeftPanel, 45, 5);
+            Button minionButton = AddButtonToPanel($"Recycle {minion.Name}", bottomLeftPanel, 45, 5);
             minionButton.RegisterCallback<ClickEvent>(e => SetMinionToRecycle(minion));
         }
     }
 
-    private void SetMinionToRecycle(GameObject minion)
+    private void SetMinionToRecycle(LivingBeing minion)
     {
         minionToRecycle = minion;
     }
@@ -688,10 +687,9 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
         else SetInstructionsText($"You do not have sufficient core resources to concoct {selectedAbility.name}.");
         if (selectedMinionAbility != null)
         {
-            foreach (GameObject minion in AlchemyHandler.Instance.activeMinions)
+            foreach (LivingBeing minion in AlchemyHandler.Instance.activeMinions)
             {
-                LivingBeing minionStats = minion.GetComponent<LivingBeing>();
-                if (minionStats.GetAffinity(selectedMinionAbility.ElementTypes[0]) > 50)
+                if (minion.GetAffinity(selectedMinionAbility.ElementTypes[0]) > 50)
                 {
                     minion.GetComponent<AbilityHandler>().LearnAbility(selectedMinionAbility);
                 }
@@ -701,7 +699,33 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     }
     private void SpawnCraftableAbilityButtons()
     {
-        #region make list of abilities player can learn
+        SpawnCraftablePlayerAbilities();
+
+        List<Element> minionElements = GetListMinionElements();
+
+        SpawnCraftableMinionAbilityButtons(minionElements);
+
+        //SetInstructionsText($"Confirm to learn the selected ability if you have sufficient core power. Currently you have {AlchemyInventory.GetCorePowerResource(selectedIngredients)} core power activated."))
+    }
+    private void SpawnCraftableMinionAbilityButtons(List<Element> minionElements)
+    {
+        foreach (AbilityLibrary_SO.ElementCategories category in AbilityLibrary.abilityLibrary.entries)
+        {
+            if (minionElements.Contains(category.Element))
+            {
+                foreach (Ability ability in category.Abilities)
+                {
+                    Button abilityButton = AddButtonToPanel($"{ability.Name} : {Ability.GetCoreCraftingCost(ability)} Core Power", bottomLeftPanel, 70, 5);
+                    //Debug.Log("made it this far2");
+
+                    abilityButton.RegisterCallback<ClickEvent>(e => SetSelectedMinionAbility(ability));
+                    abilityButton.RegisterCallback<ClickEvent>(e => ShowAbilityCraftingInfo());
+                }
+            }
+        }
+    }
+    private void SpawnCraftablePlayerAbilities()
+    {
         foreach (AbilityLibrary_SO.PlayerAbilitiesByLevel abilityLibraryEntry in AbilityLibrary.abilityLibrary.abilitiesByLevelEntries)
         {
             if (abilityLibraryEntry.Level <= PlayerStats.Instance.CurrentLevel)
@@ -717,41 +741,20 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
                 }
             }
         }
-        #endregion
-
-        #region make list of elements the minions can learn
+    }
+    private List<Element> GetListMinionElements()
+    {
         List<Element> minionElements = new();
-        foreach (GameObject minion in alchemyHandler.activeMinions)
+        foreach (LivingBeing minion in alchemyHandler.activeMinions)
         {
-            LivingBeing minionStats = minion.GetComponent<LivingBeing>();
-            Element potentialElement = minionStats.GetHighestAffinity(out float value, 50);
+            Element potentialElement = minion.GetHighestAffinity(out float value, 50);
             if (potentialElement != Element.None && !minionElements.Contains(potentialElement))
             {
                 minionElements.Add(potentialElement);
             }
         }
-        #endregion
-
-        #region add ability buttons for minions
-        foreach (AbilityLibrary_SO.ElementCategories category in AbilityLibrary.abilityLibrary.entries)
-        {
-            if (minionElements.Contains(category.Element))
-            {
-                foreach (Ability ability in category.Abilities)
-                {
-                    Button abilityButton = AddButtonToPanel($"{ability.Name} : {Ability.GetCoreCraftingCost(ability)} Core Power", bottomLeftPanel, 70, 5);
-                    //Debug.Log("made it this far2");
-
-                    abilityButton.RegisterCallback<ClickEvent>(e => SetSelectedMinionAbility(ability));
-                    abilityButton.RegisterCallback<ClickEvent>(e => ShowAbilityCraftingInfo());
-                }
-            }
-        }
-        #endregion
-        //SetInstructionsText($"Confirm to learn the selected ability if you have sufficient core power. Currently you have {AlchemyInventory.GetCorePowerResource(selectedIngredients)} core power activated."))
+        return minionElements;
     }
-
-
     private void ShowAbilityCraftingInfo()
     {
 

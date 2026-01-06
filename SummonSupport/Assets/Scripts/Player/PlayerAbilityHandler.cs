@@ -6,6 +6,7 @@ using Unity.VisualScripting;
 
 public class PlayerAbilityHandler : AbilityHandler
 {
+    public PlayerAbilityHandler Instance { private set; get; }
     PlayerInputActions inputActions;
     public static Ability DashAbility { private set; get; }
     public Ability selectedAbility { private set; get; }
@@ -42,6 +43,8 @@ public class PlayerAbilityHandler : AbilityHandler
         UpdateAbilities();
         playerStats = GetComponent<LivingBeing>();
         modHandler = AbilityModHandler.Instance;
+        if (Instance != null) Destroy(this);
+        else Instance = this;
 
     }
 

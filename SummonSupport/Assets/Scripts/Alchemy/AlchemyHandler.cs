@@ -23,7 +23,7 @@ public class AlchemyHandler : MonoBehaviour
     [field: SerializeField] public float RecycleExchangeRate { get; private set; } = .05f;
     [field: SerializeField] public float KnowledgeGainRate { get; private set; } = 1f;
     [field: SerializeField] public int SizeScalar { get; private set; } = 20;
-    [SerializeField] public List<GameObject> activeMinions = new List<GameObject>();
+    [SerializeField] public List<LivingBeing> activeMinions = new List<LivingBeing>();
     public static AlchemyHandler Instance { get; private set; }
     public static Dictionary<AlchemyLoot, int> AlchemyLootValueDict = new();
 
@@ -76,7 +76,7 @@ public class AlchemyHandler : MonoBehaviour
                 Vector3 playerPos = PlayerStats.Instance.transform.position;
                 craftedMinion = Instantiate(minionPrefab, new Vector3(playerPos.x + 10, playerPos.y, playerPos.z + 10), Quaternion.identity);
 
-                UpgradeMinion(craftedMinion, combinedIngredients, elementList);
+                UpgradeMinion(craftedMinion.GetComponent<LivingBeing>(), combinedIngredients, elementList);
                 AddActiveMinion(craftedMinion);
                 //Debug.Log("Add ACtive minion");
                 int knowledgeGain = GainKnowledge(elementList, combinedIngredients);
@@ -87,27 +87,27 @@ public class AlchemyHandler : MonoBehaviour
         }
     }
 
-    public static void HandleMinionRecycling(GameObject minion)
+    public static void HandleMinionRecycling(LivingBeing minion)
     {
-        EventDeclarer.minionRecycled?.Invoke(minion);
+        if (minion == null) throw new SystemException("Minionstats is null when trying to recycle a minion");
+        EventDeclarer.minionRecycled?.Invoke(minion.gameObject);
 
-        if (minion.TryGetComponent<MinionStats>(out MinionStats stats))
-        {
-            float minionPower = stats.MaxHP - 100f;
-            float minionHP = stats.MaxHP - 100f;
-            float minionAffinity = GetCombinedElementValues(stats);
 
-            AlchemyInventory.AlterIngredientNum(AlchemyLoot.WeakCore, (int)(minionPower * Instance.RecycleExchangeRate));
-            AlchemyInventory.AlterIngredientNum(AlchemyLoot.FaintEther, (int)(minionAffinity * Instance.RecycleExchangeRate));
-            AlchemyInventory.AlterIngredientNum(AlchemyLoot.WretchedOrgans, (int)(minionHP * Instance.RecycleExchangeRate));
-        }
-        EventDeclarer.minionDied?.Invoke(minion);
+        float minionPower = minion.MaxHP - 100f;
+        float minionHP = minion.MaxHP - 100f;
+        float minionAffinity = GetCombinedElementValues(minion);
+
+        AlchemyInventory.AlterIngredientNum(AlchemyLoot.WeakCore, (int)(minionPower * Instance.RecycleExchangeRate));
+        AlchemyInventory.AlterIngredientNum(AlchemyLoot.FaintEther, (int)(minionAffinity * Instance.RecycleExchangeRate));
+        AlchemyInventory.AlterIngredientNum(AlchemyLoot.WretchedOrgans, (int)(minionHP * Instance.RecycleExchangeRate));
+
+        EventDeclarer.minionDied?.Invoke(minion.gameObject);
         CommandMinion.RemoveActiveMinions(minion);
 
 
         Destroy(minion);
     }
-    private static int GetCombinedElementValues(MinionStats stats)
+    private static int GetCombinedElementValues(LivingBeing stats)
     {
         int combinedAffinity = 0;
         foreach (Element element in Enum.GetValues(typeof(Element)))
@@ -171,7 +171,7 @@ public class AlchemyHandler : MonoBehaviour
         return elementUpgrade;
     }
 
-    public void UpgradeMinion(GameObject minion, Dictionary<AlchemyLoot, int> ingredients, List<Element> elementList)
+    public void UpgradeMinion(LivingBeing minion, Dictionary<AlchemyLoot, int> ingredients, List<Element> elementList)
     {
         MinionStats stats = minion.GetComponent<MinionStats>();
 
@@ -206,9 +206,8 @@ public class AlchemyHandler : MonoBehaviour
         }
     }
 
-    private void AlterMinionByElement(GameObject minion)
+    private void AlterMinionByElement(LivingBeing stats)
     {
-        LivingBeing stats = minion.GetComponent<LivingBeing>();
         Element strongestElement = stats.GetHighestAffinity(out float value);
         string nameModifier;
 
@@ -228,9 +227,9 @@ public class AlchemyHandler : MonoBehaviour
     private void AddActiveMinion(GameObject minion)
     {
         LivingBeing livingBeing = minion.GetComponent<LivingBeing>();
-        if (!activeMinions.Contains(minion))
+        if (!activeMinions.Contains(livingBeing))
         {
-            activeMinions.Add(minion);
+            activeMinions.Add(livingBeing);
             EventDeclarer.newMinionAdded?.Invoke(livingBeing);
         }
         CommandMinion.SetActiveMinions(activeMinions);
