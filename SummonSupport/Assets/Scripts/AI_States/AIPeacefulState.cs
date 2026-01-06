@@ -145,9 +145,9 @@ public class AIPeacefulState : AIState
     private LivingBeing SelectFriendlyTarget()
     {
         List<LivingBeing> friendlies = new() { stateHandler.playerStats, stateHandler.livingBeing };
-        foreach (GameObject minion in CommandMinion.activeMinions)
+        foreach (LivingBeing minion in CommandMinion.activeMinions)
         {
-            friendlies.Add(minion.GetComponent<LivingBeing>());
+            friendlies.Add(minion);
         }
 
         LivingBeing selectedFriend = friendlies[Random.Range(0, friendlies.Count)];

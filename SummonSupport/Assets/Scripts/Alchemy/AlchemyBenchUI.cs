@@ -415,7 +415,6 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
 
     private void DisplayAllModableAbilities()
     {
-
         ShowUI(bottomLeftPanel);
         foreach (Ability ability in playerAbilityHandler.Instance.Abilities)
         {

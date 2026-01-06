@@ -50,7 +50,7 @@ public class MinionStats : LivingBeing
     {
         yield return null; // wartet 1 Frame – nach allen Start()-Methoden
         PlayerUIHandler.Instance.AddMinionHP(this);
-        CommandMinion.AddActiveMinions(gameObject);
+        CommandMinion.AddActiveMinions(this);
         base.Start();
 
 

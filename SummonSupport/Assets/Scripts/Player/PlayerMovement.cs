@@ -169,6 +169,7 @@ public class PlayerMovement : MovementScript
         if (Physics.Raycast(ray, out RaycastHit hit, 300))
         {
             CommandMinion.HandleCommand(hit);
+            Debug.Log($"{hit}");
         }
     }
 

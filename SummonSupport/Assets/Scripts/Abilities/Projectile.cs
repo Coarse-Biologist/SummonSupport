@@ -27,6 +27,7 @@ public class Projectile : MonoBehaviour
     int ricochet = 0;
     LivingBeing userLivingBeing = null;
     private bool active = false;
+    private bool modsAdded = false;
 
     public AbilityModHandler modHandler { private set; get; }
     public Mod_Base projectileMod { private set; get; }
@@ -82,6 +83,7 @@ public class Projectile : MonoBehaviour
     }
     public void HandleRicochet()
     {
+        Debug.Log("Rico shetting");
         if (ricochedAlready >= ricochet)
         {
             Debug.Log($"destroying because: ricocheted already = {ricochedAlready}. max ricochet = {ricochet}");
@@ -152,6 +154,7 @@ public class Projectile : MonoBehaviour
             if (other.gameObject.TryGetComponent(out NavMeshObstacle obstacle))
             {
                 Debug.Log("Box collider entered");
+                AddMods();
                 HandleRicochet();
                 SpawnEffect(transform);
             }
@@ -175,15 +178,20 @@ public class Projectile : MonoBehaviour
         }
 
     }
-
-    void HandleOnHitBehaviour(LivingBeing other, Collision col = null)
+    private void AddMods()
     {
-        if (modHandler != null)
+        if (!modsAdded && modHandler != null)
         {
             split = modHandler.GetModAttributeByType(ability, AbilityModTypes.MaxSplit);
             pierce = modHandler.GetModAttributeByType(ability, AbilityModTypes.MaxPierce);
             ricochet = modHandler.GetModAttributeByType(ability, AbilityModTypes.MaxRicochet);
+            modsAdded = true;
         }
+    }
+
+    void HandleOnHitBehaviour(LivingBeing other, Collision col = null)
+    {
+        AddMods();
 
         if (!splitAlready && (ability.PiercingMode == OnHitBehaviour.Split || split > 0))
         {
@@ -197,7 +205,6 @@ public class Projectile : MonoBehaviour
         {
             if (ricochedAlready < ricochet)
             {
-
                 HandleRicochet();
             }
         }

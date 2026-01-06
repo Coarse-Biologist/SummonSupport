@@ -46,7 +46,7 @@ public static class CrewsRelationshipHandler
     {
         bool isAlly1 = Allies.Contains(attacker.CharacterTag);
         bool isAlly2 = Allies.Contains(target.CharacterTag);
-        if (attacker.TryGetComponent<AI_CC_State>(out AI_CC_State ccState) && ccState.isCharmed) return RelationshipType.Hostile;
+        if (attacker.TryGetComponent(out AI_CC_State ccState) && ccState.isCharmed) return RelationshipType.Hostile;
         return (isAlly1 == isAlly2) ? RelationshipType.Friendly : RelationshipType.Hostile;
     }
 

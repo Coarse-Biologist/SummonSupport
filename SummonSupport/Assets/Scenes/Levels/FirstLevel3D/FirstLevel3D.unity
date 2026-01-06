@@ -10404,6 +10404,11 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2442994578383176847, guid: 4234196dba3d8d14195068062b6f93d4,
         type: 3}
+    - target: {fileID: 4958059305299819429, guid: 7328986a125173a4c8c04b292083f431,
+        type: 3}
+      propertyPath: <SizeScalar>k__BackingField
+      value: 50
+      objectReference: {fileID: 0}
     - target: {fileID: 6104946648137055005, guid: 7328986a125173a4c8c04b292083f431,
         type: 3}
       propertyPath: m_Size.x
