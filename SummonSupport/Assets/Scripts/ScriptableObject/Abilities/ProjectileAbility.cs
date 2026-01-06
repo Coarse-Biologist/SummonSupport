@@ -25,16 +25,18 @@ public class ProjectileAbility : Ability
     }
     public bool Activate(GameObject user, GameObject spawnPoint)
     {
-
-        return Activate(user, spawnPoint.transform);
+        Debug.Log("Someone wants to use this");
+        return false; //Activate(user, spawnPoint.transform);
     }
-    public bool Activate(GameObject user, Transform spawnPoint)
+    public bool Activate(LivingBeing casterStats)
     {
+        Transform spawnPoint = casterStats.transform;
         //Debug.Log($"spawnpoint rotation = {spawnPoint.rotation.y}");
         int shots = 1;
-        if (user.TryGetComponent(out AbilityModHandler modHandler))
+        if (casterStats.CharacterTag != CharacterTag.Enemy)
         {
-            shots += modHandler.GetModAttributeByType(this, AbilityModTypes.Number);
+            shots += AbilityModHandler.Instance.GetModAttributeByType(this, AbilityModTypes.Number);
+            Debug.Log($"Shots = {shots}");
         }
         for (int i = 0; i < shots; i += 1)
         {
@@ -48,7 +50,7 @@ public class ProjectileAbility : Ability
             Quaternion rotation = Quaternion.Euler(0, rotY, 0);
             Vector3 newDirection = rotation * spawnPoint.forward;
             //Debug.Log($"  user: {user.GetComponent<LivingBeing>().Name} is using the ability {projectileScript.name}");
-            projectileScript.SetActive(this, user.GetComponent<LivingBeing>(), modHandler);
+            projectileScript.SetActive(this, casterStats.GetComponent<LivingBeing>(), AbilityModHandler.Instance);
             projectileScript.SetProjectilePhysics(newDirection);
             projectileScript.SetParticleTrailEffects(newDirection);
 

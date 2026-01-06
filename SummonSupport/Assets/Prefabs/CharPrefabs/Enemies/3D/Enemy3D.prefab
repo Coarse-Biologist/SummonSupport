@@ -18,7 +18,6 @@ GameObject:
   - component: {fileID: 505316166019517454}
   - component: {fileID: 5243959057096400346}
   - component: {fileID: 3813269723501921765}
-  - component: {fileID: 1189656574215276347}
   - component: {fileID: 2032322451267575377}
   - component: {fileID: 6881935197926149321}
   - component: {fileID: 8380647337846140276}
@@ -96,6 +95,8 @@ MonoBehaviour:
   <Slashing>k__BackingField: 0
   <AffectedByAbilities>k__BackingField: []
   <XP_OnDeath>k__BackingField: 5
+  SE_Handler: {fileID: 0}
+  navMesh: {fileID: 0}
 --- !u!114 &6420015540202892481
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -214,18 +215,6 @@ MonoBehaviour:
   <DashCoolDown>k__BackingField: 1
   <DashDuration>k__BackingField: 0.1
   <Weight>k__BackingField: 0.1
---- !u!114 &1189656574215276347
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 810306928598971056}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf6e2c2e7a35ed14a8e559a025cea79d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AbilityModHandler
 --- !u!114 &2032322451267575377
 MonoBehaviour:
   m_ObjectHideFlags: 0

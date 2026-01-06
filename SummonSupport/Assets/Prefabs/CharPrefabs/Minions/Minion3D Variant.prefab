@@ -151,13 +151,13 @@ PrefabInstance:
     - target: {fileID: 6420015540202892481, guid: deb0299c2f7c5ee468cb23755c8d92da,
         type: 3}
       propertyPath: <Abilities>k__BackingField.Array.size
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6420015540202892481, guid: deb0299c2f7c5ee468cb23755c8d92da,
         type: 3}
       propertyPath: '<Abilities>k__BackingField.Array.data[0]'
       value: 
-      objectReference: {fileID: 11400000, guid: a1d92caf1a989f045afb6724af236c41,
+      objectReference: {fileID: 11400000, guid: 5021e273f1bb93f48b798a0a50132e88,
         type: 2}
     - target: {fileID: 7173906857914730221, guid: deb0299c2f7c5ee468cb23755c8d92da,
         type: 3}
@@ -213,6 +213,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 7097166787737714777}
+    - targetCorrespondingSourceObject: {fileID: 810306928598971056, guid: deb0299c2f7c5ee468cb23755c8d92da,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6321436163420995799}
   m_SourcePrefab: {fileID: 100100000, guid: deb0299c2f7c5ee468cb23755c8d92da, type: 3}
 --- !u!4 &1705187181853708855 stripped
 Transform:
@@ -260,6 +264,18 @@ MonoBehaviour:
   - {fileID: 3072345204892040774}
   - {fileID: 8582960059180049285}
   - {fileID: 280827777760705073}
+--- !u!114 &6321436163420995799
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2442994578383176847}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5bf0aa40a5c8c5340a0e99117006653a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::StatusEffectHandler
 --- !u!1 &5838535601565866860 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8925903879776759123, guid: deb0299c2f7c5ee468cb23755c8d92da,

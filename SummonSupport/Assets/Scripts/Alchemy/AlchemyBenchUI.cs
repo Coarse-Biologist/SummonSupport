@@ -55,7 +55,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     private GameObject minionToRecycle;
 
     #region ability modding
-    private AbilityModHandler selectedModHandler;
+    private AbilityModHandler ModHandler;
 
     private AbilityModTypes selectedModType = AbilityModTypes.None;
     private StatusEffects selectedStatusEffect = null;
@@ -119,6 +119,14 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
         bottomRightPanel = craftingUI.Q<VisualElement>("BottomRightPanel");
         interactWindow.style.display = DisplayStyle.None;
         craftingUI.style.display = DisplayStyle.None;
+
+        ModHandler = AbilityModHandler.Instance;
+
+        if (ModHandler == null)
+        {
+            Debug.Log("No modhandler found");
+        }
+
 
         //ShowBackground();
     }
@@ -407,23 +415,21 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     {
 
         ShowUI(bottomLeftPanel);
-        if (PlayerStats.Instance.TryGetComponent<AbilityHandler>(out AbilityHandler abilityHandler) && PlayerStats.Instance.TryGetComponent(out AbilityModHandler playerModHandler))
+        if (PlayerStats.Instance.TryGetComponent(out AbilityHandler abilityHandler))
             foreach (Ability ability in abilityHandler.Abilities)
             {
                 ///Ability potentiallySelectedAbility = ability;
                 Button button = AddButtonToPanel($"{ability.Name}", bottomLeftPanel, 40, 5);
                 button.RegisterCallback<ClickEvent>(e => SetSelectedAbility(ability));
-                button.RegisterCallback<ClickEvent>(e => SetSelectedModHandler(playerModHandler));
                 button.RegisterCallback<ClickEvent>(e => DisplayAbilityModOptions(ability));
             }
         foreach (GameObject minion in alchemyHandler.activeMinions)
         {
-            if (minion.TryGetComponent(out CreatureAbilityHandler creatureAbilityHandler) && minion.TryGetComponent(out AbilityModHandler modHandler))
+            if (minion.TryGetComponent(out CreatureAbilityHandler creatureAbilityHandler))
                 foreach (Ability ability in creatureAbilityHandler.Abilities)
                 {
                     Ability potentiallySelectedAbility = ability;
                     Button button = AddButtonToPanel($"{ability.Name}", bottomLeftPanel, 20, 5);
-                    button.RegisterCallback<ClickEvent>(e => SetSelectedModHandler(modHandler));
                     button.RegisterCallback<ClickEvent>(e => SetSelectedAbility(potentiallySelectedAbility));
                     button.RegisterCallback<ClickEvent>(e => DisplayAbilityModOptions(potentiallySelectedAbility));
                 }
@@ -434,7 +440,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
         if (selectedAbility == null) return;
         ClearPanel(bottomRightPanel);
         SetInstructionsText($"Select an attribute for the ability which you would like to upgrade.");
-        foreach (AbilityModTypes modableAttribute in selectedModHandler.GetModableAttributes(ability))
+        foreach (AbilityModTypes modableAttribute in ModHandler.GetModableAttributes(ability))
         {
             Button button = AddButtonToPanel(AbilityModHandler.GetCleanEnumString(modableAttribute), bottomRightPanel, 40, 10);
             button.RegisterCallback<ClickEvent>(e => SetSelectedModAttribute(modableAttribute));
@@ -473,7 +479,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     private void AttemptModification(AbilityModTypes modAttribute)
     {
         if (selectedAbility == null) return;
-        if (selectedModHandler == null) return;
+        if (ModHandler == null) return;
         if (selectedModType == AbilityModTypes.None && selectedStatusEffect == null) return;
         Debug.Log($"selected mod = {selectedModType}. selected status effect = {selectedStatusEffect}");
 
@@ -482,7 +488,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
             var boughtPrice = AlchemyInventory.BuyCraftingPowerWithCores(AbilityModHandler.GetModCost(selectedModType));
             if (boughtPrice.bought)
             {
-                selectedModHandler.ModAttributeByType(selectedAbility, selectedModType, AbilityModHandler.GetModIncrementValue(selectedModType));
+                ModHandler.ModAttributeByType(selectedAbility, selectedModType, AbilityModHandler.GetModIncrementValue(selectedModType));
                 SetInstructionsText($"You have modified the {AbilityModHandler.GetCleanEnumString(selectedModType)} of {selectedAbility.Name} by {AbilityModHandler.GetModIncrementValue(selectedModType)} at the cost of {boughtPrice.price} core power.");
             }
         }
@@ -491,14 +497,10 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
             var boughtPrice = AlchemyInventory.BuyCraftingPowerWithCores(AbilityModHandler.GetModCost(selectedStatusEffect.EffectType));
             if (boughtPrice.bought)
             {
-                selectedModHandler.AddStatusEffectToAbility(selectedAbility, selectedStatusEffect);
+                ModHandler.AddStatusEffectToAbility(selectedAbility, selectedStatusEffect);
                 SetInstructionsText($"You have modified the {AbilityModHandler.GetCleanEnumString(selectedModType)} of {selectedAbility.Name} by {AbilityModHandler.GetModIncrementValue(selectedModType)} at the cost of {boughtPrice.price} core power.");
             }
         }
-    }
-    private void SetSelectedModHandler(AbilityModHandler modHandler)
-    {
-        selectedModHandler = modHandler;
     }
 
     #endregion
@@ -818,7 +820,6 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
         selectedElements.Clear();
         selectedIngredients.Clear();
         selectedModType = AbilityModTypes.None;
-        selectedModHandler = null;
 
     }
 

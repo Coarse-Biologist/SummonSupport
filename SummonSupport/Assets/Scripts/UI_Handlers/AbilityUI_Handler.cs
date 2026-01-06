@@ -44,8 +44,7 @@ public class AbilityUI_Handler : MonoBehaviour
     }
     void Start()
     {
-        if (PlayerStats.Instance.TryGetComponent(out AbilityModHandler handler))
-            modHandler = handler;
+        modHandler = AbilityModHandler.Instance;
     }
 
     void OnEnable()

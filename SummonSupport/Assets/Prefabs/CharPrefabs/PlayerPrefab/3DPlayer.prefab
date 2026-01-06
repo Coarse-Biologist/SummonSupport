@@ -14,7 +14,6 @@ GameObject:
   - component: {fileID: 3587660070194886959}
   - component: {fileID: 5700169036039766404}
   - component: {fileID: 5469552160048565923}
-  - component: {fileID: 8875079696745540598}
   - component: {fileID: 8215957815775318066}
   - component: {fileID: 2381431553521449507}
   - component: {fileID: 485068674075403870}
@@ -137,7 +136,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 3426d86dfddd8b342b4b8164207c3157, type: 2}
   - {fileID: 11400000, guid: e959c2ee0da79214a833f2b04de5f78c, type: 2}
   - {fileID: 11400000, guid: 2c411350804b90246b5fcb0c56b66a2c, type: 2}
-  abilitiesOnCooldown: 
   <WeaponInfo>k__BackingField: {fileID: 0}
   currentAnimation: 
 --- !u!114 &5469552160048565923
@@ -186,21 +184,10 @@ MonoBehaviour:
   <Slashing>k__BackingField: 0
   <AffectedByAbilities>k__BackingField: []
   <XP_OnDeath>k__BackingField: 5
+  SE_Handler: {fileID: 0}
   <SkillPoints>k__BackingField: 100
   <TotalControlllableMinions>k__BackingField: 2
   <AbilitySlots>k__BackingField: 2
---- !u!114 &8875079696745540598
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5369172574488311089}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf6e2c2e7a35ed14a8e559a025cea79d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AbilityModHandler
 --- !u!114 &8215957815775318066
 MonoBehaviour:
   m_ObjectHideFlags: 0

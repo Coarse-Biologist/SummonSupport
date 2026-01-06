@@ -12,10 +12,9 @@ public class AbilityHandler : MonoBehaviour
     private Dictionary<BeamAbility, GameObject> toggledAbilitiesDict = new();
     [field: SerializeField] public WeaponInfo WeaponInfo { get; private set; }
     private bool charging = false;
-    private AbilityModHandler modHandler;
+    public AbilityModHandler modHandler { protected set; get; }
     private AnimationControllerScript anim;
 
-    //#TODO Add status effect implimentations that should be handled here
 
     protected virtual void Awake()
     {
@@ -31,9 +30,15 @@ public class AbilityHandler : MonoBehaviour
         {
             abilitiesOnCooldownCrew.Add(ability, false);
         }
-        if (gameObject.TryGetComponent(out AbilityModHandler modScript))
-            modHandler = modScript;
-        else throw new System.Exception("No Ability mod handler found, and now im throwing a fit");
+    }
+    void Start()
+    {
+        modHandler = AbilityModHandler.Instance;
+        if (modHandler == null)
+        {
+            Debug.Log("No mod handler found");
+        }
+        else Debug.Log($"ModHandler found: {modHandler}");
     }
 
     public void LearnAbility(Ability ability)
@@ -172,7 +177,7 @@ public class AbilityHandler : MonoBehaviour
         //Debug.Log("Time to see the heavy throw animation");
         if (anim != null) anim.ChangeLayerAnimation("OneArmedThrow", 1, 2f);
 
-        return ability.Activate(gameObject, abilitySpawn);
+        return ability.Activate(statsHandler);
     }
 
     bool HandlePointAndClick(TargetMouseAbility ability)
@@ -205,6 +210,7 @@ public class AbilityHandler : MonoBehaviour
     {
         try
         {
+
             float coolDown = ability.Cooldown + modHandler.GetModAttributeByType(ability, AbilityModTypes.Cooldown) + statsHandler.SE_Handler.GetStatusEffectValue(StatusEffectType.Lethargic);
             // default, plus modifier, plus lethargy value
             //Debug.Log($"Cool down duration for {ability.Name} calculated to be {coolDown}");

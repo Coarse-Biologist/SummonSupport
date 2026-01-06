@@ -6,7 +6,7 @@ public class LootSpawnHandler : MonoBehaviour
     [field: SerializeField] GameObject FaintEtherPrefab;
     [field: SerializeField] GameObject PowerfulEtherPrefab;
     [field: SerializeField] GameObject IntenseEtherPrefab;
-    [field: SerializeField] GameObject OrganPrefab;
+    [field: SerializeField] GameObject[] OrganPrefabs = new GameObject[3];
 
     #region Cores
     [field: SerializeField] GameObject CorePrefab;
@@ -75,12 +75,12 @@ public class LootSpawnHandler : MonoBehaviour
 
     private void SpawnOrgans(EnemyStats enemy, AlchemyLoot organType)
     {
-        //        //Debug.Log("Spawning organ!");
+        Debug.Log("Spawning organ!");
         if (organType == AlchemyLoot.WeakCore) return;
-        Instantiate(OrganPrefab, enemy.transform.position, Quaternion.identity);
+        GameObject randomOrgan = Instantiate(OrganPrefabs[Random.Range(0, 2)], enemy.transform.position, Quaternion.identity);
         //Debug.Log("Indeed, Spawning organ");
 
-        if (OrganPrefab.TryGetComponent(out LootableAlchemyMaterial lootScript))
+        if (randomOrgan.TryGetComponent(out LootableAlchemyMaterial lootScript))
         {
             lootScript.SetAlchemyMaterial(organType);
         }

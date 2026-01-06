@@ -90,6 +90,7 @@ public class PlayerUIHandler : MonoBehaviour
 
     public void AddMinionHP(LivingBeing livingBeing)
     {
+        Debug.Log($"adding health bar for {livingBeing}");
         TemplateContainer prefabContainer = UIPrefabAssets.Instantiate();
 
         ProgressBar minionHP = prefabContainer.Q<ProgressBar>("HealthbarPrefab");
@@ -101,7 +102,7 @@ public class PlayerUIHandler : MonoBehaviour
             minionHP.title = $"{livingBeing.Name} HP: {hp}";
             minionHP.highValue = hp;
             minionHP.value = hp;
-            if (minionHPBars == null) Logging.Error("minion HP visual element doesnt exist");
+            if (minionHPBars == null) Debug.Log("Error: minion HP visual element doesnt exist");
             minionHPBars.Add(minionHP);
             minionHP.RegisterCallback<ClickEvent>(evt => OnMinionSelect(minionHP));
         }

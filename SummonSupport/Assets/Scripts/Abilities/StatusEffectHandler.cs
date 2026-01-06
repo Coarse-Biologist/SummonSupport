@@ -9,7 +9,7 @@ public class StatusEffectHandler : MonoBehaviour
 {
     private LivingBeing livingBeing;
     private AIStateHandler stateHandler;
-    public Rigidbody rigidBody;
+    public Rigidbody rigidBody { private set; get; }
     private float ai_Speed = 5;
     public Dictionary<StatusEffectType, int> SufferedStatusEffects { get; private set; } = new();
 

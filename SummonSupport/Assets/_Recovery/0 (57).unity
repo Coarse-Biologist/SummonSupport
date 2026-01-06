@@ -434,6 +434,84 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e886a549e6972994abaa35dd9c7f3236, type: 3}
+--- !u!1001 &45705984
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1705187181853708855, guid: 4234196dba3d8d14195068062b6f93d4,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -7.8616724
+      objectReference: {fileID: 0}
+    - target: {fileID: 1705187181853708855, guid: 4234196dba3d8d14195068062b6f93d4,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 5.72
+      objectReference: {fileID: 0}
+    - target: {fileID: 1705187181853708855, guid: 4234196dba3d8d14195068062b6f93d4,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 14.248339
+      objectReference: {fileID: 0}
+    - target: {fileID: 1705187181853708855, guid: 4234196dba3d8d14195068062b6f93d4,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1705187181853708855, guid: 4234196dba3d8d14195068062b6f93d4,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1705187181853708855, guid: 4234196dba3d8d14195068062b6f93d4,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1705187181853708855, guid: 4234196dba3d8d14195068062b6f93d4,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1705187181853708855, guid: 4234196dba3d8d14195068062b6f93d4,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1705187181853708855, guid: 4234196dba3d8d14195068062b6f93d4,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1705187181853708855, guid: 4234196dba3d8d14195068062b6f93d4,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2338675823077055740, guid: 4234196dba3d8d14195068062b6f93d4,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2442994578383176847, guid: 4234196dba3d8d14195068062b6f93d4,
+        type: 3}
+      propertyPath: m_Name
+      value: Minion3D Variant
+      objectReference: {fileID: 0}
+    - target: {fileID: 6386852988019537431, guid: 4234196dba3d8d14195068062b6f93d4,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 4234196dba3d8d14195068062b6f93d4, type: 3}
 --- !u!1 &51023587 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3518818309262500619, guid: 3388c2193e6a56841b1082aa7f3f5844,
@@ -3883,7 +3961,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5bf0aa40a5c8c5340a0e99117006653a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StatusEffectHandler
-  rigidBody: {fileID: 0}
 --- !u!114 &1006284826
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3896,7 +3973,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5bf0aa40a5c8c5340a0e99117006653a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StatusEffectHandler
-  rigidBody: {fileID: 0}
 --- !u!4 &1042397107 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1229462029999028531, guid: aff31b32fc4eea5418f988c216c59a4a,
@@ -4695,7 +4771,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5bf0aa40a5c8c5340a0e99117006653a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StatusEffectHandler
-  rigidBody: {fileID: 0}
 --- !u!4 &1251025559 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1229462029999028531, guid: aff31b32fc4eea5418f988c216c59a4a,
@@ -7753,7 +7828,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5bf0aa40a5c8c5340a0e99117006653a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StatusEffectHandler
-  rigidBody: {fileID: 0}
 --- !u!1 &1863413858
 GameObject:
   m_ObjectHideFlags: 0
@@ -10751,3 +10825,4 @@ SceneRoots:
   - {fileID: 1320286669402340343}
   - {fileID: 84590274017519541}
   - {fileID: 1674715767}
+  - {fileID: 45705984}

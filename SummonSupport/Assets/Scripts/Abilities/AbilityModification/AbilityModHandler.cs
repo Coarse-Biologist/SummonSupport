@@ -1,12 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.Entities.UniversalDelegates;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class AbilityModHandler : MonoBehaviour
 {
+    public static AbilityModHandler Instance { private set; get; }
     public Dictionary<Ability, Mod_Base> ModdedAbilities { private set; get; } = new();
 
 
@@ -57,7 +56,14 @@ public class AbilityModHandler : MonoBehaviour
             {typeof(BeamAbility), new List<AbilityModTypes>() { AbilityModTypes.Cost, AbilityModTypes.Cooldown, AbilityModTypes.Damage, AbilityModTypes.DamageOverTime, AbilityModTypes.Heal, AbilityModTypes.HealOverTime } },
             {typeof(ChargeAbility), new List<AbilityModTypes>() { AbilityModTypes.MaxPierce, AbilityModTypes.Range, AbilityModTypes.Cost, AbilityModTypes.Cooldown, AbilityModTypes.Damage, AbilityModTypes.DamageOverTime, AbilityModTypes.Heal, AbilityModTypes.HealOverTime }},
         };
-
+    void Awake()
+    {
+        if (Instance != null)
+        {
+            Destroy(this);
+        }
+        else Instance = this;
+    }
     public static int GetModCost(AbilityModTypes modType)
     {
         if (ModCosts.TryGetValue(modType, out int cost))

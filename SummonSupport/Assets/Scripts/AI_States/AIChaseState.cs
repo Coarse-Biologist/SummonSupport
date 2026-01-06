@@ -153,6 +153,7 @@ public class AIChaseState : AIState
                     }
 
                     abilityHandler.UseAbility(stateHandler.target, ability);
+
                 }
             }
 
