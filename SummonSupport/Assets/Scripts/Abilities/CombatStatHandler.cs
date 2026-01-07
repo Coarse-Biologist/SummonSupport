@@ -88,6 +88,8 @@ public static class CombatStatHandler
     public static float AdjustDamageValue(Damage_AT damage_AT, SpecialAbilityAttribute specialAbilityAttribute = SpecialAbilityAttribute.None)
     {
         float damageValue = GetDamageByType(damage_AT);
+        damageValue = ModifyDamageValueByCasterAffinity(damageValue);
+
         if (modHandler != null)
         {
             damageValue += modHandler.GetModAttributeByType(currentAbility, AbilityModTypes.Damage);
@@ -207,7 +209,6 @@ public static class CombatStatHandler
         float tempMax = currentTarget.GetAttribute(attributeTypeTempMax);
         float currentValue = currentTarget.GetAttribute(typeCurrentValue);
         UnityEngine.Debug.Log($"damage = {changeValue}. ability = {currentAbility}");
-        changeValue = ModifyDamageValueByCasterAffinity(changeValue);
         UnityEngine.Debug.Log($"damage Now = {changeValue}. ability = {currentAbility}");
 
         //if (newValue > max) // if the newly calculated value (after recieving heal or damage) is greater than the  characters max
