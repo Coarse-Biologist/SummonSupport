@@ -1,0 +1,66 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7d1854101543804bb043f80b060a821, type: 3}
+  m_Name: Slash_Fungi
+  m_EditorClassIdentifier: 
+  <Name>k__BackingField: Fungal Slash
+  <Icon>k__BackingField: {fileID: 0}
+  <Cooldown>k__BackingField: 3
+  <CostType>k__BackingField: 4
+  <Cost>k__BackingField: 20
+  <Range>k__BackingField: 5
+  <Duration>k__BackingField: 0
+  <AbilityTypeTag>k__BackingField: 1
+  <ListUsableOn>k__BackingField: 01000000
+  <TargetEffects>k__BackingField:
+    <EffectDescription>k__BackingField: 
+    <Heal>k__BackingField:
+      <Value>k__BackingField: 0
+      <ValueType>k__BackingField: 0
+    <HealOverTime>k__BackingField:
+      <Value>k__BackingField: 0
+      <ValueType>k__BackingField: 0
+    <Damage>k__BackingField:
+      <Value>k__BackingField: 50
+    <DamageOverTime>k__BackingField:
+      <Value>k__BackingField: 0
+    <AttributeUp>k__BackingField: []
+    <AttributeDown>k__BackingField: []
+    <StatusEffects>k__BackingField: []
+    <SpecialAbilityAttribute>k__BackingField: 0
+  <SelfEffects>k__BackingField:
+    <EffectDescription>k__BackingField: 
+    <Heal>k__BackingField:
+      <Value>k__BackingField: 0
+      <ValueType>k__BackingField: 0
+    <HealOverTime>k__BackingField:
+      <Value>k__BackingField: 0
+      <ValueType>k__BackingField: 0
+    <Damage>k__BackingField:
+      <Value>k__BackingField: 0
+    <DamageOverTime>k__BackingField:
+      <Value>k__BackingField: 0
+    <AttributeUp>k__BackingField: []
+    <AttributeDown>k__BackingField: []
+    <StatusEffects>k__BackingField: []
+    <SpecialAbilityAttribute>k__BackingField: 0
+  <ElementTypes>k__BackingField: 0a000000
+  <PhysicalType>k__BackingField: 3
+  <OnHitEffect>k__BackingField: {fileID: 8554696951228805582, guid: 7bfcb6e9a8dfc5544ae6f2975f7ebf45,
+    type: 3}
+  <AlterParticleSystemGradient>k__BackingField: 0
+  <Angle>k__BackingField: 0
+  <Width>k__BackingField: 5
+  <SpawnLocEnum>k__BackingField: 1
+  <Shape>k__BackingField: 2
+  <MeleeParticleSystem>k__BackingField: {fileID: 2233059703059497809, guid: bc7a0bf0cdc25a840b7cd2ff07eef4b4,
+    type: 3}

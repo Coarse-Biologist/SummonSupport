@@ -708,7 +708,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     }
     private void SpawnCraftableMinionAbilityButtons(List<Element> minionElements)
     {
-        foreach (AbilityLibrary_SO.ElementCategories category in AbilityLibrary.abilityLibrary.entries)
+        foreach (AbilityLibrary_SO.ElementCategories category in AbilityLibrary.abilityLibrary.ElementalEntries)
         {
             if (minionElements.Contains(category.Element))
             {

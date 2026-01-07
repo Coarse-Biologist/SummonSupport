@@ -9,17 +9,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a284ac289eac5874ca5ee64e83ba096e, type: 3}
-  m_Name: Wind Aura
+  m_Script: {fileID: 11500000, guid: d7d1854101543804bb043f80b060a821, type: 3}
+  m_Name: Slash_Electricity
   m_EditorClassIdentifier: 
-  <Name>k__BackingField: Wind Aura
-  <Icon>k__BackingField: {fileID: -8172051240425876022, guid: d46d43f87ef93d3448c986a15737f67a,
-    type: 3}
-  <Cooldown>k__BackingField: 10
+  <Name>k__BackingField: Shocking Slash
+  <Icon>k__BackingField: {fileID: 0}
+  <Cooldown>k__BackingField: 3
   <CostType>k__BackingField: 4
-  <Cost>k__BackingField: 10
-  <Range>k__BackingField: 3
-  <Duration>k__BackingField: 8
+  <Cost>k__BackingField: 20
+  <Range>k__BackingField: 5
+  <Duration>k__BackingField: 0
   <AbilityTypeTag>k__BackingField: 1
   <ListUsableOn>k__BackingField: 01000000
   <TargetEffects>k__BackingField:
@@ -31,9 +30,9 @@ MonoBehaviour:
       <Value>k__BackingField: 0
       <ValueType>k__BackingField: 0
     <Damage>k__BackingField:
-      <Value>k__BackingField: 10
+      <Value>k__BackingField: 50
     <DamageOverTime>k__BackingField:
-      <Value>k__BackingField: 30
+      <Value>k__BackingField: 0
     <AttributeUp>k__BackingField: []
     <AttributeDown>k__BackingField: []
     <StatusEffects>k__BackingField: []
@@ -54,12 +53,14 @@ MonoBehaviour:
     <AttributeDown>k__BackingField: []
     <StatusEffects>k__BackingField: []
     <SpecialAbilityAttribute>k__BackingField: 0
-  <ElementTypes>k__BackingField: 05000000
-  <PhysicalType>k__BackingField: 0
-  <OnHitEffect>k__BackingField: {fileID: 9018438208592869522, guid: c5fd21a9f6e4d654cb82200a0fb3e341,
+  <ElementTypes>k__BackingField: 06000000
+  <PhysicalType>k__BackingField: 3
+  <OnHitEffect>k__BackingField: {fileID: 3120327116199938787, guid: 1c8e879845899e24290d617f97db8328,
     type: 3}
   <AlterParticleSystemGradient>k__BackingField: 0
-  <Radius>k__BackingField: 3
-  <AuraObject>k__BackingField: {fileID: 1699087696372334086, guid: 28b37b0f746263c449726bb994cd6f00,
+  <Angle>k__BackingField: 0
+  <Width>k__BackingField: 5
+  <SpawnLocEnum>k__BackingField: 1
+  <Shape>k__BackingField: 2
+  <MeleeParticleSystem>k__BackingField: {fileID: 8045656634573937372, guid: 58da61d6f192e1641a627c47b325eb53,
     type: 3}
-  <LeaveRotation>k__BackingField: 1

@@ -180,7 +180,7 @@ public class AlchemyHandler : MonoBehaviour
         }
         stats.RestoreResources();
         AlterMinionByElement(minion);
-        AddAbilitiesByElement(stats);
+        AddMeleeAbilityByElement(stats);
     }
 
     private void AddAbilitiesByElement(LivingBeing livingBeing)
@@ -198,6 +198,24 @@ public class AlchemyHandler : MonoBehaviour
                 {
                     abilityHandler.LearnAbility(ability);
                 }
+            }
+            abilityHandler.SetAbilityLists();
+        }
+    }
+    private void AddMeleeAbilityByElement(LivingBeing livingBeing)
+    {
+        CreatureAbilityHandler abilityHandler = livingBeing.gameObject.GetComponent<CreatureAbilityHandler>();
+        if (abilityHandler == null) return;
+        Element strongestElement = livingBeing.GetHighestAffinity(out float value);
+        if (strongestElement != Element.None)
+        {
+            Ability meleeAbility = AbilityLibrary.GetElementalMeleeAbility(strongestElement, value);
+
+            if (meleeAbility != null)
+            {
+
+                abilityHandler.LearnAbility(meleeAbility);
+
             }
             abilityHandler.SetAbilityLists();
         }

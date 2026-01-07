@@ -36,7 +36,7 @@ public static class AbilityLibrary
         int maxAttempts = 10;
         if (abilityLibrary != null)
         {
-            foreach (ElementCategories elementCategory in abilityLibrary.entries)
+            foreach (ElementCategories elementCategory in abilityLibrary.ElementalEntries)
             {
                 if (elementCategory.Element == element)
                 {
@@ -69,6 +69,19 @@ public static class AbilityLibrary
             Debug.Log($"ability handler scriptable object is not placed in the Ability library.");
             return null;
         }
+    }
+    public static Ability GetElementalMeleeAbility(Element element, float affinityValue)
+    {
+        Ability meleeAbility = null;
+        foreach (MeleeCategories meleeCategory in abilityLibrary.MeleeEntries)
+        {
+            if (meleeCategory.Element == element)
+            {
+                meleeAbility = meleeCategory.Abilities[0];
+            }
+        }
+        Debug.Log($"Returning {meleeAbility.Name} in the get Elemental Melee ability function");
+        return meleeAbility;
     }
     public static List<Ability> GetRandomAbilities(PhysicalType physical, int number = 1)
     {

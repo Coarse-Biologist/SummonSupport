@@ -12,11 +12,16 @@ public class AbilityLibrary_SO : ScriptableObject
         public Element Element;
         public List<Ability> Abilities;
     }
+    [System.Serializable]
+    public struct MeleeCategories
+    {
+        public Element Element;
+        public List<Ability> Abilities; // Only melee type abilities
+    }
+    public MeleeCategories[] MeleeEntries;
 
 
-
-
-    public ElementCategories[] entries;
+    public ElementCategories[] ElementalEntries;
 
     [System.Serializable]
 
@@ -39,7 +44,7 @@ public class AbilityLibrary_SO : ScriptableObject
     public Ability GetAbilityOfElementType(Element element)
     {
         Ability ability = null;
-        foreach (ElementCategories category in entries)
+        foreach (ElementCategories category in ElementalEntries)
         {
             if (category.Element == element) ability = category.Abilities[0];
         }
@@ -53,6 +58,10 @@ public class AbilityLibrary_SO : ScriptableObject
             if (category.PhysicalType == physicalType) ability = category.Abilities[0];
         }
         return ability;
+    }
+    public Ability GetPhysicalAbilityOfElementType(Element element)
+    {
+        throw new System.Exception("This function does nothing but complain about being useless.");
     }
 }
 
