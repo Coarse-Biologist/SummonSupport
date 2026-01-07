@@ -184,6 +184,7 @@ public static class CombatStatHandler
         // change value based Physical Resistance;
 
         float relevantResistance = currentTarget.PhysicalDict[physical].Get();
+        relevantResistance -= currentTarget.SE_Handler.GetStatusEffectValue(StatusEffectType.Dissolving) * 25; // magic number for effect of acid status effect where does it belog?
         if (relevantResistance > 0)
         {
             value -= value * relevantResistance / 100;
