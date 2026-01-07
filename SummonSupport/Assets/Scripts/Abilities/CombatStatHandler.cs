@@ -7,12 +7,16 @@ using System.Collections.Generic;
 using SummonSupportEvents;
 using UnityEngine.ResourceManagement.Profiling;
 using UnityEditor.Rendering;
+using UnityEditor.ShaderGraph.Internal;
+using System;
 
 public static class CombatStatHandler
 {
     //public static CombatStatHandler Instance;
 
     // doesnt use or recognize percentage based damage
+    private static float AffinityDamageScalar = 100f; // relevant caster affinity will be divided by this to modify damage. max affinity doubles elemental damage
+    private static float MinDamageScalar = .4f; //minimum modifier. once 40 affinity is surpassed, affinity scaling will increase.
     private static float tickRateFloat = 1f;
     private static WaitForSeconds tickRate = new WaitForSeconds(tickRateFloat);
     private static AbilityModHandler modHandler;
@@ -142,6 +146,8 @@ public static class CombatStatHandler
     public static float AdjustAndApplyDOT(Damage_AT damageOT)
     {
         float damageValue = -damageOT.Value;
+        damageValue = ModifyDamageValueByCasterAffinity(damageValue);
+
         foreach (Element element in currentAbility.ElementTypes)
         {
             PhysicalType physical = currentAbility.PhysicalType;
@@ -184,7 +190,15 @@ public static class CombatStatHandler
 
         return value;
     }
-
+    private static float ModifyDamageValueByCasterAffinity(float changeValue)
+    {
+        if (currentAbility.ElementTypes.Count == 0) return changeValue;
+        else
+        {
+            float damageModifier = Math.Max(MinDamageScalar, currentCaster.GetAffinity(currentAbility.ElementTypes[0]) / AffinityDamageScalar);
+            return changeValue *= damageModifier;
+        }
+    }
     public static void AdjustForOverValue(AttributeType attributeTypeTempMax, AttributeType attributeTypeMax, AttributeType typeCurrentValue, float changeValue)
     {
         // skipping until we actually have mechanism to show overhealth.
@@ -192,6 +206,9 @@ public static class CombatStatHandler
         float max = currentTarget.GetAttribute(attributeTypeMax);
         float tempMax = currentTarget.GetAttribute(attributeTypeTempMax);
         float currentValue = currentTarget.GetAttribute(typeCurrentValue);
+        UnityEngine.Debug.Log($"damage = {changeValue}. ability = {currentAbility}");
+        changeValue = ModifyDamageValueByCasterAffinity(changeValue);
+        UnityEngine.Debug.Log($"damage Now = {changeValue}. ability = {currentAbility}");
 
         //if (newValue > max) // if the newly calculated value (after recieving heal or damage) is greater than the  characters max
         //    return max;
