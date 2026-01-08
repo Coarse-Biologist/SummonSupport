@@ -36,7 +36,7 @@ public class Beam : MonoBehaviour
                 onCoolDown = true;
                 Invoke("OffCoolDown", TickRate);
                 AlreadyCollided.Add(targetStatsHandler);
-                GameObject hitEffect = Instantiate(Ability.SpawnEffectOnHit, other.transform.position, Quaternion.identity, other.transform);
+                GameObject hitEffect = Instantiate(Ability.OnHitEffect, other.transform.position, Quaternion.identity, other.transform);
                 Destroy(hitEffect, 5f);
                 StartCoroutine(DelayedDeletion(targetStatsHandler));
                 if (Ability.ThoroughIsUsableOn(Caster, targetStatsHandler))

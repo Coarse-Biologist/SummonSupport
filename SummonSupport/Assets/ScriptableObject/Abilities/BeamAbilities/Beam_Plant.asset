@@ -1,0 +1,63 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f56b7f0861db714c9f7f04ae6193671, type: 3}
+  m_Name: Beam_Plant
+  m_EditorClassIdentifier: 
+  <Name>k__BackingField: Plant Stream
+  <Icon>k__BackingField: {fileID: 0}
+  <Cooldown>k__BackingField: 0
+  <CostType>k__BackingField: 4
+  <Cost>k__BackingField: 3
+  <Range>k__BackingField: 5
+  <Duration>k__BackingField: 0
+  <AbilityTypeTag>k__BackingField: 1
+  <ListUsableOn>k__BackingField: 01000000
+  <TargetEffects>k__BackingField:
+    <EffectDescription>k__BackingField: Damage
+    <Heal>k__BackingField:
+      <Value>k__BackingField: 0
+      <ValueType>k__BackingField: 0
+    <HealOverTime>k__BackingField:
+      <Value>k__BackingField: 0
+      <ValueType>k__BackingField: 0
+    <Damage>k__BackingField:
+      <Value>k__BackingField: 100
+    <DamageOverTime>k__BackingField:
+      <Value>k__BackingField: 0
+    <AttributeUp>k__BackingField: []
+    <AttributeDown>k__BackingField: []
+    <StatusEffects>k__BackingField: []
+    <SpecialAbilityAttribute>k__BackingField: 0
+  <SelfEffects>k__BackingField:
+    <EffectDescription>k__BackingField: 
+    <Heal>k__BackingField:
+      <Value>k__BackingField: 0
+      <ValueType>k__BackingField: 0
+    <HealOverTime>k__BackingField:
+      <Value>k__BackingField: 0
+      <ValueType>k__BackingField: 0
+    <Damage>k__BackingField:
+      <Value>k__BackingField: 0
+    <DamageOverTime>k__BackingField:
+      <Value>k__BackingField: 0
+    <AttributeUp>k__BackingField: []
+    <AttributeDown>k__BackingField: []
+    <StatusEffects>k__BackingField: []
+    <SpecialAbilityAttribute>k__BackingField: 0
+  <ElementTypes>k__BackingField: 0b000000
+  <PhysicalType>k__BackingField: 0
+  <OnHitEffect>k__BackingField: {fileID: 3349317053817142625, guid: d09e3f2219cfd89408e67115a8f072be,
+    type: 3}
+  <AlterParticleSystemGradient>k__BackingField: 0
+  <BeamParticleSystem>k__BackingField: {fileID: 5563619062739287444, guid: f447a0c3807551846ba74f218f13add5,
+    type: 3}
+  <TickRate>k__BackingField: 0.5
