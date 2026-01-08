@@ -23,6 +23,7 @@ GameObject:
   - component: {fileID: 8380647337846140276}
   - component: {fileID: 7876922258442859149}
   - component: {fileID: 4211011472189413324}
+  - component: {fileID: -1710566687155731106}
   m_Layer: 6
   m_Name: Enemy3D
   m_TagString: Enemy
@@ -311,6 +312,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AnimationControllerScript
   AnimatorStringLine: Dog_001_
   currentMovementAnimation: 
+--- !u!114 &-1710566687155731106
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 810306928598971056}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5bf0aa40a5c8c5340a0e99117006653a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::StatusEffectHandler
 --- !u!1 &8925903879776759123
 GameObject:
   m_ObjectHideFlags: 0

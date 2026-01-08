@@ -148,8 +148,9 @@ public class AIChaseState : AIState
                 {
                     if (stateHandler.anim != null)
                     {
-                        if (ability is ProjectileAbility) stateHandler.anim.ChangeAnimation("Projectile");
-                        else stateHandler.anim.ChangeAnimation("Melee");
+                        if (ability is MeleeAbility) stateHandler.anim.ChangeAnimation("Melee");
+                        else if (ability is ProjectileAbility) stateHandler.anim.ChangeAnimation("Projectile");
+                        else stateHandler.anim.ChangeAnimation("SpecialAbility");
                     }
 
                     abilityHandler.UseAbility(stateHandler.target, ability);
