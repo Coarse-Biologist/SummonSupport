@@ -11,9 +11,10 @@ public class Ragdoll : MonoBehaviour, I_Destruction
     [field: SerializeField] public Collider mainCollider;
     [field: SerializeField] public List<Rigidbody> rigidbodies = new();
     [field: SerializeField] public List<Collider> colliders = new();
-    
+
     public void CauseDestruction(bool SaveTransformData = false)
     {
+        Debug.Log($"causing destruction");
         if (SaveTransformData) SavePreRagdollTransformData();
 
         RagDoll(true);
@@ -35,10 +36,10 @@ public class Ragdoll : MonoBehaviour, I_Destruction
         if (rigidbodies.Count == 0) return;
 
         else foreach (Rigidbody rb in rigidbodies)
-            {
-                rb.isKinematic = !isRagdoll;
-                rb.useGravity = isRagdoll;
-            }
+        {
+            rb.isKinematic = !isRagdoll;
+            rb.useGravity = isRagdoll;
+        }
     }
     private void EnableMainCollider()
     {

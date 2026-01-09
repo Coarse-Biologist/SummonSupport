@@ -34,7 +34,7 @@ public class EnemyStats : LivingBeing
             navMesh = nav;
             navMeshSpeed = navMesh.speed;
         }
-        Destroy(gameObject);
+        Destroy(gameObject, .5f);
         //Invoke("DelayedTestDeath", .3f);
     }
     public void AddStatusEffectSymbol(StatusEffects status, int stacks)

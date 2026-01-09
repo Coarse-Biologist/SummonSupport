@@ -10,10 +10,10 @@ public class AbilityHandler : MonoBehaviour
     [field: SerializeField] public List<Ability> Abilities { private set; get; } = new();
     public Dictionary<Ability, bool> abilitiesOnCooldownCrew = new();
     private Dictionary<BeamAbility, GameObject> toggledAbilitiesDict = new();
-    [field: SerializeField] public WeaponInfo WeaponInfo { get; private set; }
     private bool charging = false;
     public AbilityModHandler modHandler { protected set; get; }
     private AnimationControllerScript anim;
+    //private bool AbilityToggledRecently = false;
 
 
     protected virtual void Awake()
@@ -71,25 +71,6 @@ public class AbilityHandler : MonoBehaviour
         return true;
     }
 
-    protected bool CastAbility(int abilityIndex, Vector2 targetPosition, Quaternion rotation)
-    {
-        Ability ability = Abilities[abilityIndex];
-
-        if (Abilities.Count <= 0 || abilitiesOnCooldownCrew[ability])
-            return false;
-
-        if (!HasEnoughPower(ability.Cost))
-            return false;
-
-        bool usedAbility = HandleAbilityType(ability, targetPosition, rotation);
-
-        if (!usedAbility)
-            return false;
-        StartCoroutine(SetOnCooldown(ability));
-        int costMod = modHandler.GetModAttributeByType(ability, AbilityModTypes.Cost);
-        statsHandler?.ChangeAttribute(AttributeType.CurrentPower, -ability.Cost + costMod);
-        return true;
-    }
 
     bool HandleAbilityType(Ability ability, Vector2 targetPosition, Quaternion rotation)
     {
@@ -133,9 +114,10 @@ public class AbilityHandler : MonoBehaviour
     private bool HandleBeamAbility(BeamAbility beamAbility, LivingBeing statsHandler)
     {
         GameObject beamInstance;
-
+        if (IsOnCoolDown(beamAbility)) return false;
         if (toggledAbilitiesDict.TryGetValue(beamAbility, out GameObject activeAbility))
         {
+            StartCoroutine(SetOnCooldown(beamAbility));
             StopToggledAbility(beamAbility, activeAbility);
             return false;
         }
@@ -144,7 +126,7 @@ public class AbilityHandler : MonoBehaviour
             beamInstance = beamAbility.ToggleBeam(statsHandler.gameObject, abilitySpawn.transform);
             toggledAbilitiesDict.TryAdd(beamAbility, beamInstance);
             statsHandler.ChangeRegeneration(beamAbility.CostType, -beamAbility.Cost);
-
+            //AbilityToggledRecently = true;
             return true;
         }
     }
@@ -158,6 +140,7 @@ public class AbilityHandler : MonoBehaviour
     {
         statsHandler.ChangeRegeneration(AttributeType.CurrentPower, beamAbility.Cost);
         toggledAbilitiesDict.Remove(beamAbility);
+        //AbilityToggledRecently = false;
         Destroy(activeAbility);
     }
 
