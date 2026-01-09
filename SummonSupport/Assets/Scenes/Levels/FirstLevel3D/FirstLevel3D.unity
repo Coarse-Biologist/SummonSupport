@@ -9735,6 +9735,56 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 853046149141040365, guid: c7f20613f6056c84cad3b32c01b12428,
+        type: 3}
+      propertyPath: m_UseGravity
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 853046149141040365, guid: c7f20613f6056c84cad3b32c01b12428,
+        type: 3}
+      propertyPath: m_IsKinematic
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1435525247965775136, guid: c7f20613f6056c84cad3b32c01b12428,
+        type: 3}
+      propertyPath: m_UseGravity
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1435525247965775136, guid: c7f20613f6056c84cad3b32c01b12428,
+        type: 3}
+      propertyPath: m_Constraints
+      value: 84
+      objectReference: {fileID: 0}
+    - target: {fileID: 2793961001590674864, guid: c7f20613f6056c84cad3b32c01b12428,
+        type: 3}
+      propertyPath: m_UseGravity
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2793961001590674864, guid: c7f20613f6056c84cad3b32c01b12428,
+        type: 3}
+      propertyPath: m_IsKinematic
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2927163973574848893, guid: c7f20613f6056c84cad3b32c01b12428,
+        type: 3}
+      propertyPath: m_UseGravity
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2927163973574848893, guid: c7f20613f6056c84cad3b32c01b12428,
+        type: 3}
+      propertyPath: m_IsKinematic
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3381689891527195150, guid: c7f20613f6056c84cad3b32c01b12428,
+        type: 3}
+      propertyPath: m_UseGravity
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3381689891527195150, guid: c7f20613f6056c84cad3b32c01b12428,
+        type: 3}
+      propertyPath: m_IsKinematic
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3688559523477429147, guid: c7f20613f6056c84cad3b32c01b12428,
         type: 3}
       propertyPath: m_AnchorMax.x
@@ -9745,6 +9795,31 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4045221317855405213, guid: c7f20613f6056c84cad3b32c01b12428,
+        type: 3}
+      propertyPath: m_Size.y
+      value: 0.86187536
+      objectReference: {fileID: 0}
+    - target: {fileID: 4045221317855405213, guid: c7f20613f6056c84cad3b32c01b12428,
+        type: 3}
+      propertyPath: m_Center.y
+      value: 0.36906233
+      objectReference: {fileID: 0}
+    - target: {fileID: 5056388550750722147, guid: c7f20613f6056c84cad3b32c01b12428,
+        type: 3}
+      propertyPath: m_UseGravity
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5998405861540107959, guid: c7f20613f6056c84cad3b32c01b12428,
+        type: 3}
+      propertyPath: m_UseGravity
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5998405861540107959, guid: c7f20613f6056c84cad3b32c01b12428,
+        type: 3}
+      propertyPath: m_IsKinematic
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6544162418587585628, guid: c7f20613f6056c84cad3b32c01b12428,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -9753,7 +9828,7 @@ PrefabInstance:
     - target: {fileID: 6544162418587585628, guid: c7f20613f6056c84cad3b32c01b12428,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 5.72
+      value: 6.85
       objectReference: {fileID: 0}
     - target: {fileID: 6544162418587585628, guid: c7f20613f6056c84cad3b32c01b12428,
         type: 3}
@@ -9795,10 +9870,30 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7223719915534547192, guid: c7f20613f6056c84cad3b32c01b12428,
+        type: 3}
+      propertyPath: m_UseGravity
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7223719915534547192, guid: c7f20613f6056c84cad3b32c01b12428,
+        type: 3}
+      propertyPath: m_IsKinematic
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7826342566136339172, guid: c7f20613f6056c84cad3b32c01b12428,
         type: 3}
       propertyPath: m_Name
       value: Enemy3D
+      objectReference: {fileID: 0}
+    - target: {fileID: 8026827070947555896, guid: c7f20613f6056c84cad3b32c01b12428,
+        type: 3}
+      propertyPath: m_UseGravity
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8026827070947555896, guid: c7f20613f6056c84cad3b32c01b12428,
+        type: 3}
+      propertyPath: m_IsKinematic
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -9976,6 +10071,11 @@ PrefabInstance:
       propertyPath: m_StaticShadowCaster
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1173131967334636059, guid: 29cc623553c0c3d4aa9548ba52efed1b,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.722
+      objectReference: {fileID: 0}
     - target: {fileID: 1549572368035487864, guid: 29cc623553c0c3d4aa9548ba52efed1b,
         type: 3}
       propertyPath: m_LinearDamping
@@ -10059,13 +10159,13 @@ PrefabInstance:
     - target: {fileID: 5700169036039766404, guid: 29cc623553c0c3d4aa9548ba52efed1b,
         type: 3}
       propertyPath: <Abilities>k__BackingField.Array.size
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5700169036039766404, guid: 29cc623553c0c3d4aa9548ba52efed1b,
         type: 3}
       propertyPath: '<Abilities>k__BackingField.Array.data[0]'
       value: 
-      objectReference: {fileID: 11400000, guid: 02894058bc7d1fc488a7fa85542c4396,
+      objectReference: {fileID: 11400000, guid: bedb0aeed6ae7bb4499b3e96059b287a,
         type: 2}
     - target: {fileID: 5700169036039766404, guid: 29cc623553c0c3d4aa9548ba52efed1b,
         type: 3}
