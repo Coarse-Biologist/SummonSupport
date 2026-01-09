@@ -29,13 +29,11 @@ public class Beam : MonoBehaviour
 
     void OnParticleCollision(GameObject other)
     {
-        Debug.Log($"Detecting  {other}");
-        if (other.TryGetComponent(out LivingBeing targetStatsHandler) && !AlreadyCollided.Contains(targetStatsHandler))
+        if (!onCoolDown)
         {
-            Debug.Log($"Detecting  {targetStatsHandler}");
-
-            if (!onCoolDown)
+            if (other.TryGetComponent(out LivingBeing targetStatsHandler) && !AlreadyCollided.Contains(targetStatsHandler))
             {
+
                 onCoolDown = true;
                 Invoke("OffCoolDown", TickRate);
                 AlreadyCollided.Add(targetStatsHandler);
