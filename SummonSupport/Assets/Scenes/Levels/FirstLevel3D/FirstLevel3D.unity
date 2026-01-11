@@ -9885,6 +9885,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Enemy3D
       objectReference: {fileID: 0}
+    - target: {fileID: 7826342566136339172, guid: c7f20613f6056c84cad3b32c01b12428,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8026827070947555896, guid: c7f20613f6056c84cad3b32c01b12428,
         type: 3}
       propertyPath: m_UseGravity
@@ -10165,19 +10170,18 @@ PrefabInstance:
         type: 3}
       propertyPath: '<Abilities>k__BackingField.Array.data[0]'
       value: 
-      objectReference: {fileID: 11400000, guid: bedb0aeed6ae7bb4499b3e96059b287a,
+      objectReference: {fileID: 11400000, guid: b0436cdd83cb68c49bc69f2703f7f475,
         type: 2}
     - target: {fileID: 5700169036039766404, guid: 29cc623553c0c3d4aa9548ba52efed1b,
         type: 3}
       propertyPath: '<Abilities>k__BackingField.Array.data[1]'
       value: 
-      objectReference: {fileID: 11400000, guid: 6ecd8945d9da6ca4da64c6af3d43bf0f,
-        type: 2}
+      objectReference: {fileID: 0}
     - target: {fileID: 5700169036039766404, guid: 29cc623553c0c3d4aa9548ba52efed1b,
         type: 3}
       propertyPath: '<Abilities>k__BackingField.Array.data[2]'
       value: 
-      objectReference: {fileID: 11400000, guid: a51fc697c016f874ba93dd993138f074,
+      objectReference: {fileID: 11400000, guid: dd196a46f145b2941a1fe08be186cfe8,
         type: 2}
     - target: {fileID: 5700169036039766404, guid: 29cc623553c0c3d4aa9548ba52efed1b,
         type: 3}

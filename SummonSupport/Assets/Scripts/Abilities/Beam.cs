@@ -67,6 +67,7 @@ public class Beam : MonoBehaviour
         abilityRotation = rotationObject;
         Caster = caster;
         Ability = ability;
+        AlreadyCollided.Add(caster);
     }
 
     private void UpdateRotation()

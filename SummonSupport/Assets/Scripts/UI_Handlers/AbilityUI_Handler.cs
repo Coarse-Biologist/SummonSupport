@@ -15,6 +15,8 @@ public class AbilityUI_Handler : MonoBehaviour
     private VisualElement root;
     private Dictionary<int, ProgressBar> ProgressBarDict = new();
     private Dictionary<int, Ability> abilityIntProgressBarDict = new();
+    private Dictionary<ProgressBar, string> ProgressBarButtonNameDict = new();
+
 
 
     #region all ProgressBars
@@ -52,11 +54,16 @@ public class AbilityUI_Handler : MonoBehaviour
         EventDeclarer.SlotChanged?.AddListener(SetAbilitySlot);
         EventDeclarer.AbilityUsed?.AddListener(AbilityUsed);
 
+        EventDeclarer.SetSlot?.AddListener(SetAbilitySlot);
+
     }
     void OnDisable()
     {
         EventDeclarer.SlotChanged?.RemoveListener(SetAbilitySlot);
         EventDeclarer.AbilityUsed?.RemoveListener(AbilityUsed);
+
+        EventDeclarer.SetSlot?.RemoveListener(SetAbilitySlot);
+
     }
     private void GetAllProgressBars()
     {
@@ -90,6 +97,13 @@ public class AbilityUI_Handler : MonoBehaviour
         abilityIntProgressBarDict.Add(4, null);
         abilityIntProgressBarDict.Add(5, null);
 
+        ProgressBarButtonNameDict.Add(ProgressBarL1, "1");
+        ProgressBarButtonNameDict.Add(ProgressBarL2, "2");
+        ProgressBarButtonNameDict.Add(ProgressBarL3, "3");
+        ProgressBarButtonNameDict.Add(ProgressBarL4, "Q");
+        ProgressBarButtonNameDict.Add(ProgressBarL5, "E");
+        ProgressBarButtonNameDict.Add(ProgressBarL6, "F");
+
     }
 
     private void Setup()
@@ -105,10 +119,18 @@ public class AbilityUI_Handler : MonoBehaviour
     {
 
         if (ability == null) return;
-        else if (slotIndex <= abilityIntProgressBarDict.Keys.Count) // check if the index is usable
+        else
         {
+            foreach (KeyValuePair<int, Ability> intAbilityKVP in abilityIntProgressBarDict)
+            {
+                if (intAbilityKVP.Value == ability) ProgressBarDict[intAbilityKVP.Key].title = ProgressBarButtonNameDict[ProgressBarDict[intAbilityKVP.Key]];
+            }
+            //else if (slotIndex <= abilityIntProgressBarDict.Keys.Count) // check if the index is usable
+
+            //remove ability from previous location, if it has one. (avoid double slotting)
             abilityIntProgressBarDict[slotIndex] = ability; // set ability to the slot
             SetAbilityIcon(slotIndex, ability);
+
         }
     }
 

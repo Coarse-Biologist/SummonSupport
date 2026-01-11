@@ -34,11 +34,6 @@ public class AbilityHandler : MonoBehaviour
     void Start()
     {
         modHandler = AbilityModHandler.Instance;
-        if (modHandler == null)
-        {
-            Debug.Log("No mod handler found");
-        }
-        else Debug.Log($"ModHandler found: {modHandler}");
     }
 
     public void LearnAbility(Ability ability)
@@ -123,6 +118,12 @@ public class AbilityHandler : MonoBehaviour
         }
         else
         {
+            if (anim != null)
+            {
+                //anim.anim.CrossFade("HeavyThrow", 0.25f, 1, 0f);
+                anim.ChangeLayerAnimation("SpellCast", 1, 1f, .3f, true);
+            }
+
             beamInstance = beamAbility.ToggleBeam(statsHandler.gameObject, abilitySpawn.transform);
             toggledAbilitiesDict.TryAdd(beamAbility, beamInstance);
             statsHandler.ChangeRegeneration(beamAbility.CostType, -beamAbility.Cost);
@@ -193,10 +194,8 @@ public class AbilityHandler : MonoBehaviour
     {
         try
         {
-
             float coolDown = ability.Cooldown + modHandler.GetModAttributeByType(ability, AbilityModTypes.Cooldown) + statsHandler.SE_Handler.GetStatusEffectValue(StatusEffectType.Lethargic);
             // default, plus modifier, plus lethargy value
-            //Debug.Log($"Cool down duration for {ability.Name} calculated to be {coolDown}");
             abilitiesOnCooldownCrew[ability] = true;
             yield return new WaitForSeconds(coolDown);
         }

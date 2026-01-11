@@ -820,7 +820,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     private void SpawnKnownAbilityButtons()
     {
         if (playerAbilityHandler != null)
-            foreach (Ability ability in playerAbilityHandler.Abilities)
+            foreach (Ability ability in playerAbilityHandler.Abilities) //null reference 
             {
                 Button abilityButton = AddButtonToPanel($"{ability.name}", bottomLeftPanel, 50, 5);
                 abilityButton.RegisterCallback<ClickEvent>(e => SetSelectedAbility(ability));

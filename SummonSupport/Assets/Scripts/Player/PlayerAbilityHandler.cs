@@ -24,20 +24,7 @@ public class PlayerAbilityHandler : AbilityHandler
         { "Ability6", 5 },
     };
 
-    public static void SetDashAbility(DashAbility ability)
-    {
-        Debug.Log("Setting dash ability");
-        DashAbility = ability;
-    }
-    public void UpdateAbilities()
-    {
-        int index = 0;
-        foreach (Ability ability in Abilities)
-        {
-            EventDeclarer.SlotChanged.Invoke(index, ability);
-            index++;
-        }
-    }
+
     void Start()
     {
         UpdateAbilities();
@@ -69,6 +56,7 @@ public class PlayerAbilityHandler : AbilityHandler
         inputActions.Player.AbilityE.performed += OnAbilityE;
         inputActions.Player.AbilityF.performed += OnAbilityF;
         inputActions.Player.UseSelectedAbility.performed += OnSelectedAbility;
+        EventDeclarer.SlotChanged?.AddListener(ChangeAbilitySlot);
 
     }
 
@@ -84,8 +72,33 @@ public class PlayerAbilityHandler : AbilityHandler
         inputActions.Player.AbilityE.performed -= OnAbilityE;
         inputActions.Player.AbilityF.performed -= OnAbilityF;
         inputActions.Player.UseSelectedAbility.performed -= OnSelectedAbility;
+        EventDeclarer.SlotChanged?.RemoveListener(ChangeAbilitySlot);
 
         inputActions.Disable();
+    }
+
+    public static void SetDashAbility(DashAbility ability)
+    {
+        Debug.Log("Setting dash ability");
+        DashAbility = ability;
+    }
+    public void UpdateAbilities()
+    {
+        int index = 0;
+        foreach (Ability ability in Abilities)
+        {
+            if (ability == null) continue;
+            EventDeclarer.SetSlot?.Invoke(index, ability);
+            index++;
+        }
+    }
+    private void ChangeAbilitySlot(int index, Ability ability)
+    {
+        if (Abilities.Contains(ability))
+            Abilities[Abilities.IndexOf(ability)] = null;
+        while (Abilities.Count < index + 1)
+            Abilities.Add(null);
+        Abilities[index] = ability;
     }
 
     #region ability used
