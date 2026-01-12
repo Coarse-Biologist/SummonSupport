@@ -209,8 +209,6 @@ public static class CombatStatHandler
         float max = currentTarget.GetAttribute(attributeTypeMax);
         float tempMax = currentTarget.GetAttribute(attributeTypeTempMax);
         float currentValue = currentTarget.GetAttribute(typeCurrentValue);
-        UnityEngine.Debug.Log($"damage = {changeValue}. ability = {currentAbility}");
-        UnityEngine.Debug.Log($"damage Now = {changeValue}. ability = {currentAbility}");
 
         //if (newValue > max) // if the newly calculated value (after recieving heal or damage) is greater than the  characters max
         //    return max;

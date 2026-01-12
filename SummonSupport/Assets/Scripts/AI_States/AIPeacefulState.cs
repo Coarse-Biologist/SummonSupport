@@ -69,7 +69,7 @@ public class AIPeacefulState : AIState
                 if (detectedObject.TryGetComponent(out LivingBeing targetLivingBeing))
                 {
 
-                    Debug.Log($"{targetLivingBeing.Name} = target found in check target in range func");
+                    //Debug.Log($"{targetLivingBeing.Name} = target found in check target in range func");
                     if (targetLivingBeing.GetAttribute(AttributeType.CurrentHitpoints) > 0)
                     {
                         stateHandler.SetTarget(targetLivingBeing);

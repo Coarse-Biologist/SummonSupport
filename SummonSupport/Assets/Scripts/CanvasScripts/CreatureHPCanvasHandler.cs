@@ -15,10 +15,7 @@ public class CreatureHPCanvasHandler : MonoBehaviour, I_ResourceBar
         Slider[] sliders = GetComponentsInChildren<Slider>();
         hpSlider = sliders[0];
         canvas = GetComponentInChildren<Canvas>();
-        if (canvas != null)
-        {
-            Debug.Log("Canvas found!");
-        }
+
 
         // manaSlider = sliders[1];
 

@@ -2,6 +2,7 @@ using System.Collections;
 using UnityEngine;
 using System.Collections.Generic;
 using SummonSupportEvents;
+using System.Linq;
 
 public class AbilityHandler : MonoBehaviour
 {
@@ -48,6 +49,8 @@ public class AbilityHandler : MonoBehaviour
 
     protected bool CastAbility(Ability ability, Vector2 targetPosition, Quaternion rotation)
     {
+        if (ability is not BeamAbility beam || !toggledAbilitiesDict.TryGetValue(beam, out GameObject gameObject)) StopAllToggledAbilities();
+        //when casting a beam which is already toggled on, toggle beam off. 
         bool usedAbility = HandleAbilityType(ability, targetPosition, rotation);
 
         if (!usedAbility)
@@ -118,11 +121,8 @@ public class AbilityHandler : MonoBehaviour
         }
         else
         {
-            if (anim != null)
-            {
-                //anim.anim.CrossFade("HeavyThrow", 0.25f, 1, 0f);
-                anim.ChangeLayerAnimation("SpellCast", 1, 1f, .3f, true);
-            }
+            if (anim != null) anim.ChangeLayerAnimation("BeamStart", 1, 2f, true);
+
 
             beamInstance = beamAbility.ToggleBeam(statsHandler.gameObject, abilitySpawn.transform);
             toggledAbilitiesDict.TryAdd(beamAbility, beamInstance);
@@ -137,8 +137,22 @@ public class AbilityHandler : MonoBehaviour
 
         charging = alreadyCharging;
     }
+    private void StopAllToggledAbilities()
+    {
+        foreach (KeyValuePair<BeamAbility, GameObject> kvp in toggledAbilitiesDict)
+        {
+            statsHandler.ChangeRegeneration(AttributeType.CurrentPower, kvp.Key.Cost);
+
+            Destroy(kvp.Value);
+        }
+        toggledAbilitiesDict.Clear();
+    }
     private void StopToggledAbility(BeamAbility beamAbility, GameObject activeAbility)
     {
+        if (anim != null)
+        {
+            anim.SeLayerWeight(1, 0);
+        }
         statsHandler.ChangeRegeneration(AttributeType.CurrentPower, beamAbility.Cost);
         toggledAbilitiesDict.Remove(beamAbility);
         //AbilityToggledRecently = false;
