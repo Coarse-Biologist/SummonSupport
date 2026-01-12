@@ -39,13 +39,13 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     private Ability selectedAbility;
     private Ability selectedMinionAbility;
 
+    private List<string> SlotNames = new List<string>() { "1", "2", "3", "Q", "E", "F" };
     private int abilitySlot;
     private PlayerAbilityHandler playerAbilityHandler;
 
     #endregion
 
     private Label instructions;
-    public UnityEvent playerUsingUI = new UnityEvent();
     private AlchemyHandler alchemyHandler;
 
     #endregion
@@ -152,7 +152,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     #region Begin and end workbench use
     private void PlayerUsingUI()
     {
-        playerUsingUI?.Invoke();
+        EventDeclarer.PlayerUsingUI?.Invoke();
     }
     public void Interact(GameObject Player)//WithWorkBench()
     {
@@ -810,10 +810,10 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     }
     private void SpawnAbilitySlotButtons()
     {
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < 6; i++)
         {
             int slotIndex = i;
-            Button slotButton = AddButtonToPanel($"Slot: {slotIndex + 1}", bottomLeftPanel, 20, 5);
+            Button slotButton = AddButtonToPanel($"Slot: {SlotNames[slotIndex]}", bottomLeftPanel, 20, 5);
             slotButton.RegisterCallback<ClickEvent>(e => SetSelectedSlot(slotIndex));
         }
     }
@@ -822,7 +822,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
         if (playerAbilityHandler != null)
             foreach (Ability ability in playerAbilityHandler.Abilities) //null reference 
             {
-                Button abilityButton = AddButtonToPanel($"{ability.name}", bottomLeftPanel, 50, 5);
+                Button abilityButton = AddButtonToPanel($"{ability.Name}", bottomLeftPanel, 50, 5);
                 abilityButton.RegisterCallback<ClickEvent>(e => SetSelectedAbility(ability));
                 abilityButton.RegisterCallback<ClickEvent>(e => SetAbilitySlottingInstructions(ability));
 

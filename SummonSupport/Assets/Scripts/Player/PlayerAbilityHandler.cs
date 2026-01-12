@@ -14,6 +14,7 @@ public class PlayerAbilityHandler : AbilityHandler
     public AnimationControllerScript anim { get; private set; }
     public string currentAnimation;
     private int currentAbilityIndex;
+    private bool stuckInUI = false;
     private Dictionary<string, int> inputActionToIndex = new()
     {
         { "Ability1", 0 },
@@ -47,6 +48,8 @@ public class PlayerAbilityHandler : AbilityHandler
         inputActions ??= new PlayerInputActions();
         //RegisterInputEvents(true);
         EventDeclarer.PlayerLearnedAbility?.AddListener(LearnAbility);
+        EventDeclarer.PlayerUsingUI?.AddListener(ToggleUsingUI);
+
         inputActions.Enable();
 
         inputActions.Player.Ability1.performed += OnAbility1;
@@ -73,10 +76,14 @@ public class PlayerAbilityHandler : AbilityHandler
         inputActions.Player.AbilityF.performed -= OnAbilityF;
         inputActions.Player.UseSelectedAbility.performed -= OnSelectedAbility;
         EventDeclarer.SlotChanged?.RemoveListener(ChangeAbilitySlot);
+        EventDeclarer.PlayerUsingUI?.RemoveListener(ToggleUsingUI);
 
         inputActions.Disable();
     }
-
+    private void ToggleUsingUI()
+    {
+        stuckInUI = !stuckInUI;
+    }
     public static void SetDashAbility(DashAbility ability)
     {
         Debug.Log("Setting dash ability");
@@ -104,7 +111,7 @@ public class PlayerAbilityHandler : AbilityHandler
     #region ability used
     public void OnAbility1(InputAction.CallbackContext context)
     {
-        if (playerStats.Dead) return;
+        if (playerStats.Dead || stuckInUI) return;
 
         Ability ability = GetAbilityOfIndex(0);
 
@@ -121,7 +128,7 @@ public class PlayerAbilityHandler : AbilityHandler
     }
     public void OnAbility2(InputAction.CallbackContext context)
     {
-        if (playerStats.Dead) return;
+        if (playerStats.Dead || stuckInUI) return;
 
         Ability ability = GetAbilityOfIndex(1);
 
@@ -138,7 +145,7 @@ public class PlayerAbilityHandler : AbilityHandler
     }
     public void OnAbility3(InputAction.CallbackContext context)
     {
-        if (playerStats.Dead) return;
+        if (playerStats.Dead || stuckInUI) return;
 
         Ability ability = GetAbilityOfIndex(2);
 
@@ -155,7 +162,7 @@ public class PlayerAbilityHandler : AbilityHandler
     }
     public void OnAbilityQ(InputAction.CallbackContext context)
     {
-        if (playerStats.Dead) return;
+        if (playerStats.Dead || stuckInUI) return;
 
         Ability ability = GetAbilityOfIndex(3);
         if (ability == null) return;
@@ -171,7 +178,7 @@ public class PlayerAbilityHandler : AbilityHandler
     }
     public void OnAbilityE(InputAction.CallbackContext context)
     {
-        if (playerStats.Dead) return;
+        if (playerStats.Dead || stuckInUI) return;
 
         Ability ability = GetAbilityOfIndex(4);
 
@@ -187,7 +194,7 @@ public class PlayerAbilityHandler : AbilityHandler
     }
     public void OnAbilityF(InputAction.CallbackContext context)
     {
-        if (playerStats.Dead) return;
+        if (playerStats.Dead || stuckInUI) return;
 
         Ability ability = GetAbilityOfIndex(5);
 
@@ -206,7 +213,7 @@ public class PlayerAbilityHandler : AbilityHandler
     #endregion
     public void OnSelectedAbility(InputAction.CallbackContext context)
     {
-        if (selectedAbility == null || playerStats.Dead) return;
+        if (selectedAbility == null || playerStats.Dead || stuckInUI) return;
 
         if (!abilitiesOnCooldownCrew[selectedAbility]) // Checks if the value is true. Abilities[index] is the ability at the InputActions context index.
         {

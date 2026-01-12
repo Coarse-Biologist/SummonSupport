@@ -26,9 +26,8 @@ public class PlayerMovement : MovementScript
     private bool dashing = false;
     private bool canDash = true;
     GameObject DashDustInstance = null;
-    private bool lockedInUI = false;
+    private bool stuck = false;
     private bool paused = false;
-    private bool StuckInAbilityAnimation = false;
     private AnimationControllerScript anim;
 
 
@@ -54,7 +53,7 @@ public class PlayerMovement : MovementScript
     #region Enable and Disable event subscriptions
     private void OnEnable()
     {
-        //AlchemyBenchUI.Instance.playerUsingUI.AddListener(ToggleLockedInUI);
+        EventDeclarer.PlayerUsingUI.AddListener(ToggleUsingUI);
         inputActions ??= new PlayerInputActions();
         EventDeclarer.SpeedAttributeChanged?.AddListener(SetMovementAttribute);
         inputActions.Player.Enable();
@@ -69,7 +68,7 @@ public class PlayerMovement : MovementScript
 
     private void OnDisable()
     {
-        //AlchemyBenchUI.Instance.playerUsingUI.RemoveListener(ToggleLockedInUI);
+        EventDeclarer.PlayerUsingUI.RemoveListener(ToggleUsingUI);
 
         EventDeclarer.SpeedAttributeChanged?.RemoveListener(SetMovementAttribute);
         inputActions.Player.Move.performed -= OnWASD;
@@ -115,9 +114,15 @@ public class PlayerMovement : MovementScript
         dashing = false;
     }
 
-    public void SetStuckInAbilityAnimation(bool stuck)
+    public void SetStuck(bool howStuck)
     {
-        StuckInAbilityAnimation = stuck;
+        stuck = howStuck;
+    }
+    private void ToggleUsingUI()
+    {
+        Debug.Log($"stuck in UI? = {stuck}");
+        stuck = !stuck;
+
     }
     #endregion
 
@@ -169,7 +174,6 @@ public class PlayerMovement : MovementScript
         if (Physics.Raycast(ray, out RaycastHit hit, 300))
         {
             CommandMinion.HandleCommand(hit);
-            Debug.Log($"{hit}");
         }
     }
 
@@ -181,7 +185,7 @@ public class PlayerMovement : MovementScript
             return;
         }
 
-        if (!lockedInUI && !StuckInAbilityAnimation)
+        if (!stuck)
         {
             HandleMove();
 
@@ -191,7 +195,7 @@ public class PlayerMovement : MovementScript
 
     private void ToggleGamePause(InputAction.CallbackContext context)
     {
-        if (!lockedInUI)
+        if (!stuck)
         {
             paused = !paused;
             EventDeclarer.TogglePauseGame?.Invoke();

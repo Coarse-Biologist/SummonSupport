@@ -102,14 +102,14 @@ public class ChargeAbilityMono : MonoBehaviour
 
     private void ToggleStuckInAbilityAnimation(GameObject user, bool stuck)
     {
-        if (user.TryGetComponent<AI_CC_State>(out AI_CC_State ccState))
+        if (user.TryGetComponent(out AI_CC_State ccState))
         {
             if (stuck) ccState.RecieveCC(attackAnimationCC, caster);
             else if (!stuck) ccState.RemoveCC(StatusEffectType.AttackAnimation);
         }
 
-        else if (user.TryGetComponent<PlayerMovement>(out PlayerMovement playerMovementScript))
-            playerMovementScript.SetStuckInAbilityAnimation(stuck);
+        else if (user.TryGetComponent(out PlayerMovement playerMovementScript))
+            playerMovementScript.SetStuck(stuck);
         else Debug.Log($"No CcState script or playermovement script found on the sought gameObject: {user}");
     }
 
