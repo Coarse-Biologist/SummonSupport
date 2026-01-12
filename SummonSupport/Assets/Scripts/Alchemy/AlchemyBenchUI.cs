@@ -150,9 +150,16 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     #endregion
 
     #region Begin and end workbench use
-    private void PlayerUsingUI()
+    private void PlayerUsingUI(AnimationControllerScript anim = null)
     {
         EventDeclarer.PlayerUsingUI?.Invoke();
+        if (anim != null)
+        {
+            Debug.Log("Changing animation? but probably time scale is 0");
+            anim.ChangeAnimation("Crafting");
+        }
+        else Debug.Log("No animation script found");
+
     }
     public void Interact(GameObject Player)//WithWorkBench()
     {
@@ -162,10 +169,10 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
         if (Player.TryGetComponent(out PlayerAbilityHandler abilityHandler))
             playerAbilityHandler = abilityHandler;
         else return;
-        Time.timeScale = 0f;
+        //Time.timeScale = 0f;
 
         HideInteractionOption();
-        PlayerUsingUI();
+        PlayerUsingUI(Player.GetComponent<AnimationControllerScript>());
         ShowUI(craftingUI);
         ShowDefaultScreen();
 

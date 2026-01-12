@@ -11,17 +11,17 @@ PrefabInstance:
     - target: {fileID: 1267822290811238092, guid: fa7994c3213928c4c8dd583efc31deeb,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 3.5059133
+      value: 10.026147
       objectReference: {fileID: 0}
     - target: {fileID: 1267822290811238092, guid: fa7994c3213928c4c8dd583efc31deeb,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 5.72
+      value: 5.7199993
       objectReference: {fileID: 0}
     - target: {fileID: 1267822290811238092, guid: fa7994c3213928c4c8dd583efc31deeb,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 2.4396653
+      value: 33.054367
       objectReference: {fileID: 0}
     - target: {fileID: 1267822290811238092, guid: fa7994c3213928c4c8dd583efc31deeb,
         type: 3}
@@ -81,7 +81,7 @@ PrefabInstance:
     - target: {fileID: 2157544451121103673, guid: fa7994c3213928c4c8dd583efc31deeb,
         type: 3}
       propertyPath: NoiseModule.octaves
-      value: 4
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2157544451121103673, guid: fa7994c3213928c4c8dd583efc31deeb,
         type: 3}
@@ -91,7 +91,7 @@ PrefabInstance:
     - target: {fileID: 2157544451121103673, guid: fa7994c3213928c4c8dd583efc31deeb,
         type: 3}
       propertyPath: NoiseModule.frequency
-      value: 0.2
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 2157544451121103673, guid: fa7994c3213928c4c8dd583efc31deeb,
         type: 3}
@@ -112,6 +112,11 @@ PrefabInstance:
         type: 3}
       propertyPath: TrailModule.lifetime.scalar
       value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2157544451121103673, guid: fa7994c3213928c4c8dd583efc31deeb,
+        type: 3}
+      propertyPath: NoiseModule.sizeAmount.scalar
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2157544451121103673, guid: fa7994c3213928c4c8dd583efc31deeb,
         type: 3}
@@ -136,7 +141,7 @@ PrefabInstance:
     - target: {fileID: 2157544451121103673, guid: fa7994c3213928c4c8dd583efc31deeb,
         type: 3}
       propertyPath: InitialModule.startLifetime.scalar
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2157544451121103673, guid: fa7994c3213928c4c8dd583efc31deeb,
         type: 3}
@@ -215,6 +220,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2157544451121103673, guid: fa7994c3213928c4c8dd583efc31deeb,
         type: 3}
+      propertyPath: TrailModule.colorOverLifetime.minMaxState
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2157544451121103673, guid: fa7994c3213928c4c8dd583efc31deeb,
+        type: 3}
       propertyPath: ColorModule.gradient.maxGradient.m_ColorSpace
       value: 0
       objectReference: {fileID: 0}
@@ -222,6 +232,31 @@ PrefabInstance:
         type: 3}
       propertyPath: ColorModule.gradient.maxGradient.m_NumColorKeys
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2157544451121103673, guid: fa7994c3213928c4c8dd583efc31deeb,
+        type: 3}
+      propertyPath: TrailModule.colorOverLifetime.maxGradient.key0.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2157544451121103673, guid: fa7994c3213928c4c8dd583efc31deeb,
+        type: 3}
+      propertyPath: TrailModule.colorOverLifetime.maxGradient.key0.g
+      value: 0.97597444
+      objectReference: {fileID: 0}
+    - target: {fileID: 2157544451121103673, guid: fa7994c3213928c4c8dd583efc31deeb,
+        type: 3}
+      propertyPath: TrailModule.colorOverLifetime.maxGradient.key0.r
+      value: 0.64716977
+      objectReference: {fileID: 0}
+    - target: {fileID: 2157544451121103673, guid: fa7994c3213928c4c8dd583efc31deeb,
+        type: 3}
+      propertyPath: TrailModule.colorOverLifetime.maxGradient.key1.a
+      value: 0.8039216
+      objectReference: {fileID: 0}
+    - target: {fileID: 2157544451121103673, guid: fa7994c3213928c4c8dd583efc31deeb,
+        type: 3}
+      propertyPath: TrailModule.colorOverLifetime.maxGradient.m_ColorSpace
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

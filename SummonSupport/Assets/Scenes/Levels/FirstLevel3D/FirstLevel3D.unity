@@ -10164,43 +10164,43 @@ PrefabInstance:
     - target: {fileID: 5700169036039766404, guid: 29cc623553c0c3d4aa9548ba52efed1b,
         type: 3}
       propertyPath: <Abilities>k__BackingField.Array.size
-      value: 3
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 5700169036039766404, guid: 29cc623553c0c3d4aa9548ba52efed1b,
         type: 3}
       propertyPath: '<Abilities>k__BackingField.Array.data[0]'
       value: 
-      objectReference: {fileID: 11400000, guid: b0436cdd83cb68c49bc69f2703f7f475,
+      objectReference: {fileID: 11400000, guid: 358ed5ab9d9298649ad685f077551a3b,
         type: 2}
     - target: {fileID: 5700169036039766404, guid: 29cc623553c0c3d4aa9548ba52efed1b,
         type: 3}
       propertyPath: '<Abilities>k__BackingField.Array.data[1]'
       value: 
-      objectReference: {fileID: 11400000, guid: 358ed5ab9d9298649ad685f077551a3b,
+      objectReference: {fileID: 11400000, guid: 6991858e11ff93d4bb23795e859b1a77,
         type: 2}
     - target: {fileID: 5700169036039766404, guid: 29cc623553c0c3d4aa9548ba52efed1b,
         type: 3}
       propertyPath: '<Abilities>k__BackingField.Array.data[2]'
       value: 
-      objectReference: {fileID: 11400000, guid: 6991858e11ff93d4bb23795e859b1a77,
+      objectReference: {fileID: 11400000, guid: 3e0402e646fe5aa4d8fef84a5738411b,
         type: 2}
     - target: {fileID: 5700169036039766404, guid: 29cc623553c0c3d4aa9548ba52efed1b,
         type: 3}
       propertyPath: '<Abilities>k__BackingField.Array.data[3]'
       value: 
-      objectReference: {fileID: 11400000, guid: a51fc697c016f874ba93dd993138f074,
+      objectReference: {fileID: 11400000, guid: be738ccc17b71df439af67044ab786d5,
         type: 2}
     - target: {fileID: 5700169036039766404, guid: 29cc623553c0c3d4aa9548ba52efed1b,
         type: 3}
       propertyPath: '<Abilities>k__BackingField.Array.data[4]'
       value: 
-      objectReference: {fileID: 11400000, guid: 50f97cd667dde2345a4e08bd5abdc79a,
+      objectReference: {fileID: 11400000, guid: bedb0aeed6ae7bb4499b3e96059b287a,
         type: 2}
     - target: {fileID: 5700169036039766404, guid: 29cc623553c0c3d4aa9548ba52efed1b,
         type: 3}
       propertyPath: '<Abilities>k__BackingField.Array.data[5]'
       value: 
-      objectReference: {fileID: 11400000, guid: 5605a5e8027c4e94691ae731bacfcb5a,
+      objectReference: {fileID: 11400000, guid: a5be7768a57c4f94bbf99c7d35f6b0fe,
         type: 2}
     - target: {fileID: 6707783455156688924, guid: 29cc623553c0c3d4aa9548ba52efed1b,
         type: 3}

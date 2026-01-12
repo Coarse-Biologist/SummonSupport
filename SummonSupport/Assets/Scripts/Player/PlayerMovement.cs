@@ -120,7 +120,6 @@ public class PlayerMovement : MovementScript
     }
     private void ToggleUsingUI()
     {
-        Debug.Log($"stuck in UI? = {stuck}");
         stuck = !stuck;
 
     }

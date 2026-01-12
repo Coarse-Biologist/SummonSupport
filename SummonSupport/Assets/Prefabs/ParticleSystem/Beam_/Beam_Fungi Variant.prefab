@@ -11,17 +11,17 @@ PrefabInstance:
     - target: {fileID: 1267822290811238092, guid: fa7994c3213928c4c8dd583efc31deeb,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 20.875237
       objectReference: {fileID: 0}
     - target: {fileID: 1267822290811238092, guid: fa7994c3213928c4c8dd583efc31deeb,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 5.72
       objectReference: {fileID: 0}
     - target: {fileID: 1267822290811238092, guid: fa7994c3213928c4c8dd583efc31deeb,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 35.27184
       objectReference: {fileID: 0}
     - target: {fileID: 1267822290811238092, guid: fa7994c3213928c4c8dd583efc31deeb,
         type: 3}
@@ -76,7 +76,7 @@ PrefabInstance:
     - target: {fileID: 1465089769712175474, guid: fa7994c3213928c4c8dd583efc31deeb,
         type: 3}
       propertyPath: m_Materials.Array.size
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1465089769712175474, guid: fa7994c3213928c4c8dd583efc31deeb,
         type: 3}
@@ -110,8 +110,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2157544451121103673, guid: fa7994c3213928c4c8dd583efc31deeb,
         type: 3}
-      propertyPath: TrailModule.enabled
+      propertyPath: NoiseModule.enabled
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2157544451121103673, guid: fa7994c3213928c4c8dd583efc31deeb,
+        type: 3}
+      propertyPath: NoiseModule.octaves
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2157544451121103673, guid: fa7994c3213928c4c8dd583efc31deeb,
+        type: 3}
+      propertyPath: TrailModule.enabled
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2157544451121103673, guid: fa7994c3213928c4c8dd583efc31deeb,
         type: 3}
@@ -122,6 +132,11 @@ PrefabInstance:
         type: 3}
       propertyPath: ShapeModule.arc.mode
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2157544451121103673, guid: fa7994c3213928c4c8dd583efc31deeb,
+        type: 3}
+      propertyPath: NoiseModule.frequency
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 2157544451121103673, guid: fa7994c3213928c4c8dd583efc31deeb,
         type: 3}
@@ -170,6 +185,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2157544451121103673, guid: fa7994c3213928c4c8dd583efc31deeb,
         type: 3}
+      propertyPath: NoiseModule.octaveMultiplier
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2157544451121103673, guid: fa7994c3213928c4c8dd583efc31deeb,
+        type: 3}
       propertyPath: CollisionModule.colliderForce
       value: 0
       objectReference: {fileID: 0}
@@ -206,17 +226,17 @@ PrefabInstance:
     - target: {fileID: 2157544451121103673, guid: fa7994c3213928c4c8dd583efc31deeb,
         type: 3}
       propertyPath: EmissionModule.rateOverTime.scalar
-      value: 10
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 2157544451121103673, guid: fa7994c3213928c4c8dd583efc31deeb,
         type: 3}
       propertyPath: InitialModule.startLifetime.scalar
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2157544451121103673, guid: fa7994c3213928c4c8dd583efc31deeb,
         type: 3}
       propertyPath: InitialModule.startRotation.scalar
-      value: 0
+      value: 6.283185
       objectReference: {fileID: 0}
     - target: {fileID: 2157544451121103673, guid: fa7994c3213928c4c8dd583efc31deeb,
         type: 3}
@@ -341,17 +361,17 @@ PrefabInstance:
     - target: {fileID: 2157544451121103673, guid: fa7994c3213928c4c8dd583efc31deeb,
         type: 3}
       propertyPath: InitialModule.startRotation.minMaxState
-      value: 0
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 2157544451121103673, guid: fa7994c3213928c4c8dd583efc31deeb,
         type: 3}
       propertyPath: InitialModule.startRotationX.minMaxState
-      value: 0
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 2157544451121103673, guid: fa7994c3213928c4c8dd583efc31deeb,
         type: 3}
       propertyPath: InitialModule.startRotationY.minMaxState
-      value: 0
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 2157544451121103673, guid: fa7994c3213928c4c8dd583efc31deeb,
         type: 3}

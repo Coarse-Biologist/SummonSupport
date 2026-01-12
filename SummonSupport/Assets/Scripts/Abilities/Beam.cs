@@ -65,6 +65,7 @@ public class Beam : MonoBehaviour
         TickRate = ability.TickRate;
         Range = ability.Range;
         abilityRotation = rotationObject;
+        Debug.Log($"does the rotation object exist? ({rotationObject})");
         Caster = caster;
         Ability = ability;
         AlreadyCollided.Add(caster);
@@ -73,7 +74,9 @@ public class Beam : MonoBehaviour
     private void UpdateRotation()
     {
         //Debug.Log("rotation func being called");
-        transform.rotation = abilityRotation.rotation;// * Rotation90Z;
+        if (abilityRotation != null)
+            transform.rotation = abilityRotation.rotation;// * Rotation90Z;
+        else Debug.Log("You are trying to use ability rotation but for some reason it doesnt exist.");
     }
 
     private IEnumerator DelayedDeletion(LivingBeing collidedObject)

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f56b7f0861db714c9f7f04ae6193671, type: 3}
   m_Name: Beam_Heat
   m_EditorClassIdentifier: 
-  <Name>k__BackingField: Water Stream
+  <Name>k__BackingField: Flamethrower
   <Icon>k__BackingField: {fileID: 0}
   <Cooldown>k__BackingField: 5
   <CostType>k__BackingField: 4
