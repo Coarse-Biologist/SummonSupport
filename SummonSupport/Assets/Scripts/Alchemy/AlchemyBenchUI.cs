@@ -145,6 +145,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     public void HideInteractionOption()
     {
         InteractCanvasHandler.Instance.HideInteractionOption();
+
     }
 
     #endregion
@@ -152,6 +153,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     #region Begin and end workbench use
     private void PlayerUsingUI(AnimationControllerScript anim = null)
     {
+
         EventDeclarer.PlayerUsingUI?.Invoke();
         if (anim != null)
         {
@@ -161,8 +163,22 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
         else Debug.Log("No animation script found");
 
     }
+    private void UseAlchemyObjectInteraction(bool On)
+    {
+
+        if (TryGetComponent(out AlchemyObjectInteraction itemInteraction))
+        {
+            if (On)
+                itemInteraction.Interact(gameObject);
+            else itemInteraction.HideInteractionOption();
+        }
+
+    }
     public void Interact(GameObject Player)//WithWorkBench()
     {
+
+        UseAlchemyObjectInteraction(true);
+
         UnityEngine.Cursor.lockState = CursorLockMode.None;   // Locks the cursor to the center of the screen
         UnityEngine.Cursor.visible = true;
 
@@ -320,6 +336,8 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
         Time.timeScale = 1f;
         UnityEngine.Cursor.lockState = CursorLockMode.Locked;   // Locks the cursor to the center of the screen
         UnityEngine.Cursor.visible = false;
+        UseAlchemyObjectInteraction(false);
+
         PlayerUsingUI();
     }
 
