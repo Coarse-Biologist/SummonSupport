@@ -78,6 +78,7 @@ public static class AbilityLibrary
             if (meleeCategory.Element == element)
             {
                 meleeAbility = meleeCategory.Abilities[0];
+                break;
             }
         }
         Debug.Log($"Returning {meleeAbility.Name} in the get Elemental Melee ability function");

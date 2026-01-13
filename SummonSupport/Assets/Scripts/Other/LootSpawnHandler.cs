@@ -115,7 +115,7 @@ public class LootSpawnHandler : MonoBehaviour
         if (renderer != null && strongestElement != Element.None)
         {
             //Debug.Log("trying to change core color");
-            Material glowMaterial = ColorChanger.GetGlowByElement(strongestElement);
+            Material glowMaterial = ColorChanger.GetGlowStrengthByElement(strongestElement);
             ColorChanger.ChangeMatByAffinity(renderer, glowMaterial);
         }
     }

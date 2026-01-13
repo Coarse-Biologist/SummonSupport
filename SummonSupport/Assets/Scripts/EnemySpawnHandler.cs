@@ -36,8 +36,6 @@ public class EnemySpawnHandler : MonoBehaviour
 
 
 
-
-
     #endregion
 
     #region Setup
@@ -237,13 +235,15 @@ public class EnemySpawnHandler : MonoBehaviour
     private void AddElementalAbilities(int level, LivingBeing livingBeing, Element element)
     {
         CreatureAbilityHandler abilityHandler = livingBeing.GetComponent<CreatureAbilityHandler>();
-
-        //Ability elementalAbility = SetupManager.Instance.ElementToAbilityLibrary_SO.GetAbilityOfElementType(element);
-        foreach (Ability ability in AbilityLibrary.GetRandomAbilities(element, level + 1))
+        if (UnityEngine.Random.value > .5)
         {
-            livingBeing.GetComponent<CreatureAbilityHandler>().LearnAbility(ability);
+            //Ability elementalAbility = SetupManager.Instance.ElementToAbilityLibrary_SO.GetAbilityOfElementType(element);
+            foreach (Ability ability in AbilityLibrary.GetRandomAbilities(element, level + 1))
+            {
+                abilityHandler.LearnAbility(ability);
+            }
         }
-
+        else abilityHandler.LearnAbility(AbilityLibrary.GetElementalMeleeAbility(element, 50));
     }
     private void AddPhysicalAbilities(int level, LivingBeing livingBeing, PhysicalType physical)
     {

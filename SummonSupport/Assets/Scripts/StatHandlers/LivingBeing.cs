@@ -109,7 +109,7 @@ public abstract class LivingBeing : MonoBehaviour
         InitializeRegenerationValues();
         StartCoroutine(RegenerateRoutine());
         abilityHandler = GetComponent<AbilityHandler>();
-        ColorChanger.ChangeMatByAffinity(this);
+
         ragdollScript = GetComponent<I_Destruction>();
         if (TryGetComponent(out StatusEffectHandler se))
         {

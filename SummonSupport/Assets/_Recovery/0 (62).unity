@@ -538,7 +538,7 @@ PrefabInstance:
     - target: {fileID: 7762288698868103776, guid: ac788a31b3c87bf43bcc0387b0238bab,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 10.2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7762288698868103776, guid: ac788a31b3c87bf43bcc0387b0238bab,
         type: 3}
@@ -548,7 +548,7 @@ PrefabInstance:
     - target: {fileID: 7762288698868103776, guid: ac788a31b3c87bf43bcc0387b0238bab,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 5.1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7762288698868103776, guid: ac788a31b3c87bf43bcc0387b0238bab,
         type: 3}
@@ -568,7 +568,7 @@ PrefabInstance:
     - target: {fileID: 7765434297030881640, guid: ac788a31b3c87bf43bcc0387b0238bab,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.7
+      value: -28.91
       objectReference: {fileID: 0}
     - target: {fileID: 7765434297030881640, guid: ac788a31b3c87bf43bcc0387b0238bab,
         type: 3}
@@ -578,7 +578,7 @@ PrefabInstance:
     - target: {fileID: 7765434297030881640, guid: ac788a31b3c87bf43bcc0387b0238bab,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 26.2
+      value: 25.24
       objectReference: {fileID: 0}
     - target: {fileID: 7765434297030881640, guid: ac788a31b3c87bf43bcc0387b0238bab,
         type: 3}
@@ -620,23 +620,6 @@ PrefabInstance:
       propertyPath: <PreferedPhysical>k__BackingField
       value: 3
       objectReference: {fileID: 0}
-    - target: {fileID: 7869144613869010447, guid: ac788a31b3c87bf43bcc0387b0238bab,
-        type: 3}
-      propertyPath: <Creatures>k__BackingField.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 7869144613869010447, guid: ac788a31b3c87bf43bcc0387b0238bab,
-        type: 3}
-      propertyPath: '<Creatures>k__BackingField.Array.data[0]'
-      value: 
-      objectReference: {fileID: 856754605309222973, guid: 3388c2193e6a56841b1082aa7f3f5844,
-        type: 3}
-    - target: {fileID: 7869144613869010447, guid: ac788a31b3c87bf43bcc0387b0238bab,
-        type: 3}
-      propertyPath: '<Creatures>k__BackingField.Array.data[1]'
-      value: 
-      objectReference: {fileID: 7826342566136339172, guid: c7f20613f6056c84cad3b32c01b12428,
-        type: 3}
     m_RemovedComponents:
     - {fileID: 5346902603508771770, guid: ac788a31b3c87bf43bcc0387b0238bab, type: 3}
     m_RemovedGameObjects: []
@@ -6856,7 +6839,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93e3fd9ce2ccb9548ad2bd2ba1f01db6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <Active>k__BackingField: 1
+  <Active>k__BackingField: 0
   <enemyPrefab>k__BackingField: {fileID: 810306928598971056, guid: 6eb2daf00740bba47aac2befdc6b070e,
     type: 3}
   <SpawnCenter>k__BackingField: {fileID: 80988764}

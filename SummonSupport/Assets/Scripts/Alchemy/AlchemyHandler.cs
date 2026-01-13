@@ -228,7 +228,7 @@ public class AlchemyHandler : MonoBehaviour
 
         if (strongestElement != Element.None && stats.GetAffinity(strongestElement) > 50)
         {
-            ColorChanger.ChangeMatByAffinity(stats);
+            ColorChanger.ChangeAllMatsByAffinity(stats);
             nameModifier = strongestElement.ToString();
             stats.SetName(nameModifier + " Elemental");
         }

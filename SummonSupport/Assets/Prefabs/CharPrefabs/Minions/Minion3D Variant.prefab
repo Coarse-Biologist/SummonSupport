@@ -31,6 +31,11 @@ PrefabInstance:
     - target: {fileID: 2038755144732919392, guid: deb0299c2f7c5ee468cb23755c8d92da,
         type: 3}
       propertyPath: <Air>k__BackingField
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2038755144732919392, guid: deb0299c2f7c5ee468cb23755c8d92da,
+        type: 3}
+      propertyPath: <Heat>k__BackingField
       value: 200
       objectReference: {fileID: 0}
     - target: {fileID: 2038755144732919392, guid: deb0299c2f7c5ee468cb23755c8d92da,
@@ -41,6 +46,11 @@ PrefabInstance:
     - target: {fileID: 2038755144732919392, guid: deb0299c2f7c5ee468cb23755c8d92da,
         type: 3}
       propertyPath: <Psychic>k__BackingField
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2038755144732919392, guid: deb0299c2f7c5ee468cb23755c8d92da,
+        type: 3}
+      propertyPath: <Bacteria>k__BackingField
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2038755144732919392, guid: deb0299c2f7c5ee468cb23755c8d92da,

@@ -43,7 +43,7 @@ public class ProjectileAbility : Ability
             GameObject projectile = Instantiate(Projectile, spawnPoint.position, Quaternion.identity);
             Projectile projectileScript = projectile.GetComponent<Projectile>();
 
-            Material glowMaterial = ColorChanger.GetGlowByElement(ElementTypes[0]);
+            Material glowMaterial = ColorChanger.GetGlowStrengthByElement(ElementTypes[0]);
             ColorChanger.ChangeMatByAffinity(projectile.GetComponent<Renderer>(), glowMaterial);
 
             float rotY = (float)Math.Sin(45 * i) * (10 + 5 * i);
