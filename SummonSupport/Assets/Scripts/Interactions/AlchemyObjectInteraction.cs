@@ -13,10 +13,10 @@ public class AlchemyObjectInteraction : MonoBehaviour, I_Interactable
 
     public void HideInteractionOption()
     {
-        Debug.Log("destroying potions or maybe not?");
+        //Debug.Log("destroying potions or maybe not?");
         if (leftPotion != null && rightPotion != null)
         {
-            Debug.Log("destroying potions!?");
+            //Debug.Log("destroying potions!?");
 
             Destroy(leftPotion);
             Destroy(rightPotion);

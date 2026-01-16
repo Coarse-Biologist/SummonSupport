@@ -55,6 +55,8 @@ public class Mod_Base
 
     public void Mod_AddStatusEffect(StatusEffects status)
     {
+        UnityEngine.Debug.Log($"Adding {status} to {this}");
+
         if (!StatusEffects_Mod.Contains(status))
         {
             Debug.Log("Modding status effect in base mod!!!!!!!!!!.");

@@ -15,19 +15,27 @@ MonoBehaviour:
   entries:
   - Type: 1
     Effect: {fileID: 11400000, guid: 6ef243f4fc8d3fc49a992694220d85ee, type: 2}
-  - Type: 2
-    Effect: {fileID: 11400000, guid: cd27898494af29c498198f0470c47632, type: 2}
-  - Type: 3
-    Effect: {fileID: 11400000, guid: 950c5110c28d3e14e91ab7bf88eee014, type: 2}
   - Type: 4
-    Effect: {fileID: 11400000, guid: 238b170d3d4c26344bf2d0fa36669467, type: 2}
-  - Type: 5
     Effect: {fileID: 11400000, guid: a1c4f82da9337b549af8c79d41093bdf, type: 2}
-  - Type: 0
-    Effect: {fileID: 0}
-  - Type: 6
+  - Type: 5
     Effect: {fileID: 11400000, guid: d2c2bc483ce8e844bb6602d77e8062db, type: 2}
-  - Type: 7
+  - Type: 6
     Effect: {fileID: 11400000, guid: de217b777d75f0e4280c41fbaa010a5a, type: 2}
-  - Type: 9
+  - Type: 8
     Effect: {fileID: 11400000, guid: b4787caaf899c8d4bbe607486149e76e, type: 2}
+  - Type: 9
+    Effect: {fileID: 11400000, guid: 6e8169b72bb091e41939591a58f31d02, type: 2}
+  - Type: 12
+    Effect: {fileID: 11400000, guid: a7cd492d4cd83a0489ee1d9d08f80f76, type: 2}
+  - Type: 13
+    Effect: {fileID: 11400000, guid: 61d84c3f9129bca499fa68ac5be438b5, type: 2}
+  - Type: 14
+    Effect: {fileID: 11400000, guid: cec2dd41caf8df44fa945ab1962af85c, type: 2}
+  - Type: 15
+    Effect: {fileID: 11400000, guid: 15479ffbc49e0f6438096f06a5225d6c, type: 2}
+  - Type: 16
+    Effect: {fileID: 11400000, guid: cd27898494af29c498198f0470c47632, type: 2}
+  - Type: 16
+    Effect: {fileID: 11400000, guid: cd27898494af29c498198f0470c47632, type: 2}
+  - Type: 18
+    Effect: {fileID: 11400000, guid: 1bcb9c8b93ea5f3499ff46760bc429ef, type: 2}

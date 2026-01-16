@@ -43,7 +43,8 @@ public class AbilityModHandler : MonoBehaviour
         { AbilityModTypes.MaxPierce, 150 },
         { AbilityModTypes.MaxSplit, 150 },
         { AbilityModTypes.MaxRicochet, 150 },
-        { AbilityModTypes.Number, 400 } };
+        { AbilityModTypes.Number, 400 } ,
+        {AbilityModTypes.StatusEffect, 99}};
 
     public static readonly Dictionary<Type, List<AbilityModTypes>> ModOptions = new()
         {
@@ -72,12 +73,10 @@ public class AbilityModHandler : MonoBehaviour
         }
         else throw new System.Exception($"The mod whose price you are searching {modType} is not in the Ability Mod cost dictionary!");
     }
-    public static int GetModCost(StatusEffectType modType)
-    {
-        return 500;
-    }
+
     public Mod_Base GetAbilityMod(Ability ability)
     {
+        Debug.Log($"Checking {ability} for a mod");
         if (ModdedAbilities.TryGetValue(ability, out Mod_Base mod))
             return mod;
         else return null;
@@ -106,6 +105,7 @@ public class AbilityModHandler : MonoBehaviour
 
     public void ModAttributeByType(Ability ability, AbilityModTypes modType, float changeValue)
     {
+        if (modType == AbilityModTypes.StatusEffect) return;
         Mod_Base mod = TryAddNewAbilityMod(ability);
         mod.Mod_Attribute(modType, changeValue);
         Debug.Log($"ability = {ability.Name}. mod type = {modType}. change value = {changeValue}");
@@ -124,24 +124,16 @@ public class AbilityModHandler : MonoBehaviour
     {
         if (!ModdedAbilities.TryGetValue(ability, out Mod_Base existingMod))
         {
-            foreach (KeyValuePair<Ability, Mod_Base> kvp in ModdedAbilities)
-            {
-                //Debug.Log($"ability = {kvp.Key}. mod = {kvp.Value}");
-
-            }
-            //Debug.Log("REturning Null like no 0nes business");
             return new();
         }
         else
         {
-            //Debug.Log($"REturning a dope ass list of length{existingMod.GetStatusEffects().Count}");
-
             return existingMod.GetStatusEffects();
         }
     }
     public void AddStatusEffectToAbility(Ability ability, StatusEffects effectType)
     {
-        //Debug.Log($"Modding to add {effectType} to {ability}!");
+        Debug.Log($"Modding to add {effectType} to {ability}!@#$%^&*()!");
         Mod_Base mod = TryAddNewAbilityMod(ability);
         mod.Mod_AddStatusEffect(effectType);
     }

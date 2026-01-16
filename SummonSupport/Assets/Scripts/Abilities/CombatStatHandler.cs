@@ -9,6 +9,7 @@ using UnityEngine.ResourceManagement.Profiling;
 using UnityEditor.Rendering;
 using UnityEditor.ShaderGraph.Internal;
 using System;
+using System.Linq;
 
 public static class CombatStatHandler
 {
@@ -35,7 +36,8 @@ public static class CombatStatHandler
         currentAbility = ability;
         currentCaster = caster;
         currentTarget = target;
-        modHandler = caster.GetComponent<AbilityModHandler>();
+        if (caster is not EnemyStats) modHandler = AbilityModHandler.Instance;
+        else modHandler = null;
         //UnityEngine.Debug.Log($"caster = {caster.Name}, target = {target.Name} mod handler = {modHandler}");
 
         if (effectPackage.Heal.Value > 0)
@@ -70,16 +72,29 @@ public static class CombatStatHandler
                 AdjustAndApplyTempChange(tempChange);
             }
         }
-
-        if (effectPackage.StatusEffects.Count > 0)
+        currentStatusEffects = effectPackage.StatusEffects;
+        AddMods();
+        if (currentStatusEffects.Count > 0)
         {
-            foreach (StatusEffects status in effectPackage.StatusEffects)
+
+            foreach (StatusEffects status in currentStatusEffects)
             {
                 currentTarget.SE_Handler.AlterStatusEffectList(status, true);
             }
-
         }
+    }
 
+    public static void AddMods()
+    {
+
+        if (modHandler != null)
+        {
+            foreach (StatusEffects se in modHandler.GetModStatusEffects(currentAbility))
+            {
+                UnityEngine.Debug.Log($"Adding {se} to list in to be handled in combat stat handler");
+                currentStatusEffects.Add(se);
+            }
+        }
     }
 
 

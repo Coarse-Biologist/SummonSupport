@@ -119,7 +119,7 @@ public class PlayerAbilityHandler : AbilityHandler
 
         SetSelectedAbility(ability, 0);
 
-        if (!abilitiesOnCooldownCrew[ability]) // Checks if the value is true. Abilities[index] is the ability at the InputActions context index.
+        if (!IsOnCoolDown(ability)) // Checks if the value is true. Abilities[index] is the ability at the InputActions context index.
         {
             CastAbility(ability, GetCenterOfScreen(100f), transform.rotation);
             EventDeclarer.AbilityUsed?.Invoke(0);
@@ -136,11 +136,10 @@ public class PlayerAbilityHandler : AbilityHandler
 
         SetSelectedAbility(ability, 1);
 
-        if (!abilitiesOnCooldownCrew[ability]) // Checks if the value is true. Abilities[index] is the ability at the InputActions context index.
+        if (!IsOnCoolDown(ability)) // Checks if the value is true. Abilities[index] is the ability at the InputActions context index.
         {
             CastAbility(ability, GetCenterOfScreen(100f), transform.rotation);
             EventDeclarer.AbilityUsed?.Invoke(1);
-
         }
     }
     public void OnAbility3(InputAction.CallbackContext context)
@@ -153,7 +152,7 @@ public class PlayerAbilityHandler : AbilityHandler
 
         SetSelectedAbility(ability, 2);
 
-        if (!abilitiesOnCooldownCrew[ability]) // Checks if the value is true. Abilities[index] is the ability at the InputActions context index.
+        if (!IsOnCoolDown(ability)) // Checks if the value is true. Abilities[index] is the ability at the InputActions context index.
         {
             CastAbility(ability, GetCenterOfScreen(100f), transform.rotation);
             EventDeclarer.AbilityUsed?.Invoke(2);
@@ -169,7 +168,7 @@ public class PlayerAbilityHandler : AbilityHandler
 
         SetSelectedAbility(ability, 3);
 
-        if (!abilitiesOnCooldownCrew[ability]) // Checks if the value is true. Abilities[index] is the ability at the InputActions context index.
+        if (!IsOnCoolDown(ability)) // Checks if the value is true. Abilities[index] is the ability at the InputActions context index.
         {
             CastAbility(ability, GetCenterOfScreen(100f), transform.rotation);
             EventDeclarer.AbilityUsed?.Invoke(3);
@@ -186,7 +185,7 @@ public class PlayerAbilityHandler : AbilityHandler
 
         SetSelectedAbility(ability, 4);
 
-        if (!abilitiesOnCooldownCrew[ability]) // Checks if the value is true. Abilities[index] is the ability at the InputActions context index.
+        if (!IsOnCoolDown(ability)) // Checks if the value is true. Abilities[index] is the ability at the InputActions context index.
         {
             CastAbility(ability, GetCenterOfScreen(100f), transform.rotation);
             EventDeclarer.AbilityUsed?.Invoke(4);
@@ -202,7 +201,7 @@ public class PlayerAbilityHandler : AbilityHandler
 
         SetSelectedAbility(ability, 5);
 
-        if (!abilitiesOnCooldownCrew[ability]) // Checks if the value is true. Abilities[index] is the ability at the InputActions context index.
+        if (!IsOnCoolDown(ability)) // Checks if the value is true. Abilities[index] is the ability at the InputActions context index.
         {
             CastAbility(ability, GetCenterOfScreen(100f), transform.rotation);
             EventDeclarer.AbilityUsed?.Invoke(5);
@@ -215,7 +214,7 @@ public class PlayerAbilityHandler : AbilityHandler
     {
         if (selectedAbility == null || playerStats.Dead || stuckInUI) return;
 
-        if (!abilitiesOnCooldownCrew[selectedAbility]) // Checks if the value is true. Abilities[index] is the ability at the InputActions context index.
+        if (!IsOnCoolDown(selectedAbility)) // Checks if the value is true. Abilities[index] is the ability at the InputActions context index.
         {
             CastAbility(selectedAbility, GetCenterOfScreen(100f), transform.rotation);
             EventDeclarer.AbilityUsed?.Invoke(currentAbilityIndex);
@@ -243,5 +242,15 @@ public class PlayerAbilityHandler : AbilityHandler
             );
 
         return Camera.main.ScreenToWorldPoint(screenCenter);
+    }
+    protected override bool IsOnCoolDown(Ability ability)
+    {
+        if(ability is BeamAbility beamAbility)
+        {
+            if (toggledAbilitiesDict.ContainsKey(beamAbility))
+                return false;
+        }
+        bool onCooldown = abilitiesOnCooldownCrew[ability];
+        return onCooldown;
     }
 }

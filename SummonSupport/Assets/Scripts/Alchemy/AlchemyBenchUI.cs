@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using SummonSupportEvents;
 using static StatusEffectsLibrary;
+using UnityEditorInternal.Profiling.Memory.Experimental.FileFormat;
 
 
 
@@ -185,7 +186,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
         if (Player.TryGetComponent(out PlayerAbilityHandler abilityHandler))
             playerAbilityHandler = abilityHandler;
         else return;
-        //Time.timeScale = 0f;
+        Time.timeScale = 0f;
 
         HideInteractionOption();
         PlayerUsingUI(Player.GetComponent<AnimationControllerScript>());
@@ -283,10 +284,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
         }
         SetInstructionsText(text);
     }
-    private void UpgradePlayer()
-    {
-
-    }
+   
 
     #endregion
 
@@ -477,30 +475,25 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     private void ShowStatusEffectOptionScreen()
     {
         ClearPanel(bottomRightPanel);
-        StatusEffectsLibrary library = AbilityLibrary.GetStatusEffectLibrary();
-        if (library != null)
-        {
-            foreach (EffectEntry entry in library.entries)
-            {
-                Button button = AddButtonToPanel(AbilityModHandler.GetCleanEnumString(entry.Type), bottomRightPanel, 40, 10);
-                button.RegisterCallback<ClickEvent>(e => SetSelectedModAttribute(entry.Effect));
-            }
-        }
+        StatusEffectType releventStatusEffect = StatusEffectsLibrary.ElementToEffectDict[selectedAbility.ElementTypes[0]];
+        Button button = AddButtonToPanel(AbilityModHandler.GetCleanEnumString(releventStatusEffect), bottomRightPanel, 40, 10);
+        button.RegisterCallback<ClickEvent>(e => SetSelectedModAttribute(AbilityModTypes.StatusEffect, releventStatusEffect));
+
     }
-    private void SetSelectedModAttribute(AbilityModTypes modType)
+    private void SetSelectedModAttribute(AbilityModTypes modType, StatusEffectType status = StatusEffectType.None)
     {
-        selectedModType = modType;
         selectedStatusEffect = null;
+
+        selectedModType = modType;
+        if (status != StatusEffectType.None)
+        {
+            selectedStatusEffect = AbilityLibrary.GetStatusEffects(selectedAbility.ElementTypes[0], status);
+            Debug.Log($"Selected status effect is being set to {selectedStatusEffect} for ability self");
+        }
         SetInstructionsText($"The {AbilityModHandler.GetCleanEnumString(modType)} of {selectedAbility.Name} can be improved for {AbilityModHandler.GetModCost(modType)} core power. You currently have {AlchemyInventory.GetCorePowerResource(AlchemyInventory.ingredients)}");
 
     }
-    private void SetSelectedModAttribute(StatusEffects modType)
-    {
-        selectedStatusEffect = modType;
-        selectedModType = AbilityModTypes.None;
-        SetInstructionsText($"The {AbilityModHandler.GetCleanEnumString(modType)} of {selectedAbility.Name} can be improved for {AbilityModHandler.GetModCost(modType.EffectType)} core power. You currently have {AlchemyInventory.GetCorePowerResource(AlchemyInventory.ingredients)}");
 
-    }
     private void AttemptModification(AbilityModTypes modAttribute)
     {
         if (selectedAbility == null) return;
@@ -514,12 +507,13 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
             if (boughtPrice.bought)
             {
                 ModHandler.ModAttributeByType(selectedAbility, selectedModType, AbilityModHandler.GetModIncrementValue(selectedModType));
+                if (selectedStatusEffect != null) ModHandler.AddStatusEffectToAbility(selectedAbility, selectedStatusEffect);
                 SetInstructionsText($"You have modified the {AbilityModHandler.GetCleanEnumString(selectedModType)} of {selectedAbility.Name} by {AbilityModHandler.GetModIncrementValue(selectedModType)} at the cost of {boughtPrice.price} core power.");
             }
         }
         else if (selectedStatusEffect != null)
         {
-            var boughtPrice = AlchemyInventory.BuyCraftingPowerWithCores(AbilityModHandler.GetModCost(selectedStatusEffect.EffectType));
+            var boughtPrice = AlchemyInventory.BuyCraftingPowerWithCores(AbilityModHandler.GetModCost(AbilityModTypes.StatusEffect));
             if (boughtPrice.bought)
             {
                 ModHandler.AddStatusEffectToAbility(selectedAbility, selectedStatusEffect);

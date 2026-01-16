@@ -568,7 +568,7 @@ PrefabInstance:
     - target: {fileID: 7765434297030881640, guid: ac788a31b3c87bf43bcc0387b0238bab,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.7
+      value: 39.7
       objectReference: {fileID: 0}
     - target: {fileID: 7765434297030881640, guid: ac788a31b3c87bf43bcc0387b0238bab,
         type: 3}
@@ -578,7 +578,7 @@ PrefabInstance:
     - target: {fileID: 7765434297030881640, guid: ac788a31b3c87bf43bcc0387b0238bab,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 26.2
+      value: 26.6
       objectReference: {fileID: 0}
     - target: {fileID: 7765434297030881640, guid: ac788a31b3c87bf43bcc0387b0238bab,
         type: 3}
@@ -6856,7 +6856,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93e3fd9ce2ccb9548ad2bd2ba1f01db6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <Active>k__BackingField: 1
+  <Active>k__BackingField: 0
   <enemyPrefab>k__BackingField: {fileID: 810306928598971056, guid: 6eb2daf00740bba47aac2befdc6b070e,
     type: 3}
   <SpawnCenter>k__BackingField: {fileID: 80988764}
@@ -9907,12 +9907,12 @@ PrefabInstance:
     - target: {fileID: 3688559523477429147, guid: c7f20613f6056c84cad3b32c01b12428,
         type: 3}
       propertyPath: m_AnchorMax.x
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3688559523477429147, guid: c7f20613f6056c84cad3b32c01b12428,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4045221317855405213, guid: c7f20613f6056c84cad3b32c01b12428,
         type: 3}
@@ -9924,6 +9924,23 @@ PrefabInstance:
       propertyPath: m_Center.y
       value: 0.36906233
       objectReference: {fileID: 0}
+    - target: {fileID: 4520051469020906645, guid: c7f20613f6056c84cad3b32c01b12428,
+        type: 3}
+      propertyPath: <Abilities>k__BackingField.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4520051469020906645, guid: c7f20613f6056c84cad3b32c01b12428,
+        type: 3}
+      propertyPath: '<Abilities>k__BackingField.Array.data[0]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 6991858e11ff93d4bb23795e859b1a77,
+        type: 2}
+    - target: {fileID: 4520051469020906645, guid: c7f20613f6056c84cad3b32c01b12428,
+        type: 3}
+      propertyPath: '<Abilities>k__BackingField.Array.data[1]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 946e5f54d23bbc24e9bf9696f3cf93c2,
+        type: 2}
     - target: {fileID: 5056388550750722147, guid: c7f20613f6056c84cad3b32c01b12428,
         type: 3}
       propertyPath: m_UseGravity
@@ -10007,7 +10024,7 @@ PrefabInstance:
     - target: {fileID: 7826342566136339172, guid: c7f20613f6056c84cad3b32c01b12428,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8026827070947555896, guid: c7f20613f6056c84cad3b32c01b12428,
         type: 3}
@@ -10283,19 +10300,19 @@ PrefabInstance:
     - target: {fileID: 5700169036039766404, guid: 29cc623553c0c3d4aa9548ba52efed1b,
         type: 3}
       propertyPath: <Abilities>k__BackingField.Array.size
-      value: 6
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5700169036039766404, guid: 29cc623553c0c3d4aa9548ba52efed1b,
         type: 3}
       propertyPath: '<Abilities>k__BackingField.Array.data[0]'
       value: 
-      objectReference: {fileID: 11400000, guid: 358ed5ab9d9298649ad685f077551a3b,
+      objectReference: {fileID: 11400000, guid: bedb0aeed6ae7bb4499b3e96059b287a,
         type: 2}
     - target: {fileID: 5700169036039766404, guid: 29cc623553c0c3d4aa9548ba52efed1b,
         type: 3}
       propertyPath: '<Abilities>k__BackingField.Array.data[1]'
       value: 
-      objectReference: {fileID: 11400000, guid: 6991858e11ff93d4bb23795e859b1a77,
+      objectReference: {fileID: 11400000, guid: 6ecd8945d9da6ca4da64c6af3d43bf0f,
         type: 2}
     - target: {fileID: 5700169036039766404, guid: 29cc623553c0c3d4aa9548ba52efed1b,
         type: 3}

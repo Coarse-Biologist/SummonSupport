@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9aea4a5536635d742ae35c809c15f9f8, type: 3}
-  m_Name: InAttackAnimation
-  m_EditorClassIdentifier: 
-  <Name>k__BackingField: StuckInAttackAnimation
-  <Icon>k__BackingField: {fileID: 0}
-  <EffectType>k__BackingField: 8
-  <Duration>k__BackingField: 0
-  <UsesEffectLocation>k__BackingField: 0
+  m_Name: Lethargic_Bacteria
+  m_EditorClassIdentifier: Assembly-CSharp::StatusEffects
+  <Name>k__BackingField: Lethargy
+  <Icon>k__BackingField: {fileID: 21300000, guid: f2ae201335ed24646b4dc974e1798c3b,
+    type: 3}
+  <EffectType>k__BackingField: 13
+  <Duration>k__BackingField: 5

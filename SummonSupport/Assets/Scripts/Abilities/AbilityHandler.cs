@@ -10,7 +10,7 @@ public class AbilityHandler : MonoBehaviour
     [SerializeField] protected LivingBeing statsHandler;
     [field: SerializeField] public List<Ability> Abilities { private set; get; } = new();
     public Dictionary<Ability, bool> abilitiesOnCooldownCrew = new();
-    private Dictionary<BeamAbility, GameObject> toggledAbilitiesDict = new();
+    protected Dictionary<BeamAbility, GameObject> toggledAbilitiesDict = new();
     private bool charging = false;
     public AbilityModHandler modHandler { protected set; get; }
     private AnimationControllerScript anim;
@@ -112,10 +112,10 @@ public class AbilityHandler : MonoBehaviour
     private bool HandleBeamAbility(BeamAbility beamAbility, LivingBeing statsHandler)
     {
         GameObject beamInstance;
-        if (IsOnCoolDown(beamAbility)) return false;
+        //if (IsOnCoolDown(beamAbility)) return false;
         if (toggledAbilitiesDict.TryGetValue(beamAbility, out GameObject activeAbility))
         {
-            StartCoroutine(SetOnCooldown(beamAbility));
+            //StartCoroutine(SetOnCooldown(beamAbility));
             StopToggledAbility(beamAbility, activeAbility);
             return false;
         }
@@ -206,8 +206,10 @@ public class AbilityHandler : MonoBehaviour
 
     public IEnumerator SetOnCooldown(Ability ability)
     {
+        
         try
         {
+            //status effect presense handling
             float coolDown = ability.Cooldown + modHandler.GetModAttributeByType(ability, AbilityModTypes.Cooldown) + statsHandler.SE_Handler.GetStatusEffectValue(StatusEffectType.Lethargic);
             // default, plus modifier, plus lethargy value
             abilitiesOnCooldownCrew[ability] = true;
@@ -218,7 +220,7 @@ public class AbilityHandler : MonoBehaviour
             abilitiesOnCooldownCrew[ability] = false;
         }
     }
-    protected bool IsOnCoolDown(Ability ability)
+    protected virtual bool IsOnCoolDown(Ability ability)
     {
         bool onCooldown = abilitiesOnCooldownCrew[ability];
         return onCooldown;

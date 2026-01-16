@@ -10,7 +10,26 @@ public static class AbilityLibrary
     public static PlayerAbilitiesByLevel playerAbilitiesByLevel { get; private set; } = new();
     [field: SerializeField] public static StatusEffectsLibrary StatusEffectsLibrary { get; private set; }
 
+    public static StatusEffects GetStatusEffects(Element element, StatusEffectType statusType = StatusEffectType.None)
+    {
+        if (statusType == StatusEffectType.None)
+        {
+            if (StatusEffectsLibrary.ElementToEffectDict.TryGetValue(element, out StatusEffectType type))
+            {
+                statusType = type;
+            }
+            else throw new SystemException($"Get Status EFfects in ability library coultnt find a status effect for {element}");
 
+        }
+        {
+            foreach (StatusEffectsLibrary.EffectEntry entry in StatusEffectsLibrary.entries)
+            {
+                if (entry.Type == statusType)
+                    return entry.Effect;
+            }
+            throw new SystemException($"Status Effect type {statusType} had no pair found in the Status effect library");
+        }
+    }
 
     public static void SetAbilityLibrary(AbilityLibrary_SO library_SO)
     {

@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9aea4a5536635d742ae35c809c15f9f8, type: 3}
-  m_Name: Pulled
+  m_Name: Blinded_Light
   m_EditorClassIdentifier: 
-  <Name>k__BackingField: Pull
-  <Icon>k__BackingField: {fileID: -6759531213810404388, guid: 87fd5a41827ad5e4eae32e065f01d8c4,
+  <Name>k__BackingField: Blinded
+  <Icon>k__BackingField: {fileID: 21300000, guid: fd324fdc8ff4eb244baa75d0e2b339d7,
     type: 3}
-  <EffectType>k__BackingField: 6
+  <EffectType>k__BackingField: 16
   <Duration>k__BackingField: 5

@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9aea4a5536635d742ae35c809c15f9f8, type: 3}
-  m_Name: Chilled
+  m_Name: Entangle_Plant
   m_EditorClassIdentifier: 
-  <Name>k__BackingField: Chilled
-  <Icon>k__BackingField: {fileID: 21300000, guid: 787f466796bbbbe4caa71f2cdd8d68fa,
+  <Name>k__BackingField: Pull
+  <Icon>k__BackingField: {fileID: -6759531213810404388, guid: 87fd5a41827ad5e4eae32e065f01d8c4,
     type: 3}
-  <EffectType>k__BackingField: 9
+  <EffectType>k__BackingField: 6
   <Duration>k__BackingField: 5

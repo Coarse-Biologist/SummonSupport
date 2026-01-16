@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9aea4a5536635d742ae35c809c15f9f8, type: 3}
-  m_Name: Infected
+  m_Name: Overheated_Heat
   m_EditorClassIdentifier: Assembly-CSharp::StatusEffects
-  <Name>k__BackingField: Infected
-  <Icon>k__BackingField: {fileID: 21300000, guid: d71eb30e7a0d1a445b1d9e82071c9139,
+  <Name>k__BackingField: OverHeated
+  <Icon>k__BackingField: {fileID: 21300000, guid: f5be0153cedc73845a41957c906bbf0a,
     type: 3}
-  <EffectType>k__BackingField: 14
-  <Duration>k__BackingField: 5
+  <EffectType>k__BackingField: 8
+  <Duration>k__BackingField: 6

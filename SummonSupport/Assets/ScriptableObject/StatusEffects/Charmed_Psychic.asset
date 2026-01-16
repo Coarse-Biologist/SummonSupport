@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9aea4a5536635d742ae35c809c15f9f8, type: 3}
-  m_Name: Madness
+  m_Name: Charmed_Psychic
   m_EditorClassIdentifier: 
-  <Name>k__BackingField: Mdness
-  <Icon>k__BackingField: {fileID: 21300000, guid: 053d5db613986bd429265c3fb4987dbc,
+  <Name>k__BackingField: Charm
+  <Icon>k__BackingField: {fileID: 21300000, guid: 9a16434928bf46145991df5259d51513,
     type: 3}
-  <EffectType>k__BackingField: 5
+  <EffectType>k__BackingField: 4
   <Duration>k__BackingField: 10
