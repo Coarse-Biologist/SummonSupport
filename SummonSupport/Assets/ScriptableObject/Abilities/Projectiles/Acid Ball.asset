@@ -18,7 +18,7 @@ MonoBehaviour:
   <CostType>k__BackingField: 4
   <Cost>k__BackingField: 20
   <Range>k__BackingField: 20
-  <Duration>k__BackingField: 0
+  <Duration>k__BackingField: 10
   <AbilityTypeTag>k__BackingField: 1
   <ListUsableOn>k__BackingField: 01000000
   <TargetEffects>k__BackingField:
@@ -32,7 +32,7 @@ MonoBehaviour:
     <Damage>k__BackingField:
       <Value>k__BackingField: 30
     <DamageOverTime>k__BackingField:
-      <Value>k__BackingField: 0
+      <Value>k__BackingField: 10
     <AttributeUp>k__BackingField: []
     <AttributeDown>k__BackingField: []
     <StatusEffects>k__BackingField: []

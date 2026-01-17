@@ -297,9 +297,10 @@ public abstract class LivingBeing : MonoBehaviour
     {
         while (true)
         {
-            float newHP = Mathf.Min(CurrentHP + HealthRegeneration, MaxHP);
+            float newHP = Mathf.Min(CurrentHP + TotalHealthRegeneration, MaxHP);
             if (newHP != CurrentHP)
                 SetAttribute(AttributeType.CurrentHitpoints, newHP);
+                
             float newPower = Mathf.Min(CurrentPower + PowerRegeneration, MaxPower);
             if (newPower != CurrentPower)
                 SetAttribute(AttributeType.CurrentPower, newPower);
@@ -311,6 +312,7 @@ public abstract class LivingBeing : MonoBehaviour
     {
         if (attributeType == AttributeType.CurrentHitpoints)
         {
+            Debug.Log($"Changing health regen by {value}");
             TotalHealthRegeneration += value;
             //HealthRegenArrows = GetRegenerationIndicatorAmount(MaxHP, TotalHealthRegeneration);
         }
