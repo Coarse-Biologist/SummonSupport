@@ -31,8 +31,8 @@ public abstract class LivingBeing : MonoBehaviour
     [field: SerializeField] public float TickRateRegenerationInSeconds { get; private set; } = .2f;
     [field: SerializeField] public float HealthRegeneration { get; private set; } = 1;
     [field: SerializeField] public float PowerRegeneration { get; private set; } = 1;
-    private float TotalHealthRegeneration = 0;
-    private float TotalPowerRegeneration = 0;
+    public float TotalHealthRegeneration {private set; get;} = 0;
+    public float TotalPowerRegeneration {private set; get;} = 0;
 
     public GameObject locSphere;
 
@@ -409,5 +409,20 @@ public abstract class LivingBeing : MonoBehaviour
     protected void ViciousDeathExplosion()
     {
         //EventDeclarer.ViciousDeath?.Invoke(this);
+    }
+    public virtual string GetLivingBeingStats()
+    {
+        
+        string statString = "";
+        statString += $"Max hitpoints: {GetAttribute(AttributeType.MaxHitpoints)}\n";
+        statString += GetComponent<AbilityHandler>().GetKnownAbilitiesString();
+        foreach(var kvp in Affinities)
+        {
+            if(kvp.Value.Get() > 0)
+            statString += $"{kvp.Key} affinity: {kvp.Value.Get()}\n";
+        }
+        
+        return statString;
+    
     }
 }

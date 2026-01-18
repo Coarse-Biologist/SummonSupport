@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using SummonSupportEvents;
+using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
@@ -15,10 +16,18 @@ public class PauseGameHandler : MonoBehaviour
 
     private VisualElement root;
     private VisualElement PauseMenu;
+    private VisualElement ButtonMenu;
+
     private Button ResumeButton;
     private Button RestartButton;
     private Button OptionsButton;
+    private Button StatsButton;
+
     private Label InfoElement;
+    private VisualElement MainUI;
+    private VisualElement DialogueUI;
+    private VisualElement PlayerOptions;
+    private int statIndex = 0;
 
     private Button QuitButton;
     void OnEnable()
@@ -45,15 +54,34 @@ public class PauseGameHandler : MonoBehaviour
         UIPrefabAssets = UI_DocHandler.Instance.UIPrefabAssets;
         root = ui.rootVisualElement;
         PauseMenu = root.Q<VisualElement>("PauseMenu");
+        //ButtonMenu = PauseMenu.Q<VisualElement>("ButtonMenu");
         ResumeButton = PauseMenu.Q<Button>("Resume");
         OptionsButton = PauseMenu.Q<Button>("Options");
         RestartButton = PauseMenu.Q<Button>("Restart");
         QuitButton = PauseMenu.Q<Button>("Quit");
-        InfoElement = PauseMenu.Q<Label>("Info");
+        StatsButton = PauseMenu.Q<Button>("ShowStats");
+        
+        MainUI = root.Q<VisualElement>("MainUI");
+        Debug.Log($"main ui: {PauseMenu}");
+
+        DialogueUI = MainUI.Q<VisualElement>("Dialogue");
+        Debug.Log($"dialogue ui: {DialogueUI}");
+        PlayerOptions = MainUI.Q<VisualElement>("PlayerOptions");
+        Debug.Log($"playeroptions : {PlayerOptions}");
+
+
+
+        //InfoScrollElement = PauseMenu.Q<ScrollView>("ScrollView");
+        //Debug.Log($"InfoScrollElement: {InfoScrollElement}");
+
+        InfoElement = PlayerOptions.Q<Label>("Info");
+        Debug.Log($"InfoElement: {InfoElement}");
 
         ResumeButton.RegisterCallback<ClickEvent>(e => Resume());
         RestartButton.RegisterCallback<ClickEvent>(e => Restart());
-        //QuitButton.RegisterCallback<ClickEvent>(e => Quit());
+
+        StatsButton.RegisterCallback<ClickEvent>(e => ChangeStatIndex());
+        InfoElement.text = "";
 
     }
     private void ToggleGamePause()
@@ -79,10 +107,10 @@ public class PauseGameHandler : MonoBehaviour
 
         PauseMenu.SetEnabled(true);
         PauseMenu.style.display = DisplayStyle.Flex;
+
         ResumeButton.style.display = DisplayStyle.Flex;
         ResumeButton.style.width = StyleKeyword.Auto;
-
-        InfoElement.style.display = DisplayStyle.None;
+        InfoElement.style.display = DisplayStyle.Flex;
         OptionsButton.style.display = DisplayStyle.Flex;
         QuitButton.style.display = DisplayStyle.Flex;
         RestartButton.style.display = DisplayStyle.Flex;
@@ -95,6 +123,7 @@ public class PauseGameHandler : MonoBehaviour
     {
         UnityEngine.Cursor.lockState = CursorLockMode.Locked;   // Locks the cursor to the center of the screen
         UnityEngine.Cursor.visible = false;
+        PlayerOptions.style.display = DisplayStyle.None;
 
         PauseMenu.SetEnabled(false);
         PauseMenu.style.display = DisplayStyle.None;
@@ -119,8 +148,10 @@ public class PauseGameHandler : MonoBehaviour
         RestartButton.style.display = DisplayStyle.Flex;
         ResumeButton.style.display = DisplayStyle.None;
         OptionsButton.style.display = DisplayStyle.None;
-        InfoElement.text = "You have fallen asleep in death";
+        //InfoScrollElement.style.display = DisplayStyle.Flex;
 
+        InfoElement.text = "You have fallen asleep in death \n";
+        ShowGameStats();
 
         Time.timeScale = 0f;
     }
@@ -151,4 +182,46 @@ public class PauseGameHandler : MonoBehaviour
 
         Time.timeScale = 0f;
     }
+    private void ShowPlayerstats()
+    {
+        InfoElement.text = $"{PlayerStats.Instance.Name} stats:\n {PlayerStats.Instance.GetLivingBeingStats()}";
+    }
+
+    private void ShowGameStats()
+    {
+        string questStats = QuestHandler.Instance.GetQuestCompletionStats();
+        Debug.Log($"{questStats}");
+        InfoElement.text += $"{questStats}\n";
+    }
+    private void ChangeStatIndex()
+    {
+        ShowStats();
+        statIndex++;
+        Debug.Log($"stat index: {statIndex}");
+
+    }
+    private void ShowStats()
+    {   
+        PlayerOptions.style.display = DisplayStyle.Flex;
+
+        int minionsNum = AlchemyHandler.Instance.activeMinions.Count;
+        if(statIndex == 0)
+        {
+            ShowPlayerstats();
+        }
+        else
+        {
+            if (minionsNum >= statIndex)
+            {
+                LivingBeing minion = AlchemyHandler.Instance.activeMinions[statIndex - 1];
+                string minionStats = minion.GetLivingBeingStats();
+                InfoElement.text = $"{minion.Name} stats:\n {minionStats}\n";
+            }
+            else
+            {
+                statIndex = 0;
+                ShowPlayerstats();
+            }
+        }
+}
 }

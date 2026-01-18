@@ -227,6 +227,28 @@ public class PlayerStats : LivingBeing
 
         }
     }
+    public override string GetLivingBeingStats()
+    {
+        
+        string statString = "";
+        statString += $"Max hitpoints: {GetAttribute(AttributeType.MaxHitpoints)}\n";
+        statString += $"Max Power: {GetAttribute(AttributeType.MaxPower)}\n";
+        statString += $"Health regeneration: {TotalHealthRegeneration}\n";
+        statString += $"Power regeneration: {TotalPowerRegeneration}\n";
+
+
+        
+
+        statString += GetComponent<AbilityHandler>().GetKnownAbilitiesString();
+        foreach(var kvp in Affinities)
+        {
+            if(kvp.Value.Get() > 0)
+            statString += $"{kvp.Key} affinity: {kvp.Value.Get()}\n";
+        }
+        
+        return statString;
+    
+    }
 
 
 }

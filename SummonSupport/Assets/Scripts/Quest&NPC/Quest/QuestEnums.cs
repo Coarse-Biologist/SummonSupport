@@ -8,15 +8,15 @@ namespace Quest
 
     public enum RepeatableAccomplishments // quests which can and may be required to be completed X times.
     {
-        DefeatEnemies,
-        CraftMinions,
-        LootOrgans,
-        LootCores,
-        LootEther,
-        UseOrgans,
-        UseCores,
-        UseEther,
-        GainKnowledge,
+        EnemiesDefeated,
+        MinionsCrafted,
+        OrgansLooted,
+        CoresLooted,
+        EtherLooted,
+        OrgansUsed,
+        CoresUsed,
+        EtherUsed,
+        KnowledgeGained,
 
     }
 }

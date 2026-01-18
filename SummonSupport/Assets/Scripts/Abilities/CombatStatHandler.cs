@@ -48,6 +48,7 @@ public static class CombatStatHandler
         currentTarget = target;
         if (caster is not EnemyStats) modHandler = AbilityModHandler.Instance;
         else modHandler = null;
+        SetCurrentValues();
         //UnityEngine.Debug.Log($"caster = {caster.Name}, target = {target.Name} mod handler = {modHandler}");
         AddMods();
 
@@ -89,12 +90,10 @@ public static class CombatStatHandler
             }
         }
     }
-
-    public static void AddMods()
+    private static void SetCurrentValues()
     {
-        if (modHandler != null)
-        {
             EffectPackage currentAbilityEffects = currentAbility.TargetEffects;
+
             currentStatusEffects = currentAbilityEffects.StatusEffects;
             
             currentDamageValue = currentAbilityEffects.Damage.Value;
@@ -102,7 +101,12 @@ public static class CombatStatHandler
             currentHealValue = currentAbilityEffects.Heal.Value;
             currentHealOverTimeValue = currentAbilityEffects.HealOverTime.Value;
             currentAbilityDuration = currentAbility.Duration;
-            
+    }
+
+    public static void AddMods()
+    {
+        if (modHandler != null)
+        {
             foreach (StatusEffects se in modHandler.GetModStatusEffects(currentAbility))
             {
                 currentStatusEffects.Add(se);
@@ -116,8 +120,6 @@ public static class CombatStatHandler
 
 
             currentAbilityDuration += modHandler.GetModAttributeByType(currentAbility, AbilityModTypes.Duration);
-        
-        
         }
     }
 
@@ -190,6 +192,8 @@ public static class CombatStatHandler
     }
     public static float AdjustAndApplyDOT()
     {
+        if (currentDotValue == 0) return 0;
+        
         float damageValue = -currentDotValue;
         UnityEngine.Debug.Log($"Applying DOT of value {damageValue}");
         damageValue = ModifyDamageValueByCasterAffinity(damageValue);

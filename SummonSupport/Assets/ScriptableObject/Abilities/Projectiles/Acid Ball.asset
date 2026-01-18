@@ -32,7 +32,7 @@ MonoBehaviour:
     <Damage>k__BackingField:
       <Value>k__BackingField: 30
     <DamageOverTime>k__BackingField:
-      <Value>k__BackingField: 10
+      <Value>k__BackingField: 0
     <AttributeUp>k__BackingField: []
     <AttributeDown>k__BackingField: []
     <StatusEffects>k__BackingField: []

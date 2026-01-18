@@ -225,6 +225,15 @@ public class AbilityHandler : MonoBehaviour
         bool onCooldown = abilitiesOnCooldownCrew[ability];
         return onCooldown;
     }
+    public string GetKnownAbilitiesString()
+    {
+        string KnownAbilities = "Known Abilities:\n";
+        foreach(Ability ability in GetComponent<AbilityHandler>().Abilities)
+        {
+            KnownAbilities += $"{ability.Name} \n";
+        }
+        return KnownAbilities;
+    }
 
 }
 

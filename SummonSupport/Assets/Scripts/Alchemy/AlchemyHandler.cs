@@ -118,7 +118,7 @@ public class AlchemyHandler : MonoBehaviour
         int healthUpgrade = 0;
         if (AlchemyLootValueDict.TryGetValue(organKvp.Key, out int num))
         {
-            EventDeclarer.RepeatableQuestCompleted?.Invoke(Quest.RepeatableAccomplishments.UseOrgans, num);
+            EventDeclarer.RepeatableQuestCompleted?.Invoke(Quest.RepeatableAccomplishments.OrgansUsed, num);
             stats.ChangeAttribute(AttributeType.MaxHitpoints, num * organKvp.Value);
             healthUpgrade += num * organKvp.Value;
             AlterSizeByOrganNum(stats, num * organKvp.Value);
@@ -141,7 +141,7 @@ public class AlchemyHandler : MonoBehaviour
 
         if (AlchemyLootValueDict.TryGetValue(coreKvp.Key, out int num))
         {
-            EventDeclarer.RepeatableQuestCompleted?.Invoke(Quest.RepeatableAccomplishments.UseCores, num);
+            EventDeclarer.RepeatableQuestCompleted?.Invoke(Quest.RepeatableAccomplishments.CoresUsed, num);
 
             stats.ChangeAttribute(AttributeType.MaxPower, num * coreKvp.Value);
             powerUpgrade += num * coreKvp.Value;
@@ -156,7 +156,7 @@ public class AlchemyHandler : MonoBehaviour
         int elementUpgrade = 0;
         if (AlchemyLootValueDict.TryGetValue(etherKvp.Key, out int num))
         {
-            EventDeclarer.RepeatableQuestCompleted?.Invoke(Quest.RepeatableAccomplishments.UseEther, num);
+            EventDeclarer.RepeatableQuestCompleted?.Invoke(Quest.RepeatableAccomplishments.EtherUsed, num);
 
             foreach (Element element in elementList)
             {
@@ -266,7 +266,7 @@ public class AlchemyHandler : MonoBehaviour
                 AlchemyInventory.IncemementElementalKnowledge(element, strengthAndAmount);
             }
         }
-        EventDeclarer.RepeatableQuestCompleted?.Invoke(Quest.RepeatableAccomplishments.GainKnowledge, total);
+        EventDeclarer.RepeatableQuestCompleted?.Invoke(Quest.RepeatableAccomplishments.KnowledgeGained, total);
 
         return total;
     }
