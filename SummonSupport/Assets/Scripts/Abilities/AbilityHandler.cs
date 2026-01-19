@@ -88,13 +88,13 @@ public class AbilityHandler : MonoBehaviour
                 usedAbility = HandleConjureAbility(conjureAbility, targetPosition, rotation);
                 break;
             case AuraAbility auraAbility:
-                usedAbility = HandleAuraAbility(auraAbility, statsHandler);
+                usedAbility = HandleAuraAbility(auraAbility);
                 break;
             case TeleportAbility teleportAbility:
-                usedAbility = teleportAbility.Activate(gameObject, targetPosition);
+                usedAbility = teleportAbility.Activate(statsHandler, targetPosition);
                 break;
             case MeleeAbility meleeAbility:
-                usedAbility = meleeAbility.Activate(statsHandler.gameObject);
+                usedAbility = meleeAbility.Activate(statsHandler);
                 break;
             case BeamAbility beamAbility:
                 usedAbility = HandleBeamAbility(beamAbility, statsHandler);
@@ -103,7 +103,7 @@ public class AbilityHandler : MonoBehaviour
                 if (!charging)
                 {
                     SetCharging(true);
-                    usedAbility = chargeAbility.Activate(gameObject);
+                    usedAbility = chargeAbility.Activate(statsHandler);
                 }
                 break;
         }
@@ -123,8 +123,7 @@ public class AbilityHandler : MonoBehaviour
         {
             if (anim != null) anim.ChangeLayerAnimation("BeamStart", 1, 2f, true);
 
-
-            beamInstance = beamAbility.ToggleBeam(statsHandler.gameObject, abilitySpawn.transform);
+            beamInstance = beamAbility.ToggleBeam(statsHandler, abilitySpawn.transform);
             toggledAbilitiesDict.TryAdd(beamAbility, beamInstance);
             statsHandler.ChangeRegeneration(beamAbility.CostType, -beamAbility.Cost);
             //AbilityToggledRecently = true;
@@ -182,26 +181,26 @@ public class AbilityHandler : MonoBehaviour
     {
         if (anim != null) anim.ChangeLayerAnimation("SpellCast", 1, 1f);
 
-        return ability.Activate(gameObject);
+        return ability.Activate(statsHandler);
     }
 
     bool HandleConjureAbility(ConjureAbility ability, Vector2 targetPosition, Quaternion rotation)
     {
         if (anim != null) anim.ChangeLayerAnimation("HeavyThrow", 1, 1f);
 
-        return ability.Activate(gameObject, rotation);
+        return ability.Activate(statsHandler, rotation);
     }
 
     bool HandleDashAbility(DashAbility dashAbility)
     {
         if (anim != null) anim.ChangeLayerAnimation("Sprint", 1, .1f);
-        return dashAbility.Activate(gameObject);
+        return dashAbility.Activate(statsHandler);
     }
-    bool HandleAuraAbility(AuraAbility auraAbility, LivingBeing statsHandler)
+    bool HandleAuraAbility(AuraAbility auraAbility)
     {
         if (anim != null) anim.ChangeLayerAnimation("Buff", 1, 1f);
 
-        return auraAbility.Activate(statsHandler.gameObject);
+        return auraAbility.Activate(statsHandler);
     }
 
     public IEnumerator SetOnCooldown(Ability ability)
@@ -228,7 +227,7 @@ public class AbilityHandler : MonoBehaviour
     public string GetKnownAbilitiesString()
     {
         string KnownAbilities = "Known Abilities:\n";
-        foreach(Ability ability in GetComponent<AbilityHandler>().Abilities)
+        foreach(Ability ability in statsHandler.abilityHandler.Abilities)
         {
             KnownAbilities += $"{ability.Name} \n";
         }

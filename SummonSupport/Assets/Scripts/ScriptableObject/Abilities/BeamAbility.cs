@@ -8,17 +8,18 @@ public class BeamAbility : Ability
     //[field: SerializeField] public GameObject SpawnEffectOnHit { get; protected set; }
     [field: SerializeField] public float TickRate { get; private set; } = .5f;
 
-    public override bool Activate(GameObject user)
+    public override bool Activate(LivingBeing casterStats)
     {
-        throw new System.NotImplementedException();
+        ToggleBeam(casterStats, casterStats.abilityHandler.abilitySpawn.transform);
+        return true;
     }
 
-    public GameObject ToggleBeam(GameObject user, Transform abilityDirection)
+    public GameObject ToggleBeam(LivingBeing casterStats, Transform abilityDirection)
     {
         Beam beamScript = SpawnBeam(abilityDirection).GetComponent<Beam>();
         //Debug.Log($"{abilityDirection} = ability direction object");
 
-        beamScript.SetAbilitySettings(user.GetComponent<LivingBeing>(), this, abilityDirection);
+        beamScript.SetAbilitySettings(casterStats, this, abilityDirection);
 
         return beamScript.gameObject;
     }

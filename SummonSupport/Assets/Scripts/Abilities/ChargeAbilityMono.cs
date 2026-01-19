@@ -24,15 +24,16 @@ public class ChargeAbilityMono : MonoBehaviour
 
     [field: SerializeField] public StatusEffects attackAnimationCC;
 
-    public void Charge(ChargeAbility assignedAbility)
+    public void Charge(LivingBeing casterStats, ChargeAbility assignedAbility)
     {
         GameObject user = transform.parent.gameObject;
         ToggleStuckInAbilityAnimation(user, true);
         chargeAbility = assignedAbility;
-        abilityHandler = user.GetComponentInParent<AbilityHandler>();
+        abilityHandler = casterStats.abilityHandler;
         abilityHandler.SetCharging(true);
-        caster = user.GetComponentInParent<LivingBeing>();
-        modHandler = caster.GetComponent<AbilityModHandler>();
+        caster = casterStats;
+        SetModHandler(casterStats);
+
         if (caster.gameObject.TryGetComponent(out MovementScript movementScript))
         {
             speedBoost += movementScript.MovementSpeed;
@@ -76,7 +77,7 @@ public class ChargeAbilityMono : MonoBehaviour
     {
         //if (collision is BoxCollider wall) EndCharge();
         Ability abilityToCast = chargeAbility.ActivateOnHit;
-        bool success = abilityToCast.Activate(transform.parent.gameObject);
+        bool success = abilityToCast.Activate(caster);
         if (success)
         {
             if (chargeAbility.OnHitEffect != null)
@@ -112,5 +113,14 @@ public class ChargeAbilityMono : MonoBehaviour
             playerMovementScript.SetStuck(stuck);
         else Debug.Log($"No CcState script or playermovement script found on the sought gameObject: {user}");
     }
+     private void SetModHandler(LivingBeing casterStats)
+    {
+        if (casterStats.CharacterTag != CharacterTag.Enemy)
+        {
+            modHandler = AbilityModHandler.Instance;
+        }
+        else modHandler = null;
+    }
+
 
 }

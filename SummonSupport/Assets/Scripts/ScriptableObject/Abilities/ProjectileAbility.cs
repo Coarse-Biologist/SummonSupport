@@ -19,16 +19,8 @@ public class ProjectileAbility : Ability
 
 
 
-    public override bool Activate(GameObject user)
-    {
-        return Activate(user, user);
-    }
-    public bool Activate(GameObject user, GameObject spawnPoint)
-    {
-        Debug.Log("Someone wants to use this");
-        return false; //Activate(user, spawnPoint.transform);
-    }
-    public bool Activate(LivingBeing casterStats)
+   
+    public override bool Activate(LivingBeing casterStats)
     {
         Transform spawnPoint = casterStats.transform;
         //Debug.Log($"spawnpoint rotation = {spawnPoint.rotation.y}");

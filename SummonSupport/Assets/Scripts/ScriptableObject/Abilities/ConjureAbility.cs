@@ -28,20 +28,19 @@ public class ConjureAbility : Ability
 
 
 
-    public override bool Activate(GameObject user)
+    public override bool Activate(LivingBeing casterStats)
     {
-        Quaternion rotation = user.transform.rotation;
-        return Activate(user, rotation);
+        Quaternion rotation = casterStats.transform.rotation;
+        return Activate(casterStats, rotation);
     }
 
-    public bool Activate(GameObject user, Quaternion rotation)
+    public bool Activate(LivingBeing casterStats, Quaternion rotation)
     {
-        LivingBeing casterStats = user.GetComponent<LivingBeing>();
 
         int targetNum = 1;
         float duration = Duration;
 
-        if (user.TryGetComponent(out AbilityModHandler modHandler))
+        if (casterStats.TryGetComponent(out AbilityModHandler modHandler))
         {
             targetNum += modHandler.GetModAttributeByType(this, AbilityModTypes.Number);
             duration += modHandler.GetModAttributeByType(this, AbilityModTypes.Duration);
@@ -50,7 +49,7 @@ public class ConjureAbility : Ability
         {
             TeamType desiredTargetType = this.GetTargetPreference(casterStats);
 
-            List<LivingBeing> targets = GetTargetfromSphereCast(user.GetComponent<AbilityHandler>().abilitySpawn.transform, targetNum, desiredTargetType);
+            List<LivingBeing> targets = GetTargetfromSphereCast(casterStats, casterStats.GetComponent<AbilityHandler>().abilitySpawn.transform, targetNum, desiredTargetType);
             foreach (LivingBeing target in targets)
             {
                 SpawnOnTarget(casterStats, target, rotation);

@@ -23,6 +23,7 @@ public class AlchemyHandler : MonoBehaviour
     [SerializeField] public List<LivingBeing> activeMinions = new List<LivingBeing>();
     public static AlchemyHandler Instance { get; private set; }
     public static Dictionary<AlchemyLoot, int> AlchemyLootValueDict = new();
+    [field: SerializeField] public Transform SpawnLocation { get; private set; }
 
 
     #endregion
@@ -54,8 +55,9 @@ public class AlchemyHandler : MonoBehaviour
 
     #region Crafting Minion
 
-    public void HandleCraftingResults(Dictionary<AlchemyLoot, int> combinedIngredients, List<Element> elementList)
+    public string HandleCraftingResults(Dictionary<AlchemyLoot, int> combinedIngredients, List<Element> elementList)
     {
+        string craftingResults = "";
         if (elementList.Count() == 0)
         {
             combinedIngredients = combinedIngredients
@@ -70,18 +72,20 @@ public class AlchemyHandler : MonoBehaviour
         {
             if (minionPrefab != null)
             {
-                Vector3 playerPos = PlayerStats.Instance.transform.position;
-                craftedMinion = Instantiate(minionPrefab, new Vector3(playerPos.x + 10, playerPos.y, playerPos.z + 10), Quaternion.identity);
+                Vector3 spawnPos = PlayerStats.Instance.transform.position;
+                if (SpawnLocation != null) spawnPos = SpawnLocation.position;
+                craftedMinion = Instantiate(minionPrefab, spawnPos, Quaternion.identity);
 
-                UpgradeMinion(craftedMinion.GetComponent<LivingBeing>(), combinedIngredients, elementList);
+                craftingResults += UpgradeMinion(craftedMinion.GetComponent<LivingBeing>(), combinedIngredients, elementList);
                 AddActiveMinion(craftedMinion);
                 //Debug.Log("Add ACtive minion");
                 int knowledgeGain = GainKnowledge(elementList, combinedIngredients);
-
+                craftingResults += $"You have gained {knowledgeGain} alchemic knowledge.\n";
                 //Logging.Info($"You have just gained a total of {knowledgeGain} knowledge from alchemic work.");
             }
             else Logging.Error("Crafted Minion is null, was he loaded promtly or correctly?");
         }
+        return craftingResults;
     }
 
     public static void HandleMinionRecycling(LivingBeing minion)
@@ -94,7 +98,7 @@ public class AlchemyHandler : MonoBehaviour
         float minionHP = minion.MaxHP - 100f;
         float minionAffinity = GetCombinedElementValues(minion);
 
-        AlchemyInventory.AlterIngredientNum(AlchemyLoot.WeakCore, (int)(minionPower * Instance.RecycleExchangeRate));
+        AlchemyInventory.AlterIngredientNum(AlchemyLoot.WeakCore, (int)(minionPower * Instance.RecycleExchangeRate)); //This should all scale in a more satosfying way
         AlchemyInventory.AlterIngredientNum(AlchemyLoot.FaintEther, (int)(minionAffinity * Instance.RecycleExchangeRate));
         AlchemyInventory.AlterIngredientNum(AlchemyLoot.WretchedOrgans, (int)(minionHP * Instance.RecycleExchangeRate));
 
@@ -168,19 +172,26 @@ public class AlchemyHandler : MonoBehaviour
         return elementUpgrade;
     }
 
-    public void UpgradeMinion(LivingBeing minion, Dictionary<AlchemyLoot, int> ingredients, List<Element> elementList)
+    public string UpgradeMinion(LivingBeing minion, Dictionary<AlchemyLoot, int> ingredients, List<Element> elementList)
     {
+        string upgradeResults = "";
         MinionStats stats = minion.GetComponent<MinionStats>();
-
+        int healthUpgrade = 0;
+        int powerUpgrade = 0;   
+        int elementUpgrade = 0;
         foreach (KeyValuePair<AlchemyLoot, int> kvp in ingredients)
         {
-            if (kvp.Key.ToString().Contains("Organs")) HandleOrganUse(stats, kvp);
-            if (kvp.Key.ToString().Contains("Cores")) HandleCoreUse(stats, kvp);
-            if (kvp.Key.ToString().Contains("Ether")) HandleEtherUse(stats, kvp, elementList);
+            if (kvp.Key.ToString().Contains("Organs")) healthUpgrade += HandleOrganUse(minion, kvp);
+                if (kvp.Key.ToString().Contains("Core")) powerUpgrade += HandleCoreUse(stats, kvp);
+            if (kvp.Key.ToString().Contains("Ether")) elementUpgrade += HandleEtherUse(stats, kvp, elementList);
         }
+        upgradeResults += $"Health upgraded by {healthUpgrade} \n";
+        upgradeResults += $"Power upgraded by {powerUpgrade} \n";
+        upgradeResults += $"Elemental affinity upgraded by {elementUpgrade} \n";
         stats.RestoreResources();
         AlterMinionByElement(minion);
         AddMeleeAbilityByElement(stats);
+        return upgradeResults;
     }
 
     private void AddAbilitiesByElement(LivingBeing livingBeing)

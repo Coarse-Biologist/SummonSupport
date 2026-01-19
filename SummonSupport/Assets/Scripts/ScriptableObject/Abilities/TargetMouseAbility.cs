@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-
+using Unity.VisualScripting;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Abilities/Target Mouse Ability")]
@@ -13,32 +13,31 @@ public class TargetMouseAbility : Ability
     private List<LivingBeing> GetTargets(LivingBeing caster)
     {
         int targetNum = 1;
-        if (caster.TryGetComponent(out AbilityModHandler modHandler))
+        if (caster.CharacterTag != CharacterTag.Enemy)
         {
-            targetNum += modHandler.GetModAttributeByType(this, AbilityModTypes.Number);
+            targetNum += AbilityModHandler.Instance.GetModAttributeByType(this, AbilityModTypes.Number);
         }
         TeamType desiredTargetType = GetTargetPreference(caster);
         Transform spawnPoint = caster.GetComponent<AbilityHandler>().abilitySpawn.transform;
         //Debug.Log($"number of Targets found: {targets.Count}. max targets = {targetNum}");
-        return GetTargetfromSphereCast(spawnPoint, targetNum, desiredTargetType);
+        return GetTargetfromSphereCast(caster, spawnPoint, targetNum, desiredTargetType);
     }
 
-    public override bool Activate(GameObject user)
+    public override bool Activate(LivingBeing casterStats)
     {
         //Debug.Log($"Activating the targetMouse ability {this.Name}");
-        LivingBeing casterStats = user.GetComponent<LivingBeing>();
 
         bool usedAbility = false;
         foreach (LivingBeing target in GetTargets(casterStats))
         {
             if (target != null)
             {
-                usedAbility = ActivateAbility(user, target);
+                usedAbility = ActivateAbility(casterStats, target);
 
                 //Debug.Log($"success in activating ability = {usedAbility}");
                 if (usedAbility)
                 {
-                    SpawnEffect(target, user);
+                    SpawnEffect(target, casterStats);
                     if (casterStats == target)
                     {
                         CombatStatHandler.HandleEffectPackage(this, casterStats, target, SelfEffects);
@@ -54,17 +53,17 @@ public class TargetMouseAbility : Ability
     }
 
 
-    public bool ActivateAbility(GameObject user, LivingBeing targetLivingBeing)
+    public bool ActivateAbility(LivingBeing casterStats, LivingBeing targetLivingBeing)
     {
-        if (user.TryGetComponent<AI_CC_State>(out AI_CC_State ccState) && ccState.isCharmed)
+        if (casterStats.TryGetComponent<AI_CC_State>(out AI_CC_State ccState) && ccState.isCharmed)
         {
             //Debug.Log($"returning false");
             return true;
         }
 
-        if (user.TryGetComponent<LivingBeing>(out var userLivingBeing))
+        if (casterStats != null && targetLivingBeing != null)
         {
-            if (!IsUsableOn(userLivingBeing.CharacterTag, targetLivingBeing.CharacterTag))
+            if (!IsUsableOn(casterStats.CharacterTag, targetLivingBeing.CharacterTag))
             {
                 //Debug.Log($"returning false");
                 return false;
@@ -86,7 +85,7 @@ public class TargetMouseAbility : Ability
 
 
 
-    private void SpawnEffect(LivingBeing targetLivingBeing, GameObject Caster)
+    private void SpawnEffect(LivingBeing targetLivingBeing, LivingBeing Caster)
     {
         GameObject instance;
         Quaternion rotation = Quaternion.identity;

@@ -85,7 +85,7 @@ public abstract class LivingBeing : MonoBehaviour
 
     public I_ResourceBar resourceBarInterface { protected set; get; }
     public I_Destruction ragdollScript;
-    private AbilityHandler abilityHandler;
+    public AbilityHandler abilityHandler { protected set; get; }
     public StatusEffectHandler SE_Handler;
 
 

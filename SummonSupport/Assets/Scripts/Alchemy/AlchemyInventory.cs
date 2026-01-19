@@ -183,4 +183,33 @@ public static class AlchemyInventory
     {
         return System.Text.RegularExpressions.Regex.Replace(lootString.ToString(), "(?<!^)([A-Z])", " $1");
     }
+    public static string GetAlchemyInventory()
+    {
+        string inv = "";
+        foreach (KeyValuePair<AlchemyLoot, int> kvp in ingredients)
+        {
+            if (kvp.Value != 0)
+                inv += $"{GetAlchemyLootString(kvp.Key)}: {kvp.Value}\n";
+        }
+        return inv;
+    }
+    public static string GetElementalKnowlegdeString()
+    {
+        string knowledge = "";
+        foreach (KeyValuePair<Element, int> kvp in knowledgeDict)
+        {
+            if (kvp.Value != 0)
+                knowledge += $"{kvp.Key}: {kvp.Value}\n";
+        }
+        return knowledge;
+    }
+    public static string GetKnownToolsString()
+    {
+        string tools = "";
+        foreach (AlchemyTool tool in KnownTools)
+        {
+                tools += $"{tool}";
+        }
+        return tools;
+    }
 }

@@ -19,20 +19,19 @@ public class TeleportAbility : Ability
 
 
 
-    public bool Activate(GameObject user, Vector3 targetLocation)
+    public bool Activate(LivingBeing casterStats, Vector3 targetLocation)
     {
-        LivingBeing casterStats = user.GetComponent<LivingBeing>();
         //RaycastHit[] hits = Physics.SphereCastAll(user.transform.position, Range, user.transform.forward, Range);
         TeamType desiredTargetType = this.GetTargetPreference(casterStats);
 
-        List<LivingBeing> targets = GetTargetfromSphereCast(user.GetComponent<AbilityHandler>().abilitySpawn.transform, 1, desiredTargetType);
+        List<LivingBeing> targets = GetTargetfromSphereCast(casterStats, casterStats.abilityHandler.abilitySpawn.transform, 1, desiredTargetType);
 
         foreach (LivingBeing target in targets)
         {
 
             if (IsUsableOn(casterStats.CharacterTag, target.CharacterTag))
             {
-                CoroutineManager.Instance.StartCustomCoroutine(TeleportToBeing(user, target));
+                CoroutineManager.Instance.StartCustomCoroutine(TeleportToBeing(casterStats, target));
 
                 return true;
             }
@@ -41,25 +40,24 @@ public class TeleportAbility : Ability
         return false;
     }
 
-    public override bool Activate(GameObject user)
+    public override bool Activate(LivingBeing user)
     {
         throw new System.NotImplementedException();
     }
 
-    public IEnumerator TeleportToBeing(GameObject user, LivingBeing target)
+    public IEnumerator TeleportToBeing(LivingBeing casterStats, LivingBeing target)
     {
-        if (target != null && user != null)
+        if (target != null && casterStats != null)
         {
-            Instantiate(EffectOnActivate, user.transform.position, Quaternion.identity, user.transform);
+            Instantiate(EffectOnActivate, casterStats.transform.position, Quaternion.identity, casterStats.transform);
 
             yield return new WaitForSeconds(ActivationSpeed);
 
-            if (target != null && user != null)
-            {
-                user.transform.position = target.transform.position + (user.transform.position * .1f);
+            
+            casterStats.transform.position = target.transform.position + (casterStats.transform.position * .1f);
 
-                if (ActivateOnArrive != null) ActivateOnArrive.Activate(user);
-            }
+            if (ActivateOnArrive != null) ActivateOnArrive.Activate(casterStats);
+            
         }
 
         else yield return new WaitForSeconds(ActivationSpeed);

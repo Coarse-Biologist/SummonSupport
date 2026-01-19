@@ -27,7 +27,7 @@ public abstract class Ability : ScriptableObject
 
 
 
-    public abstract bool Activate(GameObject Caster);
+    public abstract bool Activate(LivingBeing Caster);
 
     public bool IsUsableOn(CharacterTag user, CharacterTag target)
     {
@@ -58,7 +58,7 @@ public abstract class Ability : ScriptableObject
         return (int)ability.Cooldown * (int)ability.Cost * modifier;
     }
 
-    public List<LivingBeing> GetTargetfromSphereCast(Transform directionTransform, int desiredTargetNum, TeamType teamType)
+    public List<LivingBeing> GetTargetfromSphereCast(LivingBeing casterStats, Transform directionTransform, int desiredTargetNum, TeamType teamType)
     {
         List<CharacterTag> targetTypes = CrewsRelationshipHandler.TargetTypeToCharTab(teamType);
 
@@ -68,7 +68,7 @@ public abstract class Ability : ScriptableObject
         hits = ArrangeByDistanceFromCenter(hits, directionTransform, desiredTargetNum);
         foreach (RaycastHit hit in hits)
         {
-            if (!hit.collider.TryGetComponent(out LivingBeing hitStats)) continue;
+            if (!hit.collider.TryGetComponent(out LivingBeing hitStats) || hitStats == casterStats) continue;
             if (targetTypes.Contains(hitStats.CharacterTag))
             {
                 targets.Add(hitStats);

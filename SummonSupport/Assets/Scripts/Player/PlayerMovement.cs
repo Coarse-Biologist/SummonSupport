@@ -93,7 +93,7 @@ public class PlayerMovement : MovementScript
             dashing = true;
             Invoke("ReturnToNormalSpeed", DashDuration);
             Invoke("ReadyDash", DashCoolDown);
-            if (PlayerAbilityHandler.DashAbility != null) PlayerAbilityHandler.DashAbility.Activate(gameObject);
+            if (PlayerAbilityHandler.DashAbility != null) PlayerAbilityHandler.DashAbility.Activate(playerStats);
             else
             {
                 DashDustInstance = Instantiate(DashDust, transform.position, Quaternion.identity);

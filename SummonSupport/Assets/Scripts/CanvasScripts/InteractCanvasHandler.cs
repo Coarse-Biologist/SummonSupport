@@ -79,14 +79,19 @@ public class InteractCanvasHandler : MonoBehaviour
         DisplayGoldenLetters($"+{enemyStats.XP_OnDeath} xp");
     }
 
-    public void DisplayGoldenLetters(string loot, float duration = .8f)
+    public void DisplayGoldenLetters(string words, float duration = .8f)
     {
+
         Transform playerTransform = PlayerStats.Instance.transform;
         Vector3 pos = new Vector3(playerTransform.position.x, playerTransform.position.y + 3, playerTransform.position.z);
         GameObject xpCanvas = Instantiate(xpTextGUI, pos, Quaternion.identity);
         xpCanvas.transform.rotation = playerTransform.rotation;
         if (xpCanvas.TryGetComponent(out TextMeshProUGUI canvasGUI))
-            canvasGUI.text = $"{loot}";
+        {
+            //Debug.Log($"font size = {canvasGUI.fontSize}");
+            canvasGUI.text = $"{words}";
+            canvasGUI.fontSize = .3f;
+        }
         if (xpCanvas.TryGetComponent(out Rigidbody rb))
         {
             rb.AddForce(new Vector3(Random.Range(-1f, 1f), 2f, Random.Range(-1f, 1f)), ForceMode.Impulse);

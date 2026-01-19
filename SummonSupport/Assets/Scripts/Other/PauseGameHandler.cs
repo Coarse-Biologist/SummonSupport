@@ -20,7 +20,7 @@ public class PauseGameHandler : MonoBehaviour
 
     private Button ResumeButton;
     private Button RestartButton;
-    private Button OptionsButton;
+    private Button InventoryButton;
     private Button StatsButton;
 
     private Label InfoElement;
@@ -28,6 +28,8 @@ public class PauseGameHandler : MonoBehaviour
     private VisualElement DialogueUI;
     private VisualElement PlayerOptions;
     private int statIndex = 0;
+    private int invIndex = 0;
+
 
     private Button QuitButton;
     void OnEnable()
@@ -56,7 +58,7 @@ public class PauseGameHandler : MonoBehaviour
         PauseMenu = root.Q<VisualElement>("PauseMenu");
         //ButtonMenu = PauseMenu.Q<VisualElement>("ButtonMenu");
         ResumeButton = PauseMenu.Q<Button>("Resume");
-        OptionsButton = PauseMenu.Q<Button>("Options");
+        InventoryButton = PauseMenu.Q<Button>("Inventory");
         RestartButton = PauseMenu.Q<Button>("Restart");
         QuitButton = PauseMenu.Q<Button>("Quit");
         StatsButton = PauseMenu.Q<Button>("ShowStats");
@@ -81,6 +83,7 @@ public class PauseGameHandler : MonoBehaviour
         RestartButton.RegisterCallback<ClickEvent>(e => Restart());
 
         StatsButton.RegisterCallback<ClickEvent>(e => ChangeStatIndex());
+        InventoryButton.RegisterCallback<ClickEvent>(e => ShowInventory());
         InfoElement.text = "";
 
     }
@@ -111,7 +114,7 @@ public class PauseGameHandler : MonoBehaviour
         ResumeButton.style.display = DisplayStyle.Flex;
         ResumeButton.style.width = StyleKeyword.Auto;
         InfoElement.style.display = DisplayStyle.Flex;
-        OptionsButton.style.display = DisplayStyle.Flex;
+        InventoryButton.style.display = DisplayStyle.Flex;
         QuitButton.style.display = DisplayStyle.Flex;
         RestartButton.style.display = DisplayStyle.Flex;
 
@@ -147,7 +150,7 @@ public class PauseGameHandler : MonoBehaviour
         QuitButton.style.display = DisplayStyle.Flex;
         RestartButton.style.display = DisplayStyle.Flex;
         ResumeButton.style.display = DisplayStyle.None;
-        OptionsButton.style.display = DisplayStyle.None;
+        InventoryButton.style.display = DisplayStyle.None;
         //InfoScrollElement.style.display = DisplayStyle.Flex;
 
         InfoElement.text = "You have fallen asleep in death \n";
@@ -165,7 +168,7 @@ public class PauseGameHandler : MonoBehaviour
         PauseMenu.style.display = DisplayStyle.Flex;
         ResumeButton.text = "Continue";
         ResumeButton.style.display = DisplayStyle.Flex;
-        OptionsButton.style.display = DisplayStyle.None;
+        InventoryButton.style.display = DisplayStyle.None;
         QuitButton.style.display = DisplayStyle.None;
         RestartButton.style.display = DisplayStyle.None;
         ResumeButton.style.width = Length.Percent(30);
@@ -201,11 +204,11 @@ public class PauseGameHandler : MonoBehaviour
 
     }
     private void ShowStats()
-    {   
+    {
         PlayerOptions.style.display = DisplayStyle.Flex;
 
         int minionsNum = AlchemyHandler.Instance.activeMinions.Count;
-        if(statIndex == 0)
+        if (statIndex == 0)
         {
             ShowPlayerstats();
         }
@@ -223,5 +226,31 @@ public class PauseGameHandler : MonoBehaviour
                 ShowPlayerstats();
             }
         }
-}
+    }
+
+    private void ShowInventory()
+    {
+        PlayerOptions.style.display = DisplayStyle.Flex;
+
+        if (invIndex == 0)
+        {
+            string InventoryString = AlchemyInventory.GetAlchemyInventory();
+            InfoElement.text = $"Alchemy Inventory:\n {InventoryString}\n";
+        }
+        else if (invIndex == 1)
+        {
+            string InventoryString = AlchemyInventory.GetElementalKnowlegdeString();
+            InfoElement.text = $"Your Elemental Knowledge:\n {InventoryString}\n";
+        }
+        else if (invIndex == 2)
+        {
+            string InventoryString = AlchemyInventory.GetKnownToolsString();
+            InfoElement.text = $"Known Alchemy Tools:\n {InventoryString}\n";
+        }
+        invIndex++;
+        if (invIndex > 2)
+        {
+            invIndex = 0;
+        }
+    }
 }

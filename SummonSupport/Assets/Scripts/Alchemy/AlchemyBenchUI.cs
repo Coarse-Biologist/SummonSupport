@@ -538,9 +538,9 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     {
         if (CheckUsingCoresandOrgans())
         {
-            alchemyHandler.HandleCraftingResults(selectedIngredients, selectedElements);
+            SetInstructionsText(alchemyHandler.HandleCraftingResults(selectedIngredients, selectedElements));
             ClearCraftingSelection();
-            ShowCraftingOptions();
+            //ShowCraftingOptions();
         }
 
     }
@@ -565,7 +565,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
             clearButton.RegisterCallback<ClickEvent>(e => SpawnIngredientButtons());
 
             confirmButton.RegisterCallback<ClickEvent>(e => Craft());
-            confirmButton.RegisterCallback<ClickEvent>(e => ShowCraftingInfo());
+            //confirmButton.RegisterCallback<ClickEvent>(e => ShowCraftingInfo());
         }
     }
     private void SpawnIngredientButtons()

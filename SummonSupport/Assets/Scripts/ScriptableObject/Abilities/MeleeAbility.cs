@@ -30,41 +30,49 @@ public class MeleeAbility : Ability
 
 
 
-    public override bool Activate(GameObject user)
+    public override bool Activate(LivingBeing casterStats)
     {
-        Caster = user.GetComponent<LivingBeing>();
-        abilityHandler = user.GetComponent<AbilityHandler>();
-        modHandler = user.GetComponent<AbilityModHandler>();
+        abilityHandler = casterStats.abilityHandler;
+
         originTransform = abilityHandler.abilitySpawn.transform;
+        SetModHandler(casterStats);
         if (originTransform == null)
         {
-            Debug.Log($"the user: {user} of this {Name}.");
-            originTransform = user.transform;
+            originTransform = casterStats.transform;
         }
 
-        return AttemptActivation(user);
+        return AttemptActivation(casterStats);
 
+    }
+    
+    private void SetModHandler(LivingBeing casterStats)
+    {
+        if (casterStats.CharacterTag != CharacterTag.Enemy)
+        {
+            modHandler = AbilityModHandler.Instance;
+        }
+        else modHandler = null;
     }
 
 
 
 
-    private bool AttemptActivation(GameObject user)
+    private bool AttemptActivation(LivingBeing casterStats)
     {
-        Collider[] hits = Physics.OverlapSphere(user.transform.position, Range);
+        Collider[] hits = Physics.OverlapSphere(casterStats.transform.position, Range);
         bool activated = false;
         foreach (Collider collider in hits)
         {
-            if (collider != null && collider.gameObject != user)
+            if (collider != null && collider.gameObject != casterStats.gameObject)
             {
                 if (!collider.TryGetComponent(out LivingBeing targetStats))
                 {
                     continue;
                 }
-                if (VerifyActivate(targetStats, user))
+                if (VerifyActivate(targetStats, casterStats))
                 {
-                    SetEffects(Caster, targetStats);
-                    CombatStatHandler.HandleEffectPackage(this, Caster, targetStats, this.TargetEffects);
+                    SetEffects(casterStats, targetStats);
+                    CombatStatHandler.HandleEffectPackage(this, casterStats, targetStats, this.TargetEffects);
                     SpawnHitEffect(targetStats);
                     activated = true;
                 }
@@ -75,32 +83,32 @@ public class MeleeAbility : Ability
     }
 
 
-    private bool VerifyActivate(LivingBeing targetStats, GameObject user)
+    private bool VerifyActivate(LivingBeing targetStats, LivingBeing casterStats)
     {
 
         Target = targetStats;
 
-        if (!ThoroughIsUsableOn(Caster, Target))
+        if (!ThoroughIsUsableOn(casterStats, Target))
         {
             if (!HasElementalSynergy(this, Target))
                 return false;
         }
-        return VerifyWithinShape(user, targetStats);
+        return VerifyWithinShape(casterStats, targetStats);
     }
 
-    private bool VerifyWithinShape(GameObject user, LivingBeing targetStats)
+    private bool VerifyWithinShape(LivingBeing casterStats, LivingBeing targetStats)
     {
         float sizeMod = Width;
         if (modHandler != null)
         {
-            sizeMod = modHandler.GetModAttributeByType(this, AbilityModTypes.Size);
+            sizeMod += modHandler.GetModAttributeByType(this, AbilityModTypes.Size);
         }
         Vector3 hitLocation = targetStats.transform.position;
         if ((hitLocation - originTransform.position).magnitude <= .2)
             return true;
         if (Shape == AreaOfEffectShape.Sphere)
         {
-            if ((user.transform.position - targetStats.transform.position).magnitude <= Range + sizeMod)
+            if ((casterStats.transform.position - targetStats.transform.position).magnitude <= Range + sizeMod)
                 return true;
         }
         if (Shape == AreaOfEffectShape.Cone)

@@ -3,14 +3,14 @@ using UnityEngine;
 
 public class DashAbility : ConjureAbility
 {
-    public override bool Activate(GameObject user)
+    public override bool Activate(LivingBeing casterStats)
     {
-        Transform originTransform = user.transform;
+        Transform originTransform = casterStats.transform;
         // find backward direction
-        Vector3 spawnPosition = user.transform.position - new Vector3(originTransform.right.x, originTransform.right.y, originTransform.right.z);
+        Vector3 spawnPosition = casterStats.transform.position - new Vector3(originTransform.right.x, originTransform.right.y, originTransform.right.z);
         Quaternion rotation = originTransform.rotation;
         //Debug.Log($"spawn position = {spawnPosition}");
-        SpawnConjuredObject(user.GetComponent<LivingBeing>(), rotation, spawnPosition);
+        SpawnConjuredObject(casterStats, rotation, spawnPosition);
         return true;
     }
     protected void SpawnConjuredObject(LivingBeing user, Quaternion rotation, Vector3 position)
