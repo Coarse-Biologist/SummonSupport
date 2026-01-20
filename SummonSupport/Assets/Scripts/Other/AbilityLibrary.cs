@@ -99,7 +99,8 @@ public static class AbilityLibrary
                 meleeAbility = meleeCategory.Abilities[0];
                 break;
             }
-        }
+        }   
+        
         Debug.Log($"Returning {meleeAbility.Name} in the get Elemental Melee ability function");
         return meleeAbility;
     }

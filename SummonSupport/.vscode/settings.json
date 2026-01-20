@@ -56,5 +56,13 @@
         "temp/": true,
         "Temp/": true
     },
+
     "dotnet.defaultSolution": "SummonSupport.sln",
+
+    "[csharp]": {
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "ms-dotnettools.csharp"
+    },
+
+    "editor.formatOnSaveMode": "file"
 }

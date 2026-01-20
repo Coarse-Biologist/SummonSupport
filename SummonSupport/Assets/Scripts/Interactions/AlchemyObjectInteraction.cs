@@ -28,7 +28,7 @@ public class AlchemyObjectInteraction : MonoBehaviour, I_Interactable
 
     public void Interact(GameObject interactor)
     {
-        Debug.Log("interqct called on screeglers neegler");
+        //Debug.Log("interqct called on screeglers neegler");
         if (leftPotion == null && rightPotion == null)
         {
             leftPotion = Instantiate(potion1, playerHand_L.transform.position, Quaternion.identity, playerHand_L);

@@ -22,6 +22,7 @@ public abstract class Ability : ScriptableObject
     [field: SerializeField] public List<Element> ElementTypes { get; protected set; } = new();
     [field: SerializeField] public PhysicalType PhysicalType { get; protected set; } = new();
     [field: SerializeField] public GameObject OnHitEffect { get; protected set; }
+    [field: SerializeField] public AbilitySoundPackage Sounds { get; protected set; }
     [field: SerializeField] public bool AlterParticleSystemGradient { get; protected set; } = false;
 
 

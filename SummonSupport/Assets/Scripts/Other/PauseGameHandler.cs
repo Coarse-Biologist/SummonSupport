@@ -64,20 +64,12 @@ public class PauseGameHandler : MonoBehaviour
         StatsButton = PauseMenu.Q<Button>("ShowStats");
         
         MainUI = root.Q<VisualElement>("MainUI");
-        Debug.Log($"main ui: {PauseMenu}");
+        //Debug.Log($"main ui: {PauseMenu}");
 
         DialogueUI = MainUI.Q<VisualElement>("Dialogue");
-        Debug.Log($"dialogue ui: {DialogueUI}");
         PlayerOptions = MainUI.Q<VisualElement>("PlayerOptions");
-        Debug.Log($"playeroptions : {PlayerOptions}");
-
-
-
-        //InfoScrollElement = PauseMenu.Q<ScrollView>("ScrollView");
-        //Debug.Log($"InfoScrollElement: {InfoScrollElement}");
 
         InfoElement = PlayerOptions.Q<Label>("Info");
-        Debug.Log($"InfoElement: {InfoElement}");
 
         ResumeButton.RegisterCallback<ClickEvent>(e => Resume());
         RestartButton.RegisterCallback<ClickEvent>(e => Restart());

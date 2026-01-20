@@ -158,7 +158,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
         EventDeclarer.PlayerUsingUI?.Invoke();
         if (anim != null)
         {
-            Debug.Log("Changing animation? but probably time scale is 0");
+            //Debug.Log("Changing animation? but probably time scale is 0");
             anim.ChangeAnimation("Crafting");
         }
         else Debug.Log("No animation script found");

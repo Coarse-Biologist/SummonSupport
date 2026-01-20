@@ -53,6 +53,8 @@ public class AbilityHandler : MonoBehaviour
         //when casting a beam which is already toggled on, toggle beam off. 
         bool usedAbility = HandleAbilityType(ability, targetPosition, rotation);
 
+        PlayCastSound(ability);
+
         if (!usedAbility)
             return false;
 
@@ -227,11 +229,19 @@ public class AbilityHandler : MonoBehaviour
     public string GetKnownAbilitiesString()
     {
         string KnownAbilities = "Known Abilities:\n";
-        foreach(Ability ability in statsHandler.abilityHandler.Abilities)
+        foreach (Ability ability in statsHandler.abilityHandler.Abilities)
         {
             KnownAbilities += $"{ability.Name} \n";
         }
         return KnownAbilities;
+    }
+    private void PlayCastSound(Ability ability)
+    {
+        if (ability.Sounds != null && ability.Sounds.CastSound != null)
+        {
+            Debug.Log("trying to play cast sound");
+            EventDeclarer.PlayAbilityCastSound?.Invoke(ability);
+        }
     }
 
 }

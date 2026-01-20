@@ -171,7 +171,7 @@ public abstract class LivingBeing : MonoBehaviour
     {
         Element element = Affinities.OrderByDescending(a => a.Value.Get()).First().Key;
         value = GetAffinity(element);
-        if (value < min) return Element.None;
+        if (value < min || value == 0) return Element.None;
 
         else return element;
     }

@@ -26,6 +26,9 @@ namespace SummonSupportEvents
         public static UnityEvent<int, Ability> SetSlot = new();
 
         public static UnityEvent<int> AbilityUsed = new(); // int should be the index of the ability
+        public static UnityEvent<Ability> PlayAbilityCastSound = new();
+        public static UnityEvent<Ability> PlayAbilityImpactSound = new();
+
         public static UnityEvent<SpawnLocationInfo> SpawnEnemies = new();
 
         public static UnityEvent<bool> PlayerDead = new();

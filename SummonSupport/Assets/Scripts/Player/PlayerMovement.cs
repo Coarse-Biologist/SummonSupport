@@ -208,6 +208,7 @@ public class PlayerMovement : MovementScript
             {
                 Debug.Log("Unpausing");
                 Time.timeScale = 1f;
+                rb.transform.rotation = new Quaternion(0, mainCamera.transform.rotation.y, 0, 1);
             }
         }
     }

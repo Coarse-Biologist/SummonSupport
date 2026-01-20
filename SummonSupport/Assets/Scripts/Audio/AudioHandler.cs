@@ -1,12 +1,14 @@
 using UnityEngine;
 using System;
 using SummonSupportEvents;
+using UnityEditor.Timeline.Actions;
 
 public class AudioHandler : MonoBehaviour
 {
     public AudioHandler Instance;
     private AudioSource audioSource;
     public LayeredSongs_SO[] audioClips;
+    [field: SerializeField] public AudioClip[] PlayerFootSteps { private set; get; } = new AudioClip[10];
     int roundedInt = 0;
     float newVolume = 0f;
 
@@ -20,10 +22,14 @@ public class AudioHandler : MonoBehaviour
     }
     void OnEnable()
     {
-        //EventDeclarer.
+        EventDeclarer.PlayAbilityCastSound?.AddListener(PlayAbilityCastSound);
+        EventDeclarer.PlayAbilityImpactSound?.AddListener(PlayAbilityImpactSound);
+
     }
     void OnDisable()
     {
+        EventDeclarer.PlayAbilityCastSound?.RemoveListener(PlayAbilityCastSound);
+        EventDeclarer.PlayAbilityImpactSound?.RemoveListener(PlayAbilityImpactSound);
 
     }
 
@@ -36,6 +42,21 @@ public class AudioHandler : MonoBehaviour
         audioSource.volume = newVolume;
         if (audioSource.clip != null)
             audioSource.Play();
+    }
+
+    private void PlayAbilityCastSound(Ability ability)
+    {
+        if (ability.Sounds != null && ability.Sounds.CastSound != null)
+            audioSource.PlayOneShot(ability.Sounds.CastSound, 1);
+    }
+    private void PlayAbilityImpactSound(Ability ability)
+    {
+        if (ability.Sounds.ImpactSound != null)
+            audioSource.PlayOneShot(ability.Sounds.ImpactSound, 1);
+    }
+    public void OnFootstep()
+    {
+        audioSource.PlayOneShot(PlayerFootSteps[UnityEngine.Random.Range(0, PlayerFootSteps.Length)]);
     }
 
 }

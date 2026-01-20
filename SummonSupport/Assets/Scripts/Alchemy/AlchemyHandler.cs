@@ -215,28 +215,33 @@ public class AlchemyHandler : MonoBehaviour
     }
     private void AddMeleeAbilityByElement(LivingBeing livingBeing)
     {
-        CreatureAbilityHandler abilityHandler = livingBeing.gameObject.GetComponent<CreatureAbilityHandler>();
-        if (abilityHandler == null) return;
-        Element strongestElement = livingBeing.GetHighestAffinity(out float value);
-        if (strongestElement != Element.None)
+        CreatureAbilityHandler abilityHandler = livingBeing.GetComponent<CreatureAbilityHandler>();
+        if (abilityHandler != null)
         {
-            Ability meleeAbility = AbilityLibrary.GetElementalMeleeAbility(strongestElement, value);
-
-            if (meleeAbility != null)
+        
+            Element strongestElement = livingBeing.GetHighestAffinity(out float value);
+            Debug.Log($"Strongest Element : {strongestElement}, Value : {value}");
+            Ability meleeAbility = AbilityLibrary.abilityLibrary.defaultAttack;
+    
+            if (strongestElement != Element.None)
             {
-
-                abilityHandler.LearnAbility(meleeAbility);
-
+            
+                meleeAbility = AbilityLibrary.GetElementalMeleeAbility(strongestElement, value);
+                Debug.Log($"Setting melee ability to {meleeAbility.Name}");
+    
             }
+            abilityHandler.LearnAbility(meleeAbility);
+    
             abilityHandler.SetAbilityLists();
         }
+
     }
 
     private void AlterMinionByElement(LivingBeing stats)
     {
         Element strongestElement = stats.GetHighestAffinity(out float value);
         string nameModifier;
-
+        Debug.Log($"Strongest Element : {strongestElement}, Value : {value}");
         if (strongestElement != Element.None && stats.GetAffinity(strongestElement) > 50)
         {
             ColorChanger.ChangeAllMatsByAffinity(stats);

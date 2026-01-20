@@ -90,7 +90,7 @@ public class PlayerUIHandler : MonoBehaviour
 
     public void AddMinionHP(LivingBeing livingBeing)
     {
-        Debug.Log($"adding health bar for {livingBeing}");
+        //Debug.Log($"adding health bar for {livingBeing}");
         TemplateContainer prefabContainer = UIPrefabAssets.Instantiate();
 
         ProgressBar minionHP = prefabContainer.Q<ProgressBar>("HealthbarPrefab");
@@ -106,7 +106,7 @@ public class PlayerUIHandler : MonoBehaviour
             minionHPBars.Add(minionHP);
             minionHP.RegisterCallback<ClickEvent>(evt => OnMinionSelect(minionHP));
         }
-        else Debug.Log("The minion HP progress bar is already present ");
+        //else Debug.Log("The minion HP progress bar is already present ");
     }
 
 
@@ -190,7 +190,7 @@ public class PlayerUIHandler : MonoBehaviour
             hpBar.value = livingBeing.CurrentHP;
             hpBar.title = $"{livingBeing.Name} HP: {hp}";
         }
-        else Logging.Info($"There was no hp bar for the living being {livingBeing.name}");
+        //else Logging.Info($"There was no hp bar for the living being {livingBeing.name}");
     }
 
     private void SetPlayerAttribute(AttributeType attributeType)
