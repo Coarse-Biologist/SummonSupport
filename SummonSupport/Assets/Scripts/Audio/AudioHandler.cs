@@ -60,8 +60,7 @@ public class AudioHandler : MonoBehaviour
     }
     public void OnFootstep()
     {
-        Debug.Log("Playing footstep sound?");
-        audioSource.PlayOneShot(PlayerFootSteps[UnityEngine.Random.Range(0, PlayerFootSteps.Length)]);
+        audioSource.PlayOneShot(PlayerFootSteps[UnityEngine.Random.Range(0, PlayerFootSteps.Length)], UnityEngine.Random.value);
     }
 
 }
