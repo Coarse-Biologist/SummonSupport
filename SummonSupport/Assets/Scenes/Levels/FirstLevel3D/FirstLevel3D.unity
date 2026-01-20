@@ -2112,6 +2112,24 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 13353934}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &514581774 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2434613562600362832, guid: 29cc623553c0c3d4aa9548ba52efed1b,
+    type: 3}
+  m_PrefabInstance: {fileID: 6132780491778671729}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &514581777
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 514581774}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90f9ba7d8388456429b7c32f1ea713f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FootStepSoundInvoker
 --- !u!1001 &540829899
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8670,6 +8688,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Instance: {fileID: 0}
   audioClips: []
+  <PlayerFootSteps>k__BackingField:
+  - {fileID: 8300000, guid: b3f36852538cc964ba1dab7ba769e77d, type: 3}
+  - {fileID: 8300000, guid: d515e9cb28e25234da00f2b3c271947e, type: 3}
+  - {fileID: 8300000, guid: d7a04a00e46387947b52c5bc22bfcbe9, type: 3}
+  - {fileID: 8300000, guid: 0c79f4c6d45ffbc47ad57b0820fbe4e6, type: 3}
+  - {fileID: 8300000, guid: 7627288847723354dbe7a59475f6e6da, type: 3}
 --- !u!1001 &84590274017519541
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10331,7 +10355,7 @@ PrefabInstance:
     - target: {fileID: 5700169036039766404, guid: 29cc623553c0c3d4aa9548ba52efed1b,
         type: 3}
       propertyPath: <Abilities>k__BackingField.Array.size
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 5700169036039766404, guid: 29cc623553c0c3d4aa9548ba52efed1b,
         type: 3}
@@ -10355,7 +10379,7 @@ PrefabInstance:
         type: 3}
       propertyPath: '<Abilities>k__BackingField.Array.data[3]'
       value: 
-      objectReference: {fileID: 11400000, guid: be738ccc17b71df439af67044ab786d5,
+      objectReference: {fileID: 11400000, guid: 50f97cd667dde2345a4e08bd5abdc79a,
         type: 2}
     - target: {fileID: 5700169036039766404, guid: 29cc623553c0c3d4aa9548ba52efed1b,
         type: 3}
@@ -10482,6 +10506,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 1850629604}
+    - targetCorrespondingSourceObject: {fileID: 2434613562600362832, guid: 29cc623553c0c3d4aa9548ba52efed1b,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 514581777}
   m_SourcePrefab: {fileID: 100100000, guid: 29cc623553c0c3d4aa9548ba52efed1b, type: 3}
 --- !u!4 &6132780491778671730 stripped
 Transform:

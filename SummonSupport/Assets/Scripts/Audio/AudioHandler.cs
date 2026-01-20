@@ -7,8 +7,8 @@ public class AudioHandler : MonoBehaviour
 {
     public AudioHandler Instance;
     private AudioSource audioSource;
-    public LayeredSongs_SO[] audioClips;
-    [field: SerializeField] public AudioClip[] PlayerFootSteps { private set; get; } = new AudioClip[10];
+    public LayeredSongs_SO[] audioClips = new LayeredSongs_SO[5];
+    [field: SerializeField] public AudioClip[] PlayerFootSteps { private set; get; } = new AudioClip[5];
     int roundedInt = 0;
     float newVolume = 0f;
 
@@ -24,12 +24,16 @@ public class AudioHandler : MonoBehaviour
     {
         EventDeclarer.PlayAbilityCastSound?.AddListener(PlayAbilityCastSound);
         EventDeclarer.PlayAbilityImpactSound?.AddListener(PlayAbilityImpactSound);
+        EventDeclarer.PlayerFootstep?.AddListener(OnFootstep);
+
 
     }
     void OnDisable()
     {
         EventDeclarer.PlayAbilityCastSound?.RemoveListener(PlayAbilityCastSound);
         EventDeclarer.PlayAbilityImpactSound?.RemoveListener(PlayAbilityImpactSound);
+        EventDeclarer.PlayerFootstep?.RemoveListener(OnFootstep);
+
 
     }
 
@@ -56,6 +60,7 @@ public class AudioHandler : MonoBehaviour
     }
     public void OnFootstep()
     {
+        Debug.Log("Playing footstep sound?");
         audioSource.PlayOneShot(PlayerFootSteps[UnityEngine.Random.Range(0, PlayerFootSteps.Length)]);
     }
 

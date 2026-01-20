@@ -34,6 +34,7 @@ namespace SummonSupportEvents
         public static UnityEvent<bool> PlayerDead = new();
         public static UnityEvent<List<string>> PlayerLevelUp = new(); // should I be passing this?
         public static UnityEvent PlayerUsingUI = new();
+        public static UnityEvent PlayerFootstep = new();
 
 
         public static UnityEvent<Ability> PlayerLearnedAbility = new();
