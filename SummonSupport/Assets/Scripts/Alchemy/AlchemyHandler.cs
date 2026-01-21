@@ -177,12 +177,12 @@ public class AlchemyHandler : MonoBehaviour
         string upgradeResults = "";
         MinionStats stats = minion.GetComponent<MinionStats>();
         int healthUpgrade = 0;
-        int powerUpgrade = 0;   
+        int powerUpgrade = 0;
         int elementUpgrade = 0;
         foreach (KeyValuePair<AlchemyLoot, int> kvp in ingredients)
         {
             if (kvp.Key.ToString().Contains("Organs")) healthUpgrade += HandleOrganUse(minion, kvp);
-                if (kvp.Key.ToString().Contains("Core")) powerUpgrade += HandleCoreUse(stats, kvp);
+            if (kvp.Key.ToString().Contains("Core")) powerUpgrade += HandleCoreUse(stats, kvp);
             if (kvp.Key.ToString().Contains("Ether")) elementUpgrade += HandleEtherUse(stats, kvp, elementList);
         }
         upgradeResults += $"Health upgraded by {healthUpgrade} \n";
@@ -213,25 +213,25 @@ public class AlchemyHandler : MonoBehaviour
             abilityHandler.SetAbilityLists();
         }
     }
-    private void AddMeleeAbilityByElement(LivingBeing livingBeing)
+    public void AddMeleeAbilityByElement(LivingBeing livingBeing)
     {
         CreatureAbilityHandler abilityHandler = livingBeing.GetComponent<CreatureAbilityHandler>();
         if (abilityHandler != null)
         {
-        
+
             Element strongestElement = livingBeing.GetHighestAffinity(out float value);
             Debug.Log($"Strongest Element : {strongestElement}, Value : {value}");
             Ability meleeAbility = AbilityLibrary.abilityLibrary.defaultAttack;
-    
+
             if (strongestElement != Element.None)
             {
-            
+
                 meleeAbility = AbilityLibrary.GetElementalMeleeAbility(strongestElement, value);
                 Debug.Log($"Setting melee ability to {meleeAbility.Name}");
-    
+
             }
             abilityHandler.LearnAbility(meleeAbility);
-    
+
             abilityHandler.SetAbilityLists();
         }
 

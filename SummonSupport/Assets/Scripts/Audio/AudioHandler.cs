@@ -9,6 +9,7 @@ public class AudioHandler : MonoBehaviour
     private AudioSource audioSource;
     public LayeredSongs_SO[] audioClips = new LayeredSongs_SO[5];
     [field: SerializeField] public AudioClip[] PlayerFootSteps { private set; get; } = new AudioClip[5];
+    [field: SerializeField] public float FootstepVolume { private set; get; } = .2f;
     int roundedInt = 0;
     float newVolume = 0f;
 
@@ -60,7 +61,7 @@ public class AudioHandler : MonoBehaviour
     }
     public void OnFootstep()
     {
-        audioSource.PlayOneShot(PlayerFootSteps[UnityEngine.Random.Range(0, PlayerFootSteps.Length)], UnityEngine.Random.value);
+        audioSource.PlayOneShot(PlayerFootSteps[UnityEngine.Random.Range(0, PlayerFootSteps.Length)], FootstepVolume);
     }
 
 }

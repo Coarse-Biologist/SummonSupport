@@ -26,6 +26,7 @@ MonoBehaviour:
   - Element: 4
     Abilities:
     - {fileID: 11400000, guid: e65b83780f45fc649aa4032ffdecb241, type: 2}
+    - {fileID: 11400000, guid: e65b83780f45fc649aa4032ffdecb241, type: 2}
   - Element: 5
     Abilities:
     - {fileID: 11400000, guid: a9d7f1d84b426dc4fa180ca917e506f5, type: 2}
@@ -165,7 +166,6 @@ MonoBehaviour:
   - PhysicalType: 3
     Abilities:
     - {fileID: 11400000, guid: 946e5f54d23bbc24e9bf9696f3cf93c2, type: 2}
-    - {fileID: 11400000, guid: 996489c834f79a74fb51758838eabbcd, type: 2}
   abilitiesByLevelEntries:
   - Level: 0
     Abilities:

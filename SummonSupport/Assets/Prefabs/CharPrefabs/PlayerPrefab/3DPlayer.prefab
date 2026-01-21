@@ -20,6 +20,7 @@ GameObject:
   - component: {fileID: 4913614373251763327}
   - component: {fileID: 1259026463883460064}
   - component: {fileID: 5094339020759155991}
+  - component: {fileID: 8560957201525694217}
   m_Layer: 3
   m_Name: 3DPlayer
   m_TagString: Player
@@ -65,9 +66,9 @@ CapsuleCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 1
-  m_Height: 2.2
+  m_Height: 2
   m_Direction: 1
-  m_Center: {x: 0, y: 1, z: 0}
+  m_Center: {x: 0, y: 0.2, z: 0}
 --- !u!54 &1549572368035487864
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -131,12 +132,10 @@ MonoBehaviour:
   <abilitySpawn>k__BackingField: {fileID: 7538319549239340809}
   statsHandler: {fileID: 5469552160048565923}
   <Abilities>k__BackingField:
-  - {fileID: 11400000, guid: 5d20d6cc1fa7eb547ba5d0f9aefcc225, type: 2}
-  - {fileID: 11400000, guid: 893aad7fae2993c4da43dc50c4147674, type: 2}
-  - {fileID: 11400000, guid: 3426d86dfddd8b342b4b8164207c3157, type: 2}
-  - {fileID: 11400000, guid: e959c2ee0da79214a833f2b04de5f78c, type: 2}
-  - {fileID: 11400000, guid: 2c411350804b90246b5fcb0c56b66a2c, type: 2}
-  <WeaponInfo>k__BackingField: {fileID: 0}
+  - {fileID: 11400000, guid: 4c3c5f9615adc0745ad7d2d7106f3cd8, type: 2}
+  - {fileID: 11400000, guid: bedb0aeed6ae7bb4499b3e96059b287a, type: 2}
+  - {fileID: 11400000, guid: 996489c834f79a74fb51758838eabbcd, type: 2}
+  - {fileID: 11400000, guid: 50f97cd667dde2345a4e08bd5abdc79a, type: 2}
   currentAnimation: 
 --- !u!114 &5469552160048565923
 MonoBehaviour:
@@ -150,19 +149,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 48786c349691b5047845878d6c44a224, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerStats
-  <Name>k__BackingField: 
+  <Name>k__BackingField: Crew
   <CharacterTag>k__BackingField: 0
   <Description>k__BackingField: 
   <BattleCries>k__BackingField: []
   <MaxHP>k__BackingField: 100
   <Overshield>k__BackingField: 0
   <CurrentHP>k__BackingField: 100
-  <MaxPower>k__BackingField: 500
+  <MaxPower>k__BackingField: 5000
   <PowerSurge>k__BackingField: 0
-  <CurrentPower>k__BackingField: 500
-  <TickRateRegenerationInSeconds>k__BackingField: 1
-  <HealthRegeneration>k__BackingField: 1
-  <PowerRegeneration>k__BackingField: 1
+  <CurrentPower>k__BackingField: 5000
+  <TickRateRegenerationInSeconds>k__BackingField: 2
+  <HealthRegeneration>k__BackingField: 2
+  <PowerRegeneration>k__BackingField: 2
   locSphere: {fileID: 0}
   <Cold>k__BackingField: 0
   <Water>k__BackingField: 0
@@ -171,7 +170,7 @@ MonoBehaviour:
   <Air>k__BackingField: 0
   <Electricity>k__BackingField: 0
   <Poison>k__BackingField: 0
-  <Acid>k__BackingField: 0
+  <Acid>k__BackingField: 100
   <Bacteria>k__BackingField: 0
   <Fungi>k__BackingField: 0
   <Plant>k__BackingField: 0
@@ -266,7 +265,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.InputSystem::UnityEngine.InputSystem.PlayerInput
   m_Actions: {fileID: -944628639613478452, guid: ef3d4caf026ae934c96527d8bf4c055a,
     type: 3}
-  m_NotificationBehavior: 0
+  m_NotificationBehavior: 3
   m_UIInputModule: {fileID: 0}
   m_DeviceLostEvent:
     m_PersistentCalls:
@@ -283,6 +282,18 @@ MonoBehaviour:
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!114 &8560957201525694217
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5369172574488311089}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5bf0aa40a5c8c5340a0e99117006653a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::StatusEffectHandler
 --- !u!1 &7538319549239340809
 GameObject:
   m_ObjectHideFlags: 0
@@ -308,7 +319,7 @@ Transform:
   m_GameObject: {fileID: 7538319549239340809}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.3, z: 0.35}
+  m_LocalPosition: {x: 0, y: 0.722, z: 0.35}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -338,8 +349,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8479308500795002724}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.65965, y: 0.59157, z: 0.4636}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.85, z: -0.0099}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -381,7 +392,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: de13a7420582ded45a8d7d3f96889aca,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -0.7
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: de13a7420582ded45a8d7d3f96889aca,
         type: 3}
@@ -465,6 +476,11 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 95fcf9331ca635c459a201f2c56f44dc, type: 2}
     - target: {fileID: 2871514044933378746, guid: de13a7420582ded45a8d7d3f96889aca,
         type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2871514044933378746, guid: de13a7420582ded45a8d7d3f96889aca,
+        type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 95fcf9331ca635c459a201f2c56f44dc, type: 2}
@@ -501,8 +517,30 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: de13a7420582ded45a8d7d3f96889aca,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5272022871536841930}
   m_SourcePrefab: {fileID: 100100000, guid: de13a7420582ded45a8d7d3f96889aca, type: 3}
+--- !u!1 &2434613562600362832 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: de13a7420582ded45a8d7d3f96889aca,
+    type: 3}
+  m_PrefabInstance: {fileID: 3244867665749716481}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &5272022871536841930
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2434613562600362832}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90f9ba7d8388456429b7c32f1ea713f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FootStepSoundInvoker
 --- !u!4 &3063200423769065962 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: de13a7420582ded45a8d7d3f96889aca,

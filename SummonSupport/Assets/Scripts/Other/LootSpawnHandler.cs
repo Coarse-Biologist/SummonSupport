@@ -29,10 +29,11 @@ public class LootSpawnHandler : MonoBehaviour
 
     private void DecideDropLoot(EnemyStats enemyStats)
     {
-        float etherValue = enemyStats.GetAffinity(enemyStats.GetHighestAffinity(out float value));
+        Element strongestElement = enemyStats.GetHighestAffinity(out float value);
+        float etherValue = enemyStats.GetAffinity(strongestElement); ;
         if (etherValue >= 50)
         {
-            SpawnEther(enemyStats, GetEtherType(etherValue));
+            SpawnEther(enemyStats, GetEtherType(etherValue), strongestElement);
         }
         if (enemyStats.MaxHP > 150)
         {
@@ -43,7 +44,7 @@ public class LootSpawnHandler : MonoBehaviour
             SpawnCores(enemyStats, GetCoreType(enemyStats.MaxPower));
         }
     }
-    private void SpawnEther(EnemyStats enemyStats, GameObject etherPrefab)
+    private void SpawnEther(EnemyStats enemyStats, GameObject etherPrefab, Element element)
     {
         //Debug.Log("Spawning ether");
 
@@ -54,7 +55,7 @@ public class LootSpawnHandler : MonoBehaviour
 
         if (instance.TryGetComponent(out LootableAlchemyMaterial lootScript))
         {
-            lootScript.SetElement(enemyStats.GetHighestAffinity(out float value));
+            lootScript.SetElement(element);
         }
         if (instance.TryGetComponent(out ParticleSystem ps))
         {
