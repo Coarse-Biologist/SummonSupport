@@ -31,7 +31,7 @@ public static class CombatStatHandler
     private static float currentDamageValue;
     private static float currentHealValue;
     private static float currentAbilityDuration;
-    
+
 
 
 
@@ -48,14 +48,14 @@ public static class CombatStatHandler
         currentTarget = target;
         if (caster is not EnemyStats) modHandler = AbilityModHandler.Instance;
         else modHandler = null;
-        SetCurrentValues();
-        //UnityEngine.Debug.Log($"caster = {caster.Name}, target = {target.Name} mod handler = {modHandler}");
+        SetCurrentValues(effectPackage);
+        UnityEngine.Debug.Log($"caster = {caster.Name}, target = {target.Name} mod handler = {modHandler}");
         AddMods();
 
         AdjustandApplyHealValue();
 
         AdjustAndApplyDOT();
-        
+
         HandleApplyDOT(AttributeType.CurrentHitpoints, currentHealOverTimeValue);
 
         AdjustDamageValue(effectPackage.Damage, effectPackage.SpecialAbilityAttribute);
@@ -77,30 +77,29 @@ public static class CombatStatHandler
                 AdjustAndApplyTempChange(tempChange);
             }
         }
-        
+
     }
-    
+
     private static void HandleApplyStatusEffects()
     {
         if (currentStatusEffects.Count > 0)
         {
             foreach (StatusEffects status in currentStatusEffects)
             {
-                currentTarget.SE_Handler.AlterStatusEffectList(status, true); 
+                currentTarget.SE_Handler.AlterStatusEffectList(status, true);
             }
         }
     }
-    private static void SetCurrentValues()
+    private static void SetCurrentValues(EffectPackage currentAbilityEffects)
     {
-            EffectPackage currentAbilityEffects = currentAbility.TargetEffects;
 
-            currentStatusEffects = currentAbilityEffects.StatusEffects;
-            
-            currentDamageValue = currentAbilityEffects.Damage.Value;
-            currentDotValue = currentAbilityEffects.DamageOverTime.Value;
-            currentHealValue = currentAbilityEffects.Heal.Value;
-            currentHealOverTimeValue = currentAbilityEffects.HealOverTime.Value;
-            currentAbilityDuration = currentAbility.Duration;
+        currentStatusEffects = currentAbilityEffects.StatusEffects;
+
+        currentDamageValue = currentAbilityEffects.Damage.Value;
+        currentDotValue = currentAbilityEffects.DamageOverTime.Value;
+        currentHealValue = currentAbilityEffects.Heal.Value;
+        currentHealOverTimeValue = currentAbilityEffects.HealOverTime.Value;
+        currentAbilityDuration = currentAbility.Duration;
     }
 
     public static void AddMods()
@@ -133,7 +132,7 @@ public static class CombatStatHandler
             float damageValue = GetDamageByType(damage_AT);
             damageValue = ModifyDamageValueByCasterAffinity(damageValue);
 
-                        
+
             foreach (Element element in currentAbility.ElementTypes)
             {
                 if (element != Element.None) damageValue = AdjustBasedOnAffinity(element, damageValue);
@@ -159,15 +158,15 @@ public static class CombatStatHandler
     }
     public static float AdjustandApplyHealValue()
     {
-        if(currentHealValue > 0)
+        if (currentHealValue > 0)
         {
-        float newHP = Mathf.Min(currentHealValue + currentTarget.GetAttribute(AttributeType.CurrentHitpoints), currentTarget.GetAttribute(AttributeType.MaxHitpoints));
-        currentTarget.SetAttribute(AttributeType.CurrentHitpoints, newHP);
-        //UnityEngine.Debug.Log($"healing {target.Name} for {healValue}");
-        return newHP;
+            float newHP = Mathf.Min(currentHealValue + currentTarget.GetAttribute(AttributeType.CurrentHitpoints), currentTarget.GetAttribute(AttributeType.MaxHitpoints));
+            currentTarget.SetAttribute(AttributeType.CurrentHitpoints, newHP);
+            //UnityEngine.Debug.Log($"healing {target.Name} for {healValue}");
+            return newHP;
         }
         else return 0;
-    
+
     }
     public static float AdjustAndApplyTempChange(TempAttrChange tempAttr)
     {
@@ -193,7 +192,7 @@ public static class CombatStatHandler
     public static float AdjustAndApplyDOT()
     {
         if (currentDotValue == 0) return 0;
-        
+
         float damageValue = -currentDotValue;
         UnityEngine.Debug.Log($"Applying DOT of value {damageValue}");
         damageValue = ModifyDamageValueByCasterAffinity(damageValue);
@@ -208,7 +207,7 @@ public static class CombatStatHandler
 
         return damageValue;
     }
-    
+
     #endregion
 
     #region modify resistable damages
