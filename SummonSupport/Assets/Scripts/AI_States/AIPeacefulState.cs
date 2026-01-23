@@ -119,7 +119,6 @@ public class AIPeacefulState : AIState
             return this;
         }
         else return this;
-
     }
     private IEnumerator HandleSupportloop()
     {
@@ -158,7 +157,7 @@ public class AIPeacefulState : AIState
     {
         //Debug.Log("Going to player function called");
         float distance = (player.transform.position - transform.position).sqrMagnitude;
-        if (distance >= stateHandler.navAgent.stoppingDistance || distance >= chaseState.SelectedAbilityAttackRange)
+        if (distance >= stateHandler.navAgent.stoppingDistance + 1 || distance >= chaseState.SelectedAbilityAttackRange)
         {
             //Debug.Log($"Going to player becuase: Distance = {distance}. stopping distance = {stateHandler.navAgent.stoppingDistance}. chase state selected ability = {chaseState.SelectedAbilityAttackRange}");
 

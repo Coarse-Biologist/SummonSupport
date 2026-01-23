@@ -14,6 +14,7 @@ public class SummonSupportLightEffects : MonoBehaviour
 
     void Start()
     {
+
         InvokeRepeating("StartFlashOfLightningCoroutine", 1f, 1f);
     }
     private void StartFlashOfLightningCoroutine()

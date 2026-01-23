@@ -7,26 +7,31 @@ using UnityEngine.AI;
 
 public class AIStateHandler : MonoBehaviour
 {
+    #region creature behavior settings
     [field: SerializeField] public int FollowRadius = 5; // The distance a summon follows behind a player
     [field: SerializeField] public int DetectionRadius = 50; // the radius in which summons will recognize and try to chase or attack
     [field: SerializeField] public int AngleOfSight = 360;
     [field: SerializeField] public int InterestRadius = 80; // radius beyond which a summon will lose interest in attacking
     [field: SerializeField] public int Cowardice = 0; // At what HP percentage a summon may try to retreat
-    [field: SerializeField] public bool Dead = false; // At what HP percentage a summon may try to retreat
+    #endregion 
+    [field: SerializeField] public bool Dead = false; // is creature dead?
 
-
-    public LayerMask targetMask { private set; get; }
     public bool StuckInAbilityAnimation { private set; get; } = false;
-
+    #region masks
+    public LayerMask targetMask { private set; get; }
     public LayerMask enemyMask { private set; get; }
     public LayerMask friendlyMask { private set; get; }
     public LayerMask belligerantMask { private set; get; }
+    #endregion    \
     public NavMeshAgent navAgent { private set; get; }
+
+    #region states
     public AIState currentState { get; private set; }
-    [SerializeField] public AI_CC_State ccState;
+    //[SerializeField] public AI_CC_State ccState;
     [SerializeField] public AIState peaceState { private set; get; }
     [SerializeField] public AIState chaseState { private set; get; }
     [SerializeField] public AIState obedienceState { private set; get; }
+    #endregion
     [SerializeField] public LivingBeing livingBeing { private set; get; }
     public MovementScript movementScript { get; private set; }
     [SerializeField] public MinionStats minionStats { private set; get; }
@@ -44,8 +49,6 @@ public class AIStateHandler : MonoBehaviour
     public WaitForSeconds stateMachineSpeed4 = new WaitForSeconds(1.9f);
     public WaitForSeconds stateMachineSpeed5 = new WaitForSeconds(2.2f);
     public WaitForSeconds stateMachineDead = new WaitForSeconds(5f);
-
-
 
     public WaitForSeconds currentMachineSpeed { private set; get; }
 
@@ -69,7 +72,7 @@ public class AIStateHandler : MonoBehaviour
         livingBeing = GetComponent<LivingBeing>();
         movementScript = GetComponent<MovementScript>();
         minionStats = GetComponent<MinionStats>();
-        ccState = GetComponent<AI_CC_State>();
+        //ccState = GetComponent<AI_CC_State>();
         abilityHandler = GetComponent<CreatureAbilityHandler>();
 
         SetMasks();
@@ -126,6 +129,7 @@ public class AIStateHandler : MonoBehaviour
     {
         Dead = dead;
     }
+
     public void SetStateMachineSpeed(int speed)
     {
         switch (speed)
@@ -153,10 +157,8 @@ public class AIStateHandler : MonoBehaviour
 
     private IEnumerator RunStateMachine()
     {
-        //Debug.Log($"current state = {currentState}1");
         while (!Dead)
         {
-            //Debug.Log($"current state = {currentState}2");
 
             if (Dead) yield return stateMachineDead;
 

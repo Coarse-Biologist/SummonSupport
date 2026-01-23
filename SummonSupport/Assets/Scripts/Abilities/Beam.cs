@@ -65,7 +65,7 @@ public class Beam : MonoBehaviour
         TickRate = ability.TickRate;
         Range = ability.Range;
         abilityRotation = rotationObject;
-        Debug.Log($"does the rotation object exist? ({rotationObject})");
+        //Debug.Log($"does the rotation object exist? ({rotationObject})");
         Caster = caster;
         Ability = ability;
         AlreadyCollided.Add(caster);

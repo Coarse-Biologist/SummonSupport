@@ -28,6 +28,7 @@ public static class CommandMinion
     public static void HandleCommand(RaycastHit hit)
     {
         Vector3 loc = hit.point;
+        SetupManager.Instance.DebugLocation(loc, Color.yellow, 2);
         if (activeMinions != null)
         {
             if (hit.collider.TryGetComponent(out EnemyStats targetLivingBeing))

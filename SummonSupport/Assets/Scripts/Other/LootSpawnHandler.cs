@@ -76,7 +76,7 @@ public class LootSpawnHandler : MonoBehaviour
 
     private void SpawnOrgans(EnemyStats enemy, AlchemyLoot organType)
     {
-        Debug.Log("Spawning organ!");
+        //Debug.Log("Spawning organ!");
         if (organType == AlchemyLoot.WeakCore) return;
         GameObject randomOrgan = Instantiate(OrganPrefabs[Random.Range(0, 2)], enemy.transform.position, Quaternion.identity);
         //Debug.Log("Indeed, Spawning organ");

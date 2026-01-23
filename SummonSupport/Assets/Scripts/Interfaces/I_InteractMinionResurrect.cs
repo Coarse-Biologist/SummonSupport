@@ -4,21 +4,21 @@ public class I_InteractMinionResurrect : MonoBehaviour, I_Interactable
 {
     public void HideInteractionOption()
     {
-        InteractCanvasHandler.Instance.HideInteractionOption();
+        FloatingInfoHandler.Instance.HideInteractionOption();
     }
 
     public void Interact(GameObject interactor)
     {
         //if (interactor == null) return;
-        if (interactor.TryGetComponent<PlayerStats>(out PlayerStats playerStats))
+        if (interactor.TryGetComponent(out PlayerStats playerStats))
         {
-            InteractCanvasHandler.Instance.DisplayIncrementalText(transform.position, "Resurrecting...", playerStats.ResurrectTime);
+            FloatingInfoHandler.Instance.DisplayIncrementalText(transform, "Resurrecting...", playerStats.ResurrectTime);
             playerStats.ResurrectMinion(gameObject);
         }
     }
 
     public void ShowInteractionOption()
     {
-        InteractCanvasHandler.Instance.ShowInteractionOption(transform.position, "Tab to resurrect");
+        FloatingInfoHandler.Instance.ShowInteractionOption(transform.position, "Tab to resurrect");
     }
 }

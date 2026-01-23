@@ -49,7 +49,7 @@ public static class CombatStatHandler
         if (caster is not EnemyStats) modHandler = AbilityModHandler.Instance;
         else modHandler = null;
         SetCurrentValues(effectPackage);
-        UnityEngine.Debug.Log($"caster = {caster.Name}, target = {target.Name} mod handler = {modHandler}");
+        //UnityEngine.Debug.Log($"caster = {caster.Name}, target = {target.Name} mod handler = {modHandler}");
         AddMods();
 
         AdjustandApplyHealValue();

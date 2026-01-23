@@ -26,6 +26,7 @@ namespace SummonSupportEvents
         public static UnityEvent<int, Ability> SetSlot = new();
 
         public static UnityEvent<int> AbilityUsed = new(); // int should be the index of the ability
+        public static UnityEvent<DialogueAndAudio_SO> PlayerDialogue = new();
         public static UnityEvent<Ability> PlayAbilityCastSound = new();
         public static UnityEvent<Ability> PlayAbilityImpactSound = new();
 

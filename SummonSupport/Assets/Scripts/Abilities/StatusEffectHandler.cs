@@ -35,7 +35,7 @@ public class StatusEffectHandler : MonoBehaviour
     }
     public void HandleStatusEffect(StatusEffects status, bool add)
     {
-        Debug.Log($"Adding {status.EffectType} = {true}");
+        //Debug.Log($"Adding {status.EffectType} = {true}");
 
         if (stateHandler == null) return;
         if (add)

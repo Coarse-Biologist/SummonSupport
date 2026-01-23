@@ -76,7 +76,7 @@ public class AbilityModHandler : MonoBehaviour
 
     public Mod_Base GetAbilityMod(Ability ability)
     {
-        Debug.Log($"Checking {ability} for a mod");
+        //Debug.Log($"Checking {ability} for a mod");
         if (ModdedAbilities.TryGetValue(ability, out Mod_Base mod))
             return mod;
         else return null;

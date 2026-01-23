@@ -55,15 +55,9 @@ public class TargetMouseAbility : Ability
 
     public bool ActivateAbility(LivingBeing casterStats, LivingBeing targetLivingBeing)
     {
-        if (casterStats.TryGetComponent<AI_CC_State>(out AI_CC_State ccState) && ccState.isCharmed)
-        {
-            //Debug.Log($"returning false");
-            return true;
-        }
-
         if (casterStats != null && targetLivingBeing != null)
         {
-            if (!IsUsableOn(casterStats.CharacterTag, targetLivingBeing.CharacterTag))
+            if (!ThoroughIsUsableOn(casterStats, targetLivingBeing))
             {
                 //Debug.Log($"returning false");
                 return false;

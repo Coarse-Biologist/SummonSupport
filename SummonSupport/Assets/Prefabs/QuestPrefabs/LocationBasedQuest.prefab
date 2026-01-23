@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 896016103627856636}
   - component: {fileID: 8830710089071737550}
-  - component: {fileID: 234888544593908749}
+  - component: {fileID: -4261034565569672522}
   m_Layer: 0
   m_Name: LocationBasedQuest
   m_TagString: Untagged
@@ -45,17 +45,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63a939b15179c794998af953d186d9c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  quest: {fileID: 11400000, guid: dc21ef7a537ac6a4f85a2b854c97365e, type: 2}
---- !u!58 &234888544593908749
-CircleCollider2D:
+  completesQuest: {fileID: 0}
+  grantsQuest: {fileID: 0}
+  AudioAndDialogue: {fileID: 0}
+--- !u!65 &-4261034565569672522
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3431340205014064840}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Density: 1
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -64,21 +63,9 @@ CircleCollider2D:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_CompositeOperation: 0
-  m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
-  m_Radius: 3
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 3, y: 3, z: 3}
+  m_Center: {x: 0, y: 0, z: 0}

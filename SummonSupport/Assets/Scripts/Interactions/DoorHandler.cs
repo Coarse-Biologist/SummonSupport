@@ -30,13 +30,13 @@ public class DoorHandler : MonoBehaviour, I_Interactable
 
     public void ShowInteractionOption()
     {
-        if (!Open) InteractCanvasHandler.Instance.ShowInteractionOption(canvasSpawnLoc.position, "Tab to Open");
-        else InteractCanvasHandler.Instance.ShowInteractionOption(canvasSpawnLoc.position, "Tab to Close");
+        if (!Open) FloatingInfoHandler.Instance.ShowInteractionOption(canvasSpawnLoc.position, "Tab to Open");
+        else FloatingInfoHandler.Instance.ShowInteractionOption(canvasSpawnLoc.position, "Tab to Close");
     }
 
     public void HideInteractionOption()
     {
-        InteractCanvasHandler.Instance.HideInteractionOption();
+        FloatingInfoHandler.Instance.HideInteractionOption();
 
     }
     private void ToggleOpenDoor()
@@ -77,7 +77,7 @@ public class DoorHandler : MonoBehaviour, I_Interactable
         else
         {
             //Logging.Info($"{livingBeing.name} did not have the required elemental affinity to open the door");
-            InteractCanvasHandler.Instance.ShowInteractionOption(transform.position, "Failed to open");
+            FloatingInfoHandler.Instance.ShowInteractionOption(transform.position, "Failed to open");
             return false;
         }
     }
@@ -106,6 +106,6 @@ public class DoorHandler : MonoBehaviour, I_Interactable
 
     private void RequestCanvasText(string temporaryText)
     {
-        InteractCanvasHandler.Instance.SetTemporaryCanvasText(transform, temporaryText);
+        FloatingInfoHandler.Instance.SetTemporaryCanvasText(transform, temporaryText);
     }
 }

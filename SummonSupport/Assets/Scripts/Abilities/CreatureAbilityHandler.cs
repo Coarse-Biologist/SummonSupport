@@ -98,7 +98,7 @@ public class CreatureAbilityHandler : AbilityHandler
 
         foreach (Ability ability in Abilities) // make list of support and attack abilities
         {
-            UnityEngine.Debug.Log($"Creature Ability Handler checking ability {ability.Name}");
+            //UnityEngine.Debug.Log($"Creature Ability Handler checking ability {ability.Name}");
             if (ability.AbilityTypeTag == AbilityTypeTag.DebuffsTarget)
             {
 

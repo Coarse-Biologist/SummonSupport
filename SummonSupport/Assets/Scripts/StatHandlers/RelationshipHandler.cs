@@ -44,10 +44,13 @@ public static class CrewsRelationshipHandler
 
     public static RelationshipType GetRelationshipType(LivingBeing attacker, LivingBeing target)
     {
+        if (attacker.SE_Handler.HasStatusEffect(StatusEffectType.Madness)) return RelationshipType.Hostile;
+
         bool isAlly1 = Allies.Contains(attacker.CharacterTag);
         bool isAlly2 = Allies.Contains(target.CharacterTag);
-        if (attacker.TryGetComponent(out AI_CC_State ccState) && ccState.isCharmed) return RelationshipType.Hostile;
-        return (isAlly1 == isAlly2) ? RelationshipType.Friendly : RelationshipType.Hostile;
+        bool sameteam = isAlly1 == isAlly2;
+        if (attacker.SE_Handler.HasStatusEffect(StatusEffectType.Charmed) && !sameteam) return RelationshipType.Friendly;
+        return sameteam ? RelationshipType.Friendly : RelationshipType.Hostile;
     }
 
     public static List<CharacterTag> TargetTypeToCharTab(TeamType teamType)

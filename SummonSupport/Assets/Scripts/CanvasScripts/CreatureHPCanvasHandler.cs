@@ -54,7 +54,7 @@ public class CreatureHPCanvasHandler : MonoBehaviour, I_ResourceBar
     {
         if (status != null && status.Icon != null)
         {
-            Debug.Log("Trying to add the thing.");
+            //Debug.Log("Trying to add the thing.");
             GameObject statusImage = new GameObject("StatusEffectImage");
 
             // Parent it to the Canvas

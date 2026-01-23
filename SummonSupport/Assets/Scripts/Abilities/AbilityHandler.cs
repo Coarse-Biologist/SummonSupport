@@ -181,7 +181,7 @@ public class AbilityHandler : MonoBehaviour
 
     bool HandlePointAndClick(TargetMouseAbility ability)
     {
-        if (anim != null) anim.ChangeLayerAnimation("SpellCast", 1, 1f);
+        if (anim != null) anim.ChangeLayerAnimation("Buff", 1, 1f);
 
         return ability.Activate(statsHandler);
     }
@@ -207,7 +207,7 @@ public class AbilityHandler : MonoBehaviour
 
     public IEnumerator SetOnCooldown(Ability ability)
     {
-        
+
         try
         {
             //status effect presense handling
@@ -239,7 +239,7 @@ public class AbilityHandler : MonoBehaviour
     {
         if (ability.Sounds != null && ability.Sounds.CastSound != null)
         {
-            Debug.Log("trying to play cast sound");
+            //Debug.Log("trying to play cast sound");
             EventDeclarer.PlayAbilityCastSound?.Invoke(ability);
         }
     }

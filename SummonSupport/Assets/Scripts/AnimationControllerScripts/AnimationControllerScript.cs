@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using Unity.InferenceEngine;
 using UnityEditor.Animations;
 using UnityEngine;
 
@@ -15,7 +14,7 @@ public class AnimationControllerScript : MonoBehaviour
     {
         anim = GetComponentInChildren<Animator>();
         if (anim == null) throw new System.Exception($"Animation controller is null. it was not found among children objects.");
-anim.updateMode = AnimatorUpdateMode.UnscaledTime;
+        anim.updateMode = AnimatorUpdateMode.UnscaledTime;
     }
     private void PrintStateMachine(AnimatorStateMachine sm, string layerName)
     {

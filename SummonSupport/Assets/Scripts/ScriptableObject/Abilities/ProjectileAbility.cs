@@ -19,7 +19,7 @@ public class ProjectileAbility : Ability
 
 
 
-   
+
     public override bool Activate(LivingBeing casterStats)
     {
         Transform spawnPoint = casterStats.transform;
@@ -28,7 +28,7 @@ public class ProjectileAbility : Ability
         if (casterStats.CharacterTag != CharacterTag.Enemy)
         {
             shots += AbilityModHandler.Instance.GetModAttributeByType(this, AbilityModTypes.Number);
-            Debug.Log($"Shots = {shots}");
+            //Debug.Log($"Shots = {shots}");
         }
         for (int i = 0; i < shots; i += 1)
         {

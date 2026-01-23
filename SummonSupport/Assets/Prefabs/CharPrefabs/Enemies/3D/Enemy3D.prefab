@@ -16,7 +16,6 @@ GameObject:
   - component: {fileID: 3635743163126103005}
   - component: {fileID: 4245647695092035784}
   - component: {fileID: 505316166019517454}
-  - component: {fileID: 5243959057096400346}
   - component: {fileID: 3813269723501921765}
   - component: {fileID: 2032322451267575377}
   - component: {fileID: 6881935197926149321}
@@ -131,7 +130,6 @@ MonoBehaviour:
   InterestRadius: 200
   Cowardice: 0
   Dead: 0
-  ccState: {fileID: 0}
   lastSeenLoc: {x: 0, y: 0, z: 0}
   anim: {fileID: 0}
 --- !u!114 &5432671304295933325
@@ -184,19 +182,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 10a52dae6bc3d844fad91f4155a6fff8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AI_AttackDecisionHandler
---- !u!114 &5243959057096400346
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 810306928598971056}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: adc4396e75b4f414a91319c54ecc0bc4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AI_CC_State
-  sufferingCC: 0
 --- !u!114 &3813269723501921765
 MonoBehaviour:
   m_ObjectHideFlags: 0

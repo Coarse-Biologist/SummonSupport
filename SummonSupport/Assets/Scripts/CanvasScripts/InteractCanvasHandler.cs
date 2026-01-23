@@ -5,11 +5,13 @@ using System.Collections;
 using SummonSupportEvents;
 using UnityEngine.Rendering;
 
-public class InteractCanvasHandler : MonoBehaviour
+public class FloatingInfoHandler : MonoBehaviour
 {
-    public static InteractCanvasHandler Instance { get; private set; }
+    public static FloatingInfoHandler Instance { get; private set; }
     private GameObject canvasInstance;
     [SerializeField] GameObject interactCanvas;
+    [SerializeField] GameObject playerDialogueCanvas;
+
     [field: SerializeField] public float slowDisplaySpeed = .8f;
 
     [field: SerializeField] GameObject xpTextGUI;
@@ -23,10 +25,13 @@ public class InteractCanvasHandler : MonoBehaviour
     private void OnEnable()
     {
         EventDeclarer.EnemyDefeated?.AddListener(DisplayXPGain);
+        EventDeclarer.PlayerDialogue?.AddListener(ShowPlayerDialogue);
     }
     private void OnDisable()
     {
         EventDeclarer.EnemyDefeated?.RemoveListener(DisplayXPGain);
+        EventDeclarer.PlayerDialogue?.RemoveListener(ShowPlayerDialogue);
+
     }
 
     public void ShowInteractionOption(Vector3 spawnLoc, string interactMessage)
@@ -53,14 +58,14 @@ public class InteractCanvasHandler : MonoBehaviour
 
     }
 
-    public void DisplayIncrementalText(Vector3 spawnLoc, string temporaryText, float duration)
+    public void DisplayIncrementalText(Transform spawnLoc, string temporaryText, float totalDuration = 4f)
     {
-        StartCoroutine(SlowlyDisplayCanvasText(spawnLoc, temporaryText, duration));
+        StartCoroutine(SlowlyDisplayCanvasText(spawnLoc, temporaryText, totalDuration));
     }
-    public IEnumerator SlowlyDisplayCanvasText(Vector3 spawnLoc, string temporaryText, float totalDuration = 4f)
+    public IEnumerator SlowlyDisplayCanvasText(Transform spawnLoc, string temporaryText, float totalDuration = 4f)
     {
         int chars = temporaryText.Length;
-        if (canvasInstance == null) canvasInstance = Instantiate(interactCanvas, spawnLoc, Quaternion.identity);
+        if (canvasInstance == null) canvasInstance = Instantiate(interactCanvas, spawnLoc.position + new Vector3(0, 2.5f, 0), Quaternion.identity, spawnLoc);
         else canvasInstance.SetActive(true);
         TextMeshProUGUI canvasGUI = canvasInstance.GetComponentInChildren<TextMeshProUGUI>();
         int textUpdateProgress = 0;
@@ -71,6 +76,24 @@ public class InteractCanvasHandler : MonoBehaviour
             textUpdateProgress++;
             yield return new WaitForSeconds(totalDuration / chars);
         }
+
+        HideInteractionOption();
+    }
+    public IEnumerator DisplayPlayerDialogue(Transform spawnLoc, string temporaryText, float printSpeed, float stayDuration = 4f)
+    {
+        int chars = temporaryText.Length;
+        if (canvasInstance == null) canvasInstance = Instantiate(playerDialogueCanvas, spawnLoc.position + new Vector3(0, 2.5f, 0), Quaternion.identity, spawnLoc);
+        else canvasInstance.SetActive(true);
+        TextMeshProUGUI canvasGUI = canvasInstance.GetComponentInChildren<TextMeshProUGUI>();
+        int textUpdateProgress = 0;
+        while (temporaryText.Length > textUpdateProgress)
+        {
+            string currentText = temporaryText.Substring(0, textUpdateProgress + 1);
+            canvasGUI.text = $"{currentText}";
+            textUpdateProgress++;
+            yield return new WaitForSeconds(printSpeed / chars);
+        }
+        yield return new WaitForSeconds(stayDuration);
         HideInteractionOption();
     }
 
@@ -97,6 +120,12 @@ public class InteractCanvasHandler : MonoBehaviour
             rb.AddForce(new Vector3(Random.Range(-1f, 1f), 2f, Random.Range(-1f, 1f)), ForceMode.Impulse);
         }
         Destroy(xpCanvas, duration);
+    }
+
+    public void ShowPlayerDialogue(DialogueAndAudio_SO dialogue)
+    {
+        Debug.Log($"Trying to show player dialogue: {dialogue.playerDialogue}");
+        StartCoroutine(DisplayPlayerDialogue(PlayerStats.Instance.transform, dialogue.playerDialogue, dialogue.playerDialogue.Length * .1f));
     }
 
 

@@ -1,13 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
-using Unity.Entities;
-using Unity.Collections;
 using SummonSupportEvents;
-using Unity.Mathematics;
-using UnityEngine.SceneManagement;
-using Unity.VisualScripting;
 using System;
-using System.Collections.Generic;
 
 
 public class PlayerMovement : MovementScript
@@ -41,6 +35,10 @@ public class PlayerMovement : MovementScript
         Cursor.lockState = CursorLockMode.Locked;   // Locks the cursor to the center of the screen
         Cursor.visible = false;
         rb = GetComponent<Rigidbody>();
+
+        Collider collider = GetComponent<Collider>();
+
+
         mainCamera = Camera.main;
         inputActions = new PlayerInputActions();
         playerStats = GetComponent<LivingBeing>();
@@ -133,6 +131,7 @@ public class PlayerMovement : MovementScript
     }
     private void HandleMove()
     {
+
         if (Math.Abs(moveInput.x) > .01 || Math.Abs(moveInput.y) > .01)
         {
             float calculatedSpeed;
@@ -143,7 +142,10 @@ public class PlayerMovement : MovementScript
 
             Vector3 moveDirection = transform.TransformDirection(new Vector3(moveInput.x, 0, moveInput.y)).normalized;
             anim.ChangeMovementAnimation(moveInput.x, moveInput.y);
-            rb.AddForce(moveDirection * calculatedSpeed * 100f, ForceMode.Acceleration);
+
+            Vector3 force = moveDirection * calculatedSpeed * 100f;
+            rb.AddForce(force, ForceMode.Acceleration);
+
         }
         else anim.ChangeAnimation("Idle", .2f);
 
@@ -169,8 +171,7 @@ public class PlayerMovement : MovementScript
     {
         if (playerStats.Dead) return;
 
-        Ray ray = new Ray(transform.position, transform.forward.normalized);
-
+        Ray ray = new Ray(Camera.main.transform.position, Camera.main.transform.forward.normalized);
         if (Physics.Raycast(ray, out RaycastHit hit, 300))
         {
             CommandMinion.HandleCommand(hit);

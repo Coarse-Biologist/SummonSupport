@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Linq;
-using Unity.InferenceEngine;
 
 //using System.Numerics;
 using UnityEngine;
@@ -83,16 +82,16 @@ public class Projectile : MonoBehaviour
     }
     public void HandleRicochet()
     {
-        Debug.Log("Rico shetting");
+        //Debug.Log("Rico shetting");
         if (ricochedAlready >= ricochet)
         {
-            Debug.Log($"destroying because: ricocheted already = {ricochedAlready}. max ricochet = {ricochet}");
+            //Debug.Log($"destroying because: ricocheted already = {ricochedAlready}. max ricochet = {ricochet}");
             Destroy(gameObject);
 
         }
         else if (Physics.Raycast(transform.position, rb.linearVelocity.normalized, out RaycastHit hit, 1f))
         {
-            Debug.Log("ray cast hits in handle ricochet func");
+            //Debug.Log("ray cast hits in handle ricochet func");
             Vector3 normal = hit.normal;
             Vector3 incomingV = rb.linearVelocity;
             Vector3 reflectDir = Vector3.Reflect(incomingV.normalized, normal);
@@ -153,7 +152,7 @@ public class Projectile : MonoBehaviour
         {
             if (other.gameObject.TryGetComponent(out NavMeshObstacle obstacle))
             {
-                Debug.Log("Box collider entered");
+                //Debug.Log("Box collider entered");
                 AddMods();
                 HandleRicochet();
                 SpawnEffect(transform);
