@@ -106,7 +106,7 @@ public class EnemySpawnHandler : MonoBehaviour
     }
     private IEnumerator SpawnWavesOfEnemies(SpawnLocationInfo spawnInfo = null)
     {
-        if (spawnInfo == null) spawnInfo = SpawnCenter.GetComponent<SpawnLocationInfo>();
+        if (spawnInfo == null) spawnInfo = SpawnCenter.GetComponentInChildren<SpawnLocationInfo>();
         if (spawnInfo != null & spawnInfo.Creatures.Length > 0)
         {
             for (int i = spawnInfo.Waves; i > 0; i--)
@@ -136,7 +136,7 @@ public class EnemySpawnHandler : MonoBehaviour
     }
     private void SpawnEnemies()
     {
-        SpawnLocationInfo spawnInfo = SpawnCenter.GetComponent<SpawnLocationInfo>();
+        SpawnLocationInfo spawnInfo = SpawnCenter.GetComponentInChildren<SpawnLocationInfo>();
         if (spawnInfo != null & spawnInfo.Creatures.Length > 0)
         {
             List<GameObject> spawnedCreatures = new();
