@@ -237,7 +237,7 @@ public class AbilityHandler : MonoBehaviour
     }
     private void PlayCastSound(Ability ability)
     {
-        if (ability.Sounds != null && ability.Sounds.CastSound != null)
+        if (ability.Sounds != null && ability.Sounds.CastSounds.Length != 0)
         {
             //Debug.Log("trying to play cast sound");
             EventDeclarer.PlayAbilityCastSound?.Invoke(ability);

@@ -2,11 +2,12 @@ using UnityEngine;
 using System;
 using SummonSupportEvents;
 using UnityEditor.Timeline.Actions;
+using System.Collections;
 
 public class AudioHandler : MonoBehaviour
 {
-    public AudioHandler Instance;
-    private AudioSource audioSource;
+    public static AudioHandler Instance;
+    public AudioSource audioSource;
     public LayeredSongs_SO[] audioClips = new LayeredSongs_SO[5];
     [field: SerializeField] public AudioClip[] PlayerFootSteps { private set; get; } = new AudioClip[5];
     [field: SerializeField] public float FootstepVolume { private set; get; } = .2f;
@@ -51,13 +52,27 @@ public class AudioHandler : MonoBehaviour
 
     private void PlayAbilityCastSound(Ability ability)
     {
-        if (ability.Sounds != null && ability.Sounds.CastSound != null)
-            audioSource.PlayOneShot(ability.Sounds.CastSound, 1);
+        AudioClip clip;
+        if (ability.Sounds != null && ability.Sounds.CastSounds.Length != 0)
+        {
+            clip = ability.Sounds.GetCastSound();
+            if (clip != null)
+            {
+                audioSource.PlayOneShot(clip, .3f);
+            }
+        }
     }
     private void PlayAbilityImpactSound(Ability ability)
     {
-        if (ability.Sounds.ImpactSound != null)
-            audioSource.PlayOneShot(ability.Sounds.ImpactSound, 1);
+        AudioClip clip;
+        if (ability.Sounds != null && ability.Sounds.ImpactSounds.Length != 0)
+        {
+            clip = ability.Sounds.GetImpactSound();
+            if (clip != null)
+            {
+                audioSource.PlayOneShot(clip, .5f);
+            }
+        }
     }
     public void OnFootstep()
     {

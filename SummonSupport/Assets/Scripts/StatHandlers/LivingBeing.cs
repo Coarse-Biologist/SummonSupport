@@ -31,8 +31,8 @@ public abstract class LivingBeing : MonoBehaviour
     [field: SerializeField] public float TickRateRegenerationInSeconds { get; private set; } = .2f;
     [field: SerializeField] public float HealthRegeneration { get; private set; } = 1;
     [field: SerializeField] public float PowerRegeneration { get; private set; } = 1;
-    public float TotalHealthRegeneration {private set; get;} = 0;
-    public float TotalPowerRegeneration {private set; get;} = 0;
+    public float TotalHealthRegeneration { private set; get; } = 0;
+    public float TotalPowerRegeneration { private set; get; } = 0;
 
     public GameObject locSphere;
 
@@ -86,6 +86,7 @@ public abstract class LivingBeing : MonoBehaviour
     public I_ResourceBar resourceBarInterface { protected set; get; }
     public I_Destruction ragdollScript;
     public AbilityHandler abilityHandler { protected set; get; }
+    public LivingBeingAudioHandler audioHandler { protected set; get; }
     public StatusEffectHandler SE_Handler;
 
 
@@ -108,6 +109,7 @@ public abstract class LivingBeing : MonoBehaviour
     {
         InitializeRegenerationValues();
         StartCoroutine(RegenerateRoutine());
+        audioHandler = GetComponent<LivingBeingAudioHandler>();
         abilityHandler = GetComponent<AbilityHandler>();
 
         ragdollScript = GetComponent<I_Destruction>();
@@ -300,7 +302,7 @@ public abstract class LivingBeing : MonoBehaviour
             float newHP = Mathf.Min(CurrentHP + TotalHealthRegeneration, MaxHP);
             if (newHP != CurrentHP)
                 SetAttribute(AttributeType.CurrentHitpoints, newHP);
-                
+
             float newPower = Mathf.Min(CurrentPower + PowerRegeneration, MaxPower);
             if (newPower != CurrentPower)
                 SetAttribute(AttributeType.CurrentPower, newPower);
@@ -412,17 +414,17 @@ public abstract class LivingBeing : MonoBehaviour
     }
     public virtual string GetLivingBeingStats()
     {
-        
+
         string statString = "";
         statString += $"Max hitpoints: {GetAttribute(AttributeType.MaxHitpoints)}\n";
         statString += GetComponent<AbilityHandler>().GetKnownAbilitiesString();
-        foreach(var kvp in Affinities)
+        foreach (var kvp in Affinities)
         {
-            if(kvp.Value.Get() > 0)
-            statString += $"{kvp.Key} affinity: {kvp.Value.Get()}\n";
+            if (kvp.Value.Get() > 0)
+                statString += $"{kvp.Key} affinity: {kvp.Value.Get()}\n";
         }
-        
+
         return statString;
-    
+
     }
 }

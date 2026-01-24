@@ -57,6 +57,8 @@ MonoBehaviour:
   <PhysicalType>k__BackingField: 3
   <OnHitEffect>k__BackingField: {fileID: 5705030685624713920, guid: e378c4ebb8c3f9d43b451efa5c71483d,
     type: 3}
+  <Sounds>k__BackingField: {fileID: 11400000, guid: 96774de62dd19724d95abe3a99036785,
+    type: 2}
   <AlterParticleSystemGradient>k__BackingField: 0
   <Angle>k__BackingField: 0
   <Width>k__BackingField: 5

@@ -1,16 +1,17 @@
+using System.Collections;
 using SummonSupportEvents;
 using UnityEngine;
 
-public class PlayerAudioHandler : MonoBehaviour
+public class PlayerAudioHandler : LivingBeingAudioHandler
 {
-    private AudioSource PlayerAudioSource;
+
 
     private void Start()
     {
-        PlayerAudioSource = GetComponent<AudioSource>();
-        if (PlayerAudioSource == null)
+        CreatureAudioSource = GetComponent<AudioSource>();
+        if (CreatureAudioSource == null)
         {
-            PlayerAudioSource = gameObject.AddComponent<AudioSource>();
+            CreatureAudioSource = gameObject.AddComponent<AudioSource>();
         }
     }
     void OnEnable()
@@ -25,7 +26,9 @@ public class PlayerAudioHandler : MonoBehaviour
     {
         if (dialogue != null && dialogue != null)
         {
-            PlayerAudioSource.PlayOneShot(dialogue.playerAudio, 1f);
+            CreatureAudioSource.PlayOneShot(dialogue.playerAudio, .3f);
         }
     }
+
+
 }
