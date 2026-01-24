@@ -96,6 +96,7 @@ public class MinionStats : LivingBeing
             {
                 stateHandler.SetDead(false);
                 Debug.Log("Setting state handler death to false");
+                //stateHandler.StartCoroutine(stateHandler.RunStateMachine());
             }
 
         }

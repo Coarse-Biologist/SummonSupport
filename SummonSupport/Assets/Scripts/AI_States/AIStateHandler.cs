@@ -155,39 +155,41 @@ public class AIStateHandler : MonoBehaviour
         }
     }
 
-    private IEnumerator RunStateMachine()
+    public IEnumerator RunStateMachine()
     {
-        while (!Dead)
+        while (true)
         {
 
             if (Dead) yield return stateMachineDead;
-
-            yield return currentMachineSpeed;
-
-            if (minionStats == null || minionStats.CurrentCommand == MinionCommands.None)
-            {
-                AIState nextState = currentState?.RunCurrentState();
-                if (nextState != null)
-                {
-                    SwitchToNextState(nextState);
-                }
-                else Debug.Log("nextState state was null");
-            }
             else
             {
-                if (livingBeing.CharacterTag == CharacterTag.Minion)
+                yield return currentMachineSpeed;
+
+                if (minionStats == null || minionStats.CurrentCommand == MinionCommands.None)
                 {
-                    //Debug.Log("I will run yee old obedience state");
-                    AIState nextState = obedienceState.RunCurrentState();
-                    SwitchToNextState(nextState);
+                    AIState nextState = currentState?.RunCurrentState();
+                    if (nextState != null)
+                    {
+                        SwitchToNextState(nextState);
+                    }
+                    else Debug.Log("nextState state was null");
                 }
                 else
                 {
-                    AIState nextState = peaceState.RunCurrentState();
-                    SwitchToNextState(nextState);
-                }
-                //else Debug.Log("next state was null");
+                    if (livingBeing.CharacterTag == CharacterTag.Minion)
+                    {
+                        //Debug.Log("I will run yee old obedience state");
+                        AIState nextState = obedienceState.RunCurrentState();
+                        SwitchToNextState(nextState);
+                    }
+                    else
+                    {
+                        AIState nextState = peaceState.RunCurrentState();
+                        SwitchToNextState(nextState);
+                    }
+                    //else Debug.Log("next state was null");
 
+                }
             }
         }
     }
