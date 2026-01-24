@@ -12,17 +12,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0bede6bd9288e574e953f4c1fbb2fde9, type: 3}
   m_Name: Simpletestquest
   m_EditorClassIdentifier: 
-  QuestName: 
+  QuestName: Start the journey
   QuestEnum: 1
-  IntQuestReqs: []
+  IntQuestReqs:
+  - quest: 0
+    reps: 1
   BoolQuestReqs: 
   PresentationString: 
   ProgressString: 
-  CompletionString: 
-  GoldReward: 1
-  XP_Reward: 1
-  KnowledgeReward: 0
+  CompletionString: The area seems safe now...
+  GoldReward: 10
+  XP_Reward: 100
+  KnowledgeReward: 10
+  BenefittedElements: 01000000
   AlchemyLootNum: 0
-  BenefittedElements: 
-  AlchemyLootReward: 0
+  AlchemyLootReward: 
+  RewardsTool: 0
   AlchemyToolReward: 0

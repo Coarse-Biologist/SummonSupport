@@ -62,7 +62,7 @@ public class PauseGameHandler : MonoBehaviour
         RestartButton = PauseMenu.Q<Button>("Restart");
         QuitButton = PauseMenu.Q<Button>("Quit");
         StatsButton = PauseMenu.Q<Button>("ShowStats");
-        
+
         MainUI = root.Q<VisualElement>("MainUI");
         //Debug.Log($"main ui: {PauseMenu}");
 
@@ -105,7 +105,7 @@ public class PauseGameHandler : MonoBehaviour
 
         ResumeButton.style.display = DisplayStyle.Flex;
         ResumeButton.style.width = StyleKeyword.Auto;
-        InfoElement.style.display = DisplayStyle.Flex;
+        InfoElement.style.display = DisplayStyle.None;
         InventoryButton.style.display = DisplayStyle.Flex;
         QuitButton.style.display = DisplayStyle.Flex;
         RestartButton.style.display = DisplayStyle.Flex;
@@ -122,6 +122,7 @@ public class PauseGameHandler : MonoBehaviour
 
         PauseMenu.SetEnabled(false);
         PauseMenu.style.display = DisplayStyle.None;
+        InfoElement.style.display = DisplayStyle.Flex;
 
         Time.timeScale = 1f;
     }
@@ -160,10 +161,11 @@ public class PauseGameHandler : MonoBehaviour
         PauseMenu.style.display = DisplayStyle.Flex;
         ResumeButton.text = "Continue";
         ResumeButton.style.display = DisplayStyle.Flex;
-        InventoryButton.style.display = DisplayStyle.None;
-        QuitButton.style.display = DisplayStyle.None;
-        RestartButton.style.display = DisplayStyle.None;
-        ResumeButton.style.width = Length.Percent(30);
+        InventoryButton.style.display = DisplayStyle.Flex;
+        QuitButton.style.display = DisplayStyle.Flex;
+        RestartButton.style.display = DisplayStyle.Flex;
+        //ResumeButton.style.width = Length.Percent(30);
+        PlayerOptions.style.display = DisplayStyle.Flex;
 
         InfoElement.style.display = DisplayStyle.Flex;
 

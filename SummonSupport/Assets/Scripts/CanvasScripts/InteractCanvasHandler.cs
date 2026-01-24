@@ -101,12 +101,15 @@ public class FloatingInfoHandler : MonoBehaviour
     {
         DisplayGoldenLetters($"+{enemyStats.XP_OnDeath} xp");
     }
-
+    public void DisplayXPGain(float xpReward)
+    {
+        DisplayGoldenLetters($"+{xpReward} xp");
+    }
     public void DisplayGoldenLetters(string words, float duration = .8f)
     {
-
+        Vector3 randomOffset = new Vector3(Random.Range(-1f, 1f), 1f, Random.Range(-1f, 1f));
         Transform playerTransform = PlayerStats.Instance.transform;
-        Vector3 pos = new Vector3(playerTransform.position.x, playerTransform.position.y + 3, playerTransform.position.z);
+        Vector3 pos = playerTransform.position + randomOffset;
         GameObject xpCanvas = Instantiate(xpTextGUI, pos, Quaternion.identity);
         xpCanvas.transform.rotation = playerTransform.rotation;
         if (xpCanvas.TryGetComponent(out TextMeshProUGUI canvasGUI))
@@ -117,7 +120,7 @@ public class FloatingInfoHandler : MonoBehaviour
         }
         if (xpCanvas.TryGetComponent(out Rigidbody rb))
         {
-            rb.AddForce(new Vector3(Random.Range(-1f, 1f), 2f, Random.Range(-1f, 1f)), ForceMode.Impulse);
+            rb.AddForce(randomOffset, ForceMode.Impulse);
         }
         Destroy(xpCanvas, duration);
     }
@@ -127,6 +130,7 @@ public class FloatingInfoHandler : MonoBehaviour
         Debug.Log($"Trying to show player dialogue: {dialogue.playerDialogue}");
         StartCoroutine(DisplayPlayerDialogue(PlayerStats.Instance.transform, dialogue.playerDialogue, dialogue.playerDialogue.Length * .1f));
     }
+
 
 
 

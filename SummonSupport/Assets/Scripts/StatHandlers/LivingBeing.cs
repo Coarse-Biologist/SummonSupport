@@ -77,7 +77,7 @@ public abstract class LivingBeing : MonoBehaviour
     [field: SerializeField] public List<Ability> AffectedByAbilities { get; private set; } = new();
 
     [field: SerializeField] public float XP_OnDeath { get; private set; } = 5f;
-    public bool Dead { get; private set; } = false;
+    public bool Dead { get; protected set; } = false;
 
     public Dictionary<Element, (Func<float> Get, Action<float> Set)> Affinities { private set; get; } = new();
     public Dictionary<AttributeType, (Func<float> Get, Action<float> Set)> ResourceAttributesDict { private set; get; } = new();

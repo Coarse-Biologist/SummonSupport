@@ -6365,6 +6365,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d04ec7a99fab9134ca869c4be558c48d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sceneStartingQuest: {fileID: 11400000, guid: dc21ef7a537ac6a4f85a2b854c97365e, type: 2}
   CompletedQuests: []
   CompletedBoolQuests: 
   ActiveQuests: []
@@ -7313,6 +7314,37 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c5feb562ef2fbe24fa22279e19522d2b, type: 3}
+--- !u!1 &1968603990
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1968603991}
+  m_Layer: 0
+  m_Name: LevelQuestHolder
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1968603991
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1968603990}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 2.94625, y: 4.72, z: 5.20785}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1968903358 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2723268545274118893, guid: e886a549e6972994abaa35dd9c7f3236,
@@ -11138,3 +11170,4 @@ SceneRoots:
   - {fileID: 3589915667515350896}
   - {fileID: 1445516591467304526}
   - {fileID: 1769241316}
+  - {fileID: 1968603991}

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using SummonSupportEvents;
 using UnityEngine.AI;
 using NUnit.Framework.Constraints;
+using Quest;
 
 
 public class EnemyStats : LivingBeing
@@ -21,21 +22,25 @@ public class EnemyStats : LivingBeing
 
     public override void Die()
     {
-        EventDeclarer.EnemyDefeated.Invoke(this);
-        if (SE_Handler.GetStatusEffectValue(StatusEffectType.Overheated) > 1) EventDeclarer.ViciousDeath?.Invoke(this);
+        if (!Dead)
+        {
+            Dead = true;
 
-        if (gameObject.TryGetComponent(out AIStateHandler stateHandler))
-        {
-            stateHandler.SetDead(true);
+            EventDeclarer.EnemyDefeated.Invoke(this);
+            if (SE_Handler.GetStatusEffectValue(StatusEffectType.Overheated) > 1) EventDeclarer.ViciousDeath?.Invoke(this);
+
+            if (gameObject.TryGetComponent(out AIStateHandler stateHandler))
+            {
+                stateHandler.SetDead(true);
+            }
+            if (ragdollScript != null) ragdollScript.CauseDestruction(false);
+            if (TryGetComponent(out NavMeshAgent nav))
+            {
+                navMesh = nav;
+                navMeshSpeed = navMesh.speed;
+            }
+            Invoke("DelayedTestDeath", .3f);
         }
-        if (ragdollScript != null) ragdollScript.CauseDestruction(false);
-        if (TryGetComponent(out NavMeshAgent nav))
-        {
-            navMesh = nav;
-            navMeshSpeed = navMesh.speed;
-        }
-        Destroy(gameObject, .5f);
-        //Invoke("DelayedTestDeath", .3f);
     }
     public void AddStatusEffectSymbol(StatusEffects status, int stacks)
     {
@@ -60,19 +65,6 @@ public class EnemyStats : LivingBeing
                 break;
             default:
                 break;
-        }
-    }
-    public void ApplyStatusEffect(StatusEffectType status, bool apply)
-    {
-        int modifier = 1;
-        if (apply) modifier = -1;
-        switch (status)
-        {
-            case StatusEffectType.Chilled:
-                {
-                    navMesh.speed += (float)-.2 * navMeshSpeed * modifier;
-                    break;
-                }
         }
     }
 

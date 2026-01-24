@@ -32,6 +32,7 @@ namespace Quest
         [SerializeField] public bool RewardsTool;
         [SerializeField] public AlchemyTool AlchemyToolReward;
 
+
     }
 
     public enum QuestName
