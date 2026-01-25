@@ -4,6 +4,7 @@ using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
+using UnityEngine.UIElements.Experimental;
 
 public class PauseGameHandler : MonoBehaviour
 {
@@ -100,29 +101,60 @@ public class PauseGameHandler : MonoBehaviour
         UnityEngine.Cursor.lockState = CursorLockMode.None;   // Locks the cursor to the center of the screen
         UnityEngine.Cursor.visible = true;
 
-        PauseMenu.SetEnabled(true);
+        PauseMenu.style.opacity = 0f;
         PauseMenu.style.display = DisplayStyle.Flex;
+        PauseMenu.SetEnabled(true);
+
+
 
         ResumeButton.style.display = DisplayStyle.Flex;
         ResumeButton.style.width = StyleKeyword.Auto;
-        InfoElement.style.display = DisplayStyle.None;
+        InfoElement.style.display = DisplayStyle.Flex;
         InventoryButton.style.display = DisplayStyle.Flex;
         QuitButton.style.display = DisplayStyle.Flex;
         RestartButton.style.display = DisplayStyle.Flex;
 
 
         Time.timeScale = 0f;
+
+
+        EaseInOpacity(PauseMenu, 350);
+        EaseInOpacity(PlayerOptions, 350);
+    }
+    private void EaseInOpacity(VisualElement element, int duration)
+    {
+        element.experimental.animation.Start(0f, 1f, duration, (e, v) => e.style.opacity = v)
+            .Ease(Easing.OutCubic);
+
+        PauseMenu.experimental.animation
+        .Start(
+            new Vector3(0.8f, 0.8f, 1f),
+            Vector3.one,
+            300,
+            (e, v) => e.style.scale = new Scale(v)
+        )
+        .Ease(Easing.OutBack);
+    }
+    private void EaseOutOpacity(VisualElement element, int duration)
+    {
+        element.experimental.animation.Start(1f, 0f, duration, (e, v) => e.style.opacity = v)
+            .Ease(Easing.OutCubic)
+            .OnCompleted(() => PauseMenu.style.display = DisplayStyle.None);
+
     }
 
     private void Resume()
     {
+        paused = false;
         UnityEngine.Cursor.lockState = CursorLockMode.Locked;   // Locks the cursor to the center of the screen
         UnityEngine.Cursor.visible = false;
         PlayerOptions.style.display = DisplayStyle.None;
 
         PauseMenu.SetEnabled(false);
-        PauseMenu.style.display = DisplayStyle.None;
-        InfoElement.style.display = DisplayStyle.Flex;
+
+        EaseOutOpacity(PauseMenu, 350);
+        EaseOutOpacity(PlayerOptions, 350);
+
 
         Time.timeScale = 1f;
     }
@@ -138,8 +170,11 @@ public class PauseGameHandler : MonoBehaviour
     {
         UnityEngine.Cursor.lockState = CursorLockMode.None;   // Locks the cursor to the center of the screen
         UnityEngine.Cursor.visible = true;
+
         PauseMenu.SetEnabled(true);
         PauseMenu.style.display = DisplayStyle.Flex;
+        PauseMenu.style.opacity = 0f;
+
         QuitButton.style.display = DisplayStyle.Flex;
         RestartButton.style.display = DisplayStyle.Flex;
         ResumeButton.style.display = DisplayStyle.None;
@@ -147,6 +182,7 @@ public class PauseGameHandler : MonoBehaviour
         //InfoScrollElement.style.display = DisplayStyle.Flex;
 
         InfoElement.text = "You have fallen asleep in death \n";
+        EaseInOpacity(PauseMenu, 350);
         ShowGameStats();
 
         Time.timeScale = 0f;
@@ -157,17 +193,21 @@ public class PauseGameHandler : MonoBehaviour
         UnityEngine.Cursor.lockState = CursorLockMode.None;   // Locks the cursor to the center of the screen
         UnityEngine.Cursor.visible = true;
 
+        PauseMenu.style.opacity = 0f;
+        PlayerOptions.style.opacity = 0f;
         PauseMenu.SetEnabled(true);
         PauseMenu.style.display = DisplayStyle.Flex;
+
         ResumeButton.text = "Continue";
         ResumeButton.style.display = DisplayStyle.Flex;
         InventoryButton.style.display = DisplayStyle.Flex;
         QuitButton.style.display = DisplayStyle.Flex;
         RestartButton.style.display = DisplayStyle.Flex;
-        //ResumeButton.style.width = Length.Percent(30);
         PlayerOptions.style.display = DisplayStyle.Flex;
 
         InfoElement.style.display = DisplayStyle.Flex;
+        EaseInOpacity(PauseMenu, 350);
+        EaseInOpacity(PlayerOptions, 350);
 
         InfoElement.text = $"Level {PlayerStats.Instance.CurrentLevel}! \n";
 
@@ -248,3 +288,9 @@ public class PauseGameHandler : MonoBehaviour
         }
     }
 }
+
+//Easing.OutCubic     // default-feeling UI motion
+//Easing.OutQuad      // snappy
+//Easing.InOutCubic   // smooth panels
+//Easing.OutBack      // overshoot (Hades-style)
+//Easing.OutElastic   // attention grabber

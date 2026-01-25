@@ -22,6 +22,15 @@ public class QuestHandler : MonoBehaviour
         {RepeatableAccomplishments.CoresUsed, 0},
         {RepeatableAccomplishments.EtherUsed, 0},
     };
+    public Dictionary<RepeatableAccomplishments, int> TotalRepTracker = new Dictionary<RepeatableAccomplishments, int>()
+    {
+        {RepeatableAccomplishments.EnemiesDefeated, 0},
+        {RepeatableAccomplishments.KnowledgeGained, 0},
+        {RepeatableAccomplishments.MinionsCrafted, 0},
+        {RepeatableAccomplishments.OrgansUsed, 0},
+        {RepeatableAccomplishments.CoresUsed, 0},
+        {RepeatableAccomplishments.EtherUsed, 0},
+    };
     private PlayerStats playerStats;
 
     void Awake()
@@ -97,6 +106,7 @@ public class QuestHandler : MonoBehaviour
     }
     public void GrantCompletionRewards(Quest_SO quest)
     {
+        Debug.Log($"Granting rewards for quest: {quest.QuestName}");
         for (int i = 0; i < quest.BenefittedElements.Count; i++)
         {
             AlchemyInventory.IncemementElementalKnowledge(quest.BenefittedElements[i], quest.KnowledgeReward);
@@ -144,6 +154,7 @@ public class QuestHandler : MonoBehaviour
     public void IncrementEnemyDefeated(LivingBeing livingBeing)
     {
         QuestRepTracker[RepeatableAccomplishments.EnemiesDefeated]++;
+        TotalRepTracker[RepeatableAccomplishments.EnemiesDefeated]++;
         CheckQuestCompletionsForActiveQuests(RepeatableAccomplishments.EnemiesDefeated);
 
     }

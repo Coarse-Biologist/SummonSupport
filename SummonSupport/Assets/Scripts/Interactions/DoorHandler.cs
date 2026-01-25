@@ -1,3 +1,5 @@
+using Quest;
+using SummonSupportEvents;
 using UnityEngine;
 
 public class DoorHandler : MonoBehaviour, I_Interactable
@@ -8,6 +10,8 @@ public class DoorHandler : MonoBehaviour, I_Interactable
     private int readyCooldownTime = 1;
     private bool ready = true;
     [SerializeField] public bool Locked = false;
+
+    [field: SerializeField] public Quest_SO QuestToUnlock { private set; get; } = null;
 
     [SerializeField] public Element elementalRequisite;
     [SerializeField] public int difficulty = 1;
@@ -21,11 +25,24 @@ public class DoorHandler : MonoBehaviour, I_Interactable
         doorCollider = GetComponent<Collider>();
         if (canvasSpawnLoc == null) canvasSpawnLoc = transform;
     }
+    void OnEnable()
+    {
+        EventDeclarer.QuestCompleted?.AddListener(CheckQuestRelatedDoor);
+    }
+
+    void OnDisable()
+    {
+        EventDeclarer.QuestCompleted?.RemoveListener(CheckQuestRelatedDoor);
+
+    }
 
     public void Interact(GameObject interactor)
     {
-        LivingBeing livingBeing = interactor.GetComponent<LivingBeing>();
-        if (livingBeing != null && HasElementalRequisite(livingBeing)) ToggleOpenDoor();
+        if (TryGetComponent(out LivingBeing livingBeing))
+        {
+            if (!Locked || HasElementalRequisite(livingBeing))
+                ToggleOpenDoor();
+        }
     }
 
     public void ShowInteractionOption()
@@ -69,6 +86,13 @@ public class DoorHandler : MonoBehaviour, I_Interactable
     {
         Locked = isLocked;
     }
+    private void CheckQuestRelatedDoor(Quest_SO quest)
+    {
+        if (quest == QuestToUnlock)
+        {
+            SetLocked(false);
+        }
+    }
 
     private bool HasElementalRequisite(LivingBeing livingBeing)
     {
@@ -88,6 +112,7 @@ public class DoorHandler : MonoBehaviour, I_Interactable
 
         if (doorCollider != null)
             doorCollider.enabled = false;
+
         transform.rotation = new Quaternion(0, 90, 0, 0);
         NotReadyToInteract();
         Open = true;

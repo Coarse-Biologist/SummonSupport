@@ -11,7 +11,7 @@ public abstract class LivingBeingAudioHandler : MonoBehaviour
     public IEnumerator CreatureDamagedSound(float damageAmount)
     {
         damageAmount = Math.Abs(damageAmount);
-        float volume = Math.Min(damageAmount / 100f, .5f);
+        float volume = Math.Min(damageAmount / 100f, .3f);
 
         Debug.Log($"Triggering creature damaged sound.");
         yield return DamageSoundDelay;
