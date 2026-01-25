@@ -11,11 +11,13 @@ public class PlayerStats : LivingBeing
 
     [Header("Experience Info")]
 
-    [SerializeField] public int CurrentLevel { private set; get; } = 1;
-    [SerializeField] public float CurrentXP { private set; get; } = 0;
-    [SerializeField] public float MaxXP { private set; get; } = 100;
+    #region Experience Variables
+    [field: SerializeField] public int CurrentLevel { private set; get; } = 1;
+    [field: SerializeField] public float CurrentXP { private set; get; } = 0;
+    [field: SerializeField] public float MaxXP { private set; get; } = 100;
     [field: SerializeField] public int SkillPoints { private set; get; } = 100;
 
+    #endregion
 
     #region Ressurrection Variables
     [SerializeField] public float ResurrectTime { private set; get; } = 5f;
@@ -46,12 +48,7 @@ public class PlayerStats : LivingBeing
     }
     private void GainXP(LivingBeing defeatedEnemy)
     {
-        CurrentXP += defeatedEnemy.XP_OnDeath;
-        if (CurrentXP >= MaxXP)
-        {
-            LevelUp();
-        }
-        PlayerUIHandler.Instance.SetPlayerXP(CurrentXP);
+        GainXP((int)defeatedEnemy.XP_OnDeath);
     }
     public void AddControllableMinions(int changeValue)
     {
@@ -65,20 +62,28 @@ public class PlayerStats : LivingBeing
     }
     public void GainXP(int amount)
     {
-
-        CurrentXP += amount * 30;
-
-        if (CurrentXP >= MaxXP)
+        int XpToGain = amount;
+        Debug.Log($"Xp to gain = {XpToGain}");
+        while (XpToGain > 0) // While we have enough XP to level up
         {
-            LevelUp();
+            CurrentXP += XpToGain;
+            if (CurrentXP > MaxXP)
+            {
+                XpToGain = (int)(CurrentXP - MaxXP);
+                CurrentXP = MaxXP;
+            }
+            else XpToGain = 0;
+
+            if (CurrentXP == MaxXP) LevelUp();
         }
+
         PlayerUIHandler.Instance.SetPlayerXP(CurrentXP);
     }
 
     private void LevelUp()
     {
         CurrentLevel += 1;
-        CurrentXP -= MaxXP;
+        CurrentXP = 0;
         MaxXP *= 2;
         SkillPoints++;
         EventDeclarer.PlayerLevelUp?.Invoke(LevelUpHandler.GetLevelRewardString(CurrentLevel));
@@ -229,7 +234,7 @@ public class PlayerStats : LivingBeing
     }
     public override string GetLivingBeingStats()
     {
-        
+
         string statString = "";
         statString += $"Max hitpoints: {GetAttribute(AttributeType.MaxHitpoints)}\n";
         statString += $"Max Power: {GetAttribute(AttributeType.MaxPower)}\n";
@@ -237,17 +242,17 @@ public class PlayerStats : LivingBeing
         statString += $"Power regeneration: {TotalPowerRegeneration}\n";
 
 
-        
+
 
         statString += GetComponent<AbilityHandler>().GetKnownAbilitiesString();
-        foreach(var kvp in Affinities)
+        foreach (var kvp in Affinities)
         {
-            if(kvp.Value.Get() > 0)
-            statString += $"{kvp.Key} affinity: {kvp.Value.Get()}\n";
+            if (kvp.Value.Get() > 0)
+                statString += $"{kvp.Key} affinity: {kvp.Value.Get()}\n";
         }
-        
+
         return statString;
-    
+
     }
 
 

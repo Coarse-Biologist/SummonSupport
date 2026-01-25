@@ -16,7 +16,7 @@ MonoBehaviour:
   QuestEnum: 1
   IntQuestReqs:
   - quest: 0
-    reps: 1
+    reps: 3
   BoolQuestReqs: 
   PresentationString: 
   ProgressString: 
