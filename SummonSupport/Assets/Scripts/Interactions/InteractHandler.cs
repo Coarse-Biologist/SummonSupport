@@ -8,34 +8,33 @@ public class InteractHandler : MonoBehaviour
 
     void OnTriggerEnter(Collider collision)
     {
-        //InvokeRepeating("AttemptInteraction", 0f, .05f);
-        checkingForTab = true;
-        I_Interactable interactInterfaceInstance = collision.gameObject.GetComponent<I_Interactable>();
-        if (interactInterfaceInstance != null)
+
+        if (collision.gameObject.TryGetComponent(out I_Interactable interactable))
         {
-            mostRecentInteractable = interactInterfaceInstance;
-            interactInterfaceInstance.ShowInteractionOption();
+            checkingForTab = true;
+            mostRecentInteractable = interactable;
+            InvokeRepeating("AttemptInteraction", 0f, .05f);
+            interactable.ShowInteractionOption();
         }
 
     }
 
     void OnTriggerExit(Collider collision)
     {
-        checkingForTab = false;
-        //CancelInvoke("AttemptInteraction");
-        I_Interactable interactInterfaceInstance = collision.gameObject.GetComponent<I_Interactable>();
-        mostRecentInteractable = null;
-        if (interactInterfaceInstance != null)
+        if (collision.gameObject.TryGetComponent(out I_Interactable interactable))
         {
-            interactInterfaceInstance.HideInteractionOption();
+            checkingForTab = false;
+            CancelInvoke("AttemptInteraction");
+            mostRecentInteractable = null;
+            interactable.HideInteractionOption();
         }
     }
 
-    void Update()
+    private void AttemptInteraction()
     {
         if (checkingForTab)
         {
-            if (Input.GetKeyDown(KeyCode.Tab) && !mostRecentInteractable.Equals(null))
+            if (Input.GetKeyDown(KeyCode.Z) && !mostRecentInteractable.Equals(null))
             {
                 mostRecentInteractable.Interact(this.gameObject); // Todo null reference after minon is ressed
             }

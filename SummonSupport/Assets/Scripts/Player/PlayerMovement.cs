@@ -20,7 +20,6 @@ public class PlayerMovement : MovementScript
     private bool dashing = false;
     private bool canDash = true;
     GameObject DashDustInstance = null;
-    private bool stuck = false;
     private bool paused = false;
     private AnimationControllerScript anim;
 
@@ -36,7 +35,6 @@ public class PlayerMovement : MovementScript
         Cursor.visible = false;
         rb = GetComponent<Rigidbody>();
 
-        Collider collider = GetComponent<Collider>();
 
 
         mainCamera = Camera.main;
@@ -51,7 +49,9 @@ public class PlayerMovement : MovementScript
     #region Enable and Disable event subscriptions
     private void OnEnable()
     {
-        EventDeclarer.PlayerUsingUI.AddListener(ToggleUsingUI);
+        EventDeclarer.UnpauseGame?.AddListener(UnpauseGame);
+
+        EventDeclarer.PauseGame?.AddListener(PauseGame);
         inputActions ??= new PlayerInputActions();
         EventDeclarer.SpeedAttributeChanged?.AddListener(SetMovementAttribute);
         inputActions.Player.Enable();
@@ -66,7 +66,9 @@ public class PlayerMovement : MovementScript
 
     private void OnDisable()
     {
-        EventDeclarer.PlayerUsingUI.RemoveListener(ToggleUsingUI);
+        EventDeclarer.UnpauseGame?.RemoveListener(UnpauseGame);
+
+        EventDeclarer.PauseGame.RemoveListener(PauseGame);
 
         EventDeclarer.SpeedAttributeChanged?.RemoveListener(SetMovementAttribute);
         inputActions.Player.Move.performed -= OnWASD;
@@ -113,13 +115,17 @@ public class PlayerMovement : MovementScript
         dashing = false;
     }
 
-    public void SetStuck(bool howStuck)
+
+    public void UnpauseGame()
     {
-        stuck = howStuck;
+        anim.SetUpdateMode(AnimatorUpdateMode.UnscaledTime);
+        paused = false;
     }
-    private void ToggleUsingUI()
+    public void PauseGame()
     {
-        stuck = !stuck;
+        anim.SetUpdateMode(AnimatorUpdateMode.Normal);
+
+        paused = true;
 
     }
     #endregion
@@ -186,7 +192,7 @@ public class PlayerMovement : MovementScript
             return;
         }
 
-        if (!stuck)
+        if (!paused)
         {
             HandleMove();
 
@@ -196,22 +202,16 @@ public class PlayerMovement : MovementScript
 
     private void ToggleGamePause(InputAction.CallbackContext context)
     {
-        if (!stuck)
-        {
-            paused = !paused;
-            EventDeclarer.TogglePauseGame?.Invoke();
 
-            if (paused)
-            {
-                Debug.Log("Pausing");
-                Time.timeScale = 0f;
-            }
-            else
-            {
-                Debug.Log("Unpausing");
-                Time.timeScale = 1f;
-                rb.transform.rotation = new Quaternion(0, mainCamera.transform.rotation.y, 0, 1);
-            }
+        if (!paused)
+        {
+            paused = true;
+            EventDeclarer.PauseGame?.Invoke();
+        }
+        else
+        {
+            EventDeclarer.UnpauseGame?.Invoke();
+            paused = false;
         }
     }
 

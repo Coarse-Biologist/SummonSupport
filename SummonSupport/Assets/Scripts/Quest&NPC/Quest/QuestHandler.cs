@@ -165,7 +165,7 @@ public class QuestHandler : MonoBehaviour
         {
             if (kvp.Value != 99)
             {
-                stats += $"{AbilityModHandler.GetCleanEnumString(kvp.Key)}: {kvp.Value}\n";
+                stats += $"{GeneralFunctions.GetCleanEnumString(kvp.Key)}: {kvp.Value}\n";
             }
         }
         return stats;
@@ -175,18 +175,15 @@ public class QuestHandler : MonoBehaviour
         string info = $"{quest.QuestName}:\n";
         foreach (var req in quest.IntQuestReqs)
         {
-            info += $"{GetCleanEnumString<RepeatableAccomplishments>(req.quest)}: {QuestRepTracker[req.quest]}/{req.reps}\n";
+            info += $"{GeneralFunctions.GetCleanEnumString<RepeatableAccomplishments>(req.quest)}: {QuestRepTracker[req.quest]}/{req.reps}\n";
         }
         foreach (var req in quest.BoolQuestReqs)
         {
-            info += $"{GetCleanEnumString<BoolAccomplishments>(req)}: {CompletedBoolQuests.Contains(req)}\n";
+            info += $"{GeneralFunctions.GetCleanEnumString<BoolAccomplishments>(req)}: {CompletedBoolQuests.Contains(req)}\n";
         }
         return info;
     }
-    public static string GetCleanEnumString<Enum>(Enum modEnum)
-    {
-        return System.Text.RegularExpressions.Regex.Replace(modEnum.ToString(), "(?<!^)([A-Z])", " $1");
-    }
+
 
 }
 

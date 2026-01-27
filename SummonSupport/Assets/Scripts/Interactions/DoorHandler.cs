@@ -47,8 +47,8 @@ public class DoorHandler : MonoBehaviour, I_Interactable
 
     public void ShowInteractionOption()
     {
-        if (!Open) FloatingInfoHandler.Instance.ShowInteractionOption(canvasSpawnLoc.position, "Tab to Open");
-        else FloatingInfoHandler.Instance.ShowInteractionOption(canvasSpawnLoc.position, "Tab to Close");
+        if (!Open) FloatingInfoHandler.Instance.ShowInteractionOption(canvasSpawnLoc.position, "Z to Open");
+        else FloatingInfoHandler.Instance.ShowInteractionOption(canvasSpawnLoc.position, "Z to Close");
     }
 
     public void HideInteractionOption()

@@ -14,7 +14,11 @@ public class AnimationControllerScript : MonoBehaviour
     {
         anim = GetComponentInChildren<Animator>();
         if (anim == null) throw new System.Exception($"Animation controller is null. it was not found among children objects.");
-        anim.updateMode = AnimatorUpdateMode.UnscaledTime;
+    }
+
+    public void SetUpdateMode(AnimatorUpdateMode mode)
+    {
+        anim.updateMode = mode;
     }
     private void PrintStateMachine(AnimatorStateMachine sm, string layerName)
     {

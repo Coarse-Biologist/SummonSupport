@@ -1,0 +1,66 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b73d0250f3b3594d9e0893d56bbd378, type: 3}
+  m_Name: Charge_Fungi
+  m_EditorClassIdentifier: 
+  <Name>k__BackingField: Fungal Flurry
+  <Icon>k__BackingField: {fileID: 0}
+  <Cooldown>k__BackingField: 5
+  <CostType>k__BackingField: 4
+  <Cost>k__BackingField: 30
+  <Range>k__BackingField: 20
+  <Duration>k__BackingField: 0
+  <AbilityTypeTag>k__BackingField: 1
+  <ListUsableOn>k__BackingField: 01000000
+  <TargetEffects>k__BackingField:
+    <EffectDescription>k__BackingField: 
+    <Heal>k__BackingField:
+      <Value>k__BackingField: 0
+      <ValueType>k__BackingField: 0
+    <HealOverTime>k__BackingField:
+      <Value>k__BackingField: 0
+      <ValueType>k__BackingField: 0
+    <Damage>k__BackingField:
+      <Value>k__BackingField: 50
+    <DamageOverTime>k__BackingField:
+      <Value>k__BackingField: 0
+    <AttributeUp>k__BackingField: []
+    <AttributeDown>k__BackingField: []
+    <StatusEffects>k__BackingField: []
+    <SpecialAbilityAttribute>k__BackingField: 0
+  <SelfEffects>k__BackingField:
+    <EffectDescription>k__BackingField: 
+    <Heal>k__BackingField:
+      <Value>k__BackingField: 0
+      <ValueType>k__BackingField: 0
+    <HealOverTime>k__BackingField:
+      <Value>k__BackingField: 0
+      <ValueType>k__BackingField: 0
+    <Damage>k__BackingField:
+      <Value>k__BackingField: 0
+    <DamageOverTime>k__BackingField:
+      <Value>k__BackingField: 0
+    <AttributeUp>k__BackingField: []
+    <AttributeDown>k__BackingField: []
+    <StatusEffects>k__BackingField: []
+    <SpecialAbilityAttribute>k__BackingField: 0
+  <ElementTypes>k__BackingField: 0a000000
+  <PhysicalType>k__BackingField: 0
+  <OnHitEffect>k__BackingField: {fileID: 0}
+  <Sounds>k__BackingField: {fileID: 0}
+  <AlterParticleSystemGradient>k__BackingField: 0
+  <ActivateOnHit>k__BackingField: {fileID: 11400000, guid: 57b2100f6ea979d48a01035ec42f5cf4,
+    type: 2}
+  <chargeMonoObject>k__BackingField: {fileID: 5632219802437681561, guid: 5e8c448d366f06c4da1190c92ec9f27f,
+    type: 3}
+  <chargeTrail>k__BackingField: {fileID: 8813646075622763008, guid: 9c08b13d2a58e144e99834e15e54bd00,
+    type: 3}

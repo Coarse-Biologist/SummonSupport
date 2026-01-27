@@ -19,7 +19,7 @@ public class NPC_UI_Handler : MonoBehaviour, I_Interactable
     private VisualElement imageSlot;
     private Label npc_text;
     private VisualElement playerOptions;
-    [SerializeField] string interactString = "Tab to Interact";
+    [SerializeField] string interactString = "Z to Interact";
 
 
     private List<Button> spawnedButtons = new List<Button>();

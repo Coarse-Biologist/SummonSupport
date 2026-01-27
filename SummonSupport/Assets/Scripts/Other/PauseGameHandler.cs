@@ -35,21 +35,20 @@ public class PauseGameHandler : MonoBehaviour
     private Button QuitButton;
     void OnEnable()
     {
-        EventDeclarer.TogglePauseGame?.AddListener(ToggleGamePause);
+        EventDeclarer.PauseGame?.AddListener(Pause);
         EventDeclarer.PlayerDead?.AddListener(DeathPause);
         EventDeclarer.PlayerLevelUp?.AddListener(LevelUpPause);
-
-
 
     }
     void OnDisable()
     {
-        EventDeclarer.TogglePauseGame?.RemoveListener(ToggleGamePause);
+        EventDeclarer.UnpauseGame?.RemoveListener(Resume);
         EventDeclarer.PlayerDead?.RemoveListener(DeathPause);
         EventDeclarer.PlayerLevelUp?.RemoveListener(LevelUpPause);
 
 
     }
+
 
     void Start()
     {
@@ -73,6 +72,8 @@ public class PauseGameHandler : MonoBehaviour
         InfoElement = PlayerOptions.Q<Label>("Info");
 
         ResumeButton.RegisterCallback<ClickEvent>(e => Resume());
+        ResumeButton.RegisterCallback<ClickEvent>(e => EventDeclarer.UnpauseGame?.Invoke());
+
         RestartButton.RegisterCallback<ClickEvent>(e => Restart());
 
         StatsButton.RegisterCallback<ClickEvent>(e => ChangeStatIndex());
@@ -80,31 +81,18 @@ public class PauseGameHandler : MonoBehaviour
         InfoElement.text = "";
 
     }
-    private void ToggleGamePause()
-    {
-        paused = !paused;
 
-        if (paused)
-        {
-            Pause();
-        }
-        else
-        {
-            Resume();
-        }
-
-    }
 
 
     private void Pause()
     {
+        paused = true;
         UnityEngine.Cursor.lockState = CursorLockMode.None;   // Locks the cursor to the center of the screen
         UnityEngine.Cursor.visible = true;
 
         PauseMenu.style.opacity = 0f;
         PauseMenu.style.display = DisplayStyle.Flex;
         PauseMenu.SetEnabled(true);
-
 
 
         ResumeButton.style.display = DisplayStyle.Flex;
@@ -115,11 +103,19 @@ public class PauseGameHandler : MonoBehaviour
         RestartButton.style.display = DisplayStyle.Flex;
 
 
-        Time.timeScale = 0f;
-
+        PauseTime();
 
         EaseInOpacity(PauseMenu, 350);
         EaseInOpacity(PlayerOptions, 350);
+    }
+    public static void PauseTime()
+    {
+        Time.timeScale = 0f;
+
+    }
+    public static void ResumeTime()
+    {
+        Time.timeScale = 1f;
     }
     private void EaseInOpacity(VisualElement element, int duration)
     {
@@ -156,7 +152,7 @@ public class PauseGameHandler : MonoBehaviour
         EaseOutOpacity(PlayerOptions, 350);
 
 
-        Time.timeScale = 1f;
+        ResumeTime();
     }
     private void Restart()
     {

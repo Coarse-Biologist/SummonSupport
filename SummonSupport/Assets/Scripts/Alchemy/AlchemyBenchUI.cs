@@ -91,14 +91,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
 
     #region Setup
 
-    //void OnEnable()
-    //{
-    //    EventDeclarer.TogglePauseGame?.AddListener();
-    //}
-    //void OnDisable()
-    //{
-    //    EventDeclarer.TogglePauseGame?.RemoveListener();
-    //}
+
 
     void Awake()
     {
@@ -140,7 +133,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     public void ShowInteractionOption()
     {
         //Debug.Log($"position of {this} = {transform.position}");
-        FloatingInfoHandler.Instance.ShowInteractionOption(new Vector3(transform.position.x, transform.position.y + 2, transform.position.z), "Tab to use alchemy bench");
+        FloatingInfoHandler.Instance.ShowInteractionOption(new Vector3(transform.position.x, transform.position.y + 2, transform.position.z), "Z to use alchemy bench");
     }
 
     public void HideInteractionOption()
@@ -152,16 +145,29 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     #endregion
 
     #region Begin and end workbench use
-    private void PlayerUsingUI(AnimationControllerScript anim = null)
+    private void TogglePlayerUsingUI(bool isUsing, AnimationControllerScript anim = null)
     {
 
-        EventDeclarer.PlayerUsingUI?.Invoke();
-        if (anim != null)
+        if (isUsing)
         {
-            //Debug.Log("Changing animation? but probably time scale is 0");
-            anim.ChangeAnimation("Crafting");
+            PauseGameHandler.PauseTime();
+            if (anim != null)
+            {
+                anim.SetUpdateMode(AnimatorUpdateMode.UnscaledTime);
+                //Debug.Log("Changing animation? but probably time scale is 0");
+                anim.ChangeAnimation("Crafting");
+            }
+            else Debug.Log("No animation script found");
         }
-        else Debug.Log("No animation script found");
+        else
+        {
+            PauseGameHandler.ResumeTime();
+
+            if (anim != null)
+            {
+                anim.SetUpdateMode(AnimatorUpdateMode.Normal);
+            }
+        }
 
     }
     private void UseAlchemyObjectInteraction(bool On)
@@ -189,7 +195,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
         Time.timeScale = 0f;
 
         HideInteractionOption();
-        PlayerUsingUI(Player.GetComponent<AnimationControllerScript>());
+        TogglePlayerUsingUI(true, Player.GetComponent<AnimationControllerScript>());
         ShowUI(craftingUI);
         ShowDefaultScreen();
 
@@ -336,7 +342,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
         UnityEngine.Cursor.visible = false;
         UseAlchemyObjectInteraction(false);
 
-        PlayerUsingUI();
+        TogglePlayerUsingUI(false);
     }
 
     #endregion
@@ -465,10 +471,10 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
         SetInstructionsText($"Select an attribute for the ability which you would like to upgrade.");
         foreach (AbilityModTypes modableAttribute in ModHandler.GetModableAttributes(ability))
         {
-            Button button = AddButtonToPanel(AbilityModHandler.GetCleanEnumString(modableAttribute), bottomRightPanel, 40, 10);
+            Button button = AddButtonToPanel(GeneralFunctions.GetCleanEnumString(modableAttribute), bottomRightPanel, 40, 10);
             button.RegisterCallback<ClickEvent>(e => SetSelectedModAttribute(modableAttribute));
         }
-        Button statuseffectButton = AddButtonToPanel(AbilityModHandler.GetCleanEnumString(AbilityModTypes.StatusEffect), bottomRightPanel, 40, 10);
+        Button statuseffectButton = AddButtonToPanel(GeneralFunctions.GetCleanEnumString(AbilityModTypes.StatusEffect), bottomRightPanel, 40, 10);
         statuseffectButton.RegisterCallback<ClickEvent>(e => ShowStatusEffectOptionScreen());
 
     }
@@ -476,7 +482,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     {
         ClearPanel(bottomRightPanel);
         StatusEffectType releventStatusEffect = StatusEffectsLibrary.ElementToEffectDict[selectedAbility.ElementTypes[0]];
-        Button button = AddButtonToPanel(AbilityModHandler.GetCleanEnumString(releventStatusEffect), bottomRightPanel, 40, 10);
+        Button button = AddButtonToPanel(GeneralFunctions.GetCleanEnumString(releventStatusEffect), bottomRightPanel, 40, 10);
         button.RegisterCallback<ClickEvent>(e => SetSelectedModAttribute(AbilityModTypes.StatusEffect, releventStatusEffect));
 
     }
@@ -490,7 +496,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
             selectedStatusEffect = AbilityLibrary.GetStatusEffects(selectedAbility.ElementTypes[0], status);
             Debug.Log($"Selected status effect is being set to {selectedStatusEffect} for ability self");
         }
-        SetInstructionsText($"The {AbilityModHandler.GetCleanEnumString(modType)} of {selectedAbility.Name} can be improved for {AbilityModHandler.GetModCost(modType)} core power. You currently have {AlchemyInventory.GetCorePowerResource(AlchemyInventory.ingredients)}");
+        SetInstructionsText($"The {GeneralFunctions.GetCleanEnumString(modType)} of {selectedAbility.Name} can be improved for {AbilityModHandler.GetModCost(modType)} core power. You currently have {AlchemyInventory.GetCorePowerResource(AlchemyInventory.ingredients)}");
 
     }
 
@@ -508,7 +514,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
             {
                 ModHandler.ModAttributeByType(selectedAbility, selectedModType, AbilityModHandler.GetModIncrementValue(selectedModType));
                 if (selectedStatusEffect != null) ModHandler.AddStatusEffectToAbility(selectedAbility, selectedStatusEffect);
-                SetInstructionsText($"You have modified the {AbilityModHandler.GetCleanEnumString(selectedModType)} of {selectedAbility.Name} by {AbilityModHandler.GetModIncrementValue(selectedModType)} at the cost of {boughtPrice.price} core power.");
+                SetInstructionsText($"You have modified the {GeneralFunctions.GetCleanEnumString(selectedModType)} of {selectedAbility.Name} by {AbilityModHandler.GetModIncrementValue(selectedModType)} at the cost of {boughtPrice.price} core power.");
             }
         }
         else if (selectedStatusEffect != null)
@@ -517,7 +523,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
             if (boughtPrice.bought)
             {
                 ModHandler.AddStatusEffectToAbility(selectedAbility, selectedStatusEffect);
-                SetInstructionsText($"You have modified the {AbilityModHandler.GetCleanEnumString(selectedModType)} of {selectedAbility.Name} by {AbilityModHandler.GetModIncrementValue(selectedModType)} at the cost of {boughtPrice.price} core power.");
+                SetInstructionsText($"You have modified the {GeneralFunctions.GetCleanEnumString(selectedModType)} of {selectedAbility.Name} by {AbilityModHandler.GetModIncrementValue(selectedModType)} at the cost of {boughtPrice.price} core power.");
             }
         }
     }
@@ -946,40 +952,3 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
 }
 
 
-//private void SpawnCoreButtons(VisualElement visualElement)
-//{
-//    foreach (KeyValuePair<AlchemyLoot, int> kvp in AlchemyInventory.ingredients)
-//    {
-//        if (kvp.Key == AlchemyLoot.WeakCore || kvp.Key == AlchemyLoot.WorkingCore || kvp.Key == AlchemyLoot.PowerfulCore || kvp.Key == AlchemyLoot.HulkingCore)
-//        {
-//            if (kvp.Value != 0)
-//            {
-//                Button ingredientButton = AddButtonToPanel($"{kvp.Key} : {kvp.Value}", visualElement, 40, 5);
-//                ingredientButton.RegisterCallback<ClickEvent>(e => AddIngredientToSelection(kvp.Key));
-//                ingredientButton.RegisterCallback<ClickEvent>(e => ShowAbilityCraftingInfo());
-//                ingredientButton.RegisterCallback<ClickEvent>(e => DecrementIngredientButton(ingredientButton));
-//            }
-//        }
-//    }
-//}
-//private void LearnAbilityIfSufficientResources()
-//{
-//    if (selectedAbility == null || selectedIngredients.Count() == 0) return;
-//    if (AlchemyInventory.HasSufficientCorePower(selectedAbility, selectedIngredients))
-//    {
-//        SetInstructionsText($"You have concocted the ability {selectedAbility.name}!");
-//        EventDeclarer.PlayerLearnedAbility?.Invoke(selectedAbility);
-//    }
-//    else SetInstructionsText($"You do not have sufficient core resources to concoct {selectedAbility.name}.");
-//}
-
-//{
-//    string ingredientInfo = $"Selected ability: {selectedAbility.name}. Selected Cores: ";
-//
-//    foreach (KeyValuePair<AlchemyLoot, int> kvp in selectedIngredients)
-//    {
-//        ingredientInfo += $"{kvp.Key}: {kvp.Value}. ";
-//    }
-//    ingredientInfo += $"This provides {AlchemyInventory.GetCorePowerResource(selectedIngredients)} core power.";
-//    instructions.text = ingredientInfo;
-//}

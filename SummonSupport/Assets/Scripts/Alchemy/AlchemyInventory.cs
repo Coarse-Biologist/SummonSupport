@@ -55,7 +55,7 @@ public static class AlchemyInventory
                 { Element.Water, 0 },
                 { Element.Earth, 0 },
                 { Element.Heat, 0 },
-                { Element.Air, 0 },
+                { Element.Air, 100 },
                 { Element.Electricity, 0 },
                 { Element.Poison, 0 },
                 { Element.Acid, 0 },
@@ -208,7 +208,7 @@ public static class AlchemyInventory
         string tools = "";
         foreach (AlchemyTool tool in KnownTools)
         {
-                tools += $"{tool}";
+            tools += $"{tool}";
         }
         return tools;
     }

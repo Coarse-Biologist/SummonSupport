@@ -19,6 +19,6 @@ public class I_InteractMinionResurrect : MonoBehaviour, I_Interactable
 
     public void ShowInteractionOption()
     {
-        FloatingInfoHandler.Instance.ShowInteractionOption(transform.position, "Tab to resurrect");
+        FloatingInfoHandler.Instance.ShowInteractionOption(transform.position, "Z to resurrect");
     }
 }

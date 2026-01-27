@@ -14,15 +14,12 @@ public class ChargeAbilityMono : MonoBehaviour
     private AbilityHandler abilityHandler;
     private LivingBeing caster;
     private WaitForSeconds chargeTickRate = new WaitForSeconds(.01f);
-    public GameObject trailEffect { private set; get; }
+    private GameObject trailEffect;
     private AbilityModHandler modHandler;
     private float speedBoost = 35;
     private float range = 0;
     private int alreadypierced = 0;
     private int maxPierce = 0;
-
-
-    [field: SerializeField] public StatusEffects attackAnimationCC;
 
     public void Charge(LivingBeing casterStats, ChargeAbility assignedAbility)
     {
@@ -32,14 +29,22 @@ public class ChargeAbilityMono : MonoBehaviour
         abilityHandler = casterStats.abilityHandler;
         abilityHandler.SetCharging(true);
         caster = casterStats;
-        SetModHandler(casterStats);
 
-        if (caster.gameObject.TryGetComponent(out MovementScript movementScript))
-        {
-            speedBoost += movementScript.MovementSpeed;
-        }
+        SetModHandler(casterStats);
+        SetRunAnimation(user);
+        SetAndApplyMods();
+
         range = chargeAbility.Range;
 
+
+        Debug.Log($"Max pierce = {maxPierce}");
+
+        originTransform = user.transform;
+        rb = user.GetComponentInParent<Rigidbody>();
+        chargeCoroutine = StartCoroutine(ChargeWhileLogical());
+    }
+    private void SetAndApplyMods()
+    {
         if (modHandler != null)
         {
             maxPierce = modHandler.GetModAttributeByType(chargeAbility.ActivateOnHit, AbilityModTypes.MaxPierce);
@@ -47,12 +52,23 @@ public class ChargeAbilityMono : MonoBehaviour
             speedBoost += modHandler.GetModAttributeByType(chargeAbility, AbilityModTypes.Speed);
 
         }
-        Debug.Log($"Max pierce = {maxPierce}");
 
-        originTransform = user.transform;
-        rb = user.GetComponentInParent<Rigidbody>();
-        chargeCoroutine = StartCoroutine(ChargeWhileLogical());
+        if (caster.gameObject.TryGetComponent(out MovementScript movementScript))
+        {
+            speedBoost += movementScript.MovementSpeed;
+        }
     }
+
+    private void SetRunAnimation(GameObject user)
+    {
+        if (user.TryGetComponent(out AnimationControllerScript anim))
+        {
+            if (caster.CharacterTag == CharacterTag.Player)
+                anim.ChangeAnimation("Sprint", .1f);
+            else anim.ChangeAnimation("Run", .1f);
+        }
+    }
+
     private IEnumerator ChargeWhileLogical()
     {
         if (chargeAbility.chargeTrail != null)
@@ -109,7 +125,12 @@ public class ChargeAbilityMono : MonoBehaviour
         }
 
         else if (user.TryGetComponent(out PlayerMovement playerMovementScript))
-            playerMovementScript.SetStuck(stuck);
+        {
+            if (stuck)
+                playerMovementScript.PauseGame();
+            else playerMovementScript.UnpauseGame();
+        }
+
         else Debug.Log($"No CcState script or playermovement script found on the sought gameObject: {user}");
     }
     private void SetModHandler(LivingBeing casterStats)

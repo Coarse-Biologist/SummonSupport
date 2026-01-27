@@ -14,7 +14,7 @@ public class PlayerAbilityHandler : AbilityHandler
     public AnimationControllerScript anim { get; private set; }
     public string currentAnimation;
     private int currentAbilityIndex;
-    private bool stuckInUI = false;
+    private bool paused = false;
     private Dictionary<string, int> inputActionToIndex = new()
     {
         { "Ability1", 0 },
@@ -48,7 +48,9 @@ public class PlayerAbilityHandler : AbilityHandler
         inputActions ??= new PlayerInputActions();
         //RegisterInputEvents(true);
         EventDeclarer.PlayerLearnedAbility?.AddListener(LearnAbility);
-        EventDeclarer.PlayerUsingUI?.AddListener(ToggleUsingUI);
+        EventDeclarer.UnpauseGame?.AddListener(UnpauseGame);
+        EventDeclarer.PauseGame?.AddListener(PauseGame);
+
 
         inputActions.Enable();
 
@@ -76,13 +78,19 @@ public class PlayerAbilityHandler : AbilityHandler
         inputActions.Player.AbilityF.performed -= OnAbilityF;
         inputActions.Player.UseSelectedAbility.performed -= OnSelectedAbility;
         EventDeclarer.SlotChanged?.RemoveListener(ChangeAbilitySlot);
-        EventDeclarer.PlayerUsingUI?.RemoveListener(ToggleUsingUI);
+        EventDeclarer.PauseGame?.RemoveListener(PauseGame);
+        EventDeclarer.UnpauseGame?.AddListener(UnpauseGame);
+
 
         inputActions.Disable();
     }
-    private void ToggleUsingUI()
+    private void PauseGame()
     {
-        stuckInUI = !stuckInUI;
+        paused = true;
+    }
+    private void UnpauseGame()
+    {
+        paused = false;
     }
     public static void SetDashAbility(DashAbility ability)
     {
@@ -111,7 +119,7 @@ public class PlayerAbilityHandler : AbilityHandler
     #region ability used
     public void OnAbility1(InputAction.CallbackContext context)
     {
-        if (playerStats.Dead || stuckInUI) return;
+        if (playerStats.Dead || paused) return;
 
         Ability ability = GetAbilityOfIndex(0);
 
@@ -128,7 +136,7 @@ public class PlayerAbilityHandler : AbilityHandler
     }
     public void OnAbility2(InputAction.CallbackContext context)
     {
-        if (playerStats.Dead || stuckInUI) return;
+        if (playerStats.Dead || paused) return;
 
         Ability ability = GetAbilityOfIndex(1);
 
@@ -144,7 +152,7 @@ public class PlayerAbilityHandler : AbilityHandler
     }
     public void OnAbility3(InputAction.CallbackContext context)
     {
-        if (playerStats.Dead || stuckInUI) return;
+        if (playerStats.Dead || paused) return;
 
         Ability ability = GetAbilityOfIndex(2);
 
@@ -161,7 +169,7 @@ public class PlayerAbilityHandler : AbilityHandler
     }
     public void OnAbilityQ(InputAction.CallbackContext context)
     {
-        if (playerStats.Dead || stuckInUI) return;
+        if (playerStats.Dead || paused) return;
 
         Ability ability = GetAbilityOfIndex(3);
         if (ability == null) return;
@@ -177,7 +185,7 @@ public class PlayerAbilityHandler : AbilityHandler
     }
     public void OnAbilityE(InputAction.CallbackContext context)
     {
-        if (playerStats.Dead || stuckInUI) return;
+        if (playerStats.Dead || paused) return;
 
         Ability ability = GetAbilityOfIndex(4);
 
@@ -193,7 +201,7 @@ public class PlayerAbilityHandler : AbilityHandler
     }
     public void OnAbilityF(InputAction.CallbackContext context)
     {
-        if (playerStats.Dead || stuckInUI) return;
+        if (playerStats.Dead || paused) return;
 
         Ability ability = GetAbilityOfIndex(5);
 
@@ -212,7 +220,7 @@ public class PlayerAbilityHandler : AbilityHandler
     #endregion
     public void OnSelectedAbility(InputAction.CallbackContext context)
     {
-        if (selectedAbility == null || playerStats.Dead || stuckInUI) return;
+        if (selectedAbility == null || playerStats.Dead || paused) return;
 
         if (!IsOnCoolDown(selectedAbility)) // Checks if the value is true. Abilities[index] is the ability at the InputActions context index.
         {
@@ -245,7 +253,7 @@ public class PlayerAbilityHandler : AbilityHandler
     }
     protected override bool IsOnCoolDown(Ability ability)
     {
-        if(ability is BeamAbility beamAbility)
+        if (ability is BeamAbility beamAbility)
         {
             if (toggledAbilitiesDict.ContainsKey(beamAbility))
                 return false;
