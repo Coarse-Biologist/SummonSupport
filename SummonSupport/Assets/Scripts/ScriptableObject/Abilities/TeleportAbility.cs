@@ -53,11 +53,12 @@ public class TeleportAbility : Ability
 
             yield return new WaitForSeconds(ActivationSpeed);
 
-            
-            casterStats.transform.position = target.transform.position + (casterStats.transform.position * .1f);
 
+            //casterStats.transform.position = target.transform.position + (casterStats.transform.position * .1f);
+            casterStats.transform.position = Vector3.Lerp(casterStats.transform.position, target.transform.position, 0.8f
+            );
             if (ActivateOnArrive != null) ActivateOnArrive.Activate(casterStats);
-            
+
         }
 
         else yield return new WaitForSeconds(ActivationSpeed);

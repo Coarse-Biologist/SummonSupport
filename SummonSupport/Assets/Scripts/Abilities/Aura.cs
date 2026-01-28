@@ -39,10 +39,6 @@ public class Aura : MonoBehaviour
     }
     public void HandleInstantiation(LivingBeing caster, LivingBeing target, Ability ability)
     {
-        if (ability.AlterParticleSystemGradient)
-        {
-            ColorChanger.ChangeObjectsParticleSystemColor(ability.ElementTypes[0], gameObject);
-        }
 
         SetAuraStats(caster, target, ability);
 
