@@ -25,7 +25,7 @@ public class TeleportAbility : Ability
         TeamType desiredTargetType = this.GetTargetPreference(casterStats);
 
         List<LivingBeing> targets = GetTargetfromSphereCast(casterStats, casterStats.abilityHandler.abilitySpawn.transform, 1, desiredTargetType);
-
+        if (ActivateOnUse != null) ActivateOnUse.Activate(casterStats);
         foreach (LivingBeing target in targets)
         {
 

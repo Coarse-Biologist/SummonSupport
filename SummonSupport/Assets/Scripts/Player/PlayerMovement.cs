@@ -177,7 +177,7 @@ public class PlayerMovement : MovementScript
     {
         if (playerStats.Dead) return;
 
-        Ray ray = new Ray(Camera.main.transform.position, Camera.main.transform.forward.normalized);
+        Ray ray = new Ray(Camera.main.transform.position, Camera.main.transform.forward);
         if (Physics.Raycast(ray, out RaycastHit hit, 300))
         {
             CommandMinion.HandleCommand(hit);

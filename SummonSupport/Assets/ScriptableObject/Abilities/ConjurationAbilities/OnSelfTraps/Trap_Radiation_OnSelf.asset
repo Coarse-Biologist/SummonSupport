@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6f72222c874821e41bccb5f49eee621c, type: 3}
-  m_Name: Trap_Floral
+  m_Name: Trap_Radiation_OnSelf
   m_EditorClassIdentifier: Assembly-CSharp::ConjureAbility
-  <Name>k__BackingField: Floral Trap
+  <Name>k__BackingField: Cherenkov Trap
   <Icon>k__BackingField: {fileID: 0}
   <Cooldown>k__BackingField: 5
   <CostType>k__BackingField: 4
   <Cost>k__BackingField: 50
-  <Range>k__BackingField: 10
+  <Range>k__BackingField: 0
   <Duration>k__BackingField: 50
   <AbilityTypeTag>k__BackingField: 1
   <ListUsableOn>k__BackingField: 01000000
@@ -53,12 +53,12 @@ MonoBehaviour:
     <AttributeDown>k__BackingField: []
     <StatusEffects>k__BackingField: []
     <SpecialAbilityAttribute>k__BackingField: 0
-  <ElementTypes>k__BackingField: 0b000000
+  <ElementTypes>k__BackingField: 0d000000
   <PhysicalType>k__BackingField: 0
-  <OnHitEffect>k__BackingField: {fileID: 5005864844744066183, guid: 4abfee1134a924843a0c2d8f0b92357e,
+  <OnHitEffect>k__BackingField: {fileID: 1847413739128325886, guid: 830db95daa93b6f4cae93aa6d4b33d0b,
     type: 3}
   <Sounds>k__BackingField: {fileID: 0}
-  <ObjectToSpawn>k__BackingField: {fileID: 9033503391587613499, guid: fc51a676655711b4995365f15de2bf4d,
+  <ObjectToSpawn>k__BackingField: {fileID: 6202576606454132206, guid: 311f4c1a50a109d4697df746965a8ee0,
     type: 3}
   <SpawnOffset>k__BackingField: {x: 0, y: 0, z: 0}
   <RotationOffset>k__BackingField: 0
