@@ -34,7 +34,7 @@ public class InteractHandler : MonoBehaviour
     {
         if (checkingForTab)
         {
-            if (Input.GetKeyDown(KeyCode.Z) && !mostRecentInteractable.Equals(null))
+            if (Input.GetKey(KeyCode.Z) && !mostRecentInteractable.Equals(null))
             {
                 mostRecentInteractable.Interact(this.gameObject); // Todo null reference after minon is ressed
             }

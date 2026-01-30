@@ -42,6 +42,7 @@ public class Aura : MonoBehaviour
 
         SetAuraStats(caster, target, ability);
 
+        CheckTargetsAtSpawnTime(caster);
 
         HandleConjureAbilitySpecifics();
 
@@ -54,13 +55,13 @@ public class Aura : MonoBehaviour
 
         CombatStatHandler.HandleEffectPackage(ability, caster, caster, ability.SelfEffects);
 
-        CheckTargetsAtSpawnTime(caster);
 
         Destroy(gameObject, duration);
 
     }
     private void AlterApparentRadius()
     {
+        Debug.Log($"radius = {radius}");
         gameObject.transform.localScale *= 1 + radius * SizeScalar;
     }
     private void HandleConjureAbilitySpecifics()
@@ -101,14 +102,13 @@ public class Aura : MonoBehaviour
 
     private void AddMods()
     {
-        modHandler = caster.GetComponent<AbilityModHandler>();
-        if (modHandler != null)
+
+        if (caster.CharacterTag != CharacterTag.Enemy)
         {
-            duration += modHandler.GetModAttributeByType(ability, AbilityModTypes.Duration);
-            radius += modHandler.GetModAttributeByType(ability, AbilityModTypes.Size);
-            speed += modHandler.GetModAttributeByType(ability, AbilityModTypes.Speed);
-            maxPierce += modHandler.GetModAttributeByType(ability, AbilityModTypes.MaxPierce);
-            //Debug.Log($"ability = {ability.Name}. size mod value = {radius}");
+            duration += AbilityModHandler.Instance.GetModAttributeByType(ability, AbilityModTypes.Duration);
+            radius += AbilityModHandler.Instance.GetModAttributeByType(ability, AbilityModTypes.Size);
+            speed += AbilityModHandler.Instance.GetModAttributeByType(ability, AbilityModTypes.Speed);
+            maxPierce += AbilityModHandler.Instance.GetModAttributeByType(ability, AbilityModTypes.MaxPierce);
 
         }
     }
@@ -183,24 +183,26 @@ public class Aura : MonoBehaviour
 
     private IEnumerator SeekTarget(GameObject target)
     {
-        TryGetComponent(out Rigidbody rb);
-
-        while (true)
+        if (TryGetComponent(out Rigidbody rb))
         {
-            if (target == null) yield break;
 
-            Vector3 directionToTarget = target.transform.position - transform.position;
-
-            if (directionToTarget.sqrMagnitude <= radius * radius)
-                yield break;
-
-            if (rb != null)
+            while (true)
             {
-                rb.linearVelocity = directionToTarget.normalized * speed;
-                transform.LookAt(directionToTarget);
-            }
+                if (target == null) yield break;
 
-            yield return null;
+                Vector3 directionToTarget = target.transform.position - transform.position;
+
+                if (directionToTarget.sqrMagnitude <= radius * radius)
+                    yield break;
+
+                if (rb != null)
+                {
+                    rb.linearVelocity = directionToTarget.normalized * speed;
+                    transform.LookAt(directionToTarget);
+                }
+
+                yield return null;
+            }
         }
     }
 

@@ -50,7 +50,7 @@ public class AbilityModHandler : MonoBehaviour
         {
             {typeof(ProjectileAbility), new List<AbilityModTypes>() { AbilityModTypes.Number, AbilityModTypes.MaxPierce, AbilityModTypes.MaxSplit, AbilityModTypes.MaxRicochet, AbilityModTypes.Cost, AbilityModTypes.Cooldown, AbilityModTypes.Damage, AbilityModTypes.DamageOverTime, AbilityModTypes.Heal, AbilityModTypes.HealOverTime } },
             {typeof(TargetMouseAbility),new List<AbilityModTypes>() { AbilityModTypes.Cost, AbilityModTypes.Cooldown, AbilityModTypes.Damage, AbilityModTypes.DamageOverTime, AbilityModTypes.Heal, AbilityModTypes.HealOverTime } },
-            {typeof(ConjureAbility), new List<AbilityModTypes>() { AbilityModTypes.MaxPierce, AbilityModTypes.Number, AbilityModTypes.Cost, AbilityModTypes.Cooldown, AbilityModTypes.Damage, AbilityModTypes.DamageOverTime, AbilityModTypes.Heal, AbilityModTypes.HealOverTime } },
+            {typeof(ConjureAbility), new List<AbilityModTypes>() { AbilityModTypes.MaxPierce, AbilityModTypes.Number, AbilityModTypes.Cost, AbilityModTypes.Cooldown, AbilityModTypes.Damage, AbilityModTypes.DamageOverTime, AbilityModTypes.Heal, AbilityModTypes.HealOverTime, AbilityModTypes.Size, AbilityModTypes.Duration} },
             {typeof(AuraAbility), new List<AbilityModTypes>() { AbilityModTypes.Cost, AbilityModTypes.Cooldown, AbilityModTypes.Damage, AbilityModTypes.DamageOverTime, AbilityModTypes.Heal, AbilityModTypes.HealOverTime, AbilityModTypes.Size } },
             {typeof(TeleportAbility), new List<AbilityModTypes>() { AbilityModTypes.Cost, AbilityModTypes.Cooldown, AbilityModTypes.Damage, AbilityModTypes.DamageOverTime, AbilityModTypes.Heal, AbilityModTypes.HealOverTime } },
             {typeof(MeleeAbility), new List<AbilityModTypes>() { AbilityModTypes.Cost, AbilityModTypes.Cooldown, AbilityModTypes.Damage, AbilityModTypes.DamageOverTime, AbilityModTypes.Heal, AbilityModTypes.HealOverTime, AbilityModTypes.Size } },
@@ -86,10 +86,14 @@ public class AbilityModHandler : MonoBehaviour
     public Mod_Base TryAddNewAbilityMod(Ability ability)
     {
 
-        Ability abilityToAdd;
+        Ability abilityToAdd = ability;
         if (ability is ChargeAbility chargeAbility) abilityToAdd = chargeAbility.ActivateOnHit;
-        else if (ability is TeleportAbility teleportAbility) abilityToAdd = teleportAbility.ActivateOnArrive;
-        else abilityToAdd = ability;
+        else if (ability is TeleportAbility teleportAbility)
+        {
+            if (teleportAbility.ActivateOnArrive != null) abilityToAdd = teleportAbility.ActivateOnArrive;
+            else if (teleportAbility.ActivateOnUse != null) abilityToAdd = teleportAbility.ActivateOnUse;
+        }
+
         Mod_Base mod;
         if (!ModdedAbilities.TryGetValue(abilityToAdd, out Mod_Base existingMod))
         {

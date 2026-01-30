@@ -93,95 +93,95 @@ MonoBehaviour:
   - m_EditModeType: 1
     m_Knots:
     - Position:
+        x: 0.177
+        y: -0.13550001
+        z: -0
+      TangentIn:
+        x: -0
+        y: -0
+        z: -0.009770619
+      TangentOut:
         x: 0
         y: 0
+        z: 0.009770619
+      Rotation:
+        value:
+          x: 0.25395858
+          y: -0.6599281
+          z: 0.6599282
+          w: -0.2539583
+    - Position:
+        x: 0.2425
+        y: -0.208
         z: 0
       TangentIn:
         x: -0
         y: -0
-        z: -0.029576853
+        z: -0.040487424
       TangentOut:
         x: 0
         y: 0
-        z: 0.029576853
+        z: 0.06671669
       Rotation:
         value:
-          x: 0.34132382
-          y: -0.61927223
-          z: 0.61927235
-          w: -0.34132358
+          x: 0.23752725
+          y: -0.66601866
+          z: 0.66601866
+          w: -0.23752725
     - Position:
-        x: 0.25006908
-        y: -0.15793818
+        x: 0.4
+        y: -0.4215
         z: 0
       TangentIn:
         x: -0
         y: -0
-        z: -0.09463994
+        z: -0.091275595
       TangentOut:
         x: 0
         y: 0
-        z: 0.095069066
+        z: 0.09739172
       Rotation:
         value:
-          x: -0.2477176
-          y: 0.662296
-          z: -0.662296
-          w: 0.24771765
+          x: -0.22915813
+          y: 0.66894436
+          z: -0.6689443
+          w: 0.22915824
     - Position:
-        x: 0.37290996
-        y: -0.42994297
+        x: 0.591
+        y: -0.6555
+        z: 0
+      TangentIn:
+        x: 0
+        y: 0
+        z: -0.060104065
+      TangentOut:
+        x: 0
+        y: 0
+        z: 0.060104065
+      Rotation:
+        value:
+          x: 0.21969642
+          y: -0.6721111
+          z: 0.6721111
+          w: -0.21969706
+    - Position:
+        x: 0.9125
+        y: -1.053
         z: 0
       TangentIn:
         x: -0
         y: -0
-        z: -0.10739007
+        z: -0.05112421
       TangentOut:
         x: 0
         y: 0
-        z: 0.13036065
+        z: 0.05112421
       Rotation:
         value:
-          x: 0.087119974
-          y: -0.7017194
-          z: 0.7017194
-          w: -0.087119974
-    - Position:
-        x: 0.40362018
-        y: -0.8686604
-        z: 0
-      TangentIn:
-        x: 0
-        y: 0
-        z: -0.0482589
-      TangentOut:
-        x: 0
-        y: 0
-        z: 0.0482589
-      Rotation:
-        value:
-          x: 0
-          y: -0.70710665
-          z: 0.7071069
-          w: -0
-    - Position:
-        x: 0.28516647
-        y: -1.1845369
-        z: 0
-      TangentIn:
-        x: -0
-        y: -0
-        z: -0.033735633
-      TangentOut:
-        x: 0
-        y: 0
-        z: 0.033735633
-      Rotation:
-        value:
-          x: 0.12616539
-          y: 0.6957602
-          z: -0.69576025
-          w: -0.12616539
+          x: 0.23584
+          y: -0.66661805
+          z: 0.666618
+          w: -0.23583987
     m_MetaData:
     - Mode: 0
       Tension: 0.5
@@ -265,95 +265,95 @@ MonoBehaviour:
   - m_EditModeType: 1
     m_Knots:
     - Position:
-        x: 0
-        y: 0
+        x: 0.298
+        y: -0.13550001
         z: 0
       TangentIn:
         x: -0
         y: -0
-        z: -0.029576853
+        z: -0
       TangentOut:
         x: 0
         y: 0
-        z: 0.029576853
+        z: 0
       Rotation:
         value:
-          x: 0.34132382
-          y: -0.61927223
-          z: 0.61927235
-          w: -0.34132358
+          x: -0.7071066
+          y: -4.0194356e-14
+          z: -0.00000040039504
+          w: 0.70710695
     - Position:
-        x: 0.25006908
-        y: -0.15793818
+        x: 0.298
+        y: -0.13550001
         z: 0
       TangentIn:
         x: -0
         y: -0
-        z: -0.09463994
+        z: -0.043252803
       TangentOut:
         x: 0
         y: 0
-        z: 0.095069066
+        z: 0.043252803
       Rotation:
         value:
-          x: -0.2477176
-          y: 0.662296
-          z: -0.662296
-          w: 0.24771765
+          x: -0.20545068
+          y: 0.67660177
+          z: -0.6766019
+          w: 0.20545068
     - Position:
-        x: 0.37290996
-        y: -0.42994297
+        x: 0.53849995
+        y: -0.495
+        z: -0
+      TangentIn:
+        x: -0
+        y: -0
+        z: -0.12595502
+      TangentOut:
+        x: 0
+        y: 0
+        z: 0.097719066
+      Rotation:
+        value:
+          x: 0.21156979
+          y: -0.67471343
+          z: 0.6747135
+          w: -0.2115697
+    - Position:
+        x: 0.691
+        y: -0.706
+        z: 0
+      TangentIn:
+        x: 0
+        y: 0
+        z: -0.06448641
+      TangentOut:
+        x: 0
+        y: 0
+        z: 0.06448641
+      Rotation:
+        value:
+          x: -0.24894969
+          y: 0.66183406
+          z: -0.6618339
+          w: 0.2489494
+    - Position:
+        x: 0.9095
+        y: -0.964
         z: 0
       TangentIn:
         x: -0
         y: -0
-        z: -0.10739007
+        z: -0.03380921
       TangentOut:
         x: 0
         y: 0
-        z: 0.13036065
+        z: 0.03380921
       Rotation:
         value:
-          x: 0.087119974
-          y: -0.7017194
-          z: 0.7017194
-          w: -0.087119974
-    - Position:
-        x: 0.40362018
-        y: -0.8686604
-        z: 0
-      TangentIn:
-        x: 0
-        y: 0
-        z: -0.0482589
-      TangentOut:
-        x: 0
-        y: 0
-        z: 0.0482589
-      Rotation:
-        value:
-          x: 0
-          y: -0.70710665
-          z: 0.7071069
-          w: -0
-    - Position:
-        x: 0.28516647
-        y: -1.1845369
-        z: 0
-      TangentIn:
-        x: -0
-        y: -0
-        z: -0.033735633
-      TangentOut:
-        x: 0
-        y: 0
-        z: 0.033735633
-      Rotation:
-        value:
-          x: 0.12616539
-          y: 0.6957602
-          z: -0.69576025
-          w: -0.12616539
+          x: -0.24335887
+          y: 0.66391
+          z: -0.66391
+          w: 0.24335904
     m_MetaData:
     - Mode: 0
       Tension: 0.5
@@ -403,8 +403,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3003049671619205123}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.00000004214685, y: -0.00000021073426, z: -0.4827047, w: -0.8757834}
-  m_LocalPosition: {x: -0.223, y: 1, z: 0}
+  m_LocalRotation: {x: 0, y: -0.000000021073426, z: 0.17842537, w: -0.98395354}
+  m_LocalPosition: {x: 0.34733295, y: -1.3690739, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -424,9 +424,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Target: {fileID: 7014892075372919053}
   m_PlayOnAwake: 1
-  m_LoopMode: 1
+  m_LoopMode: 0
   m_Method: 1
-  m_Duration: 0.45905674
+  m_Duration: 0.35406694
   m_MaxSpeed: 3
   m_EasingMode: 0
   m_AlignmentMode: 1
@@ -687,7 +687,7 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0.1
+      scalar: 0.05
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -1323,7 +1323,7 @@ ParticleSystem:
     rateOverDistance:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 100
+      scalar: 20
       minScalar: 0
       maxCurve:
         serializedVersion: 2
@@ -4334,7 +4334,7 @@ ParticleSystem:
         m_RotationOrder: 4
     maxLights: 20
   TrailModule:
-    enabled: 0
+    enabled: 1
     mode: 0
     ratio: 1
     lifetime:
@@ -5183,6 +5183,7 @@ ParticleSystemRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: f76b3decb20f9fa4f989af85c6b0732d, type: 2}
+  - {fileID: 2100000, guid: d79d1b5259721574eb39eda0fa125112, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -5284,9 +5285,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Target: {fileID: 7947419398418413461}
   m_PlayOnAwake: 1
-  m_LoopMode: 1
+  m_LoopMode: 0
   m_Method: 1
-  m_Duration: 0.45905674
+  m_Duration: 0.3921353
   m_MaxSpeed: 3
   m_EasingMode: 0
   m_AlignmentMode: 1
@@ -5547,7 +5548,7 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0.1
+      scalar: 0.05
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -6183,7 +6184,7 @@ ParticleSystem:
     rateOverDistance:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 100
+      scalar: 20
       minScalar: 0
       maxCurve:
         serializedVersion: 2
@@ -10194,95 +10195,95 @@ MonoBehaviour:
   - m_EditModeType: 1
     m_Knots:
     - Position:
-        x: 0
-        y: 0
+        x: 0.2505
+        y: -0.248
         z: 0
       TangentIn:
         x: -0
         y: -0
-        z: -0.029576853
+        z: -0.011002386
       TangentOut:
         x: 0
         y: 0
-        z: 0.029576853
+        z: 0.011002386
       Rotation:
         value:
-          x: 0.34132382
-          y: -0.61927223
-          z: 0.61927235
-          w: -0.34132358
+          x: 0.18476406
+          y: -0.6825411
+          z: 0.6825411
+          w: -0.18476397
     - Position:
-        x: 0.25006908
-        y: -0.15793818
+        x: 0.306
+        y: -0.343
         z: 0
       TangentIn:
         x: -0
         y: -0
-        z: -0.09463994
+        z: -0.04180605
       TangentOut:
         x: 0
         y: 0
-        z: 0.095069066
+        z: 0.055613365
       Rotation:
         value:
-          x: -0.2477176
-          y: 0.662296
-          z: -0.662296
-          w: 0.24771765
+          x: -0.20392166
+          y: 0.6770642
+          z: -0.6770641
+          w: 0.20392181
     - Position:
-        x: 0.37290996
-        y: -0.42994297
+        x: 0.42249998
+        y: -0.499
         z: 0
       TangentIn:
         x: -0
         y: -0
-        z: -0.10739007
+        z: -0.07674307
       TangentOut:
         x: 0
         y: 0
-        z: 0.13036065
+        z: 0.111091465
       Rotation:
         value:
-          x: 0.087119974
-          y: -0.7017194
-          z: 0.7017194
-          w: -0.087119974
+          x: -0.23147097
+          y: 0.66814756
+          z: -0.66814756
+          w: 0.23147102
     - Position:
-        x: 0.40362018
-        y: -0.8686604
+        x: 0.683
+        y: -0.81299996
         z: 0
       TangentIn:
         x: 0
         y: 0
-        z: -0.0482589
+        z: -0.21599205
       TangentOut:
         x: 0
         y: 0
-        z: 0.0482589
+        z: 0.21599205
       Rotation:
         value:
-          x: 0
-          y: -0.70710665
-          z: 0.7071069
-          w: -0
+          x: 0.21379964
+          y: -0.67401016
+          z: 0.6740107
+          w: -0.21379791
     - Position:
-        x: 0.28516647
-        y: -1.1845369
+        x: 0.89650005
+        y: -1.089
         z: 0
       TangentIn:
         x: -0
         y: -0
-        z: -0.033735633
+        z: -0.034893878
       TangentOut:
         x: 0
         y: 0
-        z: 0.033735633
+        z: 0.034893878
       Rotation:
         value:
-          x: 0.12616539
-          y: 0.6957602
-          z: -0.69576025
-          w: -0.12616539
+          x: 0.22859919
+          y: -0.66913563
+          z: 0.6691356
+          w: -0.22859904
     m_MetaData:
     - Mode: 0
       Tension: 0.5
@@ -10353,9 +10354,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Target: {fileID: 6079619356802282986}
   m_PlayOnAwake: 1
-  m_LoopMode: 1
+  m_LoopMode: 0
   m_Method: 1
-  m_Duration: 0.45905674
+  m_Duration: 0.35650027
   m_MaxSpeed: 3
   m_EasingMode: 0
   m_AlignmentMode: 1
@@ -10616,7 +10617,7 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0.1
+      scalar: 0.05
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -11252,7 +11253,7 @@ ParticleSystem:
     rateOverDistance:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 100
+      scalar: 20
       minScalar: 0
       maxCurve:
         serializedVersion: 2
@@ -14263,7 +14264,7 @@ ParticleSystem:
         m_RotationOrder: 4
     maxLights: 20
   TrailModule:
-    enabled: 0
+    enabled: 1
     mode: 0
     ratio: 1
     lifetime:
@@ -15112,6 +15113,7 @@ ParticleSystemRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: f76b3decb20f9fa4f989af85c6b0732d, type: 2}
+  - {fileID: 2100000, guid: d79d1b5259721574eb39eda0fa125112, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
