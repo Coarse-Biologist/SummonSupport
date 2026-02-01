@@ -9,10 +9,9 @@ public enum AbilityModTypes
     HealOverTime,//implemented
     Damage, // implimented
     DamageOverTime, // implimented
-    Duration, // implimented
+    Duration, // implimented, universally for DOTs and HOTs, not so for general durations, i.e for conjured abilities
     Size,
     Speed,
-    Range,
     MaxPierce, //  implimented
     MaxRicochet, // rather implimented
     MaxSplit, // implimented

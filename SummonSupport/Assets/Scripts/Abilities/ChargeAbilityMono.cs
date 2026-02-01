@@ -48,7 +48,7 @@ public class ChargeAbilityMono : MonoBehaviour
         if (modHandler != null)
         {
             maxPierce = modHandler.GetModAttributeByType(chargeAbility.ActivateOnHit, AbilityModTypes.MaxPierce);
-            range += modHandler.GetModAttributeByType(chargeAbility.ActivateOnHit, AbilityModTypes.Range);
+            range += modHandler.GetModAttributeByType(chargeAbility.ActivateOnHit, AbilityModTypes.Size);
             speedBoost += modHandler.GetModAttributeByType(chargeAbility, AbilityModTypes.Speed);
 
         }

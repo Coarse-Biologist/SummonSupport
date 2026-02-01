@@ -314,7 +314,7 @@ public abstract class LivingBeing : MonoBehaviour
     {
         if (attributeType == AttributeType.CurrentHitpoints)
         {
-            Debug.Log($"Changing health regen by {value}");
+            //Debug.Log($"Changing health regen by {value}");
             TotalHealthRegeneration += value;
             //HealthRegenArrows = GetRegenerationIndicatorAmount(MaxHP, TotalHealthRegeneration);
         }

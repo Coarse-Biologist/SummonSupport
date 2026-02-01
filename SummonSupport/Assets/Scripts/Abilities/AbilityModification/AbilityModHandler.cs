@@ -19,7 +19,6 @@ public class AbilityModHandler : MonoBehaviour
         { AbilityModTypes.Heal, 5 },
         { AbilityModTypes.HealOverTime, 1 },
         { AbilityModTypes.Duration, 1 },
-        { AbilityModTypes.Range, 1 },
         { AbilityModTypes.Size, 1 },
 
         { AbilityModTypes.MaxPierce, 1 },
@@ -37,7 +36,6 @@ public class AbilityModHandler : MonoBehaviour
         { AbilityModTypes.Heal, 60 },
         { AbilityModTypes.HealOverTime, 50 },
         { AbilityModTypes.Duration, 80 },
-        { AbilityModTypes.Range, 30 },
         { AbilityModTypes.Size, 100 },
 // projectile perks
         { AbilityModTypes.MaxPierce, 150 },
@@ -50,12 +48,12 @@ public class AbilityModHandler : MonoBehaviour
         {
             {typeof(ProjectileAbility), new List<AbilityModTypes>() { AbilityModTypes.Number, AbilityModTypes.MaxPierce, AbilityModTypes.MaxSplit, AbilityModTypes.MaxRicochet, AbilityModTypes.Cost, AbilityModTypes.Cooldown, AbilityModTypes.Damage, AbilityModTypes.DamageOverTime, AbilityModTypes.Heal, AbilityModTypes.HealOverTime } },
             {typeof(TargetMouseAbility),new List<AbilityModTypes>() { AbilityModTypes.Cost, AbilityModTypes.Cooldown, AbilityModTypes.Damage, AbilityModTypes.DamageOverTime, AbilityModTypes.Heal, AbilityModTypes.HealOverTime } },
-            {typeof(ConjureAbility), new List<AbilityModTypes>() { AbilityModTypes.MaxPierce, AbilityModTypes.Number, AbilityModTypes.Cost, AbilityModTypes.Cooldown, AbilityModTypes.Damage, AbilityModTypes.DamageOverTime, AbilityModTypes.Heal, AbilityModTypes.HealOverTime, AbilityModTypes.Size, AbilityModTypes.Duration} },
+            {typeof(ConjureAbility), new List<AbilityModTypes>() { AbilityModTypes.MaxPierce, AbilityModTypes.MaxSplit, AbilityModTypes.Number, AbilityModTypes.Cost, AbilityModTypes.Cooldown, AbilityModTypes.Damage, AbilityModTypes.DamageOverTime, AbilityModTypes.Heal, AbilityModTypes.HealOverTime, AbilityModTypes.Size, AbilityModTypes.Duration} },
             {typeof(AuraAbility), new List<AbilityModTypes>() { AbilityModTypes.Cost, AbilityModTypes.Cooldown, AbilityModTypes.Damage, AbilityModTypes.DamageOverTime, AbilityModTypes.Heal, AbilityModTypes.HealOverTime, AbilityModTypes.Size } },
             {typeof(TeleportAbility), new List<AbilityModTypes>() { AbilityModTypes.Cost, AbilityModTypes.Cooldown, AbilityModTypes.Damage, AbilityModTypes.DamageOverTime, AbilityModTypes.Heal, AbilityModTypes.HealOverTime } },
             {typeof(MeleeAbility), new List<AbilityModTypes>() { AbilityModTypes.Cost, AbilityModTypes.Cooldown, AbilityModTypes.Damage, AbilityModTypes.DamageOverTime, AbilityModTypes.Heal, AbilityModTypes.HealOverTime, AbilityModTypes.Size } },
             {typeof(BeamAbility), new List<AbilityModTypes>() { AbilityModTypes.Cost, AbilityModTypes.Cooldown, AbilityModTypes.Damage, AbilityModTypes.DamageOverTime, AbilityModTypes.Heal, AbilityModTypes.HealOverTime } },
-            {typeof(ChargeAbility), new List<AbilityModTypes>() { AbilityModTypes.MaxPierce, AbilityModTypes.Range, AbilityModTypes.Cost, AbilityModTypes.Cooldown, AbilityModTypes.Damage, AbilityModTypes.DamageOverTime, AbilityModTypes.Heal, AbilityModTypes.HealOverTime }},
+            {typeof(ChargeAbility), new List<AbilityModTypes>() { AbilityModTypes.MaxPierce, AbilityModTypes.Cost, AbilityModTypes.Cooldown, AbilityModTypes.Damage, AbilityModTypes.DamageOverTime, AbilityModTypes.Heal, AbilityModTypes.HealOverTime }},
         };
     void Awake()
     {
@@ -99,7 +97,7 @@ public class AbilityModHandler : MonoBehaviour
         {
             mod = new Mod_Base();
             ModdedAbilities.Add(abilityToAdd, mod);
-            //Debug.Log($"Adding {abilityToAdd.Name} to the modded abilities list with the mod {mod}");
+            Debug.Log($"Adding {abilityToAdd.Name} to the modded abilities list with the mod {mod}. mod ={ModdedAbilities[abilityToAdd]}");
             return mod;
         }
         else return existingMod;
@@ -113,7 +111,7 @@ public class AbilityModHandler : MonoBehaviour
         Mod_Base mod = TryAddNewAbilityMod(ability);
         mod.Mod_Attribute(modType, changeValue);
         Debug.Log($"ability = {ability.Name}. mod type = {modType}. change value = {changeValue}");
-
+        Debug.Log($"modded abilities dict now contains {ModdedAbilities[ability].GetModdedAttribute(modType)} for {modType}!");
     }
 
 

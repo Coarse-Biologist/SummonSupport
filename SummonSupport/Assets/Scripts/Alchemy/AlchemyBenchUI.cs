@@ -438,7 +438,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
         confirmButton.RegisterCallback<ClickEvent>(e => AttemptModification(selectedModType));
         confirmButton.RegisterCallback<ClickEvent>(e => DisplayAbilityModOptions(selectedAbility));
 
-        SetInstructionsText("Select an ability to modify.");
+        //SetInstructionsText("Select an ability to modify.");
         DisplayAllModableAbilities();
     }
 
@@ -494,7 +494,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
         if (status != StatusEffectType.None)
         {
             selectedStatusEffect = AbilityLibrary.GetStatusEffects(selectedAbility.ElementTypes[0], status);
-            Debug.Log($"Selected status effect is being set to {selectedStatusEffect} for ability self");
+            //Debug.Log($"Selected status effect is being set to {selectedStatusEffect} for ability self");
         }
         SetInstructionsText($"The {GeneralFunctions.GetCleanEnumString(modType)} of {selectedAbility.Name} can be improved for {AbilityModHandler.GetModCost(modType)} core power. You currently have {AlchemyInventory.GetCorePowerResource(AlchemyInventory.ingredients)}");
 
@@ -505,7 +505,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
         if (selectedAbility == null) return;
         if (ModHandler == null) return;
         if (selectedModType == AbilityModTypes.None && selectedStatusEffect == null) return;
-        Debug.Log($"selected mod = {selectedModType}. selected status effect = {selectedStatusEffect}");
+        // Debug.Log($"selected mod = {selectedModType}. selected status effect = {selectedStatusEffect}");
 
         if (selectedModType != AbilityModTypes.None)
         {

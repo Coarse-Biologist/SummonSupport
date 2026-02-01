@@ -297,7 +297,7 @@ public static class CombatStatHandler
     {
         if (changeValue != 0)
         {
-            UnityEngine.Debug.Log($"Applying DOT of value {changeValue}to attribute {attributeType}");
+            //UnityEngine.Debug.Log($"Applying DOT of value {changeValue}to attribute {attributeType}");
             currentTarget.ChangeRegeneration(attributeType, changeValue);
             currentTarget.StartCoroutine(ResetRegeneration(currentAbility, currentTarget, attributeType, changeValue, currentAbilityDuration));
         }

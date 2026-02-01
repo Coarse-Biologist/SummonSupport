@@ -14,7 +14,7 @@ public class Ragdoll : MonoBehaviour, I_Destruction
 
     public void CauseDestruction(bool SaveTransformData = false)
     {
-        Debug.Log($"causing destruction");
+        //Debug.Log($"causing destruction");
         if (SaveTransformData) SavePreRagdollTransformData();
 
         RagDoll(true);

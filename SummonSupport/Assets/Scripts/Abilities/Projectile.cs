@@ -22,7 +22,7 @@ public class Projectile : MonoBehaviour
     public bool splitAlready = false;
 
     int split = 0;
-    int pierce = 5;
+    int pierce = 0;
     int ricochet = 0;
     LivingBeing userLivingBeing = null;
     private bool active = false;
