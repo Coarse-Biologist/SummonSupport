@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6f72222c874821e41bccb5f49eee621c, type: 3}
-  m_Name: ShiningMeteor
+  m_Name: Meteor_Radiation
   m_EditorClassIdentifier: 
-  <Name>k__BackingField: Shining Comet
+  <Name>k__BackingField: Radioactive Meteor
   <Icon>k__BackingField: {fileID: 8095344145157262792, guid: c3bce2abce0ec0e47ba9c908fd690f04,
     type: 3}
   <Cooldown>k__BackingField: 5
   <CostType>k__BackingField: 4
   <Cost>k__BackingField: 70
   <Range>k__BackingField: 15
-  <Duration>k__BackingField: 6
+  <Duration>k__BackingField: 10
   <AbilityTypeTag>k__BackingField: 1
   <ListUsableOn>k__BackingField: 01000000
   <TargetEffects>k__BackingField:
@@ -54,12 +54,12 @@ MonoBehaviour:
     <AttributeDown>k__BackingField: []
     <StatusEffects>k__BackingField: []
     <SpecialAbilityAttribute>k__BackingField: 0
-  <ElementTypes>k__BackingField: 0e000000
+  <ElementTypes>k__BackingField: 0d000000
   <PhysicalType>k__BackingField: 0
-  <OnHitEffect>k__BackingField: {fileID: 6254874057816512933, guid: 933cfe8c2862c75499ef399a089d01f4,
+  <OnHitEffect>k__BackingField: {fileID: 1847413739128325886, guid: 830db95daa93b6f4cae93aa6d4b33d0b,
     type: 3}
-  <AlterParticleSystemGradient>k__BackingField: 1
-  <ObjectToSpawn>k__BackingField: {fileID: 1142077846852881211, guid: 92f7eebcf2302cd4b95a8d2467921c88,
+  <Sounds>k__BackingField: {fileID: 0}
+  <ObjectToSpawn>k__BackingField: {fileID: 5524056592298554280, guid: cbf0644f6da12c94c85ca5091e391097,
     type: 3}
   <SpawnOffset>k__BackingField: {x: 0, y: 10, z: 0}
   <RotationOffset>k__BackingField: 0

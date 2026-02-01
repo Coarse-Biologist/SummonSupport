@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6f72222c874821e41bccb5f49eee621c, type: 3}
-  m_Name: WaterMeteor
+  m_Name: Meteor_Psychic
   m_EditorClassIdentifier: 
-  <Name>k__BackingField: Water Meteor
+  <Name>k__BackingField: Psychic Meteor
   <Icon>k__BackingField: {fileID: 8095344145157262792, guid: c3bce2abce0ec0e47ba9c908fd690f04,
     type: 3}
   <Cooldown>k__BackingField: 5
@@ -54,12 +54,12 @@ MonoBehaviour:
     <AttributeDown>k__BackingField: []
     <StatusEffects>k__BackingField: []
     <SpecialAbilityAttribute>k__BackingField: 0
-  <ElementTypes>k__BackingField: 02000000
+  <ElementTypes>k__BackingField: 0f000000
   <PhysicalType>k__BackingField: 0
-  <OnHitEffect>k__BackingField: {fileID: 1847413739128325886, guid: ac4fc238eec66bf4ea51106078fde20d,
+  <OnHitEffect>k__BackingField: {fileID: 1847413739128325886, guid: af3daea78fb84b541a9b871b3917d9a9,
     type: 3}
-  <AlterParticleSystemGradient>k__BackingField: 1
-  <ObjectToSpawn>k__BackingField: {fileID: 1142077846852881211, guid: 92f7eebcf2302cd4b95a8d2467921c88,
+  <Sounds>k__BackingField: {fileID: 0}
+  <ObjectToSpawn>k__BackingField: {fileID: 7049163817033978797, guid: e921b3f07ec6cbe45ad14511133ed94a,
     type: 3}
   <SpawnOffset>k__BackingField: {x: 0, y: 10, z: 0}
   <RotationOffset>k__BackingField: 0

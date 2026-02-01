@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6f72222c874821e41bccb5f49eee621c, type: 3}
-  m_Name: BacterialMeteor
+  m_Name: Meteor_Acid
   m_EditorClassIdentifier: 
-  <Name>k__BackingField: Bacterial Meteor
+  <Name>k__BackingField: Acid Meteor
   <Icon>k__BackingField: {fileID: 8095344145157262792, guid: c3bce2abce0ec0e47ba9c908fd690f04,
     type: 3}
   <Cooldown>k__BackingField: 5
@@ -52,14 +52,16 @@ MonoBehaviour:
       <Value>k__BackingField: 0
     <AttributeUp>k__BackingField: []
     <AttributeDown>k__BackingField: []
-    <StatusEffects>k__BackingField: []
+    <StatusEffects>k__BackingField:
+    - {fileID: 11400000, guid: 15479ffbc49e0f6438096f06a5225d6c, type: 2}
+    - {fileID: 11400000, guid: 15479ffbc49e0f6438096f06a5225d6c, type: 2}
     <SpecialAbilityAttribute>k__BackingField: 0
-  <ElementTypes>k__BackingField: 09000000
+  <ElementTypes>k__BackingField: 08000000
   <PhysicalType>k__BackingField: 0
-  <OnHitEffect>k__BackingField: {fileID: 9018438208592869522, guid: 53aa11c4626a52e45b54ea1689ad41de,
+  <OnHitEffect>k__BackingField: {fileID: 5705030685624713920, guid: 1cf207986de988e47adade098e6119ca,
     type: 3}
-  <AlterParticleSystemGradient>k__BackingField: 1
-  <ObjectToSpawn>k__BackingField: {fileID: 1142077846852881211, guid: 92f7eebcf2302cd4b95a8d2467921c88,
+  <Sounds>k__BackingField: {fileID: 0}
+  <ObjectToSpawn>k__BackingField: {fileID: 3620718495311401311, guid: 78fd77997c894e94a9193d6e9db45dac,
     type: 3}
   <SpawnOffset>k__BackingField: {x: 0, y: 10, z: 0}
   <RotationOffset>k__BackingField: 0

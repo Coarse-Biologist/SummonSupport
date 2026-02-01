@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6f72222c874821e41bccb5f49eee621c, type: 3}
-  m_Name: FungalMeteor
+  m_Name: Meteor_Bacteria
   m_EditorClassIdentifier: 
-  <Name>k__BackingField: Fungal Meteor
+  <Name>k__BackingField: Bacterial Meteor
   <Icon>k__BackingField: {fileID: 8095344145157262792, guid: c3bce2abce0ec0e47ba9c908fd690f04,
     type: 3}
   <Cooldown>k__BackingField: 5
@@ -54,12 +54,12 @@ MonoBehaviour:
     <AttributeDown>k__BackingField: []
     <StatusEffects>k__BackingField: []
     <SpecialAbilityAttribute>k__BackingField: 0
-  <ElementTypes>k__BackingField: 0a000000
+  <ElementTypes>k__BackingField: 09000000
   <PhysicalType>k__BackingField: 0
-  <OnHitEffect>k__BackingField: {fileID: 8554696951228805582, guid: 7bfcb6e9a8dfc5544ae6f2975f7ebf45,
+  <OnHitEffect>k__BackingField: {fileID: 9018438208592869522, guid: 53aa11c4626a52e45b54ea1689ad41de,
     type: 3}
-  <AlterParticleSystemGradient>k__BackingField: 1
-  <ObjectToSpawn>k__BackingField: {fileID: 1142077846852881211, guid: 92f7eebcf2302cd4b95a8d2467921c88,
+  <Sounds>k__BackingField: {fileID: 0}
+  <ObjectToSpawn>k__BackingField: {fileID: 6807306002669726570, guid: e1a78b6ff65ddaa489f4762fc1c2eb92,
     type: 3}
   <SpawnOffset>k__BackingField: {x: 0, y: 10, z: 0}
   <RotationOffset>k__BackingField: 0

@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6f72222c874821e41bccb5f49eee621c, type: 3}
-  m_Name: FloralMeteor
+  m_Name: Meteor_Virus
   m_EditorClassIdentifier: 
-  <Name>k__BackingField: Floral Comet
+  <Name>k__BackingField: Viral Meteor
   <Icon>k__BackingField: {fileID: 8095344145157262792, guid: c3bce2abce0ec0e47ba9c908fd690f04,
     type: 3}
   <Cooldown>k__BackingField: 5
   <CostType>k__BackingField: 4
   <Cost>k__BackingField: 70
   <Range>k__BackingField: 15
-  <Duration>k__BackingField: 10
+  <Duration>k__BackingField: 6
   <AbilityTypeTag>k__BackingField: 1
   <ListUsableOn>k__BackingField: 01000000
   <TargetEffects>k__BackingField:
@@ -54,12 +54,12 @@ MonoBehaviour:
     <AttributeDown>k__BackingField: []
     <StatusEffects>k__BackingField: []
     <SpecialAbilityAttribute>k__BackingField: 0
-  <ElementTypes>k__BackingField: 0b000000
+  <ElementTypes>k__BackingField: 0c000000
   <PhysicalType>k__BackingField: 0
-  <OnHitEffect>k__BackingField: {fileID: 5005864844744066183, guid: 4abfee1134a924843a0c2d8f0b92357e,
+  <OnHitEffect>k__BackingField: {fileID: 5705030685624713920, guid: e378c4ebb8c3f9d43b451efa5c71483d,
     type: 3}
-  <AlterParticleSystemGradient>k__BackingField: 1
-  <ObjectToSpawn>k__BackingField: {fileID: 1142077846852881211, guid: 92f7eebcf2302cd4b95a8d2467921c88,
+  <Sounds>k__BackingField: {fileID: 0}
+  <ObjectToSpawn>k__BackingField: {fileID: 7394628531027695892, guid: 62e298840446f914c809c304592d6caf,
     type: 3}
   <SpawnOffset>k__BackingField: {x: 0, y: 10, z: 0}
   <RotationOffset>k__BackingField: 0
