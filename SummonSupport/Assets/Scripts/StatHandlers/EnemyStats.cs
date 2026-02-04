@@ -24,6 +24,7 @@ public class EnemyStats : LivingBeing
     {
         if (!Dead)
         {
+            abilityHandler.StopAllToggledAbilities();
             Dead = true;
 
             EventDeclarer.EnemyDefeated.Invoke(this);

@@ -870,7 +870,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     #endregion
 
     #region General UI functions
-    private Button AddButtonToPanel(string buttonText, VisualElement panel, int width, int height)
+    public Button AddButtonToPanel(string buttonText, VisualElement panel, int width, int height)
     {
         TemplateContainer prefabContainer = UIPrefabAssets.Instantiate();
         Button button = prefabContainer.Q<Button>("ButtonPrefab");

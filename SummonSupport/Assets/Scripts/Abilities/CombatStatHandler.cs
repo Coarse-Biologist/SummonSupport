@@ -285,7 +285,7 @@ public static class CombatStatHandler
                 {
                     currentTarget.StartCoroutine(currentTarget.audioHandler.CreatureDamagedSound(changeValue));
                 }
-                else UnityEngine.Debug.Log($"Damage less than 30, no sound played. changeValue = {changeValue}");
+                //else UnityEngine.Debug.Log($"Damage less than 30, no sound played. changeValue = {changeValue}");
                 currentTarget.SetAttribute(AttributeType.CurrentHitpoints, currentTarget.GetAttribute(AttributeType.CurrentHitpoints) + changeValue);
             }
         }

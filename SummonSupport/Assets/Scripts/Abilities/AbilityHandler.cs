@@ -138,7 +138,7 @@ public class AbilityHandler : MonoBehaviour
 
         charging = alreadyCharging;
     }
-    private void StopAllToggledAbilities()
+    public void StopAllToggledAbilities()
     {
         foreach (KeyValuePair<BeamAbility, GameObject> kvp in toggledAbilitiesDict)
         {

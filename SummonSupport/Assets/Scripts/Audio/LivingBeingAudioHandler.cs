@@ -7,9 +7,25 @@ public abstract class LivingBeingAudioHandler : MonoBehaviour
     protected AudioSource CreatureAudioSource;
     [field: SerializeField] public AudioClip[] CreatureDamagedClips { private set; get; } = new AudioClip[5];
     [field: SerializeField] public WaitForSeconds DamageSoundDelay { private set; get; } = new WaitForSeconds(.2f);
+    protected AudioHandler AudioHandlerInstance;
 
+    private void Start()
+    {
+        AudioHandlerInstance = AudioHandler.Instance;
+        if (AudioHandlerInstance == null)
+        {
+            throw new Exception("AudioHandler instance not found in scene.");
+        }
+        CreatureAudioSource = GetComponent<AudioSource>();
+        if (CreatureAudioSource == null)
+        {
+            CreatureAudioSource = gameObject.AddComponent<AudioSource>();
+        }
+
+    }
     public IEnumerator CreatureDamagedSound(float damageAmount)
     {
+        //Debug.Log(AudioHandlerInstance + "exists?");
         damageAmount = Math.Abs(damageAmount);
         float volume = Math.Min(damageAmount / 100f, .3f);
 
@@ -18,7 +34,7 @@ public abstract class LivingBeingAudioHandler : MonoBehaviour
         AudioClip clip = CreatureDamagedClips[UnityEngine.Random.Range(0, CreatureDamagedClips.Length)];
         if (clip != null)
         {
-            CreatureAudioSource.PlayOneShot(clip, volume);
+            CreatureAudioSource.PlayOneShot(clip, volume * AudioHandlerInstance.GeneralGameVolume);
         }
     }
 

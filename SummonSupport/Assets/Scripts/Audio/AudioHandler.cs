@@ -11,6 +11,7 @@ public class AudioHandler : MonoBehaviour
     public LayeredSongs_SO[] audioClips = new LayeredSongs_SO[5];
     [field: SerializeField] public AudioClip[] PlayerFootSteps { private set; get; } = new AudioClip[5];
     [field: SerializeField] public float FootstepVolume { private set; get; } = .2f;
+    [field: SerializeField] public float GeneralGameVolume { private set; get; } = 1f;
     int roundedInt = 0;
     float newVolume = 0f;
 
@@ -58,7 +59,7 @@ public class AudioHandler : MonoBehaviour
             clip = ability.Sounds.GetCastSound();
             if (clip != null)
             {
-                audioSource.PlayOneShot(clip, .3f);
+                audioSource.PlayOneShot(clip, .3f * GeneralGameVolume);
             }
         }
     }
@@ -70,14 +71,24 @@ public class AudioHandler : MonoBehaviour
             clip = ability.Sounds.GetImpactSound();
             if (clip != null)
             {
-                audioSource.PlayOneShot(clip, .5f);
+                audioSource.PlayOneShot(clip, .5f * GeneralGameVolume);
             }
         }
     }
     public void OnFootstep()
     {
-        audioSource.PlayOneShot(PlayerFootSteps[UnityEngine.Random.Range(0, PlayerFootSteps.Length)], FootstepVolume);
+        audioSource.PlayOneShot(PlayerFootSteps[UnityEngine.Random.Range(0, PlayerFootSteps.Length)], FootstepVolume * GeneralGameVolume);
     }
+
+    #region  Adjust Volume Methods
+    public void AdjustGeneralGameVolume(bool increase)
+    {
+        Debug.Log($"Adjusting volume. Increase: {increase}");
+        GeneralGameVolume += increase ? 0.1f : -0.1f; // increase or decrease by 0.1 depedning on true or false
+        GeneralGameVolume = Mathf.Clamp(GeneralGameVolume, 0f, 1f); // clamp between 0 and 1
+    }
+
+    #endregion
 
 }
 public enum LocationSong

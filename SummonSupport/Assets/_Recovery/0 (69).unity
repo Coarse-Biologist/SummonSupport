@@ -8655,7 +8655,6 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 469a9d2d7fa5d104f8827950bbd3bf28, type: 3}
   - {fileID: 8300000, guid: 131da9bc1cc786744924e2d353c9df44, type: 3}
   <FootstepVolume>k__BackingField: 0.1
-  <GeneralGameVolume>k__BackingField: 1
 --- !u!1001 &84590274017519541
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10002,6 +10001,74 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c7f20613f6056c84cad3b32c01b12428, type: 3}
+--- !u!1001 &4629974066581973114
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 301499783134332191, guid: e921b3f07ec6cbe45ad14511133ed94a,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 19.16
+      objectReference: {fileID: 0}
+    - target: {fileID: 301499783134332191, guid: e921b3f07ec6cbe45ad14511133ed94a,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 7.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 301499783134332191, guid: e921b3f07ec6cbe45ad14511133ed94a,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -8.258823
+      objectReference: {fileID: 0}
+    - target: {fileID: 301499783134332191, guid: e921b3f07ec6cbe45ad14511133ed94a,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 301499783134332191, guid: e921b3f07ec6cbe45ad14511133ed94a,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 301499783134332191, guid: e921b3f07ec6cbe45ad14511133ed94a,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 301499783134332191, guid: e921b3f07ec6cbe45ad14511133ed94a,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 301499783134332191, guid: e921b3f07ec6cbe45ad14511133ed94a,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 301499783134332191, guid: e921b3f07ec6cbe45ad14511133ed94a,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 301499783134332191, guid: e921b3f07ec6cbe45ad14511133ed94a,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7049163817033978797, guid: e921b3f07ec6cbe45ad14511133ed94a,
+        type: 3}
+      propertyPath: m_Name
+      value: Meteor_Psychic
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: e921b3f07ec6cbe45ad14511133ed94a, type: 3}
 --- !u!1001 &4824617163347258957
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11678,3 +11745,4 @@ SceneRoots:
   - {fileID: 1769241316}
   - {fileID: 1968603991}
   - {fileID: 545199855}
+  - {fileID: 4629974066581973114}

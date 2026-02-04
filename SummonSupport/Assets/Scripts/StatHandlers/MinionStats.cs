@@ -59,6 +59,7 @@ public class MinionStats : LivingBeing
 
     public override void Die()
     {
+        abilityHandler.StopAllToggledAbilities();
         EventDeclarer.minionDied?.Invoke(gameObject);
         SetRegeneration(AttributeType.CurrentHitpoints, 0);
         if (ragdollScript != null) ragdollScript.CauseDestruction(true);

@@ -6,14 +6,14 @@ public class PlayerAudioHandler : LivingBeingAudioHandler
 {
 
 
-    private void Start()
-    {
-        CreatureAudioSource = GetComponent<AudioSource>();
-        if (CreatureAudioSource == null)
-        {
-            CreatureAudioSource = gameObject.AddComponent<AudioSource>();
-        }
-    }
+    //private void Start()
+    //{
+    //    CreatureAudioSource = GetComponent<AudioSource>();
+    //    if (CreatureAudioSource == null)
+    //    {
+    //        CreatureAudioSource = gameObject.AddComponent<AudioSource>();
+    //    }
+    //}
     void OnEnable()
     {
         EventDeclarer.PlayerDialogue?.AddListener(PlayDialogueSound);

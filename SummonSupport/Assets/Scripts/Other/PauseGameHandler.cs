@@ -1,5 +1,7 @@
 using System.Collections.Generic;
+using NUnit.Framework.Internal;
 using SummonSupportEvents;
+using Unity.VisualScripting;
 using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -13,20 +15,22 @@ public class PauseGameHandler : MonoBehaviour
 
     private UIDocument ui;
 
-    public VisualTreeAsset UIPrefabAssets { get; private set; }
+    private VisualTreeAsset UIPrefabAssets { get; set; }
 
     private VisualElement root;
     private VisualElement PauseMenu;
-    private VisualElement ButtonMenu;
 
     private Button ResumeButton;
+    private Button SettingsButton;
+
     private Button RestartButton;
     private Button InventoryButton;
     private Button StatsButton;
 
     private Label InfoElement;
     private VisualElement MainUI;
-    private VisualElement DialogueUI;
+    private VisualElement QuestInfoContainer;
+    private Label QuestInfoLabel;
     private VisualElement PlayerOptions;
     private int statIndex = 0;
     private int invIndex = 0;
@@ -55,40 +59,53 @@ public class PauseGameHandler : MonoBehaviour
         ui = UI_DocHandler.Instance.ui;
         UIPrefabAssets = UI_DocHandler.Instance.UIPrefabAssets;
         root = ui.rootVisualElement;
+
+        #region get buttons from UI editor
         PauseMenu = root.Q<VisualElement>("PauseMenu");
-        //ButtonMenu = PauseMenu.Q<VisualElement>("ButtonMenu");
         ResumeButton = PauseMenu.Q<Button>("Resume");
         InventoryButton = PauseMenu.Q<Button>("Inventory");
         RestartButton = PauseMenu.Q<Button>("Restart");
         QuitButton = PauseMenu.Q<Button>("Quit");
         StatsButton = PauseMenu.Q<Button>("ShowStats");
-
+        SettingsButton = PauseMenu.Q<Button>("Settings");
         MainUI = root.Q<VisualElement>("MainUI");
-        //Debug.Log($"main ui: {PauseMenu}");
-
-        DialogueUI = MainUI.Q<VisualElement>("Dialogue");
+        QuestInfoContainer = MainUI.Q<VisualElement>("QuestInfoContainer");
         PlayerOptions = MainUI.Q<VisualElement>("PlayerOptions");
-
         InfoElement = PlayerOptions.Q<Label>("Info");
+        QuestInfoLabel = QuestInfoContainer.Q<Label>("QuestInfoLabel");
+        #endregion
 
+        #region  register buton callbacks
         ResumeButton.RegisterCallback<ClickEvent>(e => Resume());
         ResumeButton.RegisterCallback<ClickEvent>(e => EventDeclarer.UnpauseGame?.Invoke());
 
         RestartButton.RegisterCallback<ClickEvent>(e => Restart());
+        SettingsButton.RegisterCallback<ClickEvent>(e => ShowSettings());
+
 
         StatsButton.RegisterCallback<ClickEvent>(e => ChangeStatIndex());
+
         InventoryButton.RegisterCallback<ClickEvent>(e => ShowInventory());
+
+        StatsButton.RegisterCallback<ClickEvent>(e => ClearInfoElement());
+        InventoryButton.RegisterCallback<ClickEvent>(e => ClearInfoElement());
+
+
+        #endregion
+
         InfoElement.text = "";
 
     }
 
-
+    #region Pause and Resume Methods
 
     private void Pause()
     {
         paused = true;
         UnityEngine.Cursor.lockState = CursorLockMode.None;   // Locks the cursor to the center of the screen
         UnityEngine.Cursor.visible = true;
+        QuestInfoContainer.style.display = DisplayStyle.None;
+        ClearInfoElement();
 
         PauseMenu.style.opacity = 0f;
         PauseMenu.style.display = DisplayStyle.Flex;
@@ -138,6 +155,10 @@ public class PauseGameHandler : MonoBehaviour
             .OnCompleted(() => PauseMenu.style.display = DisplayStyle.None);
 
     }
+    private void ClearInfoElement()
+    {
+        InfoElement.Clear();
+    }
 
     private void Resume()
     {
@@ -145,6 +166,7 @@ public class PauseGameHandler : MonoBehaviour
         UnityEngine.Cursor.lockState = CursorLockMode.Locked;   // Locks the cursor to the center of the screen
         UnityEngine.Cursor.visible = false;
         PlayerOptions.style.display = DisplayStyle.None;
+        QuestInfoContainer.style.display = DisplayStyle.Flex;
 
         PauseMenu.SetEnabled(false);
 
@@ -154,36 +176,7 @@ public class PauseGameHandler : MonoBehaviour
 
         ResumeTime();
     }
-    private void Restart()
-    {
-        UnityEngine.Cursor.lockState = CursorLockMode.Locked;   // Locks the cursor to the center of the screen
-        UnityEngine.Cursor.visible = false;
-        Time.timeScale = 1f;
-        SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex);
-    }
-
-    private void DeathPause(bool dead)
-    {
-        UnityEngine.Cursor.lockState = CursorLockMode.None;   // Locks the cursor to the center of the screen
-        UnityEngine.Cursor.visible = true;
-
-        PauseMenu.SetEnabled(true);
-        PauseMenu.style.display = DisplayStyle.Flex;
-        PauseMenu.style.opacity = 0f;
-
-        QuitButton.style.display = DisplayStyle.Flex;
-        RestartButton.style.display = DisplayStyle.Flex;
-        ResumeButton.style.display = DisplayStyle.None;
-        InventoryButton.style.display = DisplayStyle.None;
-        //InfoScrollElement.style.display = DisplayStyle.Flex;
-
-        InfoElement.text = "You have fallen asleep in death \n";
-        EaseInOpacity(PauseMenu, 350);
-        ShowGameStats();
-
-        Time.timeScale = 0f;
-    }
-
+    #region level up pause
     private void LevelUpPause(List<string> ImprovedAttributesList)
     {
         UnityEngine.Cursor.lockState = CursorLockMode.None;   // Locks the cursor to the center of the screen
@@ -215,6 +208,47 @@ public class PauseGameHandler : MonoBehaviour
 
         Time.timeScale = 0f;
     }
+    #endregion
+
+    #region death pause
+    private void DeathPause(bool dead)
+    {
+        UnityEngine.Cursor.lockState = CursorLockMode.None;   // Locks the cursor to the center of the screen
+        UnityEngine.Cursor.visible = true;
+
+        PauseMenu.SetEnabled(true);
+        PauseMenu.style.display = DisplayStyle.Flex;
+        PauseMenu.style.opacity = 0f;
+
+        QuitButton.style.display = DisplayStyle.Flex;
+        RestartButton.style.display = DisplayStyle.Flex;
+        ResumeButton.style.display = DisplayStyle.None;
+        InventoryButton.style.display = DisplayStyle.None;
+        //InfoScrollElement.style.display = DisplayStyle.Flex;
+
+        InfoElement.text = "You have fallen asleep in death \n";
+        EaseInOpacity(PauseMenu, 350);
+        ShowGameStats();
+
+        Time.timeScale = 0f;
+    }
+
+    #endregion
+    #endregion
+
+    #region restart
+    private void Restart()
+    {
+        UnityEngine.Cursor.lockState = CursorLockMode.Locked;   // Locks the cursor to the center of the screen
+        UnityEngine.Cursor.visible = false;
+        Time.timeScale = 1f;
+        SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex);
+    }
+    #endregion
+
+
+    #region Show stats and inventory
+
     private void ShowPlayerstats()
     {
         InfoElement.text = $"{PlayerStats.Instance.Name} stats:\n {PlayerStats.Instance.GetLivingBeingStats()}";
@@ -283,6 +317,32 @@ public class PauseGameHandler : MonoBehaviour
             invIndex = 0;
         }
     }
+    #endregion
+    #region Settings Menu
+    private void ShowSettings()
+    {
+        PlayerOptions.style.display = DisplayStyle.Flex;
+        ClearInfoElement();
+        InfoElement.text = "";
+        EaseInOpacity(PlayerOptions, 350);
+        Button volumeUpButton = AddVolumeButtons("Volume Up", InfoElement, 50, 25);
+        Button volumeDownButton = AddVolumeButtons("Volume Down", InfoElement, 50, 25);
+        volumeDownButton.RegisterCallback<ClickEvent>(e => AudioHandler.Instance.AdjustGeneralGameVolume(false));
+        volumeUpButton.RegisterCallback<ClickEvent>(e => AudioHandler.Instance.AdjustGeneralGameVolume(true));
+    }
+
+    private Button AddVolumeButtons(string buttonText, VisualElement panel, float width, float height)
+    {
+        TemplateContainer prefabContainer = UIPrefabAssets.Instantiate();
+        Button button = prefabContainer.Q<Button>("ButtonPrefab");
+        button.text = buttonText;
+
+        panel.Add(button);
+        return button;
+
+    }
+    #endregion
+
 }
 
 //Easing.OutCubic     // default-feeling UI motion
