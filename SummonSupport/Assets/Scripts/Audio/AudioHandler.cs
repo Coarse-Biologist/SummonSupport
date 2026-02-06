@@ -9,7 +9,6 @@ public class AudioHandler : MonoBehaviour
     public static AudioHandler Instance;
     public AudioSource audioSource;
     public LayeredSongs_SO[] audioClips = new LayeredSongs_SO[5];
-    [field: SerializeField] public AudioClip[] PlayerFootSteps { private set; get; } = new AudioClip[5];
     [field: SerializeField] public float FootstepVolume { private set; get; } = .2f;
     [field: SerializeField] public float GeneralGameVolume { private set; get; } = 1f;
     int roundedInt = 0;
@@ -21,22 +20,6 @@ public class AudioHandler : MonoBehaviour
         audioSource = GetComponent<AudioSource>();
         //SetMusicToIntensity(1.5f, LocationSong.level1);
         audioSource.loop = true;
-
-    }
-    void OnEnable()
-    {
-        EventDeclarer.PlayAbilityCastSound?.AddListener(PlayAbilityCastSound);
-        EventDeclarer.PlayAbilityImpactSound?.AddListener(PlayAbilityImpactSound);
-        EventDeclarer.PlayerFootstep?.AddListener(OnFootstep);
-
-
-    }
-    void OnDisable()
-    {
-        EventDeclarer.PlayAbilityCastSound?.RemoveListener(PlayAbilityCastSound);
-        EventDeclarer.PlayAbilityImpactSound?.RemoveListener(PlayAbilityImpactSound);
-        EventDeclarer.PlayerFootstep?.RemoveListener(OnFootstep);
-
 
     }
 
@@ -51,34 +34,9 @@ public class AudioHandler : MonoBehaviour
             audioSource.Play();
     }
 
-    private void PlayAbilityCastSound(Ability ability)
-    {
-        AudioClip clip;
-        if (ability.Sounds != null && ability.Sounds.CastSounds.Length != 0)
-        {
-            clip = ability.Sounds.GetCastSound();
-            if (clip != null)
-            {
-                audioSource.PlayOneShot(clip, .3f * GeneralGameVolume);
-            }
-        }
-    }
-    private void PlayAbilityImpactSound(Ability ability)
-    {
-        AudioClip clip;
-        if (ability.Sounds != null && ability.Sounds.ImpactSounds.Length != 0)
-        {
-            clip = ability.Sounds.GetImpactSound();
-            if (clip != null)
-            {
-                audioSource.PlayOneShot(clip, .5f * GeneralGameVolume);
-            }
-        }
-    }
-    public void OnFootstep()
-    {
-        audioSource.PlayOneShot(PlayerFootSteps[UnityEngine.Random.Range(0, PlayerFootSteps.Length)], FootstepVolume * GeneralGameVolume);
-    }
+
+
+
 
     #region  Adjust Volume Methods
     public void AdjustGeneralGameVolume(bool increase)

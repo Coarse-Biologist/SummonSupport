@@ -2,9 +2,9 @@ using System;
 using System.Collections;
 using UnityEngine;
 
-public abstract class LivingBeingAudioHandler : MonoBehaviour
+public class LivingBeingAudioHandler : MonoBehaviour
 {
-    protected AudioSource CreatureAudioSource;
+    public AudioSource CreatureAudioSource { protected set; get; }
     [field: SerializeField] public AudioClip[] CreatureDamagedClips { private set; get; } = new AudioClip[5];
     [field: SerializeField] public WaitForSeconds DamageSoundDelay { private set; get; } = new WaitForSeconds(.2f);
     protected AudioHandler AudioHandlerInstance;
@@ -35,6 +35,30 @@ public abstract class LivingBeingAudioHandler : MonoBehaviour
         if (clip != null)
         {
             CreatureAudioSource.PlayOneShot(clip, volume * AudioHandlerInstance.GeneralGameVolume);
+        }
+    }
+    public void PlayAbilityCastSound(Ability ability)
+    {
+        AudioClip clip;
+        if (ability.Sounds != null && ability.Sounds.CastSounds.Length != 0)
+        {
+            clip = ability.Sounds.GetCastSound();
+            if (clip != null)
+            {
+                CreatureAudioSource.PlayOneShot(clip, .3f * AudioHandlerInstance.GeneralGameVolume);
+            }
+        }
+    }
+    public void PlayAbilityImpactSound(Ability ability)
+    {
+        AudioClip clip;
+        if (ability.Sounds != null && ability.Sounds.ImpactSounds.Length != 0)
+        {
+            clip = ability.Sounds.GetImpactSound();
+            if (clip != null)
+            {
+                CreatureAudioSource.PlayOneShot(clip, .5f * AudioHandlerInstance.GeneralGameVolume);
+            }
         }
     }
 

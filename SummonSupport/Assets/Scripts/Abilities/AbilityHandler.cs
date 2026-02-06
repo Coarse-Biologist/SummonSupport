@@ -14,6 +14,7 @@ public class AbilityHandler : MonoBehaviour
     private bool charging = false;
     public AbilityModHandler modHandler { protected set; get; }
     private AnimationControllerScript anim;
+    private LivingBeingAudioHandler audioHandler;
     //private bool AbilityToggledRecently = false;
 
 
@@ -26,7 +27,10 @@ public class AbilityHandler : MonoBehaviour
             abilitySpawn = gameObject;
 
         if (statsHandler == null)
+        {
             statsHandler = gameObject.GetComponent<LivingBeing>();
+        }
+
         foreach (Ability ability in Abilities)
         {
             abilitiesOnCooldownCrew.Add(ability, false);
@@ -35,6 +39,10 @@ public class AbilityHandler : MonoBehaviour
     void Start()
     {
         modHandler = AbilityModHandler.Instance;
+        audioHandler = GetComponent<LivingBeingAudioHandler>();
+
+        if (audioHandler == null) throw new System.Exception($"Audio handler is null. it was not found on the object.");
+
     }
 
     public void LearnAbility(Ability ability)
@@ -207,7 +215,6 @@ public class AbilityHandler : MonoBehaviour
 
     public IEnumerator SetOnCooldown(Ability ability)
     {
-
         try
         {
             //status effect presense handling
@@ -235,12 +242,13 @@ public class AbilityHandler : MonoBehaviour
         }
         return KnownAbilities;
     }
+
     private void PlayCastSound(Ability ability)
     {
         if (ability.Sounds != null && ability.Sounds.CastSounds.Length != 0)
         {
             //Debug.Log("trying to play cast sound");
-            EventDeclarer.PlayAbilityCastSound?.Invoke(ability);
+            audioHandler.PlayAbilityCastSound(ability);
         }
     }
 

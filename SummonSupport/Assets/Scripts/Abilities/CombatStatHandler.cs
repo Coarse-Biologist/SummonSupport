@@ -48,6 +48,8 @@ public static class CombatStatHandler
         currentTarget = target;
         if (caster is not EnemyStats) modHandler = AbilityModHandler.Instance;
         else modHandler = null;
+
+        PlayImpactSound(ability, target);
         SetCurrentValues(effectPackage);
         //UnityEngine.Debug.Log($"caster = {caster.Name}, target = {target.Name} mod handler = {modHandler}");
         AddMods();
@@ -283,13 +285,26 @@ public static class CombatStatHandler
             {
                 if (changeValue < -10 && currentTarget.audioHandler != null)
                 {
-                    currentTarget.StartCoroutine(currentTarget.audioHandler.CreatureDamagedSound(changeValue));
+                    PlayCreatureDamagedSound(changeValue, currentTarget);
                 }
                 //else UnityEngine.Debug.Log($"Damage less than 30, no sound played. changeValue = {changeValue}");
                 currentTarget.SetAttribute(AttributeType.CurrentHitpoints, currentTarget.GetAttribute(AttributeType.CurrentHitpoints) + changeValue);
             }
         }
     }
+    #region sound methods
+    private static void PlayImpactSound(Ability ability, LivingBeing target)
+    {
+        if (ability.Sounds != null && ability.Sounds.ImpactSounds.Length != 0)
+        {
+            target.audioHandler.PlayAbilityImpactSound(ability);
+        }
+    }
+    private static void PlayCreatureDamagedSound(float DamageValue, LivingBeing target)
+    {
+        target.StartCoroutine(target.audioHandler.CreatureDamagedSound(DamageValue));
+    }
+    #endregion
 
     #endregion
 

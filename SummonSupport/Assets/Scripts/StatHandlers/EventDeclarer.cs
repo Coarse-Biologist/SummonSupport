@@ -27,8 +27,8 @@ namespace SummonSupportEvents
 
         public static UnityEvent<int> AbilityUsed = new(); // int should be the index of the ability
         public static UnityEvent<DialogueAndAudio_SO> PlayerDialogue = new();
-        public static UnityEvent<Ability> PlayAbilityCastSound = new();
-        public static UnityEvent<Ability> PlayAbilityImpactSound = new();
+        public static UnityEvent<float> GeneralVolumeChanged = new();
+        public static UnityEvent<float> FootstepVolumeChanged = new();
 
         public static UnityEvent<SpawnLocationInfo> SpawnEnemies = new();
 
