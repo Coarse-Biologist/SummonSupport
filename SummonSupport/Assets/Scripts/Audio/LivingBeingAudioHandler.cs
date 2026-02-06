@@ -29,7 +29,7 @@ public class LivingBeingAudioHandler : MonoBehaviour
         damageAmount = Math.Abs(damageAmount);
         float volume = Math.Min(damageAmount / 100f, .3f);
 
-        Debug.Log($"Triggering creature damaged sound.");
+        //Debug.Log($"Triggering creature damaged sound.");
         yield return DamageSoundDelay;
         AudioClip clip = CreatureDamagedClips[UnityEngine.Random.Range(0, CreatureDamagedClips.Length)];
         if (clip != null)

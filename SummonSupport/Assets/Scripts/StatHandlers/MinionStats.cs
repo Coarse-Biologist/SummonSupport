@@ -96,7 +96,7 @@ public class MinionStats : LivingBeing
             if (gameObject.TryGetComponent(out AIStateHandler stateHandler))
             {
                 stateHandler.SetDead(false);
-                Debug.Log("Setting state handler death to false");
+                //Debug.Log("Setting state handler death to false");
                 //stateHandler.StartCoroutine(stateHandler.RunStateMachine());
             }
 
@@ -105,7 +105,7 @@ public class MinionStats : LivingBeing
 
     public void Resurrect()
     {
-        Debug.Log($"Resurrecting minion {Name}");
+        //Debug.Log($"Resurrecting minion {Name}");
         ToggleDeath(false);
         ChangeAttribute(AttributeType.CurrentHitpoints, 50f);
         if (ragdollScript != null) ragdollScript.ReverseDestruction();

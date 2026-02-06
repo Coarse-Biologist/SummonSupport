@@ -22,6 +22,7 @@ public class EnemyStats : LivingBeing
 
     public override void Die()
     {
+        Debug.Log("Gimme dat stack trace");
         if (!Dead)
         {
             abilityHandler.StopAllToggledAbilities();
@@ -71,7 +72,7 @@ public class EnemyStats : LivingBeing
 
     private void DelayedTestDeath()
     {
-        Debug.Log("Delayed test death happening now");
+        //Debug.Log("Delayed test death happening now");
         Destroy(gameObject);
     }
 

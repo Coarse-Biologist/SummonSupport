@@ -13,10 +13,10 @@ public class ChargeAbilityMono : MonoBehaviour
     private Vector3 startLoc;
     private AbilityHandler abilityHandler;
     private LivingBeing caster;
-    private WaitForSeconds chargeTickRate = new WaitForSeconds(.01f);
+    private WaitForSeconds chargeTickRate = new WaitForSeconds(.1f);
     private GameObject trailEffect;
     private AbilityModHandler modHandler;
-    private float speedBoost = 35;
+    [field: SerializeField] public float SpeedBoost { private set; get; } = 10;
     private float range = 0;
     private int alreadypierced = 0;
     private int maxPierce = 0;
@@ -37,7 +37,7 @@ public class ChargeAbilityMono : MonoBehaviour
         range = chargeAbility.Range;
 
 
-        Debug.Log($"Max pierce = {maxPierce}");
+        //Debug.Log($"Max pierce = {maxPierce}");
 
         originTransform = user.transform;
         rb = user.GetComponentInParent<Rigidbody>();
@@ -49,13 +49,13 @@ public class ChargeAbilityMono : MonoBehaviour
         {
             maxPierce = modHandler.GetModAttributeByType(chargeAbility.ActivateOnHit, AbilityModTypes.MaxPierce);
             range += modHandler.GetModAttributeByType(chargeAbility.ActivateOnHit, AbilityModTypes.Size);
-            speedBoost += modHandler.GetModAttributeByType(chargeAbility, AbilityModTypes.Speed);
+            SpeedBoost += modHandler.GetModAttributeByType(chargeAbility, AbilityModTypes.Speed);
 
         }
 
         if (caster.gameObject.TryGetComponent(out MovementScript movementScript))
         {
-            speedBoost += movementScript.MovementSpeed;
+            SpeedBoost += movementScript.MovementSpeed;
         }
     }
 
@@ -80,7 +80,9 @@ public class ChargeAbilityMono : MonoBehaviour
         startLoc = transform.position;
         while (stillCharging)
         {
-            rb.linearVelocity = originTransform.forward * speedBoost;
+            Debug.Log("Charging");
+
+            rb.linearVelocity = originTransform.forward * SpeedBoost;
             if ((gameObject.transform.position - startLoc).magnitude > chargeAbility.Range)
             {
                 EndCharge();

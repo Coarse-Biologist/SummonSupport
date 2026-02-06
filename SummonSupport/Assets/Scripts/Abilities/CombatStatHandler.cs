@@ -196,7 +196,7 @@ public static class CombatStatHandler
         if (currentDotValue == 0) return 0;
 
         float damageValue = -currentDotValue;
-        UnityEngine.Debug.Log($"Applying DOT of value {damageValue}");
+        //UnityEngine.Debug.Log($"Applying DOT of value {damageValue}");
         damageValue = ModifyDamageValueByCasterAffinity(damageValue);
 
         foreach (Element element in currentAbility.ElementTypes)

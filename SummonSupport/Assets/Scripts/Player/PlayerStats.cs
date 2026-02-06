@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using SummonSupportEvents;
+using Unity.Entities.UniversalDelegates;
 using UnityEngine;
 using UnityEngine.Rendering.PostProcessing;
 
@@ -178,17 +179,23 @@ public class PlayerStats : LivingBeing
     }
 
 
-    public void ResurrectMinion(GameObject minion)
+    public void ResurrectMinion(GameObject minion, I_InteractMinionResurrect interactable)
     {
-        StartCoroutine(CheckResurrection(minion));
+        StartCoroutine(CheckResurrection(minion, interactable));
     }
 
-    private IEnumerator CheckResurrection(GameObject minion)
+    private IEnumerator CheckResurrection(GameObject minion, I_InteractMinionResurrect interactable)
     {
-        bool resSucceeding = true;
+        Debug.Log($"Starting resurrection of {minion.name}");
+        if (!minion.TryGetComponent(out MinionStats minionStats))
+        {
+            Debug.LogWarning("Trying to resurrect a minion without minion stats component. cancelling res");
+            yield break;
+        }
+        bool resurrecting = true;
         float timeWaited = 0;
         float distance;
-        while (resSucceeding)
+        while (resurrecting)
         {
             yield return resurrectionIncrement;
             timeWaited += .5f;
@@ -196,13 +203,16 @@ public class PlayerStats : LivingBeing
             if (distance >= ResurrectRange)
             {
                 Debug.Log($"Distance to minion = {distance}. setting res succeeding to false.");
-                resSucceeding = false;
+                interactable.SetResurrecting(false);
+                resurrecting = false;
             }
             if (timeWaited >= ResurrectTime)
             {
                 Debug.Log("Breaking loop because res time has been successfully waited");
-                if (minion.TryGetComponent<MinionStats>(out MinionStats minionStats)) minionStats.Resurrect();
-                break;
+                minionStats.Resurrect();
+                interactable.SetResurrecting(false);
+                resurrecting = false;
+
             }
         }
     }

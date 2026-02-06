@@ -12,7 +12,7 @@ public class ChargeAbility : Ability
 
     public override bool Activate(LivingBeing casterStats)
     {
-        Debug.Log("Charge ability is being activated");
+        //Debug.Log("Charge ability is being activated");
         GameObject instance = Instantiate(chargeMonoObject, casterStats.transform.position, Quaternion.identity, casterStats.transform);
         instance.GetComponent<ChargeAbilityMono>().Charge(casterStats, this);
         return true;

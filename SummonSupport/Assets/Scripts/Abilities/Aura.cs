@@ -169,7 +169,7 @@ public class Aura : MonoBehaviour
             //Debug.Log($"Effects of {ability.Name} is being handled.");
             CombatStatHandler.HandleEffectPackage(ability, caster, otherLivingBeing, ability.TargetEffects);
             piercedAlready += 1;
-            Debug.Log($"split already = {splitAlready}. max split = {maxSplit}");
+            //Debug.Log($"split already = {splitAlready}. max split = {maxSplit}");
             if (ConjureAbility != null)
             {
                 if (ConjureAbility.SeeksTarget)
