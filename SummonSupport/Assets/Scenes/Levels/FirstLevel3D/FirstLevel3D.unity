@@ -5482,6 +5482,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1778159201009159650, guid: 4234196dba3d8d14195068062b6f93d4,
+        type: 3}
+      propertyPath: playerFollowRadius
+      value: 15
+      objectReference: {fileID: 0}
     - target: {fileID: 2338675823077055740, guid: 4234196dba3d8d14195068062b6f93d4,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -9047,7 +9052,7 @@ PrefabInstance:
     - target: {fileID: 3570037555416914556, guid: d59dad8fff71c26458f7a36f57b785c6,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4688877400667156625, guid: d59dad8fff71c26458f7a36f57b785c6,
         type: 3}
@@ -9123,12 +9128,12 @@ PrefabInstance:
     - target: {fileID: 7937583884017801987, guid: d59dad8fff71c26458f7a36f57b785c6,
         type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7937583884017801987, guid: d59dad8fff71c26458f7a36f57b785c6,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8523956866164005965, guid: d59dad8fff71c26458f7a36f57b785c6,
         type: 3}
@@ -9973,6 +9978,23 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 5700169036039766404, guid: 29cc623553c0c3d4aa9548ba52efed1b,
+        type: 3}
+      propertyPath: <Abilities>k__BackingField.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5700169036039766404, guid: 29cc623553c0c3d4aa9548ba52efed1b,
+        type: 3}
+      propertyPath: '<Abilities>k__BackingField.Array.data[0]'
+      value: 
+      objectReference: {fileID: 11400000, guid: c7cddf46802a5504c8341d301016c75c,
+        type: 2}
+    - target: {fileID: 5700169036039766404, guid: 29cc623553c0c3d4aa9548ba52efed1b,
+        type: 3}
+      propertyPath: '<Abilities>k__BackingField.Array.data[1]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 3ae7c83f398a8bb44aa09566b7180248,
+        type: 2}
     - target: {fileID: 6707783455156688924, guid: 29cc623553c0c3d4aa9548ba52efed1b,
         type: 3}
       propertyPath: m_LocalPosition.x

@@ -36,7 +36,10 @@ public class AudioHandler : MonoBehaviour
 
 
 
-
+    public string GetGeneralGameVolume()
+    {
+        return $"Volume: {GeneralGameVolume * 100}%";
+    }
 
     #region  Adjust Volume Methods
     public void AdjustGeneralGameVolume(bool increase)
@@ -44,6 +47,7 @@ public class AudioHandler : MonoBehaviour
         Debug.Log($"Adjusting volume. Increase: {increase}");
         GeneralGameVolume += increase ? 0.1f : -0.1f; // increase or decrease by 0.1 depedning on true or false
         GeneralGameVolume = Mathf.Clamp(GeneralGameVolume, 0f, 1f); // clamp between 0 and 1
+        GeneralGameVolume = (float)Math.Round(GeneralGameVolume, 1); // round to 1 decimal place
     }
 
     #endregion

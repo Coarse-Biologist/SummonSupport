@@ -19,6 +19,7 @@ public class AIPeacefulState : AIState
     private WaitForSeconds supportSpeed = new WaitForSeconds(5);
     private Coroutine supportCoroutine;
     private LivingBeing peaceStateTarget;
+    [field: SerializeField] private float playerFollowRadius = 2f;
     #endregion
 
 
@@ -157,7 +158,7 @@ public class AIPeacefulState : AIState
     {
         //Debug.Log("Going to player function called");
         float distance = (player.transform.position - transform.position).sqrMagnitude;
-        if (distance >= stateHandler.navAgent.stoppingDistance + 1 || distance >= chaseState.SelectedAbilityAttackRange)
+        if (distance >= stateHandler.navAgent.stoppingDistance + playerFollowRadius || distance >= chaseState.SelectedAbilityAttackRange)
         {
             //Debug.Log($"Going to player becuase: Distance = {distance}. stopping distance = {stateHandler.navAgent.stoppingDistance}. chase state selected ability = {chaseState.SelectedAbilityAttackRange}");
 

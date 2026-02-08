@@ -175,6 +175,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0ba192906d9c0c4ab421c7550d92983, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AIPeacefulState
+  playerFollowRadius: 15
 --- !u!114 &4245647695092035784
 MonoBehaviour:
   m_ObjectHideFlags: 0

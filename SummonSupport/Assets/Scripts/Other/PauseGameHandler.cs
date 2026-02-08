@@ -4,6 +4,7 @@ using SummonSupportEvents;
 using Unity.VisualScripting;
 using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 using UnityEngine.UIElements.Experimental;
@@ -329,6 +330,15 @@ public class PauseGameHandler : MonoBehaviour
         Button volumeDownButton = AddVolumeButtons("Volume Down", InfoElement, 50, 25);
         volumeDownButton.RegisterCallback<ClickEvent>(e => AudioHandler.Instance.AdjustGeneralGameVolume(false));
         volumeUpButton.RegisterCallback<ClickEvent>(e => AudioHandler.Instance.AdjustGeneralGameVolume(true));
+
+        volumeDownButton.RegisterCallback<ClickEvent>(e => DisplayVolume());
+        volumeUpButton.RegisterCallback<ClickEvent>(e => DisplayVolume());
+
+        DisplayVolume();
+    }
+    private void DisplayVolume()
+    {
+        InfoElement.text = $"\n \n \n \n {AudioHandler.Instance.GetGeneralGameVolume()}\n";
     }
 
     private Button AddVolumeButtons(string buttonText, VisualElement panel, float width, float height)
