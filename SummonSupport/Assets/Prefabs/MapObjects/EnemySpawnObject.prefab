@@ -114,7 +114,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <CreaturesPerWave>k__BackingField: 1
-  <Waves>k__BackingField: 1
+  <Waves>k__BackingField: 10
   <SecondsPerWave>k__BackingField: 20
   <Radius>k__BackingField: 3
   <MoveTowardLocation>k__BackingField: 1

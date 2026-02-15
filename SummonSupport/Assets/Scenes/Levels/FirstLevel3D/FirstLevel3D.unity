@@ -10669,6 +10669,11 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 13
       objectReference: {fileID: 0}
+    - target: {fileID: 6558628166124916185, guid: 0ef514e756e1bd540af0884298fc436d,
+        type: 3}
+      propertyPath: <Waves>k__BackingField
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 8130914880784924595, guid: 0ef514e756e1bd540af0884298fc436d,
         type: 3}
       propertyPath: m_LocalPosition.x

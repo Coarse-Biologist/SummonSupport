@@ -177,8 +177,9 @@ public class EnemySpawnHandler : MonoBehaviour
     {
         if (desiredSpawns == 0)
         {
-            desiredSpawns += (int)Difficulty + UnityEngine.Random.Range(0, 3);
+            desiredSpawns += (int)Difficulty + 1;
         }
+        else desiredSpawns += (int)Difficulty;
         List<Vector2> spawnLocs = new();
         for (int i = 0; i < desiredSpawns; i++)
         {
