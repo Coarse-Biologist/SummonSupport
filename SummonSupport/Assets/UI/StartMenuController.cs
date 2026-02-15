@@ -11,10 +11,18 @@ public class StartMenuController : MonoBehaviour
     }
     public void StartGame()
     {
-        Debug.Log("Start Game");
-        // logic for loading first game scene
+
         SceneManager.LoadSceneAsync("FirstLevel3D");
     }
+    public void QuitGame()
+    {
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+                Application.Quit();
+#endif
+    }
+
 
 
 }

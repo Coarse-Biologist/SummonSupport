@@ -1,6 +1,6 @@
 using System;
 using System.Collections;
-using UnityEditor.Animations;
+//using UnityEditor.Animations;
 using UnityEngine;
 
 public class AnimationControllerScript : MonoBehaviour
@@ -20,18 +20,18 @@ public class AnimationControllerScript : MonoBehaviour
     {
         anim.updateMode = mode;
     }
-    private void PrintStateMachine(AnimatorStateMachine sm, string layerName)
-    {
-        foreach (var state in sm.states)
-        {
-            Debug.Log($"{gameObject.name} Layer: {layerName} | State: {state.state.name}");
-        }
-
-        foreach (var sub in sm.stateMachines)
-        {
-            PrintStateMachine(sub.stateMachine, layerName);
-        }
-    }
+    //private void PrintStateMachine(AnimatorStateMachine sm, string layerName)
+    //{
+    //    foreach (var state in sm.states)
+    //    {
+    //        Debug.Log($"{gameObject.name} Layer: {layerName} | State: {state.state.name}");
+    //    }
+    //
+    //    foreach (var sub in sm.stateMachines)
+    //    {
+    //        PrintStateMachine(sub.stateMachine, layerName);
+    //    }
+    //}
 
 
     public void ChangeAnimation(string animationName, float crossFadeDuration = .2f)

@@ -90,6 +90,7 @@ public class PauseGameHandler : MonoBehaviour
 
         StatsButton.RegisterCallback<ClickEvent>(e => ClearInfoElement());
         InventoryButton.RegisterCallback<ClickEvent>(e => ClearInfoElement());
+        QuitButton.RegisterCallback<ClickEvent>(e => QuitToMainMenu());
 
 
         #endregion
@@ -247,6 +248,14 @@ public class PauseGameHandler : MonoBehaviour
     }
     #endregion
 
+    #region quit to main menu
+    private void QuitToMainMenu()
+    {
+        SceneManager.LoadSceneAsync("StartScreen");
+        Time.timeScale = 1f;
+
+    }
+    #endregion
 
     #region Show stats and inventory
 

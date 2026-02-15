@@ -19,6 +19,8 @@ public class AlchemyHandler : MonoBehaviour
     [field: SerializeField] public int ManaToAbilityRatio { get; private set; } = 50;
     [field: SerializeField] public float RecycleExchangeRate { get; private set; } = .05f;
     [field: SerializeField] public float KnowledgeGainRate { get; private set; } = 1f;
+    [field: SerializeField] public float HealthScalar { get; private set; } = 2f;
+
     [field: SerializeField] public int SizeScalar { get; private set; } = 20;
     [SerializeField] public List<LivingBeing> activeMinions = new List<LivingBeing>();
     public static AlchemyHandler Instance { get; private set; }
@@ -106,7 +108,7 @@ public class AlchemyHandler : MonoBehaviour
         CommandMinion.RemoveActiveMinions(minion);
 
 
-        Destroy(minion);
+        minion.Die();
     }
     private static int GetCombinedElementValues(LivingBeing stats)
     {
@@ -124,7 +126,7 @@ public class AlchemyHandler : MonoBehaviour
         {
             EventDeclarer.RepeatableQuestCompleted?.Invoke(Quest.RepeatableAccomplishments.OrgansUsed, num);
             stats.ChangeAttribute(AttributeType.MaxHitpoints, num * organKvp.Value);
-            healthUpgrade += num * organKvp.Value;
+            healthUpgrade += (int)(num * organKvp.Value * HealthScalar);
             AlterSizeByOrganNum(stats, num * organKvp.Value);
         }
         return healthUpgrade;
@@ -244,6 +246,7 @@ public class AlchemyHandler : MonoBehaviour
         Debug.Log($"Strongest Element : {strongestElement}, Value : {value}");
         if (strongestElement != Element.None && stats.GetAffinity(strongestElement) > 50)
         {
+            Debug.Log($"changing color by {strongestElement} affinity for {stats.Name}");
             ColorChanger.ChangeAllMatsByAffinity(stats);
             nameModifier = strongestElement.ToString();
             stats.SetName(nameModifier + " Elemental");

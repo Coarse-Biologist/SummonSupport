@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2027817742223664059}
   - component: {fileID: 8105310033013969304}
   - component: {fileID: 2040339347528224391}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: BacterialAura
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4850,6 +4850,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 083b9a9303dd9674b87cc82013ef6e84, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  SizeScalar: 0.1
 --- !u!136 &2040339347528224391
 CapsuleCollider:
   m_ObjectHideFlags: 0

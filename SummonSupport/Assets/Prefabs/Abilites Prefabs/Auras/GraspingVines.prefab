@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3855974447992457332}
   - component: {fileID: 4257607263670371081}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Spline (8)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -202,7 +202,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3268203066162784158}
   - component: {fileID: 8047699045137128713}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Spline (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -414,7 +414,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8240711578818693320}
   - component: {fileID: 6646010862517704040}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Spline (7)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -589,7 +589,7 @@ GameObject:
   - component: {fileID: 8739456287608944447}
   - component: {fileID: 2519283801243717856}
   - component: {fileID: 4771923521649362334}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: SplineVineAnimate2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5505,7 +5505,7 @@ GameObject:
   m_Component:
   - component: {fileID: 481930994500686527}
   - component: {fileID: 4837680868600160958}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Spline (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5717,7 +5717,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5828768403944924511}
   - component: {fileID: 8705661906868758121}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Spline (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5932,7 +5932,7 @@ GameObject:
   - component: {fileID: 4013852068395045474}
   - component: {fileID: 7144643174217067530}
   - component: {fileID: 8757844791680132222}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: SplineVineAnimate7
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10848,7 +10848,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8724709253643404642}
   - component: {fileID: 7965559136508627006}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Spline (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11063,7 +11063,7 @@ GameObject:
   - component: {fileID: 2265579484601595231}
   - component: {fileID: 7661597442167546630}
   - component: {fileID: 8257004680851472936}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: SplineVineAnimate1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15979,7 +15979,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4373961797828615738}
   - component: {fileID: 3100970345560979792}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Spline
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -16194,7 +16194,7 @@ GameObject:
   - component: {fileID: 8883693757366184735}
   - component: {fileID: 2356502541390902000}
   - component: {fileID: 5282854212260749196}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: SplineVineAnimate3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -21113,7 +21113,7 @@ GameObject:
   - component: {fileID: 5338098833238020590}
   - component: {fileID: 5295020672330281253}
   - component: {fileID: 2560063606209479414}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: SplineVineAnimate8
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -26032,7 +26032,7 @@ GameObject:
   - component: {fileID: 4642829439117702828}
   - component: {fileID: 6580948491403756373}
   - component: {fileID: 4700202200375252281}
-  m_Layer: 11
+  m_Layer: 13
   m_Name: GraspingVines
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -26084,6 +26084,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 083b9a9303dd9674b87cc82013ef6e84, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  SizeScalar: 0.1
 --- !u!198 &4642829439117702828
 ParticleSystem:
   m_ObjectHideFlags: 0
@@ -30923,7 +30924,7 @@ GameObject:
   - component: {fileID: 6908669784646097205}
   - component: {fileID: 5888675345437642878}
   - component: {fileID: 3019272833115209501}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: SplineVineAnimate6
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -35842,7 +35843,7 @@ GameObject:
   - component: {fileID: 6598021509912351126}
   - component: {fileID: 6775981853936662759}
   - component: {fileID: 3180556464797603251}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: SplineVineAnimate4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -40761,7 +40762,7 @@ GameObject:
   - component: {fileID: 4341839719841989456}
   - component: {fileID: 5673437577467053013}
   - component: {fileID: 5922391793068130656}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: SplineVineAnimate9
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -45677,7 +45678,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7776779329916619083}
   - component: {fileID: 7706921490897291039}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Spline (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -45889,7 +45890,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6132218677862516725}
   - component: {fileID: 1061030437783051614}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Spline (6)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -46064,7 +46065,7 @@ GameObject:
   - component: {fileID: 7649261135433159209}
   - component: {fileID: 3335553632011970935}
   - component: {fileID: 4770778541014419259}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: SplineVineAnimate 5
   m_TagString: Untagged
   m_Icon: {fileID: 0}

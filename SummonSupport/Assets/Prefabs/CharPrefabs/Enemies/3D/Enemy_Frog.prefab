@@ -11,12 +11,12 @@ PrefabInstance:
     - target: {fileID: -313098299385096099, guid: 6eb2daf00740bba47aac2befdc6b070e,
         type: 3}
       propertyPath: <MaxHP>k__BackingField
-      value: 500
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: -313098299385096099, guid: 6eb2daf00740bba47aac2befdc6b070e,
         type: 3}
       propertyPath: <CurrentHP>k__BackingField
-      value: 500
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: -313098299385096099, guid: 6eb2daf00740bba47aac2befdc6b070e,
         type: 3}

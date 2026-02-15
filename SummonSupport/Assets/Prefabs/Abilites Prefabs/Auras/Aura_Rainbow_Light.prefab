@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2027817742223664059}
   - component: {fileID: 8105310033013969304}
   - component: {fileID: 459280927778443338}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Aura_Rainbow_Light
   m_TagString: Untagged
   m_Icon: {fileID: 0}

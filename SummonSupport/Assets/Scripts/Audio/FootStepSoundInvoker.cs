@@ -5,7 +5,6 @@ using UnityEngine;
 public class FootStepSoundInvoker : MonoBehaviour
 {
     [field: SerializeField] public AudioClip[] PlayerFootSteps { private set; get; } = new AudioClip[5];
-    private float FootstepVolume = 1f;
     private AudioSource audioSource;
     private void Start()
     {
@@ -23,6 +22,6 @@ public class FootStepSoundInvoker : MonoBehaviour
     }
     public void OnFootstep()
     {
-        audioSource.PlayOneShot(PlayerFootSteps[Random.Range(0, PlayerFootSteps.Length)], FootstepVolume * AudioHandler.Instance.GeneralGameVolume);
+        audioSource.PlayOneShot(PlayerFootSteps[Random.Range(0, PlayerFootSteps.Length)], AudioHandler.Instance.FootstepVolume * AudioHandler.Instance.GeneralGameVolume);
     }
 }

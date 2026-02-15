@@ -27,7 +27,7 @@
             <ui:ProgressBar value="66" name="XP_Bar" class="Xpbar" style="height: 10%;" />
         </ui:VisualElement>
         <ui:VisualElement name="QuestInfoContainer" style="flex-grow: 1; right: 0%; top: 30%; align-items: flex-end; position: absolute; flex-basis: 0%; width: 20%; height: 20%;">
-            <ui:Label name="QuestInfoLabel" style="width: 100%; height: 100%; flex-wrap: wrap; flex-basis: auto; flex-shrink: 0; -unity-font-definition: url(&quot;project://database/Assets/UI/Fonts/Jersey10-Regular.ttf?fileID=12800000&amp;guid=3bf54017e8857c1428c5b414e1701729&amp;type=3#Jersey10-Regular&quot;); font-size: 14%; white-space: normal;" />
+            <ui:Label name="QuestInfoLabel" style="width: 100%; height: 100%; flex-wrap: wrap; flex-basis: auto; flex-shrink: 0; -unity-font-definition: url(&quot;project://database/Assets/UI/Fonts/Jersey10-Regular.ttf?fileID=12800000&amp;guid=3bf54017e8857c1428c5b414e1701729&amp;type=3#Jersey10-Regular&quot;); font-size: 14%; white-space: normal; color: rgb(182, 182, 182); -unity-text-align: upper-right;" />
         </ui:VisualElement>
     </ui:VisualElement>
     <ui:VisualElement name="CraftingUI" enabled="true" style="flex-grow: 1; position: absolute; top: 0%; left: 0%; right: 0%; bottom: 0%; opacity: 0; flex-direction: row; flex-wrap: wrap;">

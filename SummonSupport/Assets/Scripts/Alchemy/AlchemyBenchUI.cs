@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using SummonSupportEvents;
 using static StatusEffectsLibrary;
-using UnityEditorInternal.Profiling.Memory.Experimental.FileFormat;
+//using UnityEditorInternal.Profiling.Memory.Experimental.FileFormat;
 
 
 
@@ -155,7 +155,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
             {
                 anim.SetUpdateMode(AnimatorUpdateMode.UnscaledTime);
                 //Debug.Log("Changing animation? but probably time scale is 0");
-                anim.ChangeAnimation("Crafting");
+                anim.ChangeAnimation("Crafting"); // #TODO change to crafting animation
             }
             else Debug.Log("No animation script found");
         }
@@ -166,13 +166,13 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
             if (anim != null)
             {
                 anim.SetUpdateMode(AnimatorUpdateMode.Normal);
+                anim.gameObject.transform.rotation = Quaternion.Euler(0, Camera.main.transform.rotation.eulerAngles.y, 0);
             }
         }
 
     }
     private void UseAlchemyObjectInteraction(bool On)
     {
-
         if (TryGetComponent(out AlchemyObjectInteraction itemInteraction))
         {
             if (On)
@@ -337,7 +337,6 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
         ClearAllPanels();
         ResetVars();
         HideUI(craftingUI);
-        Time.timeScale = 1f;
         UnityEngine.Cursor.lockState = CursorLockMode.Locked;   // Locks the cursor to the center of the screen
         UnityEngine.Cursor.visible = false;
         UseAlchemyObjectInteraction(false);
