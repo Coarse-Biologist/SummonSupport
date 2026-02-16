@@ -176,8 +176,9 @@ public class PlayerMovement : MovementScript
     private void SendMinionCommandContext(InputAction.CallbackContext context)
     {
         if (playerStats.Dead) return;
-
-        Ray ray = new Ray(Camera.main.transform.position, Camera.main.transform.forward);
+        Vector3 cameraForward = Camera.main.transform.forward;
+        Vector3 adjustedForward = new Vector3(cameraForward.x, cameraForward.y + .15f, cameraForward.z);
+        Ray ray = new Ray(Camera.main.transform.position, adjustedForward);
         if (Physics.Raycast(ray, out RaycastHit hit, 300))
         {
             CommandMinion.HandleCommand(hit);

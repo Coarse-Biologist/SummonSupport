@@ -611,6 +611,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
                 {
                     TemplateContainer prefabContainer = UIPrefabAssets.Instantiate();
                     Toggle elementToggle = prefabContainer.Q<Toggle>("TogglePrefab");
+                    //elementToggle.AddToClassList("ElementToggle");
                     elementToggle.text = element.ToString();
                     elementToggle.style.width = Length.Percent(30);
                     elementToggle.style.height = Length.Percent(10);

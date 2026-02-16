@@ -128,3 +128,25 @@
     min-width: 100%;
     max-width: 100%;
 }
+/* element toggle pseudo states and such */
+.ElementToggle:checked .unity-toggle__checkmark {
+    
+    background-color: black;
+}
+
+.ElementToggle .unity-toggle__checkmark {
+    margin: 3px;
+    border-radius: 4px;
+    background-color: rgb(80, 80, 80);
+}
+
+.ElementToggle:hover {
+    transition-duration: 0.2s;
+    scale: 1.2 1.2;
+}
+
+.ElementToggle:checked {
+    transition-duration: 0.2s;
+    transition-timing-function: ease-in-out;
+    scale: 1.1 1.1;
+}
