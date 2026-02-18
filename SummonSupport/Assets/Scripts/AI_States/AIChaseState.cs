@@ -85,7 +85,11 @@ public class AIChaseState : AIState
             }
             else // if distance to target is less than or equal to ability range
             {
-                SetDestinationandAnimation(targetLoc);
+                if (stateHandler.livingBeing.SE_Handler.GetStatusEffectValue(StatusEffectType.Slipping) > 3)
+                {
+                    SetDestinationandAnimation(transform.position + transform.forward * 2); // if slipping, just keep trying to move forward to simulate slipping
+                }
+                else SetDestinationandAnimation(targetLoc);
             }
         }
     }

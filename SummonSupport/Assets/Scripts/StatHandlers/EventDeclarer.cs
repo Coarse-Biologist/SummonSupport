@@ -51,6 +51,8 @@ namespace SummonSupportEvents
         public static UnityEvent<LivingBeing> IonizedAttack = new();
         public static UnityEvent<Rigidbody> PlantAttack = new();
         public static UnityEvent<LivingBeing> Overheating = new();
+        public static UnityEvent<LivingBeing> Slipping = new();
+
 
 
 

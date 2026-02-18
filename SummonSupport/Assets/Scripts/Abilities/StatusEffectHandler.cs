@@ -86,9 +86,15 @@ public class StatusEffectHandler : MonoBehaviour
                     {
                         if (GetStatusEffectValue(StatusEffectType.Infected) > 4)
                         {
-                            Debug.Log($"spreading virus from {livingBeing}");
-
                             EventDeclarer.SpreadVirus?.Invoke(livingBeing);
+                        }
+                        break;
+                    }
+                case StatusEffectType.Slipping:
+                    {
+                        if (GetStatusEffectValue(StatusEffectType.Slipping) > 3)
+                        {
+                            EventDeclarer.Slipping?.Invoke(livingBeing);
                         }
                         break;
                     }

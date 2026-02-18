@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using SummonSupportEvents;
 using UnityEngine;
 
@@ -15,6 +16,8 @@ public class SE_ObjectHandler : MonoBehaviour
     [field: SerializeField] public GameObject MadnessEffect;
     [field: SerializeField] public GameObject CharmedEffect;
     [field: SerializeField] public GameObject PlantEffect;
+    [field: SerializeField] public GameObject SlippingObject;
+
 
 
 
@@ -37,6 +40,8 @@ public class SE_ObjectHandler : MonoBehaviour
         EventDeclarer.IonizedAttack?.AddListener(ShowIonization);
         EventDeclarer.PlantAttack?.AddListener(ShowPlantEffect);
         EventDeclarer.Overheating?.AddListener(ShowOverheatingEffect);
+        EventDeclarer.Slipping?.AddListener(ShowSlippingEffect);
+
 
 
 
@@ -50,6 +55,8 @@ public class SE_ObjectHandler : MonoBehaviour
         EventDeclarer.IonizedAttack?.RemoveListener(ShowIonization);
         EventDeclarer.PlantAttack?.RemoveListener(ShowPlantEffect);
         EventDeclarer.Overheating?.RemoveListener(ShowOverheatingEffect);
+        EventDeclarer.Slipping?.RemoveListener(ShowSlippingEffect);
+
 
 
 
@@ -122,6 +129,14 @@ public class SE_ObjectHandler : MonoBehaviour
         {
             GameObject instance = Instantiate(OverheatedEffect, livingBeing.transform.position, Quaternion.identity, livingBeing.transform);
             Destroy(instance, 6f);
+        }
+    }
+    public void ShowSlippingEffect(LivingBeing livingBeing)
+    {
+        if (SlippingObject != null)
+        {
+            GameObject instance = Instantiate(SlippingObject, livingBeing.transform.position, Quaternion.identity, livingBeing.transform);
+            Destroy(instance, 5f);
         }
     }
 }

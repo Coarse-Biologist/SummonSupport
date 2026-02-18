@@ -35,7 +35,9 @@ MonoBehaviour:
     Effect: {fileID: 11400000, guid: 15479ffbc49e0f6438096f06a5225d6c, type: 2}
   - Type: 16
     Effect: {fileID: 11400000, guid: cd27898494af29c498198f0470c47632, type: 2}
-  - Type: 16
-    Effect: {fileID: 11400000, guid: cd27898494af29c498198f0470c47632, type: 2}
+  - Type: 17
+    Effect: {fileID: 11400000, guid: 0a0c73ed3c16a7f47b170d23c15e15d9, type: 2}
   - Type: 18
     Effect: {fileID: 11400000, guid: 1bcb9c8b93ea5f3499ff46760bc429ef, type: 2}
+  - Type: 11
+    Effect: {fileID: 11400000, guid: 4560cd89ed98de442be1d1ff46a97670, type: 2}
