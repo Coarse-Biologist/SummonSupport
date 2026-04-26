@@ -103,7 +103,7 @@ public class AIPeacefulState : AIState
     {
         if (canSeeTarget)
         {
-            if (runningSupportLoop)
+            if (runningSupportLoop && supportCoroutine != null) // new change where crews brain has possibly lost the ability to write or understand c#
             {
                 runningSupportLoop = false;
                 StopCoroutine(supportCoroutine);

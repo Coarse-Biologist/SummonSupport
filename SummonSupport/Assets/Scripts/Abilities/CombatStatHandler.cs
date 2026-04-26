@@ -64,6 +64,10 @@ public static class CombatStatHandler
 
         HandleApplyStatusEffects();
 
+        currentStatusEffects.Clear(); //WTF, this is a band-aid for the fact that status effects from mods are being added to the static currentStatusEffects list and not being removed, 
+        // causing unintended stacking of status effects from mods. need to find better solution later.
+        // why are status effects being added to sbility scriptable objects?
+
         if (effectPackage.AttributeUp.Count > 0)
         {
             foreach (TempAttrIncrease_AT tempChange in effectPackage.AttributeUp)

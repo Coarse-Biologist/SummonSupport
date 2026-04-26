@@ -3040,6 +3040,23 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 610609387237340693, guid: b2d453e8cb9a3724a885268355bd9919,
+        type: 3}
+      propertyPath: <Abilities>k__BackingField.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 610609387237340693, guid: b2d453e8cb9a3724a885268355bd9919,
+        type: 3}
+      propertyPath: '<Abilities>k__BackingField.Array.data[0]'
+      value: 
+      objectReference: {fileID: 11400000, guid: ff53d8b056b03f34d856d03b15608f36,
+        type: 2}
+    - target: {fileID: 610609387237340693, guid: b2d453e8cb9a3724a885268355bd9919,
+        type: 3}
+      propertyPath: '<Abilities>k__BackingField.Array.data[1]'
+      value: 
+      objectReference: {fileID: 11400000, guid: ff6b8d8701459454c9b31aaae0086c8d,
+        type: 2}
     - target: {fileID: 2529346859622800124, guid: b2d453e8cb9a3724a885268355bd9919,
         type: 3}
       propertyPath: m_AnchorMax.y
