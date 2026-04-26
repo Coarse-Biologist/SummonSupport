@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using SummonSupportEvents;
+using Unity.Entities.UniversalDelegates;
 using UnityEngine;
 using UnityEngine.Rendering.PostProcessing;
 
@@ -11,11 +12,13 @@ public class PlayerStats : LivingBeing
 
     [Header("Experience Info")]
 
-    [SerializeField] public int CurrentLevel { private set; get; } = 1;
-    [SerializeField] public float CurrentXP { private set; get; } = 0;
-    [SerializeField] public float MaxXP { private set; get; } = 100;
+    #region Experience Variables
+    [field: SerializeField] public int CurrentLevel { private set; get; } = 1;
+    [field: SerializeField] public float CurrentXP { private set; get; } = 0;
+    [field: SerializeField] public float MaxXP { private set; get; } = 100;
     [field: SerializeField] public int SkillPoints { private set; get; } = 100;
 
+    #endregion
 
     #region Ressurrection Variables
     [SerializeField] public float ResurrectTime { private set; get; } = 5f;
@@ -46,12 +49,7 @@ public class PlayerStats : LivingBeing
     }
     private void GainXP(LivingBeing defeatedEnemy)
     {
-        CurrentXP += defeatedEnemy.XP_OnDeath;
-        if (CurrentXP >= MaxXP)
-        {
-            LevelUp();
-        }
-        PlayerUIHandler.Instance.SetPlayerXP(CurrentXP);
+        GainXP((int)defeatedEnemy.XP_OnDeath);
     }
     public void AddControllableMinions(int changeValue)
     {
@@ -65,20 +63,28 @@ public class PlayerStats : LivingBeing
     }
     public void GainXP(int amount)
     {
-
-        CurrentXP += amount * 30;
-
-        if (CurrentXP >= MaxXP)
+        int XpToGain = amount;
+        Debug.Log($"Xp to gain = {XpToGain}");
+        while (XpToGain > 0) // While we have enough XP to level up
         {
-            LevelUp();
+            CurrentXP += XpToGain;
+            if (CurrentXP > MaxXP)
+            {
+                XpToGain = (int)(CurrentXP - MaxXP);
+                CurrentXP = MaxXP;
+            }
+            else XpToGain = 0;
+
+            if (CurrentXP == MaxXP) LevelUp();
         }
+
         PlayerUIHandler.Instance.SetPlayerXP(CurrentXP);
     }
 
     private void LevelUp()
     {
         CurrentLevel += 1;
-        CurrentXP -= MaxXP;
+        CurrentXP = 0;
         MaxXP *= 2;
         SkillPoints++;
         EventDeclarer.PlayerLevelUp?.Invoke(LevelUpHandler.GetLevelRewardString(CurrentLevel));
@@ -112,7 +118,7 @@ public class PlayerStats : LivingBeing
                     AddControllableMinions(1);
                     break;
                 case LevelRewards.ElementalAffinity:
-                    ChangeAffinity(GetHighestAffinity(), 10);
+                    ChangeAffinity(GetHighestAffinity(out float value), 10);
                     break;
                 default:
                     Debug.LogWarning($"There is no behavior implimented for the level up reward {reward}");
@@ -149,7 +155,7 @@ public class PlayerStats : LivingBeing
                         AddControllableMinions(1 * reward.Value);
                         break;
                     case LevelRewards.ElementalAffinity:
-                        ChangeAffinity(GetHighestAffinity(), 10 * reward.Value);
+                        ChangeAffinity(GetHighestAffinity(out float value), 10 * reward.Value);
                         break;
                     default:
                         Debug.LogWarning($"There is no behavior implimented for the level up reward {reward}");
@@ -173,17 +179,23 @@ public class PlayerStats : LivingBeing
     }
 
 
-    public void ResurrectMinion(GameObject minion)
+    public void ResurrectMinion(GameObject minion, I_InteractMinionResurrect interactable)
     {
-        StartCoroutine(CheckResurrection(minion));
+        StartCoroutine(CheckResurrection(minion, interactable));
     }
 
-    private IEnumerator CheckResurrection(GameObject minion)
+    private IEnumerator CheckResurrection(GameObject minion, I_InteractMinionResurrect interactable)
     {
-        bool resSucceeding = true;
+        Debug.Log($"Starting resurrection of {minion.name}");
+        if (!minion.TryGetComponent(out MinionStats minionStats))
+        {
+            Debug.LogWarning("Trying to resurrect a minion without minion stats component. cancelling res");
+            yield break;
+        }
+        bool resurrecting = true;
         float timeWaited = 0;
         float distance;
-        while (resSucceeding)
+        while (resurrecting)
         {
             yield return resurrectionIncrement;
             timeWaited += .5f;
@@ -191,13 +203,16 @@ public class PlayerStats : LivingBeing
             if (distance >= ResurrectRange)
             {
                 Debug.Log($"Distance to minion = {distance}. setting res succeeding to false.");
-                resSucceeding = false;
+                interactable.SetResurrecting(false);
+                resurrecting = false;
             }
             if (timeWaited >= ResurrectTime)
             {
                 Debug.Log("Breaking loop because res time has been successfully waited");
-                if (minion.TryGetComponent<MinionStats>(out MinionStats minionStats)) minionStats.Resurrect();
-                break;
+                minionStats.Resurrect();
+                interactable.SetResurrecting(false);
+                resurrecting = false;
+
             }
         }
     }
@@ -226,6 +241,28 @@ public class PlayerStats : LivingBeing
                 break;
 
         }
+    }
+    public override string GetLivingBeingStats()
+    {
+
+        string statString = "";
+        statString += $"Max hitpoints: {GetAttribute(AttributeType.MaxHitpoints)}\n";
+        statString += $"Max Power: {GetAttribute(AttributeType.MaxPower)}\n";
+        statString += $"Health regeneration: {TotalHealthRegeneration}\n";
+        statString += $"Power regeneration: {TotalPowerRegeneration}\n";
+
+
+
+
+        statString += GetComponent<AbilityHandler>().GetKnownAbilitiesString();
+        foreach (var kvp in Affinities)
+        {
+            if (kvp.Value.Get() > 0)
+                statString += $"{kvp.Key} affinity: {kvp.Value.Get()}\n";
+        }
+
+        return statString;
+
     }
 
 

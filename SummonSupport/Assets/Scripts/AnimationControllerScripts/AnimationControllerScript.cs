@@ -1,6 +1,6 @@
 using System;
 using System.Collections;
-using UnityEditor.Animations;
+//using UnityEditor.Animations;
 using UnityEngine;
 
 public class AnimationControllerScript : MonoBehaviour
@@ -14,20 +14,24 @@ public class AnimationControllerScript : MonoBehaviour
     {
         anim = GetComponentInChildren<Animator>();
         if (anim == null) throw new System.Exception($"Animation controller is null. it was not found among children objects.");
-
     }
-    private void PrintStateMachine(AnimatorStateMachine sm, string layerName)
+
+    public void SetUpdateMode(AnimatorUpdateMode mode)
     {
-        foreach (var state in sm.states)
-        {
-            Debug.Log($"{gameObject.name} Layer: {layerName} | State: {state.state.name}");
-        }
-
-        foreach (var sub in sm.stateMachines)
-        {
-            PrintStateMachine(sub.stateMachine, layerName);
-        }
+        anim.updateMode = mode;
     }
+    //private void PrintStateMachine(AnimatorStateMachine sm, string layerName)
+    //{
+    //    foreach (var state in sm.states)
+    //    {
+    //        Debug.Log($"{gameObject.name} Layer: {layerName} | State: {state.state.name}");
+    //    }
+    //
+    //    foreach (var sub in sm.stateMachines)
+    //    {
+    //        PrintStateMachine(sub.stateMachine, layerName);
+    //    }
+    //}
 
 
     public void ChangeAnimation(string animationName, float crossFadeDuration = .2f)
@@ -76,22 +80,28 @@ public class AnimationControllerScript : MonoBehaviour
         }
     }
 
-    public void ChangeLayerAnimation(string animationName, int layerIndex, float animationDuration = 1f)
+    public void ChangeLayerAnimation(string animationName, int layerIndex, float animationDuration = 1f, bool holdPose = false)
     {
         if (anim.layerCount != 1)
-            StartCoroutine(ChangeLayerRoutine(layerIndex, animationName, animationDuration));
+            StartCoroutine(ChangeLayerRoutine(layerIndex, animationName, animationDuration, holdPose));
+    }
+    public void SeLayerWeight(int layerIndex, float weight)
+    {
+        anim.SetLayerWeight(layerIndex, weight);
+
     }
 
-    private IEnumerator ChangeLayerRoutine(int layerIndex, string animationName, float duration)
+    private IEnumerator ChangeLayerRoutine(int layerIndex, string animationName, float duration, bool holdPose = false)
     {
         anim.SetLayerWeight(layerIndex, 1);
 
-        anim.Play(animationName, layerIndex, 0f);
+        anim.Play(animationName, layerIndex, 0);
+        //if (holdPose) StartCoroutine(GoStopGo(layerIndex, duration));
 
         //anim.CrossFade(animationName, 0.2f, layerIndex);
 
         yield return new WaitForSeconds(duration);
 
-        anim.SetLayerWeight(layerIndex, 0);
+        if (holdPose == false) anim.SetLayerWeight(layerIndex, 0);
     }
 }

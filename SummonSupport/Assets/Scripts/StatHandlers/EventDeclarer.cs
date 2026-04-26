@@ -23,14 +23,24 @@ namespace SummonSupportEvents
         public static UnityEvent<MinionStats> SetActiveMinion = new();
         public static UnityEvent<MovementAttributes, float> SpeedAttributeChanged = new();
         public static UnityEvent<int, Ability> SlotChanged = new();
+        public static UnityEvent<int, Ability> SetSlot = new();
+
         public static UnityEvent<int> AbilityUsed = new(); // int should be the index of the ability
+        public static UnityEvent<DialogueAndAudio_SO> PlayerDialogue = new();
+        public static UnityEvent<float> GeneralVolumeChanged = new();
+        public static UnityEvent<float> FootstepVolumeChanged = new();
+
         public static UnityEvent<SpawnLocationInfo> SpawnEnemies = new();
 
         public static UnityEvent<bool> PlayerDead = new();
         public static UnityEvent<List<string>> PlayerLevelUp = new(); // should I be passing this?
+        public static UnityEvent PlayerFootstep = new();
+
 
         public static UnityEvent<Ability> PlayerLearnedAbility = new();
-        public static UnityEvent TogglePauseGame = new();
+        public static UnityEvent PauseGame = new();
+        public static UnityEvent UnpauseGame = new();
+
         public static UnityEvent<float> ShakeCamera = new();
 
         #region status effects
@@ -38,6 +48,14 @@ namespace SummonSupportEvents
         public static UnityEvent<LivingBeing> FrozenSolid = new();
         public static UnityEvent<LivingBeing> GraspingVines = new();
         public static UnityEvent<LivingBeing> SpreadVirus = new();
+        public static UnityEvent<LivingBeing> IonizedAttack = new();
+        public static UnityEvent<Rigidbody> PlantAttack = new();
+        public static UnityEvent<LivingBeing> Overheating = new();
+        public static UnityEvent<LivingBeing> Slipping = new();
+
+
+
+
 
 
 

@@ -10,7 +10,26 @@ public static class AbilityLibrary
     public static PlayerAbilitiesByLevel playerAbilitiesByLevel { get; private set; } = new();
     [field: SerializeField] public static StatusEffectsLibrary StatusEffectsLibrary { get; private set; }
 
+    public static StatusEffects GetStatusEffects(Element element, StatusEffectType statusType = StatusEffectType.None)
+    {
+        if (statusType == StatusEffectType.None)
+        {
+            if (StatusEffectsLibrary.ElementToEffectDict.TryGetValue(element, out StatusEffectType type))
+            {
+                statusType = type;
+            }
+            else throw new SystemException($"Get Status EFfects in ability library coultnt find a status effect for {element}");
 
+        }
+        {
+            foreach (StatusEffectsLibrary.EffectEntry entry in StatusEffectsLibrary.entries)
+            {
+                if (entry.Type == statusType)
+                    return entry.Effect;
+            }
+            throw new SystemException($"Status Effect type {statusType} had no pair found in the Status effect library");
+        }
+    }
 
     public static void SetAbilityLibrary(AbilityLibrary_SO library_SO)
     {
@@ -36,7 +55,7 @@ public static class AbilityLibrary
         int maxAttempts = 10;
         if (abilityLibrary != null)
         {
-            foreach (ElementCategories elementCategory in abilityLibrary.entries)
+            foreach (ElementCategories elementCategory in abilityLibrary.ElementalEntries)
             {
                 if (elementCategory.Element == element)
                 {
@@ -69,6 +88,21 @@ public static class AbilityLibrary
             Debug.Log($"ability handler scriptable object is not placed in the Ability library.");
             return null;
         }
+    }
+    public static Ability GetElementalMeleeAbility(Element element, float affinityValue)
+    {
+        Ability meleeAbility = null;
+        foreach (MeleeCategories meleeCategory in abilityLibrary.MeleeEntries)
+        {
+            if (meleeCategory.Element == element)
+            {
+                meleeAbility = meleeCategory.Abilities[0];
+                break;
+            }
+        }   
+        
+        Debug.Log($"Returning {meleeAbility.Name} in the get Elemental Melee ability function");
+        return meleeAbility;
     }
     public static List<Ability> GetRandomAbilities(PhysicalType physical, int number = 1)
     {

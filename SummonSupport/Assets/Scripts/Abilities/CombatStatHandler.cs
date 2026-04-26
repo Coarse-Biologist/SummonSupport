@@ -5,14 +5,19 @@ using UnityEngine.InputSystem;
 using Unity.VisualScripting;
 using System.Collections.Generic;
 using SummonSupportEvents;
-using UnityEngine.ResourceManagement.Profiling;
-using UnityEditor.Rendering;
+//using UnityEngine.ResourceManagement.Profiling;
+//using UnityEditor.Rendering;
+//using UnityEditor.ShaderGraph.Internal;
+using System;
+//using System.Linq;
 
 public static class CombatStatHandler
 {
     //public static CombatStatHandler Instance;
 
     // doesnt use or recognize percentage based damage
+    private static float AffinityDamageScalar = 100f; // relevant caster affinity will be divided by this to modify damage. max affinity doubles elemental damage
+    private static float MinDamageScalar = .4f; //minimum modifier. once 40 affinity is surpassed, affinity scaling will increase.
     private static float tickRateFloat = 1f;
     private static WaitForSeconds tickRate = new WaitForSeconds(tickRateFloat);
     private static AbilityModHandler modHandler;
@@ -21,6 +26,16 @@ public static class CombatStatHandler
     private static LivingBeing currentCaster;
     private static Ability currentAbility;
     private static List<StatusEffects> currentStatusEffects = new();
+    private static float currentDotValue;
+    private static float currentHealOverTimeValue;
+    private static float currentDamageValue;
+    private static float currentHealValue;
+    private static float currentAbilityDuration;
+
+
+
+
+
 
 
 
@@ -31,27 +46,28 @@ public static class CombatStatHandler
         currentAbility = ability;
         currentCaster = caster;
         currentTarget = target;
-        modHandler = caster.GetComponent<AbilityModHandler>();
-        //UnityEngine.Debug.Log($"caster = {caster.Name}, target = {target.Name} mod handler = {modHandler}");
+        if (caster is not EnemyStats) modHandler = AbilityModHandler.Instance;
+        else modHandler = null;
 
-        if (effectPackage.Heal.Value > 0)
-        {
-            AdjustHealValue(effectPackage.Heal.Value);
-        }
-        if (effectPackage.HealOverTime.Value > 0)
-        {
-            HandleApplyDOT(AttributeType.CurrentHitpoints, effectPackage.HealOverTime.Value, AbilityModTypes.HealOverTime);
-        }
-        if (effectPackage.Damage.Value > 0)
-        {
-            EventDeclarer.ShakeCamera?.Invoke(1f);
-            AdjustDamageValue(effectPackage.Damage, effectPackage.SpecialAbilityAttribute);
-        }
-        if (effectPackage.DamageOverTime.Value > 0)
-        {
-            //UnityEngine.Debug.Log($"effectPackage.DamageOverTime.Value = {effectPackage.DamageOverTime.Value}.");
-            AdjustAndApplyDOT(effectPackage.DamageOverTime);
-        }
+        PlayImpactSound(ability, target);
+        SetCurrentValues(effectPackage);
+        //UnityEngine.Debug.Log($"caster = {caster.Name}, target = {target.Name} mod handler = {modHandler}");
+        AddMods();
+
+        AdjustandApplyHealValue();
+
+        AdjustAndApplyDOT();
+
+        HandleApplyDOT(AttributeType.CurrentHitpoints, currentHealOverTimeValue);
+
+        AdjustDamageValue(effectPackage.Damage, effectPackage.SpecialAbilityAttribute);
+
+        HandleApplyStatusEffects();
+
+        currentStatusEffects.Clear(); //WTF, this is a band-aid for the fact that status effects from mods are being added to the static currentStatusEffects list and not being removed, 
+        // causing unintended stacking of status effects from mods. need to find better solution later.
+        // why are status effects being added to sbility scriptable objects?
+
         if (effectPackage.AttributeUp.Count > 0)
         {
             foreach (TempAttrIncrease_AT tempChange in effectPackage.AttributeUp)
@@ -59,6 +75,7 @@ public static class CombatStatHandler
                 AdjustAndApplyTempChange(tempChange);
             }
         }
+
         if (effectPackage.AttributeDown.Count > 0)
         {
             foreach (TempAttrDecrease_AT tempChange in effectPackage.AttributeDown)
@@ -67,61 +84,100 @@ public static class CombatStatHandler
             }
         }
 
-        if (effectPackage.StatusEffects.Count > 0)
+    }
+
+    private static void HandleApplyStatusEffects()
+    {
+        if (currentStatusEffects.Count > 0)
         {
-            foreach (StatusEffects status in effectPackage.StatusEffects)
+            foreach (StatusEffects status in currentStatusEffects)
             {
                 currentTarget.SE_Handler.AlterStatusEffectList(status, true);
             }
-
         }
+    }
+    private static void SetCurrentValues(EffectPackage currentAbilityEffects)
+    {
 
+        currentStatusEffects = currentAbilityEffects.StatusEffects;
+
+        currentDamageValue = currentAbilityEffects.Damage.Value;
+        currentDotValue = currentAbilityEffects.DamageOverTime.Value;
+        currentHealValue = currentAbilityEffects.Heal.Value;
+        currentHealOverTimeValue = currentAbilityEffects.HealOverTime.Value;
+        currentAbilityDuration = currentAbility.Duration;
     }
 
+    public static void AddMods()
+    {
+        if (modHandler != null)
+        {
+            foreach (StatusEffects se in modHandler.GetModStatusEffects(currentAbility))
+            {
+                currentStatusEffects.Add(se);
+            }
+
+            currentDamageValue += modHandler.GetModAttributeByType(currentAbility, AbilityModTypes.Damage); // damage increase from mods
+            currentDotValue += modHandler.GetModAttributeByType(currentAbility, AbilityModTypes.DamageOverTime); // DOT increase from mods
+
+            currentHealValue += modHandler.GetModAttributeByType(currentAbility, AbilityModTypes.Heal); // heal increase from mods
+            currentHealOverTimeValue += modHandler.GetModAttributeByType(currentAbility, AbilityModTypes.HealOverTime); // HOT increase from mods
+
+
+            currentAbilityDuration += modHandler.GetModAttributeByType(currentAbility, AbilityModTypes.Duration);
+        }
+    }
 
 
     #region Adjust and apply damage, heal, temp attributes and damage over times
     public static float AdjustDamageValue(Damage_AT damage_AT, SpecialAbilityAttribute specialAbilityAttribute = SpecialAbilityAttribute.None)
     {
-        float damageValue = GetDamageByType(damage_AT);
-        if (modHandler != null)
+        if (currentDamageValue > 0)
         {
-            damageValue += modHandler.GetModAttributeByType(currentAbility, AbilityModTypes.Damage);
-        }
-        foreach (Element element in currentAbility.ElementTypes)
-        {
-            if (element != Element.None) damageValue = AdjustBasedOnAffinity(element, damageValue);
+            EventDeclarer.ShakeCamera?.Invoke(1f);
+            float damageValue = GetDamageByType(damage_AT);
+            damageValue = ModifyDamageValueByCasterAffinity(damageValue);
 
-        }
-        if (currentAbility.PhysicalType != PhysicalType.None)
-        {
-            damageValue = AdjustBasedOnArmor(currentAbility.PhysicalType, damageValue);
-        }
-        AdjustForOverValue(AttributeType.Overshield, AttributeType.MaxHitpoints, AttributeType.CurrentHitpoints, -damageValue);
-        if (specialAbilityAttribute == SpecialAbilityAttribute.Syphon)
-            AdjustForOverValue(AttributeType.Overshield, AttributeType.MaxHitpoints, AttributeType.CurrentHitpoints, damageValue);
 
-        return damageValue;
+            foreach (Element element in currentAbility.ElementTypes)
+            {
+                if (element != Element.None) damageValue = AdjustBasedOnAffinity(element, damageValue);
+
+            }
+            if (currentAbility.PhysicalType != PhysicalType.None)
+            {
+                damageValue = AdjustBasedOnArmor(currentAbility.PhysicalType, damageValue);
+            }
+            AdjustForOverValue(AttributeType.Overshield, AttributeType.MaxHitpoints, AttributeType.CurrentHitpoints, -damageValue);
+            if (specialAbilityAttribute == SpecialAbilityAttribute.Syphon)
+                AdjustForOverValue(AttributeType.Overshield, AttributeType.MaxHitpoints, AttributeType.CurrentHitpoints, damageValue);
+
+            return damageValue;
+        }
+        else return 0;
     }
     private static float GetDamageByType(Damage_AT damage_AT)
     {
-        if (damage_AT.ValueType == ValueType.Flat) return damage_AT.Value;
-        if (damage_AT.ValueType == ValueType.Percentage) return damage_AT.Value / 100f * currentTarget.GetAttribute(AttributeType.MaxHitpoints);
-        else return damage_AT.Value * currentTarget.GetAttribute(AttributeType.MaxHitpoints) / (currentTarget.GetAttribute(AttributeType.CurrentHitpoints) * 2);
+        if (damage_AT.ValueType == ValueType.Flat) return currentDamageValue;
+        if (damage_AT.ValueType == ValueType.Percentage) return currentDamageValue / 100f * currentTarget.GetAttribute(AttributeType.MaxHitpoints);
+        else return currentDamageValue * currentTarget.GetAttribute(AttributeType.MaxHitpoints) / (currentTarget.GetAttribute(AttributeType.CurrentHitpoints) * 2);
     }
-    public static float AdjustHealValue(float healValue)
+    public static float AdjustandApplyHealValue()
     {
-        if (mod != null) healValue += mod.GetModdedAttribute(AbilityModTypes.Heal);
-        float newHP = Mathf.Min(healValue + currentTarget.GetAttribute(AttributeType.CurrentHitpoints), currentTarget.GetAttribute(AttributeType.MaxHitpoints));
-        currentTarget.SetAttribute(AttributeType.CurrentHitpoints, newHP);
-        //UnityEngine.Debug.Log($"healing {target.Name} for {healValue}");
-        return healValue;
+        if (currentHealValue > 0)
+        {
+            float newHP = Mathf.Min(currentHealValue + currentTarget.GetAttribute(AttributeType.CurrentHitpoints), currentTarget.GetAttribute(AttributeType.MaxHitpoints));
+            currentTarget.SetAttribute(AttributeType.CurrentHitpoints, newHP);
+            //UnityEngine.Debug.Log($"healing {target.Name} for {healValue}");
+            return newHP;
+        }
+        else return 0;
+
     }
     public static float AdjustAndApplyTempChange(TempAttrChange tempAttr)
     {
         UnityEngine.Debug.Log("Adjusting and applying tempchange");
         float changeValue = tempAttr.Value;
-        float duration = currentAbility.Duration;
         if (tempAttr is TempAttrDecrease_AT) changeValue = -changeValue; // set to negative if it decreases
         if (tempAttr.ResourceAttribute == AttributeType.CurrentHitpoints || tempAttr.ResourceAttribute == AttributeType.MaxHitpoints)
         {
@@ -130,28 +186,34 @@ public static class CombatStatHandler
         }
         UnityEngine.Debug.Log($"the change value = {changeValue}. tempAttr.PhysicalResistance = {tempAttr.ElementalAffinity}");
 
-        if (tempAttr.ResourceAttribute != AttributeType.None) ApplyTempValue(tempAttr.ResourceAttribute, changeValue, duration);
-        if (tempAttr.PhysicalResistance != PhysicalType.None) ApplyTempValue(tempAttr.PhysicalResistance, changeValue, duration);
-        if (tempAttr.ElementalAffinity != Element.None) ApplyTempValue(tempAttr.ElementalAffinity, changeValue, duration);
-        if (tempAttr.MovementAttribute != MovementAttributes.None) ApplyTempValue(tempAttr.MovementAttribute, changeValue, duration);
+        if (tempAttr.ResourceAttribute != AttributeType.None) ApplyTempValue(tempAttr.ResourceAttribute, changeValue, currentAbilityDuration);
+        if (tempAttr.PhysicalResistance != PhysicalType.None) ApplyTempValue(tempAttr.PhysicalResistance, changeValue, currentAbilityDuration);
+        if (tempAttr.ElementalAffinity != Element.None) ApplyTempValue(tempAttr.ElementalAffinity, changeValue, currentAbilityDuration);
+        if (tempAttr.MovementAttribute != MovementAttributes.None) ApplyTempValue(tempAttr.MovementAttribute, changeValue, currentAbilityDuration);
 
         //target.StartCoroutine(ResetTempAttribute(target, tempAttr.AttributeType, -changeValue, duration)); //reset by using opposite
 
         return changeValue;
     }
-    public static float AdjustAndApplyDOT(Damage_AT damageOT)
+    public static float AdjustAndApplyDOT()
     {
-        float damageValue = -damageOT.Value;
+        if (currentDotValue == 0) return 0;
+
+        float damageValue = -currentDotValue;
+        //UnityEngine.Debug.Log($"Applying DOT of value {damageValue}");
+        damageValue = ModifyDamageValueByCasterAffinity(damageValue);
+
         foreach (Element element in currentAbility.ElementTypes)
         {
             PhysicalType physical = currentAbility.PhysicalType;
             if (element != Element.None) damageValue = AdjustBasedOnAffinity(element, damageValue); // damage value is opposite?
             if (currentAbility.PhysicalType != PhysicalType.None) damageValue = AdjustBasedOnArmor(physical, damageValue);
         }
-        HandleApplyDOT(AttributeType.CurrentHitpoints, damageValue, AbilityModTypes.DamageOverTime);
+        HandleApplyDOT(AttributeType.CurrentHitpoints, damageValue);
 
         return damageValue;
     }
+
     #endregion
 
     #region modify resistable damages
@@ -176,6 +238,7 @@ public static class CombatStatHandler
         // change value based Physical Resistance;
 
         float relevantResistance = currentTarget.PhysicalDict[physical].Get();
+        relevantResistance -= currentTarget.SE_Handler.GetStatusEffectValue(StatusEffectType.Dissolving) * 25; // magic number for effect of acid status effect where does it belog?
         if (relevantResistance > 0)
         {
             value -= value * relevantResistance / 100;
@@ -184,7 +247,15 @@ public static class CombatStatHandler
 
         return value;
     }
-
+    private static float ModifyDamageValueByCasterAffinity(float changeValue)
+    {
+        if (currentAbility.ElementTypes.Count == 0) return changeValue;
+        else
+        {
+            float damageModifier = Math.Max(MinDamageScalar, currentCaster.GetAffinity(currentAbility.ElementTypes[0]) / AffinityDamageScalar);
+            return changeValue *= damageModifier;
+        }
+    }
     public static void AdjustForOverValue(AttributeType attributeTypeTempMax, AttributeType attributeTypeMax, AttributeType typeCurrentValue, float changeValue)
     {
         // skipping until we actually have mechanism to show overhealth.
@@ -216,29 +287,39 @@ public static class CombatStatHandler
 
             else
             {
+                if (changeValue < -10 && currentTarget.audioHandler != null)
+                {
+                    PlayCreatureDamagedSound(changeValue, currentTarget);
+                }
+                //else UnityEngine.Debug.Log($"Damage less than 30, no sound played. changeValue = {changeValue}");
                 currentTarget.SetAttribute(AttributeType.CurrentHitpoints, currentTarget.GetAttribute(AttributeType.CurrentHitpoints) + changeValue);
             }
         }
     }
+    #region sound methods
+    private static void PlayImpactSound(Ability ability, LivingBeing target)
+    {
+        if (ability.Sounds != null && ability.Sounds.ImpactSounds.Length != 0)
+        {
+            target.audioHandler.PlayAbilityImpactSound(ability);
+        }
+    }
+    private static void PlayCreatureDamagedSound(float DamageValue, LivingBeing target)
+    {
+        target.StartCoroutine(target.audioHandler.CreatureDamagedSound(DamageValue));
+    }
+    #endregion
 
     #endregion
 
-    private static void HandleApplyDOT(AttributeType attributeType, float changeValue, AbilityModTypes modType)
+    private static void HandleApplyDOT(AttributeType attributeType, float changeValue)
     {
-        float duration = currentAbility.Duration;
-        if (modHandler != null)
+        if (changeValue != 0)
         {
-            duration += modHandler.GetModAttributeByType(currentAbility, AbilityModTypes.Duration);
+            //UnityEngine.Debug.Log($"Applying DOT of value {changeValue}to attribute {attributeType}");
+            currentTarget.ChangeRegeneration(attributeType, changeValue);
+            currentTarget.StartCoroutine(ResetRegeneration(currentAbility, currentTarget, attributeType, changeValue, currentAbilityDuration));
         }
-        //UnityEngine.D
-        // ebug.Log($"Changing {target}s regen by {newValue}");
-        if (mod != null)
-        {
-            changeValue += mod.GetModdedAttribute(modType);
-            duration += mod.GetModdedAttribute(AbilityModTypes.Duration);
-        }
-        currentTarget.ChangeRegeneration(attributeType, changeValue);
-        currentTarget.StartCoroutine(ResetRegeneration(currentAbility, currentTarget, attributeType, changeValue, duration));
     }
     private static IEnumerator ResetRegeneration(Ability ability, LivingBeing target, AttributeType attributeType, float newValue, float duration)
     {

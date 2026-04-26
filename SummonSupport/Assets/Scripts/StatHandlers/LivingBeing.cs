@@ -31,8 +31,8 @@ public abstract class LivingBeing : MonoBehaviour
     [field: SerializeField] public float TickRateRegenerationInSeconds { get; private set; } = .2f;
     [field: SerializeField] public float HealthRegeneration { get; private set; } = 1;
     [field: SerializeField] public float PowerRegeneration { get; private set; } = 1;
-    private float TotalHealthRegeneration = 0;
-    private float TotalPowerRegeneration = 0;
+    public float TotalHealthRegeneration { private set; get; } = 0;
+    public float TotalPowerRegeneration { private set; get; } = 0;
 
     public GameObject locSphere;
 
@@ -77,7 +77,7 @@ public abstract class LivingBeing : MonoBehaviour
     [field: SerializeField] public List<Ability> AffectedByAbilities { get; private set; } = new();
 
     [field: SerializeField] public float XP_OnDeath { get; private set; } = 5f;
-    public bool Dead { get; private set; } = false;
+    public bool Dead { get; protected set; } = false;
 
     public Dictionary<Element, (Func<float> Get, Action<float> Set)> Affinities { private set; get; } = new();
     public Dictionary<AttributeType, (Func<float> Get, Action<float> Set)> ResourceAttributesDict { private set; get; } = new();
@@ -85,7 +85,8 @@ public abstract class LivingBeing : MonoBehaviour
 
     public I_ResourceBar resourceBarInterface { protected set; get; }
     public I_Destruction ragdollScript;
-    private AbilityHandler abilityHandler;
+    public AbilityHandler abilityHandler { protected set; get; }
+    public LivingBeingAudioHandler audioHandler { protected set; get; }
     public StatusEffectHandler SE_Handler;
 
 
@@ -108,8 +109,9 @@ public abstract class LivingBeing : MonoBehaviour
     {
         InitializeRegenerationValues();
         StartCoroutine(RegenerateRoutine());
+        audioHandler = GetComponent<LivingBeingAudioHandler>();
         abilityHandler = GetComponent<AbilityHandler>();
-        ColorChanger.ChangeMatByAffinity(this);
+
         ragdollScript = GetComponent<I_Destruction>();
         if (TryGetComponent(out StatusEffectHandler se))
         {
@@ -167,12 +169,15 @@ public abstract class LivingBeing : MonoBehaviour
         return (int)Affinities[element].Get();
     }
 
-    public Element GetHighestAffinity()
+    public Element GetHighestAffinity(out float value, float min = 0)
     {
         Element element = Affinities.OrderByDescending(a => a.Value.Get()).First().Key;
-        if (Affinities[element].Get() < 20) return Element.None;
+        value = GetAffinity(element);
+        if (value < min || value == 0) return Element.None;
+
         else return element;
     }
+
 
     #endregion
 
@@ -294,9 +299,10 @@ public abstract class LivingBeing : MonoBehaviour
     {
         while (true)
         {
-            float newHP = Mathf.Min(CurrentHP + HealthRegeneration, MaxHP);
+            float newHP = Mathf.Min(CurrentHP + TotalHealthRegeneration, MaxHP);
             if (newHP != CurrentHP)
                 SetAttribute(AttributeType.CurrentHitpoints, newHP);
+
             float newPower = Mathf.Min(CurrentPower + PowerRegeneration, MaxPower);
             if (newPower != CurrentPower)
                 SetAttribute(AttributeType.CurrentPower, newPower);
@@ -308,6 +314,7 @@ public abstract class LivingBeing : MonoBehaviour
     {
         if (attributeType == AttributeType.CurrentHitpoints)
         {
+            //Debug.Log($"Changing health regen by {value}");
             TotalHealthRegeneration += value;
             //HealthRegenArrows = GetRegenerationIndicatorAmount(MaxHP, TotalHealthRegeneration);
         }
@@ -404,5 +411,20 @@ public abstract class LivingBeing : MonoBehaviour
     protected void ViciousDeathExplosion()
     {
         //EventDeclarer.ViciousDeath?.Invoke(this);
+    }
+    public virtual string GetLivingBeingStats()
+    {
+
+        string statString = "";
+        statString += $"Max hitpoints: {GetAttribute(AttributeType.MaxHitpoints)}\n";
+        statString += GetComponent<AbilityHandler>().GetKnownAbilitiesString();
+        foreach (var kvp in Affinities)
+        {
+            if (kvp.Value.Get() > 0)
+                statString += $"{kvp.Key} affinity: {kvp.Value.Get()}\n";
+        }
+
+        return statString;
+
     }
 }

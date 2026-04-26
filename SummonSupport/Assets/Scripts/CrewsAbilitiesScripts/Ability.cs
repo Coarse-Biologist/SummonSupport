@@ -22,12 +22,12 @@ public abstract class Ability : ScriptableObject
     [field: SerializeField] public List<Element> ElementTypes { get; protected set; } = new();
     [field: SerializeField] public PhysicalType PhysicalType { get; protected set; } = new();
     [field: SerializeField] public GameObject OnHitEffect { get; protected set; }
-    [field: SerializeField] public bool AlterParticleSystemGradient { get; protected set; } = false;
+    [field: SerializeField] public AbilitySoundPackage Sounds { get; protected set; }
 
 
 
 
-    public abstract bool Activate(GameObject Caster);
+    public abstract bool Activate(LivingBeing Caster);
 
     public bool IsUsableOn(CharacterTag user, CharacterTag target)
     {
@@ -53,10 +53,12 @@ public abstract class Ability : ScriptableObject
     public static int GetCoreCraftingCost(Ability ability)
     {
         if (ability == null) throw new System.Exception("You are trying to access the core cost of an ability which is null.");
-        return (int)ability.Cooldown * (int)ability.Cost;
+        int modifier = 1;
+        if (ability is BeamAbility beam) modifier += 10;
+        return (int)ability.Cooldown * (int)ability.Cost * modifier;
     }
 
-    public List<LivingBeing> GetTargetfromSphereCast(Transform directionTransform, int desiredTargetNum, TeamType teamType)
+    public List<LivingBeing> GetTargetfromSphereCast(LivingBeing casterStats, Transform directionTransform, int desiredTargetNum, TeamType teamType)
     {
         List<CharacterTag> targetTypes = CrewsRelationshipHandler.TargetTypeToCharTab(teamType);
 
@@ -66,7 +68,7 @@ public abstract class Ability : ScriptableObject
         hits = ArrangeByDistanceFromCenter(hits, directionTransform, desiredTargetNum);
         foreach (RaycastHit hit in hits)
         {
-            if (!hit.collider.TryGetComponent(out LivingBeing hitStats)) continue;
+            if (!hit.collider.TryGetComponent(out LivingBeing hitStats) || hitStats == casterStats) continue;
             if (targetTypes.Contains(hitStats.CharacterTag))
             {
                 targets.Add(hitStats);

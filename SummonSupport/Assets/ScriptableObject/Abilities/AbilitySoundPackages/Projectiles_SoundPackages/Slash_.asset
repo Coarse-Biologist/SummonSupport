@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4bd91cff2f36da84c8f1bd22fd14b568, type: 3}
+  m_Name: Slash_
+  m_EditorClassIdentifier: Assembly-CSharp::AbilitySoundPackage
+  CastSounds:
+  - {fileID: 8300000, guid: 2fbb55da57e59304d8e0672d9937111d, type: 3}
+  - {fileID: 8300000, guid: a709ebb35088ed44d860173e7fe018e0, type: 3}
+  - {fileID: 8300000, guid: 75fe1084d06d5ce43b380d00d1a00faf, type: 3}
+  - {fileID: 8300000, guid: f15dd0e1dffc0c445b6ee88993016414, type: 3}
+  ActiveSound: {fileID: 8300000, guid: 2fbb55da57e59304d8e0672d9937111d, type: 3}
+  ImpactSounds:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}

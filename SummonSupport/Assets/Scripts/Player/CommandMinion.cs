@@ -6,21 +6,21 @@ public static class CommandMinion
 {
 
     public static List<GameObject> SelectedMinions { private set; get; } = new List<GameObject>();
-    public static List<GameObject> activeMinions { private set; get; } = new();
+    public static List<LivingBeing> activeMinions { private set; get; } = new();
 
 
-    public static void RemoveActiveMinions(GameObject minionObject)
+    public static void RemoveActiveMinions(LivingBeing minionObject)
     {
         if (activeMinions.Contains(minionObject))
             activeMinions.Remove(minionObject);
     }
-    public static void AddActiveMinions(GameObject minionObject)
+    public static void AddActiveMinions(LivingBeing minionObject)
     {
         if (!activeMinions.Contains(minionObject))
             activeMinions.Add(minionObject);
     }
 
-    public static void SetActiveMinions(List<GameObject> activeMinionsList)
+    public static void SetActiveMinions(List<LivingBeing> activeMinionsList)
     {
         activeMinions = activeMinionsList;
     }
@@ -28,6 +28,7 @@ public static class CommandMinion
     public static void HandleCommand(RaycastHit hit)
     {
         Vector3 loc = hit.point;
+        SetupManager.Instance.DebugLocation(loc, Color.yellow, 2);
         if (activeMinions != null)
         {
             if (hit.collider.TryGetComponent(out EnemyStats targetLivingBeing))
@@ -61,7 +62,7 @@ public static class CommandMinion
 
     private static void SendMinionToInteract(Vector3 loc)
     {
-        foreach (GameObject minion in activeMinions)
+        foreach (LivingBeing minion in activeMinions)
         {
             if (minion != null)
             {
@@ -78,7 +79,7 @@ public static class CommandMinion
     }
     public static void CommandMinionToGoToLoc(Vector3 loc)
     {
-        foreach (GameObject minion in activeMinions)
+        foreach (LivingBeing minion in activeMinions)
         {
             if (minion == null)
             {
@@ -96,7 +97,7 @@ public static class CommandMinion
 
     public static void CommandMinionToAttack(LivingBeing enemy)
     {
-        foreach (GameObject minion in activeMinions)
+        foreach (LivingBeing minion in activeMinions)
         {
             MinionStats stats = minion.GetComponent<MinionStats>();
             AIObedienceState obedienceState = minion.GetComponent<AIObedienceState>();

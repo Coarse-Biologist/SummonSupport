@@ -9,7 +9,7 @@ public class StatusEffectHandler : MonoBehaviour
 {
     private LivingBeing livingBeing;
     private AIStateHandler stateHandler;
-    public Rigidbody rigidBody;
+    public Rigidbody rigidBody { private set; get; }
     private float ai_Speed = 5;
     public Dictionary<StatusEffectType, int> SufferedStatusEffects { get; private set; } = new();
 
@@ -35,7 +35,7 @@ public class StatusEffectHandler : MonoBehaviour
     }
     public void HandleStatusEffect(StatusEffects status, bool add)
     {
-        Debug.Log($"Adding {status.EffectType} = {true}");
+        //Debug.Log($"Adding {status.EffectType} = {true}");
 
         if (stateHandler == null) return;
         if (add)
@@ -52,6 +52,11 @@ public class StatusEffectHandler : MonoBehaviour
                             stateHandler.anim.anim.speed = 0;
                             EventDeclarer.FrozenSolid?.Invoke(livingBeing);
                         }
+                        break;
+                    }
+                case StatusEffectType.Overheated:
+                    {
+                        EventDeclarer.Overheating?.Invoke(livingBeing);
                         break;
                     }
                 case StatusEffectType.Charmed:
@@ -81,9 +86,15 @@ public class StatusEffectHandler : MonoBehaviour
                     {
                         if (GetStatusEffectValue(StatusEffectType.Infected) > 4)
                         {
-                            Debug.Log($"spreading virus from {livingBeing}");
-
                             EventDeclarer.SpreadVirus?.Invoke(livingBeing);
+                        }
+                        break;
+                    }
+                case StatusEffectType.Slipping:
+                    {
+                        if (GetStatusEffectValue(StatusEffectType.Slipping) > 3)
+                        {
+                            EventDeclarer.Slipping?.Invoke(livingBeing);
                         }
                         break;
                     }

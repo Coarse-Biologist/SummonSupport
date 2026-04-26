@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Linq;
-using Unity.InferenceEngine;
 
 //using System.Numerics;
 using UnityEngine;
@@ -23,10 +22,11 @@ public class Projectile : MonoBehaviour
     public bool splitAlready = false;
 
     int split = 0;
-    int pierce = 5;
+    int pierce = 0;
     int ricochet = 0;
     LivingBeing userLivingBeing = null;
     private bool active = false;
+    private bool modsAdded = false;
 
     public AbilityModHandler modHandler { private set; get; }
     public Mod_Base projectileMod { private set; get; }
@@ -82,15 +82,16 @@ public class Projectile : MonoBehaviour
     }
     public void HandleRicochet()
     {
+        //Debug.Log("Rico shetting");
         if (ricochedAlready >= ricochet)
         {
-            Debug.Log($"destroying because: ricocheted already = {ricochedAlready}. max ricochet = {ricochet}");
+            //Debug.Log($"destroying because: ricocheted already = {ricochedAlready}. max ricochet = {ricochet}");
             Destroy(gameObject);
 
         }
         else if (Physics.Raycast(transform.position, rb.linearVelocity.normalized, out RaycastHit hit, 1f))
         {
-            Debug.Log("ray cast hits in handle ricochet func");
+            //Debug.Log("ray cast hits in handle ricochet func");
             Vector3 normal = hit.normal;
             Vector3 incomingV = rb.linearVelocity;
             Vector3 reflectDir = Vector3.Reflect(incomingV.normalized, normal);
@@ -151,7 +152,8 @@ public class Projectile : MonoBehaviour
         {
             if (other.gameObject.TryGetComponent(out NavMeshObstacle obstacle))
             {
-                Debug.Log("Box collider entered");
+                //Debug.Log("Box collider entered");
+                AddMods();
                 HandleRicochet();
                 SpawnEffect(transform);
             }
@@ -175,15 +177,20 @@ public class Projectile : MonoBehaviour
         }
 
     }
-
-    void HandleOnHitBehaviour(LivingBeing other, Collision col = null)
+    private void AddMods()
     {
-        if (modHandler != null)
+        if (!modsAdded && modHandler != null)
         {
             split = modHandler.GetModAttributeByType(ability, AbilityModTypes.MaxSplit);
             pierce = modHandler.GetModAttributeByType(ability, AbilityModTypes.MaxPierce);
             ricochet = modHandler.GetModAttributeByType(ability, AbilityModTypes.MaxRicochet);
+            modsAdded = true;
         }
+    }
+
+    void HandleOnHitBehaviour(LivingBeing other, Collision col = null)
+    {
+        AddMods();
 
         if (!splitAlready && (ability.PiercingMode == OnHitBehaviour.Split || split > 0))
         {
@@ -197,7 +204,6 @@ public class Projectile : MonoBehaviour
         {
             if (ricochedAlready < ricochet)
             {
-
                 HandleRicochet();
             }
         }
@@ -226,7 +232,7 @@ public class Projectile : MonoBehaviour
             GameObject newProjectile = Instantiate(ability.Projectile, transform.position, Quaternion.identity);
             Projectile projectileScript = newProjectile.GetComponent<Projectile>();
 
-            Material glowMaterial = ColorChanger.GetGlowByElement(ability.ElementTypes[0]);
+            Material glowMaterial = ColorChanger.GetGlowStrengthByElement(ability.ElementTypes[0]);
 
             ColorChanger.ChangeMatByAffinity(newProjectile.GetComponent<Renderer>(), glowMaterial);
             projectileScript.ignoreGameObjects = new List<GameObject>(ignoreGameObjects) { other.gameObject };

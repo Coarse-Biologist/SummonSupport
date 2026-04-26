@@ -30,12 +30,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2038755144732919392, guid: deb0299c2f7c5ee468cb23755c8d92da,
         type: 3}
+      propertyPath: <Air>k__BackingField
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2038755144732919392, guid: deb0299c2f7c5ee468cb23755c8d92da,
+        type: 3}
+      propertyPath: <Heat>k__BackingField
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2038755144732919392, guid: deb0299c2f7c5ee468cb23755c8d92da,
+        type: 3}
       propertyPath: <MaxHP>k__BackingField
       value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 2038755144732919392, guid: deb0299c2f7c5ee468cb23755c8d92da,
         type: 3}
       propertyPath: <Psychic>k__BackingField
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2038755144732919392, guid: deb0299c2f7c5ee468cb23755c8d92da,
+        type: 3}
+      propertyPath: <Bacteria>k__BackingField
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2038755144732919392, guid: deb0299c2f7c5ee468cb23755c8d92da,
@@ -106,7 +121,7 @@ PrefabInstance:
     - target: {fileID: 4718285679297901150, guid: deb0299c2f7c5ee468cb23755c8d92da,
         type: 3}
       propertyPath: m_StoppingDistance
-      value: 8
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 5058052080107270826, guid: deb0299c2f7c5ee468cb23755c8d92da,
         type: 3}
@@ -157,7 +172,7 @@ PrefabInstance:
         type: 3}
       propertyPath: '<Abilities>k__BackingField.Array.data[0]'
       value: 
-      objectReference: {fileID: 11400000, guid: a1d92caf1a989f045afb6724af236c41,
+      objectReference: {fileID: 11400000, guid: 5021e273f1bb93f48b798a0a50132e88,
         type: 2}
     - target: {fileID: 7173906857914730221, guid: deb0299c2f7c5ee468cb23755c8d92da,
         type: 3}
@@ -199,7 +214,10 @@ PrefabInstance:
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 9100000, guid: 99df3b82804751549917c98d5215c470, type: 2}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 5243959057096400346, guid: deb0299c2f7c5ee468cb23755c8d92da, type: 3}
+    - {fileID: -1068025400344585520, guid: deb0299c2f7c5ee468cb23755c8d92da, type: 3}
+    - {fileID: -521767270320588812, guid: deb0299c2f7c5ee468cb23755c8d92da, type: 3}
     m_RemovedGameObjects:
     - {fileID: 8223665307117993222, guid: deb0299c2f7c5ee468cb23755c8d92da, type: 3}
     - {fileID: 4577684411859876071, guid: deb0299c2f7c5ee468cb23755c8d92da, type: 3}
@@ -213,6 +231,14 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 7097166787737714777}
+    - targetCorrespondingSourceObject: {fileID: 810306928598971056, guid: deb0299c2f7c5ee468cb23755c8d92da,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6321436163420995799}
+    - targetCorrespondingSourceObject: {fileID: 810306928598971056, guid: deb0299c2f7c5ee468cb23755c8d92da,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8435584403926715407}
   m_SourcePrefab: {fileID: 100100000, guid: deb0299c2f7c5ee468cb23755c8d92da, type: 3}
 --- !u!4 &1705187181853708855 stripped
 Transform:
@@ -260,6 +286,35 @@ MonoBehaviour:
   - {fileID: 3072345204892040774}
   - {fileID: 8582960059180049285}
   - {fileID: 280827777760705073}
+--- !u!114 &6321436163420995799
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2442994578383176847}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5bf0aa40a5c8c5340a0e99117006653a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::StatusEffectHandler
+--- !u!114 &8435584403926715407
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2442994578383176847}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e8dcc7b59d9bab4e975794fbe7eff0f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LivingBeingAudioHandler
+  <CreatureDamagedClips>k__BackingField:
+  - {fileID: 8300000, guid: 669cc357a4465684e98c5407aebb91fb, type: 3}
+  - {fileID: 8300000, guid: f0d18e5bd1236b8448b371a890272d6f, type: 3}
+  - {fileID: 8300000, guid: 46553eed86c1fc5478de80c119443f35, type: 3}
+  - {fileID: 8300000, guid: dd99d19356b4fbe4f8aa8bbf83903bd0, type: 3}
 --- !u!1 &5838535601565866860 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8925903879776759123, guid: deb0299c2f7c5ee468cb23755c8d92da,
@@ -345,6 +400,36 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -6330669313247171797, guid: d93a58368d150c54eb0809f562378e03,
+        type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: -8050999422521613188, guid: 6e38e1af221d59647876ead5c925643f,
+        type: 3}
+    - target: {fileID: -6330669313247171797, guid: d93a58368d150c54eb0809f562378e03,
+        type: 3}
+      propertyPath: 'm_Materials.Array.data[1]'
+      value: 
+      objectReference: {fileID: -769070194814021418, guid: 6e38e1af221d59647876ead5c925643f,
+        type: 3}
+    - target: {fileID: -6330669313247171797, guid: d93a58368d150c54eb0809f562378e03,
+        type: 3}
+      propertyPath: 'm_Materials.Array.data[2]'
+      value: 
+      objectReference: {fileID: -1151317733493428544, guid: 57a704a5d8cd8944688738e2ef847305,
+        type: 3}
+    - target: {fileID: -6330669313247171797, guid: d93a58368d150c54eb0809f562378e03,
+        type: 3}
+      propertyPath: 'm_Materials.Array.data[3]'
+      value: 
+      objectReference: {fileID: 9218613529193795700, guid: 6e38e1af221d59647876ead5c925643f,
+        type: 3}
+    - target: {fileID: -6330669313247171797, guid: d93a58368d150c54eb0809f562378e03,
+        type: 3}
+      propertyPath: 'm_Materials.Array.data[4]'
+      value: 
+      objectReference: {fileID: -5040469653564478905, guid: 77ee5cf2db2fa0440bcafd0c57916374,
+        type: 3}
     - target: {fileID: 919132149155446097, guid: d93a58368d150c54eb0809f562378e03,
         type: 3}
       propertyPath: m_Name

@@ -6,7 +6,7 @@ public class LootSpawnHandler : MonoBehaviour
     [field: SerializeField] GameObject FaintEtherPrefab;
     [field: SerializeField] GameObject PowerfulEtherPrefab;
     [field: SerializeField] GameObject IntenseEtherPrefab;
-    [field: SerializeField] GameObject OrganPrefab;
+    [field: SerializeField] GameObject[] OrganPrefabs = new GameObject[3];
 
     #region Cores
     [field: SerializeField] GameObject CorePrefab;
@@ -29,10 +29,11 @@ public class LootSpawnHandler : MonoBehaviour
 
     private void DecideDropLoot(EnemyStats enemyStats)
     {
-        float etherValue = enemyStats.GetAffinity(enemyStats.GetHighestAffinity());
+        Element strongestElement = enemyStats.GetHighestAffinity(out float value);
+        float etherValue = enemyStats.GetAffinity(strongestElement); ;
         if (etherValue >= 50)
         {
-            SpawnEther(enemyStats, GetEtherType(etherValue));
+            SpawnEther(enemyStats, GetEtherType(etherValue), strongestElement);
         }
         if (enemyStats.MaxHP > 150)
         {
@@ -43,7 +44,7 @@ public class LootSpawnHandler : MonoBehaviour
             SpawnCores(enemyStats, GetCoreType(enemyStats.MaxPower));
         }
     }
-    private void SpawnEther(EnemyStats enemyStats, GameObject etherPrefab)
+    private void SpawnEther(EnemyStats enemyStats, GameObject etherPrefab, Element element)
     {
         //Debug.Log("Spawning ether");
 
@@ -54,7 +55,7 @@ public class LootSpawnHandler : MonoBehaviour
 
         if (instance.TryGetComponent(out LootableAlchemyMaterial lootScript))
         {
-            lootScript.SetElement(enemyStats.GetHighestAffinity());
+            lootScript.SetElement(element);
         }
         if (instance.TryGetComponent(out ParticleSystem ps))
         {
@@ -75,12 +76,12 @@ public class LootSpawnHandler : MonoBehaviour
 
     private void SpawnOrgans(EnemyStats enemy, AlchemyLoot organType)
     {
-        //        //Debug.Log("Spawning organ!");
+        //Debug.Log("Spawning organ!");
         if (organType == AlchemyLoot.WeakCore) return;
-        Instantiate(OrganPrefab, enemy.transform.position, Quaternion.identity);
+        GameObject randomOrgan = Instantiate(OrganPrefabs[Random.Range(0, 2)], enemy.transform.position, Quaternion.identity);
         //Debug.Log("Indeed, Spawning organ");
 
-        if (OrganPrefab.TryGetComponent(out LootableAlchemyMaterial lootScript))
+        if (randomOrgan.TryGetComponent(out LootableAlchemyMaterial lootScript))
         {
             lootScript.SetAlchemyMaterial(organType);
         }
@@ -110,12 +111,12 @@ public class LootSpawnHandler : MonoBehaviour
             lootScript.SetAlchemyMaterial(coreType);
         }
         Renderer renderer = instance.GetComponentInChildren<Renderer>();
-        Element strongestElement = enemy.GetHighestAffinity();
+        Element strongestElement = enemy.GetHighestAffinity(out float value);
 
         if (renderer != null && strongestElement != Element.None)
         {
             //Debug.Log("trying to change core color");
-            Material glowMaterial = ColorChanger.GetGlowByElement(strongestElement);
+            Material glowMaterial = ColorChanger.GetGlowStrengthByElement(strongestElement);
             ColorChanger.ChangeMatByAffinity(renderer, glowMaterial);
         }
     }

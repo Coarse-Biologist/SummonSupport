@@ -4,6 +4,7 @@ using UnityEngine.UIElements;
 using UnityEngine.Events;
 using SummonSupportEvents;
 using System;
+using Quest;
 
 public class PlayerUIHandler : MonoBehaviour
 {
@@ -20,6 +21,8 @@ public class PlayerUIHandler : MonoBehaviour
     private ProgressBar playerHealthBar;
     private ProgressBar playerPowerBar;
     private ProgressBar playerXP_Bar;
+    private VisualElement questInfoContainer;
+    private Label questInfoLabel;
 
 
 
@@ -68,6 +71,9 @@ public class PlayerUIHandler : MonoBehaviour
         playerPowerBar = resourceBarsContainer.Q<ProgressBar>("PowerBar");
         playerXP_Bar = resourceBarsContainer.Q<ProgressBar>("XP_Bar");
 
+        questInfoContainer = playerUI.Q<VisualElement>("QuestInfoContainer");
+        questInfoLabel = questInfoContainer.Q<Label>("QuestInfoLabel");
+
 
 
         minionHPBars = playerUI.Q<VisualElement>("MinionBarSlots");
@@ -90,6 +96,7 @@ public class PlayerUIHandler : MonoBehaviour
 
     public void AddMinionHP(LivingBeing livingBeing)
     {
+        //Debug.Log($"adding health bar for {livingBeing}");
         TemplateContainer prefabContainer = UIPrefabAssets.Instantiate();
 
         ProgressBar minionHP = prefabContainer.Q<ProgressBar>("HealthbarPrefab");
@@ -101,11 +108,11 @@ public class PlayerUIHandler : MonoBehaviour
             minionHP.title = $"{livingBeing.Name} HP: {hp}";
             minionHP.highValue = hp;
             minionHP.value = hp;
-            if (minionHPBars == null) Logging.Error("minion HP visual element doesnt exist");
+            if (minionHPBars == null) Debug.Log("Error: minion HP visual element doesnt exist");
             minionHPBars.Add(minionHP);
             minionHP.RegisterCallback<ClickEvent>(evt => OnMinionSelect(minionHP));
         }
-        else Debug.Log("The minion HP progress bar is already present ");
+        //else Debug.Log("The minion HP progress bar is already present ");
     }
 
 
@@ -189,7 +196,7 @@ public class PlayerUIHandler : MonoBehaviour
             hpBar.value = livingBeing.CurrentHP;
             hpBar.title = $"{livingBeing.Name} HP: {hp}";
         }
-        else Logging.Info($"There was no hp bar for the living being {livingBeing.name}");
+        //else Logging.Info($"There was no hp bar for the living being {livingBeing.name}");
     }
 
     private void SetPlayerAttribute(AttributeType attributeType)
@@ -203,5 +210,21 @@ public class PlayerUIHandler : MonoBehaviour
     {
         playerXP_Bar.value = playerStats.CurrentXP;
         playerXP_Bar.highValue = playerStats.MaxXP;
+    }
+
+    public void ShowQuestInfo(Quest_SO quest)
+    {
+        if (questInfoLabel != null)
+        {
+            questInfoLabel.text = $"{QuestHandler.Instance.GetQuestInfo(quest)}";
+        }
+
+    }
+    public void ShowCompletedQuestInfo(Quest_SO quest)
+    {
+        if (questInfoLabel != null)
+        {
+            questInfoLabel.text = $"{quest.QuestName} Completed!\n {quest.CompletionString}";
+        }
     }
 }

@@ -15,10 +15,7 @@ public class CreatureHPCanvasHandler : MonoBehaviour, I_ResourceBar
         Slider[] sliders = GetComponentsInChildren<Slider>();
         hpSlider = sliders[0];
         canvas = GetComponentInChildren<Canvas>();
-        if (canvas != null)
-        {
-            Debug.Log("Canvas found!");
-        }
+
 
         // manaSlider = sliders[1];
 
@@ -57,7 +54,7 @@ public class CreatureHPCanvasHandler : MonoBehaviour, I_ResourceBar
     {
         if (status != null && status.Icon != null)
         {
-            Debug.Log("Trying to add the thing.");
+            //Debug.Log("Trying to add the thing.");
             GameObject statusImage = new GameObject("StatusEffectImage");
 
             // Parent it to the Canvas
@@ -70,7 +67,7 @@ public class CreatureHPCanvasHandler : MonoBehaviour, I_ResourceBar
             // Configure RectTransform
             RectTransform rt = img.GetComponent<RectTransform>();
             rt.anchoredPosition = Vector2.zero;
-            rt.sizeDelta = new Vector2(1, 1);
+            rt.sizeDelta = new Vector2(.5f, .5f);
             Destroy(statusImage, 5f);
         }
     }

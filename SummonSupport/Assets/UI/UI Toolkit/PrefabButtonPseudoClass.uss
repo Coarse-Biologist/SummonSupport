@@ -1,13 +1,24 @@
-.toggle {
-    -unity-background-image-tint-color: rgb(0, 146, 27);
-    background-color: rgb(3, 176, 0);
+.ElementToggle:checked .unity-toggle__checkmark {
+    width: 0;
+    height: 0;
+    background-color: black;
 }
 
-.toggle:hover {
-    -unity-background-image-tint-color: rgb(184, 177, 177);
-    background-color: rgb(255, 255, 255);
+.ElementToggle .unity-toggle__checkmark {
+    margin: 3px;
+    border-radius: 4px;
+    background-color: rgb(80, 80, 80);
+}
+
+.ElementToggle:hover {
+    transition-duration: 0.2s;
     scale: 1.2 1.2;
-    transition-duration: 0.3s;
+}
+
+.ElementToggle:checked {
+    transition-duration: 0.2s;
+    transition-timing-function: ease-in-out;
+    scale: 1.1 1.1;
 }
 
 .buttonPrefab:hover {
@@ -43,7 +54,7 @@
     transition-duration: 0.2s;
     transition-timing-function: ease-in-out;
     scale: 1.5 1;
-    background-image: url("project://database/Assets/PixelArt/UI_Sprites/StoneButton.png?fileID=2800000&guid=df2136feabe033a47aa6a3f2891c8183&type=3#StoneButton");
+    background-image: url("project://database/Assets/Z_PixelArt/UI_Sprites/StoneButton_.png?fileID=2800000&guid=df2136feabe033a47aa6a3f2891c8183&type=3#StoneButton_");
 }
 
 .healthbar .unity-progress-bar__progress {

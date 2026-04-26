@@ -1,13 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
-using Unity.Entities;
-using Unity.Collections;
 using SummonSupportEvents;
-using Unity.Mathematics;
-using UnityEngine.SceneManagement;
-using Unity.VisualScripting;
 using System;
-using System.Collections.Generic;
 
 
 public class PlayerMovement : MovementScript
@@ -26,9 +20,7 @@ public class PlayerMovement : MovementScript
     private bool dashing = false;
     private bool canDash = true;
     GameObject DashDustInstance = null;
-    private bool lockedInUI = false;
     private bool paused = false;
-    private bool StuckInAbilityAnimation = false;
     private AnimationControllerScript anim;
 
 
@@ -42,6 +34,9 @@ public class PlayerMovement : MovementScript
         Cursor.lockState = CursorLockMode.Locked;   // Locks the cursor to the center of the screen
         Cursor.visible = false;
         rb = GetComponent<Rigidbody>();
+
+
+
         mainCamera = Camera.main;
         inputActions = new PlayerInputActions();
         playerStats = GetComponent<LivingBeing>();
@@ -54,7 +49,9 @@ public class PlayerMovement : MovementScript
     #region Enable and Disable event subscriptions
     private void OnEnable()
     {
-        //AlchemyBenchUI.Instance.playerUsingUI.AddListener(ToggleLockedInUI);
+        EventDeclarer.UnpauseGame?.AddListener(UnpauseGame);
+
+        EventDeclarer.PauseGame?.AddListener(PauseGame);
         inputActions ??= new PlayerInputActions();
         EventDeclarer.SpeedAttributeChanged?.AddListener(SetMovementAttribute);
         inputActions.Player.Enable();
@@ -69,7 +66,9 @@ public class PlayerMovement : MovementScript
 
     private void OnDisable()
     {
-        //AlchemyBenchUI.Instance.playerUsingUI.RemoveListener(ToggleLockedInUI);
+        EventDeclarer.UnpauseGame?.RemoveListener(UnpauseGame);
+
+        EventDeclarer.PauseGame.RemoveListener(PauseGame);
 
         EventDeclarer.SpeedAttributeChanged?.RemoveListener(SetMovementAttribute);
         inputActions.Player.Move.performed -= OnWASD;
@@ -94,7 +93,7 @@ public class PlayerMovement : MovementScript
             dashing = true;
             Invoke("ReturnToNormalSpeed", DashDuration);
             Invoke("ReadyDash", DashCoolDown);
-            if (PlayerAbilityHandler.DashAbility != null) PlayerAbilityHandler.DashAbility.Activate(gameObject);
+            if (PlayerAbilityHandler.DashAbility != null) PlayerAbilityHandler.DashAbility.Activate(playerStats);
             else
             {
                 DashDustInstance = Instantiate(DashDust, transform.position, Quaternion.identity);
@@ -106,6 +105,7 @@ public class PlayerMovement : MovementScript
         }
     }
 
+
     private void ReadyDash()
     {
         canDash = true;
@@ -115,9 +115,18 @@ public class PlayerMovement : MovementScript
         dashing = false;
     }
 
-    public void SetStuckInAbilityAnimation(bool stuck)
+
+    public void UnpauseGame()
     {
-        StuckInAbilityAnimation = stuck;
+        anim.SetUpdateMode(AnimatorUpdateMode.UnscaledTime);
+        paused = false;
+    }
+    public void PauseGame()
+    {
+        anim.SetUpdateMode(AnimatorUpdateMode.Normal);
+
+        paused = true;
+
     }
     #endregion
 
@@ -128,6 +137,7 @@ public class PlayerMovement : MovementScript
     }
     private void HandleMove()
     {
+
         if (Math.Abs(moveInput.x) > .01 || Math.Abs(moveInput.y) > .01)
         {
             float calculatedSpeed;
@@ -138,7 +148,10 @@ public class PlayerMovement : MovementScript
 
             Vector3 moveDirection = transform.TransformDirection(new Vector3(moveInput.x, 0, moveInput.y)).normalized;
             anim.ChangeMovementAnimation(moveInput.x, moveInput.y);
-            rb.AddForce(moveDirection * calculatedSpeed * 100f, ForceMode.Acceleration);
+
+            Vector3 force = moveDirection * calculatedSpeed * 100f;
+            rb.AddForce(force, ForceMode.Acceleration);
+
         }
         else anim.ChangeAnimation("Idle", .2f);
 
@@ -163,9 +176,9 @@ public class PlayerMovement : MovementScript
     private void SendMinionCommandContext(InputAction.CallbackContext context)
     {
         if (playerStats.Dead) return;
-
-        Ray ray = new Ray(transform.position, transform.forward.normalized);
-
+        Vector3 cameraForward = Camera.main.transform.forward;
+        Vector3 adjustedForward = new Vector3(cameraForward.x, cameraForward.y + .15f, cameraForward.z);
+        Ray ray = new Ray(Camera.main.transform.position, adjustedForward);
         if (Physics.Raycast(ray, out RaycastHit hit, 300))
         {
             CommandMinion.HandleCommand(hit);
@@ -180,7 +193,7 @@ public class PlayerMovement : MovementScript
             return;
         }
 
-        if (!lockedInUI && !StuckInAbilityAnimation)
+        if (!paused)
         {
             HandleMove();
 
@@ -190,21 +203,16 @@ public class PlayerMovement : MovementScript
 
     private void ToggleGamePause(InputAction.CallbackContext context)
     {
-        if (!lockedInUI)
-        {
-            paused = !paused;
-            EventDeclarer.TogglePauseGame?.Invoke();
 
-            if (paused)
-            {
-                Debug.Log("Pausing");
-                Time.timeScale = 0f;
-            }
-            else
-            {
-                Debug.Log("Unpausing");
-                Time.timeScale = 1f;
-            }
+        if (!paused)
+        {
+            paused = true;
+            EventDeclarer.PauseGame?.Invoke();
+        }
+        else
+        {
+            EventDeclarer.UnpauseGame?.Invoke();
+            paused = false;
         }
     }
 

@@ -12,7 +12,7 @@ public class EnemySpawnHandler : MonoBehaviour
 {
     [field: SerializeField] public bool Active { get; private set; } = false;
 
-    [field: SerializeField] public GameObject enemyPrefab { get; private set; } = null;
+    [field: SerializeField] public GameObject[] enemyPrefab { get; private set; } = new GameObject[3];
     [field: SerializeField] public GameObject SpawnCenter { get; private set; } = null;
     [field: SerializeField] public List<GameObject> AllCreatures { get; private set; } = new();
     [field: SerializeField] public List<CreatureDict> ElementCreatureDict { get; private set; } = new();
@@ -32,8 +32,6 @@ public class EnemySpawnHandler : MonoBehaviour
     private int lvl1_creatureProbability = 94;
     private int lvl3_creatureProbability = 97;
     private int lvl4_creatureProbability = 100;
-
-
 
 
 
@@ -108,8 +106,8 @@ public class EnemySpawnHandler : MonoBehaviour
     }
     private IEnumerator SpawnWavesOfEnemies(SpawnLocationInfo spawnInfo = null)
     {
-        if (spawnInfo == null) spawnInfo = SpawnCenter.GetComponent<SpawnLocationInfo>();
-        if (spawnInfo != null & spawnInfo.Creatures.Count > 0)
+        if (spawnInfo == null) spawnInfo = SpawnCenter.GetComponentInChildren<SpawnLocationInfo>();
+        if (spawnInfo != null & spawnInfo.Creatures.Length > 0)
         {
             for (int i = spawnInfo.Waves; i > 0; i--)
             {
@@ -119,7 +117,7 @@ public class EnemySpawnHandler : MonoBehaviour
                 List<Vector2> spawnLocs = GetSpawnLocations(SpawnCenter.transform.position, spawnInfo.Radius, spawnInfo.CreaturesPerWave);
                 foreach (Vector2 loc in spawnLocs)
                 {
-                    GameObject SpawnedCreature = Instantiate(spawnInfo.Creatures[UnityEngine.Random.Range(0, spawnInfo.Creatures.Count)], loc, Quaternion.identity);
+                    GameObject SpawnedCreature = Instantiate(spawnInfo.Creatures[UnityEngine.Random.Range(0, spawnInfo.Creatures.Length)], loc, Quaternion.identity);
                     int level = GetCreatureLevel();
                     ModifyCreatureStats(level, SpawnedCreature.GetComponent<LivingBeing>(), spawnInfo);
                     spawnedCreatures.Add(SpawnedCreature);
@@ -138,15 +136,15 @@ public class EnemySpawnHandler : MonoBehaviour
     }
     private void SpawnEnemies()
     {
-        SpawnLocationInfo spawnInfo = SpawnCenter.GetComponent<SpawnLocationInfo>();
-        if (spawnInfo != null & spawnInfo.Creatures.Count > 0)
+        SpawnLocationInfo spawnInfo = SpawnCenter.GetComponentInChildren<SpawnLocationInfo>();
+        if (spawnInfo != null & spawnInfo.Creatures.Length > 0)
         {
             List<GameObject> spawnedCreatures = new();
 
             List<Vector2> spawnLocs = GetSpawnLocations(SpawnCenter.transform.position, spawnInfo.Radius, spawnInfo.CreaturesPerWave);
             foreach (Vector2 loc in spawnLocs)
             {
-                GameObject SpawnedCreature = Instantiate(spawnInfo.Creatures[UnityEngine.Random.Range(0, spawnInfo.Creatures.Count)], loc, Quaternion.identity);
+                GameObject SpawnedCreature = Instantiate(spawnInfo.Creatures[UnityEngine.Random.Range(0, spawnInfo.Creatures.Length)], loc, Quaternion.identity);
                 int level = GetCreatureLevel();
                 ModifyCreatureStats(level, SpawnedCreature.GetComponent<LivingBeing>(), spawnInfo);
                 spawnedCreatures.Add(SpawnedCreature);
@@ -179,8 +177,9 @@ public class EnemySpawnHandler : MonoBehaviour
     {
         if (desiredSpawns == 0)
         {
-            desiredSpawns += (int)Difficulty + UnityEngine.Random.Range(0, 3);
+            desiredSpawns += (int)Difficulty + 1;
         }
+        else desiredSpawns += (int)Difficulty;
         List<Vector2> spawnLocs = new();
         for (int i = 0; i < desiredSpawns; i++)
         {
@@ -230,20 +229,24 @@ public class EnemySpawnHandler : MonoBehaviour
     }
     public void ModifyCreatureAbilties(int level, LivingBeing livingBeing, Element element, PhysicalType physical)
     {
-        if (element != Element.None) AddElementalAbilities(level, livingBeing, element);
-        else if (physical != PhysicalType.None) AddPhysicalAbilities(level, livingBeing, physical);
-        else livingBeing.GetComponent<CreatureAbilityHandler>().LearnAbility(AbilityLibrary.abilityLibrary.defaultAttack);
+        Debug.Log("Spawning creature of level " + level);
+        if (level < 2) AlchemyHandler.Instance.AddMeleeAbilityByElement(livingBeing);
+        else if (element != Element.None) AddElementalAbilities(level, livingBeing, element);
+        if (physical != PhysicalType.None) AddPhysicalAbilities(level, livingBeing, physical);
+        else livingBeing.abilityHandler.LearnAbility(AbilityLibrary.abilityLibrary.defaultAttack);
     }
     private void AddElementalAbilities(int level, LivingBeing livingBeing, Element element)
     {
         CreatureAbilityHandler abilityHandler = livingBeing.GetComponent<CreatureAbilityHandler>();
-
-        //Ability elementalAbility = SetupManager.Instance.ElementToAbilityLibrary_SO.GetAbilityOfElementType(element);
-        foreach (Ability ability in AbilityLibrary.GetRandomAbilities(element, level + 1))
+        if (UnityEngine.Random.value > .5)
         {
-            livingBeing.GetComponent<CreatureAbilityHandler>().LearnAbility(ability);
+            //Ability elementalAbility = SetupManager.Instance.ElementToAbilityLibrary_SO.GetAbilityOfElementType(element);
+            foreach (Ability ability in AbilityLibrary.GetRandomAbilities(element, level + 1))
+            {
+                abilityHandler.LearnAbility(ability);
+            }
         }
-
+        else abilityHandler.LearnAbility(AbilityLibrary.GetElementalMeleeAbility(element, 50));
     }
     private void AddPhysicalAbilities(int level, LivingBeing livingBeing, PhysicalType physical)
     {

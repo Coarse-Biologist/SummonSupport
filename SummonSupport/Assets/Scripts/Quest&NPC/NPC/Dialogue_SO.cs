@@ -85,6 +85,7 @@ public class Dialogue_SO : ScriptableObject
 
 }
 
+
 public enum DialogueResult
 {
     None,

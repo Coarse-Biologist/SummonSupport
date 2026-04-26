@@ -7,7 +7,7 @@ public class LootableTool : MonoBehaviour, I_LootInterface
     public void Loot()
     {
         AlchemyInventory.GainTool(tool);
-        InteractCanvasHandler.Instance.DisplayGoldenLetters($"{tool} learned!", 1f);
+        FloatingInfoHandler.Instance.DisplayGoldenLetters($"{tool} learned!", 1f);
 
         Destroy(this.gameObject);
     }

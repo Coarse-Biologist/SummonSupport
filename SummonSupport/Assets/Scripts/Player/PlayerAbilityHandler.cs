@@ -2,9 +2,11 @@ using UnityEngine.InputSystem;
 using System.Collections.Generic;
 using UnityEngine;
 using SummonSupportEvents;
+using Unity.VisualScripting;
 
 public class PlayerAbilityHandler : AbilityHandler
 {
+    public PlayerAbilityHandler Instance { private set; get; }
     PlayerInputActions inputActions;
     public static Ability DashAbility { private set; get; }
     public Ability selectedAbility { private set; get; }
@@ -12,6 +14,7 @@ public class PlayerAbilityHandler : AbilityHandler
     public AnimationControllerScript anim { get; private set; }
     public string currentAnimation;
     private int currentAbilityIndex;
+    private bool paused = false;
     private Dictionary<string, int> inputActionToIndex = new()
     {
         { "Ability1", 0 },
@@ -22,24 +25,14 @@ public class PlayerAbilityHandler : AbilityHandler
         { "Ability6", 5 },
     };
 
-    public static void SetDashAbility(DashAbility ability)
-    {
-        Debug.Log("Setting dash ability");
-        DashAbility = ability;
-    }
-    public void UpdateAbilities()
-    {
-        int index = 0;
-        foreach (Ability ability in Abilities)
-        {
-            EventDeclarer.SlotChanged.Invoke(index, ability);
-            index++;
-        }
-    }
+
     void Start()
     {
         UpdateAbilities();
         playerStats = GetComponent<LivingBeing>();
+        modHandler = AbilityModHandler.Instance;
+        if (Instance != null) Destroy(this);
+        else Instance = this;
 
     }
 
@@ -55,6 +48,10 @@ public class PlayerAbilityHandler : AbilityHandler
         inputActions ??= new PlayerInputActions();
         //RegisterInputEvents(true);
         EventDeclarer.PlayerLearnedAbility?.AddListener(LearnAbility);
+        EventDeclarer.UnpauseGame?.AddListener(UnpauseGame);
+        EventDeclarer.PauseGame?.AddListener(PauseGame);
+
+
         inputActions.Enable();
 
         inputActions.Player.Ability1.performed += OnAbility1;
@@ -64,6 +61,7 @@ public class PlayerAbilityHandler : AbilityHandler
         inputActions.Player.AbilityE.performed += OnAbilityE;
         inputActions.Player.AbilityF.performed += OnAbilityF;
         inputActions.Player.UseSelectedAbility.performed += OnSelectedAbility;
+        EventDeclarer.SlotChanged?.AddListener(ChangeAbilitySlot);
 
     }
 
@@ -79,14 +77,49 @@ public class PlayerAbilityHandler : AbilityHandler
         inputActions.Player.AbilityE.performed -= OnAbilityE;
         inputActions.Player.AbilityF.performed -= OnAbilityF;
         inputActions.Player.UseSelectedAbility.performed -= OnSelectedAbility;
+        EventDeclarer.SlotChanged?.RemoveListener(ChangeAbilitySlot);
+        EventDeclarer.PauseGame?.RemoveListener(PauseGame);
+        EventDeclarer.UnpauseGame?.AddListener(UnpauseGame);
+
 
         inputActions.Disable();
+    }
+    private void PauseGame()
+    {
+        paused = true;
+    }
+    private void UnpauseGame()
+    {
+        paused = false;
+    }
+    public static void SetDashAbility(DashAbility ability)
+    {
+        Debug.Log("Setting dash ability");
+        DashAbility = ability;
+    }
+    public void UpdateAbilities()
+    {
+        int index = 0;
+        foreach (Ability ability in Abilities)
+        {
+            if (ability == null) continue;
+            EventDeclarer.SetSlot?.Invoke(index, ability);
+            index++;
+        }
+    }
+    private void ChangeAbilitySlot(int index, Ability ability)
+    {
+        if (Abilities.Contains(ability))
+            Abilities[Abilities.IndexOf(ability)] = null;
+        while (Abilities.Count < index + 1)
+            Abilities.Add(null);
+        Abilities[index] = ability;
     }
 
     #region ability used
     public void OnAbility1(InputAction.CallbackContext context)
     {
-        if (playerStats.Dead) return;
+        if (playerStats.Dead || paused) return;
 
         Ability ability = GetAbilityOfIndex(0);
 
@@ -94,7 +127,7 @@ public class PlayerAbilityHandler : AbilityHandler
 
         SetSelectedAbility(ability, 0);
 
-        if (!abilitiesOnCooldownCrew[ability]) // Checks if the value is true. Abilities[index] is the ability at the InputActions context index.
+        if (!IsOnCoolDown(ability)) // Checks if the value is true. Abilities[index] is the ability at the InputActions context index.
         {
             CastAbility(ability, GetCenterOfScreen(100f), transform.rotation);
             EventDeclarer.AbilityUsed?.Invoke(0);
@@ -103,7 +136,7 @@ public class PlayerAbilityHandler : AbilityHandler
     }
     public void OnAbility2(InputAction.CallbackContext context)
     {
-        if (playerStats.Dead) return;
+        if (playerStats.Dead || paused) return;
 
         Ability ability = GetAbilityOfIndex(1);
 
@@ -111,16 +144,15 @@ public class PlayerAbilityHandler : AbilityHandler
 
         SetSelectedAbility(ability, 1);
 
-        if (!abilitiesOnCooldownCrew[ability]) // Checks if the value is true. Abilities[index] is the ability at the InputActions context index.
+        if (!IsOnCoolDown(ability)) // Checks if the value is true. Abilities[index] is the ability at the InputActions context index.
         {
             CastAbility(ability, GetCenterOfScreen(100f), transform.rotation);
             EventDeclarer.AbilityUsed?.Invoke(1);
-
         }
     }
     public void OnAbility3(InputAction.CallbackContext context)
     {
-        if (playerStats.Dead) return;
+        if (playerStats.Dead || paused) return;
 
         Ability ability = GetAbilityOfIndex(2);
 
@@ -128,7 +160,7 @@ public class PlayerAbilityHandler : AbilityHandler
 
         SetSelectedAbility(ability, 2);
 
-        if (!abilitiesOnCooldownCrew[ability]) // Checks if the value is true. Abilities[index] is the ability at the InputActions context index.
+        if (!IsOnCoolDown(ability)) // Checks if the value is true. Abilities[index] is the ability at the InputActions context index.
         {
             CastAbility(ability, GetCenterOfScreen(100f), transform.rotation);
             EventDeclarer.AbilityUsed?.Invoke(2);
@@ -137,14 +169,14 @@ public class PlayerAbilityHandler : AbilityHandler
     }
     public void OnAbilityQ(InputAction.CallbackContext context)
     {
-        if (playerStats.Dead) return;
+        if (playerStats.Dead || paused) return;
 
         Ability ability = GetAbilityOfIndex(3);
         if (ability == null) return;
 
         SetSelectedAbility(ability, 3);
 
-        if (!abilitiesOnCooldownCrew[ability]) // Checks if the value is true. Abilities[index] is the ability at the InputActions context index.
+        if (!IsOnCoolDown(ability)) // Checks if the value is true. Abilities[index] is the ability at the InputActions context index.
         {
             CastAbility(ability, GetCenterOfScreen(100f), transform.rotation);
             EventDeclarer.AbilityUsed?.Invoke(3);
@@ -153,7 +185,7 @@ public class PlayerAbilityHandler : AbilityHandler
     }
     public void OnAbilityE(InputAction.CallbackContext context)
     {
-        if (playerStats.Dead) return;
+        if (playerStats.Dead || paused) return;
 
         Ability ability = GetAbilityOfIndex(4);
 
@@ -161,7 +193,7 @@ public class PlayerAbilityHandler : AbilityHandler
 
         SetSelectedAbility(ability, 4);
 
-        if (!abilitiesOnCooldownCrew[ability]) // Checks if the value is true. Abilities[index] is the ability at the InputActions context index.
+        if (!IsOnCoolDown(ability)) // Checks if the value is true. Abilities[index] is the ability at the InputActions context index.
         {
             CastAbility(ability, GetCenterOfScreen(100f), transform.rotation);
             EventDeclarer.AbilityUsed?.Invoke(4);
@@ -169,7 +201,7 @@ public class PlayerAbilityHandler : AbilityHandler
     }
     public void OnAbilityF(InputAction.CallbackContext context)
     {
-        if (playerStats.Dead) return;
+        if (playerStats.Dead || paused) return;
 
         Ability ability = GetAbilityOfIndex(5);
 
@@ -177,7 +209,7 @@ public class PlayerAbilityHandler : AbilityHandler
 
         SetSelectedAbility(ability, 5);
 
-        if (!abilitiesOnCooldownCrew[ability]) // Checks if the value is true. Abilities[index] is the ability at the InputActions context index.
+        if (!IsOnCoolDown(ability)) // Checks if the value is true. Abilities[index] is the ability at the InputActions context index.
         {
             CastAbility(ability, GetCenterOfScreen(100f), transform.rotation);
             EventDeclarer.AbilityUsed?.Invoke(5);
@@ -188,9 +220,9 @@ public class PlayerAbilityHandler : AbilityHandler
     #endregion
     public void OnSelectedAbility(InputAction.CallbackContext context)
     {
-        if (selectedAbility == null || playerStats.Dead) return;
+        if (selectedAbility == null || playerStats.Dead || paused) return;
 
-        if (!abilitiesOnCooldownCrew[selectedAbility]) // Checks if the value is true. Abilities[index] is the ability at the InputActions context index.
+        if (!IsOnCoolDown(selectedAbility)) // Checks if the value is true. Abilities[index] is the ability at the InputActions context index.
         {
             CastAbility(selectedAbility, GetCenterOfScreen(100f), transform.rotation);
             EventDeclarer.AbilityUsed?.Invoke(currentAbilityIndex);
@@ -218,5 +250,15 @@ public class PlayerAbilityHandler : AbilityHandler
             );
 
         return Camera.main.ScreenToWorldPoint(screenCenter);
+    }
+    protected override bool IsOnCoolDown(Ability ability)
+    {
+        if (ability is BeamAbility beamAbility)
+        {
+            if (toggledAbilitiesDict.ContainsKey(beamAbility))
+                return false;
+        }
+        bool onCooldown = abilitiesOnCooldownCrew[ability];
+        return onCooldown;
     }
 }

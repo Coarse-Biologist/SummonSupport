@@ -8,7 +8,7 @@ public enum StatusEffectType
     Madness, //Fungus
     Pulled, //Plant
     AttackAnimation,
-    ExplodeOnDeath, // heat
+    Overheated, // heat
     Chilled, //cold can escalate to frozen
     Whirlwind, //air catches creature in whirlwind/ tornado and carries them away from player
     Slipping, //water slows down Ai movment function call speed
@@ -16,7 +16,7 @@ public enum StatusEffectType
     Lethargic, //bacteria slows down all cooldowns
     Infected, //virus spreads a DOT damage to nearby allies
     Dissolving, //acid lowers all physical resistences
-    Blinded, //light blinds /// sorted but not tested
+    Blinded, //light blinds /// works amazingly
     Ionized, //radiation casting an ability causes caster damage /// sorted but not sufficiently tested
 
     Electrified, //electricity casting an ability stuns caster

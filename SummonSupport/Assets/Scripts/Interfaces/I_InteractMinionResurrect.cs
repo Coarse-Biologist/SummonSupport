@@ -2,23 +2,33 @@ using UnityEngine;
 
 public class I_InteractMinionResurrect : MonoBehaviour, I_Interactable
 {
+    public bool resurrecting { private set; get; } = false;
+
     public void HideInteractionOption()
     {
-        InteractCanvasHandler.Instance.HideInteractionOption();
+        FloatingInfoHandler.Instance.HideInteractionOption();
     }
 
     public void Interact(GameObject interactor)
     {
-        //if (interactor == null) return;
-        if (interactor.TryGetComponent<PlayerStats>(out PlayerStats playerStats))
-        {
-            InteractCanvasHandler.Instance.DisplayIncrementalText(transform.position, "Resurrecting...", playerStats.ResurrectTime);
-            playerStats.ResurrectMinion(gameObject);
-        }
+        if (!resurrecting)
+            if (interactor.TryGetComponent(out PlayerStats playerStats))
+            {
+                SetResurrecting(true);
+                FloatingInfoHandler.Instance.DisplayIncrementalText(transform, "Resurrecting...", playerStats.ResurrectTime);
+                playerStats.ResurrectMinion(gameObject, this);
+            }
     }
 
     public void ShowInteractionOption()
     {
-        InteractCanvasHandler.Instance.ShowInteractionOption(transform.position, "Tab to resurrect");
+        if (!resurrecting)
+            FloatingInfoHandler.Instance.ShowInteractionOption(transform.position, "Z to resurrect");
     }
+
+    public void SetResurrecting(bool isResurrecting)
+    {
+        resurrecting = isResurrecting;
+    }
+
 }

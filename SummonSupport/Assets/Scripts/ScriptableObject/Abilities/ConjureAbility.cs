@@ -28,29 +28,27 @@ public class ConjureAbility : Ability
 
 
 
-    public override bool Activate(GameObject user)
+    public override bool Activate(LivingBeing casterStats)
     {
-        Quaternion rotation = user.transform.rotation;
-        return Activate(user, rotation);
+        Quaternion rotation = casterStats.transform.rotation;
+        return Activate(casterStats, rotation);
     }
 
-    public bool Activate(GameObject user, Quaternion rotation)
+    public bool Activate(LivingBeing casterStats, Quaternion rotation)
     {
-        LivingBeing casterStats = user.GetComponent<LivingBeing>();
 
         int targetNum = 1;
         float duration = Duration;
 
-        if (user.TryGetComponent(out AbilityModHandler modHandler))
+        if (casterStats.CharacterTag != CharacterTag.Enemy)
         {
-            targetNum += modHandler.GetModAttributeByType(this, AbilityModTypes.Number);
-            duration += modHandler.GetModAttributeByType(this, AbilityModTypes.Duration);
+            targetNum += AbilityModHandler.Instance.GetModAttributeByType(this, AbilityModTypes.Number);
         }
         if (SpawnsOnTarget)
         {
             TeamType desiredTargetType = this.GetTargetPreference(casterStats);
 
-            List<LivingBeing> targets = GetTargetfromSphereCast(user.GetComponent<AbilityHandler>().abilitySpawn.transform, targetNum, desiredTargetType);
+            List<LivingBeing> targets = GetTargetfromSphereCast(casterStats, casterStats.GetComponent<AbilityHandler>().abilitySpawn.transform, targetNum, desiredTargetType);
             foreach (LivingBeing target in targets)
             {
                 SpawnOnTarget(casterStats, target, rotation);
@@ -65,7 +63,7 @@ public class ConjureAbility : Ability
         return true;
     }
 
-    private void SpawnOnTarget(LivingBeing user, LivingBeing target, Quaternion rotation)
+    private void SpawnOnTarget(LivingBeing casterStats, LivingBeing target, Quaternion rotation)
     {
         Quaternion newRotation = Quaternion.identity;
         if (!LeaveRotation)
@@ -78,23 +76,23 @@ public class ConjureAbility : Ability
         Aura auraInChildren = spawnedObject.GetComponentInChildren<Aura>();
         if (auraInChildren != null)
         {
-            auraInChildren.HandleInstantiation(user.GetComponent<LivingBeing>(), target, this);
+            auraInChildren.HandleInstantiation(casterStats, target, this);
         }
     }
-    protected void SpawnConjuredObject(LivingBeing user, Quaternion rotation, int iterator)
+    protected void SpawnConjuredObject(LivingBeing casterStats, Quaternion rotation, int iterator)
     {
         Quaternion newRotation = Quaternion.identity;
         if (!LeaveRotation)
             newRotation = rotation * Quaternion.Euler(0, 0, RotationOffset);
 
-        Vector3 SpawnLoc = user.transform.position + user.transform.forward * Range;
+        Vector3 SpawnLoc = casterStats.transform.position + casterStats.transform.forward * Range;
         Vector3 newSpawnOffset = new Vector3(SpawnOffset.x, SpawnOffset.y, SpawnOffset.z + iterator);
         GameObject spawnedObject = Instantiate(ObjectToSpawn, SpawnLoc + newSpawnOffset, newRotation);
 
         Aura auraInChildren = spawnedObject.GetComponentInChildren<Aura>();
         if (auraInChildren != null)
         {
-            auraInChildren.HandleInstantiation(user.GetComponent<LivingBeing>(), null, this);
+            auraInChildren.HandleInstantiation(casterStats, null, this);
 
         }
     }

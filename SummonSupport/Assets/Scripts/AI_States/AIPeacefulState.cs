@@ -1,9 +1,9 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Build.Pipeline;
+//using UnityEditor.Build.Pipeline;
 using UnityEngine.AI;
-using Unity.VisualScripting;
+//using Unity.VisualScripting;
 
 
 public class AIPeacefulState : AIState
@@ -19,6 +19,7 @@ public class AIPeacefulState : AIState
     private WaitForSeconds supportSpeed = new WaitForSeconds(5);
     private Coroutine supportCoroutine;
     private LivingBeing peaceStateTarget;
+    [field: SerializeField] private float playerFollowRadius = 2f;
     #endregion
 
 
@@ -69,8 +70,7 @@ public class AIPeacefulState : AIState
                 if (detectedObject.TryGetComponent(out LivingBeing targetLivingBeing))
                 {
 
-                    //if (targetLivingBeing.CharacterTag == CharacterTag.Enemy)
-                    //Debug.Log($"{targetLivingBeing.Name} = target found in check target in raange func");
+                    //Debug.Log($"{targetLivingBeing.Name} = target found in check target in range func");
                     if (targetLivingBeing.GetAttribute(AttributeType.CurrentHitpoints) > 0)
                     {
                         stateHandler.SetTarget(targetLivingBeing);
@@ -103,7 +103,7 @@ public class AIPeacefulState : AIState
     {
         if (canSeeTarget)
         {
-            if (runningSupportLoop)
+            if (runningSupportLoop && supportCoroutine != null) // new change where crews brain has possibly lost the ability to write or understand c#
             {
                 runningSupportLoop = false;
                 StopCoroutine(supportCoroutine);
@@ -120,7 +120,6 @@ public class AIPeacefulState : AIState
             return this;
         }
         else return this;
-
     }
     private IEnumerator HandleSupportloop()
     {
@@ -146,9 +145,9 @@ public class AIPeacefulState : AIState
     private LivingBeing SelectFriendlyTarget()
     {
         List<LivingBeing> friendlies = new() { stateHandler.playerStats, stateHandler.livingBeing };
-        foreach (GameObject minion in CommandMinion.activeMinions)
+        foreach (LivingBeing minion in CommandMinion.activeMinions)
         {
-            friendlies.Add(minion.GetComponent<LivingBeing>());
+            friendlies.Add(minion);
         }
 
         LivingBeing selectedFriend = friendlies[Random.Range(0, friendlies.Count)];
@@ -159,7 +158,7 @@ public class AIPeacefulState : AIState
     {
         //Debug.Log("Going to player function called");
         float distance = (player.transform.position - transform.position).sqrMagnitude;
-        if (distance >= stateHandler.navAgent.stoppingDistance || distance >= chaseState.SelectedAbilityAttackRange)
+        if (distance >= stateHandler.navAgent.stoppingDistance + playerFollowRadius || distance >= chaseState.SelectedAbilityAttackRange)
         {
             //Debug.Log($"Going to player becuase: Distance = {distance}. stopping distance = {stateHandler.navAgent.stoppingDistance}. chase state selected ability = {chaseState.SelectedAbilityAttackRange}");
 

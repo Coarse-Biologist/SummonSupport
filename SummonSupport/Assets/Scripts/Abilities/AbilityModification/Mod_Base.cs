@@ -36,7 +36,6 @@ public class Mod_Base
             { AbilityModTypes.HealOverTime, (() => HealOverTime_Mod, v => HealOverTime_Mod = v) },
             { AbilityModTypes.Cooldown, (() => Cooldown_Mod, v => Cooldown_Mod = v) },
             { AbilityModTypes.Cost, (() => Cost_Mod, v => Cost_Mod = v) },
-            { AbilityModTypes.Range, (() => Range_Mod, v => Range_Mod = v) },
             { AbilityModTypes.Duration, (() => Duration_Mod, v => Duration_Mod = v) },
             { AbilityModTypes.Size, (() => Radius_Mod, v => Radius_Mod = v) },
             { AbilityModTypes.Speed, (() => ProjectileSpeed_Mod, v => ProjectileSpeed_Mod = v) },
@@ -57,7 +56,6 @@ public class Mod_Base
     {
         if (!StatusEffects_Mod.Contains(status))
         {
-            Debug.Log("Modding status effect in base mod!!!!!!!!!!.");
             StatusEffects_Mod.Add(status);
         }
         else throw new System.Exception("You are trying to mod an ability to gain a mod it already has.");
@@ -65,7 +63,7 @@ public class Mod_Base
 
     public List<StatusEffects> GetStatusEffects()
     {
-        Debug.Log($"here I am asked to return {StatusEffects_Mod}");
+        //Debug.Log($"here I am asked to return {StatusEffects_Mod}");
         return StatusEffects_Mod;
     }
 
@@ -74,8 +72,8 @@ public class Mod_Base
     {
         if (Base_Mods.TryGetValue(modType, out var func))
         {
-            Debug.Log($"Changing  {modType} by {changeValue}");
-            Base_Mods[modType].Set(changeValue + GetModdedAttribute(modType));
+            //Debug.Log($"Changing  {modType} by {changeValue}");
+            func.Set(changeValue + GetModdedAttribute(modType));
         }
         else throw new System.Exception("You are trying to modify an an attribute which cannot be changed");
     }

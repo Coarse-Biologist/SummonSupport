@@ -13,45 +13,62 @@ public class ChargeAbilityMono : MonoBehaviour
     private Vector3 startLoc;
     private AbilityHandler abilityHandler;
     private LivingBeing caster;
-    private WaitForSeconds chargeTickRate = new WaitForSeconds(.01f);
-    public GameObject trailEffect { private set; get; }
+    private WaitForSeconds chargeTickRate = new WaitForSeconds(.1f);
+    private GameObject trailEffect;
     private AbilityModHandler modHandler;
-    private float speedBoost = 35;
+    [field: SerializeField] public float SpeedBoost { private set; get; } = 10;
     private float range = 0;
     private int alreadypierced = 0;
     private int maxPierce = 0;
 
-
-    [field: SerializeField] public StatusEffects attackAnimationCC;
-
-    public void Charge(ChargeAbility assignedAbility)
+    public void Charge(LivingBeing casterStats, ChargeAbility assignedAbility)
     {
         GameObject user = transform.parent.gameObject;
         ToggleStuckInAbilityAnimation(user, true);
         chargeAbility = assignedAbility;
-        abilityHandler = user.GetComponentInParent<AbilityHandler>();
+        abilityHandler = casterStats.abilityHandler;
         abilityHandler.SetCharging(true);
-        caster = user.GetComponentInParent<LivingBeing>();
-        modHandler = caster.GetComponent<AbilityModHandler>();
-        if (caster.gameObject.TryGetComponent(out MovementScript movementScript))
-        {
-            speedBoost += movementScript.MovementSpeed;
-        }
+        caster = casterStats;
+
+        SetModHandler(casterStats);
+        SetRunAnimation(user);
+        SetAndApplyMods();
+
         range = chargeAbility.Range;
 
-        if (modHandler != null)
-        {
-            maxPierce = modHandler.GetModAttributeByType(chargeAbility.ActivateOnHit, AbilityModTypes.MaxPierce);
-            range += modHandler.GetModAttributeByType(chargeAbility.ActivateOnHit, AbilityModTypes.Range);
-            speedBoost += modHandler.GetModAttributeByType(chargeAbility, AbilityModTypes.Speed);
 
-        }
-        Debug.Log($"Max pierce = {maxPierce}");
+        //Debug.Log($"Max pierce = {maxPierce}");
 
         originTransform = user.transform;
         rb = user.GetComponentInParent<Rigidbody>();
         chargeCoroutine = StartCoroutine(ChargeWhileLogical());
     }
+    private void SetAndApplyMods()
+    {
+        if (modHandler != null)
+        {
+            maxPierce = modHandler.GetModAttributeByType(chargeAbility.ActivateOnHit, AbilityModTypes.MaxPierce);
+            range += modHandler.GetModAttributeByType(chargeAbility.ActivateOnHit, AbilityModTypes.Size);
+            SpeedBoost += modHandler.GetModAttributeByType(chargeAbility, AbilityModTypes.Speed);
+
+        }
+
+        if (caster.gameObject.TryGetComponent(out MovementScript movementScript))
+        {
+            SpeedBoost += movementScript.MovementSpeed;
+        }
+    }
+
+    private void SetRunAnimation(GameObject user)
+    {
+        if (user.TryGetComponent(out AnimationControllerScript anim))
+        {
+            if (caster.CharacterTag == CharacterTag.Player)
+                anim.ChangeAnimation("Sprint", .1f);
+            else anim.ChangeAnimation("Run", .1f);
+        }
+    }
+
     private IEnumerator ChargeWhileLogical()
     {
         if (chargeAbility.chargeTrail != null)
@@ -63,7 +80,9 @@ public class ChargeAbilityMono : MonoBehaviour
         startLoc = transform.position;
         while (stillCharging)
         {
-            rb.linearVelocity = originTransform.forward * speedBoost;
+            Debug.Log("Charging");
+
+            rb.linearVelocity = originTransform.forward * SpeedBoost;
             if ((gameObject.transform.position - startLoc).magnitude > chargeAbility.Range)
             {
                 EndCharge();
@@ -76,7 +95,7 @@ public class ChargeAbilityMono : MonoBehaviour
     {
         //if (collision is BoxCollider wall) EndCharge();
         Ability abilityToCast = chargeAbility.ActivateOnHit;
-        bool success = abilityToCast.Activate(transform.parent.gameObject);
+        bool success = abilityToCast.Activate(caster);
         if (success)
         {
             if (chargeAbility.OnHitEffect != null)
@@ -102,15 +121,28 @@ public class ChargeAbilityMono : MonoBehaviour
 
     private void ToggleStuckInAbilityAnimation(GameObject user, bool stuck)
     {
-        if (user.TryGetComponent<AI_CC_State>(out AI_CC_State ccState))
+        if (user.TryGetComponent(out AIStateHandler AIStateHandler))
         {
-            if (stuck) ccState.RecieveCC(attackAnimationCC, caster);
-            else if (!stuck) ccState.RemoveCC(StatusEffectType.AttackAnimation);
+            AIStateHandler.SetStuckInAbilityAnimation(stuck);
         }
 
-        else if (user.TryGetComponent<PlayerMovement>(out PlayerMovement playerMovementScript))
-            playerMovementScript.SetStuckInAbilityAnimation(stuck);
+        else if (user.TryGetComponent(out PlayerMovement playerMovementScript))
+        {
+            if (stuck)
+                playerMovementScript.PauseGame();
+            else playerMovementScript.UnpauseGame();
+        }
+
         else Debug.Log($"No CcState script or playermovement script found on the sought gameObject: {user}");
     }
+    private void SetModHandler(LivingBeing casterStats)
+    {
+        if (casterStats.CharacterTag != CharacterTag.Enemy)
+        {
+            modHandler = AbilityModHandler.Instance;
+        }
+        else modHandler = null;
+    }
+
 
 }

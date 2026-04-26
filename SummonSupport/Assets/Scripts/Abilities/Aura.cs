@@ -14,7 +14,7 @@ public class Aura : MonoBehaviour
     private AbilityModHandler modHandler;
     private Mod_Base abilityMod;
 
-    List<LivingBeing> listLivingBeingsInAura = new();
+    List<LivingBeing> ignoreTargets = new();
     [SerializeField] public float ActivationTime { get; private set; } = .5f;
     [field: SerializeField] public float SizeScalar = .1f;
     private bool Active = false;
@@ -28,6 +28,8 @@ public class Aura : MonoBehaviour
     private float duration;
     private int maxPierce = 0;
     private int piercedAlready = 0;
+    private int maxSplit = 0;
+    private int splitAlready = 0;
 
 
 
@@ -39,13 +41,10 @@ public class Aura : MonoBehaviour
     }
     public void HandleInstantiation(LivingBeing caster, LivingBeing target, Ability ability)
     {
-        if (ability.AlterParticleSystemGradient)
-        {
-            ColorChanger.ChangeObjectsParticleSystemColor(ability.ElementTypes[0], gameObject);
-        }
 
         SetAuraStats(caster, target, ability);
 
+        CheckTargetsAtSpawnTime(caster);
 
         HandleConjureAbilitySpecifics();
 
@@ -58,13 +57,13 @@ public class Aura : MonoBehaviour
 
         CombatStatHandler.HandleEffectPackage(ability, caster, caster, ability.SelfEffects);
 
-        CheckTargetsAtSpawnTime(caster);
 
         Destroy(gameObject, duration);
 
     }
     private void AlterApparentRadius()
     {
+        //Debug.Log($"radius = {radius}");
         gameObject.transform.localScale *= 1 + radius * SizeScalar;
     }
     private void HandleConjureAbilitySpecifics()
@@ -76,7 +75,7 @@ public class Aura : MonoBehaviour
             speed = conjureAbility.Speed;
             if (conjureAbility.SeeksTarget)
             {
-                if (target != null) StartCoroutine(SeekTarget(target.gameObject));
+                StartCoroutine(SeekTarget(target));
             }
         }
     }
@@ -97,7 +96,7 @@ public class Aura : MonoBehaviour
         {
             if (hitObject.TryGetComponent(out LivingBeing livingBeing))
             {
-                Debug.Log("IHave found a living being in this starting spherecast");
+                //Debug.Log("IHave found a living being in this starting spherecast");
                 HandleTriggerEntered(livingBeing);
             }
         }
@@ -105,14 +104,15 @@ public class Aura : MonoBehaviour
 
     private void AddMods()
     {
-        modHandler = caster.GetComponent<AbilityModHandler>();
-        if (modHandler != null)
+
+        if (caster.CharacterTag != CharacterTag.Enemy)
         {
-            duration += modHandler.GetModAttributeByType(ability, AbilityModTypes.Duration);
-            radius += modHandler.GetModAttributeByType(ability, AbilityModTypes.Size);
-            speed += modHandler.GetModAttributeByType(ability, AbilityModTypes.Speed);
-            maxPierce += modHandler.GetModAttributeByType(ability, AbilityModTypes.MaxPierce);
-            //Debug.Log($"ability = {ability.Name}. size mod value = {radius}");
+            duration += AbilityModHandler.Instance.GetModAttributeByType(ability, AbilityModTypes.Duration);
+            radius += AbilityModHandler.Instance.GetModAttributeByType(ability, AbilityModTypes.Size);
+            speed += AbilityModHandler.Instance.GetModAttributeByType(ability, AbilityModTypes.Speed);
+            maxPierce += AbilityModHandler.Instance.GetModAttributeByType(ability, AbilityModTypes.MaxPierce);
+            maxSplit += AbilityModHandler.Instance.GetModAttributeByType(ability, AbilityModTypes.MaxSplit);
+            //Debug.Log($"max split = {maxSplit}");
 
         }
     }
@@ -131,9 +131,10 @@ public class Aura : MonoBehaviour
         {
             if (other.gameObject.TryGetComponent(out LivingBeing otherLivingBeing))
             {
-                HandleTriggerEntered(otherLivingBeing);
+                if (!ignoreTargets.Contains(otherLivingBeing))
+                    HandleTriggerEntered(otherLivingBeing);
             }
-            else Debug.Log($"OnTrigger Enter func called but the trigger object {ability} is not active");
+            //else Debug.Log($"OnTrigger Enter func called but the trigger object {ability} is not a living being");
         }
     }
 
@@ -152,20 +153,7 @@ public class Aura : MonoBehaviour
         }
     }
 
-    private LivingBeing FindTarget(float SearchRadius)
-    {
-        LivingBeing target = null;
-        Collider[] colliders = Physics.OverlapSphere(transform.position, SearchRadius);
-        foreach (Collider collider in colliders)
-        {
-            if (!collider.TryGetComponent<LivingBeing>(out LivingBeing targetStats))
-                continue;
-            if (!ability.ThoroughIsUsableOn(targetStats, caster))
-                continue;
-            else return targetStats;
-        }
-        return target;
-    }
+
 
     private void HandleTriggerEntered(LivingBeing otherLivingBeing)
     {
@@ -181,32 +169,81 @@ public class Aura : MonoBehaviour
             //Debug.Log($"Effects of {ability.Name} is being handled.");
             CombatStatHandler.HandleEffectPackage(ability, caster, otherLivingBeing, ability.TargetEffects);
             piercedAlready += 1;
-            if (ConjureAbility != null && ConjureAbility.SeeksTarget && piercedAlready >= maxPierce) Destroy(gameObject, .2f);
+            //Debug.Log($"split already = {splitAlready}. max split = {maxSplit}");
+            if (ConjureAbility != null)
+            {
+                if (ConjureAbility.SeeksTarget)
+                {
+                    if (splitAlready < maxSplit)
+                    {
+                        SplitConjuredSeeker(otherLivingBeing);
+                    }
+                    if (piercedAlready >= maxPierce)
+                        Destroy(gameObject, .2f);
+
+                }
+
+            }
+        }
+    }
+    private void SplitConjuredSeeker(LivingBeing livingBeing)
+    {
+        GameObject newObject = null;
+        if (ability is ConjureAbility conjureAbility)
+            newObject = Instantiate(conjureAbility.ObjectToSpawn, transform.position, transform.rotation);
+
+        splitAlready += 1;
+        if (newObject.TryGetComponent(out Aura newAura))
+        {
+            newAura.HandleInstantiation(caster, null, ability);
+            newAura.splitAlready = splitAlready;
+            newAura.ignoreTargets.Add(livingBeing);
         }
     }
 
-    private IEnumerator SeekTarget(GameObject target)
+    private IEnumerator SeekTarget(LivingBeing target)
     {
-        TryGetComponent(out Rigidbody rb);
-
-        while (true)
+        //if (target == null) yield break;
+        if (target == null)
         {
-            if (target == null) yield break;
+            target = caster;
+        }
+        if (TryGetComponent(out Rigidbody rb))
+        {
 
-            Vector3 directionToTarget = target.transform.position - transform.position;
-
-            if (directionToTarget.sqrMagnitude <= radius * radius)
-                yield break;
-
-            if (rb != null)
+            while (true)
             {
-                rb.linearVelocity = directionToTarget.normalized * speed;
-                transform.LookAt(directionToTarget);
-            }
+                if (target == null) yield break;
 
-            yield return null;
+                Vector3 directionToTarget = target.transform.position - transform.position;
+
+                if (directionToTarget.sqrMagnitude <= radius * radius)
+                    yield break;
+
+                if (rb != null)
+                {
+                    rb.linearVelocity = directionToTarget.normalized * speed;
+                    transform.LookAt(directionToTarget);
+                }
+
+                yield return null;
+            }
         }
     }
 
 }
 
+//private LivingBeing FindTarget(float SearchRadius)
+//{
+//    LivingBeing target = null;
+//    Collider[] colliders = Physics.OverlapSphere(transform.position, SearchRadius);
+//    foreach (Collider collider in colliders)
+//    {
+//        if (!collider.TryGetComponent<LivingBeing>(out LivingBeing targetStats))
+//            continue;
+//        if (!ability.ThoroughIsUsableOn(targetStats, caster))
+//            continue;
+//        else return targetStats;
+//    }
+//    return target;
+//}

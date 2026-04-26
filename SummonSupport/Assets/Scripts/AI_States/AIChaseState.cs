@@ -85,7 +85,11 @@ public class AIChaseState : AIState
             }
             else // if distance to target is less than or equal to ability range
             {
-                SetDestinationandAnimation(targetLoc);
+                if (stateHandler.livingBeing.SE_Handler.GetStatusEffectValue(StatusEffectType.Slipping) > 3)
+                {
+                    SetDestinationandAnimation(transform.position + transform.forward * 2); // if slipping, just keep trying to move forward to simulate slipping
+                }
+                else SetDestinationandAnimation(targetLoc);
             }
         }
     }
@@ -148,11 +152,13 @@ public class AIChaseState : AIState
                 {
                     if (stateHandler.anim != null)
                     {
-                        if (ability is ProjectileAbility) stateHandler.anim.ChangeAnimation("Projectile");
-                        else stateHandler.anim.ChangeAnimation("Melee");
+                        if (ability is MeleeAbility) stateHandler.anim.ChangeAnimation("Melee");
+                        else if (ability is ProjectileAbility) stateHandler.anim.ChangeAnimation("Projectile");
+                        else stateHandler.anim.ChangeAnimation("SpecialAbility");
                     }
 
                     abilityHandler.UseAbility(stateHandler.target, ability);
+
                 }
             }
 

@@ -29,14 +29,15 @@ public class Beam : MonoBehaviour
 
     void OnParticleCollision(GameObject other)
     {
-        if (other.TryGetComponent(out LivingBeing targetStatsHandler) && !AlreadyCollided.Contains(targetStatsHandler))
+        if (!onCoolDown)
         {
-            if (!onCoolDown)
+            if (other.TryGetComponent(out LivingBeing targetStatsHandler) && !AlreadyCollided.Contains(targetStatsHandler))
             {
+
                 onCoolDown = true;
                 Invoke("OffCoolDown", TickRate);
                 AlreadyCollided.Add(targetStatsHandler);
-                GameObject hitEffect = Instantiate(Ability.SpawnEffectOnHit, other.transform.position, Quaternion.identity, other.transform);
+                GameObject hitEffect = Instantiate(Ability.OnHitEffect, other.transform.position, Quaternion.identity, other.transform);
                 Destroy(hitEffect, 5f);
                 StartCoroutine(DelayedDeletion(targetStatsHandler));
                 if (Ability.ThoroughIsUsableOn(Caster, targetStatsHandler))
@@ -64,14 +65,18 @@ public class Beam : MonoBehaviour
         TickRate = ability.TickRate;
         Range = ability.Range;
         abilityRotation = rotationObject;
+        //Debug.Log($"does the rotation object exist? ({rotationObject})");
         Caster = caster;
         Ability = ability;
+        AlreadyCollided.Add(caster);
     }
 
     private void UpdateRotation()
     {
         //Debug.Log("rotation func being called");
-        transform.rotation = abilityRotation.rotation;// * Rotation90Z;
+        if (abilityRotation != null)
+            transform.rotation = abilityRotation.rotation;// * Rotation90Z;
+        else Debug.Log("You are trying to use ability rotation but for some reason it doesnt exist.");
     }
 
     private IEnumerator DelayedDeletion(LivingBeing collidedObject)
