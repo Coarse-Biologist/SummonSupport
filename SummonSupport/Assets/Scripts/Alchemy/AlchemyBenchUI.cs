@@ -473,8 +473,8 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
             Button button = AddButtonToPanel(GeneralFunctions.GetCleanEnumString(modableAttribute), bottomRightPanel, 40, 10);
             button.RegisterCallback<ClickEvent>(e => SetSelectedModAttribute(modableAttribute));
         }
-        Button statuseffectButton = AddButtonToPanel(GeneralFunctions.GetCleanEnumString(AbilityModTypes.StatusEffect), bottomRightPanel, 40, 10);
-        statuseffectButton.RegisterCallback<ClickEvent>(e => ShowStatusEffectOptionScreen());
+        Button statusEffectButton = AddButtonToPanel(GeneralFunctions.GetCleanEnumString(AbilityModTypes.StatusEffect), bottomRightPanel, 40, 10);
+        statusEffectButton.RegisterCallback<ClickEvent>(e => ShowStatusEffectOptionScreen());
 
     }
     private void ShowStatusEffectOptionScreen()

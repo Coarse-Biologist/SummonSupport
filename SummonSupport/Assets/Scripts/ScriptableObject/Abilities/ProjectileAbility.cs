@@ -25,14 +25,16 @@ public class ProjectileAbility : Ability
         Transform spawnPoint = casterStats.transform;
         //Debug.Log($"spawnpoint rotation = {spawnPoint.rotation.y}");
         int shots = 1;
+        Vector3 sizeMod = new();
         if (casterStats.CharacterTag != CharacterTag.Enemy)
         {
             shots += AbilityModHandler.Instance.GetModAttributeByType(this, AbilityModTypes.Number);
-            //Debug.Log($"Shots = {shots}");
+            sizeMod.x += AbilityModHandler.Instance.GetModAttributeByType(this, AbilityModTypes.Size) / 2;
         }
         for (int i = 0; i < shots; i += 1)
         {
             GameObject projectile = Instantiate(Projectile, spawnPoint.position, Quaternion.identity);
+            projectile.transform.localScale += sizeMod;
             Projectile projectileScript = projectile.GetComponent<Projectile>();
 
             Material glowMaterial = ColorChanger.GetGlowStrengthByElement(ElementTypes[0]);

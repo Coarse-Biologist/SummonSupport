@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fceeef8cfafe41444bf6aa890ebad1b7, type: 3}
-  m_Name: Wave
+  m_Name: Wave_Acid
   m_EditorClassIdentifier: 
-  <Name>k__BackingField: Acid Ball
+  <Name>k__BackingField: Acid Wave
   <Icon>k__BackingField: {fileID: 0}
   <Cooldown>k__BackingField: 2
   <CostType>k__BackingField: 4
@@ -64,8 +64,8 @@ MonoBehaviour:
   <MaxRange>k__BackingField: 150
   <Lifetime>k__BackingField: 5
   <PiercingMode>k__BackingField: 0
-  <MaxPierce>k__BackingField: 0
+  <MaxPierce>k__BackingField: 5
   <MaxSplit>k__BackingField: 0
   <SplitAngleOffset>k__BackingField: 45
-  <ProjectileParticleSystem>k__BackingField: {fileID: 5647196156128557912, guid: a2591afff62de2a4baeeb792df7db93e,
+  <ProjectileParticleSystem>k__BackingField: {fileID: 5989127470947844069, guid: 4e68f56397af0714ab3fef83bfc8af6e,
     type: 3}
