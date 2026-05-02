@@ -494,8 +494,9 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
         {
             selectedStatusEffect = AbilityLibrary.GetStatusEffects(selectedAbility.ElementTypes[0], status);
             //Debug.Log($"Selected status effect is being set to {selectedStatusEffect} for ability self");
+            SetInstructionsText($"The {GeneralFunctions.GetCleanEnumString(modType)} of {selectedAbility.Name} can be improved for {AbilityModHandler.GetModCost(modType)} core power. You currently have {AlchemyInventory.GetCorePowerResource(AlchemyInventory.ingredients)}");
+
         }
-        SetInstructionsText($"The {GeneralFunctions.GetCleanEnumString(modType)} of {selectedAbility.Name} can be improved for {AbilityModHandler.GetModCost(modType)} core power. You currently have {AlchemyInventory.GetCorePowerResource(AlchemyInventory.ingredients)}");
 
     }
 
