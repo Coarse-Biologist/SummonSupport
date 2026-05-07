@@ -76,6 +76,9 @@ public class AbilityHandler : MonoBehaviour
         StartCoroutine(SetOnCooldown(ability));
         int costMod = modHandler.GetModAttributeByType(ability, AbilityModTypes.Cost);
         statsHandler?.ChangeAttribute(AttributeType.CurrentPower, -ability.Cost + costMod);
+
+        // add correct potion to hand
+        PotionHandler.MovePotionToHandorBelt(Abilities.IndexOf(ability), true);
         return true;
     }
 
@@ -221,6 +224,8 @@ public class AbilityHandler : MonoBehaviour
             float coolDown = ability.Cooldown + modHandler.GetModAttributeByType(ability, AbilityModTypes.Cooldown) + statsHandler.SE_Handler.GetStatusEffectValue(StatusEffectType.Lethargic);
             // default, plus modifier, plus lethargy value
             abilitiesOnCooldownCrew[ability] = true;
+            PotionHandler.MovePotionToHandorBelt(Abilities.IndexOf(ability), true);
+
             yield return new WaitForSeconds(coolDown);
         }
         finally
@@ -228,6 +233,7 @@ public class AbilityHandler : MonoBehaviour
             abilitiesOnCooldownCrew[ability] = false;
         }
     }
+
     protected virtual bool IsOnCoolDown(Ability ability)
     {
         bool onCooldown = abilitiesOnCooldownCrew[ability];

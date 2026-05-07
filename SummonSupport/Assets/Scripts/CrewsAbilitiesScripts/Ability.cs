@@ -25,7 +25,32 @@ public abstract class Ability : ScriptableObject
     [field: SerializeField] public AbilitySoundPackage Sounds { get; protected set; }
 
 
+    public string DisplayAbilityInfo()
+    {
+        string abilityInfo = $"{Name}";
 
+        abilityInfo += $"\nAbility type : {GeneralFunctions.GetCleanEnumString(AbilityTypeTag)}";
+        abilityInfo += $"\nCost : {Cost} {GeneralFunctions.GetCleanEnumString(CostType)}";
+        abilityInfo += $"\nCooldown : {Cooldown} seconds";
+
+        string elementTypes = "";
+        if (ElementTypes.Count() > 0)
+        {
+            foreach (Element element in ElementTypes)
+            {
+                elementTypes += $"{element}, ";
+            }
+            abilityInfo += $"Element Types : {elementTypes}";
+        }
+
+        if (PhysicalType != PhysicalType.None)
+        {
+            abilityInfo += $"\nPhysical Type : {PhysicalType}";
+        }
+        abilityInfo += $"\n Target Effects : {TargetEffects.GetPackageInfo()}";
+        abilityInfo += $"\n Self Effects : {SelfEffects.GetPackageInfo()}";
+        return abilityInfo;
+    }
 
     public abstract bool Activate(LivingBeing Caster);
 

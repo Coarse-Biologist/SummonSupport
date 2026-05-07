@@ -68,7 +68,7 @@ public static class AlchemyInventory
                 { Element.Psychic, 0 }
             };
 
-    public static List<AlchemyTool> KnownTools = new List<AlchemyTool>();
+    public static List<AlchemyTool> KnownTools = new();
 
     #endregion
 

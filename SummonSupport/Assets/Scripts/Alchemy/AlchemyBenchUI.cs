@@ -155,7 +155,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
             {
                 anim.SetUpdateMode(AnimatorUpdateMode.UnscaledTime);
                 //Debug.Log("Changing animation? but probably time scale is 0");
-                anim.ChangeAnimation("Crafting"); // #TODO change to crafting animation
+                anim.ChangeAnimation("Crafting");
             }
             else Debug.Log("No animation script found");
         }
@@ -787,7 +787,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
             instructions.text = "Select an ability which you would like to concoct.";
         else if (selectedAbility != null)
         {
-            instructions.text = $"Confirm to concoct {selectedAbility.Name} for {Ability.GetCoreCraftingCost(selectedAbility)} core power.";
+            instructions.text = $"{selectedAbility.DisplayAbilityInfo()} \n Confirm to concoct {selectedAbility.Name} for {Ability.GetCoreCraftingCost(selectedAbility)} core power.";
         }
         instructions.text += $" You have a total of {AlchemyInventory.GetCorePowerResource(AlchemyInventory.ingredients)} core power.";
 
