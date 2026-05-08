@@ -100,7 +100,7 @@ public class AnimationControllerScript : MonoBehaviour
 
         //anim.CrossFade(animationName, 0.2f, layerIndex);
 
-        yield return new WaitForSeconds(duration);
+        yield return new WaitForSeconds(duration + 1.5f);
 
         if (holdPose == false) anim.SetLayerWeight(layerIndex, 0);
     }

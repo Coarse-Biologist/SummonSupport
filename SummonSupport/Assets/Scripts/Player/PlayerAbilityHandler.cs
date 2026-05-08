@@ -31,10 +31,14 @@ public class PlayerAbilityHandler : AbilityHandler
         UpdateAbilities();
         playerStats = GetComponent<LivingBeing>();
         modHandler = AbilityModHandler.Instance;
+
+        EquipAllPotions();
+
         if (Instance != null) Destroy(this);
         else Instance = this;
 
     }
+
 
     new void Awake()
     {
@@ -106,6 +110,13 @@ public class PlayerAbilityHandler : AbilityHandler
             EventDeclarer.SetSlot?.Invoke(index, ability);
             index++;
         }
+    }
+    private void EquipAllPotions()
+    {
+
+        foreach (Ability ability in Abilities)
+            PotionHandler.SpawnElementalPotionOnBelt(Abilities.IndexOf(ability), ability);
+
     }
     private void ChangeAbilitySlot(int index, Ability ability)
     {

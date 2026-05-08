@@ -848,9 +848,12 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
         if (playerAbilityHandler != null)
             foreach (Ability ability in playerAbilityHandler.Abilities) //null reference 
             {
-                Button abilityButton = AddButtonToPanel($"{ability.Name}", bottomLeftPanel, 50, 5);
-                abilityButton.RegisterCallback<ClickEvent>(e => SetSelectedAbility(ability));
-                abilityButton.RegisterCallback<ClickEvent>(e => SetAbilitySlottingInstructions(ability));
+                if (ability != null)
+                {
+                    Button abilityButton = AddButtonToPanel($"{ability.Name}", bottomLeftPanel, 50, 5);
+                    abilityButton.RegisterCallback<ClickEvent>(e => SetSelectedAbility(ability));
+                    abilityButton.RegisterCallback<ClickEvent>(e => SetAbilitySlottingInstructions(ability));
+                }
 
             }
         else throw new Exception("The players ability handler variable has not been set properly in the alchmey UI bench, or it does not exist");

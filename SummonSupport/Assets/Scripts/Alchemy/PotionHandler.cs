@@ -7,6 +7,8 @@ using UnityEngine.InputSystem.Interactions;
 public class PotionHandler : MonoBehaviour
 {
     public static PotionHandler Instance;
+    #region potions
+    [Header("Potions")]
     [field: SerializeField] public GameObject AcidPotion { private set; get; }
 
     [field: SerializeField] public GameObject BacterialPotion { private set; get; }
@@ -34,15 +36,53 @@ public class PotionHandler : MonoBehaviour
     [field: SerializeField] public GameObject AirPotion { private set; get; }
 
     [field: SerializeField] public GameObject WaterPotion { private set; get; }
+    #endregion
+    #region Foams
+
+    [Header("Foams")]
+    [field: SerializeField] public GameObject AcidFoam { private set; get; }
+
+    [field: SerializeField] public GameObject BacterialFoam { private set; get; }
+
+    [field: SerializeField] public GameObject ViralFoam { private set; get; }
+
+    [field: SerializeField] public GameObject FungalFoam { private set; get; }
+
+    [field: SerializeField] public GameObject PlantFoam { private set; get; }
+
+    [field: SerializeField] public GameObject HeatFoam { private set; get; }
+
+    [field: SerializeField] public GameObject ColdFoam { private set; get; }
+
+    [field: SerializeField] public GameObject ElectricityFoam { private set; get; }
+
+    [field: SerializeField] public GameObject PoisonFoam { private set; get; }
+
+
+    [field: SerializeField] public GameObject RadiationFoam { private set; get; }
+
+    [field: SerializeField] public GameObject PsychicFoam { private set; get; }
+
+    [field: SerializeField] public GameObject LightFoam { private set; get; }
+
+    [field: SerializeField] public GameObject EarthFoam { private set; get; }
+
+    [field: SerializeField] public GameObject AirFoam { private set; get; }
+
+    [field: SerializeField] public GameObject WaterFoam { private set; get; }
+    #endregion
 
     public static Dictionary<Element, GameObject> ElementToPotion { private set; get; }
+
     public static Dictionary<int, GameObject> AbilitySlotToPotion { private set; get; }
     private GameObject PotionInHand;
+
 
     void Awake()
     {
         ElementToPotion = new Dictionary<Element, GameObject>()
         {
+            { Element.Acid, AcidPotion },
             { Element.Bacteria, BacterialPotion },
             { Element.Virus, ViralPotion },
             { Element.Fungi, FungalPotion },
@@ -57,6 +97,7 @@ public class PotionHandler : MonoBehaviour
             { Element.Air, AirPotion },
             { Element.Water, WaterPotion }
         };
+
         AbilitySlotToPotion = new Dictionary<int, GameObject>();
 
     }
@@ -87,8 +128,7 @@ public class PotionHandler : MonoBehaviour
         {
             Transform spawnLoc = PlayerStats.Instance.AbilityPotionTransformList[abilityslot];
             GameObject instance = Instantiate(obj, spawnLoc.position, Quaternion.identity, spawnLoc);
-            AbilitySlotToPotion[abilityslot] = instance;
-
+            AbilitySlotToPotion.TryAdd(abilityslot, instance);
         }
     }
 
@@ -100,6 +140,12 @@ public class PotionHandler : MonoBehaviour
         {
             abilityPotion.transform.position = targetTransform.position;
             abilityPotion.transform.SetParent(targetTransform);
+            if (toHand)
+            {
+                if (abilityPotion.GetComponentInChildren<ParticleSystem>() is ParticleSystem ps) ps.Play(); // stop particle system so it doesn't look weird when the potion moves to the hand.
+            }
+            //else if (abilityPotion.GetComponentInChildren<ParticleSystem>() is ParticleSystem ps) ps.Stop();
+
         }
     }
 

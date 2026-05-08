@@ -43,6 +43,8 @@ public class AbilityHandler : MonoBehaviour
 
         if (audioHandler == null) throw new System.Exception($"Audio handler is null. it was not found on the object.");
 
+
+
     }
 
     public void LearnAbility(Ability ability)
@@ -224,20 +226,20 @@ public class AbilityHandler : MonoBehaviour
             float coolDown = ability.Cooldown + modHandler.GetModAttributeByType(ability, AbilityModTypes.Cooldown) + statsHandler.SE_Handler.GetStatusEffectValue(StatusEffectType.Lethargic);
             // default, plus modifier, plus lethargy value
             abilitiesOnCooldownCrew[ability] = true;
-            PotionHandler.MovePotionToHandorBelt(Abilities.IndexOf(ability), true);
 
             yield return new WaitForSeconds(coolDown);
         }
         finally
         {
             abilitiesOnCooldownCrew[ability] = false;
+            PotionHandler.MovePotionToHandorBelt(Abilities.IndexOf(ability), false);
+
         }
     }
 
     protected virtual bool IsOnCoolDown(Ability ability)
     {
-        bool onCooldown = abilitiesOnCooldownCrew[ability];
-        return onCooldown;
+        return abilitiesOnCooldownCrew[ability];
     }
     public string GetKnownAbilitiesString()
     {
