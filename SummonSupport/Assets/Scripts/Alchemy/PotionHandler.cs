@@ -3,6 +3,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using SummonSupportEvents;
 using UnityEngine.InputSystem.Interactions;
+using System;
 
 public class PotionHandler : MonoBehaviour
 {
@@ -75,7 +76,7 @@ public class PotionHandler : MonoBehaviour
     public static Dictionary<Element, GameObject> ElementToPotion { private set; get; }
 
     public static Dictionary<int, GameObject> AbilitySlotToPotion { private set; get; }
-    private GameObject PotionInHand;
+    private static Tuple<int, GameObject> PotionInHand = new(-1, null); // item 1 is the ability slot the potion belongs to, item 2 is the potion gameobject itself. if item 1 is -1, then there is no potion in hand.
 
 
     void Awake()
@@ -132,21 +133,27 @@ public class PotionHandler : MonoBehaviour
         }
     }
 
-    public static void MovePotionToHandorBelt(int abilitySlot, bool toHand)
+    public static void MovePotionToHand(int abilitySlot)
     {
-        Transform targetTransform = toHand ? PlayerStats.Instance.HandTransform : PlayerStats.Instance.AbilityPotionTransformList[abilitySlot];
 
         if (AbilitySlotToPotion.TryGetValue(abilitySlot, out GameObject abilityPotion))
         {
-            abilityPotion.transform.position = targetTransform.position;
-            abilityPotion.transform.SetParent(targetTransform);
-            if (toHand)
-            {
-                if (abilityPotion.GetComponentInChildren<ParticleSystem>() is ParticleSystem ps) ps.Play(); // stop particle system so it doesn't look weird when the potion moves to the hand.
-            }
-            //else if (abilityPotion.GetComponentInChildren<ParticleSystem>() is ParticleSystem ps) ps.Stop();
+            abilityPotion.transform.position = PlayerStats.Instance.HandTransform.position;
+            abilityPotion.transform.SetParent(PlayerStats.Instance.HandTransform);
 
+            if (abilityPotion.GetComponentInChildren<ParticleSystem>() is ParticleSystem ps) ps.Play(); // stop particle system so it doesn't look weird when the potion moves to the hand.
+
+            //else if (abilityPotion.GetComponentInChildren<ParticleSystem>() is ParticleSystem ps) ps.Stop();
+            PotionInHand = new Tuple<int, GameObject>(abilitySlot, abilityPotion);
         }
+    }
+
+    public static void ReturnPotionToBelt()
+    {
+        Debug.Log("This is being triggered2");
+        if (PotionInHand.Item1 == -1 || PotionInHand.Item2 == null) return; // if there is no potion in hand, do nothing.
+        PotionInHand.Item2.transform.position = PlayerStats.Instance.AbilityPotionTransformList[PotionInHand.Item1].position;
+        PotionInHand.Item2.transform.SetParent(PlayerStats.Instance.AbilityPotionTransformList[PotionInHand.Item1]);
     }
 
 }

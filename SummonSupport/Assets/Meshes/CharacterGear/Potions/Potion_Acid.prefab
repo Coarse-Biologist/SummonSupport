@@ -157,13 +157,38 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7262072836425030518, guid: 3d8a85fe2a2aa5641bad6684666d5d92,
         type: 3}
+      propertyPath: lengthInSec
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7262072836425030518, guid: 3d8a85fe2a2aa5641bad6684666d5d92,
+        type: 3}
       propertyPath: ClampVelocityModule.enabled
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7262072836425030518, guid: 3d8a85fe2a2aa5641bad6684666d5d92,
         type: 3}
+      propertyPath: InitialModule.startSpeed.scalar
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7262072836425030518, guid: 3d8a85fe2a2aa5641bad6684666d5d92,
+        type: 3}
       propertyPath: InitialModule.startLifetime.scalar
-      value: 0.5
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7262072836425030518, guid: 3d8a85fe2a2aa5641bad6684666d5d92,
+        type: 3}
+      propertyPath: InitialModule.startColor.maxColor.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7262072836425030518, guid: 3d8a85fe2a2aa5641bad6684666d5d92,
+        type: 3}
+      propertyPath: InitialModule.startColor.maxColor.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7262072836425030518, guid: 3d8a85fe2a2aa5641bad6684666d5d92,
+        type: 3}
+      propertyPath: InitialModule.startColor.maxColor.r
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7262072836425030518, guid: 3d8a85fe2a2aa5641bad6684666d5d92,
         type: 3}

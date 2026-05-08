@@ -79,8 +79,7 @@ public class AbilityHandler : MonoBehaviour
         int costMod = modHandler.GetModAttributeByType(ability, AbilityModTypes.Cost);
         statsHandler?.ChangeAttribute(AttributeType.CurrentPower, -ability.Cost + costMod);
 
-        // add correct potion to hand
-        PotionHandler.MovePotionToHandorBelt(Abilities.IndexOf(ability), true);
+        PotionHandler.MovePotionToHand(Abilities.IndexOf(ability));
         return true;
     }
 
@@ -232,7 +231,6 @@ public class AbilityHandler : MonoBehaviour
         finally
         {
             abilitiesOnCooldownCrew[ability] = false;
-            PotionHandler.MovePotionToHandorBelt(Abilities.IndexOf(ability), false);
 
         }
     }

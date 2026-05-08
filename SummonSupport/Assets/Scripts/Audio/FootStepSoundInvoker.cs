@@ -24,4 +24,11 @@ public class FootStepSoundInvoker : MonoBehaviour
     {
         audioSource.PlayOneShot(PlayerFootSteps[Random.Range(0, PlayerFootSteps.Length)], AudioHandler.Instance.FootstepVolume * AudioHandler.Instance.GeneralGameVolume);
     }
+
+    public void TriggerPotionReturnToBelt()
+    {
+        Debug.Log("This is being triggered1");
+
+        PotionHandler.ReturnPotionToBelt();
+    }
 }
