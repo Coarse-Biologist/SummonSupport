@@ -11,3 +11,10 @@ public enum AlchemyLoot
     PureEther,
     IntenseEther,
 }
+
+public enum CraftingPotential
+{
+    OrganMass,
+    CorePower,
+    EtherDensity,
+}

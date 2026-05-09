@@ -29,7 +29,7 @@ public class TeleportAbility : Ability
         foreach (LivingBeing target in targets)
         {
 
-            if (IsUsableOn(casterStats.CharacterTag, target.CharacterTag))
+            if (ThoroughIsUsableOn(casterStats, target))
             {
                 CoroutineManager.Instance.StartCustomCoroutine(TeleportToBeing(casterStats, target));
 

@@ -7,7 +7,6 @@ using System;
 
 public class PotionHandler : MonoBehaviour
 {
-    public static PotionHandler Instance;
     #region potions
     [Header("Potions")]
     [field: SerializeField] public GameObject AcidPotion { private set; get; }
@@ -72,41 +71,30 @@ public class PotionHandler : MonoBehaviour
 
     [field: SerializeField] public GameObject WaterFoam { private set; get; }
     #endregion
-
+    #region Dictionaories for lookup
     public static Dictionary<Element, GameObject> ElementToPotion { private set; get; }
 
-    public static Dictionary<int, GameObject> AbilitySlotToPotion { private set; get; }
+    public static Dictionary<int, GameObject> AbilitySlotToPotion { private set; get; } = new();
+    #endregion
     private static Tuple<int, GameObject> PotionInHand = new(-1, null); // item 1 is the ability slot the potion belongs to, item 2 is the potion gameobject itself. if item 1 is -1, then there is no potion in hand.
 
 
     void Awake()
     {
-        ElementToPotion = new Dictionary<Element, GameObject>()
-        {
-            { Element.Acid, AcidPotion },
-            { Element.Bacteria, BacterialPotion },
-            { Element.Virus, ViralPotion },
-            { Element.Fungi, FungalPotion },
-            { Element.Plant, PlantPotion },
-            { Element.Heat, HeatPotion },
-            { Element.Cold, ColdPotion },
-            { Element.Electricity, ElectricityPotion },
-            { Element.Radiation, RadiationPotion },
-            { Element.Psychic, PsychicPotion },
-            { Element.Light, LightPotion },
-            { Element.Earth, EarthPotion },
-            { Element.Air, AirPotion },
-            { Element.Water, WaterPotion }
-        };
-
-        AbilitySlotToPotion = new Dictionary<int, GameObject>();
-
+        ElementToPotion = ElementDict.GetElementDict(
+            new GameObject[] { ColdPotion, WaterPotion, EarthPotion, HeatPotion, AirPotion, ElectricityPotion, PoisonFoam, AcidPotion, BacterialPotion, FungalPotion, PlantPotion, ViralPotion, RadiationPotion, LightPotion, PsychicPotion }
+            );
     }
     void OnEnable()
     {
-        if (Instance != null) Destroy(this);
-        else Instance = this;
+        EventDeclarer.AbilityUsed?.AddListener(MovePotionToHand);
         EventDeclarer.SlotChanged.AddListener(SpawnElementalPotionOnBelt);
+    }
+    void OnDisable()
+    {
+        EventDeclarer.AbilityUsed?.AddListener(MovePotionToHand);
+
+        EventDeclarer.SlotChanged.RemoveListener(SpawnElementalPotionOnBelt);
     }
 
     // #TODO somewhere have a Dictionary with positions for all potions
@@ -117,7 +105,6 @@ public class PotionHandler : MonoBehaviour
 
     //#TODO make a function that moves potion back to belt after reload animation. 
     // This can be called whenever an ability is used which should replace the one currently in hand
-
 
     public static void SpawnElementalPotionOnBelt(int abilityslot, Ability ability)
     {
@@ -130,6 +117,14 @@ public class PotionHandler : MonoBehaviour
             Transform spawnLoc = PlayerStats.Instance.AbilityPotionTransformList[abilityslot];
             GameObject instance = Instantiate(obj, spawnLoc.position, Quaternion.identity, spawnLoc);
             AbilitySlotToPotion.TryAdd(abilityslot, instance);
+        }
+        else
+        {
+            Transform spawnLoc = PlayerStats.Instance.AbilityPotionTransformList[abilityslot];
+            GameObject instance = Instantiate(ElementToPotion[Element.Plant], spawnLoc.position, Quaternion.identity, spawnLoc);
+            AbilitySlotToPotion.TryAdd(abilityslot, instance);
+
+            //#TODO find more thorough and thoughtful solution// currently spawn plant potion if  the ability has no element. what should the true fix be later?
         }
     }
 
@@ -150,8 +145,10 @@ public class PotionHandler : MonoBehaviour
 
     public static void ReturnPotionToBelt()
     {
-        Debug.Log("This is being triggered2");
-        if (PotionInHand.Item1 == -1 || PotionInHand.Item2 == null) return; // if there is no potion in hand, do nothing.
+        if (PotionInHand.Item1 == -1 || PotionInHand.Item2 == null)
+        {
+            throw new Exception("ReturnPotionToBelt was called but there is no potion in hand.");
+        }
         PotionInHand.Item2.transform.position = PlayerStats.Instance.AbilityPotionTransformList[PotionInHand.Item1].position;
         PotionInHand.Item2.transform.SetParent(PlayerStats.Instance.AbilityPotionTransformList[PotionInHand.Item1]);
     }

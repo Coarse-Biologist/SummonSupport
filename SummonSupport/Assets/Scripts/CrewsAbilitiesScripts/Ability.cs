@@ -47,18 +47,22 @@ public abstract class Ability : ScriptableObject
         {
             abilityInfo += $"\nPhysical Type : {PhysicalType}";
         }
-        abilityInfo += $"\n Target Effects : {TargetEffects.GetPackageInfo()}";
-        abilityInfo += $"\n Self Effects : {SelfEffects.GetPackageInfo()}";
+        string targetEffects = TargetEffects.GetPackageInfo();
+        if (targetEffects != "")
+        {
+            abilityInfo += $"\n Target Effects : {TargetEffects.GetPackageInfo()}";
+        }
+        string selfEffects = SelfEffects.GetPackageInfo();
+        if (selfEffects != "")
+        {
+            abilityInfo += $"\n Self Effects : {SelfEffects.GetPackageInfo()}";
+        }
         return abilityInfo;
     }
 
     public abstract bool Activate(LivingBeing Caster);
 
-    public bool IsUsableOn(CharacterTag user, CharacterTag target)
-    {
-        RelationshipType relationship = RelationshipHandler.GetRelationshipType(user, target);
-        return ListUsableOn.Contains(relationship);
-    }
+
     public bool ThoroughIsUsableOn(LivingBeing caster, LivingBeing target)
     {
         if (caster.SE_Handler != null && caster.SE_Handler.HasStatusEffect(StatusEffectType.Madness) || caster.SE_Handler.HasStatusEffect(StatusEffectType.Charmed)) return true;
@@ -78,9 +82,9 @@ public abstract class Ability : ScriptableObject
     public static int GetCoreCraftingCost(Ability ability)
     {
         if (ability == null) throw new System.Exception("You are trying to access the core cost of an ability which is null.");
-        int modifier = 1;
+        int modifier = 1; //#TODO find better solution
         if (ability is BeamAbility beam) modifier += 10;
-        return (int)ability.Cooldown * (int)ability.Cost * modifier;
+        return ((int)ability.Cooldown + 1) * ((int)ability.Cost + 1) * (1 + modifier);
     }
 
     public List<LivingBeing> GetTargetfromSphereCast(LivingBeing casterStats, Transform directionTransform, int desiredTargetNum, TeamType teamType)

@@ -26,14 +26,16 @@ public class PlayerAbilityHandler : AbilityHandler
     };
 
 
-    void Start()
+    new void Start()
     {
+        base.Start();
         UpdateAbilities();
-        playerStats = GetComponent<LivingBeing>();
-        modHandler = AbilityModHandler.Instance;
-
+        //playerStats = GetComponent<LivingBeing>();
+        //modHandler = AbilityModHandler.Instance;
+        playerStats = PlayerStats.Instance;
         EquipAllPotions();
-
+        //audioHandler = GetComponent<LivingBeingAudioHandler>();
+        Debug.Log($"{audioHandler} = audioHandler");
         if (Instance != null) Destroy(this);
         else Instance = this;
 

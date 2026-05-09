@@ -15,7 +15,6 @@ public static class ElementDict
             if (element == Element.None) continue;
             elementDict.Add(element, arrayOfType[i]);
             i++;
-            Debug.Log("Added element " + element + " to elementDict with value " + arrayOfType[i - 1]);
         }
         return elementDict;
     }
