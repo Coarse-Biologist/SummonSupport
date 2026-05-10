@@ -8,7 +8,37 @@ using System.Linq;
 
 public static class AlchemyInventory
 {
+    #region crew experimentally adds Crafting potnential categories to replace the ingredients.
+    //public static Dictionary<CraftingPotential, int> CraftingPotentialDict = new()
+    //convert ingredients on looting. 
+    //alchemy inventory funcs: 
+    // convert from ingredients, 
+    // convert to knowledge, 
+    // convert cores to ability crafting potential, 
+    // convert to elemental affinity,
+    // convert to minion crafting and upgrade potential.
+    // CorePower, EtherDensity, OrganMass
+
+
+
+
+
+
+
+
+
+
+
+    #endregion
+
     #region Class variables
+    public static Dictionary<CraftingPotential, int> AvailableCraftingPotential { get; private set; } = new()
+    {
+        {CraftingPotential.OrganMass, 100 },
+        {CraftingPotential.CorePower, 100 },
+        {CraftingPotential.EtherDensity, 100 },
+
+    };
     public static Dictionary<AlchemyLoot, int> ingredients { get; private set; } = new()
         {
             { AlchemyLoot.WretchedOrgans, 10 },

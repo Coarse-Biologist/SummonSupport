@@ -52,7 +52,14 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     #endregion
 
     #region Runtime Variables
-    private Dictionary<AlchemyLoot, int> selectedIngredients = new Dictionary<AlchemyLoot, int>();
+    private Dictionary<CraftingPotential, int> selectedCraftingPotential = new()
+    {
+        {CraftingPotential.OrganMass, 0 },
+        {CraftingPotential.CorePower, 0 },
+        {CraftingPotential.EtherDensity, 0 },
+    };
+
+    private Dictionary<AlchemyLoot, int> selectedIngredients = new();
     private List<Element> selectedElements = new List<Element>();
     private LivingBeing minionToUpgrade;
     private LivingBeing minionToRecycle;
@@ -132,14 +139,12 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
 
     public void ShowInteractionOption()
     {
-        //Debug.Log($"position of {this} = {transform.position}");
         FloatingInfoHandler.Instance.ShowInteractionOption(new Vector3(transform.position.x, transform.position.y + 2, transform.position.z), "Z to use alchemy bench");
     }
 
     public void HideInteractionOption()
     {
         FloatingInfoHandler.Instance.HideInteractionOption();
-
     }
 
     #endregion
@@ -147,7 +152,6 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     #region Begin and end workbench use
     private void TogglePlayerUsingUI(bool isUsing, AnimationControllerScript anim = null)
     {
-
         if (isUsing)
         {
             PauseGameHandler.PauseTime();
@@ -169,7 +173,6 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
                 anim.gameObject.transform.rotation = Quaternion.Euler(0, Camera.main.transform.rotation.eulerAngles.y, 0);
             }
         }
-
     }
     private void UseAlchemyObjectInteraction(bool On)
     {
@@ -561,7 +564,8 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
         else
         {
             ShowCraftingInfo();
-            SpawnIngredientButtons();
+            SpawnCraftingPotentialButtons();
+            //SpawnIngredientButtons();
             ShowElementToggles(bottomRightPanel);
             Button confirmButton = AddButtonToPanel("Confirm", topRightPanel, 50, 5);
 
@@ -573,6 +577,28 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
             confirmButton.RegisterCallback<ClickEvent>(e => Craft());
             //confirmButton.RegisterCallback<ClickEvent>(e => ShowCraftingInfo());
         }
+    }
+    private void SpawnCraftingPotentialButtons() // #TODO // make this flow with the other stuff
+    {
+        if (AlchemyInventory.AvailableCraftingPotential == null) throw new Exception("Crafting potential dict has not been initialized.");
+
+        foreach (KeyValuePair<CraftingPotential, int> kvp in AlchemyInventory.AvailableCraftingPotential)
+        {
+            Button ingredientButton = AddButtonToPanel($"{GeneralFunctions.GetCleanEnumString(kvp.Key)} : {kvp.Value}", bottomLeftPanel, 40, 5);
+            ingredientButton.RegisterCallback<ClickEvent>(e => UpdateSelectedCraftingPotentialInfo(kvp.Key));
+        }
+    }
+    private void UpdateSelectedCraftingPotentialInfo(CraftingPotential potential)
+    {
+        selectedCraftingPotential[potential] += 10;
+        string craftinPotentialInfo = "Currently selected crafting potential:";
+        foreach (KeyValuePair<CraftingPotential, int> kvp in selectedCraftingPotential)
+        {
+            craftinPotentialInfo += $"{GeneralFunctions.GetCleanEnumString(kvp.Key)} : {kvp.Value}\n";
+        }
+
+        SetInstructionsText(craftinPotentialInfo);
+
     }
     private void SpawnIngredientButtons()
     {
