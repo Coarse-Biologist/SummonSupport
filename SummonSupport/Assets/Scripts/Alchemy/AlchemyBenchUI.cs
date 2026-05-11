@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using SummonSupportEvents;
 using static StatusEffectsLibrary;
+using Unity.Entities.UniversalDelegates;
 //using UnityEditorInternal.Profiling.Memory.Experimental.FileFormat;
 
 
@@ -578,19 +579,28 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
             //confirmButton.RegisterCallback<ClickEvent>(e => ShowCraftingInfo());
         }
     }
+    #region Work In Progress with crafting potential
     private void SpawnCraftingPotentialButtons() // #TODO // make this flow with the other stuff
     {
         if (AlchemyInventory.AvailableCraftingPotential == null) throw new Exception("Crafting potential dict has not been initialized.");
 
         foreach (KeyValuePair<CraftingPotential, int> kvp in AlchemyInventory.AvailableCraftingPotential)
         {
-            Button ingredientButton = AddButtonToPanel($"{GeneralFunctions.GetCleanEnumString(kvp.Key)} : {kvp.Value}", bottomLeftPanel, 40, 5);
-            ingredientButton.RegisterCallback<ClickEvent>(e => UpdateSelectedCraftingPotentialInfo(kvp.Key));
+            Button craftingPotentialButton = AddButtonToPanel($"{GeneralFunctions.GetCleanEnumString(kvp.Key)} : {kvp.Value}", bottomLeftPanel, 40, 5);
+            craftingPotentialButton.RegisterCallback<ClickEvent>(e => UpdateSelectedCraftingPotentialInfo(craftingPotentialButton, kvp.Key));
+            //craftingPotentialButton.RegisterCallback<ClickEvent>(e => OnCraftingPotentialAdded(craftingPotentialButton, kvp.Key));
+
         }
     }
-    private void UpdateSelectedCraftingPotentialInfo(CraftingPotential potential)
+    private void UpdateSelectedCraftingPotentialInfo(Button button, CraftingPotential potential)
     {
+        if (selectedCraftingPotential[potential] + 10 > AlchemyInventory.AvailableCraftingPotential[potential]) return; // do nothing if adding 10 would be more than is available
+
         selectedCraftingPotential[potential] += 10;
+
+        int newAvailableCP = AlchemyInventory.AvailableCraftingPotential[potential] - selectedCraftingPotential[potential]; // calc new available
+        AlterButtonText(button, $"{GeneralFunctions.GetCleanEnumString(potential)} : {newAvailableCP}"); //display new available
+
         string craftinPotentialInfo = "Currently selected crafting potential:";
         foreach (KeyValuePair<CraftingPotential, int> kvp in selectedCraftingPotential)
         {
@@ -598,8 +608,14 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
         }
 
         SetInstructionsText(craftinPotentialInfo);
-
     }
+
+    private void AlterButtonText(Button button, string newString)
+    {
+        button.text = newString;
+    }
+    #endregion
+
     private void SpawnIngredientButtons()
     {
         bottomLeftPanel.Clear();
