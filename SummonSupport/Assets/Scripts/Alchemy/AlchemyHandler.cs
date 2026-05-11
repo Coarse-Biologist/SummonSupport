@@ -42,7 +42,7 @@ public class AlchemyHandler : MonoBehaviour
     }
     private void InitiateAlchemyLootDict()
     {
-        if (AlchemyLootValueDict.TryGetValue(AlchemyLoot.WretchedOrgans, out int num)) return;
+        //if (AlchemyLootValueDict.TryGetValue(AlchemyLoot.WretchedOrgans, out int num)) return;
         AlchemyLootValueDict.Add(AlchemyLoot.WretchedOrgans, 5);
         AlchemyLootValueDict.Add(AlchemyLoot.FunctionalOrgans, 10);
         AlchemyLootValueDict.Add(AlchemyLoot.HulkingOrgans, 20);
@@ -87,6 +87,36 @@ public class AlchemyHandler : MonoBehaviour
             }
             else Logging.Error("Crafted Minion is null, was he loaded promtly or correctly?");
         }
+        return craftingResults;
+    }
+    public string HandleCraftingResultsCP(Dictionary<CraftingPotential, int> combinedCraftingPotential, List<Element> elementList)
+    {
+        string craftingResults = "";
+
+
+        //AlchemyInventory.ExpendIngredients(combinedIngredients);
+        //#TODO
+
+        if (minionPrefab != null)
+        {
+            Vector3 spawnPos = PlayerStats.Instance.transform.position;
+            if (SpawnLocation != null) spawnPos = SpawnLocation.position;
+            craftedMinion = Instantiate(minionPrefab, spawnPos, Quaternion.identity);
+
+            //craftingResults += UpgradeMinion(craftedMinion.GetComponent<LivingBeing>(), combinedCraftingPotential, elementList);
+            //#TODO
+
+            AddActiveMinion(craftedMinion);
+            //Debug.Log("Add ACtive minion");
+            //#TODO
+
+            //int knowledgeGain = GainKnowledge(elementList, combinedCraftingPotential);
+            //#TODO
+            //craftingResults += $"You have gained {knowledgeGain} alchemic knowledge.\n";
+            //Logging.Info($"You have just gained a total of {knowledgeGain} knowledge from alchemic work.");
+        }
+        else Logging.Error("Crafted Minion is null, was he loaded promtly or correctly?");
+
         return craftingResults;
     }
 
