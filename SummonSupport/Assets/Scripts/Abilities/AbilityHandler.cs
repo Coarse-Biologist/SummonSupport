@@ -61,6 +61,7 @@ public class AbilityHandler : MonoBehaviour
 
     protected bool CastAbility(Ability ability, Vector2 targetPosition, Quaternion rotation)
     {
+        if (PauseGameHandler.paused) return false;
         if (ability is not BeamAbility beam || !toggledAbilitiesDict.TryGetValue(beam, out GameObject gameObject)) StopAllToggledAbilities();
         //when casting a beam which is already toggled on, toggle beam off. 
         bool usedAbility = HandleAbilityType(ability, targetPosition, rotation);

@@ -12,40 +12,38 @@ using UnityEngine.UIElements.Experimental;
 public class PauseGameHandler : MonoBehaviour
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    public bool paused { set; private get; } = false;
+    public static bool paused { private set; get; } = false;
 
-    private UIDocument ui;
+    private static UIDocument ui;
 
-    private VisualTreeAsset UIPrefabAssets { get; set; }
+    private static VisualTreeAsset UIPrefabAssets { get; set; }
 
-    private VisualElement root;
-    private VisualElement PauseMenu;
+    private static VisualElement root;
+    private static VisualElement PauseMenu;
+    private static Button ResumeButton;
+    private static Button SettingsButton;
+    private static Button RestartButton;
+    private static Button InventoryButton;
+    private static Button StatsButton;
 
-    private Button ResumeButton;
-    private Button SettingsButton;
-
-    private Button RestartButton;
-    private Button InventoryButton;
-    private Button StatsButton;
-
-    private Label InfoElement;
-    private VisualElement MainUI;
-    private VisualElement QuestInfoContainer;
-    private Label QuestInfoLabel;
-    private VisualElement PlayerOptions;
-    private int statIndex = 0;
-    private int invIndex = 0;
+    private static Label InfoElement;
+    private static VisualElement MainUI;
+    private static VisualElement QuestInfoContainer;
+    private static Label QuestInfoLabel;
+    private static VisualElement PlayerOptions;
+    private static int statIndex = 0;
+    private static int invIndex = 0;
 
 
-    private Button QuitButton;
-    void OnEnable()
+    private static Button QuitButton;
+    static void OnEnable()
     {
         EventDeclarer.PauseGame?.AddListener(Pause);
         EventDeclarer.PlayerDead?.AddListener(DeathPause);
         EventDeclarer.PlayerLevelUp?.AddListener(LevelUpPause);
 
     }
-    void OnDisable()
+    static void OnDisable()
     {
         EventDeclarer.UnpauseGame?.RemoveListener(Resume);
         EventDeclarer.PlayerDead?.RemoveListener(DeathPause);
@@ -55,7 +53,7 @@ public class PauseGameHandler : MonoBehaviour
     }
 
 
-    void Start()
+    static void Start()
     {
         ui = UI_DocHandler.Instance.ui;
         UIPrefabAssets = UI_DocHandler.Instance.UIPrefabAssets;
@@ -101,7 +99,7 @@ public class PauseGameHandler : MonoBehaviour
 
     #region Pause and Resume Methods
 
-    private void Pause()
+    static private void Pause()
     {
         paused = true;
         UnityEngine.Cursor.lockState = CursorLockMode.None;   // Locks the cursor to the center of the screen
@@ -130,13 +128,12 @@ public class PauseGameHandler : MonoBehaviour
     public static void PauseTime()
     {
         Time.timeScale = 0f;
-
     }
     public static void ResumeTime()
     {
         Time.timeScale = 1f;
     }
-    private void EaseInOpacity(VisualElement element, int duration)
+    private static void EaseInOpacity(VisualElement element, int duration)
     {
         element.experimental.animation.Start(0f, 1f, duration, (e, v) => e.style.opacity = v)
             .Ease(Easing.OutCubic);
@@ -150,19 +147,19 @@ public class PauseGameHandler : MonoBehaviour
         )
         .Ease(Easing.OutBack);
     }
-    private void EaseOutOpacity(VisualElement element, int duration)
+    private static void EaseOutOpacity(VisualElement element, int duration)
     {
         element.experimental.animation.Start(1f, 0f, duration, (e, v) => e.style.opacity = v)
             .Ease(Easing.OutCubic)
             .OnCompleted(() => PauseMenu.style.display = DisplayStyle.None);
 
     }
-    private void ClearInfoElement()
+    private static void ClearInfoElement()
     {
         InfoElement.Clear();
     }
 
-    private void Resume()
+    private static void Resume()
     {
         paused = false;
         UnityEngine.Cursor.lockState = CursorLockMode.Locked;   // Locks the cursor to the center of the screen
@@ -179,7 +176,7 @@ public class PauseGameHandler : MonoBehaviour
         ResumeTime();
     }
     #region level up pause
-    private void LevelUpPause(List<string> ImprovedAttributesList)
+    private static void LevelUpPause(List<string> ImprovedAttributesList)
     {
         UnityEngine.Cursor.lockState = CursorLockMode.None;   // Locks the cursor to the center of the screen
         UnityEngine.Cursor.visible = true;
@@ -213,7 +210,7 @@ public class PauseGameHandler : MonoBehaviour
     #endregion
 
     #region death pause
-    private void DeathPause(bool dead)
+    private static void DeathPause(bool dead)
     {
         UnityEngine.Cursor.lockState = CursorLockMode.None;   // Locks the cursor to the center of the screen
         UnityEngine.Cursor.visible = true;
@@ -239,7 +236,7 @@ public class PauseGameHandler : MonoBehaviour
     #endregion
 
     #region restart
-    private void Restart()
+    private static void Restart()
     {
         UnityEngine.Cursor.lockState = CursorLockMode.Locked;   // Locks the cursor to the center of the screen
         UnityEngine.Cursor.visible = false;
@@ -249,7 +246,7 @@ public class PauseGameHandler : MonoBehaviour
     #endregion
 
     #region quit to main menu
-    private void QuitToMainMenu()
+    private static void QuitToMainMenu()
     {
         SceneManager.LoadSceneAsync("StartScreen");
         Time.timeScale = 1f;
@@ -259,25 +256,25 @@ public class PauseGameHandler : MonoBehaviour
 
     #region Show stats and inventory
 
-    private void ShowPlayerstats()
+    private static void ShowPlayerstats()
     {
         InfoElement.text = $"{PlayerStats.Instance.Name} stats:\n {PlayerStats.Instance.GetLivingBeingStats()}";
     }
 
-    private void ShowGameStats()
+    private static void ShowGameStats()
     {
         string questStats = QuestHandler.GetQuestCompletionStats();
         Debug.Log($"{questStats}");
         InfoElement.text += $"{questStats}\n";
     }
-    private void ChangeStatIndex()
+    private static void ChangeStatIndex()
     {
         ShowStats();
         statIndex++;
         Debug.Log($"stat index: {statIndex}");
 
     }
-    private void ShowStats()
+    private static void ShowStats()
     {
         PlayerOptions.style.display = DisplayStyle.Flex;
 
@@ -302,7 +299,7 @@ public class PauseGameHandler : MonoBehaviour
         }
     }
 
-    private void ShowInventory()
+    private static void ShowInventory()
     {
         PlayerOptions.style.display = DisplayStyle.Flex;
         string InventoryString = "";
@@ -334,7 +331,7 @@ public class PauseGameHandler : MonoBehaviour
     }
     #endregion
     #region Settings Menu
-    private void ShowSettings()
+    private static void ShowSettings()
     {
         PlayerOptions.style.display = DisplayStyle.Flex;
         ClearInfoElement();
@@ -350,12 +347,12 @@ public class PauseGameHandler : MonoBehaviour
 
         DisplayVolume();
     }
-    private void DisplayVolume()
+    private static void DisplayVolume()
     {
         InfoElement.text = $"\n \n \n \n {AudioHandler.Instance.GetGeneralGameVolume()}\n";
     }
 
-    private Button AddVolumeButtons(string buttonText, VisualElement panel, float width, float height)
+    private static Button AddVolumeButtons(string buttonText, VisualElement panel, float width, float height)
     {
         TemplateContainer prefabContainer = UIPrefabAssets.Instantiate();
         Button button = prefabContainer.Q<Button>("ButtonPrefab");

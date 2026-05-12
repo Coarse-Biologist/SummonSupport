@@ -498,7 +498,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
         {
             selectedStatusEffect = AbilityLibrary.GetStatusEffects(selectedAbility.ElementTypes[0], status);
             //Debug.Log($"Selected status effect is being set to {selectedStatusEffect} for ability self");
-            SetInstructionsText($"The {GeneralFunctions.GetCleanEnumString(modType)} of {selectedAbility.Name} can be improved for {AbilityModHandler.GetModCost(modType)} core power. You currently have {AlchemyInventory.GetCorePowerResource(AlchemyInventory.ingredients)}");
+            SetInstructionsText($"The {GeneralFunctions.GetCleanEnumString(modType)} of {selectedAbility.Name} can be improved for {AbilityModHandler.GetModCost(modType)} core power. You currently have {AlchemyInventory.AvailableCraftingPotential[CraftingPotential.CorePower]}");
 
         }
 
@@ -615,20 +615,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     }
     #endregion
 
-    private void SpawnIngredientButtons()
-    {
-        bottomLeftPanel.Clear();
-        foreach (KeyValuePair<AlchemyLoot, int> kvp in AlchemyInventory.ingredients)
-        {
-            if (kvp.Value != 0)
-            {
-                Button ingredientButton = AddButtonToPanel($"{AlchemyInventory.GetAlchemyLootString(kvp.Key)} : {kvp.Value}", bottomLeftPanel, 40, 5);
-                ingredientButton.RegisterCallback<ClickEvent>(e => AddIngredientToSelection(kvp.Key));
-                ingredientButton.RegisterCallback<ClickEvent>(e => ShowCraftingInfo());
-                ingredientButton.RegisterCallback<ClickEvent>(e => DecrementIngredientButton(ingredientButton));
-            }
-        }
-    }
+
 
     private void DecrementIngredientButton(Button ingredientButton)
     {
@@ -681,15 +668,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
         if (!selectedElements.Contains(element)) selectedElements.Add(element);
         else selectedElements.Remove(element);
     }
-    private void AddIngredientToSelection(AlchemyLoot ingredient)
-    {
-        if (selectedIngredients.TryGetValue(ingredient, out int amountSelected)) // if the key exists
-        {
-            if (amountSelected < AlchemyInventory.ingredients[ingredient]) //if not already equal or more have been selected
-                selectedIngredients[ingredient]++;
-        }
-        else selectedIngredients.Add(ingredient, 1);
-    }
+
 
     #endregion
 
@@ -837,7 +816,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
         {
             instructions.text = $"{selectedAbility.DisplayAbilityInfo()} \n Confirm to concoct {selectedAbility.Name} for {Ability.GetCoreCraftingCost(selectedAbility)} core power.";
         }
-        instructions.text += $" You have a total of {AlchemyInventory.GetCorePowerResource(AlchemyInventory.ingredients)} core power.";
+        instructions.text += $" You have a total of {AlchemyInventory.GetCraftingPotential(CraftingPotential.CorePower)} core power.";
 
     }
 

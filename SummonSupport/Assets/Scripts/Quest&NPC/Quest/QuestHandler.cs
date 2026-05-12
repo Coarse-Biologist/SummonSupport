@@ -121,7 +121,7 @@ public class QuestHandler : MonoBehaviour
         AlchemyInventory.GainTool(quest.AlchemyToolReward);
         foreach (AlchemyLoot ingredient in quest.AlchemyLootReward)
         {
-            AlchemyInventory.AlterIngredientNum(ingredient, quest.AlchemyLootNum);
+            AlchemyInventory.ConvertIngredientsToPotential(ingredient, quest.AlchemyLootNum);
         }
         FloatingInfoHandler.Instance.DisplayXPGain(quest.XP_Reward);
         playerStats.GainXP(quest.XP_Reward);

@@ -40,19 +40,19 @@ public static class AlchemyInventory
         {CraftingPotential.EtherDensity, 100 },
 
     };
-    public static Dictionary<AlchemyLoot, int> ingredients { get; private set; } = new()
-        {
-            { AlchemyLoot.WretchedOrgans, 10 },
-            { AlchemyLoot.FunctionalOrgans, 10 },
-            { AlchemyLoot.HulkingOrgans, 10 },
-            { AlchemyLoot.WeakCore, 10 },
-            { AlchemyLoot.SolidCore, 10 },
-            { AlchemyLoot.PowerfulCore, 10 },
-            { AlchemyLoot.HulkingCore, 10 },
-            { AlchemyLoot.FaintEther, 10 },
-            { AlchemyLoot.PureEther, 10 },
-            { AlchemyLoot.IntenseEther,101 }
-            };
+    //public static Dictionary<AlchemyLoot, int> ingredients { get; private set; } = new()
+    //    {
+    //        { AlchemyLoot.WretchedOrgans, 10 },
+    //        { AlchemyLoot.FunctionalOrgans, 10 },
+    //        { AlchemyLoot.HulkingOrgans, 10 },
+    //        { AlchemyLoot.WeakCore, 10 },
+    //        { AlchemyLoot.SolidCore, 10 },
+    //        { AlchemyLoot.PowerfulCore, 10 },
+    //        { AlchemyLoot.HulkingCore, 10 },
+    //        { AlchemyLoot.FaintEther, 10 },
+    //        { AlchemyLoot.PureEther, 10 },
+    //        { AlchemyLoot.IntenseEther,101 }
+    //        };
     public static Dictionary<AlchemyLoot, int> ingredientValues { get; private set; } = new()
         {
             { AlchemyLoot.WretchedOrgans, 1 },
@@ -133,7 +133,7 @@ public static class AlchemyInventory
 
         return total;
     }
-    public static void ConvertIngredientsToPotential(AlchemyLoot ingredient)
+    public static void ConvertIngredientsToPotential(AlchemyLoot ingredient, int numberOfIngredients = 1)
     {
         // #TODO i hate this conditional business
         float modifier = KnownTools.Count() / 10;
@@ -141,6 +141,7 @@ public static class AlchemyInventory
         RepeatableAccomplishments type = RepeatableAccomplishments.OrgansCollected;
         if (ingredientValues.TryGetValue(ingredient, out int value))
         {
+            value *= numberOfIngredients;
             value *= (int)modifier;
             if (ingredient.ToString().Contains("Organ"))
             {
@@ -162,24 +163,13 @@ public static class AlchemyInventory
             EventDeclarer.RepeatableQuestCompleted.Invoke(type, 1);
         }
     }
-    public static void AlterIngredientNum(AlchemyLoot newIngredient, int amount)
-    {
-        //UnityEngine.Debug.Log($"Adding {amount} {newIngredient}");
-        ingredients[newIngredient] += amount;
-        ConvertIngredientsToPotential(newIngredient);
-    }
+
     public static void AlterCraftingPotential(CraftingPotential potential, int amount)
     {
         //UnityEngine.Debug.Log($"Adding {amount} {newIngredient}");
         AvailableCraftingPotential[potential] += amount;
     }
-    public static void ExpendIngredients(Dictionary<AlchemyLoot, int> usedIngredients)
-    {
-        foreach (KeyValuePair<AlchemyLoot, int> kvp in usedIngredients)
-        {
-            if (ingredients[kvp.Key] > 0) AlterIngredientNum(kvp.Key, -kvp.Value);
-        }
-    }
+
     public static void ExpendCraftingPotential(Dictionary<CraftingPotential, int> usedPotential)
     {
         foreach (KeyValuePair<CraftingPotential, int> kvp in usedPotential)
@@ -203,35 +193,15 @@ public static class AlchemyInventory
     #endregion
 
     #region Check dict values
-    public static bool GetSufficentIngredients(AlchemyLoot ingredient, int amount)
-    {
-        bool sufficient = false;
-        if (ingredients[ingredient] >= amount) sufficient = true;
 
-        return sufficient;
-    }
     #endregion
     #region Check suffient resource
 
-    public static bool HasSufficientCorePower(Ability ability, Dictionary<AlchemyLoot, int> coreKvp)
-    {
-        int corePower = GetCorePowerResource(coreKvp);
-        if (Ability.GetCoreCraftingCost(ability) <= corePower)
-        {
-            ExpendIngredients(coreKvp);
-            return true;
-        }
-        else return false;
-    }
 
-    public static int GetCorePowerResource(Dictionary<AlchemyLoot, int> coreKvp)
+
+    public static int GetCraftingPotential(CraftingPotential potentialType)
     {
-        int corePower = 0;
-        foreach (KeyValuePair<AlchemyLoot, int> kvp in coreKvp)
-        {
-            if (kvp.Key.ToString().Contains("Core")) corePower += AlchemyLootPowerValues[kvp.Key] * kvp.Value;
-        }
-        return corePower;
+        return AvailableCraftingPotential[potentialType];
     }
 
 
@@ -241,16 +211,7 @@ public static class AlchemyInventory
     {
         return System.Text.RegularExpressions.Regex.Replace(lootString.ToString(), "(?<!^)([A-Z])", " $1");
     }
-    public static string GetAlchemyInventory()
-    {
-        string inv = "";
-        foreach (KeyValuePair<AlchemyLoot, int> kvp in ingredients)
-        {
-            if (kvp.Value != 0)
-                inv += $"{GetAlchemyLootString(kvp.Key)}: {kvp.Value}\n";
-        }
-        return inv;
-    }
+
     public static string GetCraftingPotentialString()
     {
         string inv = "";

@@ -11,7 +11,7 @@ public class LootableAlchemyMaterial : MonoBehaviour, I_LootInterface
 
     public void Loot()
     {
-        AlchemyInventory.AlterIngredientNum(alchemyMaterial, 1);
+        AlchemyInventory.ConvertIngredientsToPotential(alchemyMaterial);
         FloatingInfoHandler.Instance.DisplayGoldenLetters($"+1 {GeneralFunctions.GetCleanEnumString(alchemyMaterial)}!", 1.5f);
         if (alchemyMaterial.ToString().Contains("Ether"))
         {

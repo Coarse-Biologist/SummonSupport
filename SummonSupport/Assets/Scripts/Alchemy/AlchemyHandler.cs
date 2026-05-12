@@ -137,9 +137,9 @@ public class AlchemyHandler : MonoBehaviour
         float minionHP = minion.MaxHP - 100f;
         float minionAffinity = GetCombinedElementValues(minion);
 
-        AlchemyInventory.AlterIngredientNum(AlchemyLoot.WeakCore, (int)(minionPower * Instance.RecycleExchangeRate)); //This should all scale in a more satosfying way
-        AlchemyInventory.AlterIngredientNum(AlchemyLoot.FaintEther, (int)(minionAffinity * Instance.RecycleExchangeRate));
-        AlchemyInventory.AlterIngredientNum(AlchemyLoot.WretchedOrgans, (int)(minionHP * Instance.RecycleExchangeRate));
+        AlchemyInventory.AlterCraftingPotential(CraftingPotential.CorePower, (int)(minionPower * Instance.RecycleExchangeRate)); //This should all scale in a more satosfying way
+        AlchemyInventory.AlterCraftingPotential(CraftingPotential.EtherDensity, (int)(minionAffinity * Instance.RecycleExchangeRate));
+        AlchemyInventory.AlterCraftingPotential(CraftingPotential.OrganMass, (int)(minionHP * Instance.RecycleExchangeRate));
 
         EventDeclarer.minionDied?.Invoke(minion.gameObject);
         CommandMinion.RemoveActiveMinions(minion);
