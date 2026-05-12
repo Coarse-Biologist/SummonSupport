@@ -60,7 +60,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
         {CraftingPotential.EtherDensity, 0 },
     };
 
-    private Dictionary<AlchemyLoot, int> selectedIngredients = new();
+    //private Dictionary<AlchemyLoot, int> selectedIngredients = new();
     private List<Element> selectedElements = new List<Element>();
     private LivingBeing minionToUpgrade;
     private LivingBeing minionToRecycle;
@@ -353,36 +353,34 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     #region Show Info in instructions panel
     private void ShowUpgradeInfo()
     {
-        if (selectedIngredients.Keys.Count == 0)
-            instructions.text = "Which Minion would you like to upgrade?";
-        else
-        {
-            string ingredientInfo = "Selected Ingredients: ";
+        instructions.text = "Which Minion would you like to upgrade?";
+        string ingredientInfo = "Allocated Crating Potential: ";
 
-            foreach (KeyValuePair<AlchemyLoot, int> kvp in selectedIngredients)
-            {
+        foreach (KeyValuePair<CraftingPotential, int> kvp in selectedCraftingPotential)
+        {
+            if (kvp.Value > 0)
                 ingredientInfo += $"{kvp.Key}: {kvp.Value}. ";
-            }
-            instructions.text = ingredientInfo;
         }
+        instructions.text += ingredientInfo;
+
     }
 
 
     private void ShowCraftingInfo()
     {
-        if (selectedIngredients.Keys.Count == 0)
-            instructions.text = "Combine Cores, Ether and Body Parts to make minons of selected Elemental Affinity.";
-        else
-        {
-            string ingredientInfo = "Selected Ingredients: ";
+        string craftingInfo = "";
+        instructions.text = "Combine Cores, Ether and Body Parts to make minons of selected Elemental Affinity.";
+        if (!CheckUsingCoresandOrgans()) instructions.text += $"\nYou must use cores and organs in order to craft a minion.";
 
-            foreach (KeyValuePair<AlchemyLoot, int> kvp in selectedIngredients)
-            {
-                ingredientInfo += $"{AlchemyInventory.GetAlchemyLootString(kvp.Key)}: {kvp.Value}. ";
-            }
-            instructions.text = ingredientInfo;
+        craftingInfo += "\nSelected Ingredients: ";
+
+        foreach (KeyValuePair<CraftingPotential, int> kvp in selectedCraftingPotential)
+        {
+            if (kvp.Value > 0)
+                craftingInfo += $"{AlchemyInventory.GetCraftingPotentialString()}: {kvp.Value}. ";
         }
-        if (!CheckUsingCoresandOrgans()) instructions.text += $" You must use cores and organs in order to craft a minion.";
+        instructions.text += craftingInfo;
+
 
     }
 
@@ -656,7 +654,6 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     private void ClearCraftingSelection()
     {
         selectedElements = new List<Element>();
-        selectedIngredients = new Dictionary<AlchemyLoot, int>();
         selectedCraftingPotential[CraftingPotential.OrganMass] = 0;
         selectedCraftingPotential[CraftingPotential.CorePower] = 0;
         selectedCraftingPotential[CraftingPotential.EtherDensity] = 0;
@@ -925,7 +922,6 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     {
         SetSelectedAbility(null);
         selectedElements.Clear();
-        selectedIngredients.Clear();
         selectedModType = AbilityModTypes.None;
         selectedCraftingPotential[CraftingPotential.OrganMass] = 0;
         selectedCraftingPotential[CraftingPotential.CorePower] = 0;
