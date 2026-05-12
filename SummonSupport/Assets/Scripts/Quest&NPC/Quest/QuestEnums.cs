@@ -10,12 +10,12 @@ namespace Quest
     {
         EnemiesDefeated,
         MinionsCrafted,
-        OrgansLooted,
-        CoresLooted,
-        EtherLooted,
-        OrgansUsed,
-        CoresUsed,
-        EtherUsed,
+        OrganMassUsed,
+        CorePowerUsed,
+        EtherDensityUsed,
+        OrgansCollected,
+        CoresCollected,
+        EtherCollected,
         KnowledgeGained,
 
     }

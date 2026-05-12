@@ -137,7 +137,7 @@ public static class ColorChanger
     public static void ChangeAllMatsByAffinity(LivingBeing livingBeing)
     {
         Element element = livingBeing.GetHighestAffinity(out float value);
-        if (element == Element.None) return;
+        if (element == Element.None || value < AlchemyHandler.ElementThreshhold) return;
 
         Renderer meshRenderer = livingBeing.GetComponentInChildren<Renderer>();
         //SkinnedMeshRenderer skinnedMeshRenderer = livingBeing.GetComponentInChildren<SkinnedMeshRenderer>();

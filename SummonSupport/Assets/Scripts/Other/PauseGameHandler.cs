@@ -266,7 +266,7 @@ public class PauseGameHandler : MonoBehaviour
 
     private void ShowGameStats()
     {
-        string questStats = QuestHandler.Instance.GetQuestCompletionStats();
+        string questStats = QuestHandler.GetQuestCompletionStats();
         Debug.Log($"{questStats}");
         InfoElement.text += $"{questStats}\n";
     }
@@ -305,24 +305,29 @@ public class PauseGameHandler : MonoBehaviour
     private void ShowInventory()
     {
         PlayerOptions.style.display = DisplayStyle.Flex;
-
+        string InventoryString = "";
         if (invIndex == 0)
         {
-            string InventoryString = AlchemyInventory.GetAlchemyInventory();
+            InventoryString = AlchemyInventory.GetCraftingPotentialString();
             InfoElement.text = $"Alchemy Inventory:\n {InventoryString}\n";
         }
         else if (invIndex == 1)
         {
-            string InventoryString = AlchemyInventory.GetElementalKnowlegdeString();
+            InventoryString = AlchemyInventory.GetElementalKnowlegdeString();
             InfoElement.text = $"Your Elemental Knowledge:\n {InventoryString}\n";
         }
         else if (invIndex == 2)
         {
-            string InventoryString = AlchemyInventory.GetKnownToolsString();
+            InventoryString = AlchemyInventory.GetKnownToolsString();
             InfoElement.text = $"Known Alchemy Tools:\n {InventoryString}\n";
         }
+        else if (invIndex == 3)
+        {
+            InventoryString = QuestHandler.GetQuestCompletionStats();
+            InfoElement.text = $"Quest progress:\n {InventoryString}\n";
+        }
         invIndex++;
-        if (invIndex > 2)
+        if (invIndex > 3)
         {
             invIndex = 0;
         }

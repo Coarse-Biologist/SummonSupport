@@ -13,23 +13,30 @@ public class QuestHandler : MonoBehaviour
     public List<Quest_SO> CompletedQuests = new List<Quest_SO>();
     public List<BoolAccomplishments> CompletedBoolQuests;
     public List<Quest_SO> ActiveQuests = new List<Quest_SO>();
-    public Dictionary<RepeatableAccomplishments, int> QuestRepTracker = new Dictionary<RepeatableAccomplishments, int>()
+    public static Dictionary<RepeatableAccomplishments, int> QuestRepTracker = new Dictionary<RepeatableAccomplishments, int>()
     {
         {RepeatableAccomplishments.EnemiesDefeated, 0},
         {RepeatableAccomplishments.KnowledgeGained, 0},
         {RepeatableAccomplishments.MinionsCrafted, 0},
-        {RepeatableAccomplishments.OrgansUsed, 0},
-        {RepeatableAccomplishments.CoresUsed, 0},
-        {RepeatableAccomplishments.EtherUsed, 0},
+        {RepeatableAccomplishments.CoresCollected, 0},
+        {RepeatableAccomplishments.OrgansCollected, 0},
+        {RepeatableAccomplishments.EtherCollected, 0},
+        {RepeatableAccomplishments.CorePowerUsed, 0},
+        {RepeatableAccomplishments.OrganMassUsed, 0},
+        {RepeatableAccomplishments.EtherDensityUsed, 0},
     };
     public Dictionary<RepeatableAccomplishments, int> TotalRepTracker = new Dictionary<RepeatableAccomplishments, int>()
     {
         {RepeatableAccomplishments.EnemiesDefeated, 0},
         {RepeatableAccomplishments.KnowledgeGained, 0},
         {RepeatableAccomplishments.MinionsCrafted, 0},
-        {RepeatableAccomplishments.OrgansUsed, 0},
-        {RepeatableAccomplishments.CoresUsed, 0},
-        {RepeatableAccomplishments.EtherUsed, 0},
+        {RepeatableAccomplishments.CoresCollected, 0},
+        {RepeatableAccomplishments.OrgansCollected, 0},
+        {RepeatableAccomplishments.EtherCollected, 0},
+        {RepeatableAccomplishments.CorePowerUsed, 0},
+        {RepeatableAccomplishments.OrganMassUsed, 0},
+        {RepeatableAccomplishments.EtherDensityUsed, 0},
+
     };
     private PlayerStats playerStats;
 
@@ -158,7 +165,7 @@ public class QuestHandler : MonoBehaviour
         CheckQuestCompletionsForActiveQuests(RepeatableAccomplishments.EnemiesDefeated);
 
     }
-    public string GetQuestCompletionStats()
+    public static string GetQuestCompletionStats()
     {
         string stats = "";
         foreach (KeyValuePair<RepeatableAccomplishments, int> kvp in QuestRepTracker)

@@ -42,7 +42,7 @@ public class AbilityModHandler : MonoBehaviour
         { AbilityModTypes.MaxSplit, 150 },
         { AbilityModTypes.MaxRicochet, 150 },
         { AbilityModTypes.Number, 400 } ,
-        {AbilityModTypes.StatusEffect, 99}};
+        {AbilityModTypes.StatusEffect, 200}};
 
     public static readonly Dictionary<Type, List<AbilityModTypes>> ModOptions = new()
         {
