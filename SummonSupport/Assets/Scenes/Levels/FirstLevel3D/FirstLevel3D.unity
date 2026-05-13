@@ -7982,31 +7982,31 @@ PrefabInstance:
     - target: {fileID: 5700169036039766404, guid: 29cc623553c0c3d4aa9548ba52efed1b,
         type: 3}
       propertyPath: <Abilities>k__BackingField.Array.size
-      value: 5
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 5700169036039766404, guid: 29cc623553c0c3d4aa9548ba52efed1b,
         type: 3}
       propertyPath: '<Abilities>k__BackingField.Array.data[0]'
       value: 
-      objectReference: {fileID: 11400000, guid: 47722ea3acd0b2a47b8f3a976e2c88d6,
+      objectReference: {fileID: 11400000, guid: 0da9c7948a53d274e891d2c1e63f6df0,
         type: 2}
     - target: {fileID: 5700169036039766404, guid: 29cc623553c0c3d4aa9548ba52efed1b,
         type: 3}
       propertyPath: '<Abilities>k__BackingField.Array.data[1]'
       value: 
-      objectReference: {fileID: 11400000, guid: d8f7f3b4233a15d40b4007399065525f,
+      objectReference: {fileID: 11400000, guid: fa869cac87f35ec40996d5e12ebbcd3c,
         type: 2}
     - target: {fileID: 5700169036039766404, guid: 29cc623553c0c3d4aa9548ba52efed1b,
         type: 3}
       propertyPath: '<Abilities>k__BackingField.Array.data[2]'
       value: 
-      objectReference: {fileID: 11400000, guid: 7018aba292904024cac832e5d9be20d3,
+      objectReference: {fileID: 11400000, guid: 5f0b8767d36dfc94897a1c6da892e216,
         type: 2}
     - target: {fileID: 5700169036039766404, guid: 29cc623553c0c3d4aa9548ba52efed1b,
         type: 3}
       propertyPath: '<Abilities>k__BackingField.Array.data[3]'
       value: 
-      objectReference: {fileID: 11400000, guid: 6949278a1cdb58a478fa721871e6e803,
+      objectReference: {fileID: 11400000, guid: 476f7af99a785b5438e44fc6bedca917,
         type: 2}
     - target: {fileID: 5700169036039766404, guid: 29cc623553c0c3d4aa9548ba52efed1b,
         type: 3}

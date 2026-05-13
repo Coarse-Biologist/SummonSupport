@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fceeef8cfafe41444bf6aa890ebad1b7, type: 3}
-  m_Name: Wave_Water 6
+  m_Name: Wave_Plant
   m_EditorClassIdentifier: 
-  <Name>k__BackingField: Tidal Wave
+  <Name>k__BackingField: Gaea's Wave
   <Icon>k__BackingField: {fileID: 0}
   <Cooldown>k__BackingField: 2
   <CostType>k__BackingField: 4
-  <Cost>k__BackingField: 20
+  <Cost>k__BackingField: 40
   <Range>k__BackingField: 20
   <Duration>k__BackingField: 10
   <AbilityTypeTag>k__BackingField: 1
@@ -53,9 +53,9 @@ MonoBehaviour:
     <AttributeDown>k__BackingField: []
     <StatusEffects>k__BackingField: []
     <SpecialAbilityAttribute>k__BackingField: 0
-  <ElementTypes>k__BackingField: 02000000
+  <ElementTypes>k__BackingField: 0b000000
   <PhysicalType>k__BackingField: 0
-  <OnHitEffect>k__BackingField: {fileID: 1847413739128325886, guid: ac4fc238eec66bf4ea51106078fde20d,
+  <OnHitEffect>k__BackingField: {fileID: 5005864844744066183, guid: 4abfee1134a924843a0c2d8f0b92357e,
     type: 3}
   <Sounds>k__BackingField: {fileID: 0}
   <Speed>k__BackingField: 5
@@ -67,5 +67,5 @@ MonoBehaviour:
   <MaxPierce>k__BackingField: 5
   <MaxSplit>k__BackingField: 0
   <SplitAngleOffset>k__BackingField: 45
-  <ProjectileParticleSystem>k__BackingField: {fileID: 2533809563473789410, guid: e452ff59178a7fa438cbcf9443b03c20,
+  <ProjectileParticleSystem>k__BackingField: {fileID: 8013858401468046030, guid: 4391e30dece3df143bec3bd3e5d26c82,
     type: 3}

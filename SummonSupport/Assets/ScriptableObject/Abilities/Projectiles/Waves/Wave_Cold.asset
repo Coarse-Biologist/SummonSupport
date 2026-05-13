@@ -16,7 +16,7 @@ MonoBehaviour:
   <Icon>k__BackingField: {fileID: 0}
   <Cooldown>k__BackingField: 2
   <CostType>k__BackingField: 4
-  <Cost>k__BackingField: 20
+  <Cost>k__BackingField: 40
   <Range>k__BackingField: 20
   <Duration>k__BackingField: 10
   <AbilityTypeTag>k__BackingField: 1
