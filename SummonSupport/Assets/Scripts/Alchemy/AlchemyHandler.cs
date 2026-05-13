@@ -6,6 +6,7 @@ using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using System;
 using SummonSupportEvents;
+using Unity.VisualScripting.Antlr3.Runtime.Misc;
 
 
 #endregion
@@ -223,18 +224,19 @@ public class AlchemyHandler : MonoBehaviour
         upgradeResults += $"Elemental affinity upgraded by {elementUpgrade} \n";
         stats.RestoreResources();
         AlterMinionByElement(minion);
+        AddAbilitiesByElement(minion, (int)stats.GetAttribute(AttributeType.MaxPower));
         AddMeleeAbilityByElement(stats);
         return upgradeResults;
     }
 
-    private void AddAbilitiesByElement(LivingBeing livingBeing)
+    private void AddAbilitiesByElement(LivingBeing livingBeing, int minionPower)
     {
         CreatureAbilityHandler abilityHandler = livingBeing.gameObject.GetComponent<CreatureAbilityHandler>();
         if (abilityHandler == null) return;
         Element strongestElement = livingBeing.GetHighestAffinity(out float value);
         if (strongestElement != Element.None)
         {
-            List<Ability> abilities = AbilityLibrary.GetRandomAbilities(strongestElement, (int)(livingBeing.GetAttribute(AttributeType.MaxPower) / ManaToAbilityRatio));
+            Ability[] abilities = AbilityLibrary.abilityLibrary.GetElementalAbilitiesBelowLevel(minionPower, new() { strongestElement });
 
             if (abilities != null)
             {
