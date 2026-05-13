@@ -30,7 +30,16 @@ public class PlayerStats : LivingBeing
     [field: SerializeField] public int AbilitySlots { private set; get; } = 2;
     [field: SerializeField] public Dictionary<string, int> SlottedAbilities { private set; get; } = new Dictionary<string, int>(); //This will store the slot in which an ability is contained. the string is a placeholder until we decide the object type of an ability
     public PlayerUIHandler UiHandler { private set; get; }
+
+    #region player speciic transforms;
+    [field: SerializeField] public Transform HandTransform { private set; get; }
+    [field: SerializeField] public List<Transform> AbilityPotionTransformList { private set; get; }
+
+
+    #endregion
     protected override void Awake()
+
+
     {
         base.Awake();
         Instance = this;

@@ -1,0 +1,150 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &5839871058248770875
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 2492930683692111485, guid: 250f0bc5d73d2fe4597139c54e23b61d,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 23.212666
+      objectReference: {fileID: 0}
+    - target: {fileID: 2492930683692111485, guid: 250f0bc5d73d2fe4597139c54e23b61d,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.5681581
+      objectReference: {fileID: 0}
+    - target: {fileID: 2492930683692111485, guid: 250f0bc5d73d2fe4597139c54e23b61d,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 13.884413
+      objectReference: {fileID: 0}
+    - target: {fileID: 2492930683692111485, guid: 250f0bc5d73d2fe4597139c54e23b61d,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2492930683692111485, guid: 250f0bc5d73d2fe4597139c54e23b61d,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2492930683692111485, guid: 250f0bc5d73d2fe4597139c54e23b61d,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2492930683692111485, guid: 250f0bc5d73d2fe4597139c54e23b61d,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2492930683692111485, guid: 250f0bc5d73d2fe4597139c54e23b61d,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2492930683692111485, guid: 250f0bc5d73d2fe4597139c54e23b61d,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2492930683692111485, guid: 250f0bc5d73d2fe4597139c54e23b61d,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5386951236646681141, guid: 250f0bc5d73d2fe4597139c54e23b61d,
+        type: 3}
+      propertyPath: m_Name
+      value: ps_wave_poison Variant
+      objectReference: {fileID: 0}
+    - target: {fileID: 6839049006060168355, guid: 250f0bc5d73d2fe4597139c54e23b61d,
+        type: 3}
+      propertyPath: ColorModule.enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6839049006060168355, guid: 250f0bc5d73d2fe4597139c54e23b61d,
+        type: 3}
+      propertyPath: ColorModule.gradient.maxGradient.ctime1
+      value: 14572
+      objectReference: {fileID: 0}
+    - target: {fileID: 6839049006060168355, guid: 250f0bc5d73d2fe4597139c54e23b61d,
+        type: 3}
+      propertyPath: ColorModule.gradient.maxGradient.ctime2
+      value: 35697
+      objectReference: {fileID: 0}
+    - target: {fileID: 6839049006060168355, guid: 250f0bc5d73d2fe4597139c54e23b61d,
+        type: 3}
+      propertyPath: ColorModule.gradient.maxGradient.ctime3
+      value: 58056
+      objectReference: {fileID: 0}
+    - target: {fileID: 6839049006060168355, guid: 250f0bc5d73d2fe4597139c54e23b61d,
+        type: 3}
+      propertyPath: ColorModule.gradient.maxGradient.key0.b
+      value: 0.33018857
+      objectReference: {fileID: 0}
+    - target: {fileID: 6839049006060168355, guid: 250f0bc5d73d2fe4597139c54e23b61d,
+        type: 3}
+      propertyPath: ColorModule.gradient.maxGradient.key0.r
+      value: 0.42561835
+      objectReference: {fileID: 0}
+    - target: {fileID: 6839049006060168355, guid: 250f0bc5d73d2fe4597139c54e23b61d,
+        type: 3}
+      propertyPath: ColorModule.gradient.maxGradient.key1.a
+      value: 0.7647059
+      objectReference: {fileID: 0}
+    - target: {fileID: 6839049006060168355, guid: 250f0bc5d73d2fe4597139c54e23b61d,
+        type: 3}
+      propertyPath: ColorModule.gradient.maxGradient.key1.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6839049006060168355, guid: 250f0bc5d73d2fe4597139c54e23b61d,
+        type: 3}
+      propertyPath: ColorModule.gradient.maxGradient.key1.g
+      value: 0.78039217
+      objectReference: {fileID: 0}
+    - target: {fileID: 6839049006060168355, guid: 250f0bc5d73d2fe4597139c54e23b61d,
+        type: 3}
+      propertyPath: ColorModule.gradient.maxGradient.key1.r
+      value: 0.1557685
+      objectReference: {fileID: 0}
+    - target: {fileID: 6839049006060168355, guid: 250f0bc5d73d2fe4597139c54e23b61d,
+        type: 3}
+      propertyPath: ColorModule.gradient.maxGradient.key2.b
+      value: 0.002957239
+      objectReference: {fileID: 0}
+    - target: {fileID: 6839049006060168355, guid: 250f0bc5d73d2fe4597139c54e23b61d,
+        type: 3}
+      propertyPath: ColorModule.gradient.maxGradient.key2.g
+      value: 0.381132
+      objectReference: {fileID: 0}
+    - target: {fileID: 6839049006060168355, guid: 250f0bc5d73d2fe4597139c54e23b61d,
+        type: 3}
+      propertyPath: ColorModule.gradient.maxGradient.key3.b
+      value: 0.13207549
+      objectReference: {fileID: 0}
+    - target: {fileID: 6839049006060168355, guid: 250f0bc5d73d2fe4597139c54e23b61d,
+        type: 3}
+      propertyPath: ColorModule.gradient.maxGradient.key3.g
+      value: 0.13207549
+      objectReference: {fileID: 0}
+    - target: {fileID: 6839049006060168355, guid: 250f0bc5d73d2fe4597139c54e23b61d,
+        type: 3}
+      propertyPath: ColorModule.gradient.maxGradient.key3.r
+      value: 0.13207549
+      objectReference: {fileID: 0}
+    - target: {fileID: 6839049006060168355, guid: 250f0bc5d73d2fe4597139c54e23b61d,
+        type: 3}
+      propertyPath: ColorModule.gradient.maxGradient.m_NumColorKeys
+      value: 4
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 250f0bc5d73d2fe4597139c54e23b61d, type: 3}

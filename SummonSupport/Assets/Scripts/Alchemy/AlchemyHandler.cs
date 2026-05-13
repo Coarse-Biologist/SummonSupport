@@ -20,11 +20,27 @@ public class AlchemyHandler : MonoBehaviour
     [field: SerializeField] public float RecycleExchangeRate { get; private set; } = .05f;
     [field: SerializeField] public float KnowledgeGainRate { get; private set; } = 1f;
     [field: SerializeField] public float HealthScalar { get; private set; } = 2f;
+    [field: SerializeField] public static int ElementThreshhold { get; private set; } = 50;
+
 
     [field: SerializeField] public int SizeScalar { get; private set; } = 20;
     [SerializeField] public List<LivingBeing> activeMinions = new List<LivingBeing>();
     public static AlchemyHandler Instance { get; private set; }
-    public static Dictionary<AlchemyLoot, int> AlchemyLootValueDict = new();
+    public static Dictionary<AlchemyLoot, int> AlchemyLootValueDict = new()
+    {
+        { AlchemyLoot.WretchedOrgans, 5 },
+        { AlchemyLoot.FunctionalOrgans, 10 },
+        { AlchemyLoot.HulkingOrgans, 20 },
+        { AlchemyLoot.WeakCore, 5 },
+        { AlchemyLoot.SolidCore, 10 },
+        { AlchemyLoot.PowerfulCore, 20 },
+        { AlchemyLoot.HulkingCore, 30 },
+        { AlchemyLoot.FaintEther, 10 },
+        { AlchemyLoot.PureEther, 30 },
+        { AlchemyLoot.IntenseEther, 50 }
+    };
+
+
     [field: SerializeField] public Transform SpawnLocation { get; private set; }
 
 
@@ -38,39 +54,25 @@ public class AlchemyHandler : MonoBehaviour
             return;
         }
         Instance = this;
-        InitiateAlchemyLootDict();
     }
-    private void InitiateAlchemyLootDict()
-    {
-        if (AlchemyLootValueDict.TryGetValue(AlchemyLoot.WretchedOrgans, out int num)) return;
-        AlchemyLootValueDict.Add(AlchemyLoot.WretchedOrgans, 5);
-        AlchemyLootValueDict.Add(AlchemyLoot.FunctionalOrgans, 10);
-        AlchemyLootValueDict.Add(AlchemyLoot.HulkingOrgans, 20);
-        AlchemyLootValueDict.Add(AlchemyLoot.WeakCore, 5);
-        AlchemyLootValueDict.Add(AlchemyLoot.SolidCore, 10);
-        AlchemyLootValueDict.Add(AlchemyLoot.PowerfulCore, 20);
-        AlchemyLootValueDict.Add(AlchemyLoot.HulkingCore, 30);
-        AlchemyLootValueDict.Add(AlchemyLoot.FaintEther, 10);
-        AlchemyLootValueDict.Add(AlchemyLoot.PureEther, 30);
-        AlchemyLootValueDict.Add(AlchemyLoot.IntenseEther, 50);
-    }
+
 
     #region Crafting Minion
 
-    public string HandleCraftingResults(Dictionary<AlchemyLoot, int> combinedIngredients, List<Element> elementList)
+    public string HandleCraftingResults(Dictionary<CraftingPotential, int> combinedPotential, List<Element> elementList)
     {
         string craftingResults = "";
-        if (elementList.Count() == 0)
-        {
-            combinedIngredients = combinedIngredients
-            .Where(g => !g.ToString()
-            .Contains("Ether"))
-            .ToDictionary(g => g.Key, g => g.Value);
-        }
+        //if (elementList.Count() == 0)
+        //{
+        //    combinedPotential = combinedPotential
+        //    .Where(g => !g.ToString()
+        //    .Contains("Ether"))
+        //    .ToDictionary(g => g.Key, g => g.Value);
+        //}
 
-        AlchemyInventory.ExpendIngredients(combinedIngredients);
+        AlchemyInventory.ExpendCraftingPotential(combinedPotential);
 
-        if (combinedIngredients.Keys.Count > 0)
+        if (combinedPotential.Keys.Count > 0)
         {
             if (minionPrefab != null)
             {
@@ -78,15 +80,49 @@ public class AlchemyHandler : MonoBehaviour
                 if (SpawnLocation != null) spawnPos = SpawnLocation.position;
                 craftedMinion = Instantiate(minionPrefab, spawnPos, Quaternion.identity);
 
-                craftingResults += UpgradeMinion(craftedMinion.GetComponent<LivingBeing>(), combinedIngredients, elementList);
+                craftingResults += UpgradeMinion(craftedMinion.GetComponent<LivingBeing>(), combinedPotential, elementList);
                 AddActiveMinion(craftedMinion);
-                //Debug.Log("Add ACtive minion");
-                int knowledgeGain = GainKnowledge(elementList, combinedIngredients);
+
+
+                int knowledgeGain = AlchemyInventory.GainKnowledge(elementList, combinedPotential);
+
+                EventDeclarer.RepeatableQuestCompleted?.Invoke(Quest.RepeatableAccomplishments.KnowledgeGained, knowledgeGain);
+
                 craftingResults += $"You have gained {knowledgeGain} alchemic knowledge.\n";
                 //Logging.Info($"You have just gained a total of {knowledgeGain} knowledge from alchemic work.");
             }
             else Logging.Error("Crafted Minion is null, was he loaded promtly or correctly?");
         }
+        return craftingResults;
+    }
+    public string HandleCraftingResultsCP(Dictionary<CraftingPotential, int> combinedCraftingPotential, List<Element> elementList)
+    {
+        string craftingResults = "";
+
+
+        //AlchemyInventory.ExpendIngredients(combinedIngredients);
+        //#TODO
+
+        if (minionPrefab != null)
+        {
+            Vector3 spawnPos = PlayerStats.Instance.transform.position;
+            if (SpawnLocation != null) spawnPos = SpawnLocation.position;
+            craftedMinion = Instantiate(minionPrefab, spawnPos, Quaternion.identity);
+
+            //craftingResults += UpgradeMinion(craftedMinion.GetComponent<LivingBeing>(), combinedCraftingPotential, elementList);
+            //#TODO
+
+            AddActiveMinion(craftedMinion);
+            //Debug.Log("Add ACtive minion");
+            //#TODO
+
+            //int knowledgeGain = GainKnowledge(elementList, combinedCraftingPotential);
+            //#TODO
+            //craftingResults += $"You have gained {knowledgeGain} alchemic knowledge.\n";
+            //Logging.Info($"You have just gained a total of {knowledgeGain} knowledge from alchemic work.");
+        }
+        else Logging.Error("Crafted Minion is null, was he loaded promtly or correctly?");
+
         return craftingResults;
     }
 
@@ -95,14 +131,15 @@ public class AlchemyHandler : MonoBehaviour
         if (minion == null) throw new SystemException("Minionstats is null when trying to recycle a minion");
         EventDeclarer.minionRecycled?.Invoke(minion.gameObject);
 
+        //#TODO examine closely and maybe make this all better
 
         float minionPower = minion.MaxHP - 100f;
         float minionHP = minion.MaxHP - 100f;
         float minionAffinity = GetCombinedElementValues(minion);
 
-        AlchemyInventory.AlterIngredientNum(AlchemyLoot.WeakCore, (int)(minionPower * Instance.RecycleExchangeRate)); //This should all scale in a more satosfying way
-        AlchemyInventory.AlterIngredientNum(AlchemyLoot.FaintEther, (int)(minionAffinity * Instance.RecycleExchangeRate));
-        AlchemyInventory.AlterIngredientNum(AlchemyLoot.WretchedOrgans, (int)(minionHP * Instance.RecycleExchangeRate));
+        AlchemyInventory.AlterCraftingPotential(CraftingPotential.CorePower, (int)(minionPower * Instance.RecycleExchangeRate)); //This should all scale in a more satosfying way
+        AlchemyInventory.AlterCraftingPotential(CraftingPotential.EtherDensity, (int)(minionAffinity * Instance.RecycleExchangeRate));
+        AlchemyInventory.AlterCraftingPotential(CraftingPotential.OrganMass, (int)(minionHP * Instance.RecycleExchangeRate));
 
         EventDeclarer.minionDied?.Invoke(minion.gameObject);
         CommandMinion.RemoveActiveMinions(minion);
@@ -119,16 +156,15 @@ public class AlchemyHandler : MonoBehaviour
         }
         return combinedAffinity;
     }
-    private int HandleOrganUse(LivingBeing stats, KeyValuePair<AlchemyLoot, int> organKvp)
+    private int HandleOrganUse(LivingBeing stats, int value)
     {
         int healthUpgrade = 0;
-        if (AlchemyLootValueDict.TryGetValue(organKvp.Key, out int num))
-        {
-            EventDeclarer.RepeatableQuestCompleted?.Invoke(Quest.RepeatableAccomplishments.OrgansUsed, num);
-            stats.ChangeAttribute(AttributeType.MaxHitpoints, num * organKvp.Value);
-            healthUpgrade += (int)(num * organKvp.Value * HealthScalar);
-            AlterSizeByOrganNum(stats, num * organKvp.Value);
-        }
+
+        EventDeclarer.RepeatableQuestCompleted?.Invoke(Quest.RepeatableAccomplishments.OrganMassUsed, value); //#TODO this has to be where the organs are converted to organ mass crafting potential
+        stats.ChangeAttribute(AttributeType.MaxHitpoints, value);
+        healthUpgrade += (int)(value * HealthScalar);
+        AlterSizeByOrganNum(stats, value);
+
         return healthUpgrade;
     }
     private void AlterSizeByOrganNum(LivingBeing stats, int organValue)
@@ -140,53 +176,48 @@ public class AlchemyHandler : MonoBehaviour
             stats.gameObject.transform.localScale *= organValue / SizeScalar;
         }
     }
-    private int HandleCoreUse(LivingBeing stats, KeyValuePair<AlchemyLoot, int> coreKvp)
+    private int HandleCoreUse(LivingBeing stats, int value)
     {
 
         int powerUpgrade = 0;
 
-        if (AlchemyLootValueDict.TryGetValue(coreKvp.Key, out int num))
-        {
-            EventDeclarer.RepeatableQuestCompleted?.Invoke(Quest.RepeatableAccomplishments.CoresUsed, num);
+        EventDeclarer.RepeatableQuestCompleted?.Invoke(Quest.RepeatableAccomplishments.CorePowerUsed, value); //#TODO this should be elswehere
 
-            stats.ChangeAttribute(AttributeType.MaxPower, num * coreKvp.Value);
-            powerUpgrade += num * coreKvp.Value;
-        }
-        else Debug.Log($"Core = {coreKvp.Key}");
+        stats.ChangeAttribute(AttributeType.MaxPower, value);
+        powerUpgrade += value;
+
         return powerUpgrade;
     }
-    private int HandleEtherUse(LivingBeing stats, KeyValuePair<AlchemyLoot, int> etherKvp, List<Element> elementList)
+    private int HandleEtherUse(LivingBeing stats, int value, List<Element> elementList)
     {
         if (elementList.Count() == 0) return 0;
-        Debug.Log($"ether type : {etherKvp.Key}. Amount : {etherKvp.Value}");
-        int elementUpgrade = 0;
-        if (AlchemyLootValueDict.TryGetValue(etherKvp.Key, out int num))
-        {
-            EventDeclarer.RepeatableQuestCompleted?.Invoke(Quest.RepeatableAccomplishments.EtherUsed, num);
 
-            foreach (Element element in elementList)
-            {
-                stats.ChangeAffinity(element, num * etherKvp.Value / elementList.Count);
-                elementUpgrade += num * etherKvp.Value;
-            }
+        int elementUpgrade = 0;
+
+        EventDeclarer.RepeatableQuestCompleted?.Invoke(Quest.RepeatableAccomplishments.EtherDensityUsed, value); // #TODO this ought be elswhere
+
+        foreach (Element element in elementList)
+        {
+            stats.ChangeAffinity(element, value / elementList.Count);
+            elementUpgrade += value;
         }
 
         return elementUpgrade;
     }
 
-    public string UpgradeMinion(LivingBeing minion, Dictionary<AlchemyLoot, int> ingredients, List<Element> elementList)
+    public string UpgradeMinion(LivingBeing minion, Dictionary<CraftingPotential, int> potentialUsed, List<Element> elementList)
     {
         string upgradeResults = "";
         MinionStats stats = minion.GetComponent<MinionStats>();
         int healthUpgrade = 0;
         int powerUpgrade = 0;
         int elementUpgrade = 0;
-        foreach (KeyValuePair<AlchemyLoot, int> kvp in ingredients)
-        {
-            if (kvp.Key.ToString().Contains("Organs")) healthUpgrade += HandleOrganUse(minion, kvp);
-            if (kvp.Key.ToString().Contains("Core")) powerUpgrade += HandleCoreUse(stats, kvp);
-            if (kvp.Key.ToString().Contains("Ether")) elementUpgrade += HandleEtherUse(stats, kvp, elementList);
-        }
+
+        healthUpgrade += HandleOrganUse(minion, potentialUsed[CraftingPotential.OrganMass]);
+        powerUpgrade += HandleCoreUse(stats, potentialUsed[CraftingPotential.CorePower]);
+
+        elementUpgrade += HandleEtherUse(stats, potentialUsed[CraftingPotential.EtherDensity], elementList);
+
         upgradeResults += $"Health upgraded by {healthUpgrade} \n";
         upgradeResults += $"Power upgraded by {powerUpgrade} \n";
         upgradeResults += $"Elemental affinity upgraded by {elementUpgrade} \n";
@@ -244,7 +275,7 @@ public class AlchemyHandler : MonoBehaviour
         Element strongestElement = stats.GetHighestAffinity(out float value);
         string nameModifier;
         Debug.Log($"Strongest Element : {strongestElement}, Value : {value}");
-        if (strongestElement != Element.None && stats.GetAffinity(strongestElement) > 50)
+        if (strongestElement != Element.None && stats.GetAffinity(strongestElement) > ElementThreshhold)
         {
             Debug.Log($"changing color by {strongestElement} affinity for {stats.Name}");
             ColorChanger.ChangeAllMatsByAffinity(stats);
@@ -272,23 +303,7 @@ public class AlchemyHandler : MonoBehaviour
     #endregion
 
 
-    private int GainKnowledge(List<Element> elementsList, Dictionary<AlchemyLoot, int> combinedIngredients)
-    {
-        int total = 0;
-        foreach (KeyValuePair<AlchemyLoot, int> kvp in combinedIngredients)
-        {
-            int strengthAndAmount = AlchemyInventory.ingredientValues[kvp.Key] * kvp.Value; //multiply ingredient value by num used
-            strengthAndAmount += AlchemyInventory.KnownTools.Count;
-            total += strengthAndAmount;
-            foreach (Element element in elementsList)
-            {
-                AlchemyInventory.IncemementElementalKnowledge(element, strengthAndAmount);
-            }
-        }
-        EventDeclarer.RepeatableQuestCompleted?.Invoke(Quest.RepeatableAccomplishments.KnowledgeGained, total);
 
-        return total;
-    }
 
     #region Load Prefab
     public void LoadMinionPrefab(string address)

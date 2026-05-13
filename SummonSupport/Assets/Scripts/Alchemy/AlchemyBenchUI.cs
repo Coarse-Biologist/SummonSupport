@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using SummonSupportEvents;
 using static StatusEffectsLibrary;
+using Unity.Entities.UniversalDelegates;
 //using UnityEditorInternal.Profiling.Memory.Experimental.FileFormat;
 
 
@@ -52,7 +53,14 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     #endregion
 
     #region Runtime Variables
-    private Dictionary<AlchemyLoot, int> selectedIngredients = new Dictionary<AlchemyLoot, int>();
+    private Dictionary<CraftingPotential, int> selectedCraftingPotential = new()
+    {
+        {CraftingPotential.OrganMass, 0 },
+        {CraftingPotential.CorePower, 0 },
+        {CraftingPotential.EtherDensity, 0 },
+    };
+
+    //private Dictionary<AlchemyLoot, int> selectedIngredients = new();
     private List<Element> selectedElements = new List<Element>();
     private LivingBeing minionToUpgrade;
     private LivingBeing minionToRecycle;
@@ -132,14 +140,12 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
 
     public void ShowInteractionOption()
     {
-        //Debug.Log($"position of {this} = {transform.position}");
         FloatingInfoHandler.Instance.ShowInteractionOption(new Vector3(transform.position.x, transform.position.y + 2, transform.position.z), "Z to use alchemy bench");
     }
 
     public void HideInteractionOption()
     {
         FloatingInfoHandler.Instance.HideInteractionOption();
-
     }
 
     #endregion
@@ -147,7 +153,6 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     #region Begin and end workbench use
     private void TogglePlayerUsingUI(bool isUsing, AnimationControllerScript anim = null)
     {
-
         if (isUsing)
         {
             PauseGameHandler.PauseTime();
@@ -155,7 +160,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
             {
                 anim.SetUpdateMode(AnimatorUpdateMode.UnscaledTime);
                 //Debug.Log("Changing animation? but probably time scale is 0");
-                anim.ChangeAnimation("Crafting"); // #TODO change to crafting animation
+                anim.ChangeAnimation("Crafting");
             }
             else Debug.Log("No animation script found");
         }
@@ -169,7 +174,6 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
                 anim.gameObject.transform.rotation = Quaternion.Euler(0, Camera.main.transform.rotation.eulerAngles.y, 0);
             }
         }
-
     }
     private void UseAlchemyObjectInteraction(bool On)
     {
@@ -349,36 +353,34 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     #region Show Info in instructions panel
     private void ShowUpgradeInfo()
     {
-        if (selectedIngredients.Keys.Count == 0)
-            instructions.text = "Which Minion would you like to upgrade?";
-        else
-        {
-            string ingredientInfo = "Selected Ingredients: ";
+        instructions.text = "Which Minion would you like to upgrade?";
+        string ingredientInfo = "Allocated Crating Potential: ";
 
-            foreach (KeyValuePair<AlchemyLoot, int> kvp in selectedIngredients)
-            {
+        foreach (KeyValuePair<CraftingPotential, int> kvp in selectedCraftingPotential)
+        {
+            if (kvp.Value > 0)
                 ingredientInfo += $"{kvp.Key}: {kvp.Value}. ";
-            }
-            instructions.text = ingredientInfo;
         }
+        instructions.text += ingredientInfo;
+
     }
 
 
     private void ShowCraftingInfo()
     {
-        if (selectedIngredients.Keys.Count == 0)
-            instructions.text = "Combine Cores, Ether and Body Parts to make minons of selected Elemental Affinity.";
-        else
-        {
-            string ingredientInfo = "Selected Ingredients: ";
+        string craftingInfo = "";
+        instructions.text = "Combine Cores, Ether and Body Parts to make minons of selected Elemental Affinity.";
+        if (!CheckUsingCoresandOrgans()) instructions.text += $"\nYou must use cores and organs in order to craft a minion.";
 
-            foreach (KeyValuePair<AlchemyLoot, int> kvp in selectedIngredients)
-            {
-                ingredientInfo += $"{AlchemyInventory.GetAlchemyLootString(kvp.Key)}: {kvp.Value}. ";
-            }
-            instructions.text = ingredientInfo;
+        craftingInfo += "\nSelected Ingredients: ";
+
+        foreach (KeyValuePair<CraftingPotential, int> kvp in selectedCraftingPotential)
+        {
+            if (kvp.Value > 0)
+                craftingInfo += $"{AlchemyInventory.GetCraftingPotentialString()}: {kvp.Value}. ";
         }
-        if (!CheckUsingCoresandOrgans()) instructions.text += $" You must use cores and organs in order to craft a minion.";
+        instructions.text += craftingInfo;
+
 
     }
 
@@ -401,8 +403,8 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     private void HandleUpgradeMinion(LivingBeing minionToUpgrade)
     {
         if (minionToUpgrade == null) return;
-        alchemyHandler.UpgradeMinion(minionToUpgrade, selectedIngredients, selectedElements);
-        AlchemyInventory.ExpendIngredients(selectedIngredients);
+        alchemyHandler.UpgradeMinion(minionToUpgrade, selectedCraftingPotential, selectedElements);
+        AlchemyInventory.ExpendCraftingPotential(selectedCraftingPotential);
         ClearCraftingSelection();
         HandleUpgradeDisplay();
     }
@@ -418,7 +420,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     {
         minionToUpgrade = minion;
         instructions.text = $"Select ingredients and element with which to upgrade {minion.Name}.";
-        SpawnIngredientButtons();
+        SpawnCraftingPotentialButtons();
         ShowElementToggles(bottomRightPanel);
     }
     #endregion
@@ -473,8 +475,8 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
             Button button = AddButtonToPanel(GeneralFunctions.GetCleanEnumString(modableAttribute), bottomRightPanel, 40, 10);
             button.RegisterCallback<ClickEvent>(e => SetSelectedModAttribute(modableAttribute));
         }
-        Button statuseffectButton = AddButtonToPanel(GeneralFunctions.GetCleanEnumString(AbilityModTypes.StatusEffect), bottomRightPanel, 40, 10);
-        statuseffectButton.RegisterCallback<ClickEvent>(e => ShowStatusEffectOptionScreen());
+        Button statusEffectButton = AddButtonToPanel(GeneralFunctions.GetCleanEnumString(AbilityModTypes.StatusEffect), bottomRightPanel, 40, 10);
+        statusEffectButton.RegisterCallback<ClickEvent>(e => ShowStatusEffectOptionScreen());
 
     }
     private void ShowStatusEffectOptionScreen()
@@ -494,8 +496,9 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
         {
             selectedStatusEffect = AbilityLibrary.GetStatusEffects(selectedAbility.ElementTypes[0], status);
             //Debug.Log($"Selected status effect is being set to {selectedStatusEffect} for ability self");
+            SetInstructionsText($"The {GeneralFunctions.GetCleanEnumString(modType)} of {selectedAbility.Name} can be improved for {AbilityModHandler.GetModCost(modType)} core power. You currently have {AlchemyInventory.AvailableCraftingPotential[CraftingPotential.CorePower]}");
+
         }
-        SetInstructionsText($"The {GeneralFunctions.GetCleanEnumString(modType)} of {selectedAbility.Name} can be improved for {AbilityModHandler.GetModCost(modType)} core power. You currently have {AlchemyInventory.GetCorePowerResource(AlchemyInventory.ingredients)}");
 
     }
 
@@ -508,21 +511,23 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
 
         if (selectedModType != AbilityModTypes.None)
         {
-            var boughtPrice = AlchemyInventory.BuyCraftingPowerWithCores(AbilityModHandler.GetModCost(selectedModType));
-            if (boughtPrice.bought)
+            int price = AbilityModHandler.GetModCost(selectedModType);
+
+            if (AlchemyInventory.AvailableCraftingPotential[CraftingPotential.CorePower] >= price)
             {
+                AlchemyInventory.ExpendCraftingPotential(CraftingPotential.CorePower, price);
                 ModHandler.ModAttributeByType(selectedAbility, selectedModType, AbilityModHandler.GetModIncrementValue(selectedModType));
                 if (selectedStatusEffect != null) ModHandler.AddStatusEffectToAbility(selectedAbility, selectedStatusEffect);
-                SetInstructionsText($"You have modified the {GeneralFunctions.GetCleanEnumString(selectedModType)} of {selectedAbility.Name} by {AbilityModHandler.GetModIncrementValue(selectedModType)} at the cost of {boughtPrice.price} core power.");
+                SetInstructionsText($"You have modified the {GeneralFunctions.GetCleanEnumString(selectedModType)} of {selectedAbility.Name} by {AbilityModHandler.GetModIncrementValue(selectedModType)} at the cost of {price} core power.");
             }
         }
         else if (selectedStatusEffect != null)
         {
-            var boughtPrice = AlchemyInventory.BuyCraftingPowerWithCores(AbilityModHandler.GetModCost(AbilityModTypes.StatusEffect));
-            if (boughtPrice.bought)
+            int thePrice = AbilityModHandler.GetModCost(AbilityModTypes.StatusEffect);
+            if (AlchemyInventory.AvailableCraftingPotential[CraftingPotential.CorePower] >= AbilityModHandler.GetModCost(AbilityModTypes.StatusEffect))
             {
                 ModHandler.AddStatusEffectToAbility(selectedAbility, selectedStatusEffect);
-                SetInstructionsText($"You have modified the {GeneralFunctions.GetCleanEnumString(selectedModType)} of {selectedAbility.Name} by {AbilityModHandler.GetModIncrementValue(selectedModType)} at the cost of {boughtPrice.price} core power.");
+                SetInstructionsText($"You have modified the {GeneralFunctions.GetCleanEnumString(selectedModType)} of {selectedAbility.Name} by {AbilityModHandler.GetModIncrementValue(selectedModType)} at the cost of {thePrice} core power.");
             }
         }
     }
@@ -532,18 +537,14 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     #region Crafting
     private bool CheckUsingCoresandOrgans()
     {
-        string ingredients = "";
-        foreach (var loot in selectedIngredients.Keys)
-            ingredients += loot.ToString();
-        if (ingredients.Contains("Core") && ingredients.Contains("Organs")) return true;
-        else return false;
+        return selectedCraftingPotential[CraftingPotential.OrganMass] > 0 && selectedCraftingPotential[CraftingPotential.CorePower] > 0;
     }
 
     private void Craft()
     {
         if (CheckUsingCoresandOrgans())
         {
-            SetInstructionsText(alchemyHandler.HandleCraftingResults(selectedIngredients, selectedElements));
+            SetInstructionsText(alchemyHandler.HandleCraftingResults(selectedCraftingPotential, selectedElements));
             ClearCraftingSelection();
             //ShowCraftingOptions();
         }
@@ -560,33 +561,59 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
         else
         {
             ShowCraftingInfo();
-            SpawnIngredientButtons();
+            SpawnCraftingPotentialButtons();
+            //SpawnIngredientButtons();
             ShowElementToggles(bottomRightPanel);
             Button confirmButton = AddButtonToPanel("Confirm", topRightPanel, 50, 5);
 
             Button clearButton = AddButtonToPanel("Clear Selection", topRightPanel, 50, 5);
             clearButton.RegisterCallback<ClickEvent>(e => ClearCraftingSelection());
             clearButton.RegisterCallback<ClickEvent>(e => ShowCraftingInfo());
-            clearButton.RegisterCallback<ClickEvent>(e => SpawnIngredientButtons());
+            clearButton.RegisterCallback<ClickEvent>(e => SpawnCraftingPotentialButtons());
 
             confirmButton.RegisterCallback<ClickEvent>(e => Craft());
             //confirmButton.RegisterCallback<ClickEvent>(e => ShowCraftingInfo());
         }
     }
-    private void SpawnIngredientButtons()
+    #region Work In Progress with crafting potential
+    private void SpawnCraftingPotentialButtons() // #TODO // make this flow with the other stuff
     {
         bottomLeftPanel.Clear();
-        foreach (KeyValuePair<AlchemyLoot, int> kvp in AlchemyInventory.ingredients)
+        if (AlchemyInventory.AvailableCraftingPotential == null) throw new Exception("Crafting potential dict has not been initialized.");
+
+        foreach (KeyValuePair<CraftingPotential, int> kvp in AlchemyInventory.AvailableCraftingPotential)
         {
-            if (kvp.Value != 0)
-            {
-                Button ingredientButton = AddButtonToPanel($"{AlchemyInventory.GetAlchemyLootString(kvp.Key)} : {kvp.Value}", bottomLeftPanel, 40, 5);
-                ingredientButton.RegisterCallback<ClickEvent>(e => AddIngredientToSelection(kvp.Key));
-                ingredientButton.RegisterCallback<ClickEvent>(e => ShowCraftingInfo());
-                ingredientButton.RegisterCallback<ClickEvent>(e => DecrementIngredientButton(ingredientButton));
-            }
+            Button craftingPotentialButton = AddButtonToPanel($"{GeneralFunctions.GetCleanEnumString(kvp.Key)} : {kvp.Value}", bottomLeftPanel, 40, 5);
+            craftingPotentialButton.RegisterCallback<ClickEvent>(e => UpdateSelectedCraftingPotentialInfo(craftingPotentialButton, kvp.Key));
+            //craftingPotentialButton.RegisterCallback<ClickEvent>(e => OnCraftingPotentialAdded(craftingPotentialButton, kvp.Key));
+
         }
     }
+    private void UpdateSelectedCraftingPotentialInfo(Button button, CraftingPotential potential)
+    {
+        if (selectedCraftingPotential[potential] + 10 > AlchemyInventory.AvailableCraftingPotential[potential]) return; // do nothing if adding 10 would be more than is available
+
+        selectedCraftingPotential[potential] += 10;
+
+        int newAvailableCP = AlchemyInventory.AvailableCraftingPotential[potential] - selectedCraftingPotential[potential]; // calc new available
+        AlterButtonText(button, $"{GeneralFunctions.GetCleanEnumString(potential)} : {newAvailableCP}"); //display new available
+
+        string craftinPotentialInfo = "Currently selected crafting potential:";
+        foreach (KeyValuePair<CraftingPotential, int> kvp in selectedCraftingPotential)
+        {
+            craftinPotentialInfo += $"{GeneralFunctions.GetCleanEnumString(kvp.Key)} : {kvp.Value}\n";
+        }
+
+        SetInstructionsText(craftinPotentialInfo);
+    }
+
+    private void AlterButtonText(Button button, string newString)
+    {
+        button.text = newString;
+    }
+    #endregion
+
+
 
     private void DecrementIngredientButton(Button ingredientButton)
     {
@@ -627,22 +654,18 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     private void ClearCraftingSelection()
     {
         selectedElements = new List<Element>();
-        selectedIngredients = new Dictionary<AlchemyLoot, int>();
+        selectedCraftingPotential[CraftingPotential.OrganMass] = 0;
+        selectedCraftingPotential[CraftingPotential.CorePower] = 0;
+        selectedCraftingPotential[CraftingPotential.EtherDensity] = 0;
+
+
     }
     private void ToggleSelectedElement(Element element)
     {
         if (!selectedElements.Contains(element)) selectedElements.Add(element);
         else selectedElements.Remove(element);
     }
-    private void AddIngredientToSelection(AlchemyLoot ingredient)
-    {
-        if (selectedIngredients.TryGetValue(ingredient, out int amountSelected)) // if the key exists
-        {
-            if (amountSelected < AlchemyInventory.ingredients[ingredient]) //if not already equal or more have been selected
-                selectedIngredients[ingredient]++;
-        }
-        else selectedIngredients.Add(ingredient, 1);
-    }
+
 
     #endregion
 
@@ -702,10 +725,12 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     {
         if (selectedAbility == null) return;
 
-        var boughtPrice = AlchemyInventory.BuyCraftingPowerWithCores(Ability.GetCoreCraftingCost(selectedAbility));
-        if (boughtPrice.bought)
+        int price = Ability.GetCoreCraftingCost(selectedAbility);
+        if (AlchemyInventory.AvailableCraftingPotential[CraftingPotential.CorePower] >= price)
         {
-            SetInstructionsText($"You have concocted the ability {selectedAbility.name} with {boughtPrice.price} core power!");
+            AlchemyInventory.ExpendCraftingPotential(CraftingPotential.CorePower, price);
+
+            SetInstructionsText($"You have concocted the ability {selectedAbility.name} with {price} core power!");
             EventDeclarer.PlayerLearnedAbility?.Invoke(selectedAbility);
         }
         else SetInstructionsText($"You do not have sufficient core resources to concoct {selectedAbility.name}.");
@@ -786,9 +811,9 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
             instructions.text = "Select an ability which you would like to concoct.";
         else if (selectedAbility != null)
         {
-            instructions.text = $"Confirm to concoct {selectedAbility.Name} for {Ability.GetCoreCraftingCost(selectedAbility)} core power.";
+            instructions.text = $"{selectedAbility.DisplayAbilityInfo()} \n Confirm to concoct {selectedAbility.Name} for {Ability.GetCoreCraftingCost(selectedAbility)} core power.";
         }
-        instructions.text += $" You have a total of {AlchemyInventory.GetCorePowerResource(AlchemyInventory.ingredients)} core power.";
+        instructions.text += $" You have a total of {AlchemyInventory.GetCraftingPotential(CraftingPotential.CorePower)} core power.";
 
     }
 
@@ -847,9 +872,12 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
         if (playerAbilityHandler != null)
             foreach (Ability ability in playerAbilityHandler.Abilities) //null reference 
             {
-                Button abilityButton = AddButtonToPanel($"{ability.Name}", bottomLeftPanel, 50, 5);
-                abilityButton.RegisterCallback<ClickEvent>(e => SetSelectedAbility(ability));
-                abilityButton.RegisterCallback<ClickEvent>(e => SetAbilitySlottingInstructions(ability));
+                if (ability != null)
+                {
+                    Button abilityButton = AddButtonToPanel($"{ability.Name}", bottomLeftPanel, 50, 5);
+                    abilityButton.RegisterCallback<ClickEvent>(e => SetSelectedAbility(ability));
+                    abilityButton.RegisterCallback<ClickEvent>(e => SetAbilitySlottingInstructions(ability));
+                }
 
             }
         else throw new Exception("The players ability handler variable has not been set properly in the alchmey UI bench, or it does not exist");
@@ -894,10 +922,16 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     {
         SetSelectedAbility(null);
         selectedElements.Clear();
-        selectedIngredients.Clear();
         selectedModType = AbilityModTypes.None;
+        selectedCraftingPotential[CraftingPotential.OrganMass] = 0;
+        selectedCraftingPotential[CraftingPotential.CorePower] = 0;
+        selectedCraftingPotential[CraftingPotential.EtherDensity] = 0;
+
+
 
     }
+
+
 
     private void ClearAllPanels(bool andTopLeft = false)
     {

@@ -132,8 +132,8 @@ public abstract class LivingBeing : MonoBehaviour
 
     public void RestoreResources()
     {
-        CurrentHP = MaxHP;
-        CurrentPower = MaxPower;
+        SetAttribute(AttributeType.CurrentHitpoints, GetAttribute(AttributeType.MaxHitpoints));
+        SetAttribute(AttributeType.CurrentPower, GetAttribute(AttributeType.MaxPower));
     }
 
     #endregion

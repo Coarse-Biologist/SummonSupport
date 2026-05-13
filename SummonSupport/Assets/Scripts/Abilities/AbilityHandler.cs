@@ -3,6 +3,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using SummonSupportEvents;
 using System.Linq;
+using Unity.VisualScripting;
 
 public class AbilityHandler : MonoBehaviour
 {
@@ -14,7 +15,7 @@ public class AbilityHandler : MonoBehaviour
     private bool charging = false;
     public AbilityModHandler modHandler { protected set; get; }
     private AnimationControllerScript anim;
-    private LivingBeingAudioHandler audioHandler;
+    protected LivingBeingAudioHandler audioHandler;
     //private bool AbilityToggledRecently = false;
 
 
@@ -36,12 +37,15 @@ public class AbilityHandler : MonoBehaviour
             abilitiesOnCooldownCrew.Add(ability, false);
         }
     }
-    void Start()
+    protected void Start()
     {
         modHandler = AbilityModHandler.Instance;
         audioHandler = GetComponent<LivingBeingAudioHandler>();
+        statsHandler = GetComponent<LivingBeing>();
 
         if (audioHandler == null) throw new System.Exception($"Audio handler is null. it was not found on the object.");
+
+        else Debug.Log($"Audio handler found in {statsHandler.name}.");
 
     }
 
@@ -57,6 +61,7 @@ public class AbilityHandler : MonoBehaviour
 
     protected bool CastAbility(Ability ability, Vector2 targetPosition, Quaternion rotation)
     {
+        if (PauseGameHandler.paused) return false;
         if (ability is not BeamAbility beam || !toggledAbilitiesDict.TryGetValue(beam, out GameObject gameObject)) StopAllToggledAbilities();
         //when casting a beam which is already toggled on, toggle beam off. 
         bool usedAbility = HandleAbilityType(ability, targetPosition, rotation);
@@ -76,6 +81,7 @@ public class AbilityHandler : MonoBehaviour
         StartCoroutine(SetOnCooldown(ability));
         int costMod = modHandler.GetModAttributeByType(ability, AbilityModTypes.Cost);
         statsHandler?.ChangeAttribute(AttributeType.CurrentPower, -ability.Cost + costMod);
+
         return true;
     }
 
@@ -221,17 +227,19 @@ public class AbilityHandler : MonoBehaviour
             float coolDown = ability.Cooldown + modHandler.GetModAttributeByType(ability, AbilityModTypes.Cooldown) + statsHandler.SE_Handler.GetStatusEffectValue(StatusEffectType.Lethargic);
             // default, plus modifier, plus lethargy value
             abilitiesOnCooldownCrew[ability] = true;
+
             yield return new WaitForSeconds(coolDown);
         }
         finally
         {
             abilitiesOnCooldownCrew[ability] = false;
+
         }
     }
+
     protected virtual bool IsOnCoolDown(Ability ability)
     {
-        bool onCooldown = abilitiesOnCooldownCrew[ability];
-        return onCooldown;
+        return abilitiesOnCooldownCrew[ability];
     }
     public string GetKnownAbilitiesString()
     {
@@ -247,7 +255,7 @@ public class AbilityHandler : MonoBehaviour
     {
         if (ability.Sounds != null && ability.Sounds.CastSounds.Length != 0)
         {
-            //Debug.Log("trying to play cast sound");
+            Debug.Log($"{audioHandler} = audio handler. does it exist? trying to play cast sound");
             audioHandler.PlayAbilityCastSound(ability);
         }
     }

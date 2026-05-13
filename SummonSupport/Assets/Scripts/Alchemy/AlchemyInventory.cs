@@ -1,27 +1,58 @@
-using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Globalization;
 using System.Linq;
+using Quest;
+using SummonSupportEvents;
+using UnityEditor;
 
 
 
 public static class AlchemyInventory
 {
+    #region crew experimentally adds Crafting potnential categories to replace the ingredients.
+    //public static Dictionary<CraftingPotential, int> CraftingPotentialDict = new()
+    //convert ingredients on looting. 
+    //alchemy inventory funcs: 
+    // convert from ingredients, 
+    // convert to knowledge, 
+    // convert cores to ability crafting potential, 
+    // convert to elemental affinity,
+    // convert to minion crafting and upgrade potential.
+    // CorePower, EtherDensity, OrganMass
+
+
+
+
+
+
+
+
+
+
+
+    #endregion
+
     #region Class variables
-    public static Dictionary<AlchemyLoot, int> ingredients { get; private set; } = new()
-        {
-            { AlchemyLoot.WretchedOrgans, 10 },
-            { AlchemyLoot.FunctionalOrgans, 10 },
-            { AlchemyLoot.HulkingOrgans, 10 },
-            { AlchemyLoot.WeakCore, 10 },
-            { AlchemyLoot.SolidCore, 10 },
-            { AlchemyLoot.PowerfulCore, 10 },
-            { AlchemyLoot.HulkingCore, 10 },
-            { AlchemyLoot.FaintEther, 10 },
-            { AlchemyLoot.PureEther, 10 },
-            { AlchemyLoot.IntenseEther,101 }
-            };
+    public static Dictionary<CraftingPotential, int> AvailableCraftingPotential { get; private set; } = new()
+    {
+        {CraftingPotential.OrganMass, 100 },
+        {CraftingPotential.CorePower, 100 },
+        {CraftingPotential.EtherDensity, 100 },
+
+    };
+    //public static Dictionary<AlchemyLoot, int> ingredients { get; private set; } = new()
+    //    {
+    //        { AlchemyLoot.WretchedOrgans, 10 },
+    //        { AlchemyLoot.FunctionalOrgans, 10 },
+    //        { AlchemyLoot.HulkingOrgans, 10 },
+    //        { AlchemyLoot.WeakCore, 10 },
+    //        { AlchemyLoot.SolidCore, 10 },
+    //        { AlchemyLoot.PowerfulCore, 10 },
+    //        { AlchemyLoot.HulkingCore, 10 },
+    //        { AlchemyLoot.FaintEther, 10 },
+    //        { AlchemyLoot.PureEther, 10 },
+    //        { AlchemyLoot.IntenseEther,101 }
+    //        };
     public static Dictionary<AlchemyLoot, int> ingredientValues { get; private set; } = new()
         {
             { AlchemyLoot.WretchedOrgans, 1 },
@@ -55,20 +86,20 @@ public static class AlchemyInventory
                 { Element.Water, 0 },
                 { Element.Earth, 0 },
                 { Element.Heat, 0 },
-                { Element.Air, 100 },
+                { Element.Air, 0 },
                 { Element.Electricity, 0 },
                 { Element.Poison, 0 },
                 { Element.Acid, 0 },
                 { Element.Bacteria, 0 },
                 { Element.Fungi, 0 },
-                { Element.Plant, 0 },
+                { Element.Plant, 100 },
                 { Element.Virus, 0 },
                 { Element.Radiation, 0 },
                 { Element.Light, 0 },
                 { Element.Psychic, 0 }
             };
 
-    public static List<AlchemyTool> KnownTools = new List<AlchemyTool>();
+    public static List<AlchemyTool> KnownTools = new();
 
     #endregion
 
@@ -86,17 +117,70 @@ public static class AlchemyInventory
         }
         else return 0;
     }
-    public static void AlterIngredientNum(AlchemyLoot newIngredient, int amount)
+    public static int GainKnowledge(List<Element> elementsList, Dictionary<CraftingPotential, int> usedPotential)
+    {
+        int total = 0;
+        foreach (KeyValuePair<CraftingPotential, int> kvp in usedPotential)
+        {
+            int strengthAndAmount = kvp.Value; //multiply ingredient value by num used
+            strengthAndAmount += KnownTools.Count;
+            total += strengthAndAmount;
+            foreach (Element element in elementsList)
+            {
+                IncemementElementalKnowledge(element, strengthAndAmount);
+            }
+        }
+
+        return total;
+    }
+    public static void ConvertIngredientsToPotential(AlchemyLoot ingredient, int numberOfIngredients = 1)
+    {
+        // #TODO i hate this conditional business
+        float modifier = KnownTools.Count() / 10;
+        modifier += 1; //number of total tools
+        RepeatableAccomplishments type = RepeatableAccomplishments.OrgansCollected;
+        if (ingredientValues.TryGetValue(ingredient, out int value))
+        {
+            value *= numberOfIngredients;
+            value *= (int)modifier;
+            if (ingredient.ToString().Contains("Organ"))
+            {
+                type = RepeatableAccomplishments.OrgansCollected;
+
+                AvailableCraftingPotential[CraftingPotential.OrganMass] += value;
+            }
+            else if (ingredient.ToString().Contains("Core"))
+            {
+                type = RepeatableAccomplishments.CoresCollected;
+
+                AvailableCraftingPotential[CraftingPotential.CorePower] += value;
+            }
+            else if (ingredient.ToString().Contains("Ether"))
+            {
+                type = RepeatableAccomplishments.EtherCollected;
+                AvailableCraftingPotential[CraftingPotential.EtherDensity] += value;
+            }
+            EventDeclarer.RepeatableQuestCompleted.Invoke(type, 1);
+        }
+    }
+
+    public static void AlterCraftingPotential(CraftingPotential potential, int amount)
     {
         //UnityEngine.Debug.Log($"Adding {amount} {newIngredient}");
-        ingredients[newIngredient] += amount;
+        AvailableCraftingPotential[potential] += amount;
     }
-    public static void ExpendIngredients(Dictionary<AlchemyLoot, int> usedIngredients)
+
+    public static void ExpendCraftingPotential(Dictionary<CraftingPotential, int> usedPotential)
     {
-        foreach (KeyValuePair<AlchemyLoot, int> kvp in usedIngredients)
+        foreach (KeyValuePair<CraftingPotential, int> kvp in usedPotential)
         {
-            if (ingredients[kvp.Key] > 0) AlterIngredientNum(kvp.Key, -kvp.Value);
+            if (AvailableCraftingPotential[kvp.Key] > 0) AlterCraftingPotential(kvp.Key, -kvp.Value);
         }
+    }
+    public static void ExpendCraftingPotential(CraftingPotential potential, int value)
+    {
+        if (AvailableCraftingPotential[potential] > value) AlterCraftingPotential(potential, value);
+        else throw new System.Exception("You are trying to spend more crafting potential than you have available.");
     }
     public static void GainTool(AlchemyTool tool)
     {
@@ -109,87 +193,32 @@ public static class AlchemyInventory
     #endregion
 
     #region Check dict values
-    public static bool GetSufficentIngredients(AlchemyLoot ingredient, int amount)
-    {
-        bool sufficient = false;
-        if (ingredients[ingredient] >= amount) sufficient = true;
 
-        return sufficient;
-    }
     #endregion
     #region Check suffient resource
 
-    public static bool HasSufficientCorePower(Ability ability, Dictionary<AlchemyLoot, int> coreKvp)
+
+
+    public static int GetCraftingPotential(CraftingPotential potentialType)
     {
-        int corePower = GetCorePowerResource(coreKvp);
-        if (Ability.GetCoreCraftingCost(ability) <= corePower)
-        {
-            ExpendIngredients(coreKvp);
-            return true;
-        }
-        else return false;
+        return AvailableCraftingPotential[potentialType];
     }
 
-    public static int GetCorePowerResource(Dictionary<AlchemyLoot, int> coreKvp)
-    {
-        int corePower = 0;
-        foreach (KeyValuePair<AlchemyLoot, int> kvp in coreKvp)
-        {
-            if (kvp.Key.ToString().Contains("Core")) corePower += AlchemyLootPowerValues[kvp.Key] * kvp.Value;
-        }
-        return corePower;
-    }
 
-    public static (bool bought, int price) BuyCraftingPowerWithCores(int requiredCraftingPower) // returns true if trade was possible/ successful - false otherwise
-    {
-        Dictionary<AlchemyLoot, int> CoreDict = ingredients.Where(g => g.ToString().Contains("Core")).ToDictionary(g => g.Key, g => g.Value);
-        int currentPotentialPower = GetCorePowerResource(CoreDict);
-        (bool sufficient, int currentExpenditure) continueTuple = new();
-        if (currentPotentialPower < requiredCraftingPower) return (false, 0);
-        else
-        {
-            continueTuple = ExpendCoresWhile(CoreDict, AlchemyLoot.WeakCore, 0, requiredCraftingPower);
-            if (!continueTuple.sufficient)
-                continueTuple = ExpendCoresWhile(CoreDict, AlchemyLoot.SolidCore, continueTuple.currentExpenditure, requiredCraftingPower);
-            if (!continueTuple.sufficient)
-                continueTuple = ExpendCoresWhile(CoreDict, AlchemyLoot.PowerfulCore, continueTuple.currentExpenditure, requiredCraftingPower);
-            if (!continueTuple.sufficient)
-                continueTuple = ExpendCoresWhile(CoreDict, AlchemyLoot.HulkingCore, continueTuple.currentExpenditure, requiredCraftingPower);
-
-        }
-        return (true, continueTuple.currentExpenditure);
-    }
-
-    private static (bool sufficient, int currentExpenditure) ExpendCoresWhile(Dictionary<AlchemyLoot, int> CoreDict, AlchemyLoot coreType, int currentlySpent, int goalNum)
-    {
-        int recursions = 0;
-        int maxRecursions = 100;
-        while (CoreDict.TryGetValue(coreType, out int num) && num > 0 && currentlySpent < goalNum)
-        {
-            CoreDict[coreType] = num - 1;
-            AlterIngredientNum(coreType, -1);
-            currentlySpent += AlchemyLootPowerValues[coreType];
-            recursions += 1;
-            if (recursions >= maxRecursions)
-            {
-                throw new System.Exception("GG Brueder, cant even make a simple chain of nested 'while loops'?");
-            }
-        }
-        return (currentlySpent >= goalNum, currentlySpent);
-    }
     #endregion
 
     public static string GetAlchemyLootString(AlchemyLoot lootString)
     {
         return System.Text.RegularExpressions.Regex.Replace(lootString.ToString(), "(?<!^)([A-Z])", " $1");
     }
-    public static string GetAlchemyInventory()
+
+    public static string GetCraftingPotentialString()
     {
         string inv = "";
-        foreach (KeyValuePair<AlchemyLoot, int> kvp in ingredients)
+        foreach (KeyValuePair<CraftingPotential, int> kvp in AvailableCraftingPotential)
         {
             if (kvp.Value != 0)
-                inv += $"{GetAlchemyLootString(kvp.Key)}: {kvp.Value}\n";
+                inv += $"{GeneralFunctions.GetCleanEnumString(kvp.Key)}: {kvp.Value}\n";
         }
         return inv;
     }

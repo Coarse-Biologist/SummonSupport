@@ -11,13 +11,10 @@ public class TurretHandler : AbilityHandler
 
 
     public List<GameObject> listTargets = new List<GameObject>();
-    public int shootTargetIndexNext;
+    public int shootTargetIndexNext = 0;
     public bool hasTarget;
 
-    void Start()
-    {
-        shootTargetIndexNext = 0;
-    }
+
 
     void OnTriggerEnter(Collider other)
     {
