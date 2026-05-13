@@ -63,6 +63,8 @@ public class PlayerAbilityHandler : AbilityHandler
         inputActions.Player.AbilityQ.performed += OnAbilityQ;
         inputActions.Player.AbilityE.performed += OnAbilityE;
         inputActions.Player.AbilityF.performed += OnAbilityF;
+        inputActions.Player.TogglePauseGame.performed += OnTogglePauseGame;
+
         inputActions.Player.UseSelectedAbility.performed += OnSelectedAbility;
         EventDeclarer.SlotChanged?.AddListener(ChangeAbilitySlot);
 
@@ -79,6 +81,7 @@ public class PlayerAbilityHandler : AbilityHandler
         inputActions.Player.AbilityQ.performed -= OnAbilityQ;
         inputActions.Player.AbilityE.performed -= OnAbilityE;
         inputActions.Player.AbilityF.performed -= OnAbilityF;
+        inputActions.Player.TogglePauseGame.performed -= OnTogglePauseGame;
         inputActions.Player.UseSelectedAbility.performed -= OnSelectedAbility;
         EventDeclarer.SlotChanged?.RemoveListener(ChangeAbilitySlot);
 
@@ -125,11 +128,14 @@ public class PlayerAbilityHandler : AbilityHandler
         if (playerStats.CurrentPower < selectedAbility.Cost) return false;
         return true;
     }
+    private void OnTogglePauseGame(InputAction.CallbackContext context)
+    {
+        //EventDeclarer.PauseGame?.Invoke();
+    }
 
     #region ability used
     public void OnAbility1(InputAction.CallbackContext context)
     {
-        Debug.Log(context.control.name);
         Ability ability = GetAbilityOfIndex(0);
 
         if (!CheckAbilityUsePossible(ability)) return;

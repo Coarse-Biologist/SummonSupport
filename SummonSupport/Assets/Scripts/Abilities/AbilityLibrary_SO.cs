@@ -1,10 +1,13 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "AbilityLibrary", menuName = "Ability/Ability Library")]
 public class AbilityLibrary_SO : ScriptableObject
 {
     [field: SerializeField] public Ability defaultAttack;
+    [field: SerializeField] public List<Ability> HealingAbilities = new(); // Only heal type abilities
+
 
     [System.Serializable]
     public struct ElementCategories
@@ -18,6 +21,11 @@ public class AbilityLibrary_SO : ScriptableObject
         public Element Element;
         public List<Ability> Abilities; // Only melee type abilities
     }
+
+
+
+
+
     public MeleeCategories[] MeleeEntries;
 
 
@@ -41,6 +49,7 @@ public class AbilityLibrary_SO : ScriptableObject
     }
 
     public PlayerAbilitiesByLevel[] abilitiesByLevelEntries;
+
     public Ability GetAbilityOfElementType(Element element)
     {
         Ability ability = null;
@@ -63,5 +72,23 @@ public class AbilityLibrary_SO : ScriptableObject
     {
         throw new System.Exception("This function does nothing but complain about being useless.");
     }
+    public Ability[] GetElementalAbilitiesBelowLevel(int level, List<Element> elements)
+    {
+        Ability[] abilities = new Ability[0];
+        foreach (ElementCategories category in ElementalEntries)
+        {
+            if (elements.Contains(category.Element))
+            {
+
+                foreach (Ability ability in category.Abilities)
+                {
+                    //Debug.Log($"Checking if {ability.Name} is craftable at level {level} with core cost {Ability.GetCoreCraftingCost(ability)}");
+                    if (Ability.GetCoreCraftingCost(ability) <= level) abilities = abilities.Append(ability).ToArray();
+                }
+            }
+        }
+        return abilities;
+    }
+
 }
 

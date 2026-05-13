@@ -3,6 +3,8 @@ using UnityEngine;
 
 public static class LevelUpHandler
 {
+
+    public static int CraftingPowerScalar { private set; get; } = 100;
     public static Dictionary<int, List<LevelRewards>> LevelRewardsDict = new()
     {
         {2, new (){LevelRewards.SkillPoint}},

@@ -258,10 +258,8 @@ public class AlchemyHandler : MonoBehaviour
 
             if (strongestElement != Element.None)
             {
-
                 meleeAbility = AbilityLibrary.GetElementalMeleeAbility(strongestElement, value);
                 Debug.Log($"Setting melee ability to {meleeAbility.Name}");
-
             }
             abilityHandler.LearnAbility(meleeAbility);
 

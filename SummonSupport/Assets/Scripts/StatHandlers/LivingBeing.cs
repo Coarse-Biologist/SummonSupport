@@ -177,6 +177,18 @@ public abstract class LivingBeing : MonoBehaviour
 
         else return element;
     }
+    public List<Element> GetHighAffinities(float min = 20)
+    {
+        List<Element> elements = new();
+
+        foreach (var elementKvp in Affinities)
+
+        {
+            if (GetAffinity(elementKvp.Key) > min)
+                elements.Add(elementKvp.Key);
+        }
+        return elements;
+    }
 
 
     #endregion

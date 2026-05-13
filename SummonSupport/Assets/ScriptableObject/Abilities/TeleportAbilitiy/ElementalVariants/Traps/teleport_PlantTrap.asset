@@ -17,7 +17,7 @@ MonoBehaviour:
     type: 3}
   <Cooldown>k__BackingField: 6
   <CostType>k__BackingField: 4
-  <Cost>k__BackingField: 30
+  <Cost>k__BackingField: 40
   <Range>k__BackingField: 20
   <Duration>k__BackingField: 0
   <AbilityTypeTag>k__BackingField: 0

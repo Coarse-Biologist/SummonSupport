@@ -775,20 +775,14 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     }
     private void SpawnCraftablePlayerAbilities()
     {
-        foreach (AbilityLibrary_SO.PlayerAbilitiesByLevel abilityLibraryEntry in AbilityLibrary.abilityLibrary.abilitiesByLevelEntries)
+        foreach (Ability ability in AbilityLibrary.abilityLibrary.GetElementalAbilitiesBelowLevel(LevelUpHandler.CraftingPowerScalar, PlayerStats.Instance.GetHighAffinities()))
         {
-            if (abilityLibraryEntry.Level <= PlayerStats.Instance.CurrentLevel)
-            {
-                foreach (Ability ability in abilityLibraryEntry.Abilities)
-                {
-                    Button abilityButton = AddButtonToPanel($"{ability.Name} : {Ability.GetCoreCraftingCost(ability)} Core Power", bottomLeftPanel, 70, 5);
-                    //Debug.Log("made it this far2");
+            Button abilityButton = AddButtonToPanel($"{ability.Name} : {Ability.GetCoreCraftingCost(ability)} Core Power", bottomLeftPanel, 70, 5);
+            //Debug.Log("made it this far2");
 
-                    abilityButton.RegisterCallback<ClickEvent>(e => SetSelectedAbility(ability));
-                    abilityButton.RegisterCallback<ClickEvent>(e => ShowAbilityCraftingInfo());
+            abilityButton.RegisterCallback<ClickEvent>(e => SetSelectedAbility(ability));
+            abilityButton.RegisterCallback<ClickEvent>(e => ShowAbilityCraftingInfo());
 
-                }
-            }
         }
     }
     private List<Element> GetListMinionElements()

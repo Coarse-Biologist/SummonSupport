@@ -1,17 +1,13 @@
 using System.Collections.Generic;
-using NUnit.Framework.Internal;
 using SummonSupportEvents;
-using Unity.VisualScripting;
-using Unity.VisualScripting.Antlr3.Runtime.Misc;
+
 using UnityEngine;
-using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 using UnityEngine.UIElements.Experimental;
 
 public class PauseGameHandler : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     public static bool paused { private set; get; } = false;
 
     private static UIDocument ui;
@@ -36,15 +32,18 @@ public class PauseGameHandler : MonoBehaviour
 
 
     private static Button QuitButton;
-    static void OnEnable()
+    void OnEnable()
     {
+        Debug.Log("Enabling pause game handler ");
         EventDeclarer.PauseGame?.AddListener(Pause);
+        EventDeclarer.UnpauseGame?.AddListener(Resume);
         EventDeclarer.PlayerDead?.AddListener(DeathPause);
         EventDeclarer.PlayerLevelUp?.AddListener(LevelUpPause);
 
     }
-    static void OnDisable()
+    void OnDisable()
     {
+        EventDeclarer.PauseGame?.RemoveListener(Pause);
         EventDeclarer.UnpauseGame?.RemoveListener(Resume);
         EventDeclarer.PlayerDead?.RemoveListener(DeathPause);
         EventDeclarer.PlayerLevelUp?.RemoveListener(LevelUpPause);
@@ -53,8 +52,10 @@ public class PauseGameHandler : MonoBehaviour
     }
 
 
-    static void Start()
+    void Start()
     {
+        Debug.Log("Enabling pause game handler ");
+
         ui = UI_DocHandler.Instance.ui;
         UIPrefabAssets = UI_DocHandler.Instance.UIPrefabAssets;
         root = ui.rootVisualElement;

@@ -17,7 +17,7 @@ MonoBehaviour:
     type: 3}
   <Cooldown>k__BackingField: 6
   <CostType>k__BackingField: 4
-  <Cost>k__BackingField: 30
+  <Cost>k__BackingField: 40
   <Range>k__BackingField: 20
   <Duration>k__BackingField: 0
   <AbilityTypeTag>k__BackingField: 1
@@ -59,7 +59,6 @@ MonoBehaviour:
   <OnHitEffect>k__BackingField: {fileID: 1847413739128325886, guid: 830db95daa93b6f4cae93aa6d4b33d0b,
     type: 3}
   <Sounds>k__BackingField: {fileID: 0}
-  <AlterParticleSystemGradient>k__BackingField: 0
   <ActivateOnUse>k__BackingField: {fileID: 0}
   <ActivateOnArrive>k__BackingField: {fileID: 11400000, guid: 519c02e614c4703498de02471c8aaf9b,
     type: 2}
