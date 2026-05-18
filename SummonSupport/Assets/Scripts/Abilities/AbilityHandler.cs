@@ -8,7 +8,7 @@ using Unity.VisualScripting;
 public class AbilityHandler : MonoBehaviour
 {
     [field: SerializeField] public GameObject abilitySpawn { private set; get; }
-    [SerializeField] protected LivingBeing statsHandler;
+    protected LivingBeing statsHandler;
     [field: SerializeField] public List<Ability> Abilities { private set; get; } = new();
     public Dictionary<Ability, bool> abilitiesOnCooldownCrew = new();
     protected Dictionary<BeamAbility, GameObject> toggledAbilitiesDict = new();
@@ -45,7 +45,7 @@ public class AbilityHandler : MonoBehaviour
 
         if (audioHandler == null) throw new System.Exception($"Audio handler is null. it was not found on the object.");
 
-        else Debug.Log($"Audio handler found in {statsHandler.name}.");
+        //else Debug.Log($"Audio handler found in {statsHandler.name}.");
 
     }
 

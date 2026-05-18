@@ -99,14 +99,14 @@ public static class AbilityLibrary
                 meleeAbility = meleeCategory.Abilities[0];
                 break;
             }
-        }   
-        
-        Debug.Log($"Returning {meleeAbility.Name} in the get Elemental Melee ability function");
+        }
+
+        //Debug.Log($"Returning {meleeAbility.Name} in the get Elemental Melee ability function");
         return meleeAbility;
     }
     public static List<Ability> GetRandomAbilities(PhysicalType physical, int number = 1)
     {
-        Debug.Log($"will be attempting to retrieve {number} abilities available for {physical}");
+        //Debug.Log($"will be attempting to retrieve {number} abilities available for {physical}");
 
         List<Ability> abilitiesList = new();
         Ability randomAbility = null;
@@ -118,23 +118,23 @@ public static class AbilityLibrary
                 if (physicalCategories.PhysicalType == physical)
                 {
                     number = Math.Min(number, physicalCategories.Abilities.Count);
-                    Debug.Log($"will be attempting to retrieve {number} abilities. {physicalCategories.Abilities.Count} are available for {physical}");
+                    //Debug.Log($"will be attempting to retrieve {number} abilities. {physicalCategories.Abilities.Count} are available for {physical}");
                     for (int i = number; i > 0; i--)
                     {
                         maxAttempts--;
                         randomAbility = physicalCategories.Abilities[UnityEngine.Random.Range(0, physicalCategories.Abilities.Count)];
                         if (!abilitiesList.Contains(randomAbility))
                         {
-                            Debug.Log($"Adding {randomAbility}");
+                            ///Debug.Log($"Adding {randomAbility}");
                             abilitiesList.Add(randomAbility);
                         }
                         if (maxAttempts == 0 || abilitiesList.Count == number)
                         {
-                            Debug.Log($"breaking because max attempts reached or because all possible abilities are added");
+                            ///Debug.Log($"breaking because max attempts reached or because all possible abilities are added");
                             break;
                         }
                     }
-                    Debug.Log("returning abilities list");
+                    //Debug.Log("returning abilities list");
                     if (abilitiesList.Count == 0) abilitiesList.Add(abilityLibrary.defaultAttack);
                     return abilitiesList;
                 }
@@ -143,8 +143,7 @@ public static class AbilityLibrary
         }
         else
         {
-            Debug.Log($"ability handler scriptable object is not placed in the Ability library.");
-            return null;
+            throw new System.Exception($"ability handler scriptable object is not placed in the Ability library.");
         }
     }
 

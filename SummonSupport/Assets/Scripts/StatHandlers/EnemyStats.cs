@@ -22,7 +22,6 @@ public class EnemyStats : LivingBeing
 
     public override void Die()
     {
-        Debug.Log("Gimme dat stack trace");
         if (!Dead)
         {
             abilityHandler.StopAllToggledAbilities();

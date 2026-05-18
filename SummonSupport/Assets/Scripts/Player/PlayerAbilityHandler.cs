@@ -34,7 +34,7 @@ public class PlayerAbilityHandler : AbilityHandler
         playerStats = PlayerStats.Instance;
         EquipAllPotions();
         //audioHandler = GetComponent<LivingBeingAudioHandler>();
-        Debug.Log($"{audioHandler} = audioHandler");
+        //Debug.Log($"{audioHandler} = audioHandler");
         if (Instance != null) Destroy(this);
         else Instance = this;
 

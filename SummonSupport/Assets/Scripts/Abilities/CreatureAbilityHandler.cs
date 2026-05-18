@@ -123,7 +123,7 @@ public class CreatureAbilityHandler : AbilityHandler
     }
     public new void LearnAbility(Ability ability)
     {
-        UnityEngine.Debug.Log($"Creature learning ability {ability.Name}");
+        //UnityEngine.Debug.Log($"Creature learning ability {ability.Name}");
         if (!Abilities.Contains(ability) && ability != null)
         {
             Abilities.Add(ability);

@@ -161,31 +161,30 @@ public static class ColorChanger
     }
     public static void ChangeElementalIndicatorByAffinity(LivingBeing livingBeing)
     {
-        Element element = livingBeing.GetHighestAffinity(out float value);
+        Element element = livingBeing.GetHighestAffinity(out float value, 0);
         if (element == Element.None) return;
         Material newMaterial = new(GetGlowStrengthByElement(element));
         SetMaterialColor(newMaterial, GetRandomColorFromElementGradient(element));
-        Renderer meshRenderer = livingBeing.GetComponentInChildren<Renderer>();
-        //SkinnedMeshRenderer skinnedMeshRenderer = livingBeing.GetComponentInChildren<SkinnedMeshRenderer>();
+        foreach (SkinnedMeshRenderer meshRenderer in livingBeing.GetComponentsInChildren<SkinnedMeshRenderer>())
 
 
-        if (meshRenderer != null)
-        {
-            Material[] mats = meshRenderer.materials;
-            for (int i = 0; i < mats.Length; i++)
+            if (meshRenderer != null)
             {
-                SetMaterialColor(newMaterial, GetRandomColorFromElementGradient(element));
-
-                if (mats[i].name.StartsWith("ElementalIndicator"))  // Unity adds "(Instance)"
+                Material[] mats = meshRenderer.materials;
+                for (int i = 0; i < mats.Length; i++)
                 {
-                    Debug.Log($"Material found: {mats[i].name}, assigning material {newMaterial} which has color {newMaterial.color}");
-                    mats[i] = newMaterial;
+                    SetMaterialColor(newMaterial, GetRandomColorFromElementGradient(element));
+
+                    if (mats[i].name.StartsWith("ElementalIndicator"))  // Unity adds "(Instance)"
+                    {
+                        //Debug.Log($"Material found: {mats[i].name}, assigning material {newMaterial} which has color {newMaterial.color}");
+                        mats[i] = newMaterial;
+                    }
                 }
+                meshRenderer.materials = mats;
             }
-            meshRenderer.materials = mats;
-        }
-        else
-            Debug.Log($"No renderer found for {livingBeing.Name}");
+            else
+                Debug.Log($"No renderer found for {livingBeing.Name}");
 
     }
     public static void ChangeMatByAffinity(Renderer meshRenderer, Material material)

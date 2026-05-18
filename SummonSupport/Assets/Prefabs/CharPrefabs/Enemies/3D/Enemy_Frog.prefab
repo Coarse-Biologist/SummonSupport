@@ -166,7 +166,7 @@ PrefabInstance:
     - target: {fileID: 6420015540202892481, guid: 6eb2daf00740bba47aac2befdc6b070e,
         type: 3}
       propertyPath: <Abilities>k__BackingField.Array.size
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6420015540202892481, guid: 6eb2daf00740bba47aac2befdc6b070e,
         type: 3}
@@ -206,7 +206,7 @@ PrefabInstance:
     - target: {fileID: 6881935197926149321, guid: 6eb2daf00740bba47aac2befdc6b070e,
         type: 3}
       propertyPath: m_Size.y
-      value: 1.3121471
+      value: 1.8313179
       objectReference: {fileID: 0}
     - target: {fileID: 6881935197926149321, guid: 6eb2daf00740bba47aac2befdc6b070e,
         type: 3}
@@ -221,12 +221,12 @@ PrefabInstance:
     - target: {fileID: 6881935197926149321, guid: 6eb2daf00740bba47aac2befdc6b070e,
         type: 3}
       propertyPath: m_Center.y
-      value: -1.0493908
+      value: -0.7898054
       objectReference: {fileID: 0}
     - target: {fileID: 6881935197926149321, guid: 6eb2daf00740bba47aac2befdc6b070e,
         type: 3}
       propertyPath: m_Center.z
-      value: 0.18473071
+      value: 0.18473077
       objectReference: {fileID: 0}
     - target: {fileID: 7876922258442859149, guid: 6eb2daf00740bba47aac2befdc6b070e,
         type: 3}

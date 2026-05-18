@@ -255,13 +255,13 @@ public class AlchemyHandler : MonoBehaviour
         {
 
             Element strongestElement = livingBeing.GetHighestAffinity(out float value);
-            Debug.Log($"Strongest Element : {strongestElement}, Value : {value}");
+            //Debug.Log($"Strongest Element : {strongestElement}, Value : {value}");
             Ability meleeAbility = AbilityLibrary.abilityLibrary.defaultAttack;
 
             if (strongestElement != Element.None)
             {
                 meleeAbility = AbilityLibrary.GetElementalMeleeAbility(strongestElement, value);
-                Debug.Log($"Setting melee ability to {meleeAbility.Name}");
+                //Debug.Log($"Setting melee ability to {meleeAbility.Name}");
             }
             abilityHandler.LearnAbility(meleeAbility);
 

@@ -59,10 +59,9 @@ MonoBehaviour:
     type: 3}
   <Sounds>k__BackingField: {fileID: 11400000, guid: 96774de62dd19724d95abe3a99036785,
     type: 2}
-  <AlterParticleSystemGradient>k__BackingField: 0
   <Angle>k__BackingField: 0
   <Width>k__BackingField: 5
   <SpawnLocEnum>k__BackingField: 1
   <Shape>k__BackingField: 2
-  <MeleeParticleSystem>k__BackingField: {fileID: 6657910741585044944, guid: 4ed357e3fb04ae94fb8699c256a34a97,
+  <MeleeParticleSystem>k__BackingField: {fileID: 4476762183017037125, guid: abb946fec1a75af48859a330ea8e5104,
     type: 3}

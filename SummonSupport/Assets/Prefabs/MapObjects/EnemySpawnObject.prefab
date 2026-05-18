@@ -118,14 +118,14 @@ MonoBehaviour:
   <SecondsPerWave>k__BackingField: 20
   <Radius>k__BackingField: 3
   <MoveTowardLocation>k__BackingField: 1
-  <PreferedElement>k__BackingField: 0
+  <PreferedElement>k__BackingField: 6
   <PreferedPhysical>k__BackingField: 3
   <Creatures>k__BackingField:
   - {fileID: 856754605309222973, guid: 3388c2193e6a56841b1082aa7f3f5844, type: 3}
   - {fileID: 7826342566136339172, guid: c7f20613f6056c84cad3b32c01b12428, type: 3}
   - {fileID: 8852634478417728053, guid: 2c4381ebdae7d9946ad423f08dabc809, type: 3}
-  - {fileID: 8852634478417728053, guid: 2c4381ebdae7d9946ad423f08dabc809, type: 3}
   - {fileID: 3570037555416914556, guid: d59dad8fff71c26458f7a36f57b785c6, type: 3}
+  - {fileID: 2472053300577050913, guid: ca71af75b4393944bbb40a13b04d4eb4, type: 3}
   <TargetLocation>k__BackingField: {fileID: 2499620190177935877}
   <Trigger>k__BackingField: {fileID: 5651085235464683089}
 --- !u!136 &4454912522623828167

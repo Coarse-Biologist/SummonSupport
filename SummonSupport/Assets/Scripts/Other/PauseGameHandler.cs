@@ -34,7 +34,7 @@ public class PauseGameHandler : MonoBehaviour
     private static Button QuitButton;
     void OnEnable()
     {
-        Debug.Log("Enabling pause game handler ");
+        //Debug.Log("Enabling pause game handler ");
         EventDeclarer.PauseGame?.AddListener(Pause);
         EventDeclarer.UnpauseGame?.AddListener(Resume);
         EventDeclarer.PlayerDead?.AddListener(DeathPause);
@@ -54,7 +54,7 @@ public class PauseGameHandler : MonoBehaviour
 
     void Start()
     {
-        Debug.Log("Enabling pause game handler ");
+        //Debug.Log("Enabling pause game handler ");
 
         ui = UI_DocHandler.Instance.ui;
         UIPrefabAssets = UI_DocHandler.Instance.UIPrefabAssets;

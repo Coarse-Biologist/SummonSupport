@@ -78,6 +78,11 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6468714995252788812, guid: 3388c2193e6a56841b1082aa7f3f5844,
+        type: 3}
+      propertyPath: <Abilities>k__BackingField.Array.size
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6871524929576787524, guid: 3388c2193e6a56841b1082aa7f3f5844,
         type: 3}
       propertyPath: m_Size.x

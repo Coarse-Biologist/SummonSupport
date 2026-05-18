@@ -171,11 +171,26 @@ public abstract class LivingBeing : MonoBehaviour
 
     public Element GetHighestAffinity(out float value, float min = 0)
     {
-        Element element = Affinities.OrderByDescending(a => a.Value.Get()).First().Key;
-        value = GetAffinity(element);
-        if (value < min || value == 0) return Element.None;
+        Element highestElement = Element.None;
+        float highestValue = float.MinValue;
 
-        else return element;
+        foreach (var affinity in Affinities)
+        {
+            float current = affinity.Value.Get();
+
+            if (current > highestValue)
+            {
+                highestValue = current;
+                highestElement = affinity.Key;
+            }
+        }
+
+        value = highestValue;
+
+        if (value < min || value == 0)
+            return Element.None;
+
+        return highestElement;
     }
     public List<Element> GetHighAffinities(float min = 20)
     {
