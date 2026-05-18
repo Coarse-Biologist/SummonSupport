@@ -40,7 +40,7 @@ public class EnemyStats : LivingBeing
                 navMesh = nav;
                 navMeshSpeed = navMesh.speed;
             }
-            Invoke("DelayedTestDeath", .3f);
+            Invoke("DelayedTestDeath", 1f);
         }
     }
     public void AddStatusEffectSymbol(StatusEffects status, int stacks)
