@@ -4548,8 +4548,7 @@ MonoBehaviour:
   <Damage_Scalar>k__BackingField: 1.5
   <Affinity_Scalar>k__BackingField: 25
   <Difficulty_Scalar>k__BackingField: 0.25
-  <Balance_Scalar>k__BackingField: 0.5
-  <Difficulty>k__BackingField: 0
+  <Difficulty>k__BackingField: 4
 --- !u!114 &1724141752
 MonoBehaviour:
   m_ObjectHideFlags: 0

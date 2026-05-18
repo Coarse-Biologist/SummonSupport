@@ -47,9 +47,6 @@ public class Mod_Base
     }
 
 
-    public EffectPackage_Mod SelfEffects_Mod { get; protected set; } = new();
-    public EffectPackage_Mod TargetEffects_Mod { get; protected set; } = new();
-
     //public List<AbilityModTypes> AquiredBool_Mods { get; protected set; } = new();
 
     public void Mod_AddStatusEffect(StatusEffects status)
