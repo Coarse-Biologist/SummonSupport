@@ -4623,7 +4623,12 @@ MonoBehaviour:
   <enemyPrefab>k__BackingField: []
   <SpawnCenter>k__BackingField: {fileID: 616321102}
   <AllCreatures>k__BackingField:
-  - {fileID: 810306928598971056, guid: 6eb2daf00740bba47aac2befdc6b070e, type: 3}
+  - {fileID: 8822729966061498737, guid: 1f0fa20b718a5db4695b13939e3e7c5f, type: 3}
+  - {fileID: 856754605309222973, guid: 3388c2193e6a56841b1082aa7f3f5844, type: 3}
+  - {fileID: 8852634478417728053, guid: 2c4381ebdae7d9946ad423f08dabc809, type: 3}
+  - {fileID: 7826342566136339172, guid: c7f20613f6056c84cad3b32c01b12428, type: 3}
+  - {fileID: 3570037555416914556, guid: d59dad8fff71c26458f7a36f57b785c6, type: 3}
+  - {fileID: 2472053300577050913, guid: ca71af75b4393944bbb40a13b04d4eb4, type: 3}
   <ElementCreatureDict>k__BackingField: []
   <Hp_Scalar>k__BackingField: 1.5
   <Power_Scalar>k__BackingField: 1.5

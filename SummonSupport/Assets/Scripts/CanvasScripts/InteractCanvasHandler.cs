@@ -34,7 +34,7 @@ public class FloatingInfoHandler : MonoBehaviour
 
     }
 
-    public void ShowInteractionOption(Vector3 spawnLoc, string interactMessage)
+    public TextMeshProUGUI ShowInteractionOption(Vector3 spawnLoc, string interactMessage)
     {
         if (canvasInstance == null) canvasInstance = Instantiate(interactCanvas, spawnLoc, Quaternion.identity);
         else
@@ -42,8 +42,9 @@ public class FloatingInfoHandler : MonoBehaviour
             canvasInstance.SetActive(true);
             canvasInstance.transform.position = spawnLoc;
         }
-
-        canvasInstance.GetComponentInChildren<TextMeshProUGUI>().text = interactMessage;
+        TextMeshProUGUI textMeshProUGUI = canvasInstance.GetComponentInChildren<TextMeshProUGUI>();
+        textMeshProUGUI.text = interactMessage;
+        return textMeshProUGUI;
     }
 
     public void HideInteractionOption()
