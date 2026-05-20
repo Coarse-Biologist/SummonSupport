@@ -12,7 +12,7 @@ public class StartMenuController : MonoBehaviour
     public void StartGame()
     {
 
-        SceneManager.LoadSceneAsync("FirstLevel3D");
+        SceneManager.LoadSceneAsync("Map1");
     }
     public void QuitGame()
     {
