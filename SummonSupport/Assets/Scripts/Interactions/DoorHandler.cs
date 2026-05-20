@@ -116,8 +116,7 @@ public class DoorHandler : MonoBehaviour, I_Interactable
         if (DestinationDoor != null)
             PlayerStats.Instance.gameObject.transform.position = DestinationDoor.position;
 
-        //if (doorCollider != null)
-        //    doorCollider.enabled = false;
+
 
         transform.rotation = new Quaternion(0, 90, 0, 0);
         NotReadyToInteract();
