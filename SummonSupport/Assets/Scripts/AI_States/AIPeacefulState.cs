@@ -163,20 +163,18 @@ public class AIPeacefulState : AIState
             //Debug.Log($"Going to player becuase: Distance = {distance}. stopping distance = {stateHandler.navAgent.stoppingDistance}. chase state selected ability = {chaseState.SelectedAbilityAttackRange}");
 
             stateHandler.navAgent.SetDestination(player.transform.position);
-            if (stateHandler.anim != null)
-            {
-                stateHandler.anim.ChangeAnimation("Run", .2f);
-            }
+
+            stateHandler.anim.ChangeAnimation("Run", .2f);
+
         }
         else
         {
             //Debug.Log($"NOToing to player becuase: Distance = {distance}. stopping distance = {stateHandler.navAgent.stoppingDistance}. chase state selected ability = {chaseState.SelectedAbilityAttackRange}");
 
             stateHandler.navAgent.ResetPath();
-            if (stateHandler.anim != null)
-            {
-                stateHandler.anim.ChangeAnimation("Idle", .2f);
-            }
+
+            stateHandler.anim.ChangeAnimation("Idle", .2f);
+
         }
     }
 }

@@ -67,9 +67,9 @@ MonoBehaviour:
   <CharacterTag>k__BackingField: 3
   <Description>k__BackingField: 
   <BattleCries>k__BackingField: []
-  <MaxHP>k__BackingField: 100
+  <MaxHP>k__BackingField: 50
   <Overshield>k__BackingField: 0
-  <CurrentHP>k__BackingField: 100
+  <CurrentHP>k__BackingField: 50
   <MaxPower>k__BackingField: 100
   <PowerSurge>k__BackingField: 0
   <CurrentPower>k__BackingField: 100
@@ -198,7 +198,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9957c0f2eaf0cb942a744feaeb7f63a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MovementScript
-  <MovementSpeed>k__BackingField: 0.5
+  <MovementSpeed>k__BackingField: 0.3
   <AttackSpeed>k__BackingField: 1
   <DashBoost>k__BackingField: 10
   <DashCoolDown>k__BackingField: 1
@@ -274,7 +274,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 10
+  m_Speed: 7
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120

@@ -101,21 +101,16 @@ public class AIChaseState : AIState
         }
         stateHandler.navAgent.SetDestination(targetLoc);
 
-        if (stateHandler.anim != null)
-        {
-            //Debug.Log("Going to run!");
-            stateHandler.anim.ChangeAnimation("Run", .2f);
-        }
+
+        stateHandler.anim.ChangeAnimation("Run", .2f);
+
     }
     private void IdleAndResetPath()
     {
-        stateHandler.navAgent.ResetPath();
-        if (stateHandler.anim != null)
-        {
-            //Debug.Log("Going to idle!");
+        if (stateHandler.navAgent.path != null) stateHandler.navAgent.ResetPath();
 
-            stateHandler.anim.ChangeAnimation("Idle", .2f);
-        }
+        stateHandler.anim.ChangeAnimation("Idle", .2f);
+
     }
 
     private IEnumerator HandleAttack()
@@ -125,10 +120,9 @@ public class AIChaseState : AIState
             runningAttackLoop = false;
             yield break;
         }
-        if (stateHandler.anim != null)
-        {
-            stateHandler.anim.ChangeAnimation("Idle", .2f);
-        }
+
+        stateHandler.anim.ChangeAnimation("Idle", .2f);
+
 
         runningAttackLoop = true;
 
@@ -150,12 +144,11 @@ public class AIChaseState : AIState
                 if ((transform.position - stateHandler.target.transform.position).sqrMagnitude <
                     SelectedAbilityAttackRange * SelectedAbilityAttackRange || ability is AuraAbility)
                 {
-                    if (stateHandler.anim != null)
-                    {
-                        if (ability is MeleeAbility) stateHandler.anim.ChangeAnimation("Melee");
-                        else if (ability is ProjectileAbility) stateHandler.anim.ChangeAnimation("Projectile");
-                        else stateHandler.anim.ChangeAnimation("SpecialAbility");
-                    }
+
+                    if (ability is MeleeAbility) stateHandler.anim.ChangeAnimation("Melee");
+                    else if (ability is ProjectileAbility) stateHandler.anim.ChangeAnimation("Projectile");
+                    else stateHandler.anim.ChangeAnimation("SpecialAbility");
+
 
                     abilityHandler.UseAbility(stateHandler.target, ability);
 

@@ -82,6 +82,7 @@ public class AIStateHandler : MonoBehaviour
         anim = GetComponent<AnimationControllerScript>();
         currentMachineSpeed = stateMachineSpeed1;
         StartCoroutine(RunStateMachine());
+        if (anim == null) throw new System.Exception($"The animator does not exist on {gameObject}");
 
 
     }

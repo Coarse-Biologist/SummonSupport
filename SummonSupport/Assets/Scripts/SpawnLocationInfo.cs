@@ -10,7 +10,7 @@ public class SpawnLocationInfo : MonoBehaviour
     [field: SerializeField] public float Radius { get; private set; } = 3;
     [field: SerializeField] public bool MoveTowardLocation { get; private set; } = false;
     [field: SerializeField] public int ElementChance { get; private set; } = 10; // out of 100, chance to spawn with an element.
-    [field: SerializeField] public float CreatureStrengthScalar { get; private set; } = 2f; //modifies affinit.
+    [field: SerializeField] public float CreatureStrengthScalar { get; private set; } = 2f; //modifies affinities.
     [field: SerializeField] public Element PreferedElement { get; private set; } = Element.None;
     [field: SerializeField] public PhysicalType PreferedPhysical { get; private set; } = PhysicalType.None;
 

@@ -28,21 +28,26 @@ public static class CommandMinion
     public static void HandleCommand(RaycastHit hit)
     {
         Vector3 loc = hit.point;
-        SetupManager.Instance.DebugLocation(loc, Color.yellow, 2);
         if (activeMinions != null)
         {
             if (hit.collider.TryGetComponent(out EnemyStats targetLivingBeing))
             {
+                SetupManager.Instance.DebugLocation(loc, Color.red, 2);
+
                 CommandMinionToAttack(targetLivingBeing);
             }
 
             else if (hit.collider.TryGetComponent(out I_Interactable interactable))
             {
+                SetupManager.Instance.DebugLocation(loc, Color.green, 2);
+
                 SendMinionToInteract(hit.collider.gameObject.transform.position);
             }
 
             else
             {
+                SetupManager.Instance.DebugLocation(loc, Color.black, 2);
+
                 CommandMinionToGoToLoc(loc);
             }
         }
