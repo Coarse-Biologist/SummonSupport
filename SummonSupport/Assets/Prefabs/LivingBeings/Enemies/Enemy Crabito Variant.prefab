@@ -416,6 +416,91 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4506156268917346314, guid: 6eb2daf00740bba47aac2befdc6b070e,
+        type: 3}
+      propertyPath: animator
+      value: 
+      objectReference: {fileID: 5632810987595909638}
+    - target: {fileID: 4506156268917346314, guid: 6eb2daf00740bba47aac2befdc6b070e,
+        type: 3}
+      propertyPath: 'colliders.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2995550949837228962}
+    - target: {fileID: 4506156268917346314, guid: 6eb2daf00740bba47aac2befdc6b070e,
+        type: 3}
+      propertyPath: 'colliders.Array.data[1]'
+      value: 
+      objectReference: {fileID: 145505721564162701}
+    - target: {fileID: 4506156268917346314, guid: 6eb2daf00740bba47aac2befdc6b070e,
+        type: 3}
+      propertyPath: 'colliders.Array.data[2]'
+      value: 
+      objectReference: {fileID: 7373542031022173243}
+    - target: {fileID: 4506156268917346314, guid: 6eb2daf00740bba47aac2befdc6b070e,
+        type: 3}
+      propertyPath: 'colliders.Array.data[3]'
+      value: 
+      objectReference: {fileID: 3792968378568681973}
+    - target: {fileID: 4506156268917346314, guid: 6eb2daf00740bba47aac2befdc6b070e,
+        type: 3}
+      propertyPath: 'colliders.Array.data[4]'
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4506156268917346314, guid: 6eb2daf00740bba47aac2befdc6b070e,
+        type: 3}
+      propertyPath: 'colliders.Array.data[5]'
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4506156268917346314, guid: 6eb2daf00740bba47aac2befdc6b070e,
+        type: 3}
+      propertyPath: 'colliders.Array.data[6]'
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4506156268917346314, guid: 6eb2daf00740bba47aac2befdc6b070e,
+        type: 3}
+      propertyPath: 'colliders.Array.data[7]'
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4506156268917346314, guid: 6eb2daf00740bba47aac2befdc6b070e,
+        type: 3}
+      propertyPath: 'rigidbodies.Array.data[0]'
+      value: 
+      objectReference: {fileID: 7282121015741847490}
+    - target: {fileID: 4506156268917346314, guid: 6eb2daf00740bba47aac2befdc6b070e,
+        type: 3}
+      propertyPath: 'rigidbodies.Array.data[1]'
+      value: 
+      objectReference: {fileID: 7519125621804696164}
+    - target: {fileID: 4506156268917346314, guid: 6eb2daf00740bba47aac2befdc6b070e,
+        type: 3}
+      propertyPath: 'rigidbodies.Array.data[2]'
+      value: 
+      objectReference: {fileID: 6446931130977593445}
+    - target: {fileID: 4506156268917346314, guid: 6eb2daf00740bba47aac2befdc6b070e,
+        type: 3}
+      propertyPath: 'rigidbodies.Array.data[3]'
+      value: 
+      objectReference: {fileID: 2749978124851647805}
+    - target: {fileID: 4506156268917346314, guid: 6eb2daf00740bba47aac2befdc6b070e,
+        type: 3}
+      propertyPath: 'rigidbodies.Array.data[4]'
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4506156268917346314, guid: 6eb2daf00740bba47aac2befdc6b070e,
+        type: 3}
+      propertyPath: 'rigidbodies.Array.data[5]'
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4506156268917346314, guid: 6eb2daf00740bba47aac2befdc6b070e,
+        type: 3}
+      propertyPath: 'rigidbodies.Array.data[6]'
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4506156268917346314, guid: 6eb2daf00740bba47aac2befdc6b070e,
+        type: 3}
+      propertyPath: 'rigidbodies.Array.data[7]'
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 5964188555912298956, guid: 6eb2daf00740bba47aac2befdc6b070e,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -424,7 +509,7 @@ PrefabInstance:
     - target: {fileID: 5964188555912298956, guid: 6eb2daf00740bba47aac2befdc6b070e,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.48
+      value: 0.44
       objectReference: {fileID: 0}
     - target: {fileID: 6094053756645618639, guid: 6eb2daf00740bba47aac2befdc6b070e,
         type: 3}
@@ -492,56 +577,17 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 1170062808944802383, guid: 6eb2daf00740bba47aac2befdc6b070e, type: 3}
+    - {fileID: 3653352601175887832, guid: 6eb2daf00740bba47aac2befdc6b070e, type: 3}
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 4428025582669882376, guid: 6eb2daf00740bba47aac2befdc6b070e,
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 4980689447391136901}
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 810306928598971056, guid: 6eb2daf00740bba47aac2befdc6b070e,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 6590005338067665948}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6eb2daf00740bba47aac2befdc6b070e, type: 3}
---- !u!65 &3373161395045699336 stripped
-BoxCollider:
-  m_CorrespondingSourceObject: {fileID: 6881935197926149321, guid: 6eb2daf00740bba47aac2befdc6b070e,
-    type: 3}
-  m_PrefabInstance: {fileID: 8164581867877024705}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &5493804672219523017 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4428025582669882376, guid: 6eb2daf00740bba47aac2befdc6b070e,
     type: 3}
   m_PrefabInstance: {fileID: 8164581867877024705}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &8822729966061498737 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 810306928598971056, guid: 6eb2daf00740bba47aac2befdc6b070e,
-    type: 3}
-  m_PrefabInstance: {fileID: 8164581867877024705}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &6590005338067665948
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8822729966061498737}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e93249c0e97ce724ba5775af0214127b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Ragdoll
-  animator: {fileID: 5632810987595909638}
-  mainCollider: {fileID: 3373161395045699336}
-  rigidbodies:
-  - {fileID: 7282121015741847490}
-  - {fileID: 7519125621804696164}
-  - {fileID: 6446931130977593445}
-  - {fileID: 2749978124851647805}
-  colliders:
-  - {fileID: 2995550949837228962}
-  - {fileID: 145505721564162701}
-  - {fileID: 7373542031022173243}
-  - {fileID: 3792968378568681973}

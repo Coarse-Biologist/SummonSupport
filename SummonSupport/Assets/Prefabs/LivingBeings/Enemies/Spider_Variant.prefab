@@ -244,6 +244,101 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4506156268917346314, guid: 6eb2daf00740bba47aac2befdc6b070e,
+        type: 3}
+      propertyPath: animator
+      value: 
+      objectReference: {fileID: 8852105786438554746}
+    - target: {fileID: 4506156268917346314, guid: 6eb2daf00740bba47aac2befdc6b070e,
+        type: 3}
+      propertyPath: colliders.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4506156268917346314, guid: 6eb2daf00740bba47aac2befdc6b070e,
+        type: 3}
+      propertyPath: rigidbodies.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4506156268917346314, guid: 6eb2daf00740bba47aac2befdc6b070e,
+        type: 3}
+      propertyPath: 'colliders.Array.data[0]'
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4506156268917346314, guid: 6eb2daf00740bba47aac2befdc6b070e,
+        type: 3}
+      propertyPath: 'colliders.Array.data[1]'
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4506156268917346314, guid: 6eb2daf00740bba47aac2befdc6b070e,
+        type: 3}
+      propertyPath: 'colliders.Array.data[2]'
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4506156268917346314, guid: 6eb2daf00740bba47aac2befdc6b070e,
+        type: 3}
+      propertyPath: 'colliders.Array.data[3]'
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4506156268917346314, guid: 6eb2daf00740bba47aac2befdc6b070e,
+        type: 3}
+      propertyPath: 'colliders.Array.data[4]'
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4506156268917346314, guid: 6eb2daf00740bba47aac2befdc6b070e,
+        type: 3}
+      propertyPath: 'colliders.Array.data[5]'
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4506156268917346314, guid: 6eb2daf00740bba47aac2befdc6b070e,
+        type: 3}
+      propertyPath: 'colliders.Array.data[6]'
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4506156268917346314, guid: 6eb2daf00740bba47aac2befdc6b070e,
+        type: 3}
+      propertyPath: 'colliders.Array.data[7]'
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4506156268917346314, guid: 6eb2daf00740bba47aac2befdc6b070e,
+        type: 3}
+      propertyPath: 'rigidbodies.Array.data[0]'
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4506156268917346314, guid: 6eb2daf00740bba47aac2befdc6b070e,
+        type: 3}
+      propertyPath: 'rigidbodies.Array.data[1]'
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4506156268917346314, guid: 6eb2daf00740bba47aac2befdc6b070e,
+        type: 3}
+      propertyPath: 'rigidbodies.Array.data[2]'
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4506156268917346314, guid: 6eb2daf00740bba47aac2befdc6b070e,
+        type: 3}
+      propertyPath: 'rigidbodies.Array.data[3]'
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4506156268917346314, guid: 6eb2daf00740bba47aac2befdc6b070e,
+        type: 3}
+      propertyPath: 'rigidbodies.Array.data[4]'
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4506156268917346314, guid: 6eb2daf00740bba47aac2befdc6b070e,
+        type: 3}
+      propertyPath: 'rigidbodies.Array.data[5]'
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4506156268917346314, guid: 6eb2daf00740bba47aac2befdc6b070e,
+        type: 3}
+      propertyPath: 'rigidbodies.Array.data[6]'
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4506156268917346314, guid: 6eb2daf00740bba47aac2befdc6b070e,
+        type: 3}
+      propertyPath: 'rigidbodies.Array.data[7]'
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 5548072443168765057, guid: 6eb2daf00740bba47aac2befdc6b070e,
         type: 3}
       propertyPath: <CreatureDamagedClips>k__BackingField.Array.size
@@ -334,7 +429,7 @@ PrefabInstance:
     - target: {fileID: 7876922258442859149, guid: 6eb2daf00740bba47aac2befdc6b070e,
         type: 3}
       propertyPath: m_Radius
-      value: 2
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: 7876922258442859149, guid: 6eb2daf00740bba47aac2befdc6b070e,
         type: 3}
@@ -344,6 +439,8 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 1170062808944802383, guid: 6eb2daf00740bba47aac2befdc6b070e, type: 3}
+    - {fileID: 3653352601175887832, guid: 6eb2daf00740bba47aac2befdc6b070e, type: 3}
+    - {fileID: 2105234715976851837, guid: 6eb2daf00740bba47aac2befdc6b070e, type: 3}
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 4428025582669882376, guid: 6eb2daf00740bba47aac2befdc6b070e,
         type: 3}
