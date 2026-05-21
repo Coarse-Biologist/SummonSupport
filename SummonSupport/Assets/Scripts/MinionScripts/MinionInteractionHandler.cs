@@ -13,7 +13,7 @@ public class MinionInteractionHandler : MonoBehaviour
     {
         if (CommandedToInteract)
         {
-            if (collision.gameObject.TryGetComponent(out I_Interactable interactInterfaceInstance)) ;
+            if (collision.gameObject.TryGetComponent(out I_Interactable interactInterfaceInstance))
             {
                 if (!collision.gameObject.TryGetComponent(out AlchemyHandler undesiredComponent)) // make sure this isnt the alchemy bench
 
