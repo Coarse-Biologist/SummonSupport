@@ -61,6 +61,9 @@ public class SaveHandler
         saveData.player.statData.powerRegen = (int)PlayerStats.Instance.PowerRegeneration;
         saveData.player.statData.currentPower = (int)PlayerStats.Instance.GetAttribute(AttributeType.CurrentPower);
         saveData.player.statData.currentPower = (int)PlayerStats.Instance.GetAttribute(AttributeType.MaxPower);
+
+        SavePlayerLevelData(saveData);
+
         return saveData;
     }
 
@@ -89,5 +92,16 @@ public class SaveHandler
     {
         abilityData.abilities = new List<Ability>(abilityData.abilities);
         return abilityData;
+    }
+
+    private SaveData SavePlayerLevelData(SaveData saveData)
+    {
+        saveData.player.levelData.level = PlayerStats.Instance.CurrentLevel;
+        saveData.player.levelData.currentXp = (int)PlayerStats.Instance.CurrentXP;
+        saveData.player.levelData.maxXp = (int)PlayerStats.Instance.MaxXP;
+
+        saveData.player.levelData.skillPoints = PlayerStats.Instance.SkillPoints;
+
+        return saveData;
     }
 }

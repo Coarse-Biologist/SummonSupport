@@ -25,7 +25,9 @@ public class LivingBeingData
 
 public class PlayerLevelData
 {
-    public int xp;
+    public int currentXp;
+    public int maxXp;
+
     public int level;
     public int skillPoints;
 }
