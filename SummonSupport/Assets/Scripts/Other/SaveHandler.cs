@@ -30,7 +30,7 @@ public static class SaveHandler
 
         File.WriteAllText(path, data);
 
-        Debug.Log("Saved game to: " + path);
+        Debug.Log(JsonUtility.ToJson(saveData, true));
     }
 
     private static SaveData SaveAlchemyData(SaveData saveData)
@@ -69,7 +69,7 @@ public static class SaveHandler
         saveData.player.statData.location = PlayerStats.Instance.transform.position;
         saveData.player.statData.powerRegen = (int)PlayerStats.Instance.PowerRegeneration;
         saveData.player.statData.currentPower = (int)PlayerStats.Instance.GetAttribute(AttributeType.CurrentPower);
-        saveData.player.statData.currentPower = (int)PlayerStats.Instance.GetAttribute(AttributeType.MaxPower);
+        saveData.player.statData.maxPower = (int)PlayerStats.Instance.GetAttribute(AttributeType.MaxPower);
 
         SavePlayerLevelData(saveData);
 
@@ -99,7 +99,7 @@ public static class SaveHandler
 
     private static AbilityData SaveAbilities(AbilityData abilityData, AbilityHandler abilityHandler)
     {
-        abilityData.abilities = new List<Ability>(abilityData.abilities);
+        abilityData.abilities = new List<Ability>(abilityHandler.Abilities);
         return abilityData;
     }
 
@@ -140,6 +140,7 @@ public static class SaveHandler
     {
         //#TODO
         GameObject player = SetupManager.Instance.SpawnPlayer(loadedData.player.statData.location);
+        player.transform.position = loadedData.player.statData.location;
         if (player.TryGetComponent(out LivingBeing livingBeing))
         {
             SetPlayerData(loadedData);
@@ -200,7 +201,7 @@ public static class SaveHandler
     {
         foreach (Ability ability in livingBeingAbilityData.abilities)
         {
-            lb.abilityHandler.LearnAbility(ability);
+            lb.abilityHandler.LearnAbility(ability); //#TODO null reference
         }
     }
 
