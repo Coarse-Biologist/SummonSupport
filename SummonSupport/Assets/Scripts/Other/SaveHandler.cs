@@ -1,28 +1,39 @@
 using UnityEngine;
 using System.Collections.Generic;
-using UnityEngine.InputSystem;
 using System;
-using UnityEngine.AI;
-
-public class SaveHandler
+using System.IO;
+using SummonSupportEvents;
+public static class SaveHandler
 {
-    public void SaveGameData(int slot)
+
+    public static void SaveGameData(int slot)
     {
         SaveData saveData = new SaveData();
+
         saveData = SaveAlchemyData(saveData);
         saveData = SaveMinionData(saveData);
         saveData = SavePlayerData(saveData);
-        string data = JsonUtility.ToJson(saveData);
-        //save this somewhere
-    }
-    public void LoadGameData(int slot)
-    {
-        string gameData = "info from some slot";
-        SaveData saveData = JsonUtility.FromJson<SaveData>(gameData);
-        //Set all player, minion and alchemy data as it is read from the save data
+
+        string data = JsonUtility.ToJson(saveData, true);
+
+        string folder = Path.Combine(
+            Application.persistentDataPath,
+            "Saves"
+        );
+
+        Directory.CreateDirectory(folder);
+
+        string path = Path.Combine(
+            folder,
+            $"SummonSupport_SaveSlot{slot}.json"
+        );
+
+        File.WriteAllText(path, data);
+
+        Debug.Log("Saved game to: " + path);
     }
 
-    private SaveData SaveAlchemyData(SaveData saveData)
+    private static SaveData SaveAlchemyData(SaveData saveData)
     {
         saveData.alchemy.ElementalKnowledge = new Dictionary<Element, int>(AlchemyInventory.knowledgeDict);
         saveData.alchemy.KnownTools = new List<AlchemyTool>(AlchemyInventory.KnownTools);
@@ -30,8 +41,7 @@ public class SaveHandler
         return saveData;
     }
 
-
-    private SaveData SaveMinionData(SaveData saveData)
+    private static SaveData SaveMinionData(SaveData saveData)
     {
         saveData.minions.Clear();
 
@@ -43,8 +53,7 @@ public class SaveHandler
         return saveData;
     }
 
-
-    private SaveData SavePlayerData(SaveData saveData)
+    private static SaveData SavePlayerData(SaveData saveData)
     {
 
         Dictionary<Element, int> affinitiesData = new();
@@ -67,7 +76,7 @@ public class SaveHandler
         return saveData;
     }
 
-    private SaveData SaveNewMinionData(SaveData saveData, MinionStats minionStats)
+    private static SaveData SaveNewMinionData(SaveData saveData, MinionStats minionStats)
     {
         MinionData minionData = new();
         saveData.minions.Add(minionData);
@@ -88,13 +97,13 @@ public class SaveHandler
         return saveData;
     }
 
-    private AbilityData SaveAbilities(AbilityData abilityData, AbilityHandler abilityHandler)
+    private static AbilityData SaveAbilities(AbilityData abilityData, AbilityHandler abilityHandler)
     {
         abilityData.abilities = new List<Ability>(abilityData.abilities);
         return abilityData;
     }
 
-    private SaveData SavePlayerLevelData(SaveData saveData)
+    private static SaveData SavePlayerLevelData(SaveData saveData)
     {
         saveData.player.levelData.level = PlayerStats.Instance.CurrentLevel;
         saveData.player.levelData.currentXp = (int)PlayerStats.Instance.CurrentXP;
@@ -104,4 +113,105 @@ public class SaveHandler
 
         return saveData;
     }
+
+    #region Handle loading data
+    public static void LoadGameData(int slot)
+    {
+
+        string path = Path.Combine(
+            Application.persistentDataPath,
+            "Saves",
+            $"SummonSupport_SaveSlot{slot}.json"
+        );
+
+        if (!File.Exists(path))
+        {
+            throw new Exception($"The save file path did not exist: {path}");
+        }
+
+        string data = File.ReadAllText(path);
+
+        SaveData saveData = JsonUtility.FromJson<SaveData>(data);
+
+        HandleLoadedData(saveData);
+    }
+
+    private static void HandleLoadedData(SaveData loadedData)
+    {
+        //#TODO
+        GameObject player = SetupManager.Instance.SpawnPlayer(loadedData.player.statData.location);
+        if (player.TryGetComponent(out LivingBeing livingBeing))
+        {
+            SetPlayerData(loadedData);
+        }
+        SetMinionData(loadedData);
+    }
+
+    private static void SetPlayerData(SaveData loadedData)
+    {
+        if (PlayerStats.Instance != null)
+        {
+            PlayerStats.Instance.SetAttribute(AttributeType.CurrentHitpoints, loadedData.player.statData.currentHP);
+            PlayerStats.Instance.SetAttribute(AttributeType.MaxHitpoints, loadedData.player.statData.maxHP);
+            PlayerStats.Instance.SetAttribute(AttributeType.CurrentPower, loadedData.player.statData.currentPower);
+            PlayerStats.Instance.SetAttribute(AttributeType.MaxPower, loadedData.player.statData.maxPower);
+
+            PlayerStats.Instance.SetRegeneration(AttributeType.CurrentHitpoints, loadedData.player.statData.hpRegen);
+            PlayerStats.Instance.SetRegeneration(AttributeType.CurrentPower, loadedData.player.statData.powerRegen);
+            PlayerStats.Instance.SetLevel(loadedData.player.levelData.level);
+            PlayerStats.Instance.SetXp(loadedData.player.levelData.currentXp);
+            PlayerStats.Instance.SetMaxXp(loadedData.player.levelData.maxXp);
+            SetBeingLoadedAbilities(loadedData.player.abilityData, PlayerStats.Instance);
+            SetBeingAffinities(loadedData.player.statData, PlayerStats.Instance);
+            SetPlayerAbilitySlots(loadedData);
+
+
+        }
+        else throw new Exception("The Player does not exist to be modified.");
+    }
+    private static void SetMinionData(SaveData loadedData)
+    {
+        foreach (MinionData minionData in loadedData.minions)
+        {
+            GameObject minion = AlchemyHandler.Instance.SpawnMinion(minionData.statData.location);
+            if (minion.TryGetComponent(out MinionStats minionStats))
+            {
+                SetMinionStats(minionData, minionStats);
+                SetBeingLoadedAbilities(minionData.abilityData, minionStats);
+                SetBeingAffinities(minionData.statData, minionStats);
+            }
+        }
+    }
+    private static void SetMinionStats(MinionData minionData, MinionStats minionStats)
+    {
+        minionStats.SetAttribute(AttributeType.CurrentHitpoints, minionData.statData.currentHP);
+        minionStats.SetAttribute(AttributeType.MaxHitpoints, minionData.statData.maxHP);
+
+    }
+    private static void SetBeingAffinities(LivingBeingData lb_Data, LivingBeing being)
+    {
+        being.SetRegeneration(AttributeType.CurrentHitpoints, lb_Data.hpRegen);
+        foreach (var kvp in lb_Data.Affinity)
+        {
+            being.SetAffinity(kvp.Key, kvp.Value);
+        }
+    }
+    private static void SetBeingLoadedAbilities(AbilityData livingBeingAbilityData, LivingBeing lb)
+    {
+        foreach (Ability ability in livingBeingAbilityData.abilities)
+        {
+            lb.abilityHandler.LearnAbility(ability);
+        }
+    }
+
+    private static void SetPlayerAbilitySlots(SaveData saveData)
+    {
+        foreach (var kvp in saveData.player.abilityData.SlottedAbilities)
+        {
+            EventDeclarer.SlotChanged?.Invoke(kvp.Key, kvp.Value);
+        }
+    }
+
+
+    #endregion
 }

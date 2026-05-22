@@ -18,6 +18,10 @@ public class PauseGameHandler : MonoBehaviour
     private static VisualElement PauseMenu;
     private static Button ResumeButton;
     private static Button SettingsButton;
+    private static Button SaveButton;
+
+    private static Button LoadButton;
+
     private static Button RestartButton;
     private static Button InventoryButton;
     private static Button StatsButton;
@@ -338,8 +342,9 @@ public class PauseGameHandler : MonoBehaviour
         ClearInfoElement();
         InfoElement.text = "";
         EaseInOpacity(PlayerOptions, 350);
-        Button volumeUpButton = AddVolumeButtons("Volume Up", InfoElement, 50, 25);
-        Button volumeDownButton = AddVolumeButtons("Volume Down", InfoElement, 50, 25);
+        Button volumeUpButton = AddButtons("Volume Up", InfoElement, 50, 25);
+        Button volumeDownButton = AddButtons("Volume Down", InfoElement, 50, 25);
+
         volumeDownButton.RegisterCallback<ClickEvent>(e => AudioHandler.Instance.AdjustGeneralGameVolume(false));
         volumeUpButton.RegisterCallback<ClickEvent>(e => AudioHandler.Instance.AdjustGeneralGameVolume(true));
 
@@ -347,13 +352,18 @@ public class PauseGameHandler : MonoBehaviour
         volumeUpButton.RegisterCallback<ClickEvent>(e => DisplayVolume());
 
         DisplayVolume();
+
+        Button saveButton = AddButtons("Save Game", InfoElement, 4, 20);
+        saveButton.RegisterCallback<ClickEvent>(e => SaveHandler.SaveGameData(1));
+        Button loadButton = AddButtons("Load Game", InfoElement, 4, 20);
+        loadButton.RegisterCallback<ClickEvent>(e => SaveHandler.LoadGameData(1));
     }
     private static void DisplayVolume()
     {
         InfoElement.text = $"\n \n \n \n {AudioHandler.Instance.GetGeneralGameVolume()}\n";
     }
 
-    private static Button AddVolumeButtons(string buttonText, VisualElement panel, float width, float height)
+    private static Button AddButtons(string buttonText, VisualElement panel, float width, float height)
     {
         TemplateContainer prefabContainer = UIPrefabAssets.Instantiate();
         Button button = prefabContainer.Q<Button>("ButtonPrefab");

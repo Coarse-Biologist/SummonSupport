@@ -289,6 +289,14 @@ public class AlchemyHandler : MonoBehaviour
     #endregion
 
     #region set Class Variable functions
+
+    public GameObject SpawnMinion(Vector3 location)
+    {
+        GameObject minion = Instantiate(minionPrefab, location, Quaternion.identity);
+
+        AddActiveMinion(minion);
+        return minion;
+    }
     private void AddActiveMinion(GameObject minion)
     {
         LivingBeing livingBeing = minion.GetComponent<LivingBeing>();

@@ -3,9 +3,9 @@ using UnityEngine;
 
 public class SaveData
 {
-    public PlayerData player;
-    public List<MinionData> minions;
-    public AlchemyData alchemy;
+    public PlayerData player = new();
+    public List<MinionData> minions = new();
+    public AlchemyData alchemy = new();
 
 }
 
@@ -19,7 +19,7 @@ public class LivingBeingData
 
     public int maxPower;
     public int currentPower;
-    public Dictionary<Element, int> Affinity;
+    public Dictionary<Element, int> Affinity = new();
     public Vector3 location;
 }
 
@@ -34,25 +34,25 @@ public class PlayerLevelData
 
 public class AbilityData
 {
-    public Dictionary<int, Ability> SlottedAbilities;
-    public List<Ability> abilities;
+    public Dictionary<int, Ability> SlottedAbilities = new();
+    public List<Ability> abilities = new();
 }
 
 public class MinionData
 {
-    public LivingBeingData statData;
-    public AbilityData abilityData;
+    public LivingBeingData statData = new();
+    public AbilityData abilityData = new();
 }
 
 public class PlayerData
 {
-    public PlayerLevelData levelData;
-    public LivingBeingData statData;
-    public AbilityData abilityData;
+    public PlayerLevelData levelData = new();
+    public LivingBeingData statData = new();
+    public AbilityData abilityData = new();
 }
 public class AlchemyData
 {
-    public Dictionary<CraftingPotential, int> PlayerCraftingPotential;
-    public Dictionary<Element, int> ElementalKnowledge;
-    public List<AlchemyTool> KnownTools;
+    public Dictionary<CraftingPotential, int> PlayerCraftingPotential = new();
+    public Dictionary<Element, int> ElementalKnowledge = new();
+    public List<AlchemyTool> KnownTools = new();
 }
