@@ -65,6 +65,11 @@ public class MinionStats : LivingBeing
         if (ragdollScript != null) ragdollScript.CauseDestruction(true);
         ToggleDeath(true);
     }
+    public void TrueDeath()
+    {
+        CommandMinion.RemoveActiveMinions(this);
+        Destroy(gameObject, .1f);
+    }
     private void DelayedTestDeath()
     {
         Debug.Log("Delayed test death happening now");

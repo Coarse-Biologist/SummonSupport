@@ -10,9 +10,9 @@ public class AbilityHandler : MonoBehaviour
     [field: SerializeField] public GameObject abilitySpawn { private set; get; }
     protected LivingBeing statsHandler;
     [field: SerializeField] public List<Ability> Abilities { private set; get; } = new();
-    [field: SerializeField] public Dictionary<int, Ability> SlottedAbilities { private set; get; } = new();
+    [field: SerializeField] public Dictionary<int, Ability> SlottedAbilities { protected set; get; } = new();
 
-    public Dictionary<Ability, bool> abilitiesOnCooldownCrew = new();
+    public Dictionary<Ability, bool> abilitiesOnCooldown = new();
     protected Dictionary<BeamAbility, GameObject> toggledAbilitiesDict = new();
     private bool charging = false;
     public AbilityModHandler modHandler { protected set; get; }
@@ -36,7 +36,7 @@ public class AbilityHandler : MonoBehaviour
 
         foreach (Ability ability in Abilities)
         {
-            abilitiesOnCooldownCrew.Add(ability, false);
+            abilitiesOnCooldown.Add(ability, false);
         }
     }
     protected void Start()
@@ -57,7 +57,7 @@ public class AbilityHandler : MonoBehaviour
         if (!Abilities.Contains(ability) && ability != null)
         {
             Abilities.Add(ability);
-            abilitiesOnCooldownCrew.Add(ability, false);
+            abilitiesOnCooldown.Add(ability, false);
         }
     }
 
@@ -228,20 +228,20 @@ public class AbilityHandler : MonoBehaviour
             //status effect presense handling
             float coolDown = ability.Cooldown + modHandler.GetModAttributeByType(ability, AbilityModTypes.Cooldown) + statsHandler.SE_Handler.GetStatusEffectValue(StatusEffectType.Lethargic);
             // default, plus modifier, plus lethargy value
-            abilitiesOnCooldownCrew[ability] = true;
+            abilitiesOnCooldown[ability] = true;
 
             yield return new WaitForSeconds(coolDown);
         }
         finally
         {
-            abilitiesOnCooldownCrew[ability] = false;
+            abilitiesOnCooldown[ability] = false;
 
         }
     }
 
     protected virtual bool IsOnCoolDown(Ability ability)
     {
-        return abilitiesOnCooldownCrew[ability];
+        return abilitiesOnCooldown[ability];
     }
     public string GetKnownAbilitiesString()
     {

@@ -23,7 +23,7 @@ namespace SummonSupportEvents
         public static UnityEvent<MinionStats> SetActiveMinion = new();
         public static UnityEvent<MovementAttributes, float> SpeedAttributeChanged = new();
         public static UnityEvent<int, Ability> SlotChanged = new();
-        public static UnityEvent<int, Ability> SetSlot = new();
+        public static UnityEvent<int, Ability> NewAbilityUI = new();
 
         public static UnityEvent<int> AbilityUsed = new(); // int should be the index of the ability
         public static UnityEvent<DialogueAndAudio_SO> PlayerDialogue = new();

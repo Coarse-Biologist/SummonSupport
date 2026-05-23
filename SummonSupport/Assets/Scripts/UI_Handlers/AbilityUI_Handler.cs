@@ -54,7 +54,7 @@ public class AbilityUI_Handler : MonoBehaviour
         EventDeclarer.SlotChanged?.AddListener(SetAbilitySlot);
         EventDeclarer.AbilityUsed?.AddListener(AbilityUsed);
 
-        EventDeclarer.SetSlot?.AddListener(SetAbilitySlot);
+        EventDeclarer.NewAbilityUI?.AddListener(SetAbilitySlot);
 
     }
     void OnDisable()
@@ -62,7 +62,7 @@ public class AbilityUI_Handler : MonoBehaviour
         EventDeclarer.SlotChanged?.RemoveListener(SetAbilitySlot);
         EventDeclarer.AbilityUsed?.RemoveListener(AbilityUsed);
 
-        EventDeclarer.SetSlot?.RemoveListener(SetAbilitySlot);
+        EventDeclarer.NewAbilityUI?.RemoveListener(SetAbilitySlot);
 
     }
     private void GetAllProgressBars()

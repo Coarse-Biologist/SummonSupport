@@ -143,9 +143,6 @@ public class AlchemyHandler : MonoBehaviour
         AlchemyInventory.AlterCraftingPotential(CraftingPotential.OrganMass, (int)(minionHP * Instance.RecycleExchangeRate));
 
         EventDeclarer.minionDied?.Invoke(minion.gameObject);
-        CommandMinion.RemoveActiveMinions(minion);
-
-
         minion.Die();
     }
     private static int GetCombinedElementValues(LivingBeing stats)

@@ -127,7 +127,7 @@ public class CreatureAbilityHandler : AbilityHandler
         if (!Abilities.Contains(ability) && ability != null)
         {
             Abilities.Add(ability);
-            abilitiesOnCooldownCrew.Add(ability, false);
+            abilitiesOnCooldown.Add(ability, false);
         }
         SetAbilityLists();
     }

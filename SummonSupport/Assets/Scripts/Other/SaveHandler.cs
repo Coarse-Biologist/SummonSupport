@@ -77,15 +77,8 @@ public static class SaveHandler
     private static SaveData SavePlayerData(SaveData saveData)
     {
 
-        Dictionary<Element, int> affinitiesData = new();
-        foreach (Element element in Enum.GetValues(typeof(Element)))
-        {
-            affinitiesData.Add(element, PlayerStats.Instance.GetAffinity(element));
-        }
-        foreach (var affinityStruct in saveData.player.statData.Affinity)
-        {
-            //saveData.player.statData.Affinity
-        }
+        SavePlayerAffinity(saveData);
+
         saveData.player.statData.currentHP = (int)PlayerStats.Instance.GetAttribute(AttributeType.CurrentHitpoints);
         saveData.player.statData.maxHP = (int)PlayerStats.Instance.GetAttribute(AttributeType.MaxHitpoints);
         saveData.player.statData.hpRegen = (int)PlayerStats.Instance.HealthRegeneration;
@@ -93,10 +86,23 @@ public static class SaveHandler
         saveData.player.statData.powerRegen = (int)PlayerStats.Instance.PowerRegeneration;
         saveData.player.statData.currentPower = (int)PlayerStats.Instance.GetAttribute(AttributeType.CurrentPower);
         saveData.player.statData.maxPower = (int)PlayerStats.Instance.GetAttribute(AttributeType.MaxPower);
-
+        SaveAbilities(saveData.player.abilityData, PlayerStats.Instance.abilityHandler);
+        SaveSlottedAbilities(saveData.player.abilityData);
         SavePlayerLevelData(saveData);
 
         return saveData;
+    }
+
+    private static void SavePlayerAffinity(SaveData saveData)
+    {
+        saveData.player.statData.Affinity.Clear();
+        foreach (Element element in Enum.GetValues(typeof(Element)))
+        {
+            SS_Structs.ElementAffinity affinityStruct = new();
+            affinityStruct.elementType = element;
+            affinityStruct.value = PlayerStats.Instance.GetAffinity(element);
+            saveData.player.statData.Affinity.Add(affinityStruct);
+        }
     }
 
     private static SaveData SaveNewMinionData(SaveData saveData, MinionStats minionStats)
@@ -109,7 +115,6 @@ public static class SaveHandler
         {
             SS_Structs.ElementAffinity data = new()
             {
-
                 elementType = element,
                 value = PlayerStats.Instance.GetAffinity(element)
             };
@@ -225,6 +230,10 @@ public static class SaveHandler
     }
     private static void SetMinionData(SaveData loadedData)
     {
+        foreach (MinionStats minionStats in AlchemyHandler.Instance.activeMinions)
+        {
+            minionStats.TrueDeath();
+        }
         foreach (MinionData minionData in loadedData.minions)
         {
             GameObject minion = AlchemyHandler.Instance.SpawnMinion(minionData.statData.location);

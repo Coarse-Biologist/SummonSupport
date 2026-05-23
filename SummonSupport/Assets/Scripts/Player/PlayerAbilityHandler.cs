@@ -100,7 +100,7 @@ public class PlayerAbilityHandler : AbilityHandler
         foreach (Ability ability in Abilities)
         {
             if (ability == null) continue;
-            EventDeclarer.SetSlot?.Invoke(index, ability);
+            EventDeclarer.NewAbilityUI?.Invoke(index, ability);
             index++;
         }
     }
@@ -121,6 +121,7 @@ public class PlayerAbilityHandler : AbilityHandler
                 break;
             }
         }
+        Debug.Log($"setting sbility index {index} to hold {ability.name}");
         SlottedAbilities[index] = ability;
 
         if (Abilities.Contains(ability))
@@ -259,7 +260,7 @@ public class PlayerAbilityHandler : AbilityHandler
             if (toggledAbilitiesDict.ContainsKey(beamAbility))
                 return false;
         }
-        bool onCooldown = abilitiesOnCooldownCrew[ability];
+        bool onCooldown = abilitiesOnCooldown[ability];
         return onCooldown;
     }
 }
