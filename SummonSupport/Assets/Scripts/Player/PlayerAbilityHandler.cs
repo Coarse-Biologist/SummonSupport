@@ -113,6 +113,16 @@ public class PlayerAbilityHandler : AbilityHandler
     }
     private void ChangeAbilitySlot(int index, Ability ability)
     {
+        foreach (var kvp in SlottedAbilities)
+        {
+            if (kvp.Value == ability)
+            {
+                SlottedAbilities[kvp.Key] = null;
+                break;
+            }
+        }
+        SlottedAbilities[index] = ability;
+
         if (Abilities.Contains(ability))
             Abilities[Abilities.IndexOf(ability)] = null;
         while (Abilities.Count < index + 1)

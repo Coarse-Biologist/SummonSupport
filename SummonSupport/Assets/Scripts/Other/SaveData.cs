@@ -13,7 +13,6 @@ public class SaveData
 [Serializable]
 public class LivingBeingData
 {
-
     public int maxHP;
     public int currentHP;
     public int hpRegen;
@@ -21,7 +20,7 @@ public class LivingBeingData
 
     public int maxPower;
     public int currentPower;
-    public Dictionary<Element, int> Affinity = new();
+    public List<SS_Structs.ElementAffinity> Affinity = new();
     public Vector3 location;
 }
 
@@ -30,7 +29,6 @@ public class PlayerLevelData
 {
     public int currentXp;
     public int maxXp;
-
     public int level;
     public int skillPoints;
 }
@@ -38,8 +36,8 @@ public class PlayerLevelData
 [Serializable]
 public class AbilityData
 {
-    public Dictionary<int, Ability> SlottedAbilities = new();
-    public List<Ability> abilities = new();
+    public List<SS_Structs.SlottedAbilities> SlottedAbilities = new();
+    public List<Ability> knownAbilities = new();
 }
 
 [Serializable]
@@ -60,7 +58,7 @@ public class PlayerData
 [Serializable]
 public class AlchemyData
 {
-    public Dictionary<CraftingPotential, int> PlayerCraftingPotential = new();
-    public Dictionary<Element, int> ElementalKnowledge = new();
+    public List<SS_Structs.CraftingPotentialDict> PlayerCraftingPotential = new();
+    public List<SS_Structs.ElementKnowledge> ElementalKnowledge = new();
     public List<AlchemyTool> KnownTools = new();
 }

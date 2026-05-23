@@ -10,6 +10,8 @@ public class AbilityHandler : MonoBehaviour
     [field: SerializeField] public GameObject abilitySpawn { private set; get; }
     protected LivingBeing statsHandler;
     [field: SerializeField] public List<Ability> Abilities { private set; get; } = new();
+    [field: SerializeField] public Dictionary<int, Ability> SlottedAbilities { private set; get; } = new();
+
     public Dictionary<Ability, bool> abilitiesOnCooldownCrew = new();
     protected Dictionary<BeamAbility, GameObject> toggledAbilitiesDict = new();
     private bool charging = false;

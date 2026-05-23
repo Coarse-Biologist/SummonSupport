@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System;
 using System.IO;
 using SummonSupportEvents;
+using UnityEngine.InputSystem;
 public static class SaveHandler
 {
 
@@ -35,9 +36,29 @@ public static class SaveHandler
 
     private static SaveData SaveAlchemyData(SaveData saveData)
     {
-        saveData.alchemy.ElementalKnowledge = new Dictionary<Element, int>(AlchemyInventory.knowledgeDict);
+        foreach (var kvp in AlchemyInventory.knowledgeDict)
+        {
+            SS_Structs.ElementKnowledge knowledgeStruct = new()
+            {
+                elementType = kvp.Key,
+                value = kvp.Value
+            };
+            saveData.alchemy.ElementalKnowledge.Add(knowledgeStruct);
+        }
+
+        foreach (var kvp in AlchemyInventory.AvailableCraftingPotential)
+        {
+            SS_Structs.CraftingPotentialDict craftingPotentialStruct = new()
+            {
+                craftingPotential = kvp.Key,
+                value = kvp.Value
+            };
+            saveData.alchemy.PlayerCraftingPotential.Add(craftingPotentialStruct);
+
+        }
         saveData.alchemy.KnownTools = new List<AlchemyTool>(AlchemyInventory.KnownTools);
-        saveData.alchemy.PlayerCraftingPotential = new Dictionary<CraftingPotential, int>(AlchemyInventory.AvailableCraftingPotential);
+
+
         return saveData;
     }
 
@@ -61,8 +82,10 @@ public static class SaveHandler
         {
             affinitiesData.Add(element, PlayerStats.Instance.GetAffinity(element));
         }
-
-        saveData.player.statData.Affinity = affinitiesData;
+        foreach (var affinityStruct in saveData.player.statData.Affinity)
+        {
+            //saveData.player.statData.Affinity
+        }
         saveData.player.statData.currentHP = (int)PlayerStats.Instance.GetAttribute(AttributeType.CurrentHitpoints);
         saveData.player.statData.maxHP = (int)PlayerStats.Instance.GetAttribute(AttributeType.MaxHitpoints);
         saveData.player.statData.hpRegen = (int)PlayerStats.Instance.HealthRegeneration;
@@ -80,13 +103,19 @@ public static class SaveHandler
     {
         MinionData minionData = new();
         saveData.minions.Add(minionData);
-        Dictionary<Element, int> affinitiesData = new();
+
+        List<SS_Structs.ElementAffinity> affinityData = new();
         foreach (Element element in Enum.GetValues(typeof(Element)))
         {
-            affinitiesData.Add(element, PlayerStats.Instance.GetAffinity(element));
+            SS_Structs.ElementAffinity data = new()
+            {
+
+                elementType = element,
+                value = PlayerStats.Instance.GetAffinity(element)
+            };
+            affinityData.Add(data);
         }
 
-        minionData.statData.Affinity = affinitiesData;
         minionData.statData.currentHP = (int)minionStats.GetAttribute(AttributeType.CurrentHitpoints);
         minionData.statData.maxHP = (int)minionStats.GetAttribute(AttributeType.MaxHitpoints);
         minionData.statData.hpRegen = (int)minionStats.HealthRegeneration;
@@ -99,7 +128,20 @@ public static class SaveHandler
 
     private static AbilityData SaveAbilities(AbilityData abilityData, AbilityHandler abilityHandler)
     {
-        abilityData.abilities = new List<Ability>(abilityHandler.Abilities);
+        abilityData.knownAbilities = new List<Ability>(abilityHandler.Abilities);
+        return abilityData;
+    }
+    private static AbilityData SaveSlottedAbilities(AbilityData abilityData)
+    {
+        foreach (var kvp in PlayerStats.Instance.abilityHandler.SlottedAbilities)
+        {
+            SS_Structs.SlottedAbilities slottedAbilitiesStruct = new()
+            {
+                ability = kvp.Value,
+                slot = kvp.Key
+            };
+            abilityData.SlottedAbilities.Add(slottedAbilitiesStruct);
+        }
         return abilityData;
     }
 
@@ -114,7 +156,7 @@ public static class SaveHandler
         return saveData;
     }
 
-    #region Handle loading data
+    #region load
     public static void LoadGameData(int slot)
     {
 
@@ -146,8 +188,19 @@ public static class SaveHandler
             SetPlayerData(loadedData);
         }
         SetMinionData(loadedData);
+        SetAlchemyData(loadedData.alchemy);
     }
-
+    private static void SetAlchemyData(AlchemyData data)
+    {
+        foreach (var dataStruct in data.ElementalKnowledge)
+        {
+            AlchemyInventory.SetElementalKnowledge(dataStruct.elementType, dataStruct.value);
+        }
+        foreach (var dataStruct in data.PlayerCraftingPotential)
+        {
+            AlchemyInventory.SetCraftingPotential(dataStruct.craftingPotential, dataStruct.value);
+        }
+    }
     private static void SetPlayerData(SaveData loadedData)
     {
         if (PlayerStats.Instance != null)
@@ -191,15 +244,14 @@ public static class SaveHandler
     }
     private static void SetBeingAffinities(LivingBeingData lb_Data, LivingBeing being)
     {
-        being.SetRegeneration(AttributeType.CurrentHitpoints, lb_Data.hpRegen);
         foreach (var kvp in lb_Data.Affinity)
         {
-            being.SetAffinity(kvp.Key, kvp.Value);
+            being.SetAffinity(kvp.elementType, kvp.value);
         }
     }
     private static void SetBeingLoadedAbilities(AbilityData livingBeingAbilityData, LivingBeing lb)
     {
-        foreach (Ability ability in livingBeingAbilityData.abilities)
+        foreach (Ability ability in livingBeingAbilityData.knownAbilities)
         {
             lb.abilityHandler.LearnAbility(ability); //#TODO null reference
         }
@@ -209,7 +261,7 @@ public static class SaveHandler
     {
         foreach (var kvp in saveData.player.abilityData.SlottedAbilities)
         {
-            EventDeclarer.SlotChanged?.Invoke(kvp.Key, kvp.Value);
+            EventDeclarer.SlotChanged?.Invoke(kvp.slot, kvp.ability);
         }
     }
 

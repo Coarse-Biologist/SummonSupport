@@ -82,7 +82,6 @@ public abstract class LivingBeing : MonoBehaviour
     public Dictionary<Element, (Func<float> Get, Action<float> Set)> Affinities { private set; get; } = new();
     public Dictionary<AttributeType, (Func<float> Get, Action<float> Set)> ResourceAttributesDict { private set; get; } = new();
 
-
     public I_ResourceBar resourceBarInterface { protected set; get; }
     public I_Destruction ragdollScript;
     public AbilityHandler abilityHandler { protected set; get; }

@@ -27,7 +27,6 @@ public class PlayerStats : LivingBeing
 
     #endregion
     [field: SerializeField] public int TotalControlllableMinions { private set; get; } = 2;
-    [field: SerializeField] public Dictionary<string, int> SlottedAbilities { private set; get; } = new Dictionary<string, int>(); //This will store the slot in which an ability is contained. the string is a placeholder until we decide the object type of an ability
     public PlayerUIHandler UiHandler { private set; get; }
 
     #region player speciic transforms;
