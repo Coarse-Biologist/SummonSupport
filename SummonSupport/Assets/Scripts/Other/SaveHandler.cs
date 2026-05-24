@@ -4,6 +4,9 @@ using System;
 using System.IO;
 using SummonSupportEvents;
 using UnityEngine.InputSystem;
+using SS_Structs;
+using Unity.Entities.UniversalDelegates;
+using Unity.VisualScripting;
 public static class SaveHandler
 {
 
@@ -68,8 +71,11 @@ public static class SaveHandler
 
         foreach (MinionStats minion in AlchemyHandler.Instance.activeMinions)
         {
-            saveData = SaveNewMinionData(saveData, minion);
+            Debug.Log($"savedata = {saveData}");
+
+            SaveNewMinionData(saveData, minion);
         }
+        Debug.Log($"savedata = {saveData}");
 
         return saveData;
     }
@@ -105,21 +111,29 @@ public static class SaveHandler
         }
     }
 
-    private static SaveData SaveNewMinionData(SaveData saveData, MinionStats minionStats)
+    private static List<ElementAffinity> SaveMinionAffinity(SaveData saveData, MinionStats minionStats)
     {
-        MinionData minionData = new();
-        saveData.minions.Add(minionData);
-
-        List<SS_Structs.ElementAffinity> affinityData = new();
+        List<ElementAffinity> affinityData = new();
         foreach (Element element in Enum.GetValues(typeof(Element)))
         {
-            SS_Structs.ElementAffinity data = new()
+            ElementAffinity data = new()
             {
                 elementType = element,
                 value = PlayerStats.Instance.GetAffinity(element)
             };
             affinityData.Add(data);
         }
+        return affinityData;
+    }
+
+    private static void SaveNewMinionData(SaveData saveData, MinionStats minionStats)
+    {
+        MinionData minionData = new();
+        saveData.minions.Add(minionData);
+
+        List<ElementAffinity> affinityData = SaveMinionAffinity(saveData, minionStats);
+
+        minionData.statData.Affinity = affinityData;
 
         minionData.statData.currentHP = (int)minionStats.GetAttribute(AttributeType.CurrentHitpoints);
         minionData.statData.maxHP = (int)minionStats.GetAttribute(AttributeType.MaxHitpoints);
@@ -127,8 +141,7 @@ public static class SaveHandler
         minionData.statData.location = minionStats.transform.position;
 
         minionData.abilityData = SaveAbilities(minionData.abilityData, minionStats.abilityHandler);
-
-        return saveData;
+        saveData.minions.Add(minionData);
     }
 
     private static AbilityData SaveAbilities(AbilityData abilityData, AbilityHandler abilityHandler)
@@ -230,13 +243,16 @@ public static class SaveHandler
     }
     private static void SetMinionData(SaveData loadedData)
     {
-        foreach (MinionStats minionStats in AlchemyHandler.Instance.activeMinions)
+        for (int i = 0; i < AlchemyHandler.Instance.activeMinions.Count; i++)
         {
-            minionStats.TrueDeath();
+            MinionStats minionToUnload = (MinionStats)AlchemyHandler.Instance.activeMinions[i];
+            minionToUnload.TrueDeath();
         }
         foreach (MinionData minionData in loadedData.minions)
         {
             GameObject minion = AlchemyHandler.Instance.SpawnMinion(minionData.statData.location);
+            SetupManager.Instance.DebugLocation(minion.transform.position + Vector3.left, Color.orange);
+
             if (minion.TryGetComponent(out MinionStats minionStats))
             {
                 SetMinionStats(minionData, minionStats);
@@ -262,6 +278,12 @@ public static class SaveHandler
     {
         foreach (Ability ability in livingBeingAbilityData.knownAbilities)
         {
+            if (!lb.TryGetComponent(out AbilityHandler aHandler))
+            {
+                throw new Exception("You wont see this message because every minion has it");
+            }
+            else lb.SetAbilityHandler(aHandler);
+            SetupManager.Instance.DebugLocation(lb.transform.position, Color.red);
             lb.abilityHandler.LearnAbility(ability); //#TODO null reference
         }
     }

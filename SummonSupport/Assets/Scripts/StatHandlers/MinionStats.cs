@@ -44,7 +44,10 @@ public class MinionStats : LivingBeing
     }
     protected override void Start()
     {
-        StartCoroutine("LateStart");
+        abilityHandler = GetComponent<AbilityHandler>();
+        SetupManager.Instance.DebugLocation(transform.position, Color.yellow);
+        base.Start();
+        StartCoroutine(LateStart());
     }
     IEnumerator LateStart()
     {
@@ -52,7 +55,6 @@ public class MinionStats : LivingBeing
         PlayerUIHandler.Instance.AddMinionHP(this);
         CommandMinion.AddActiveMinions(this);
         ColorChanger.ChangeAllMatsByAffinity(this);
-        base.Start();
 
 
     }
@@ -67,6 +69,9 @@ public class MinionStats : LivingBeing
     }
     public void TrueDeath()
     {
+        EventDeclarer.minionDied?.Invoke(gameObject);
+
+        AlchemyHandler.Instance.RemoveActiveMinion(this);
         CommandMinion.RemoveActiveMinions(this);
         Destroy(gameObject, .1f);
     }

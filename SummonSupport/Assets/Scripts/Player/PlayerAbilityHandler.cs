@@ -29,6 +29,7 @@ public class PlayerAbilityHandler : AbilityHandler
     {
         base.Start();
         UpdateAbilities();
+        SetAllAbilitySlots();
         //playerStats = GetComponent<LivingBeing>();
         //modHandler = AbilityModHandler.Instance;
         playerStats = PlayerStats.Instance;
@@ -121,7 +122,6 @@ public class PlayerAbilityHandler : AbilityHandler
                 break;
             }
         }
-        Debug.Log($"setting sbility index {index} to hold {ability.name}");
         SlottedAbilities[index] = ability;
 
         if (Abilities.Contains(ability))
@@ -129,6 +129,13 @@ public class PlayerAbilityHandler : AbilityHandler
         while (Abilities.Count < index + 1)
             Abilities.Add(null);
         Abilities[index] = ability;
+    }
+    private void SetAllAbilitySlots()
+    {
+        for (int i = 0; i < Abilities.Count && i < 5; i++)
+        {
+            SlottedAbilities.Add(i, Abilities[i]);
+        }
     }
     private bool CheckAbilityUsePossible(Ability selectedAbility)
     {

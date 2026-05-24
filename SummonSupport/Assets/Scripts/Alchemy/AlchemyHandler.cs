@@ -304,6 +304,11 @@ public class AlchemyHandler : MonoBehaviour
         }
         CommandMinion.SetActiveMinions(activeMinions);
     }
+    public void RemoveActiveMinion(LivingBeing livingBeing)
+    {
+        activeMinions.Remove(livingBeing);
+
+    }
 
     #endregion
 

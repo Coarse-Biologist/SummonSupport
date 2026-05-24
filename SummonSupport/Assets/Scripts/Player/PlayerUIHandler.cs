@@ -41,12 +41,16 @@ public class PlayerUIHandler : MonoBehaviour
     {
         EventDeclarer.newMinionAdded?.AddListener(AddMinionHP);
         EventDeclarer.minionRecycled?.AddListener(RemoveMinionHP);
+        EventDeclarer.minionDied?.AddListener(RemoveMinionHP);
+
     }
 
     void OnDisable()
     {
         EventDeclarer.newMinionAdded?.RemoveListener(AddMinionHP);
         EventDeclarer.minionRecycled?.RemoveListener(RemoveMinionHP);
+        EventDeclarer.minionDied?.RemoveListener(RemoveMinionHP);
+
     }
 
     void Start()

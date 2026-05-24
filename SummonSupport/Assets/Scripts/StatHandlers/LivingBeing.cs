@@ -110,12 +110,16 @@ public abstract class LivingBeing : MonoBehaviour
         StartCoroutine(RegenerateRoutine());
         audioHandler = GetComponent<LivingBeingAudioHandler>();
         abilityHandler = GetComponent<AbilityHandler>();
-
+        Debug.Log($"Thus i have come into the world: {abilityHandler}");
         ragdollScript = GetComponent<I_Destruction>();
         if (TryGetComponent(out StatusEffectHandler se))
         {
             SE_Handler = se;
         }
+    }
+    public void SetAbilityHandler(AbilityHandler aH)
+    {
+        abilityHandler = aH;
     }
 
     private void InitializeRegenerationValues()
@@ -160,7 +164,6 @@ public abstract class LivingBeing : MonoBehaviour
         {
             Affinities[element].Set(newAffinity);
         }
-        //Debug.Log($"SetAffinity: Affinity = {newAffinity}");
     }
     public int GetAffinity(Element element)
     {
@@ -443,7 +446,7 @@ public abstract class LivingBeing : MonoBehaviour
 
         string statString = "";
         statString += $"Max hitpoints: {GetAttribute(AttributeType.MaxHitpoints)}\n";
-        statString += GetComponent<AbilityHandler>().GetKnownAbilitiesString();
+        statString += abilityHandler.GetKnownAbilitiesString();
         foreach (var kvp in Affinities)
         {
             if (kvp.Value.Get() > 0)
