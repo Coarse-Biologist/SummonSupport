@@ -8,6 +8,8 @@ using UnityEngine;
 
 public static class ColorChanger
 {
+
+
     private static ParticleSystem BleedEffect;
     private static GradientLibraryAsset colorGradientLibrary;
     private static bool ready = false;
@@ -136,7 +138,11 @@ public static class ColorChanger
     }
     public static void ChangeAllMatsByAffinity(LivingBeing livingBeing)
     {
+
         Element element = livingBeing.GetHighestAffinity(out float value);
+        float affinityDisplayStrength = value; // likelihood of element overwriting default mats.
+
+
         if (element == Element.None || value < AlchemyHandler.ElementThreshhold) return;
 
         Renderer meshRenderer = livingBeing.GetComponentInChildren<Renderer>();
@@ -148,10 +154,15 @@ public static class ColorChanger
             Material[] mats = meshRenderer.materials;
             for (int i = 0; i < mats.Length; i++)
             {
-                Material newMaterial = new(GetGlowStrengthByElement(element));
-                SetMaterialColor(newMaterial, GetRandomColorFromElementGradient(element));
+                int theRoll = UnityEngine.Random.Range(0, 200);
+                Debug.Log($"{affinityDisplayStrength} = creature affinity. roll to beat = {theRoll}");
+                if (UnityEngine.Random.Range(0, 200) <= affinityDisplayStrength)
+                {
+                    Material newMaterial = new(GetGlowStrengthByElement(element));
+                    SetMaterialColor(newMaterial, GetRandomColorFromElementGradient(element));
 
-                mats[i] = newMaterial;
+                    mats[i] = newMaterial;
+                }
             }
             meshRenderer.materials = mats;
         }

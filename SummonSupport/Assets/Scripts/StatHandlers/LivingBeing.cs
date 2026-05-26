@@ -110,7 +110,7 @@ public abstract class LivingBeing : MonoBehaviour
         StartCoroutine(RegenerateRoutine());
         audioHandler = GetComponent<LivingBeingAudioHandler>();
         abilityHandler = GetComponent<AbilityHandler>();
-        Debug.Log($"Thus i have come into the world: {abilityHandler}");
+        //Debug.Log($"Thus i have come into the world: {abilityHandler}");
         ragdollScript = GetComponent<I_Destruction>();
         if (TryGetComponent(out StatusEffectHandler se))
         {

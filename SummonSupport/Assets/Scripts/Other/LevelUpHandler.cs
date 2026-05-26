@@ -4,7 +4,7 @@ using UnityEngine;
 public static class LevelUpHandler
 {
 
-    public static int CraftingPowerScalar { private set; get; } = 100;
+    public static int CraftingPowerScalar { private set; get; } = 100; // multiplied by level and compared to abiloity crafting cost to determine if a power is in their level range.
     public static Dictionary<int, List<LevelRewards>> LevelRewardsDict = new()
     {
         {2, new (){LevelRewards.SkillPoint}},

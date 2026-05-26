@@ -13,6 +13,7 @@ public class SaveData
 [Serializable]
 public class LivingBeingData
 {
+    public string Name;
     public int maxHP;
     public int currentHP;
     public int hpRegen;
@@ -22,6 +23,7 @@ public class LivingBeingData
     public int currentPower;
     public List<SS_Structs.ElementAffinity> Affinity = new();
     public Vector3 location;
+    public Quaternion rotation;
 }
 
 [Serializable]

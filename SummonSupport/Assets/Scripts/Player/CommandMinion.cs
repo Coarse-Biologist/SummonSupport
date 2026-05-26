@@ -5,30 +5,25 @@ using UnityEngine;
 public static class CommandMinion
 {
 
-    public static List<GameObject> SelectedMinions { private set; get; } = new List<GameObject>();
-    public static List<LivingBeing> activeMinions { private set; get; } = new();
 
+    public static List<LivingBeing> selectedMinions { private set; get; } = new();
 
-    public static void RemoveActiveMinions(LivingBeing minionObject)
+    public static void RemoveSelectedMinion(LivingBeing minionObject)
     {
-        if (activeMinions.Contains(minionObject))
-            activeMinions.Remove(minionObject);
+        if (selectedMinions.Contains(minionObject))
+            selectedMinions.Remove(minionObject);
     }
-    public static void AddActiveMinions(LivingBeing minionObject)
+    public static void AddSelectedMinion(LivingBeing minionObject)
     {
-        if (!activeMinions.Contains(minionObject))
-            activeMinions.Add(minionObject);
+        if (!selectedMinions.Contains(minionObject))
+            selectedMinions.Add(minionObject);
     }
 
-    public static void SetActiveMinions(List<LivingBeing> activeMinionsList)
-    {
-        activeMinions = activeMinionsList;
-    }
 
     public static void HandleCommand(RaycastHit hit)
     {
         Vector3 loc = hit.point;
-        if (activeMinions != null)
+        if (AlchemyHandler.Instance.activeMinions != null)
         {
             if (hit.collider.TryGetComponent(out EnemyStats targetLivingBeing))
             {
@@ -55,19 +50,9 @@ public static class CommandMinion
     }
 
 
-    public static void SetSelectedMinion(GameObject minion)
-    {
-        if (minion != null)
-        {
-            if (!SelectedMinions.Contains(minion))
-                SelectedMinions.Add(minion);
-            else SelectedMinions.Remove(minion);
-        }
-    }
-
     private static void SendMinionToInteract(Vector3 loc)
     {
-        foreach (LivingBeing minion in activeMinions)
+        foreach (LivingBeing minion in AlchemyHandler.Instance.activeMinions)
         {
             if (minion != null)
             {
@@ -78,17 +63,17 @@ public static class CommandMinion
                 obedienceState.SetCommandLoc(loc);
                 stats.SetCommand(MinionCommands.GoTo);
             }
-            else activeMinions.Remove(minion);
+            else AlchemyHandler.Instance.activeMinions.Remove(minion);
         }
 
     }
     public static void CommandMinionToGoToLoc(Vector3 loc)
     {
-        foreach (LivingBeing minion in activeMinions)
+        foreach (LivingBeing minion in AlchemyHandler.Instance.activeMinions)
         {
             if (minion == null)
             {
-                activeMinions.Remove(minion);
+                AlchemyHandler.Instance.activeMinions.Remove(minion);
                 return;
             }
             MinionStats stats = minion.GetComponent<MinionStats>();
@@ -102,7 +87,7 @@ public static class CommandMinion
 
     public static void CommandMinionToAttack(LivingBeing enemy)
     {
-        foreach (LivingBeing minion in activeMinions)
+        foreach (LivingBeing minion in AlchemyHandler.Instance.activeMinions)
         {
             MinionStats stats = minion.GetComponent<MinionStats>();
             AIObedienceState obedienceState = minion.GetComponent<AIObedienceState>();

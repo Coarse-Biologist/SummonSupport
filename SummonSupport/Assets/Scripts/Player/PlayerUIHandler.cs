@@ -159,7 +159,7 @@ public class PlayerUIHandler : MonoBehaviour
         LivingBeing minionStats = GetLivingBeingFromHPBar(minionHP);
         ToggleHPGlow(minionHP);
 
-        CommandMinion.SetSelectedMinion(minionStats.gameObject);
+        CommandMinion.AddSelectedMinion(minionStats);
     }
 
     private void ToggleHPGlow(ProgressBar minionHP)

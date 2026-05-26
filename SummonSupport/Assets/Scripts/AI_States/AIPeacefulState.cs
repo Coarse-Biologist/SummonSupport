@@ -144,8 +144,8 @@ public class AIPeacefulState : AIState
     }
     private LivingBeing SelectFriendlyTarget()
     {
-        List<LivingBeing> friendlies = new() { stateHandler.playerStats, stateHandler.livingBeing };
-        foreach (LivingBeing minion in CommandMinion.activeMinions)
+        List<LivingBeing> friendlies = new() { stateHandler.playerStats };
+        foreach (LivingBeing minion in AlchemyHandler.Instance.activeMinions)
         {
             friendlies.Add(minion);
         }

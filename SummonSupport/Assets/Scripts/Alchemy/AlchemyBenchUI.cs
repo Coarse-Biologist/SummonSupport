@@ -554,7 +554,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     {
         ClearAllPanels();
         ResetVars();
-        if (CommandMinion.activeMinions.Count() == PlayerStats.Instance.TotalControlllableMinions)
+        if (AlchemyHandler.Instance.activeMinions.Count() == PlayerStats.Instance.TotalControlllableMinions)
         {
             instructions.text = "You already have your maximum number of minions. Upgrade your current minions, recycle and replace them, or acquire more minion slots.";
         }

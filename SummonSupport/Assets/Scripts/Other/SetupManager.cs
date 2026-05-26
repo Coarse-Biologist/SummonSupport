@@ -55,18 +55,18 @@ public class SetupManager : MonoBehaviour
     public void DebugLocation(Vector3 loc, Color specialColorRequest, int duration = 2)
     {
         if (loc == Vector3.negativeInfinity) return;
-        Debug.Log($"Debugging location. {Instance.transform.position}");
+        //Debug.Log($"Debugging location. {Instance.transform.position}");
         GameObject instance = Instantiate(LocSphere, loc, Quaternion.identity);
         instance.GetComponent<MeshRenderer>().material.color = specialColorRequest;
 
         Destroy(instance, duration);
     }
 
-    public GameObject SpawnPlayer(Vector3 spawnLoc)
+    public GameObject SpawnPlayer(Vector3 spawnLoc, Quaternion rotation)
     {
         if (PlayerPrefab == null) throw new System.Exception("Player prefab was not set in the SetupManager");
         if (PlayerStats.Instance != null) return PlayerStats.Instance.gameObject;
-        else return Instantiate(PlayerPrefab, spawnLoc, Quaternion.identity);
+        else return Instantiate(PlayerPrefab, spawnLoc, rotation);
     }
 
 

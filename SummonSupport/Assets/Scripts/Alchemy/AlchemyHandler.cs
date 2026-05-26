@@ -22,6 +22,8 @@ public class AlchemyHandler : MonoBehaviour
     [field: SerializeField] public float KnowledgeGainRate { get; private set; } = 1f;
     [field: SerializeField] public float HealthScalar { get; private set; } = 2f;
     [field: SerializeField] public static int ElementThreshhold { get; private set; } = 50;
+    [field: SerializeField] public static float AffinityToColorScalar { private set; get; } = .01f; // likelihood per affinity that a portion of the elemental will show affinity in their material.
+
 
 
     [field: SerializeField] public int SizeScalar { get; private set; } = 20;
@@ -55,6 +57,7 @@ public class AlchemyHandler : MonoBehaviour
             return;
         }
         Instance = this;
+        Debug.Log($"active minions at awake: {activeMinions.Count}");
     }
 
 
@@ -63,13 +66,6 @@ public class AlchemyHandler : MonoBehaviour
     public string HandleCraftingResults(Dictionary<CraftingPotential, int> combinedPotential, List<Element> elementList)
     {
         string craftingResults = "";
-        //if (elementList.Count() == 0)
-        //{
-        //    combinedPotential = combinedPotential
-        //    .Where(g => !g.ToString()
-        //    .Contains("Ether"))
-        //    .ToDictionary(g => g.Key, g => g.Value);
-        //}
 
         AlchemyInventory.ExpendCraftingPotential(combinedPotential);
 
@@ -94,36 +90,6 @@ public class AlchemyHandler : MonoBehaviour
             }
             else Logging.Error("Crafted Minion is null, was he loaded promtly or correctly?");
         }
-        return craftingResults;
-    }
-    public string HandleCraftingResultsCP(Dictionary<CraftingPotential, int> combinedCraftingPotential, List<Element> elementList)
-    {
-        string craftingResults = "";
-
-
-        //AlchemyInventory.ExpendIngredients(combinedIngredients);
-        //#TODO
-
-        if (minionPrefab != null)
-        {
-            Vector3 spawnPos = PlayerStats.Instance.transform.position;
-            if (SpawnLocation != null) spawnPos = SpawnLocation.position;
-            craftedMinion = Instantiate(minionPrefab, spawnPos, Quaternion.identity);
-
-            //craftingResults += UpgradeMinion(craftedMinion.GetComponent<LivingBeing>(), combinedCraftingPotential, elementList);
-            //#TODO
-
-            AddActiveMinion(craftedMinion);
-            //Debug.Log("Add ACtive minion");
-            //#TODO
-
-            //int knowledgeGain = GainKnowledge(elementList, combinedCraftingPotential);
-            //#TODO
-            //craftingResults += $"You have gained {knowledgeGain} alchemic knowledge.\n";
-            //Logging.Info($"You have just gained a total of {knowledgeGain} knowledge from alchemic work.");
-        }
-        else Logging.Error("Crafted Minion is null, was he loaded promtly or correctly?");
-
         return craftingResults;
     }
 
@@ -158,7 +124,7 @@ public class AlchemyHandler : MonoBehaviour
     {
         int healthUpgrade = 0;
 
-        EventDeclarer.RepeatableQuestCompleted?.Invoke(Quest.RepeatableAccomplishments.OrganMassUsed, value); //#TODO this has to be where the organs are converted to organ mass crafting potential
+        EventDeclarer.RepeatableQuestCompleted?.Invoke(Quest.RepeatableAccomplishments.OrganMassUsed, value);
         stats.ChangeAttribute(AttributeType.MaxHitpoints, value);
         healthUpgrade += (int)(value * HealthScalar);
         AlterSizeByOrganNum(stats, value);
@@ -233,7 +199,7 @@ public class AlchemyHandler : MonoBehaviour
         Element strongestElement = livingBeing.GetHighestAffinity(out float value);
         if (strongestElement != Element.None)
         {
-            Ability[] abilities = AbilityLibrary.abilityLibrary.GetElementalAbilitiesBelowLevel(minionPower, new() { strongestElement });
+            List<Ability> abilities = AbilityLibrary.abilityLibrary.GetElementalAbilitiesBelowLevel(minionPower, new() { strongestElement });
 
             if (abilities != null)
             {
@@ -287,22 +253,24 @@ public class AlchemyHandler : MonoBehaviour
 
     #region set Class Variable functions
 
-    public GameObject SpawnMinion(Vector3 location)
+    public GameObject SpawnMinion(Vector3 location, Quaternion rotation)
     {
-        GameObject minion = Instantiate(minionPrefab, location, Quaternion.identity);
+        GameObject minion = Instantiate(minionPrefab, location, rotation);
 
-        AddActiveMinion(minion);
         return minion;
     }
-    private void AddActiveMinion(GameObject minion)
+    public void AddActiveMinion(GameObject minion)
     {
         LivingBeing livingBeing = minion.GetComponent<LivingBeing>();
+        Debug.Log($"attempting to add Active minion: {livingBeing.name}");
+
         if (!activeMinions.Contains(livingBeing))
         {
+            Debug.Log($"Indded adding Active minion: {livingBeing.name}");
+
             activeMinions.Add(livingBeing);
             EventDeclarer.newMinionAdded?.Invoke(livingBeing);
         }
-        CommandMinion.SetActiveMinions(activeMinions);
     }
     public void RemoveActiveMinion(LivingBeing livingBeing)
     {

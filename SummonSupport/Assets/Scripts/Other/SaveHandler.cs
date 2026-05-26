@@ -7,6 +7,7 @@ using UnityEngine.InputSystem;
 using SS_Structs;
 using Unity.Entities.UniversalDelegates;
 using Unity.VisualScripting;
+using Mono.Cecil;
 public static class SaveHandler
 {
 
@@ -71,11 +72,11 @@ public static class SaveHandler
 
         foreach (MinionStats minion in AlchemyHandler.Instance.activeMinions)
         {
-            Debug.Log($"savedata = {saveData}");
+            Debug.Log($"ss  aving minion edata = {minion}");
 
             SaveNewMinionData(saveData, minion);
         }
-        Debug.Log($"savedata = {saveData}");
+        Debug.Log("number of minions:" + saveData.minions.Count);
 
         return saveData;
     }
@@ -129,12 +130,12 @@ public static class SaveHandler
     private static void SaveNewMinionData(SaveData saveData, MinionStats minionStats)
     {
         MinionData minionData = new();
-        saveData.minions.Add(minionData);
 
         List<ElementAffinity> affinityData = SaveMinionAffinity(saveData, minionStats);
 
         minionData.statData.Affinity = affinityData;
 
+        minionData.statData.Name = minionStats.Name;
         minionData.statData.currentHP = (int)minionStats.GetAttribute(AttributeType.CurrentHitpoints);
         minionData.statData.maxHP = (int)minionStats.GetAttribute(AttributeType.MaxHitpoints);
         minionData.statData.hpRegen = (int)minionStats.HealthRegeneration;
@@ -165,6 +166,7 @@ public static class SaveHandler
 
     private static SaveData SavePlayerLevelData(SaveData saveData)
     {
+        saveData.player.statData.Name = PlayerStats.Instance.Name;
         saveData.player.levelData.level = PlayerStats.Instance.CurrentLevel;
         saveData.player.levelData.currentXp = (int)PlayerStats.Instance.CurrentXP;
         saveData.player.levelData.maxXp = (int)PlayerStats.Instance.MaxXP;
@@ -199,7 +201,7 @@ public static class SaveHandler
     private static void HandleLoadedData(SaveData loadedData)
     {
         //#TODO
-        GameObject player = SetupManager.Instance.SpawnPlayer(loadedData.player.statData.location);
+        GameObject player = SetupManager.Instance.SpawnPlayer(loadedData.player.statData.location, loadedData.player.statData.rotation);
         player.transform.position = loadedData.player.statData.location;
         if (player.TryGetComponent(out LivingBeing livingBeing))
         {
@@ -250,8 +252,7 @@ public static class SaveHandler
         }
         foreach (MinionData minionData in loadedData.minions)
         {
-            GameObject minion = AlchemyHandler.Instance.SpawnMinion(minionData.statData.location);
-            SetupManager.Instance.DebugLocation(minion.transform.position + Vector3.left, Color.orange);
+            GameObject minion = AlchemyHandler.Instance.SpawnMinion(minionData.statData.location, minionData.statData.rotation);
 
             if (minion.TryGetComponent(out MinionStats minionStats))
             {
@@ -259,12 +260,18 @@ public static class SaveHandler
                 SetBeingLoadedAbilities(minionData.abilityData, minionStats);
                 SetBeingAffinities(minionData.statData, minionStats);
             }
+            AlchemyHandler.Instance.AddActiveMinion(minion);
+
         }
     }
     private static void SetMinionStats(MinionData minionData, MinionStats minionStats)
     {
+        minionStats.SetName(minionData.statData.Name);
         minionStats.SetAttribute(AttributeType.CurrentHitpoints, minionData.statData.currentHP);
         minionStats.SetAttribute(AttributeType.MaxHitpoints, minionData.statData.maxHP);
+        minionStats.SetRegeneration(AttributeType.CurrentHitpoints, minionData.statData.hpRegen);
+        minionStats.SetRegeneration(AttributeType.CurrentPower, minionData.statData.powerRegen);
+
 
     }
     private static void SetBeingAffinities(LivingBeingData lb_Data, LivingBeing being)
@@ -283,7 +290,6 @@ public static class SaveHandler
                 throw new Exception("You wont see this message because every minion has it");
             }
             else lb.SetAbilityHandler(aHandler);
-            SetupManager.Instance.DebugLocation(lb.transform.position, Color.red);
             lb.abilityHandler.LearnAbility(ability); //#TODO null reference
         }
     }
