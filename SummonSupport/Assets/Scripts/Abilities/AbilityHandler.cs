@@ -133,6 +133,8 @@ public class AbilityHandler : MonoBehaviour
         {
             //StartCoroutine(SetOnCooldown(beamAbility));
             StopToggledAbility(beamAbility, activeAbility);
+            if (anim != null) anim.ChangeLayerAnimation("Reload", 1, 2f, true);
+
             return false;
         }
         else
