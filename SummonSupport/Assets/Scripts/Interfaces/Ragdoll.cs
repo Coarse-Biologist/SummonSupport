@@ -56,11 +56,14 @@ public class Ragdoll : MonoBehaviour, I_Destruction
     }
     public void ReverseDestruction()
     {
-        for (int i = 0; i < rigidbodies.Count; i++)
+        if (rigidbodies != null && rigidbodies.Count > 0)
         {
-            rigidbodies[i].transform.localPosition = startingPositions[i];
-            rigidbodies[i].transform.localRotation = startingRotations[i];
+            for (int i = 0; i < rigidbodies.Count; i++)
+            {
+                rigidbodies[i].transform.localPosition = startingPositions[i];
+                rigidbodies[i].transform.localRotation = startingRotations[i];
+            }
+            RagDoll(false);
         }
-        RagDoll(false);
     }
 }

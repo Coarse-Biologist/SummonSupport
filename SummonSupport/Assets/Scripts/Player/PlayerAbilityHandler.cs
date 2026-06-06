@@ -11,7 +11,6 @@ public class PlayerAbilityHandler : AbilityHandler
     public static Ability DashAbility { private set; get; }
     public Ability selectedAbility { private set; get; }
     private LivingBeing playerStats;
-    public AnimationControllerScript anim { get; private set; }
     public string currentAnimation;
     private int currentAbilityIndex;
     private Dictionary<string, int> inputActionToIndex = new()
@@ -141,7 +140,7 @@ public class PlayerAbilityHandler : AbilityHandler
     {
         if (selectedAbility == null) return false;
         if (IsOnCoolDown(selectedAbility)) return false;
-        if (PauseGameHandler.paused) return false;
+        if (PauseGameHandler.RecentlyPaused) return false;
         if (playerStats.Dead) return false;
         if (playerStats.CurrentPower < selectedAbility.Cost) return false;
         return true;

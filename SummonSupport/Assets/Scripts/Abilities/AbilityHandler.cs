@@ -16,7 +16,7 @@ public class AbilityHandler : MonoBehaviour
     protected Dictionary<BeamAbility, GameObject> toggledAbilitiesDict = new();
     private bool charging = false;
     public AbilityModHandler modHandler { protected set; get; }
-    private AnimationControllerScript anim;
+    public AnimationControllerScript anim { private set; get; }
     protected LivingBeingAudioHandler audioHandler;
     //private bool AbilityToggledRecently = false;
 
@@ -29,10 +29,8 @@ public class AbilityHandler : MonoBehaviour
         if (abilitySpawn == null)
             abilitySpawn = gameObject;
 
-        if (statsHandler == null)
-        {
-            statsHandler = gameObject.GetComponent<LivingBeing>();
-        }
+        statsHandler = gameObject.GetComponent<LivingBeing>();
+
 
         foreach (Ability ability in Abilities)
         {

@@ -111,6 +111,10 @@ public class PlayerStats : LivingBeing
     {
         CurrentLevel = level;
     }
+    public void ExpendSkillPoints(int value = 1)
+    {
+        SkillPoints -= value;
+    }
 
     public void GainLevelRewards(List<LevelRewards> rewards)
     {
@@ -217,6 +221,9 @@ public class PlayerStats : LivingBeing
         bool resurrecting = true;
         float timeWaited = 0;
         float distance;
+
+        abilityHandler.anim.ChangeLayerAnimation("Crafting", 1, ResurrectTime, true);
+
         while (resurrecting)
         {
             yield return resurrectionIncrement;
@@ -230,6 +237,7 @@ public class PlayerStats : LivingBeing
             }
             if (timeWaited >= ResurrectTime)
             {
+                abilityHandler.anim.SeLayerWeight(1, 0);
                 Debug.Log("Breaking loop because res time has been successfully waited");
                 minionStats.Resurrect();
                 interactable.SetResurrecting(false);
@@ -237,6 +245,8 @@ public class PlayerStats : LivingBeing
 
             }
         }
+        abilityHandler.anim.SeLayerWeight(1, 0);
+
     }
 
     public override void HandleUIAttrDisplay(AttributeType attributeType, float newValue)

@@ -160,16 +160,13 @@ public class Aura : MonoBehaviour
 
         if (ability.ListUsableOn.Contains(RelationshipHandler.GetRelationshipType(caster.CharacterTag, otherLivingBeing.CharacterTag)))
         {
-            //Debug.Log($"usable on {otherLivingBeing.Name}");
             if (ability.OnHitEffect != null)
             {
                 SpawnOnHitEffect(otherLivingBeing, ability.OnHitEffect);
             }
             otherLivingBeing.AlterAbilityList(ability, true);
-            //Debug.Log($"Effects of {ability.Name} is being handled.");
             CombatStatHandler.HandleEffectPackage(ability, caster, otherLivingBeing, ability.TargetEffects);
             piercedAlready += 1;
-            //Debug.Log($"split already = {splitAlready}. max split = {maxSplit}");
             if (ConjureAbility != null)
             {
                 if (ConjureAbility.SeeksTarget)
@@ -233,17 +230,3 @@ public class Aura : MonoBehaviour
 
 }
 
-//private LivingBeing FindTarget(float SearchRadius)
-//{
-//    LivingBeing target = null;
-//    Collider[] colliders = Physics.OverlapSphere(transform.position, SearchRadius);
-//    foreach (Collider collider in colliders)
-//    {
-//        if (!collider.TryGetComponent<LivingBeing>(out LivingBeing targetStats))
-//            continue;
-//        if (!ability.ThoroughIsUsableOn(targetStats, caster))
-//            continue;
-//        else return targetStats;
-//    }
-//    return target;
-//}

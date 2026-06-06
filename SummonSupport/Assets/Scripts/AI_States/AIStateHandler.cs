@@ -177,7 +177,7 @@ public class AIStateHandler : MonoBehaviour
                 }
                 else
                 {
-                    if (livingBeing.CharacterTag == CharacterTag.Minion)
+                    if (charType == CharacterTag.Minion)
                     {
                         //Debug.Log("I will run yee old obedience state");
                         AIState nextState = obedienceState.RunCurrentState();

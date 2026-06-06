@@ -355,11 +355,11 @@ public static class CombatStatHandler
     public static void ApplyTempValue(MovementAttributes movementAttribute, float tempValue, float duration)
     {
         //Logging.Info($"{currentTarget.name} has had {movementAttribute} changed by {tempValue}");
-        if (currentTarget.TryGetComponent<MovementScript>(out MovementScript movementScript))
+        if (currentTarget.movementScript != null)
         {
-            float preChangeValue = movementScript.GetMovementAttribute(movementAttribute);
-            movementScript.StartCoroutine(ResetTempMovementAttribute(movementScript, movementAttribute, preChangeValue, duration));
-            movementScript.SetMovementAttribute(movementAttribute, preChangeValue + tempValue);
+            float preChangeValue = currentTarget.movementScript.GetMovementAttribute(movementAttribute);
+            currentTarget.movementScript.StartCoroutine(ResetTempMovementAttribute(currentTarget.movementScript, movementAttribute, preChangeValue, duration));
+            currentTarget.movementScript.SetMovementAttribute(movementAttribute, preChangeValue + tempValue);
         }
     }
 

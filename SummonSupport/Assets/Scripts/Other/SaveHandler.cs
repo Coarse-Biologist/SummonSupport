@@ -283,13 +283,15 @@ public static class SaveHandler
     }
     private static void SetBeingLoadedAbilities(AbilityData livingBeingAbilityData, LivingBeing lb)
     {
+        if (!lb.TryGetComponent(out AbilityHandler aHandler))
+        {
+            throw new Exception("You wont see this message because every minion has it");
+        }
+        else lb.SetAbilityHandler(aHandler);
+
         foreach (Ability ability in livingBeingAbilityData.knownAbilities)
         {
-            if (!lb.TryGetComponent(out AbilityHandler aHandler))
-            {
-                throw new Exception("You wont see this message because every minion has it");
-            }
-            else lb.SetAbilityHandler(aHandler);
+
             lb.abilityHandler.LearnAbility(ability); //#TODO null reference
         }
     }

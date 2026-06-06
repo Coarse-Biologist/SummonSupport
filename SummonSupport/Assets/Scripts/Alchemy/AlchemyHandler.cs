@@ -187,7 +187,7 @@ public class AlchemyHandler : MonoBehaviour
         upgradeResults += $"Elemental affinity upgraded by {elementUpgrade} \n";
         stats.RestoreResources();
         AlterMinionByElement(minion);
-        AddAbilitiesByElement(minion, (int)stats.GetAttribute(AttributeType.MaxPower));
+        //AddAbilitiesByElement(minion, (int)stats.GetAttribute(AttributeType.MaxPower));
         AddMeleeAbilityByElement(stats);
         return upgradeResults;
     }

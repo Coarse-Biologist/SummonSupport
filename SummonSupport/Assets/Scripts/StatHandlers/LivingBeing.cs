@@ -34,7 +34,6 @@ public abstract class LivingBeing : MonoBehaviour
     public float TotalHealthRegeneration { private set; get; } = 0;
     public float TotalPowerRegeneration { private set; get; } = 0;
 
-    public GameObject locSphere;
 
 
     #endregion
@@ -85,8 +84,9 @@ public abstract class LivingBeing : MonoBehaviour
     public I_ResourceBar resourceBarInterface { protected set; get; }
     public I_Destruction ragdollScript;
     public AbilityHandler abilityHandler { protected set; get; }
+    public MovementScript movementScript { protected set; get; }
     public LivingBeingAudioHandler audioHandler { protected set; get; }
-    public StatusEffectHandler SE_Handler;
+    public StatusEffectHandler SE_Handler { protected set; get; }
 
 
     #endregion
@@ -110,6 +110,7 @@ public abstract class LivingBeing : MonoBehaviour
         StartCoroutine(RegenerateRoutine());
         audioHandler = GetComponent<LivingBeingAudioHandler>();
         abilityHandler = GetComponent<AbilityHandler>();
+        movementScript = GetComponent<MovementScript>();
         //Debug.Log($"Thus i have come into the world: {abilityHandler}");
         ragdollScript = GetComponent<I_Destruction>();
         if (TryGetComponent(out StatusEffectHandler se))

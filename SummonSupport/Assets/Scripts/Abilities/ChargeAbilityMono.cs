@@ -31,7 +31,7 @@ public class ChargeAbilityMono : MonoBehaviour
         caster = casterStats;
 
         SetModHandler(casterStats);
-        SetRunAnimation(user);
+        SetRunAnimation();
         SetAndApplyMods();
 
         range = chargeAbility.Range;
@@ -59,13 +59,13 @@ public class ChargeAbilityMono : MonoBehaviour
         }
     }
 
-    private void SetRunAnimation(GameObject user)
+    private void SetRunAnimation()
     {
-        if (user.TryGetComponent(out AnimationControllerScript anim))
+        if (abilityHandler.anim != null)
         {
             if (caster.CharacterTag == CharacterTag.Player)
-                anim.ChangeAnimation("Sprint", .1f);
-            else anim.ChangeAnimation("Run", .1f);
+                abilityHandler.anim.ChangeAnimation("Sprint", .1f);
+            else abilityHandler.anim.ChangeAnimation("Run", .1f);
         }
     }
 
@@ -121,9 +121,10 @@ public class ChargeAbilityMono : MonoBehaviour
 
     private void ToggleStuckInAbilityAnimation(GameObject user, bool stuck)
     {
-        if (user.TryGetComponent(out AIStateHandler AIStateHandler))
+        if (caster.CharacterTag != CharacterTag.Player)
         {
-            AIStateHandler.SetStuckInAbilityAnimation(stuck);
+            AIStateHandler stateHandler = user.GetComponent<AIStateHandler>();
+            stateHandler.SetStuckInAbilityAnimation(stuck);
         }
 
         else if (user.TryGetComponent(out PlayerMovement playerMovementScript))

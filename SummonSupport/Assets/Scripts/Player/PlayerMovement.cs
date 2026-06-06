@@ -21,6 +21,7 @@ public class PlayerMovement : MovementScript
     private bool canDash = true;
     GameObject DashDustInstance = null;
     private bool paused = false;
+    public bool usingUI { private set; get; } = false;
     private AnimationControllerScript anim;
 
 
@@ -49,9 +50,11 @@ public class PlayerMovement : MovementScript
     #region Enable and Disable event subscriptions
     private void OnEnable()
     {
-        EventDeclarer.UnpauseGame?.AddListener(UnpauseGame);
+        EventDeclarer.UsingUI?.AddListener(ToggleUsingUI);
 
+        EventDeclarer.UnpauseGame?.AddListener(UnpauseGame);
         EventDeclarer.PauseGame?.AddListener(PauseGame);
+
         inputActions ??= new PlayerInputActions();
         EventDeclarer.SpeedAttributeChanged?.AddListener(SetMovementAttribute);
         inputActions.Player.Enable();
@@ -66,9 +69,11 @@ public class PlayerMovement : MovementScript
 
     private void OnDisable()
     {
-        EventDeclarer.UnpauseGame?.RemoveListener(UnpauseGame);
+        EventDeclarer.UsingUI?.RemoveListener(ToggleUsingUI);
 
+        EventDeclarer.UnpauseGame?.RemoveListener(UnpauseGame);
         EventDeclarer.PauseGame.RemoveListener(PauseGame);
+
 
         EventDeclarer.SpeedAttributeChanged?.RemoveListener(SetMovementAttribute);
         inputActions.Player.Move.performed -= OnWASD;
@@ -124,9 +129,12 @@ public class PlayerMovement : MovementScript
     public void PauseGame()
     {
         anim.SetUpdateMode(AnimatorUpdateMode.Normal);
-
         paused = true;
+    }
 
+    public void ToggleUsingUI()
+    {
+        usingUI = !usingUI;
     }
     #endregion
 
@@ -203,15 +211,19 @@ public class PlayerMovement : MovementScript
 
     private void ToggleGamePause(InputAction.CallbackContext context)
     {
-
+        if (usingUI) return;
         if (!paused)
         {
             paused = true;
             EventDeclarer.PauseGame?.Invoke();
+            EventDeclarer.ShowPauseScreen?.Invoke();
+
         }
         else
         {
             EventDeclarer.UnpauseGame?.Invoke();
+            EventDeclarer.HidePauseScreen?.Invoke();
+
             paused = false;
         }
     }

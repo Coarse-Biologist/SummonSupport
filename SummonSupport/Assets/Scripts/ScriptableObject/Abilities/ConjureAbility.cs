@@ -38,7 +38,6 @@ public class ConjureAbility : Ability
     {
 
         int targetNum = 1;
-        float duration = Duration;
 
         if (casterStats.CharacterTag != CharacterTag.Enemy)
         {
@@ -48,7 +47,7 @@ public class ConjureAbility : Ability
         {
             TeamType desiredTargetType = this.GetTargetPreference(casterStats);
 
-            List<LivingBeing> targets = GetTargetfromSphereCast(casterStats, casterStats.GetComponent<AbilityHandler>().abilitySpawn.transform, targetNum, desiredTargetType);
+            List<LivingBeing> targets = GetTargetfromSphereCast(casterStats, casterStats.abilityHandler.abilitySpawn.transform, targetNum, desiredTargetType);
             foreach (LivingBeing target in targets)
             {
                 SpawnOnTarget(casterStats, target, rotation);

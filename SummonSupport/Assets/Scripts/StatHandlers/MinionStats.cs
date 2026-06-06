@@ -71,11 +71,6 @@ public class MinionStats : LivingBeing
         AlchemyHandler.Instance.RemoveActiveMinion(this);
         Destroy(gameObject, .1f);
     }
-    private void DelayedTestDeath()
-    {
-        Debug.Log("Delayed test death happening now");
-        Destroy(gameObject);
-    }
 
     private void ToggleDeath(bool dead)
     {

@@ -40,6 +40,10 @@ namespace SummonSupportEvents
         public static UnityEvent<Ability> PlayerLearnedAbility = new();
         public static UnityEvent PauseGame = new();
         public static UnityEvent UnpauseGame = new();
+        public static UnityEvent ShowPauseScreen = new();
+        public static UnityEvent HidePauseScreen = new();
+        public static UnityEvent UsingUI = new();
+
 
         public static UnityEvent<float> ShakeCamera = new();
 

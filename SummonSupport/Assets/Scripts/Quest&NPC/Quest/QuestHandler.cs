@@ -10,9 +10,9 @@ public class QuestHandler : MonoBehaviour
 {
     [field: SerializeField] public Quest_SO sceneStartingQuest;
     public static QuestHandler Instance;
-    public List<Quest_SO> CompletedQuests = new List<Quest_SO>();
+    public static List<Quest_SO> CompletedQuests = new List<Quest_SO>();
     public List<BoolAccomplishments> CompletedBoolQuests;
-    public List<Quest_SO> ActiveQuests = new List<Quest_SO>();
+    public static List<Quest_SO> ActiveQuests = new List<Quest_SO>();
     public static Dictionary<RepeatableAccomplishments, int> QuestRepTracker = new Dictionary<RepeatableAccomplishments, int>()
     {
         {RepeatableAccomplishments.EnemiesDefeated, 0},
@@ -66,6 +66,8 @@ public class QuestHandler : MonoBehaviour
         EventDeclarer.QuestStarted?.RemoveListener(AddActiveQuest);
         EventDeclarer.QuestCompleted?.RemoveListener(HandleQuestCompleted);
     }
+    public static bool HasActiveQuest(Quest_SO quest) => ActiveQuests.Contains(quest);
+    public static bool HasCompletedQuest(Quest_SO quest) => CompletedQuests.Contains(quest);
 
 
     public bool CheckQuestCompletion(Quest_SO activeQuest)
@@ -105,11 +107,14 @@ public class QuestHandler : MonoBehaviour
 
     public void HandleQuestCompleted(Quest_SO quest)
     {
-        if (ActiveQuests.Contains(quest)) ActiveQuests.Remove(quest);
-        if (!CompletedQuests.Contains(quest)) CompletedQuests.Add(quest);
-        PlayerUIHandler.Instance.ShowCompletedQuestInfo(quest);
-        //EventDeclarer.QuestCompleted?.Invoke(quest);
-        GrantCompletionRewards(quest);
+        if (ActiveQuests.Contains(quest))
+        {
+            ActiveQuests.Remove(quest);
+            if (!CompletedQuests.Contains(quest)) CompletedQuests.Add(quest);
+            PlayerUIHandler.Instance.ShowCompletedQuestInfo(quest);
+            //EventDeclarer.QuestCompleted?.Invoke(quest);
+            GrantCompletionRewards(quest);
+        }
     }
     public void GrantCompletionRewards(Quest_SO quest)
     {

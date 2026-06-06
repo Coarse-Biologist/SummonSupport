@@ -10,21 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0bede6bd9288e574e953f4c1fbb2fde9, type: 3}
-  m_Name: Simpletestquest
+  m_Name: Quest_1
   m_EditorClassIdentifier: 
-  QuestName: Start the journey
+  QuestName: Bump in the night
   QuestEnum: 1
-  IntQuestReqs:
-  - quest: 0
-    reps: 3
+  IntQuestReqs: []
   BoolQuestReqs: 
-  PresentationString: 
-  ProgressString: 
+  PresentationString: Investigate the sound
+  ProgressString: Investigate the sound
   CompletionString: The area seems safe now...
-  GoldReward: 10
+  GoldReward: 0
   XP_Reward: 100
-  KnowledgeReward: 10
-  BenefittedElements: 01000000
+  KnowledgeReward: 0
+  BenefittedElements: 
   AlchemyLootNum: 0
   AlchemyLootReward: 
   RewardsTool: 0

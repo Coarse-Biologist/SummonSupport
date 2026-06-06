@@ -1,6 +1,8 @@
+using System.Collections;
 using System.Collections.Generic;
+using System.Dynamic;
 using SummonSupportEvents;
-
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
@@ -8,7 +10,11 @@ using UnityEngine.UIElements.Experimental;
 
 public class PauseGameHandler : MonoBehaviour
 {
+    public static PauseGameHandler Instance { private set; get; }
     public static bool paused { private set; get; } = false;
+    public static bool RecentlyPaused { private set; get; } = false;
+    public static WaitForSeconds RecentlyPausedDuration { private set; get; } = new WaitForSeconds(.1f);
+
 
     private static UIDocument ui;
 
@@ -41,6 +47,10 @@ public class PauseGameHandler : MonoBehaviour
         //Debug.Log("Enabling pause game handler ");
         EventDeclarer.PauseGame?.AddListener(Pause);
         EventDeclarer.UnpauseGame?.AddListener(Resume);
+
+        EventDeclarer.ShowPauseScreen?.AddListener(ShowPauseScreen);
+        EventDeclarer.HidePauseScreen?.AddListener(HidePauseScreen);
+
         EventDeclarer.PlayerDead?.AddListener(DeathPause);
         EventDeclarer.PlayerLevelUp?.AddListener(LevelUpPause);
 
@@ -49,6 +59,10 @@ public class PauseGameHandler : MonoBehaviour
     {
         EventDeclarer.PauseGame?.RemoveListener(Pause);
         EventDeclarer.UnpauseGame?.RemoveListener(Resume);
+
+        EventDeclarer.ShowPauseScreen?.RemoveListener(ShowPauseScreen);
+        EventDeclarer.HidePauseScreen?.RemoveListener(HidePauseScreen);
+
         EventDeclarer.PlayerDead?.RemoveListener(DeathPause);
         EventDeclarer.PlayerLevelUp?.RemoveListener(LevelUpPause);
 
@@ -59,6 +73,9 @@ public class PauseGameHandler : MonoBehaviour
     void Start()
     {
         //Debug.Log("Enabling pause game handler ");
+
+        if (Instance == null) Instance = this;
+        else Destroy(this);
 
         ui = UI_DocHandler.Instance.ui;
         UIPrefabAssets = UI_DocHandler.Instance.UIPrefabAssets;
@@ -82,6 +99,8 @@ public class PauseGameHandler : MonoBehaviour
         #region  register buton callbacks
         ResumeButton.RegisterCallback<ClickEvent>(e => Resume());
         ResumeButton.RegisterCallback<ClickEvent>(e => EventDeclarer.UnpauseGame?.Invoke());
+        ResumeButton.RegisterCallback<ClickEvent>(e => EventDeclarer.HidePauseScreen?.Invoke());
+
 
         RestartButton.RegisterCallback<ClickEvent>(e => Restart());
         SettingsButton.RegisterCallback<ClickEvent>(e => ShowSettings());
@@ -103,10 +122,8 @@ public class PauseGameHandler : MonoBehaviour
     }
 
     #region Pause and Resume Methods
-
-    static private void Pause()
+    static public void ShowPauseScreen()
     {
-        paused = true;
         UnityEngine.Cursor.lockState = CursorLockMode.None;   // Locks the cursor to the center of the screen
         UnityEngine.Cursor.visible = true;
         QuestInfoContainer.style.display = DisplayStyle.None;
@@ -124,11 +141,17 @@ public class PauseGameHandler : MonoBehaviour
         QuitButton.style.display = DisplayStyle.Flex;
         RestartButton.style.display = DisplayStyle.Flex;
 
+        EaseInOpacity(PauseMenu, 350);
+        EaseInOpacity(PlayerOptions, 350);
+    }
+    static public void Pause()
+    {
+        paused = true;
+        RecentlyPaused = true;
 
         PauseTime();
 
-        EaseInOpacity(PauseMenu, 350);
-        EaseInOpacity(PlayerOptions, 350);
+
     }
     public static void PauseTime()
     {
@@ -163,10 +186,8 @@ public class PauseGameHandler : MonoBehaviour
     {
         InfoElement.Clear();
     }
-
-    private static void Resume()
+    public static void HidePauseScreen()
     {
-        paused = false;
         UnityEngine.Cursor.lockState = CursorLockMode.Locked;   // Locks the cursor to the center of the screen
         UnityEngine.Cursor.visible = false;
         PlayerOptions.style.display = DisplayStyle.None;
@@ -176,31 +197,49 @@ public class PauseGameHandler : MonoBehaviour
 
         EaseOutOpacity(PauseMenu, 350);
         EaseOutOpacity(PlayerOptions, 350);
+    }
 
+    private static void Resume()
+    {
+        paused = false;
 
+        Instance.StartCoroutine(Instance.NotRecentlyPaused());
         ResumeTime();
     }
+
+
+    public IEnumerator NotRecentlyPaused()
+    {
+        yield return RecentlyPausedDuration;
+        RecentlyPaused = false;
+    }
+
+
     #region level up pause
     private static void LevelUpPause(List<string> ImprovedAttributesList)
     {
-        UnityEngine.Cursor.lockState = CursorLockMode.None;   // Locks the cursor to the center of the screen
-        UnityEngine.Cursor.visible = true;
+        //UnityEngine.Cursor.lockState = CursorLockMode.None;   // Locks the cursor to the center of the screen
+        //UnityEngine.Cursor.visible = true;
 
-        PauseMenu.style.opacity = 0f;
-        PlayerOptions.style.opacity = 0f;
-        PauseMenu.SetEnabled(true);
-        PauseMenu.style.display = DisplayStyle.Flex;
+        //PauseMenu.style.opacity = 0f;
+        //PlayerOptions.style.opacity = 0f;
+        //PauseMenu.SetEnabled(true);
+        //PauseMenu.style.display = DisplayStyle.Flex;
+        //
+        //ResumeButton.text = "Continue";
+        //ResumeButton.style.display = DisplayStyle.Flex;
+        //InventoryButton.style.display = DisplayStyle.Flex;
+        //QuitButton.style.display = DisplayStyle.Flex;
+        //RestartButton.style.display = DisplayStyle.Flex;
+        //PlayerOptions.style.display = DisplayStyle.Flex;
+        //
+        //InfoElement.style.display = DisplayStyle.Flex;
+        //EaseInOpacity(PauseMenu, 350);
+        //EaseInOpacity(PlayerOptions, 350);
 
-        ResumeButton.text = "Continue";
-        ResumeButton.style.display = DisplayStyle.Flex;
-        InventoryButton.style.display = DisplayStyle.Flex;
-        QuitButton.style.display = DisplayStyle.Flex;
-        RestartButton.style.display = DisplayStyle.Flex;
-        PlayerOptions.style.display = DisplayStyle.Flex;
+        ShowPauseScreen();
 
-        InfoElement.style.display = DisplayStyle.Flex;
-        EaseInOpacity(PauseMenu, 350);
-        EaseInOpacity(PlayerOptions, 350);
+        PauseTime();
 
         InfoElement.text = $"Level {PlayerStats.Instance.CurrentLevel}! \n";
 
@@ -208,9 +247,6 @@ public class PauseGameHandler : MonoBehaviour
         {
             InfoElement.text += $"{rewardDescription} \n";
         }
-
-
-        Time.timeScale = 0f;
     }
     #endregion
 

@@ -153,9 +153,12 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     #region Begin and end workbench use
     private void TogglePlayerUsingUI(bool isUsing, AnimationControllerScript anim = null)
     {
+        EventDeclarer.UsingUI?.Invoke();
+
         if (isUsing)
         {
-            PauseGameHandler.PauseTime();
+            EventDeclarer.PauseGame?.Invoke();
+
             if (anim != null)
             {
                 anim.SetUpdateMode(AnimatorUpdateMode.UnscaledTime);
@@ -166,7 +169,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
         }
         else
         {
-            PauseGameHandler.ResumeTime();
+            EventDeclarer.UnpauseGame?.Invoke();
 
             if (anim != null)
             {
@@ -253,7 +256,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     }
     private void HandleplayerUpgradeAttempt()
     {
-
+        PlayerStats.Instance.ExpendSkillPoints(selectedUpgradeCost);
         SetInstructionsText($"Upgrade successful! \nYou have {PlayerStats.Instance.SkillPoints} skill-points.");
         PlayerStats.Instance.GainLevelRewards(selectedPlayerUpgrades);
         ClearSelectedPlayerUpgrades();
@@ -273,6 +276,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
 
     private void ClearSelectedPlayerUpgrades()
     {
+        selectedUpgradeCost = 0;
         foreach (LevelRewards key in selectedPlayerUpgrades.Keys.ToList())
         {
             selectedPlayerUpgrades[key] = 0;

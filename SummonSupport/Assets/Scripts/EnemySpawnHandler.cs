@@ -70,21 +70,22 @@ public class EnemySpawnHandler : MonoBehaviour
             for (int i = spawnInfo.Waves; i > 0; i--)
             {
                 //Debug.Log($"Spawning wave {i}");
-                List<GameObject> spawnedCreatures = new();
+                List<LivingBeing> spawnedCreatures = new();
 
                 List<Vector3> spawnLocs = GetSpawnLocations(spawnInfo.transform.position, spawnInfo.Radius, spawnInfo.MinimumCreaturesPerWave);
                 foreach (Vector3 loc in spawnLocs)
                 {
                     GameObject SpawnedCreature = Instantiate(spawnInfo.Creatures[UnityEngine.Random.Range(0, spawnInfo.Creatures.Length)], loc, Quaternion.identity);
+                    LivingBeing livingBeing = SpawnedCreature.GetComponent<LivingBeing>();
                     int level = GetNumBasedOnDifficulty();
-                    ModifyCreatureStats(level, SpawnedCreature.GetComponent<LivingBeing>(), spawnInfo);
-                    spawnedCreatures.Add(SpawnedCreature);
+                    ModifyCreatureStats(level, livingBeing, spawnInfo);
+                    spawnedCreatures.Add(livingBeing);
                 }
                 if (spawnInfo.MoveTowardLocation && spawnInfo.TargetLocation != null)
                 {
-                    foreach (GameObject creature in spawnedCreatures)
+                    foreach (LivingBeing lb in spawnedCreatures)
                     {
-                        MoveTowardTarget(creature, spawnInfo.TargetLocation.position);
+                        MoveTowardTarget(lb, spawnInfo.TargetLocation.position);
                     }
                 }
                 yield return new WaitForSeconds(spawnInfo.SecondsPerWave);
@@ -93,13 +94,13 @@ public class EnemySpawnHandler : MonoBehaviour
         else Debug.Log($"The invoked spawn center {spawnInfo} contains no creatures.");
     }
 
-    private void MoveTowardTarget(GameObject creature, Vector2 loc)
+    private void MoveTowardTarget(LivingBeing creature, Vector2 loc)
     {
         if (creature.TryGetComponent(out AIStateHandler stateHandler))
         {
             stateHandler.lastSeenLoc = loc;
             stateHandler.SetTarget(PlayerStats.Instance);
-            stateHandler.SetCurrentState(creature.GetComponent<AIChaseState>());
+            stateHandler.SetCurrentState(stateHandler.chaseState);
         }
 
     }
@@ -173,7 +174,7 @@ public class EnemySpawnHandler : MonoBehaviour
     }
     private void AddElementalAbilities(int level, LivingBeing livingBeing, Element element)
     {
-        CreatureAbilityHandler abilityHandler = livingBeing.GetComponent<CreatureAbilityHandler>();
+        CreatureAbilityHandler abilityHandler = (CreatureAbilityHandler)livingBeing.abilityHandler;
         if (UnityEngine.Random.value > .5)
         {
             //Ability elementalAbility = SetupManager.Instance.ElementToAbilityLibrary_SO.GetAbilityOfElementType(element);
@@ -186,9 +187,8 @@ public class EnemySpawnHandler : MonoBehaviour
     }
     private void AddPhysicalAbilities(int level, LivingBeing livingBeing, PhysicalType physical)
     {
-        CreatureAbilityHandler abilityHandler = livingBeing.GetComponent<CreatureAbilityHandler>();
         foreach (Ability ability in AbilityLibrary.GetRandomAbilities(physical, level + 1))
-            livingBeing.GetComponent<CreatureAbilityHandler>().LearnAbility(ability);
+            livingBeing.abilityHandler.LearnAbility(ability);
     }
 
     private int GetNumBasedOnDifficulty()
