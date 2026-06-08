@@ -28,11 +28,17 @@ public class LocationBasedQuest : MonoBehaviour, IQuest
     }
     public void CompleteQuest()
     {
+        Debug.Log($"This quest was completeded: {completesQuest} in location based quest schlick?");
+
         if (QuestHandler.HasActiveQuest(completesQuest))
         {
+            Debug.Log($"This quest was an active quest: {completesQuest}");
+
             if (completesQuest != null)
                 EventDeclarer.QuestCompleted?.Invoke(completesQuest);
         }
+        else Debug.Log($"This quest was not an acitve quest: {completesQuest}");
+
     }
 
     public void GrantQuest()

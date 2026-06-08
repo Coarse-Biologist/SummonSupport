@@ -107,13 +107,14 @@ public class QuestHandler : MonoBehaviour
 
     public void HandleQuestCompleted(Quest_SO quest)
     {
-        if (ActiveQuests.Contains(quest))
+        if (ActiveQuests.Contains(quest)) // if this quest was even something the player was allowed to be striving after
         {
+            Debug.Log($"This quest was completeded: {quest}");
             ActiveQuests.Remove(quest);
             if (!CompletedQuests.Contains(quest)) CompletedQuests.Add(quest);
             PlayerUIHandler.Instance.ShowCompletedQuestInfo(quest);
-            //EventDeclarer.QuestCompleted?.Invoke(quest);
             GrantCompletionRewards(quest);
+            FloatingInfoHandler.Instance.ShowDialogue(PlayerStats.Instance.transform, "Quest Completed!");
         }
     }
     public void GrantCompletionRewards(Quest_SO quest)

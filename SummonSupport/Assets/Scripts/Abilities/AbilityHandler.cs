@@ -62,7 +62,7 @@ public class AbilityHandler : MonoBehaviour
     protected bool CastAbility(Ability ability, Vector2 targetPosition, Quaternion rotation)
     {
         if (PauseGameHandler.paused) return false;
-        if (ability is not BeamAbility beam || !toggledAbilitiesDict.TryGetValue(beam, out GameObject gameObject)) StopAllToggledAbilities();
+        if (ability is not BeamAbility beam) StopAllToggledAbilities();
         //when casting a beam which is already toggled on, toggle beam off. 
         bool usedAbility = HandleAbilityType(ability, targetPosition, rotation);
 
@@ -156,8 +156,10 @@ public class AbilityHandler : MonoBehaviour
     }
     public void StopAllToggledAbilities()
     {
+        //if (anim != null) anim.SeLayerWeight(1, 0);
         foreach (KeyValuePair<BeamAbility, GameObject> kvp in toggledAbilitiesDict)
         {
+            PotionHandler.SpawnElementalPotionOnBelt(Abilities.IndexOf(kvp.Key), kvp.Key);
             statsHandler.ChangeRegeneration(AttributeType.CurrentPower, kvp.Key.Cost);
 
             Destroy(kvp.Value);
@@ -190,21 +192,21 @@ public class AbilityHandler : MonoBehaviour
     bool HandleProjectile(ProjectileAbility ability)
     {
         //Debug.Log("Time to see the heavy throw animation");
-        if (anim != null) anim.ChangeLayerAnimation("OneArmedThrow", 1, 1.7f);
+        if (anim != null) anim.ChangeLayerAnimation("OneArmedThrow", 1, 3f);
 
         return ability.Activate(statsHandler);
     }
 
     bool HandlePointAndClick(TargetMouseAbility ability)
     {
-        if (anim != null) anim.ChangeLayerAnimation("Buff", 1, 1.5f);
+        if (anim != null) anim.ChangeLayerAnimation("Buff", 1, 3f);
 
         return ability.Activate(statsHandler);
     }
 
     bool HandleConjureAbility(ConjureAbility ability, Vector2 targetPosition, Quaternion rotation)
     {
-        if (anim != null) anim.ChangeLayerAnimation("HeavyThrow", 1, 1f);
+        if (anim != null) anim.ChangeLayerAnimation("HeavyThrow", 1, 3);
 
         return ability.Activate(statsHandler, rotation);
     }
@@ -216,7 +218,7 @@ public class AbilityHandler : MonoBehaviour
     }
     bool HandleAuraAbility(AuraAbility auraAbility)
     {
-        if (anim != null) anim.ChangeLayerAnimation("Buff", 1, 1f);
+        if (anim != null) anim.ChangeLayerAnimation("Buff", 1, 3f);
 
         return auraAbility.Activate(statsHandler);
     }
