@@ -14,10 +14,13 @@ public class EnemyStats : LivingBeing
     private float navMeshSpeed;
 
 
-    private new void Start()
+    protected override void Start()
     {
         base.Start();
-
+    }
+    protected override void Awake()
+    {
+        base.Awake();
     }
 
     public override void Die()

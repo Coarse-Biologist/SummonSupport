@@ -44,9 +44,12 @@ public class MinionStats : LivingBeing
     }
     protected override void Start()
     {
-        abilityHandler = GetComponent<AbilityHandler>();
         base.Start();
         StartCoroutine(LateStart());
+    }
+    protected override void Awake()
+    {
+        base.Awake();
     }
     IEnumerator LateStart()
     {

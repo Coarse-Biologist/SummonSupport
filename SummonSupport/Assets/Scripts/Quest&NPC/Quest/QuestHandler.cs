@@ -73,6 +73,7 @@ public class QuestHandler : MonoBehaviour
     public bool CheckQuestCompletion(Quest_SO activeQuest)
     {
         bool complete = true;
+        if (activeQuest.IntQuestReqs.Count == 0 && activeQuest.BoolQuestReqs.Count == 0) return false;
         foreach (RepeatableQuestDict intQuest in activeQuest.IntQuestReqs)
         {
             if (QuestRepTracker.TryGetValue(intQuest.quest, out int reps) && reps >= intQuest.reps)

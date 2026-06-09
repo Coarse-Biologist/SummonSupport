@@ -9,7 +9,7 @@ public class SpawnTrigger : MonoBehaviour
         if (!triggered)
             if (collision.gameObject.TryGetComponent(out PlayerMovement pm))
             {
-                EventDeclarer.SpawnEnemies?.Invoke(transform.parent.GetComponent<SpawnLocationInfo>());
+                EventDeclarer.SpawnEnemies?.Invoke(transform.parent.GetComponentInChildren<SpawnLocationInfo>());
                 triggered = true;
                 Destroy(gameObject);
             }

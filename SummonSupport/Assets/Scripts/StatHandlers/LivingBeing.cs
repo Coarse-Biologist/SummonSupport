@@ -102,21 +102,23 @@ public abstract class LivingBeing : MonoBehaviour
         resourceBarInterface = GetComponent<I_ResourceBar>();
         regenTickRate = new WaitForSeconds(TickRateRegenerationInSeconds);
 
+        audioHandler = GetComponent<LivingBeingAudioHandler>();
+        abilityHandler = GetComponent<AbilityHandler>();
+        movementScript = GetComponent<MovementScript>();
+        ragdollScript = GetComponent<I_Destruction>();
+
     }
 
     protected virtual void Start()
     {
         InitializeRegenerationValues();
         StartCoroutine(RegenerateRoutine());
-        audioHandler = GetComponent<LivingBeingAudioHandler>();
-        abilityHandler = GetComponent<AbilityHandler>();
-        movementScript = GetComponent<MovementScript>();
-        //Debug.Log($"Thus i have come into the world: {abilityHandler}");
-        ragdollScript = GetComponent<I_Destruction>();
+
         if (TryGetComponent(out StatusEffectHandler se))
         {
             SE_Handler = se;
         }
+        if (abilityHandler == null) throw new Exception($"{Name} has no ability handler some how");
     }
     public void SetAbilityHandler(AbilityHandler aH)
     {

@@ -69,6 +69,8 @@ public class AIStateHandler : MonoBehaviour
 
         currentState = GetComponentInChildren<AIPeacefulState>();
         obedienceState = GetComponent<AIObedienceState>();
+        chaseState = GetComponent<AIChaseState>();
+
         livingBeing = GetComponent<LivingBeing>();
         movementScript = GetComponent<MovementScript>();
         minionStats = GetComponent<MinionStats>();
