@@ -103,7 +103,7 @@ public class PauseGameHandler : MonoBehaviour
 
 
         RestartButton.RegisterCallback<ClickEvent>(e => Restart());
-        SettingsButton.RegisterCallback<ClickEvent>(e => ShowSettings());
+        SettingsButton.RegisterCallback<ClickEvent>(e => ShowSettingsOptions());
 
 
         StatsButton.RegisterCallback<ClickEvent>(e => ChangeStatIndex());
@@ -372,7 +372,18 @@ public class PauseGameHandler : MonoBehaviour
     }
     #endregion
     #region Settings Menu
-    private static void ShowSettings()
+    private static void ShowSettingsOptions()
+    {
+        PlayerOptions.style.display = DisplayStyle.Flex;
+        ClearInfoElement();
+        InfoElement.text = "";
+        Button audioSettingsButton = AddButtons("Audio Settings", InfoElement, 50, 25);
+        Button saveLoadButton = AddButtons("Save/Load", InfoElement, 50, 25);
+
+        audioSettingsButton.RegisterCallback<ClickEvent>(e => ShowAudioSettings());
+        saveLoadButton.RegisterCallback<ClickEvent>(e => ShowSaveLoad());
+    }
+    private static void ShowAudioSettings()
     {
         PlayerOptions.style.display = DisplayStyle.Flex;
         ClearInfoElement();
@@ -389,10 +400,38 @@ public class PauseGameHandler : MonoBehaviour
 
         DisplayVolume();
 
+
+    }
+    private static void ShowSaveLoad()
+    {
+        ClearInfoElement();
+
         Button saveButton = AddButtons("Save Game", InfoElement, 4, 20);
-        saveButton.RegisterCallback<ClickEvent>(e => SaveHandler.SaveGameData(1));
+        saveButton.RegisterCallback<ClickEvent>(e => ShowSaveableSlots());
         Button loadButton = AddButtons("Load Game", InfoElement, 4, 20);
-        loadButton.RegisterCallback<ClickEvent>(e => SaveHandler.LoadGameData(1));
+        loadButton.RegisterCallback<ClickEvent>(e => ShowLoadbleSlots());
+    }
+    private static void ShowSaveableSlots()
+    {
+        ClearInfoElement();
+
+        foreach (var saveDataKvp in SaveHandler.saves)
+        {
+            Button saveButton = AddButtons(SaveHandler.GetSaveFileInfo(saveDataKvp.Key), InfoElement, 4, 20);
+            saveButton.RegisterCallback<ClickEvent>(e => SaveHandler.SaveGameData(saveDataKvp.Key));
+            saveButton.RegisterCallback<ClickEvent>(e => saveButton.text = SaveHandler.GetSaveFileInfo(saveDataKvp.Key));
+
+        }
+    }
+    private static void ShowLoadbleSlots()
+    {
+        ClearInfoElement();
+
+        foreach (var saveDataKvp in SaveHandler.saves)
+        {
+            Button loadButton = AddButtons(SaveHandler.GetSaveFileInfo(saveDataKvp.Key), InfoElement, 4, 20);
+            loadButton.RegisterCallback<ClickEvent>(e => SaveHandler.LoadGameData(saveDataKvp.Key));
+        }
     }
     private static void DisplayVolume()
     {

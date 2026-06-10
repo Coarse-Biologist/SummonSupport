@@ -8,17 +8,27 @@ using SS_Structs;
 using Unity.Entities.UniversalDelegates;
 using Unity.VisualScripting;
 using Mono.Cecil;
+using UnityEngine.Rendering.LookDev;
+using UnityEditor.PackageManager;
 public static class SaveHandler
 {
-
+    public static Dictionary<int, SaveData> saves { private set; get; } = new() { { 1, null } };
+    public static string GetSaveFileInfo(int slot)
+    {
+        string saveInfo = "Empty";
+        SaveData saveData = saves[slot];
+        if (saveData != null) saveInfo = $"Slot {slot}: " + saveData.saveTime;
+        return saveInfo;
+    }
     public static void SaveGameData(int slot)
     {
         SaveData saveData = new SaveData();
+        saves[slot] = saveData;
 
         saveData = SaveAlchemyData(saveData);
         saveData = SaveMinionData(saveData);
         saveData = SavePlayerData(saveData);
-
+        saveData.saveTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm");
         string data = JsonUtility.ToJson(saveData, true);
 
         string folder = Path.Combine(

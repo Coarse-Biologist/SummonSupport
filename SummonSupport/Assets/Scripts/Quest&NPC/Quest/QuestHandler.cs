@@ -186,7 +186,8 @@ public class QuestHandler : MonoBehaviour
     }
     public string GetQuestInfo(Quest_SO quest)
     {
-        string info = $"{quest.QuestName}:\n";
+        string info = $"{quest.QuestName}\n";
+        info += $"{quest.PresentationString}\n";
         foreach (var req in quest.IntQuestReqs)
         {
             info += $"{GeneralFunctions.GetCleanEnumString<RepeatableAccomplishments>(req.quest)}: {QuestRepTracker[req.quest]}/{req.reps}\n";

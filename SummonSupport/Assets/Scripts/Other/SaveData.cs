@@ -5,6 +5,7 @@ using System;
 [Serializable]
 public class SaveData
 {
+    public string saveTime = "";
     public PlayerData player = new();
     public List<MinionData> minions = new();
     public AlchemyData alchemy = new();

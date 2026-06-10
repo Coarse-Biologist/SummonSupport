@@ -10,7 +10,7 @@ public class EnemyStats : LivingBeing
 {
     [SerializeField] public Dictionary<string, int> SlottedAbilities { private set; get; } = new Dictionary<string, int>(); //This will store the slot in which an ability is contained. the string is a placeholder until we decide the object type of an ability
     [SerializeField] public List<AlchemyLoot> Loot { private set; get; } = new List<AlchemyLoot>();
-    public NavMeshAgent navMesh;
+    private NavMeshAgent navMesh;
     private float navMeshSpeed;
 
 
@@ -38,11 +38,11 @@ public class EnemyStats : LivingBeing
                 stateHandler.SetDead(true);
             }
             if (ragdollScript != null) ragdollScript.CauseDestruction(false);
-            if (TryGetComponent(out NavMeshAgent nav))
-            {
-                navMesh = nav;
-                navMeshSpeed = navMesh.speed;
-            }
+            //if (TryGetComponent(out NavMeshAgent nav))
+            //{
+            //    navMesh = nav;
+            //    navMeshSpeed = navMesh.speed;
+            //}
             Invoke("DelayedTestDeath", 1f);
         }
     }
