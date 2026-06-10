@@ -600,7 +600,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
         selectedCraftingPotential[potential] += 10;
 
         int newAvailableCP = AlchemyInventory.AvailableCraftingPotential[potential] - selectedCraftingPotential[potential]; // calc new available
-        AlterButtonText(button, $"{GeneralFunctions.GetCleanEnumString(potential)} : {newAvailableCP}"); //display new available
+        AlterButtonText(button, $"{GeneralFunctions.GetCleanEnumString(potential)} : {selectedCraftingPotential[potential]} / {AlchemyInventory.AvailableCraftingPotential[potential]} "); //display new available
 
         string craftinPotentialInfo = "Currently selected crafting potential:";
         foreach (KeyValuePair<CraftingPotential, int> kvp in selectedCraftingPotential)

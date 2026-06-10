@@ -63,7 +63,7 @@ MonoBehaviour:
     type: 3}
   <SpawnOffset>k__BackingField: {x: 0, y: 10, z: 0}
   <RotationOffset>k__BackingField: 0
-  Radius: 1
+  Radius: 20
   <IsDecaying>k__BackingField: 0
   <LeaveRotation>k__BackingField: 0
   <SpawnsOnTarget>k__BackingField: 1

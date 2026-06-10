@@ -24,6 +24,9 @@ public class PlayerMovement : MovementScript
     public bool usingUI { private set; get; } = false;
     private AnimationControllerScript anim;
 
+    private CapsuleCollider playerCollider;
+    private float colliderRadius;
+
 
 
 
@@ -36,7 +39,8 @@ public class PlayerMovement : MovementScript
         Cursor.visible = false;
         rb = GetComponent<Rigidbody>();
 
-
+        playerCollider = GetComponent<CapsuleCollider>();
+        colliderRadius = playerCollider.radius;
 
         mainCamera = Camera.main;
         inputActions = new PlayerInputActions();
@@ -96,6 +100,7 @@ public class PlayerMovement : MovementScript
         {
             canDash = false;
             dashing = true;
+            playerCollider.radius = .01f; // make collider slippery thin
             Invoke("ReturnToNormalSpeed", DashDuration);
             Invoke("ReadyDash", DashCoolDown);
             if (PlayerAbilityHandler.DashAbility != null) PlayerAbilityHandler.DashAbility.Activate(playerStats);
@@ -117,7 +122,11 @@ public class PlayerMovement : MovementScript
     }
     private void ReturnToNormalSpeed()
     {
+        Debug.Log($"Collider radius is: {playerCollider.radius}");
         dashing = false;
+        playerCollider.radius = colliderRadius;
+        Debug.Log($"Collider radius is now: {playerCollider.radius}");
+
     }
 
 

@@ -222,7 +222,6 @@ public class PlayerUIHandler : MonoBehaviour
         {
             questInfoLabel.text = $"{QuestHandler.Instance.GetQuestInfo(quest)}";
         }
-
     }
     public void ShowCompletedQuestInfo(Quest_SO quest)
     {

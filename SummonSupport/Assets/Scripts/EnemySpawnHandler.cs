@@ -41,7 +41,7 @@ public class EnemySpawnHandler : MonoBehaviour
     #region Setup
     void Start()
     {
-        if (Active) InvokeRepeating("SpawnEnemies", 0f, 10f);
+        //if (Active) InvokeRepeating("SpawnEnemies", 0f, 10f);
     }
 
 

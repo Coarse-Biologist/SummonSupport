@@ -83,6 +83,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4451953354928791596, guid: 6eb2daf00740bba47aac2befdc6b070e,
+        type: 3}
+      propertyPath: MaxDistance
+      value: 45007.562
+      objectReference: {fileID: 0}
     - target: {fileID: 4506156268917346314, guid: 6eb2daf00740bba47aac2befdc6b070e,
         type: 3}
       propertyPath: animator
@@ -219,7 +224,7 @@ PrefabInstance:
     - target: {fileID: 6881935197926149321, guid: 6eb2daf00740bba47aac2befdc6b070e,
         type: 3}
       propertyPath: m_Size.y
-      value: 0.930521
+      value: 1.7137234
       objectReference: {fileID: 0}
     - target: {fileID: 6881935197926149321, guid: 6eb2daf00740bba47aac2befdc6b070e,
         type: 3}
@@ -234,7 +239,7 @@ PrefabInstance:
     - target: {fileID: 6881935197926149321, guid: 6eb2daf00740bba47aac2befdc6b070e,
         type: 3}
       propertyPath: m_Center.y
-      value: 0.26526046
+      value: 0.65686166
       objectReference: {fileID: 0}
     - target: {fileID: 6881935197926149321, guid: 6eb2daf00740bba47aac2befdc6b070e,
         type: 3}

@@ -92,8 +92,7 @@ public abstract class Ability : ScriptableObject
         List<CharacterTag> targetTypes = CrewsRelationshipHandler.TargetTypeToCharTab(teamType);
 
         List<LivingBeing> targets = new();
-
-        RaycastHit[] hits = Physics.SphereCastAll(directionTransform.position, Range, directionTransform.transform.forward, Range);
+        RaycastHit[] hits = Physics.SphereCastAll(directionTransform.position, 4, directionTransform.transform.forward, Range);
         hits = ArrangeByDistanceFromCenter(hits, directionTransform, desiredTargetNum);
         foreach (RaycastHit hit in hits)
         {
@@ -101,6 +100,14 @@ public abstract class Ability : ScriptableObject
             if (targetTypes.Contains(hitStats.CharacterTag))
             {
                 targets.Add(hitStats);
+                Debug.Log($"Hit found {hit}");
+                SetupManager.Instance.DebugLocation(hitStats.transform.position, Color.blueViolet, 2);
+                Debug.DrawLine(
+        directionTransform.position,
+        hit.point,
+        Color.yellow,
+        2f
+    );
             }
             if (targets.Count >= desiredTargetNum) break;
         }

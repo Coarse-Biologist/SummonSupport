@@ -26,7 +26,7 @@ public class AlchemyHandler : MonoBehaviour
 
 
 
-    [field: SerializeField] public int SizeScalar { get; private set; } = 20;
+    [field: SerializeField] public float SizeScalar { get; private set; } = .1f;
     [SerializeField] public List<LivingBeing> activeMinions = new List<LivingBeing>();
     public static AlchemyHandler Instance { get; private set; }
     public static Dictionary<AlchemyLoot, int> AlchemyLootValueDict = new()
@@ -133,11 +133,11 @@ public class AlchemyHandler : MonoBehaviour
     }
     private void AlterSizeByOrganNum(LivingBeing stats, int organValue)
     {
-        float sizeChangeScalar = organValue / SizeScalar;
+        float sizeChangeScalar = organValue * SizeScalar;
         if (sizeChangeScalar > 1)
         {
             Debug.Log($"changing sie of {stats.Name} by {sizeChangeScalar}");
-            stats.gameObject.transform.localScale *= organValue / SizeScalar;
+            stats.gameObject.transform.localScale *= sizeChangeScalar;
         }
     }
     private int HandleCoreUse(LivingBeing stats, int value)

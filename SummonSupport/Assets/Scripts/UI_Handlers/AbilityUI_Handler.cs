@@ -97,12 +97,12 @@ public class AbilityUI_Handler : MonoBehaviour
         abilityIntProgressBarDict.Add(4, null);
         abilityIntProgressBarDict.Add(5, null);
 
-        ProgressBarButtonNameDict.Add(ProgressBarL1, "1");
-        ProgressBarButtonNameDict.Add(ProgressBarL2, "2");
-        ProgressBarButtonNameDict.Add(ProgressBarL3, "3");
-        ProgressBarButtonNameDict.Add(ProgressBarL4, "Q");
-        ProgressBarButtonNameDict.Add(ProgressBarL5, "E");
-        ProgressBarButtonNameDict.Add(ProgressBarL6, "F");
+        ProgressBarButtonNameDict.Add(ProgressBarL1, "(1)");
+        ProgressBarButtonNameDict.Add(ProgressBarL2, "(2)");
+        ProgressBarButtonNameDict.Add(ProgressBarL3, "(3)");
+        ProgressBarButtonNameDict.Add(ProgressBarL4, "(Q)");
+        ProgressBarButtonNameDict.Add(ProgressBarL5, "(E)");
+        ProgressBarButtonNameDict.Add(ProgressBarL6, "(F)");
 
     }
 
@@ -123,7 +123,8 @@ public class AbilityUI_Handler : MonoBehaviour
         {
             foreach (KeyValuePair<int, Ability> intAbilityKVP in abilityIntProgressBarDict)
             {
-                if (intAbilityKVP.Value == ability) ProgressBarDict[intAbilityKVP.Key].title = ProgressBarButtonNameDict[ProgressBarDict[intAbilityKVP.Key]];
+                int slot = intAbilityKVP.Key;
+                if (intAbilityKVP.Value == ability) ProgressBarDict[slot].title = ProgressBarButtonNameDict[ProgressBarDict[slot]];
             }
             //else if (slotIndex <= abilityIntProgressBarDict.Keys.Count) // check if the index is usable
 
@@ -141,7 +142,7 @@ public class AbilityUI_Handler : MonoBehaviour
 
         if (ProgressBarDict.TryGetValue(slotIndex, out ProgressBar bar))
         {
-            bar.title = ability.Name;
+            bar.title = $"{ability.Name} {ProgressBarButtonNameDict[bar]}";
             bar.style.backgroundImage = new StyleBackground(ability.Icon);
         }
 
