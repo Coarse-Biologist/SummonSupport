@@ -166,8 +166,8 @@ public static class SaveHandler
         {
             SS_Structs.SlottedAbilities slottedAbilitiesStruct = new()
             {
-                ability = kvp.Value,
-                slot = kvp.Key
+                ability = kvp.ability,
+                slot = kvp.slot
             };
             abilityData.SlottedAbilities.Add(slottedAbilitiesStruct);
         }

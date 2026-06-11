@@ -113,15 +113,27 @@ public class PlayerAbilityHandler : AbilityHandler
     }
     private void ChangeAbilitySlot(int index, Ability ability)
     {
+        SS_Structs.SlottedAbilities abilityStruct = default;
+        SS_Structs.SlottedAbilities oldAbilityStruct = default;
+
+        SS_Structs.SlottedAbilities newAbilityStruct = new()
+        {
+            slot = index,
+            ability = ability
+        };
+
         foreach (var kvp in SlottedAbilities)
         {
-            if (kvp.Value == ability)
+            if (kvp.ability == ability)
             {
-                SlottedAbilities[kvp.Key] = null;
-                break;
+                SlottedAbilities[kvp.slot] = abilityStruct;
+            }
+            if (kvp.slot == index)
+            {
+                oldAbilityStruct = newAbilityStruct;
             }
         }
-        SlottedAbilities[index] = ability;
+        oldAbilityStruct.ability = newAbilityStruct.ability;
 
         if (Abilities.Contains(ability))
             Abilities[Abilities.IndexOf(ability)] = null;
@@ -133,7 +145,11 @@ public class PlayerAbilityHandler : AbilityHandler
     {
         for (int i = 0; i < Abilities.Count && i < 5; i++)
         {
-            SlottedAbilities.Add(i, Abilities[i]);
+            SlottedAbilities.Add(new()
+            {
+                slot = i,
+                ability = Abilities[i]
+            });
         }
     }
     private bool CheckAbilityUsePossible(Ability selectedAbility)

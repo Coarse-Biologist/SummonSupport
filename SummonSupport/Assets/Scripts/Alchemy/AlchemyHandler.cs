@@ -217,22 +217,20 @@ public class AlchemyHandler : MonoBehaviour
             {
                 foreach (Ability ability in abilities)
                 {
-                    if (abilityHandler.SlottedAbilities.Count < abilitiesAdded)
+                    if (abilityHandler.SlottedAbilities.Count <= abilitiesAdded)
                     {
                         Debug.Log($"Breaking because the number of ability slots is {abilityHandler.SlottedAbilities.Count} and the numbe ralready added was {abilitiesAdded}");
                         break;
                     }
-                    else
-                    {
-                        abilityHandler.LearnAbility(ability);
-                        abilityHandler.SlotAbility(ability, abilitiesAdded);
-                        abilitiesAdded++;
-                    }
+                    abilityHandler.LearnAbility(ability);
+                    abilityHandler.SlotAbility(ability, abilitiesAdded);
+                    abilitiesAdded++;
                 }
             }
-            abilityHandler.SetAbilityLists();
         }
+        abilityHandler.SetAbilityLists();
     }
+
     public void AddMeleeAbilityByElement(LivingBeing livingBeing)
     {
         CreatureAbilityHandler abilityHandler = livingBeing.GetComponent<CreatureAbilityHandler>();

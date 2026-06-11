@@ -4,13 +4,14 @@ using System.Collections.Generic;
 using SummonSupportEvents;
 using System.Linq;
 using Unity.VisualScripting;
+using SS_Structs;
 
 public class AbilityHandler : MonoBehaviour
 {
     [field: SerializeField] public GameObject abilitySpawn { private set; get; }
     protected LivingBeing statsHandler;
     [field: SerializeField] public List<Ability> Abilities { private set; get; } = new();
-    [field: SerializeField] public Dictionary<int, Ability> SlottedAbilities { protected set; get; } = new();
+    [field: SerializeField] public List<SlottedAbilities> SlottedAbilities { protected set; get; } = new();
 
     public Dictionary<Ability, bool> abilitiesOnCooldown = new();
     protected Dictionary<BeamAbility, GameObject> toggledAbilitiesDict = new();
