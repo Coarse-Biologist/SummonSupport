@@ -7,6 +7,8 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 using System;
 using SummonSupportEvents;
 using Unity.VisualScripting.Antlr3.Runtime.Misc;
+using Unity.Entities.UniversalDelegates;
+using SS_Structs;
 
 
 #endregion
@@ -187,14 +189,24 @@ public class AlchemyHandler : MonoBehaviour
         upgradeResults += $"Elemental affinity upgraded by {elementUpgrade} \n";
         stats.RestoreResources();
         AlterMinionByElement(minion);
-        //AddAbilitiesByElement(minion, (int)stats.GetAttribute(AttributeType.MaxPower));
+        AddAbilitiesByElement(minion, (int)stats.GetAttribute(AttributeType.MaxPower));
         AddMeleeAbilityByElement(stats);
         return upgradeResults;
     }
 
     private void AddAbilitiesByElement(LivingBeing livingBeing, int minionPower)
     {
+
+        int abilitySlotsToAdd = (int)minionPower / 100;
+        Debug.Log($"ability slots to add: {abilitySlotsToAdd}. power used: {minionPower}");
+
         CreatureAbilityHandler abilityHandler = livingBeing.gameObject.GetComponent<CreatureAbilityHandler>();
+
+        for (int i = abilitySlotsToAdd; i > 0; i--)
+        {
+            abilityHandler.AddAbilitySlot();
+        }
+        int abilitiesAdded = 0;
         if (abilityHandler == null) return;
         Element strongestElement = livingBeing.GetHighestAffinity(out float value);
         if (strongestElement != Element.None)
@@ -205,7 +217,17 @@ public class AlchemyHandler : MonoBehaviour
             {
                 foreach (Ability ability in abilities)
                 {
-                    abilityHandler.LearnAbility(ability);
+                    if (abilityHandler.SlottedAbilities.Count < abilitiesAdded)
+                    {
+                        Debug.Log($"Breaking because the number of ability slots is {abilityHandler.SlottedAbilities.Count} and the numbe ralready added was {abilitiesAdded}");
+                        break;
+                    }
+                    else
+                    {
+                        abilityHandler.LearnAbility(ability);
+                        abilityHandler.SlotAbility(ability, abilitiesAdded);
+                        abilitiesAdded++;
+                    }
                 }
             }
             abilityHandler.SetAbilityLists();

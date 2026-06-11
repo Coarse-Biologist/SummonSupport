@@ -3,6 +3,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Diagnostics;
 using UnityEngine.Rendering;
+using SS_Structs;
 
 
 
@@ -13,7 +14,6 @@ public class CreatureAbilityHandler : AbilityHandler
     private List<Ability> attackAbilities { get; set; } = new();
     private List<Ability> allSupportAbilities { get; set; } = new();
     private List<Ability> synergyAbilities { get; set; } = new();
-
 
 
     private Ability selectedAbility { get; set; } = null;
@@ -96,9 +96,10 @@ public class CreatureAbilityHandler : AbilityHandler
     public void SetAbilityLists()
     {
 
-        foreach (Ability ability in Abilities) // make list of support and attack abilities
+        foreach (Ability ability in SlottedAbilities.Values) // make list of support and attack abilities
         {
             //UnityEngine.Debug.Log($"Creature Ability Handler checking ability {ability.Name}");
+            if (ability == null) continue;
             if (ability.AbilityTypeTag == AbilityTypeTag.DebuffsTarget)
             {
 
@@ -130,6 +131,22 @@ public class CreatureAbilityHandler : AbilityHandler
             abilitiesOnCooldown.Add(ability, false);
         }
         SetAbilityLists();
+    }
+    public void SlotAbility(Ability ability, int slot)
+    {
+        if (ability == null || SlottedAbilities.Count < slot - 1) throw new System.Exception($"Cannot slot ability ({ability}) in slot ({slot})");
+        else
+        {
+            this.SlottedAbilities[slot] = ability;
+            UnityEngine.Debug.Log($"Slotting {ability.Name} in slot {slot}");
+        }
+    }
+
+    public void AddAbilitySlot()
+    {
+        SlottedAbilities.Add(SlottedAbilities.Count, null);
+        UnityEngine.Debug.Log($"Adding slot ");
+
     }
 
 
