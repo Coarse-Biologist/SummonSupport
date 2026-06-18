@@ -767,11 +767,12 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
             {
                 foreach (Ability ability in category.Abilities)
                 {
-                    Button abilityButton = AddButtonToPanel($"{ability.Name} : {Ability.GetCoreCraftingCost(ability)} Core Power", bottomLeftPanel, 70, 5);
+                    Button abilityButton = AddButtonToPanel($"{ability.Name}", bottomLeftPanel, 70, 5);
                     //Debug.Log("made it this far2");
 
                     abilityButton.RegisterCallback<ClickEvent>(e => SetSelectedMinionAbility(ability));
                     abilityButton.RegisterCallback<ClickEvent>(e => ShowAbilityCraftingInfo());
+                    abilityButton.RegisterCallback<PointerEnterEvent>(e => SetInstructionsText(ability.DisplayAbilityInfo()));
                 }
             }
         }
@@ -780,7 +781,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     {
         foreach (Ability ability in AbilityLibrary.abilityLibrary.GetElementalAbilitiesBelowLevel(LevelUpHandler.CraftingPowerScalar, PlayerStats.Instance.GetHighAffinities()))
         {
-            Button abilityButton = AddButtonToPanel($"{ability.Name} : {Ability.GetCoreCraftingCost(ability)} Core Power", bottomLeftPanel, 70, 5);
+            Button abilityButton = AddButtonToPanel($"{ability.Name}", bottomLeftPanel, 70, 5);
             //Debug.Log("made it this far2");
 
             abilityButton.RegisterCallback<ClickEvent>(e => SetSelectedAbility(ability));
