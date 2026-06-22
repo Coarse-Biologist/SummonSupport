@@ -115,10 +115,6 @@ public class MinionStats : LivingBeing
         if (ragdollScript != null) ragdollScript.ReverseDestruction();
     }
 
-    public void ApplyStatusEffect(StatusEffectType status, bool apply)
-    {
-        //throw new NotImplementedException();
-    }
 }
 
 

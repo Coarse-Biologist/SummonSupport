@@ -331,6 +331,7 @@ public abstract class LivingBeing : MonoBehaviour
     {
         while (true)
         {
+            if (CurrentHP <= 0) yield return regenTickRate;
             float newHP = Mathf.Min(CurrentHP + TotalHealthRegeneration, MaxHP);
             if (newHP != CurrentHP)
                 SetAttribute(AttributeType.CurrentHitpoints, newHP);

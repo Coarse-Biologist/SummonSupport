@@ -106,7 +106,7 @@ public class StatusEffectHandler : MonoBehaviour
             {
                 case StatusEffectType.Chilled:
                     {
-                        Debug.Log($"Increasing speed by {.2f * ai_Speed}");
+                        //Debug.Log($"Increasing speed by {.2f * ai_Speed}");
                         stateHandler.anim.anim.speed += .2f;
                         stateHandler.navAgent.speed += .2f * ai_Speed;
                         break;

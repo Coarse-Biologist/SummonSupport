@@ -59,7 +59,6 @@ public class AlchemyHandler : MonoBehaviour
             return;
         }
         Instance = this;
-        Debug.Log($"active minions at awake: {activeMinions.Count}");
     }
 
 
@@ -189,14 +188,22 @@ public class AlchemyHandler : MonoBehaviour
         upgradeResults += $"Elemental affinity upgraded by {elementUpgrade} \n";
         stats.RestoreResources();
         AlterMinionByElement(minion);
-        AddAbilitiesByElement(minion, (int)stats.GetAttribute(AttributeType.MaxPower));
-        AddMeleeAbilityByElement(stats);
+
+        CreatureAbilityHandler abilityHandler = minion.GetComponent<CreatureAbilityHandler>();
+
+        List<Ability> abilities = GetAbilitiesByElement(minion, (int)stats.GetAttribute(AttributeType.MaxPower));
+        abilities.Add(GetMeleeAbilityByElement(stats));
+        foreach (Ability ability in abilities)
+        {
+            abilityHandler.LearnAbility(ability);
+
+        }
         return upgradeResults;
     }
 
-    private void AddAbilitiesByElement(LivingBeing livingBeing, int minionPower)
+    private List<Ability> GetAbilitiesByElement(LivingBeing livingBeing, int minionPower)
     {
-
+        List<Ability> abilitiesToLearn = new();
         int abilitySlotsToAdd = (int)minionPower / 100;
         Debug.Log($"ability slots to add: {abilitySlotsToAdd}. power used: {minionPower}");
 
@@ -207,7 +214,7 @@ public class AlchemyHandler : MonoBehaviour
             abilityHandler.AddAbilitySlot();
         }
         int abilitiesAdded = 0;
-        if (abilityHandler == null) return;
+        if (abilityHandler == null) throw new Exception($"Ability handler is null for {livingBeing.Name}");
         Element strongestElement = livingBeing.GetHighestAffinity(out float value);
         if (strongestElement != Element.None)
         {
@@ -222,34 +229,27 @@ public class AlchemyHandler : MonoBehaviour
                         Debug.Log($"Breaking because the number of ability slots is {abilityHandler.SlottedAbilities.Count} and the numbe ralready added was {abilitiesAdded}");
                         break;
                     }
-                    abilityHandler.LearnAbility(ability);
-                    abilityHandler.SlotAbility(ability, abilitiesAdded);
+                    abilitiesToLearn.Add(ability);
                     abilitiesAdded++;
                 }
             }
         }
-        abilityHandler.SetAbilityLists();
+        return abilitiesToLearn;
     }
 
-    public void AddMeleeAbilityByElement(LivingBeing livingBeing)
+    public Ability GetMeleeAbilityByElement(LivingBeing livingBeing)
     {
-        CreatureAbilityHandler abilityHandler = livingBeing.GetComponent<CreatureAbilityHandler>();
-        if (abilityHandler != null)
+
+        Element strongestElement = livingBeing.GetHighestAffinity(out float value);
+        //Debug.Log($"Strongest Element : {strongestElement}, Value : {value}");
+        Ability meleeAbility = AbilityLibrary.abilityLibrary.defaultAttack;
+
+        if (strongestElement != Element.None)
         {
-
-            Element strongestElement = livingBeing.GetHighestAffinity(out float value);
-            //Debug.Log($"Strongest Element : {strongestElement}, Value : {value}");
-            Ability meleeAbility = AbilityLibrary.abilityLibrary.defaultAttack;
-
-            if (strongestElement != Element.None)
-            {
-                meleeAbility = AbilityLibrary.GetElementalMeleeAbility(strongestElement, value);
-                //Debug.Log($"Setting melee ability to {meleeAbility.Name}");
-            }
-            abilityHandler.LearnAbility(meleeAbility);
-
-            abilityHandler.SetAbilityLists();
+            meleeAbility = AbilityLibrary.GetElementalMeleeAbility(strongestElement, value);
+            //Debug.Log($"Setting melee ability to {meleeAbility.Name}");
         }
+        return meleeAbility;
 
     }
 

@@ -10,7 +10,7 @@ public class SpawnTrigger : MonoBehaviour
     void Start()
     {
         if (TriggerAutomatically)
-            Invoke("Trigger", TriggerTimer);
+            Invoke("TriggerRepeatedly", TriggerTimer);
     }
     void OnTriggerEnter(Collider collision)
     {
@@ -19,8 +19,13 @@ public class SpawnTrigger : MonoBehaviour
             Trigger();
         }
     }
-    private void Trigger()
+    private void TriggerRepeatedly()
     {
+        Trigger(true);
+    }
+    private void Trigger(bool repeatTrigger = false)
+    {
+        if (repeatTrigger) triggered = false;
         if (!triggered)
         {
             EventDeclarer.SpawnEnemies?.Invoke(transform.parent.GetComponentInChildren<SpawnLocationInfo>());

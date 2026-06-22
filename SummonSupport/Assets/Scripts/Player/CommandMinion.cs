@@ -87,6 +87,7 @@ public static class CommandMinion
 
     public static void CommandMinionToAttack(LivingBeing enemy)
     {
+        enemy.resourceBarInterface.HighlightHealthbar(5f);
         foreach (LivingBeing minion in AlchemyHandler.Instance.activeMinions)
         {
             MinionStats stats = minion.GetComponent<MinionStats>();

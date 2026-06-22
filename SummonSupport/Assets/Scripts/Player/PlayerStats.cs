@@ -69,7 +69,7 @@ public class PlayerStats : LivingBeing
     public void GainXP(int amount)
     {
         int XpToGain = amount;
-        Debug.Log($"Xp to gain = {XpToGain}");
+        //Debug.Log($"Xp to gain = {XpToGain}");
         while (XpToGain > 0) // While we have enough XP to level up
         {
             CurrentXP += XpToGain;

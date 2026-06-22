@@ -92,14 +92,17 @@ public static class CombatStatHandler
         {
             foreach (StatusEffects status in currentStatusEffects)
             {
+                //UnityEngine.Debug.Log("gimmi stack trace du Pilzchen :)");
+
                 currentTarget.SE_Handler.AlterStatusEffectList(status, true);
             }
         }
     }
     private static void SetCurrentValues(EffectPackage currentAbilityEffects)
     {
-
+        //UnityEngine.Debug.Log($"current status efffects in combatStatsHandlerClass = {currentStatusEffects}. statusEffects of ability itself = {currentAbilityEffects.StatusEffects}");
         currentStatusEffects = currentAbilityEffects.StatusEffects;
+        //UnityEngine.Debug.Log($"After setting equal: current status efffects in combatStatsHandlerClass = {currentStatusEffects}. statusEffects of ability itself = {currentAbilityEffects.StatusEffects}");
 
         currentDamageValue = currentAbilityEffects.Damage.Value;
         currentDotValue = currentAbilityEffects.DamageOverTime.Value;

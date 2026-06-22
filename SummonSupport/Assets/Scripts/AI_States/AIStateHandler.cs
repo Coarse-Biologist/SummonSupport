@@ -131,6 +131,7 @@ public class AIStateHandler : MonoBehaviour
     public void SetDead(bool dead)
     {
         Dead = dead;
+        navAgent.speed = 0;
     }
 
     public void SetStateMachineSpeed(int speed)

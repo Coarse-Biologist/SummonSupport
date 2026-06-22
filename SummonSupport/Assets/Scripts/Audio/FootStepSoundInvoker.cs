@@ -33,7 +33,6 @@ public class FootStepSoundInvoker : MonoBehaviour
 
     public void TriggerPotionReturnToBelt()
     {
-        Debug.Log("This is being triggered1");
 
         PotionHandler.ReturnPotionToBelt();
     }

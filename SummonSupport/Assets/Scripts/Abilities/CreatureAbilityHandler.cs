@@ -36,7 +36,6 @@ public class CreatureAbilityHandler : AbilityHandler
 
         if (target == null)
         {
-
             return null;
         }
         if (casterStats.SE_Handler.HasStatusEffect(StatusEffectType.Charmed) || casterStats.SE_Handler.HasStatusEffect(StatusEffectType.Madness))
@@ -129,6 +128,12 @@ public class CreatureAbilityHandler : AbilityHandler
         {
             Abilities.Add(ability);
             abilitiesOnCooldown.Add(ability, false);
+            SlottedAbilities abilitSlot = new()
+            {
+                slot = SlottedAbilities.Count + 1,
+                ability = ability
+            };
+            SlottedAbilities.Add(abilitSlot);
         }
         SetAbilityLists();
     }
@@ -152,6 +157,7 @@ public class CreatureAbilityHandler : AbilityHandler
             }
             UnityEngine.Debug.Log($"Slotting {ability.Name} in slot {slot}");
         }
+        SetAbilityLists();
     }
 
 

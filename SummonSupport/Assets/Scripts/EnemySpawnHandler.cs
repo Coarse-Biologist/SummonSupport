@@ -166,8 +166,8 @@ public class EnemySpawnHandler : MonoBehaviour
     }
     public void ModifyCreatureAbilties(int level, LivingBeing livingBeing, Element element, PhysicalType physical)
     {
-        //Debug.Log("Spawning creature of level " + level);
-        if (level < 2) AlchemyHandler.Instance.AddMeleeAbilityByElement(livingBeing);
+        CreatureAbilityHandler abilityHandler = (CreatureAbilityHandler)livingBeing.abilityHandler;
+        if (level < 2) abilityHandler.LearnAbility(AlchemyHandler.Instance.GetMeleeAbilityByElement(livingBeing));
         else if (element != Element.None) AddElementalAbilities(level, livingBeing, element);
         if (physical != PhysicalType.None) AddPhysicalAbilities(level, livingBeing, physical);
         else livingBeing.abilityHandler.LearnAbility(AbilityLibrary.abilityLibrary.defaultAttack);

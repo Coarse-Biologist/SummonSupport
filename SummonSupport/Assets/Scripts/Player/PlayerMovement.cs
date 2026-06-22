@@ -2,6 +2,9 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using SummonSupportEvents;
 using System;
+using Unity.InferenceEngine;
+using System.Linq;
+//using Unity.Physics;
 
 
 public class PlayerMovement : MovementScript
@@ -24,7 +27,7 @@ public class PlayerMovement : MovementScript
     public bool usingUI { private set; get; } = false;
     private AnimationControllerScript anim;
 
-    private CapsuleCollider playerCollider;
+    private UnityEngine.CapsuleCollider playerCollider;
     private float colliderRadius;
 
 
@@ -122,10 +125,8 @@ public class PlayerMovement : MovementScript
     }
     private void ReturnToNormalSpeed()
     {
-        Debug.Log($"Collider radius is: {playerCollider.radius}");
         dashing = false;
         playerCollider.radius = colliderRadius;
-        Debug.Log($"Collider radius is now: {playerCollider.radius}");
 
     }
 
@@ -195,8 +196,12 @@ public class PlayerMovement : MovementScript
         if (playerStats.Dead) return;
         Vector3 cameraForward = Camera.main.transform.forward;
         Vector3 adjustedForward = new Vector3(cameraForward.x, cameraForward.y + .15f, cameraForward.z);
-        Ray ray = new Ray(Camera.main.transform.position, adjustedForward);
-        if (Physics.Raycast(ray, out RaycastHit hit, 300))
+
+        RaycastHit[] hits = Physics.SphereCastAll(playerStats.transform.position, 2f, playerStats.abilityHandler.abilitySpawn.transform.forward, 20f, LayerMask.NameToLayer("Enemy"));
+        if (hits.Length != 0)
+            CommandMinion.HandleCommand(hits[0]);
+
+        else if (Physics.Raycast(new Ray(Camera.main.transform.position, adjustedForward), out RaycastHit hit, 300))
         {
             CommandMinion.HandleCommand(hit);
         }
