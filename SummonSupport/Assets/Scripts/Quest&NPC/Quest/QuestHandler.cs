@@ -135,7 +135,7 @@ public class QuestHandler : MonoBehaviour
     }
     public void IncrementIntQuest(RepeatableAccomplishments intQuest, int value = 1)
     {
-        Debug.Log($"Increment func called for {intQuest}. change value  = {value}");
+        //Debug.Log($"Increment func called for {intQuest}. change value  = {value}");
 
 
         if (QuestRepTracker.TryGetValue(intQuest, out int reps))

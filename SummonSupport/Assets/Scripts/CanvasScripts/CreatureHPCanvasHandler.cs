@@ -80,7 +80,7 @@ public class CreatureHPCanvasHandler : MonoBehaviour, I_ResourceBar
     {
         if (hpSlider != null)
         {
-            Debug.Log("It is not null, but do you rejoice?");
+            //Debug.Log("It is not null, but do you rejoice?");
             foreach (Image i in sliderImage)
                 i.color = Color.yellow;
         }

@@ -10,6 +10,7 @@ using System.Text.RegularExpressions;
 using SummonSupportEvents;
 using static StatusEffectsLibrary;
 using Unity.Entities.UniversalDelegates;
+using SS_Structs;
 //using UnityEditorInternal.Profiling.Memory.Experimental.FileFormat;
 
 
@@ -887,14 +888,23 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     }
     private void SpawnAbilitySlotButtons(LivingBeing livingBeing)
     {
-        int maxSlots = livingBeing.abilityHandler.SlottedAbilities.Count;
-        if (livingBeing.CharacterTag == CharacterTag.Player) maxSlots = 6;
-        for (int i = 0; i < maxSlots; i++)
+        int maxSlots = 0;
+        if (livingBeing.CharacterTag == CharacterTag.Player)
         {
-            int slotNum = i;
-            Button slotButton = AddButtonToPanel($"Slot: {SlotNames[i]}", bottomLeftPanel, 20, 5);
-            slotButton.RegisterCallback<ClickEvent>(e => SetSelectedSlot(slotNum));
+            maxSlots = 6;
+            for (int i = 0; i < maxSlots; i++)
+            {
+                int slotNum = i;
+                Button slotButton = AddButtonToPanel($"Slot: {SlotNames[i]}", bottomLeftPanel, 20, 5);
+                slotButton.RegisterCallback<ClickEvent>(e => SetSelectedSlot(slotNum));
 
+            }
+        }
+        else foreach (SlottedAbilities slottedAbilities in livingBeing.abilityHandler.SlottedAbilities)
+        {
+            int slotNum = slottedAbilities.slot;
+            Button slotButton = AddButtonToPanel($"Slot: {SlotNames[slotNum]}", bottomLeftPanel, 20, 5);
+            slotButton.RegisterCallback<ClickEvent>(e => SetSelectedSlot(slotNum));
         }
     }
     private void SpawnKnownAbilityButtons()

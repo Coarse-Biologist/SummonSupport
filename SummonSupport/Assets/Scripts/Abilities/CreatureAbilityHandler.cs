@@ -128,12 +128,7 @@ public class CreatureAbilityHandler : AbilityHandler
         {
             Abilities.Add(ability);
             abilitiesOnCooldown.Add(ability, false);
-            SlottedAbilities abilitSlot = new()
-            {
-                slot = SlottedAbilities.Count + 1,
-                ability = ability
-            };
-            SlottedAbilities.Add(abilitSlot);
+
         }
         SetAbilityLists();
     }
@@ -162,11 +157,16 @@ public class CreatureAbilityHandler : AbilityHandler
 
 
 
-    public void AddAbilitySlot()
+    public void AddAbilitySlot(int slotIndex, Ability ability)
     {
-        SlottedAbilities.Add(new());
-        UnityEngine.Debug.Log($"Adding slot ");
+        abilitiesOnCooldown.TryAdd(ability, false);
 
+        SlottedAbilities abilitSlot = new()
+        {
+            slot = slotIndex,
+            ability = ability
+        };
+        SlottedAbilities.Add(abilitSlot);
     }
 
 

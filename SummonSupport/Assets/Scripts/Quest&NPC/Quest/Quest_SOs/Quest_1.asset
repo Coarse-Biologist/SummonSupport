@@ -20,7 +20,7 @@ MonoBehaviour:
   ProgressString: Investigate the sound
   CompletionString: The area seems safe now...
   GoldReward: 0
-  XP_Reward: 100
+  XP_Reward: 20
   KnowledgeReward: 0
   BenefittedElements: 
   AlchemyLootNum: 0

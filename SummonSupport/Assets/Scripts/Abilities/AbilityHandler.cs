@@ -260,7 +260,6 @@ public class AbilityHandler : MonoBehaviour
     {
         if (ability.Sounds != null && ability.Sounds.CastSounds.Length != 0)
         {
-            Debug.Log($"{audioHandler} = audio handler. does it exist? trying to play cast sound");
             audioHandler.PlayAbilityCastSound(ability);
         }
     }

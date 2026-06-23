@@ -79,8 +79,10 @@ public class AlchemyHandler : MonoBehaviour
                 Vector3 spawnPos = PlayerStats.Instance.transform.position;
                 if (SpawnLocation != null) spawnPos = SpawnLocation.position;
                 craftedMinion = Instantiate(minionPrefab, spawnPos, Quaternion.identity);
+                MinionStats minionStats = craftedMinion.GetComponent<MinionStats>();
+                craftingResults += UpgradeMinion(minionStats, combinedPotential, elementList);
+                AddAbilitiesToCraftedMinion(minionStats);
 
-                craftingResults += UpgradeMinion(craftedMinion.GetComponent<MinionStats>(), combinedPotential, elementList);
                 AddActiveMinion(craftedMinion);
 
                 int knowledgeGain = AlchemyInventory.GainKnowledge(elementList, combinedPotential);
@@ -187,7 +189,6 @@ public class AlchemyHandler : MonoBehaviour
         upgradeResults += $"Elemental affinity upgraded by {elementUpgrade} \n";
         minionStats.RestoreResources();
         AlterMinionByElement(minionStats);
-        AddAbilitiesToCraftedMinion(minionStats);
 
         return upgradeResults;
     }
@@ -195,18 +196,25 @@ public class AlchemyHandler : MonoBehaviour
     private void AddAbilitiesToCraftedMinion(MinionStats minionStats)
     {
         CreatureAbilityHandler abilityHandler = minionStats.GetComponent<CreatureAbilityHandler>();
-        List<Ability> abilities = new() { GetMeleeAbilityByElement(minionStats) };
-        foreach (Ability ability in GetAbilitiesByElement(minionStats, (int)minionStats.GetAttribute(AttributeType.MaxPower)))
+        Ability meleeAbility = GetMeleeAbilityByElement(minionStats);
+        abilityHandler.LearnAbility(meleeAbility);
+        abilityHandler.AddAbilitySlot(0, meleeAbility);
+        for (int i = (int)minionStats.GetAttribute(AttributeType.MaxPower) / ManaToAbilityRatio; i > 0; i--)
         {
-            abilities.Add(ability);
+            abilityHandler.AddAbilitySlot(i, null);
         }
-        foreach (Ability ability in abilities)
-        {
-            abilityHandler.LearnAbility(ability);
-        }
+        //List<Ability> abilities = new() { GetMeleeAbilityByElement(minionStats) };
+        //foreach (Ability ability in GetAbilitiesByElement(minionStats, (int)minionStats.GetAttribute(AttributeType.MaxPower)))
+        //{
+        //    abilities.Add(ability);
+        //}
+        //foreach (Ability ability in abilities)
+        //{
+        //    abilityHandler.LearnAbility(ability);
+        //}
     }
 
-    private List<Ability> GetAbilitiesByElement(LivingBeing livingBeing, int minionPower)
+    private List<Ability> GetAbilitiesByElement(LivingBeing livingBeing, int minionPower) //broken
     {
         List<Ability> abilitiesToLearn = new();
         int abilitySlotsToAdd = (int)minionPower / ManaToAbilityRatio;
@@ -216,7 +224,7 @@ public class AlchemyHandler : MonoBehaviour
 
         for (int i = abilitySlotsToAdd; i > 0; i--)
         {
-            abilityHandler.AddAbilitySlot();
+            //abilityHandler.AddAbilitySlot();
         }
         int abilitiesAdded = 0;
         if (abilityHandler == null) throw new Exception($"Ability handler is null for {livingBeing.Name}");
