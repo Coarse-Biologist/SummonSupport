@@ -94,7 +94,7 @@ public static class AlchemyInventory
         foreach (KeyValuePair<CraftingPotential, int> kvp in usedPotential)
         {
             int strengthAndAmount = kvp.Value; // amount of potential used
-            strengthAndAmount = (int)(strengthAndAmount / AlchemyHandler.KnowledgeGainRate); //
+            strengthAndAmount = (int)(strengthAndAmount * AlchemyHandler.KnowledgeGainRate); //
             total += strengthAndAmount;
 
             foreach (Element element in elementsList)

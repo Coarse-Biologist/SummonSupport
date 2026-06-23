@@ -17,7 +17,7 @@ public class AlchemyHandler : MonoBehaviour
     //[field: Tooltip("The amount of minion HP per new extra ability they can use.")]
     [field: SerializeField] public static int ManaToAbilityRatio { get; private set; } = 50;
     [field: SerializeField] public static float RecycleExchangeRate { get; private set; } = .2f;
-    [field: SerializeField] public static float KnowledgeGainRate { get; private set; } = .01f;
+    [field: SerializeField] public static float KnowledgeGainRate { get; private set; } = .03f;
     [field: SerializeField] public static float HealthScalar { get; private set; } = 2f;
     [field: SerializeField] public static int ElementThreshhold { get; private set; } = 50;
     [field: SerializeField] public static float AffinityToColorScalar { private set; get; } = .01f; // likelihood per affinity that a portion of the elemental will show affinity in their material.
