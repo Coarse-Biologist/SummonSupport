@@ -2,13 +2,9 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine.AddressableAssets;
-using UnityEngine.ResourceManagement.AsyncOperations;
 using System;
 using SummonSupportEvents;
-using Unity.VisualScripting.Antlr3.Runtime.Misc;
-using Unity.Entities.UniversalDelegates;
-using SS_Structs;
+
 
 
 #endregion
@@ -19,10 +15,10 @@ public class AlchemyHandler : MonoBehaviour
     private GameObject craftedMinion;
     public GameObject minionPrefab;
     //[field: Tooltip("The amount of minion HP per new extra ability they can use.")]
-    [field: SerializeField] public int ManaToAbilityRatio { get; private set; } = 50;
-    [field: SerializeField] public float RecycleExchangeRate { get; private set; } = .05f;
-    [field: SerializeField] public float KnowledgeGainRate { get; private set; } = 1f;
-    [field: SerializeField] public float HealthScalar { get; private set; } = 2f;
+    [field: SerializeField] public static int ManaToAbilityRatio { get; private set; } = 50;
+    [field: SerializeField] public static float RecycleExchangeRate { get; private set; } = .2f;
+    [field: SerializeField] public static float KnowledgeGainRate { get; private set; } = .01f;
+    [field: SerializeField] public static float HealthScalar { get; private set; } = 2f;
     [field: SerializeField] public static int ElementThreshhold { get; private set; } = 50;
     [field: SerializeField] public static float AffinityToColorScalar { private set; get; } = .01f; // likelihood per affinity that a portion of the elemental will show affinity in their material.
 
@@ -61,9 +57,15 @@ public class AlchemyHandler : MonoBehaviour
         Instance = this;
     }
 
-
     #region Crafting Minion
 
+    #region HandleCraftingResults
+    /// <summary>
+    /// Crafts a minion and spawns it by the alchemy bench.
+    /// </summary>
+    /// <param name="combinedPotential">The enemy to damage.</param>
+    /// <param name="elementList">The enemy to damage.</param>
+    /// <returns> A description string of the resuls of crafting.</returns>
     public string HandleCraftingResults(Dictionary<CraftingPotential, int> combinedPotential, List<Element> elementList)
     {
         string craftingResults = "";
@@ -78,9 +80,8 @@ public class AlchemyHandler : MonoBehaviour
                 if (SpawnLocation != null) spawnPos = SpawnLocation.position;
                 craftedMinion = Instantiate(minionPrefab, spawnPos, Quaternion.identity);
 
-                craftingResults += UpgradeMinion(craftedMinion.GetComponent<LivingBeing>(), combinedPotential, elementList);
+                craftingResults += UpgradeMinion(craftedMinion.GetComponent<MinionStats>(), combinedPotential, elementList);
                 AddActiveMinion(craftedMinion);
-
 
                 int knowledgeGain = AlchemyInventory.GainKnowledge(elementList, combinedPotential);
 
@@ -89,30 +90,30 @@ public class AlchemyHandler : MonoBehaviour
                 craftingResults += $"You have gained {knowledgeGain} alchemic knowledge.\n";
                 //Logging.Info($"You have just gained a total of {knowledgeGain} knowledge from alchemic work.");
             }
-            else Logging.Error("Crafted Minion is null, was he loaded promtly or correctly?");
+            else throw new Exception($"Minion prefab was null when trying to craft minion");
         }
         return craftingResults;
     }
+    #endregion
 
-    public static void HandleMinionRecycling(LivingBeing minion)
+    public static void HandleMinionRecycling(MinionStats minionStats)
     {
-        if (minion == null) throw new SystemException("Minionstats is null when trying to recycle a minion");
-        EventDeclarer.minionRecycled?.Invoke(minion.gameObject);
+        if (minionStats == null) throw new SystemException("Minionstats is null when trying to recycle a minion");
+        EventDeclarer.minionRecycled?.Invoke(minionStats.gameObject);
 
         //#TODO examine closely and maybe make this all better
 
-        float minionPower = minion.MaxHP - 100f;
-        float minionHP = minion.MaxHP - 100f;
-        float minionAffinity = GetCombinedElementValues(minion);
+        float minionPower = minionStats.MaxHP - 100f;
+        float minionHP = minionStats.MaxHP - 100f;
+        float minionAffinity = GetCombinedElementValues(minionStats);
 
-        AlchemyInventory.AlterCraftingPotential(CraftingPotential.CorePower, (int)(minionPower * Instance.RecycleExchangeRate)); //This should all scale in a more satosfying way
-        AlchemyInventory.AlterCraftingPotential(CraftingPotential.EtherDensity, (int)(minionAffinity * Instance.RecycleExchangeRate));
-        AlchemyInventory.AlterCraftingPotential(CraftingPotential.OrganMass, (int)(minionHP * Instance.RecycleExchangeRate));
+        AlchemyInventory.AlterCraftingPotential(CraftingPotential.CorePower, (int)(minionPower * RecycleExchangeRate)); //This should all scale in a more satosfying way
+        AlchemyInventory.AlterCraftingPotential(CraftingPotential.EtherDensity, (int)(minionAffinity * RecycleExchangeRate));
+        AlchemyInventory.AlterCraftingPotential(CraftingPotential.OrganMass, (int)(minionHP * RecycleExchangeRate));
 
-        EventDeclarer.minionDied?.Invoke(minion.gameObject);
-        minion.Die();
+        minionStats.Die();
     }
-    private static int GetCombinedElementValues(LivingBeing stats)
+    private static int GetCombinedElementValues(MinionStats stats)
     {
         int combinedAffinity = 0;
         foreach (Element element in Enum.GetValues(typeof(Element)))
@@ -121,7 +122,7 @@ public class AlchemyHandler : MonoBehaviour
         }
         return combinedAffinity;
     }
-    private int HandleOrganUse(LivingBeing stats, int value)
+    private int HandleOrganUse(MinionStats stats, int value)
     {
         int healthUpgrade = 0;
 
@@ -132,7 +133,7 @@ public class AlchemyHandler : MonoBehaviour
 
         return healthUpgrade;
     }
-    private void AlterSizeByOrganNum(LivingBeing stats, int organValue)
+    private void AlterSizeByOrganNum(MinionStats stats, int organValue)
     {
         float sizeChangeScalar = organValue * SizeScalar;
         if (sizeChangeScalar > 1)
@@ -141,9 +142,8 @@ public class AlchemyHandler : MonoBehaviour
             stats.gameObject.transform.localScale *= sizeChangeScalar;
         }
     }
-    private int HandleCoreUse(LivingBeing stats, int value)
+    private int HandleCoreUse(MinionStats stats, int value)
     {
-
         int powerUpgrade = 0;
 
         EventDeclarer.RepeatableQuestCompleted?.Invoke(Quest.RepeatableAccomplishments.CorePowerUsed, value); //#TODO this should be elswehere
@@ -153,58 +153,63 @@ public class AlchemyHandler : MonoBehaviour
 
         return powerUpgrade;
     }
-    private int HandleEtherUse(LivingBeing stats, int value, List<Element> elementList)
+    private int HandleEtherUse(MinionStats stats, int value, List<Element> elementList)
     {
         if (elementList.Count() == 0) return 0;
 
         int elementUpgrade = 0;
 
         EventDeclarer.RepeatableQuestCompleted?.Invoke(Quest.RepeatableAccomplishments.EtherDensityUsed, value); // #TODO this ought be elswhere
-
         foreach (Element element in elementList)
         {
-            stats.ChangeAffinity(element, value / elementList.Count);
+            int moddedValue = value * (AlchemyInventory.GetElementalKnowledge(element) / 100);
+            stats.ChangeAffinity(element, moddedValue / elementList.Count);
             elementUpgrade += value;
         }
 
         return elementUpgrade;
     }
 
-    public string UpgradeMinion(LivingBeing minion, Dictionary<CraftingPotential, int> potentialUsed, List<Element> elementList)
+    public string UpgradeMinion(MinionStats minionStats, Dictionary<CraftingPotential, int> potentialUsed, List<Element> elementList)
     {
         string upgradeResults = "";
-        MinionStats stats = minion.GetComponent<MinionStats>();
         int healthUpgrade = 0;
         int powerUpgrade = 0;
         int elementUpgrade = 0;
 
-        healthUpgrade += HandleOrganUse(minion, potentialUsed[CraftingPotential.OrganMass]);
-        powerUpgrade += HandleCoreUse(stats, potentialUsed[CraftingPotential.CorePower]);
+        healthUpgrade += HandleOrganUse(minionStats, potentialUsed[CraftingPotential.OrganMass]);
+        powerUpgrade += HandleCoreUse(minionStats, potentialUsed[CraftingPotential.CorePower]);
 
-        elementUpgrade += HandleEtherUse(stats, potentialUsed[CraftingPotential.EtherDensity], elementList);
+        elementUpgrade += HandleEtherUse(minionStats, potentialUsed[CraftingPotential.EtherDensity], elementList);
 
         upgradeResults += $"Health upgraded by {healthUpgrade} \n";
         upgradeResults += $"Power upgraded by {powerUpgrade} \n";
         upgradeResults += $"Elemental affinity upgraded by {elementUpgrade} \n";
-        stats.RestoreResources();
-        AlterMinionByElement(minion);
+        minionStats.RestoreResources();
+        AlterMinionByElement(minionStats);
+        AddAbilitiesToCraftedMinion(minionStats);
 
-        CreatureAbilityHandler abilityHandler = minion.GetComponent<CreatureAbilityHandler>();
-
-        List<Ability> abilities = GetAbilitiesByElement(minion, (int)stats.GetAttribute(AttributeType.MaxPower));
-        abilities.Add(GetMeleeAbilityByElement(stats));
+        return upgradeResults;
+    }
+    #region Give Minions Abilities
+    private void AddAbilitiesToCraftedMinion(MinionStats minionStats)
+    {
+        CreatureAbilityHandler abilityHandler = minionStats.GetComponent<CreatureAbilityHandler>();
+        List<Ability> abilities = new() { GetMeleeAbilityByElement(minionStats) };
+        foreach (Ability ability in GetAbilitiesByElement(minionStats, (int)minionStats.GetAttribute(AttributeType.MaxPower)))
+        {
+            abilities.Add(ability);
+        }
         foreach (Ability ability in abilities)
         {
             abilityHandler.LearnAbility(ability);
-
         }
-        return upgradeResults;
     }
 
     private List<Ability> GetAbilitiesByElement(LivingBeing livingBeing, int minionPower)
     {
         List<Ability> abilitiesToLearn = new();
-        int abilitySlotsToAdd = (int)minionPower / 100;
+        int abilitySlotsToAdd = (int)minionPower / ManaToAbilityRatio;
         Debug.Log($"ability slots to add: {abilitySlotsToAdd}. power used: {minionPower}");
 
         CreatureAbilityHandler abilityHandler = livingBeing.gameObject.GetComponent<CreatureAbilityHandler>();
@@ -253,6 +258,7 @@ public class AlchemyHandler : MonoBehaviour
 
     }
 
+    #endregion
     private void AlterMinionByElement(LivingBeing stats)
     {
         Element strongestElement = stats.GetHighestAffinity(out float value);
@@ -272,7 +278,17 @@ public class AlchemyHandler : MonoBehaviour
     #endregion
 
     #region set Class Variable functions
-
+    /// <summary>
+    /// Called by an Alchemy Inventory when a tool is gained.
+    /// Modifies crafting scalars based on the number of tools the player has.
+    /// </summary>
+    public static void ModifyToolBasedScaling(int numOfToolsKnown)
+    {
+        ManaToAbilityRatio -= numOfToolsKnown;
+        RecycleExchangeRate += (float)(numOfToolsKnown * .04);
+        KnowledgeGainRate += (float)(numOfToolsKnown * .01);
+        HealthScalar += (float)(numOfToolsKnown * .01);
+    }
     public GameObject SpawnMinion(Vector3 location, Quaternion rotation)
     {
         GameObject minion = Instantiate(minionPrefab, location, rotation);
@@ -286,7 +302,7 @@ public class AlchemyHandler : MonoBehaviour
 
         if (!activeMinions.Contains(livingBeing))
         {
-            Debug.Log($"Indded adding Active minion: {livingBeing.name}");
+            Debug.Log($"Indeed adding Active minion: {livingBeing.name}");
 
             activeMinions.Add(livingBeing);
             EventDeclarer.newMinionAdded?.Invoke(livingBeing);
@@ -303,21 +319,4 @@ public class AlchemyHandler : MonoBehaviour
 
 
 
-    #region Load Prefab
-    public void LoadMinionPrefab(string address)
-    {
-        Addressables.LoadAssetAsync<GameObject>(address).Completed += handle =>
-            {
-                if (handle.Status == AsyncOperationStatus.Succeeded)
-                {
-                    craftedMinion = handle.Result;
-                    minionPrefab = handle.Result;
-
-                    //Debug.Log($"Loaded: {address}");
-                }
-                //else Debug.Log($"address {address} failed to Load");
-            };
-    }
-
-    #endregion
 }

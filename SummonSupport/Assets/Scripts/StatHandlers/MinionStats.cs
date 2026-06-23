@@ -100,6 +100,7 @@ public class MinionStats : LivingBeing
             if (gameObject.TryGetComponent(out AIStateHandler stateHandler))
             {
                 stateHandler.SetDead(false);
+
                 //Debug.Log("Setting state handler death to false");
                 //stateHandler.StartCoroutine(stateHandler.RunStateMachine());
             }

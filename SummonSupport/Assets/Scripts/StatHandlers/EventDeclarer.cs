@@ -16,6 +16,7 @@ namespace SummonSupportEvents
         public static UnityEvent<EnemyStats> EnemyDefeated = new();
 
         #endregion
+        public static UnityEvent<AlchemyTool> toolGained = new();
         public static UnityEvent<GameObject> minionDied = new();
         public static UnityEvent<GameObject> minionRecycled = new();
         public static UnityEvent<LivingBeing> newMinionAdded = new();

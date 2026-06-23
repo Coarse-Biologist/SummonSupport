@@ -154,7 +154,7 @@ public abstract class LivingBeing : MonoBehaviour
         {
             Affinities[element].Set(newAffinity);
         }
-        //Debug.Log($"Change affinity: current Affinity = {newAffinity}");
+        Debug.Log($"Change affinity: current Affinity = {newAffinity}");
 
     }
     public void SetAffinity(Element element, float amount)

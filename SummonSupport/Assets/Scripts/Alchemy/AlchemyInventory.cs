@@ -10,28 +10,7 @@ using UnityEditor;
 
 public static class AlchemyInventory
 {
-    #region crew experimentally adds Crafting potnential categories to replace the ingredients.
-    //public static Dictionary<CraftingPotential, int> CraftingPotentialDict = new()
-    //convert ingredients on looting. 
-    //alchemy inventory funcs: 
-    // convert from ingredients, 
-    // convert to knowledge, 
-    // convert cores to ability crafting potential, 
-    // convert to elemental affinity,
-    // convert to minion crafting and upgrade potential.
-    // CorePower, EtherDensity, OrganMass
 
-
-
-
-
-
-
-
-
-
-
-    #endregion
 
     #region Class variables
     public static Dictionary<CraftingPotential, int> AvailableCraftingPotential { get; private set; } = new()
@@ -41,19 +20,7 @@ public static class AlchemyInventory
         {CraftingPotential.EtherDensity, 100 },
 
     };
-    //public static Dictionary<AlchemyLoot, int> ingredients { get; private set; } = new()
-    //    {
-    //        { AlchemyLoot.WretchedOrgans, 10 },
-    //        { AlchemyLoot.FunctionalOrgans, 10 },
-    //        { AlchemyLoot.HulkingOrgans, 10 },
-    //        { AlchemyLoot.WeakCore, 10 },
-    //        { AlchemyLoot.SolidCore, 10 },
-    //        { AlchemyLoot.PowerfulCore, 10 },
-    //        { AlchemyLoot.HulkingCore, 10 },
-    //        { AlchemyLoot.FaintEther, 10 },
-    //        { AlchemyLoot.PureEther, 10 },
-    //        { AlchemyLoot.IntenseEther,101 }
-    //        };
+
     public static Dictionary<AlchemyLoot, int> ingredientValues { get; private set; } = new()
         {
             { AlchemyLoot.WretchedOrgans, 1 },
@@ -108,7 +75,10 @@ public static class AlchemyInventory
     public static void IncemementElementalKnowledge(Element element, int amount)
     {
         if (element != Element.None)
+        {
             knowledgeDict[element] += amount;
+            UnityEngine.Debug.Log($"element {element} kniweledge gained: {amount}");
+        }
     }
     public static int GetElementalKnowledge(Element element)
     {
@@ -123,9 +93,10 @@ public static class AlchemyInventory
         int total = 0;
         foreach (KeyValuePair<CraftingPotential, int> kvp in usedPotential)
         {
-            int strengthAndAmount = kvp.Value; //multiply ingredient value by num used
-            strengthAndAmount += KnownTools.Count;
+            int strengthAndAmount = kvp.Value; // amount of potential used
+            strengthAndAmount = (int)(strengthAndAmount / AlchemyHandler.KnowledgeGainRate); //
             total += strengthAndAmount;
+
             foreach (Element element in elementsList)
             {
                 IncemementElementalKnowledge(element, strengthAndAmount);
@@ -137,8 +108,7 @@ public static class AlchemyInventory
     public static void ConvertIngredientsToPotential(AlchemyLoot ingredient, int numberOfIngredients = 1)
     {
         // #TODO i hate this conditional business
-        float modifier = KnownTools.Count() / 10;
-        modifier += 1; //number of total tools
+        float modifier = 1 + KnownTools.Count / 20;
         RepeatableAccomplishments type = RepeatableAccomplishments.OrgansCollected;
         if (ingredientValues.TryGetValue(ingredient, out int value))
         {
@@ -188,6 +158,7 @@ public static class AlchemyInventory
         if (!KnownTools.Contains(tool))
         {
             KnownTools.Add(tool);
+            AlchemyHandler.ModifyToolBasedScaling(KnownTools.Count);
         }
         //else Logging.Error($"The tool {tool} is already known");
     }

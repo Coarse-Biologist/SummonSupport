@@ -62,8 +62,8 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
 
     //private Dictionary<AlchemyLoot, int> selectedIngredients = new();
     private List<Element> selectedElements = new List<Element>();
-    private LivingBeing minionToUpgrade;
-    private LivingBeing minionToRecycle;
+    private MinionStats minionToUpgrade;
+    private MinionStats minionToRecycle;
 
     #region ability modding
     private AbilityModHandler ModHandler;
@@ -405,7 +405,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
         clearButton.RegisterCallback<ClickEvent>(e => ClearCraftingSelection());
         clearButton.RegisterCallback<ClickEvent>(e => HandleUpgradeDisplay());
     }
-    private void HandleUpgradeMinion(LivingBeing minionToUpgrade)
+    private void HandleUpgradeMinion(MinionStats minionToUpgrade)
     {
         if (minionToUpgrade == null) return;
         alchemyHandler.UpgradeMinion(minionToUpgrade, selectedCraftingPotential, selectedElements);
@@ -415,13 +415,13 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     }
     private void ShowUpgradableMinions()
     {
-        foreach (LivingBeing minion in alchemyHandler.activeMinions)
+        foreach (MinionStats minion in alchemyHandler.activeMinions)
         {
             Button minionButton = AddButtonToPanel($"Upgrade {minion.Name}", bottomLeftPanel, 45, 5);
             minionButton.RegisterCallback<ClickEvent>(e => SetMinionToUpgrade(minion));
         }
     }
-    private void SetMinionToUpgrade(LivingBeing minion)
+    private void SetMinionToUpgrade(MinionStats minion)
     {
         minionToUpgrade = minion;
         instructions.text = $"Select ingredients and element with which to upgrade {minion.Name}.";
@@ -690,7 +690,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
         Button clearButton = AddButtonToPanel("Clear Selection", topRightPanel, 50, 5);
         confirmButton.RegisterCallback<ClickEvent>(e => AlchemyHandler.HandleMinionRecycling(minionToRecycle));
         clearButton.RegisterCallback<ClickEvent>(e => SetMinionToRecycle(null));
-        foreach (LivingBeing minion in alchemyHandler.activeMinions)
+        foreach (MinionStats minion in alchemyHandler.activeMinions)
         {
             Debug.Log("Minion should be shown in alchemy inventory panel");
             Button minionButton = AddButtonToPanel($"Recycle {minion.Name}", bottomLeftPanel, 45, 5);
@@ -698,7 +698,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
         }
     }
 
-    private void SetMinionToRecycle(LivingBeing minion)
+    private void SetMinionToRecycle(MinionStats minion)
     {
         minionToRecycle = minion;
     }
