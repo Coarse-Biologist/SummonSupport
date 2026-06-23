@@ -76,7 +76,9 @@ public class PotionHandler : MonoBehaviour
 
     public static Dictionary<int, GameObject> AbilitySlotToPotion { private set; get; } = new();
     #endregion
-    private static Tuple<int, GameObject> PotionInHand = new(-1, null); // item 1 is the ability slot the potion belongs to, item 2 is the potion gameobject itself. if item 1 is -1, then there is no potion in hand.
+    private static bool potionInHand = false;
+    private static GameObject PotionInHand = null;
+    private static int SlotOfPotionInHand = -1;
 
 
     void Awake()
@@ -130,7 +132,11 @@ public class PotionHandler : MonoBehaviour
 
     public static void MovePotionToHand(int abilitySlot)
     {
-
+        if (potionInHand)
+        {
+            ReturnPotionToBelt();
+        }
+        potionInHand = true;
         if (AbilitySlotToPotion.TryGetValue(abilitySlot, out GameObject abilityPotion))
         {
             abilityPotion.transform.position = PlayerStats.Instance.HandTransform.position;
@@ -139,18 +145,20 @@ public class PotionHandler : MonoBehaviour
             if (abilityPotion.GetComponentInChildren<ParticleSystem>() is ParticleSystem ps) ps.Play(); // stop particle system so it doesn't look weird when the potion moves to the hand.
 
             //else if (abilityPotion.GetComponentInChildren<ParticleSystem>() is ParticleSystem ps) ps.Stop();
-            PotionInHand = new Tuple<int, GameObject>(abilitySlot, abilityPotion);
+            PotionInHand = abilityPotion;
+            SlotOfPotionInHand = abilitySlot;
         }
     }
 
     public static void ReturnPotionToBelt()
     {
-        if (PotionInHand.Item1 == -1 || PotionInHand.Item2 == null)
+        if (SlotOfPotionInHand == -1 || PotionInHand == null)
         {
             throw new Exception("ReturnPotionToBelt was called but there is no potion in hand.");
         }
-        PotionInHand.Item2.transform.position = PlayerStats.Instance.AbilityPotionTransformList[PotionInHand.Item1].position;
-        PotionInHand.Item2.transform.SetParent(PlayerStats.Instance.AbilityPotionTransformList[PotionInHand.Item1]);
+        PotionInHand.transform.position = PlayerStats.Instance.AbilityPotionTransformList[SlotOfPotionInHand].position;
+        PotionInHand.transform.SetParent(PlayerStats.Instance.AbilityPotionTransformList[SlotOfPotionInHand]);
+        potionInHand = false;
     }
 
 }

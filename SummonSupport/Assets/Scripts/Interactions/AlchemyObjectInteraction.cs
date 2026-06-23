@@ -7,6 +7,7 @@ public class AlchemyObjectInteraction : MonoBehaviour, I_Interactable
     [field: SerializeField] GameObject potion1;
 
     [field: SerializeField] GameObject potion2;
+    private static Quaternion upsideDownRotation = new Quaternion(0, 180, 0, 0);
 
     private GameObject leftPotion;
     private GameObject rightPotion;
@@ -16,8 +17,6 @@ public class AlchemyObjectInteraction : MonoBehaviour, I_Interactable
         //Debug.Log("destroying potions or maybe not?");
         if (leftPotion != null && rightPotion != null)
         {
-            //Debug.Log("destroying potions!?");
-
             Destroy(leftPotion);
             Destroy(rightPotion);
             leftPotion = null;
@@ -31,10 +30,12 @@ public class AlchemyObjectInteraction : MonoBehaviour, I_Interactable
         //Debug.Log("interqct called on screeglers neegler");
         if (leftPotion == null && rightPotion == null)
         {
-            leftPotion = Instantiate(potion1, playerHand_L.transform.position, Quaternion.identity, playerHand_L);
-            rightPotion = Instantiate(potion2, playerHand_R.transform.position, Quaternion.identity, playerHand_R);
-        }
+            leftPotion = Instantiate(potion1, playerHand_L.transform.position, upsideDownRotation);
+            leftPotion.transform.SetParent(playerHand_L);
+            rightPotion = Instantiate(potion2, playerHand_R.transform.position, upsideDownRotation);
+            rightPotion.transform.SetParent(playerHand_R);
 
+        }
     }
 
     public void ShowInteractionOption()

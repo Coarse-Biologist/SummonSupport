@@ -22,12 +22,12 @@ public class WeaponMono : MonoBehaviour
         startLoc = transform.localPosition;
         //WeaponSpline.rotation = Quaternion.LookRotation(abilityRotation.position - WeaponSpline.position);
 
-        if (gameObject.TryGetComponent<SplineAnimate>(out SplineAnimate animator))
+        if (gameObject.TryGetComponent(out SplineAnimate animator))
         {
             splineAnimator = animator;
             //Debug.Log($"animator's spline = {animator.Container.name}");
 
-            if (gameObject.TryGetComponent<SpriteRenderer>(out SpriteRenderer spriteRenderer))
+            if (gameObject.TryGetComponent(out SpriteRenderer spriteRenderer))
             {
                 spriteRenderer.sprite = WeaponImage;
             }

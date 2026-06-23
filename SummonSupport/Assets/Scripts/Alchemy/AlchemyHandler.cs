@@ -6,6 +6,9 @@ using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using System;
 using SummonSupportEvents;
+using Unity.VisualScripting.Antlr3.Runtime.Misc;
+using Unity.Entities.UniversalDelegates;
+using SS_Structs;
 
 
 #endregion
@@ -21,9 +24,11 @@ public class AlchemyHandler : MonoBehaviour
     [field: SerializeField] public float KnowledgeGainRate { get; private set; } = 1f;
     [field: SerializeField] public float HealthScalar { get; private set; } = 2f;
     [field: SerializeField] public static int ElementThreshhold { get; private set; } = 50;
+    [field: SerializeField] public static float AffinityToColorScalar { private set; get; } = .01f; // likelihood per affinity that a portion of the elemental will show affinity in their material.
 
 
-    [field: SerializeField] public int SizeScalar { get; private set; } = 20;
+
+    [field: SerializeField] public float SizeScalar { get; private set; } = .1f;
     [SerializeField] public List<LivingBeing> activeMinions = new List<LivingBeing>();
     public static AlchemyHandler Instance { get; private set; }
     public static Dictionary<AlchemyLoot, int> AlchemyLootValueDict = new()
@@ -62,13 +67,6 @@ public class AlchemyHandler : MonoBehaviour
     public string HandleCraftingResults(Dictionary<CraftingPotential, int> combinedPotential, List<Element> elementList)
     {
         string craftingResults = "";
-        //if (elementList.Count() == 0)
-        //{
-        //    combinedPotential = combinedPotential
-        //    .Where(g => !g.ToString()
-        //    .Contains("Ether"))
-        //    .ToDictionary(g => g.Key, g => g.Value);
-        //}
 
         AlchemyInventory.ExpendCraftingPotential(combinedPotential);
 
@@ -95,36 +93,6 @@ public class AlchemyHandler : MonoBehaviour
         }
         return craftingResults;
     }
-    public string HandleCraftingResultsCP(Dictionary<CraftingPotential, int> combinedCraftingPotential, List<Element> elementList)
-    {
-        string craftingResults = "";
-
-
-        //AlchemyInventory.ExpendIngredients(combinedIngredients);
-        //#TODO
-
-        if (minionPrefab != null)
-        {
-            Vector3 spawnPos = PlayerStats.Instance.transform.position;
-            if (SpawnLocation != null) spawnPos = SpawnLocation.position;
-            craftedMinion = Instantiate(minionPrefab, spawnPos, Quaternion.identity);
-
-            //craftingResults += UpgradeMinion(craftedMinion.GetComponent<LivingBeing>(), combinedCraftingPotential, elementList);
-            //#TODO
-
-            AddActiveMinion(craftedMinion);
-            //Debug.Log("Add ACtive minion");
-            //#TODO
-
-            //int knowledgeGain = GainKnowledge(elementList, combinedCraftingPotential);
-            //#TODO
-            //craftingResults += $"You have gained {knowledgeGain} alchemic knowledge.\n";
-            //Logging.Info($"You have just gained a total of {knowledgeGain} knowledge from alchemic work.");
-        }
-        else Logging.Error("Crafted Minion is null, was he loaded promtly or correctly?");
-
-        return craftingResults;
-    }
 
     public static void HandleMinionRecycling(LivingBeing minion)
     {
@@ -142,9 +110,6 @@ public class AlchemyHandler : MonoBehaviour
         AlchemyInventory.AlterCraftingPotential(CraftingPotential.OrganMass, (int)(minionHP * Instance.RecycleExchangeRate));
 
         EventDeclarer.minionDied?.Invoke(minion.gameObject);
-        CommandMinion.RemoveActiveMinions(minion);
-
-
         minion.Die();
     }
     private static int GetCombinedElementValues(LivingBeing stats)
@@ -160,7 +125,7 @@ public class AlchemyHandler : MonoBehaviour
     {
         int healthUpgrade = 0;
 
-        EventDeclarer.RepeatableQuestCompleted?.Invoke(Quest.RepeatableAccomplishments.OrganMassUsed, value); //#TODO this has to be where the organs are converted to organ mass crafting potential
+        EventDeclarer.RepeatableQuestCompleted?.Invoke(Quest.RepeatableAccomplishments.OrganMassUsed, value);
         stats.ChangeAttribute(AttributeType.MaxHitpoints, value);
         healthUpgrade += (int)(value * HealthScalar);
         AlterSizeByOrganNum(stats, value);
@@ -169,11 +134,11 @@ public class AlchemyHandler : MonoBehaviour
     }
     private void AlterSizeByOrganNum(LivingBeing stats, int organValue)
     {
-        float sizeChangeScalar = organValue / SizeScalar;
+        float sizeChangeScalar = organValue * SizeScalar;
         if (sizeChangeScalar > 1)
         {
             Debug.Log($"changing sie of {stats.Name} by {sizeChangeScalar}");
-            stats.gameObject.transform.localScale *= organValue / SizeScalar;
+            stats.gameObject.transform.localScale *= sizeChangeScalar;
         }
     }
     private int HandleCoreUse(LivingBeing stats, int value)
@@ -223,48 +188,68 @@ public class AlchemyHandler : MonoBehaviour
         upgradeResults += $"Elemental affinity upgraded by {elementUpgrade} \n";
         stats.RestoreResources();
         AlterMinionByElement(minion);
-        AddMeleeAbilityByElement(stats);
+
+        CreatureAbilityHandler abilityHandler = minion.GetComponent<CreatureAbilityHandler>();
+
+        List<Ability> abilities = GetAbilitiesByElement(minion, (int)stats.GetAttribute(AttributeType.MaxPower));
+        abilities.Add(GetMeleeAbilityByElement(stats));
+        foreach (Ability ability in abilities)
+        {
+            abilityHandler.LearnAbility(ability);
+
+        }
         return upgradeResults;
     }
 
-    private void AddAbilitiesByElement(LivingBeing livingBeing)
+    private List<Ability> GetAbilitiesByElement(LivingBeing livingBeing, int minionPower)
     {
+        List<Ability> abilitiesToLearn = new();
+        int abilitySlotsToAdd = (int)minionPower / 100;
+        Debug.Log($"ability slots to add: {abilitySlotsToAdd}. power used: {minionPower}");
+
         CreatureAbilityHandler abilityHandler = livingBeing.gameObject.GetComponent<CreatureAbilityHandler>();
-        if (abilityHandler == null) return;
+
+        for (int i = abilitySlotsToAdd; i > 0; i--)
+        {
+            abilityHandler.AddAbilitySlot();
+        }
+        int abilitiesAdded = 0;
+        if (abilityHandler == null) throw new Exception($"Ability handler is null for {livingBeing.Name}");
         Element strongestElement = livingBeing.GetHighestAffinity(out float value);
         if (strongestElement != Element.None)
         {
-            List<Ability> abilities = AbilityLibrary.GetRandomAbilities(strongestElement, (int)(livingBeing.GetAttribute(AttributeType.MaxPower) / ManaToAbilityRatio));
+            List<Ability> abilities = AbilityLibrary.abilityLibrary.GetElementalAbilitiesBelowLevel(minionPower, new() { strongestElement });
 
             if (abilities != null)
             {
                 foreach (Ability ability in abilities)
                 {
-                    abilityHandler.LearnAbility(ability);
+                    if (abilityHandler.SlottedAbilities.Count <= abilitiesAdded)
+                    {
+                        Debug.Log($"Breaking because the number of ability slots is {abilityHandler.SlottedAbilities.Count} and the numbe ralready added was {abilitiesAdded}");
+                        break;
+                    }
+                    abilitiesToLearn.Add(ability);
+                    abilitiesAdded++;
                 }
             }
-            abilityHandler.SetAbilityLists();
         }
+        return abilitiesToLearn;
     }
-    public void AddMeleeAbilityByElement(LivingBeing livingBeing)
+
+    public Ability GetMeleeAbilityByElement(LivingBeing livingBeing)
     {
-        CreatureAbilityHandler abilityHandler = livingBeing.GetComponent<CreatureAbilityHandler>();
-        if (abilityHandler != null)
+
+        Element strongestElement = livingBeing.GetHighestAffinity(out float value);
+        //Debug.Log($"Strongest Element : {strongestElement}, Value : {value}");
+        Ability meleeAbility = AbilityLibrary.abilityLibrary.defaultAttack;
+
+        if (strongestElement != Element.None)
         {
-
-            Element strongestElement = livingBeing.GetHighestAffinity(out float value);
-            Debug.Log($"Strongest Element : {strongestElement}, Value : {value}");
-            Ability meleeAbility = AbilityLibrary.abilityLibrary.defaultAttack;
-
-            if (strongestElement != Element.None)
-            {
-                meleeAbility = AbilityLibrary.GetElementalMeleeAbility(strongestElement, value);
-                Debug.Log($"Setting melee ability to {meleeAbility.Name}");
-            }
-            abilityHandler.LearnAbility(meleeAbility);
-
-            abilityHandler.SetAbilityLists();
+            meleeAbility = AbilityLibrary.GetElementalMeleeAbility(strongestElement, value);
+            //Debug.Log($"Setting melee ability to {meleeAbility.Name}");
         }
+        return meleeAbility;
 
     }
 
@@ -287,15 +272,30 @@ public class AlchemyHandler : MonoBehaviour
     #endregion
 
     #region set Class Variable functions
-    private void AddActiveMinion(GameObject minion)
+
+    public GameObject SpawnMinion(Vector3 location, Quaternion rotation)
+    {
+        GameObject minion = Instantiate(minionPrefab, location, rotation);
+
+        return minion;
+    }
+    public void AddActiveMinion(GameObject minion)
     {
         LivingBeing livingBeing = minion.GetComponent<LivingBeing>();
+        Debug.Log($"attempting to add Active minion: {livingBeing.name}");
+
         if (!activeMinions.Contains(livingBeing))
         {
+            Debug.Log($"Indded adding Active minion: {livingBeing.name}");
+
             activeMinions.Add(livingBeing);
             EventDeclarer.newMinionAdded?.Invoke(livingBeing);
         }
-        CommandMinion.SetActiveMinions(activeMinions);
+    }
+    public void RemoveActiveMinion(LivingBeing livingBeing)
+    {
+        activeMinions.Remove(livingBeing);
+
     }
 
     #endregion

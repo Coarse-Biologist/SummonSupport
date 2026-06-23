@@ -2,6 +2,9 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using SummonSupportEvents;
 using System;
+using Unity.InferenceEngine;
+using System.Linq;
+//using Unity.Physics;
 
 
 public class PlayerMovement : MovementScript
@@ -21,7 +24,11 @@ public class PlayerMovement : MovementScript
     private bool canDash = true;
     GameObject DashDustInstance = null;
     private bool paused = false;
+    public bool usingUI { private set; get; } = false;
     private AnimationControllerScript anim;
+
+    private UnityEngine.CapsuleCollider playerCollider;
+    private float colliderRadius;
 
 
 
@@ -35,7 +42,8 @@ public class PlayerMovement : MovementScript
         Cursor.visible = false;
         rb = GetComponent<Rigidbody>();
 
-
+        playerCollider = GetComponent<CapsuleCollider>();
+        colliderRadius = playerCollider.radius;
 
         mainCamera = Camera.main;
         inputActions = new PlayerInputActions();
@@ -49,9 +57,11 @@ public class PlayerMovement : MovementScript
     #region Enable and Disable event subscriptions
     private void OnEnable()
     {
-        EventDeclarer.UnpauseGame?.AddListener(UnpauseGame);
+        EventDeclarer.UsingUI?.AddListener(ToggleUsingUI);
 
+        EventDeclarer.UnpauseGame?.AddListener(UnpauseGame);
         EventDeclarer.PauseGame?.AddListener(PauseGame);
+
         inputActions ??= new PlayerInputActions();
         EventDeclarer.SpeedAttributeChanged?.AddListener(SetMovementAttribute);
         inputActions.Player.Enable();
@@ -66,9 +76,11 @@ public class PlayerMovement : MovementScript
 
     private void OnDisable()
     {
-        EventDeclarer.UnpauseGame?.RemoveListener(UnpauseGame);
+        EventDeclarer.UsingUI?.RemoveListener(ToggleUsingUI);
 
+        EventDeclarer.UnpauseGame?.RemoveListener(UnpauseGame);
         EventDeclarer.PauseGame.RemoveListener(PauseGame);
+
 
         EventDeclarer.SpeedAttributeChanged?.RemoveListener(SetMovementAttribute);
         inputActions.Player.Move.performed -= OnWASD;
@@ -91,6 +103,7 @@ public class PlayerMovement : MovementScript
         {
             canDash = false;
             dashing = true;
+            playerCollider.radius = .01f; // make collider slippery thin
             Invoke("ReturnToNormalSpeed", DashDuration);
             Invoke("ReadyDash", DashCoolDown);
             if (PlayerAbilityHandler.DashAbility != null) PlayerAbilityHandler.DashAbility.Activate(playerStats);
@@ -113,6 +126,8 @@ public class PlayerMovement : MovementScript
     private void ReturnToNormalSpeed()
     {
         dashing = false;
+        playerCollider.radius = colliderRadius;
+
     }
 
 
@@ -124,9 +139,12 @@ public class PlayerMovement : MovementScript
     public void PauseGame()
     {
         anim.SetUpdateMode(AnimatorUpdateMode.Normal);
-
         paused = true;
+    }
 
+    public void ToggleUsingUI()
+    {
+        usingUI = !usingUI;
     }
     #endregion
 
@@ -178,8 +196,12 @@ public class PlayerMovement : MovementScript
         if (playerStats.Dead) return;
         Vector3 cameraForward = Camera.main.transform.forward;
         Vector3 adjustedForward = new Vector3(cameraForward.x, cameraForward.y + .15f, cameraForward.z);
-        Ray ray = new Ray(Camera.main.transform.position, adjustedForward);
-        if (Physics.Raycast(ray, out RaycastHit hit, 300))
+
+        RaycastHit[] hits = Physics.SphereCastAll(playerStats.transform.position, 2f, playerStats.abilityHandler.abilitySpawn.transform.forward, 20f, LayerMask.NameToLayer("Enemy"));
+        if (hits.Length != 0)
+            CommandMinion.HandleCommand(hits[0]);
+
+        else if (Physics.Raycast(new Ray(Camera.main.transform.position, adjustedForward), out RaycastHit hit, 300))
         {
             CommandMinion.HandleCommand(hit);
         }
@@ -203,15 +225,19 @@ public class PlayerMovement : MovementScript
 
     private void ToggleGamePause(InputAction.CallbackContext context)
     {
-
+        if (usingUI) return;
         if (!paused)
         {
             paused = true;
             EventDeclarer.PauseGame?.Invoke();
+            EventDeclarer.ShowPauseScreen?.Invoke();
+
         }
         else
         {
             EventDeclarer.UnpauseGame?.Invoke();
+            EventDeclarer.HidePauseScreen?.Invoke();
+
             paused = false;
         }
     }

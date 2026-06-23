@@ -30,10 +30,9 @@ public class LootSpawnHandler : MonoBehaviour
     private void DecideDropLoot(EnemyStats enemyStats)
     {
         Element strongestElement = enemyStats.GetHighestAffinity(out float value);
-        float etherValue = enemyStats.GetAffinity(strongestElement); ;
-        if (etherValue >= 50)
+        if (value >= 50)
         {
-            SpawnEther(enemyStats, GetEtherType(etherValue), strongestElement);
+            SpawnEther(enemyStats, GetEtherType(value), strongestElement);
         }
         if (enemyStats.MaxHP > 150)
         {

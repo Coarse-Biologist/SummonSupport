@@ -20,6 +20,8 @@ public class SetupManager : MonoBehaviour
     [field: SerializeField] public List<Ability> AllAbilities { get; private set; } = null;
     [field: SerializeField] public StatusEffectsLibrary StatusEffectsLibrary { get; private set; }
     [field: SerializeField] public GameObject LocSphere { get; private set; }
+    [field: SerializeField] public GameObject PlayerPrefab { get; private set; }
+
 
 
 
@@ -58,6 +60,13 @@ public class SetupManager : MonoBehaviour
         instance.GetComponent<MeshRenderer>().material.color = specialColorRequest;
 
         Destroy(instance, duration);
+    }
+
+    public GameObject SpawnPlayer(Vector3 spawnLoc, Quaternion rotation)
+    {
+        if (PlayerPrefab == null) throw new System.Exception("Player prefab was not set in the SetupManager");
+        if (PlayerStats.Instance != null) return PlayerStats.Instance.gameObject;
+        else return Instantiate(PlayerPrefab, spawnLoc, rotation);
     }
 
 

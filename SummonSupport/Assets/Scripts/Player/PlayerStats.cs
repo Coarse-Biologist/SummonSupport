@@ -27,8 +27,6 @@ public class PlayerStats : LivingBeing
 
     #endregion
     [field: SerializeField] public int TotalControlllableMinions { private set; get; } = 2;
-    [field: SerializeField] public int AbilitySlots { private set; get; } = 2;
-    [field: SerializeField] public Dictionary<string, int> SlottedAbilities { private set; get; } = new Dictionary<string, int>(); //This will store the slot in which an ability is contained. the string is a placeholder until we decide the object type of an ability
     public PlayerUIHandler UiHandler { private set; get; }
 
     #region player speciic transforms;
@@ -37,9 +35,9 @@ public class PlayerStats : LivingBeing
 
 
     #endregion
+
+    #region start game object life
     protected override void Awake()
-
-
     {
         base.Awake();
         Instance = this;
@@ -49,31 +47,29 @@ public class PlayerStats : LivingBeing
     void OnEnable()
     {
         EventDeclarer.EnemyDefeated?.AddListener(GainXP);
-
     }
     void OnDisable()
     {
         EventDeclarer.EnemyDefeated?.RemoveListener(GainXP);
 
     }
+    #endregion
+
+    public void AddControllableMinions(int changeValue)
+    {
+        TotalControlllableMinions = Math.Max(0, TotalControlllableMinions + changeValue);
+        Debug.Log($"Changing total controllable minion number"); //#TODO check  to see if this is being implimented at the crafting station
+    }
+
+    #region xp and level 
     private void GainXP(LivingBeing defeatedEnemy)
     {
         GainXP((int)defeatedEnemy.XP_OnDeath);
     }
-    public void AddControllableMinions(int changeValue)
-    {
-        TotalControlllableMinions = Math.Max(0, TotalControlllableMinions + changeValue);
-        Debug.Log($"Changing total controllable minion number");
-
-    }
-    public void AddAbilitySlot(int changeValue)
-    {
-        AbilitySlots = Math.Max(0, AbilitySlots + changeValue);
-    }
     public void GainXP(int amount)
     {
         int XpToGain = amount;
-        Debug.Log($"Xp to gain = {XpToGain}");
+        //Debug.Log($"Xp to gain = {XpToGain}");
         while (XpToGain > 0) // While we have enough XP to level up
         {
             CurrentXP += XpToGain;
@@ -89,6 +85,18 @@ public class PlayerStats : LivingBeing
 
         PlayerUIHandler.Instance.SetPlayerXP(CurrentXP);
     }
+    public void SetXp(int xp)
+    {
+        CurrentXP = xp;
+        PlayerUIHandler.Instance.SetPlayerXP(CurrentXP);
+
+    }
+    public void SetMaxXp(int xp)
+    {
+        MaxXP = xp;
+        PlayerUIHandler.Instance.SetPlayerXP(CurrentXP);
+
+    }
 
     private void LevelUp()
     {
@@ -98,6 +106,14 @@ public class PlayerStats : LivingBeing
         SkillPoints++;
         EventDeclarer.PlayerLevelUp?.Invoke(LevelUpHandler.GetLevelRewardString(CurrentLevel));
         LevelUpHandler.GetLevelRewards(CurrentLevel);
+    }
+    public void SetLevel(int level)
+    {
+        CurrentLevel = level;
+    }
+    public void ExpendSkillPoints(int value = 1)
+    {
+        SkillPoints -= value;
     }
 
     public void GainLevelRewards(List<LevelRewards> rewards)
@@ -173,8 +189,9 @@ public class PlayerStats : LivingBeing
             }
         }
     }
+    #endregion
 
-
+    #region death and resurrection handling
     public override void Die()
     {
         SetDead(true);
@@ -192,7 +209,7 @@ public class PlayerStats : LivingBeing
     {
         StartCoroutine(CheckResurrection(minion, interactable));
     }
-
+    #endregion
     private IEnumerator CheckResurrection(GameObject minion, I_InteractMinionResurrect interactable)
     {
         Debug.Log($"Starting resurrection of {minion.name}");
@@ -204,6 +221,9 @@ public class PlayerStats : LivingBeing
         bool resurrecting = true;
         float timeWaited = 0;
         float distance;
+
+        abilityHandler.anim.ChangeLayerAnimation("Crafting", 1, ResurrectTime, true);
+
         while (resurrecting)
         {
             yield return resurrectionIncrement;
@@ -217,6 +237,7 @@ public class PlayerStats : LivingBeing
             }
             if (timeWaited >= ResurrectTime)
             {
+                abilityHandler.anim.SeLayerWeight(1, 0);
                 Debug.Log("Breaking loop because res time has been successfully waited");
                 minionStats.Resurrect();
                 interactable.SetResurrecting(false);
@@ -224,6 +245,8 @@ public class PlayerStats : LivingBeing
 
             }
         }
+        abilityHandler.anim.SeLayerWeight(1, 0);
+
     }
 
     public override void HandleUIAttrDisplay(AttributeType attributeType, float newValue)
@@ -259,9 +282,6 @@ public class PlayerStats : LivingBeing
         statString += $"Max Power: {GetAttribute(AttributeType.MaxPower)}\n";
         statString += $"Health regeneration: {TotalHealthRegeneration}\n";
         statString += $"Power regeneration: {TotalPowerRegeneration}\n";
-
-
-
 
         statString += GetComponent<AbilityHandler>().GetKnownAbilitiesString();
         foreach (var kvp in Affinities)

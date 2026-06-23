@@ -10,19 +10,21 @@ public class EnemyStats : LivingBeing
 {
     [SerializeField] public Dictionary<string, int> SlottedAbilities { private set; get; } = new Dictionary<string, int>(); //This will store the slot in which an ability is contained. the string is a placeholder until we decide the object type of an ability
     [SerializeField] public List<AlchemyLoot> Loot { private set; get; } = new List<AlchemyLoot>();
-    public NavMeshAgent navMesh;
+    private NavMeshAgent navMesh;
     private float navMeshSpeed;
 
 
-    private new void Start()
+    protected override void Start()
     {
         base.Start();
-
+    }
+    protected override void Awake()
+    {
+        base.Awake();
     }
 
     public override void Die()
     {
-        Debug.Log("Gimme dat stack trace");
         if (!Dead)
         {
             abilityHandler.StopAllToggledAbilities();
@@ -36,12 +38,12 @@ public class EnemyStats : LivingBeing
                 stateHandler.SetDead(true);
             }
             if (ragdollScript != null) ragdollScript.CauseDestruction(false);
-            if (TryGetComponent(out NavMeshAgent nav))
-            {
-                navMesh = nav;
-                navMeshSpeed = navMesh.speed;
-            }
-            Invoke("DelayedTestDeath", .3f);
+            //if (TryGetComponent(out NavMeshAgent nav))
+            //{
+            //    navMesh = nav;
+            //    navMeshSpeed = navMesh.speed;
+            //}
+            Invoke("DelayedTestDeath", 2f);
         }
     }
     public void AddStatusEffectSymbol(StatusEffects status, int stacks)

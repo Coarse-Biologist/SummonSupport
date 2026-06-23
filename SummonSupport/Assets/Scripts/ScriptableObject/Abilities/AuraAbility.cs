@@ -23,7 +23,7 @@ public class AuraAbility : Ability
         Aura auraMonoScript = auraInstance.GetComponent<Aura>();
         if (auraMonoScript != null) auraMonoScript.HandleInstantiation(casterStats, null, this);
 
-        List<LivingBeing> targets = GetTargetfromSphereCast(casterStats, casterStats.GetComponent<AbilityHandler>().abilitySpawn.transform, targetNum, desiredTarget);
+        List<LivingBeing> targets = GetTargetfromSphereCast(casterStats, casterStats.abilityHandler.abilitySpawn.transform, targetNum, desiredTarget);
 
         foreach (LivingBeing target in targets)
         {

@@ -34,7 +34,6 @@ public abstract class LivingBeing : MonoBehaviour
     public float TotalHealthRegeneration { private set; get; } = 0;
     public float TotalPowerRegeneration { private set; get; } = 0;
 
-    public GameObject locSphere;
 
 
     #endregion
@@ -82,12 +81,12 @@ public abstract class LivingBeing : MonoBehaviour
     public Dictionary<Element, (Func<float> Get, Action<float> Set)> Affinities { private set; get; } = new();
     public Dictionary<AttributeType, (Func<float> Get, Action<float> Set)> ResourceAttributesDict { private set; get; } = new();
 
-
     public I_ResourceBar resourceBarInterface { protected set; get; }
     public I_Destruction ragdollScript;
     public AbilityHandler abilityHandler { protected set; get; }
+    public MovementScript movementScript { protected set; get; }
     public LivingBeingAudioHandler audioHandler { protected set; get; }
-    public StatusEffectHandler SE_Handler;
+    public StatusEffectHandler SE_Handler { protected set; get; }
 
 
     #endregion
@@ -103,20 +102,27 @@ public abstract class LivingBeing : MonoBehaviour
         resourceBarInterface = GetComponent<I_ResourceBar>();
         regenTickRate = new WaitForSeconds(TickRateRegenerationInSeconds);
 
+        audioHandler = GetComponent<LivingBeingAudioHandler>();
+        abilityHandler = GetComponent<AbilityHandler>();
+        movementScript = GetComponent<MovementScript>();
+        ragdollScript = GetComponent<I_Destruction>();
+
     }
 
     protected virtual void Start()
     {
         InitializeRegenerationValues();
         StartCoroutine(RegenerateRoutine());
-        audioHandler = GetComponent<LivingBeingAudioHandler>();
-        abilityHandler = GetComponent<AbilityHandler>();
 
-        ragdollScript = GetComponent<I_Destruction>();
         if (TryGetComponent(out StatusEffectHandler se))
         {
             SE_Handler = se;
         }
+        if (abilityHandler == null) throw new Exception($"{Name} has no ability handler some how");
+    }
+    public void SetAbilityHandler(AbilityHandler aH)
+    {
+        abilityHandler = aH;
     }
 
     private void InitializeRegenerationValues()
@@ -161,7 +167,6 @@ public abstract class LivingBeing : MonoBehaviour
         {
             Affinities[element].Set(newAffinity);
         }
-        //Debug.Log($"SetAffinity: Affinity = {newAffinity}");
     }
     public int GetAffinity(Element element)
     {
@@ -171,11 +176,26 @@ public abstract class LivingBeing : MonoBehaviour
 
     public Element GetHighestAffinity(out float value, float min = 0)
     {
-        Element element = Affinities.OrderByDescending(a => a.Value.Get()).First().Key;
-        value = GetAffinity(element);
-        if (value < min || value == 0) return Element.None;
+        Element highestElement = Element.None;
+        float highestValue = float.MinValue;
 
-        else return element;
+        foreach (var affinity in Affinities)
+        {
+            float current = affinity.Value.Get();
+
+            if (current > highestValue)
+            {
+                highestValue = current;
+                highestElement = affinity.Key;
+            }
+        }
+
+        value = highestValue;
+
+        if (value < min || value == 0)
+            return Element.None;
+
+        return highestElement;
     }
     public List<Element> GetHighAffinities(float min = 20)
     {
@@ -311,6 +331,7 @@ public abstract class LivingBeing : MonoBehaviour
     {
         while (true)
         {
+            if (CurrentHP <= 0) yield return regenTickRate;
             float newHP = Mathf.Min(CurrentHP + TotalHealthRegeneration, MaxHP);
             if (newHP != CurrentHP)
                 SetAttribute(AttributeType.CurrentHitpoints, newHP);
@@ -429,7 +450,7 @@ public abstract class LivingBeing : MonoBehaviour
 
         string statString = "";
         statString += $"Max hitpoints: {GetAttribute(AttributeType.MaxHitpoints)}\n";
-        statString += GetComponent<AbilityHandler>().GetKnownAbilitiesString();
+        statString += abilityHandler.GetKnownAbilitiesString();
         foreach (var kvp in Affinities)
         {
             if (kvp.Value.Get() > 0)

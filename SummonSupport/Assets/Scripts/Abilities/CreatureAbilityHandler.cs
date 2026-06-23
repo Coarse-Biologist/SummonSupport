@@ -3,6 +3,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Diagnostics;
 using UnityEngine.Rendering;
+using SS_Structs;
 
 
 
@@ -13,7 +14,6 @@ public class CreatureAbilityHandler : AbilityHandler
     private List<Ability> attackAbilities { get; set; } = new();
     private List<Ability> allSupportAbilities { get; set; } = new();
     private List<Ability> synergyAbilities { get; set; } = new();
-
 
 
     private Ability selectedAbility { get; set; } = null;
@@ -36,7 +36,6 @@ public class CreatureAbilityHandler : AbilityHandler
 
         if (target == null)
         {
-
             return null;
         }
         if (casterStats.SE_Handler.HasStatusEffect(StatusEffectType.Charmed) || casterStats.SE_Handler.HasStatusEffect(StatusEffectType.Madness))
@@ -96,18 +95,19 @@ public class CreatureAbilityHandler : AbilityHandler
     public void SetAbilityLists()
     {
 
-        foreach (Ability ability in Abilities) // make list of support and attack abilities
+        foreach (SlottedAbilities abilityStruct in SlottedAbilities) // make list of support and attack abilities
         {
             //UnityEngine.Debug.Log($"Creature Ability Handler checking ability {ability.Name}");
-            if (ability.AbilityTypeTag == AbilityTypeTag.DebuffsTarget)
+            if (abilityStruct.ability == null) continue;
+            if (abilityStruct.ability.AbilityTypeTag == AbilityTypeTag.DebuffsTarget)
             {
 
-                attackAbilities.Add(ability);
+                attackAbilities.Add(abilityStruct.ability);
             }
-            else if (ability.AbilityTypeTag == AbilityTypeTag.BuffsTarget)
+            else if (abilityStruct.ability.AbilityTypeTag == AbilityTypeTag.BuffsTarget)
             {
 
-                supportAbilities.Add(ability);
+                supportAbilities.Add(abilityStruct.ability);
             }
         }
         allSupportAbilities = supportAbilities;
@@ -123,13 +123,50 @@ public class CreatureAbilityHandler : AbilityHandler
     }
     public new void LearnAbility(Ability ability)
     {
-        UnityEngine.Debug.Log($"Creature learning ability {ability.Name}");
+        //UnityEngine.Debug.Log($"Creature learning ability {ability.Name}");
         if (!Abilities.Contains(ability) && ability != null)
         {
             Abilities.Add(ability);
-            abilitiesOnCooldownCrew.Add(ability, false);
+            abilitiesOnCooldown.Add(ability, false);
+            SlottedAbilities abilitSlot = new()
+            {
+                slot = SlottedAbilities.Count + 1,
+                ability = ability
+            };
+            SlottedAbilities.Add(abilitSlot);
         }
         SetAbilityLists();
+    }
+    public void SlotAbility(Ability ability, int slot)
+    {
+
+        if (ability == null || SlottedAbilities.Count < slot - 1) throw new System.Exception($"Cannot slot ability ({ability}) in slot ({slot})");
+        else
+        {
+            for (int i = 0; i < SlottedAbilities.Count; i++)
+            {
+                if (SlottedAbilities[i].slot == slot)
+                {
+                    SlottedAbilities[i] = new()
+                    {
+                        slot = slot,
+                        ability = ability
+                    };
+                    break;
+                }
+            }
+            UnityEngine.Debug.Log($"Slotting {ability.Name} in slot {slot}");
+        }
+        SetAbilityLists();
+    }
+
+
+
+    public void AddAbilitySlot()
+    {
+        SlottedAbilities.Add(new());
+        UnityEngine.Debug.Log($"Adding slot ");
+
     }
 
 

@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Linq;
 using Quest;
 using SummonSupportEvents;
+using Unity.Entities.UniversalDelegates;
 using UnityEditor;
 
 
@@ -204,8 +205,15 @@ public static class AlchemyInventory
         return AvailableCraftingPotential[potentialType];
     }
 
-
+    public static void SetCraftingPotential(CraftingPotential potentialType, int value)
+    {
+        AvailableCraftingPotential[potentialType] = value;
+    }
     #endregion
+    public static void SetElementalKnowledge(Element element, int value)
+    {
+        knowledgeDict[element] = value;
+    }
 
     public static string GetAlchemyLootString(AlchemyLoot lootString)
     {

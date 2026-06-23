@@ -86,13 +86,13 @@ public class AIObedienceState : AIState
         {
             Debug.Log($"traveling to commanded loc {commandLoc}. distance to target = {direction.sqrMagnitude}");
             navMesh.SetDestination(commandLoc);
-            if (anim != null) anim.ChangeAnimation("Run", .2f);
+            anim.ChangeAnimation("Run", .2f);
 
             return States.Obedience;
         }
         else
         {
-            if (anim != null) anim.ChangeAnimation("Idle", .2f);
+            anim.ChangeAnimation("Idle", .2f);
 
             Debug.Log("no longer setting destination to the commanded loc because sufficiently close");
             navMesh.ResetPath();

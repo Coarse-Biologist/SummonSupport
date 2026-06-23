@@ -11,7 +11,6 @@ public class PlayerAbilityHandler : AbilityHandler
     public static Ability DashAbility { private set; get; }
     public Ability selectedAbility { private set; get; }
     private LivingBeing playerStats;
-    public AnimationControllerScript anim { get; private set; }
     public string currentAnimation;
     private int currentAbilityIndex;
     private Dictionary<string, int> inputActionToIndex = new()
@@ -29,12 +28,13 @@ public class PlayerAbilityHandler : AbilityHandler
     {
         base.Start();
         UpdateAbilities();
+        SetAllAbilitySlots();
         //playerStats = GetComponent<LivingBeing>();
         //modHandler = AbilityModHandler.Instance;
         playerStats = PlayerStats.Instance;
         EquipAllPotions();
         //audioHandler = GetComponent<LivingBeingAudioHandler>();
-        Debug.Log($"{audioHandler} = audioHandler");
+        //Debug.Log($"{audioHandler} = audioHandler");
         if (Instance != null) Destroy(this);
         else Instance = this;
 
@@ -100,7 +100,7 @@ public class PlayerAbilityHandler : AbilityHandler
         foreach (Ability ability in Abilities)
         {
             if (ability == null) continue;
-            EventDeclarer.SetSlot?.Invoke(index, ability);
+            EventDeclarer.NewAbilityUI?.Invoke(index, ability);
             index++;
         }
     }
@@ -113,17 +113,50 @@ public class PlayerAbilityHandler : AbilityHandler
     }
     private void ChangeAbilitySlot(int index, Ability ability)
     {
+        SS_Structs.SlottedAbilities abilityStruct = default;
+        SS_Structs.SlottedAbilities oldAbilityStruct = default;
+
+        SS_Structs.SlottedAbilities newAbilityStruct = new()
+        {
+            slot = index,
+            ability = ability
+        };
+
+        foreach (var kvp in SlottedAbilities)
+        {
+            if (kvp.ability == ability)
+            {
+                SlottedAbilities[kvp.slot] = abilityStruct;
+            }
+            if (kvp.slot == index)
+            {
+                oldAbilityStruct = newAbilityStruct;
+            }
+        }
+        oldAbilityStruct.ability = newAbilityStruct.ability;
+
         if (Abilities.Contains(ability))
             Abilities[Abilities.IndexOf(ability)] = null;
         while (Abilities.Count < index + 1)
             Abilities.Add(null);
         Abilities[index] = ability;
     }
+    private void SetAllAbilitySlots()
+    {
+        for (int i = 0; i < Abilities.Count && i < 5; i++)
+        {
+            SlottedAbilities.Add(new()
+            {
+                slot = i,
+                ability = Abilities[i]
+            });
+        }
+    }
     private bool CheckAbilityUsePossible(Ability selectedAbility)
     {
         if (selectedAbility == null) return false;
         if (IsOnCoolDown(selectedAbility)) return false;
-        if (PauseGameHandler.paused) return false;
+        if (PauseGameHandler.RecentlyPaused) return false;
         if (playerStats.Dead) return false;
         if (playerStats.CurrentPower < selectedAbility.Cost) return false;
         return true;
@@ -249,7 +282,7 @@ public class PlayerAbilityHandler : AbilityHandler
             if (toggledAbilitiesDict.ContainsKey(beamAbility))
                 return false;
         }
-        bool onCooldown = abilitiesOnCooldownCrew[ability];
+        bool onCooldown = abilitiesOnCooldown[ability];
         return onCooldown;
     }
 }

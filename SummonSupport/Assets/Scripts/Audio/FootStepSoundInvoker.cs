@@ -6,12 +6,18 @@ public class FootStepSoundInvoker : MonoBehaviour
 {
     [field: SerializeField] public AudioClip[] PlayerFootSteps { private set; get; } = new AudioClip[5];
     private AudioSource audioSource;
+    private AnimationControllerScript anim;
     private void Start()
     {
+        anim = gameObject.transform.parent.GetComponent<AnimationControllerScript>();
         audioSource = gameObject.transform.parent.GetComponent<AudioSource>();
         if (audioSource == null || PlayerFootSteps.Length == 0)
         {
             throw new System.Exception("No AudioSource found on parent object for FootStepSoundInvoker.");
+        }
+        if (anim == null)
+        {
+            throw new System.Exception("No animation controller script found on parent object.");
         }
 
     }
@@ -27,8 +33,12 @@ public class FootStepSoundInvoker : MonoBehaviour
 
     public void TriggerPotionReturnToBelt()
     {
-        Debug.Log("This is being triggered1");
 
         PotionHandler.ReturnPotionToBelt();
+    }
+
+    public void ResetAnimLayerWeight()
+    {
+        anim.SeLayerWeight(1, 0);
     }
 }

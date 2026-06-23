@@ -8,6 +8,8 @@ using UnityEngine;
 
 public static class ColorChanger
 {
+
+
     private static ParticleSystem BleedEffect;
     private static GradientLibraryAsset colorGradientLibrary;
     private static bool ready = false;
@@ -136,7 +138,11 @@ public static class ColorChanger
     }
     public static void ChangeAllMatsByAffinity(LivingBeing livingBeing)
     {
+
         Element element = livingBeing.GetHighestAffinity(out float value);
+        float affinityDisplayStrength = value; // likelihood of element overwriting default mats.
+
+
         if (element == Element.None || value < AlchemyHandler.ElementThreshhold) return;
 
         Renderer meshRenderer = livingBeing.GetComponentInChildren<Renderer>();
@@ -148,10 +154,15 @@ public static class ColorChanger
             Material[] mats = meshRenderer.materials;
             for (int i = 0; i < mats.Length; i++)
             {
-                Material newMaterial = new(GetGlowStrengthByElement(element));
-                SetMaterialColor(newMaterial, GetRandomColorFromElementGradient(element));
+                int theRoll = UnityEngine.Random.Range(0, 200);
+                Debug.Log($"{affinityDisplayStrength} = creature affinity. roll to beat = {theRoll}");
+                if (UnityEngine.Random.Range(0, 200) <= affinityDisplayStrength)
+                {
+                    Material newMaterial = new(GetGlowStrengthByElement(element));
+                    SetMaterialColor(newMaterial, GetRandomColorFromElementGradient(element));
 
-                mats[i] = newMaterial;
+                    mats[i] = newMaterial;
+                }
             }
             meshRenderer.materials = mats;
         }
@@ -161,31 +172,30 @@ public static class ColorChanger
     }
     public static void ChangeElementalIndicatorByAffinity(LivingBeing livingBeing)
     {
-        Element element = livingBeing.GetHighestAffinity(out float value);
+        Element element = livingBeing.GetHighestAffinity(out float value, 0);
         if (element == Element.None) return;
         Material newMaterial = new(GetGlowStrengthByElement(element));
         SetMaterialColor(newMaterial, GetRandomColorFromElementGradient(element));
-        Renderer meshRenderer = livingBeing.GetComponentInChildren<Renderer>();
-        //SkinnedMeshRenderer skinnedMeshRenderer = livingBeing.GetComponentInChildren<SkinnedMeshRenderer>();
+        foreach (SkinnedMeshRenderer meshRenderer in livingBeing.GetComponentsInChildren<SkinnedMeshRenderer>())
 
 
-        if (meshRenderer != null)
-        {
-            Material[] mats = meshRenderer.materials;
-            for (int i = 0; i < mats.Length; i++)
+            if (meshRenderer != null)
             {
-                SetMaterialColor(newMaterial, GetRandomColorFromElementGradient(element));
-
-                if (mats[i].name.StartsWith("ElementalIndicator"))  // Unity adds "(Instance)"
+                Material[] mats = meshRenderer.materials;
+                for (int i = 0; i < mats.Length; i++)
                 {
-                    Debug.Log($"Material found: {mats[i].name}, assigning material {newMaterial} which has color {newMaterial.color}");
-                    mats[i] = newMaterial;
+                    SetMaterialColor(newMaterial, GetRandomColorFromElementGradient(element));
+
+                    if (mats[i].name.StartsWith("ElementalIndicator"))  // Unity adds "(Instance)"
+                    {
+                        //Debug.Log($"Material found: {mats[i].name}, assigning material {newMaterial} which has color {newMaterial.color}");
+                        mats[i] = newMaterial;
+                    }
                 }
+                meshRenderer.materials = mats;
             }
-            meshRenderer.materials = mats;
-        }
-        else
-            Debug.Log($"No renderer found for {livingBeing.Name}");
+            else
+                Debug.Log($"No renderer found for {livingBeing.Name}");
 
     }
     public static void ChangeMatByAffinity(Renderer meshRenderer, Material material)

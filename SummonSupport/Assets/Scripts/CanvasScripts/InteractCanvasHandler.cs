@@ -34,7 +34,7 @@ public class FloatingInfoHandler : MonoBehaviour
 
     }
 
-    public void ShowInteractionOption(Vector3 spawnLoc, string interactMessage)
+    public TextMeshProUGUI ShowInteractionOption(Vector3 spawnLoc, string interactMessage)
     {
         if (canvasInstance == null) canvasInstance = Instantiate(interactCanvas, spawnLoc, Quaternion.identity);
         else
@@ -42,8 +42,9 @@ public class FloatingInfoHandler : MonoBehaviour
             canvasInstance.SetActive(true);
             canvasInstance.transform.position = spawnLoc;
         }
-
-        canvasInstance.GetComponentInChildren<TextMeshProUGUI>().text = interactMessage;
+        TextMeshProUGUI textMeshProUGUI = canvasInstance.GetComponentInChildren<TextMeshProUGUI>();
+        textMeshProUGUI.text = interactMessage;
+        return textMeshProUGUI;
     }
 
     public void HideInteractionOption()
@@ -64,6 +65,7 @@ public class FloatingInfoHandler : MonoBehaviour
     }
     public IEnumerator SlowlyDisplayCanvasText(Transform spawnLoc, string temporaryText, float totalDuration = 4f)
     {
+
         int chars = temporaryText.Length;
         if (canvasInstance == null) canvasInstance = Instantiate(interactCanvas, spawnLoc.position + new Vector3(0, 2.5f, 0), Quaternion.identity, spawnLoc);
         else canvasInstance.SetActive(true);
@@ -82,7 +84,7 @@ public class FloatingInfoHandler : MonoBehaviour
     public IEnumerator DisplayPlayerDialogue(Transform spawnLoc, string temporaryText, float printSpeed, float stayDuration = 4f)
     {
         int chars = temporaryText.Length;
-        if (canvasInstance == null) canvasInstance = Instantiate(playerDialogueCanvas, spawnLoc.position + new Vector3(0, 2.5f, 0), Quaternion.identity, spawnLoc);
+        if (canvasInstance == null) canvasInstance = Instantiate(playerDialogueCanvas, spawnLoc.position + new Vector3(0, .2f, 0), Quaternion.identity, spawnLoc);
         else canvasInstance.SetActive(true);
         TextMeshProUGUI canvasGUI = canvasInstance.GetComponentInChildren<TextMeshProUGUI>();
         int textUpdateProgress = 0;
@@ -129,6 +131,10 @@ public class FloatingInfoHandler : MonoBehaviour
     {
         Debug.Log($"Trying to show player dialogue: {dialogue.playerDialogue}");
         StartCoroutine(DisplayPlayerDialogue(PlayerStats.Instance.transform, dialogue.playerDialogue, dialogue.playerDialogue.Length * .1f));
+    }
+    public void ShowDialogue(Transform transform, string dialogue)
+    {
+        StartCoroutine(DisplayPlayerDialogue(transform, dialogue, dialogue.Length * .1f));
     }
 
 

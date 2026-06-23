@@ -153,9 +153,12 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     #region Begin and end workbench use
     private void TogglePlayerUsingUI(bool isUsing, AnimationControllerScript anim = null)
     {
+        EventDeclarer.UsingUI?.Invoke();
+
         if (isUsing)
         {
-            PauseGameHandler.PauseTime();
+            EventDeclarer.PauseGame?.Invoke();
+
             if (anim != null)
             {
                 anim.SetUpdateMode(AnimatorUpdateMode.UnscaledTime);
@@ -166,7 +169,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
         }
         else
         {
-            PauseGameHandler.ResumeTime();
+            EventDeclarer.UnpauseGame?.Invoke();
 
             if (anim != null)
             {
@@ -253,7 +256,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     }
     private void HandleplayerUpgradeAttempt()
     {
-
+        PlayerStats.Instance.ExpendSkillPoints(selectedUpgradeCost);
         SetInstructionsText($"Upgrade successful! \nYou have {PlayerStats.Instance.SkillPoints} skill-points.");
         PlayerStats.Instance.GainLevelRewards(selectedPlayerUpgrades);
         ClearSelectedPlayerUpgrades();
@@ -273,6 +276,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
 
     private void ClearSelectedPlayerUpgrades()
     {
+        selectedUpgradeCost = 0;
         foreach (LevelRewards key in selectedPlayerUpgrades.Keys.ToList())
         {
             selectedPlayerUpgrades[key] = 0;
@@ -307,6 +311,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
 
         Button craftMinionsButton = AddButtonToPanel("Craft", centerPanel, 50, 5);
         Button minionManagementOptions = AddButtonToPanel("Upgrade", centerPanel, 50, 5);
+
         Button recycleButton = AddButtonToPanel("Recycle", centerPanel, 50, 5);
         Button backButton = AddButtonToPanel("Back", centerPanel, 50, 5);
 
@@ -316,13 +321,13 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
         recycleButton.RegisterCallback<ClickEvent>(e => ShowRecycleOptions());
         backButton.RegisterCallback<ClickEvent>(e => ShowDefaultScreen());
 
+
     }
 
     private void ShowAbilityManagementOptions()
     {
         ClearAllPanels(true);
         ResetVars();
-
 
         SetInstructionsText("Would you like to concoct new abilities, modify them, or control their use slots?");
 
@@ -546,7 +551,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
         {
             SetInstructionsText(alchemyHandler.HandleCraftingResults(selectedCraftingPotential, selectedElements));
             ClearCraftingSelection();
-            //ShowCraftingOptions();
+            ShowCraftingOptions();
         }
 
     }
@@ -554,7 +559,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     {
         ClearAllPanels();
         ResetVars();
-        if (CommandMinion.activeMinions.Count() == PlayerStats.Instance.TotalControlllableMinions)
+        if (AlchemyHandler.Instance.activeMinions.Count() == PlayerStats.Instance.TotalControlllableMinions)
         {
             instructions.text = "You already have your maximum number of minions. Upgrade your current minions, recycle and replace them, or acquire more minion slots.";
         }
@@ -596,7 +601,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
         selectedCraftingPotential[potential] += 10;
 
         int newAvailableCP = AlchemyInventory.AvailableCraftingPotential[potential] - selectedCraftingPotential[potential]; // calc new available
-        AlterButtonText(button, $"{GeneralFunctions.GetCleanEnumString(potential)} : {newAvailableCP}"); //display new available
+        AlterButtonText(button, $"{GeneralFunctions.GetCleanEnumString(potential)} : {selectedCraftingPotential[potential]} / {AlchemyInventory.AvailableCraftingPotential[potential]} "); //display new available
 
         string craftinPotentialInfo = "Currently selected crafting potential:";
         foreach (KeyValuePair<CraftingPotential, int> kvp in selectedCraftingPotential)
@@ -732,10 +737,6 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
 
             SetInstructionsText($"You have concocted the ability {selectedAbility.name} with {price} core power!");
             EventDeclarer.PlayerLearnedAbility?.Invoke(selectedAbility);
-        }
-        else SetInstructionsText($"You do not have sufficient core resources to concoct {selectedAbility.name}.");
-        if (selectedMinionAbility != null)
-        {
             foreach (LivingBeing minion in AlchemyHandler.Instance.activeMinions)
             {
                 if (minion.GetAffinity(selectedMinionAbility.ElementTypes[0]) > 50)
@@ -744,6 +745,8 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
                 }
             }
         }
+        else SetInstructionsText($"You do not have sufficient core resources to concoct {selectedAbility.name}.");
+
 
     }
     private void SpawnCraftableAbilityButtons()
@@ -764,11 +767,12 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
             {
                 foreach (Ability ability in category.Abilities)
                 {
-                    Button abilityButton = AddButtonToPanel($"{ability.Name} : {Ability.GetCoreCraftingCost(ability)} Core Power", bottomLeftPanel, 70, 5);
+                    Button abilityButton = AddButtonToPanel($"{ability.Name}", bottomLeftPanel, 70, 5);
                     //Debug.Log("made it this far2");
 
                     abilityButton.RegisterCallback<ClickEvent>(e => SetSelectedMinionAbility(ability));
                     abilityButton.RegisterCallback<ClickEvent>(e => ShowAbilityCraftingInfo());
+                    abilityButton.RegisterCallback<PointerEnterEvent>(e => SetInstructionsText(ability.DisplayAbilityInfo()));
                 }
             }
         }
@@ -777,7 +781,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     {
         foreach (Ability ability in AbilityLibrary.abilityLibrary.GetElementalAbilitiesBelowLevel(LevelUpHandler.CraftingPowerScalar, PlayerStats.Instance.GetHighAffinities()))
         {
-            Button abilityButton = AddButtonToPanel($"{ability.Name} : {Ability.GetCoreCraftingCost(ability)} Core Power", bottomLeftPanel, 70, 5);
+            Button abilityButton = AddButtonToPanel($"{ability.Name}", bottomLeftPanel, 70, 5);
             //Debug.Log("made it this far2");
 
             abilityButton.RegisterCallback<ClickEvent>(e => SetSelectedAbility(ability));
@@ -823,7 +827,6 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     #endregion
 
     #region Ability slot control
-
     private void SlotAbilities()
     {
         ShowUI(topRightPanel);
@@ -831,34 +834,67 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
         ResetVars();
 
 
-        SpawnAbilitySlotButtons();
+
+        SetInstructionsText("Select whose abilities you would like to slot.");
+        Button slotPlayerAbilitiesButton = AddButtonToPanel("Player Abilities", bottomLeftPanel, 50, 5);
+        slotPlayerAbilitiesButton.RegisterCallback<ClickEvent>(e => SlotLivingBeingAbilities(PlayerStats.Instance));
+
+        foreach (MinionStats minion in AlchemyHandler.Instance.activeMinions)
+        {
+            Button button = AddButtonToPanel($"{minion.Name}", bottomLeftPanel, 50, 5);
+            button.RegisterCallback<ClickEvent>(e => SlotLivingBeingAbilities(minion));
+
+        }
+
+
+        Button backButton = AddButtonToPanel("Back", topRightPanel, 50, 5);
+        backButton.RegisterCallback<ClickEvent>(e => ShowDefaultScreen());
+
+    }
+
+    private void SlotLivingBeingAbilities(LivingBeing livingBeing)
+    {
+        ShowUI(topRightPanel);
+        ClearAllPanels();
+        ResetVars();
+        //selectedAbilitySlotBeing = livingBeing;
+
+        SpawnAbilitySlotButtons(livingBeing);
         SpawnKnownAbilityButtons();
 
         SetInstructionsText("Select an ability and a slot.");
         Button confirmButton = AddButtonToPanel("Confirm", topRightPanel, 50, 5);
 
         Button clearButton = AddButtonToPanel("Clear Selection", topRightPanel, 50, 5);
+
         clearButton.RegisterCallback<ClickEvent>(e => SetInstructionsText("Select an ability and a slot."));
         clearButton.RegisterCallback<ClickEvent>(e => SetSelectedAbility(null));
 
         //Button setAbilitySlot = AddButtonToPanel("Set Ability Slot", confirmClear, 50, 5);
 
-        confirmButton.RegisterCallback<ClickEvent>(e => HandleAbilityandSlotSelected(abilitySlot, selectedAbility));
+        confirmButton.RegisterCallback<ClickEvent>(e => HandleAbilityandSlotSelected(abilitySlot, selectedAbility, livingBeing));
 
     }
-    private void HandleAbilityandSlotSelected(int abilitySlot, Ability selectedAbility)
+    private void HandleAbilityandSlotSelected(int abilitySlot, Ability selectedAbility, LivingBeing livingBeing)
     {
-        if (selectedAbility is DashAbility) PlayerAbilityHandler.SetDashAbility((DashAbility)selectedAbility);
-        else EventDeclarer.SlotChanged?.Invoke(abilitySlot, selectedAbility);
-
-    }
-    private void SpawnAbilitySlotButtons()
-    {
-        for (int i = 0; i < 6; i++)
+        if (livingBeing == PlayerStats.Instance)
         {
-            int slotIndex = i;
-            Button slotButton = AddButtonToPanel($"Slot: {SlotNames[slotIndex]}", bottomLeftPanel, 20, 5);
-            slotButton.RegisterCallback<ClickEvent>(e => SetSelectedSlot(slotIndex));
+            if (selectedAbility is DashAbility) PlayerAbilityHandler.SetDashAbility((DashAbility)selectedAbility);
+            else EventDeclarer.SlotChanged?.Invoke(abilitySlot, selectedAbility);
+        }
+        else if (livingBeing.abilityHandler is CreatureAbilityHandler creatureAHandler) creatureAHandler.SlotAbility(selectedAbility, abilitySlot);
+
+    }
+    private void SpawnAbilitySlotButtons(LivingBeing livingBeing)
+    {
+        int maxSlots = livingBeing.abilityHandler.SlottedAbilities.Count;
+        if (livingBeing.CharacterTag == CharacterTag.Player) maxSlots = 6;
+        for (int i = 0; i < maxSlots; i++)
+        {
+            int slotNum = i;
+            Button slotButton = AddButtonToPanel($"Slot: {SlotNames[i]}", bottomLeftPanel, 20, 5);
+            slotButton.RegisterCallback<ClickEvent>(e => SetSelectedSlot(slotNum));
+
         }
     }
     private void SpawnKnownAbilityButtons()

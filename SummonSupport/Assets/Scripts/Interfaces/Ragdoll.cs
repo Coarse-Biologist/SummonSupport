@@ -7,7 +7,7 @@ public class Ragdoll : MonoBehaviour, I_Destruction
     [field: SerializeField] public Animator animator;
     private List<Quaternion> startingRotations = new();
     private List<Vector3> startingPositions = new();
-
+    [field: SerializeField] public float ragdollFreedom = 2f;
     [field: SerializeField] public Collider mainCollider;
     [field: SerializeField] public List<Rigidbody> rigidbodies = new();
     [field: SerializeField] public List<Collider> colliders = new();
@@ -26,7 +26,7 @@ public class Ragdoll : MonoBehaviour, I_Destruction
             animator.enabled = !isRagdoll;
         if (mainCollider != null) mainCollider.enabled = false;
 
-        Invoke("EnableMainCollider", 1f);
+        Invoke("EnableMainCollider", ragdollFreedom);
 
         if (colliders.Count != 0)
             foreach (Collider collider in colliders)
@@ -39,6 +39,11 @@ public class Ragdoll : MonoBehaviour, I_Destruction
         {
             rb.isKinematic = !isRagdoll;
             rb.useGravity = isRagdoll;
+            if (isRagdoll)
+            {
+                Vector3 randomDirection = Random.insideUnitSphere.normalized;
+                rb.AddForce(randomDirection * 3, ForceMode.Impulse);
+            }
         }
     }
     private void EnableMainCollider()
@@ -56,11 +61,14 @@ public class Ragdoll : MonoBehaviour, I_Destruction
     }
     public void ReverseDestruction()
     {
-        for (int i = 0; i < rigidbodies.Count; i++)
+        if (rigidbodies != null && rigidbodies.Count > 0)
         {
-            rigidbodies[i].transform.localPosition = startingPositions[i];
-            rigidbodies[i].transform.localRotation = startingRotations[i];
+            for (int i = 0; i < rigidbodies.Count; i++)
+            {
+                rigidbodies[i].transform.localPosition = startingPositions[i];
+                rigidbodies[i].transform.localRotation = startingRotations[i];
+            }
+            RagDoll(false);
         }
-        RagDoll(false);
     }
 }

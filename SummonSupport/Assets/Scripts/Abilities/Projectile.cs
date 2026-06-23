@@ -141,6 +141,7 @@ public class Projectile : MonoBehaviour
             Quaternion rotation = Quaternion.LookRotation(-direction);
             particleSystem.transform.rotation = rotation;
             Vector3 sizeMod = new();
+
             if (userLivingBeing.CharacterTag != CharacterTag.Enemy)
             {
                 sizeMod.x = 1 + AbilityModHandler.Instance.GetModAttributeByType(this.ability, AbilityModTypes.Size) / 2;

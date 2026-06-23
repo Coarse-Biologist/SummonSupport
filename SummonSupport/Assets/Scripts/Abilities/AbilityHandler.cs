@@ -4,17 +4,20 @@ using System.Collections.Generic;
 using SummonSupportEvents;
 using System.Linq;
 using Unity.VisualScripting;
+using SS_Structs;
 
 public class AbilityHandler : MonoBehaviour
 {
     [field: SerializeField] public GameObject abilitySpawn { private set; get; }
-    [SerializeField] protected LivingBeing statsHandler;
+    protected LivingBeing statsHandler;
     [field: SerializeField] public List<Ability> Abilities { private set; get; } = new();
-    public Dictionary<Ability, bool> abilitiesOnCooldownCrew = new();
+    [field: SerializeField] public List<SlottedAbilities> SlottedAbilities { protected set; get; } = new();
+
+    public Dictionary<Ability, bool> abilitiesOnCooldown = new();
     protected Dictionary<BeamAbility, GameObject> toggledAbilitiesDict = new();
     private bool charging = false;
     public AbilityModHandler modHandler { protected set; get; }
-    private AnimationControllerScript anim;
+    public AnimationControllerScript anim { private set; get; }
     protected LivingBeingAudioHandler audioHandler;
     //private bool AbilityToggledRecently = false;
 
@@ -27,14 +30,12 @@ public class AbilityHandler : MonoBehaviour
         if (abilitySpawn == null)
             abilitySpawn = gameObject;
 
-        if (statsHandler == null)
-        {
-            statsHandler = gameObject.GetComponent<LivingBeing>();
-        }
+        statsHandler = gameObject.GetComponent<LivingBeing>();
+
 
         foreach (Ability ability in Abilities)
         {
-            abilitiesOnCooldownCrew.Add(ability, false);
+            abilitiesOnCooldown.Add(ability, false);
         }
     }
     protected void Start()
@@ -45,7 +46,7 @@ public class AbilityHandler : MonoBehaviour
 
         if (audioHandler == null) throw new System.Exception($"Audio handler is null. it was not found on the object.");
 
-        else Debug.Log($"Audio handler found in {statsHandler.name}.");
+        //else Debug.Log($"Audio handler found in {statsHandler.name}.");
 
     }
 
@@ -55,14 +56,14 @@ public class AbilityHandler : MonoBehaviour
         if (!Abilities.Contains(ability) && ability != null)
         {
             Abilities.Add(ability);
-            abilitiesOnCooldownCrew.Add(ability, false);
+            abilitiesOnCooldown.Add(ability, false);
         }
     }
 
     protected bool CastAbility(Ability ability, Vector2 targetPosition, Quaternion rotation)
     {
         if (PauseGameHandler.paused) return false;
-        if (ability is not BeamAbility beam || !toggledAbilitiesDict.TryGetValue(beam, out GameObject gameObject)) StopAllToggledAbilities();
+        if (ability is not BeamAbility beam) StopAllToggledAbilities();
         //when casting a beam which is already toggled on, toggle beam off. 
         bool usedAbility = HandleAbilityType(ability, targetPosition, rotation);
 
@@ -133,6 +134,8 @@ public class AbilityHandler : MonoBehaviour
         {
             //StartCoroutine(SetOnCooldown(beamAbility));
             StopToggledAbility(beamAbility, activeAbility);
+            if (anim != null) anim.ChangeLayerAnimation("Reload", 1, 2f, true);
+
             return false;
         }
         else
@@ -154,8 +157,10 @@ public class AbilityHandler : MonoBehaviour
     }
     public void StopAllToggledAbilities()
     {
+        //if (anim != null) anim.SeLayerWeight(1, 0);
         foreach (KeyValuePair<BeamAbility, GameObject> kvp in toggledAbilitiesDict)
         {
+            PotionHandler.SpawnElementalPotionOnBelt(Abilities.IndexOf(kvp.Key), kvp.Key);
             statsHandler.ChangeRegeneration(AttributeType.CurrentPower, kvp.Key.Cost);
 
             Destroy(kvp.Value);
@@ -188,21 +193,21 @@ public class AbilityHandler : MonoBehaviour
     bool HandleProjectile(ProjectileAbility ability)
     {
         //Debug.Log("Time to see the heavy throw animation");
-        if (anim != null) anim.ChangeLayerAnimation("OneArmedThrow", 1, 2f);
+        if (anim != null) anim.ChangeLayerAnimation("OneArmedThrow", 1, 3f);
 
         return ability.Activate(statsHandler);
     }
 
     bool HandlePointAndClick(TargetMouseAbility ability)
     {
-        if (anim != null) anim.ChangeLayerAnimation("Buff", 1, 1f);
+        if (anim != null) anim.ChangeLayerAnimation("Buff", 1, 3f);
 
         return ability.Activate(statsHandler);
     }
 
     bool HandleConjureAbility(ConjureAbility ability, Vector2 targetPosition, Quaternion rotation)
     {
-        if (anim != null) anim.ChangeLayerAnimation("HeavyThrow", 1, 1f);
+        if (anim != null) anim.ChangeLayerAnimation("HeavyThrow", 1, 3);
 
         return ability.Activate(statsHandler, rotation);
     }
@@ -214,7 +219,7 @@ public class AbilityHandler : MonoBehaviour
     }
     bool HandleAuraAbility(AuraAbility auraAbility)
     {
-        if (anim != null) anim.ChangeLayerAnimation("Buff", 1, 1f);
+        if (anim != null) anim.ChangeLayerAnimation("Buff", 1, 3f);
 
         return auraAbility.Activate(statsHandler);
     }
@@ -226,20 +231,20 @@ public class AbilityHandler : MonoBehaviour
             //status effect presense handling
             float coolDown = ability.Cooldown + modHandler.GetModAttributeByType(ability, AbilityModTypes.Cooldown) + statsHandler.SE_Handler.GetStatusEffectValue(StatusEffectType.Lethargic);
             // default, plus modifier, plus lethargy value
-            abilitiesOnCooldownCrew[ability] = true;
+            abilitiesOnCooldown[ability] = true;
 
             yield return new WaitForSeconds(coolDown);
         }
         finally
         {
-            abilitiesOnCooldownCrew[ability] = false;
+            abilitiesOnCooldown[ability] = false;
 
         }
     }
 
     protected virtual bool IsOnCoolDown(Ability ability)
     {
-        return abilitiesOnCooldownCrew[ability];
+        return abilitiesOnCooldown[ability];
     }
     public string GetKnownAbilitiesString()
     {

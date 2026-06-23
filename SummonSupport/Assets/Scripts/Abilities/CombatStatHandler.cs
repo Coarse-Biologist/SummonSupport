@@ -92,14 +92,17 @@ public static class CombatStatHandler
         {
             foreach (StatusEffects status in currentStatusEffects)
             {
+                //UnityEngine.Debug.Log("gimmi stack trace du Pilzchen :)");
+
                 currentTarget.SE_Handler.AlterStatusEffectList(status, true);
             }
         }
     }
     private static void SetCurrentValues(EffectPackage currentAbilityEffects)
     {
-
+        //UnityEngine.Debug.Log($"current status efffects in combatStatsHandlerClass = {currentStatusEffects}. statusEffects of ability itself = {currentAbilityEffects.StatusEffects}");
         currentStatusEffects = currentAbilityEffects.StatusEffects;
+        //UnityEngine.Debug.Log($"After setting equal: current status efffects in combatStatsHandlerClass = {currentStatusEffects}. statusEffects of ability itself = {currentAbilityEffects.StatusEffects}");
 
         currentDamageValue = currentAbilityEffects.Damage.Value;
         currentDotValue = currentAbilityEffects.DamageOverTime.Value;
@@ -355,11 +358,11 @@ public static class CombatStatHandler
     public static void ApplyTempValue(MovementAttributes movementAttribute, float tempValue, float duration)
     {
         //Logging.Info($"{currentTarget.name} has had {movementAttribute} changed by {tempValue}");
-        if (currentTarget.TryGetComponent<MovementScript>(out MovementScript movementScript))
+        if (currentTarget.movementScript != null)
         {
-            float preChangeValue = movementScript.GetMovementAttribute(movementAttribute);
-            movementScript.StartCoroutine(ResetTempMovementAttribute(movementScript, movementAttribute, preChangeValue, duration));
-            movementScript.SetMovementAttribute(movementAttribute, preChangeValue + tempValue);
+            float preChangeValue = currentTarget.movementScript.GetMovementAttribute(movementAttribute);
+            currentTarget.movementScript.StartCoroutine(ResetTempMovementAttribute(currentTarget.movementScript, movementAttribute, preChangeValue, duration));
+            currentTarget.movementScript.SetMovementAttribute(movementAttribute, preChangeValue + tempValue);
         }
     }
 

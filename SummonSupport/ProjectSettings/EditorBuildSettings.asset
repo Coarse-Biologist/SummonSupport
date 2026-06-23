@@ -11,9 +11,12 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Levels/StartScreen.unity
     guid: e93908f234c348c49b585ce6d069431c
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Levels/FirstLevel3D/FirstLevel3D.unity
     guid: 24cae85a35716f047ab3d4f7681bff48
+  - enabled: 1
+    path: Assets/Scenes/Levels/FirstLevel3D/Map1/Map1.unity
+    guid: 93c35cda29c978c4c9138702908878e8
   m_configObjects:
     com.unity.addressableassets: {fileID: 11400000, guid: ee8af731f9d08b441a5f72852f2dd759,
       type: 2}

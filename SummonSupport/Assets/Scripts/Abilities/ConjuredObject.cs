@@ -32,6 +32,20 @@ public class ConjuredObject : MonoBehaviour
         {
             if (Ability.ThoroughIsUsableOn(Conjurer, livingBeing))
                 CombatStatHandler.HandleEffectPackage(Ability, Conjurer, livingBeing, Ability.TargetEffects);
+            CauseSplashEffect(livingBeing);
+        }
+    }
+
+    private void CauseSplashEffect(LivingBeing originalLivingBeing)
+    {
+        Collider[] colliders = Physics.OverlapSphere(transform.position, radius);
+        foreach (Collider collider in colliders)
+        {
+            if (collider.gameObject.TryGetComponent(out LivingBeing livingBeing) && livingBeing != originalLivingBeing)
+            {
+                if (Ability.ThoroughIsUsableOn(Conjurer, livingBeing))
+                    CombatStatHandler.HandleEffectPackage(Ability, Conjurer, livingBeing, Ability.TargetEffects);
+            }
         }
     }
 }

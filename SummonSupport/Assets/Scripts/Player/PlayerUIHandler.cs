@@ -41,12 +41,16 @@ public class PlayerUIHandler : MonoBehaviour
     {
         EventDeclarer.newMinionAdded?.AddListener(AddMinionHP);
         EventDeclarer.minionRecycled?.AddListener(RemoveMinionHP);
+        EventDeclarer.minionDied?.AddListener(RemoveMinionHP);
+
     }
 
     void OnDisable()
     {
         EventDeclarer.newMinionAdded?.RemoveListener(AddMinionHP);
         EventDeclarer.minionRecycled?.RemoveListener(RemoveMinionHP);
+        EventDeclarer.minionDied?.RemoveListener(RemoveMinionHP);
+
     }
 
     void Start()
@@ -155,7 +159,7 @@ public class PlayerUIHandler : MonoBehaviour
         LivingBeing minionStats = GetLivingBeingFromHPBar(minionHP);
         ToggleHPGlow(minionHP);
 
-        CommandMinion.SetSelectedMinion(minionStats.gameObject);
+        CommandMinion.AddSelectedMinion(minionStats);
     }
 
     private void ToggleHPGlow(ProgressBar minionHP)
@@ -218,7 +222,6 @@ public class PlayerUIHandler : MonoBehaviour
         {
             questInfoLabel.text = $"{QuestHandler.Instance.GetQuestInfo(quest)}";
         }
-
     }
     public void ShowCompletedQuestInfo(Quest_SO quest)
     {

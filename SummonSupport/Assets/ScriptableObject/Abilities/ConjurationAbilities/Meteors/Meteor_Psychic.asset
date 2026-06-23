@@ -68,5 +68,5 @@ MonoBehaviour:
   <LeaveRotation>k__BackingField: 0
   <SpawnsOnTarget>k__BackingField: 1
   <SeeksTarget>k__BackingField: 1
-  <Speed>k__BackingField: 20
+  <Speed>k__BackingField: 15
   <SearchRadius>k__BackingField: 50

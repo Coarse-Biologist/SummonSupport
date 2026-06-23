@@ -106,7 +106,7 @@ public class StatusEffectHandler : MonoBehaviour
             {
                 case StatusEffectType.Chilled:
                     {
-                        Debug.Log($"Increasing speed by {.2f * ai_Speed}");
+                        //Debug.Log($"Increasing speed by {.2f * ai_Speed}");
                         stateHandler.anim.anim.speed += .2f;
                         stateHandler.navAgent.speed += .2f * ai_Speed;
                         break;
@@ -131,6 +131,7 @@ public class StatusEffectHandler : MonoBehaviour
     }
     public void AlterStatusEffectList(StatusEffects status, bool Add) // modifies the list of abilities by which one is affected
     {
+        Debug.Log("gimmi stack trace du arsch");
         if (Add)
         {
             if (livingBeing is EnemyStats enemyStats)

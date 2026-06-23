@@ -10,9 +10,9 @@ public class QuestHandler : MonoBehaviour
 {
     [field: SerializeField] public Quest_SO sceneStartingQuest;
     public static QuestHandler Instance;
-    public List<Quest_SO> CompletedQuests = new List<Quest_SO>();
+    public static List<Quest_SO> CompletedQuests = new List<Quest_SO>();
     public List<BoolAccomplishments> CompletedBoolQuests;
-    public List<Quest_SO> ActiveQuests = new List<Quest_SO>();
+    public static List<Quest_SO> ActiveQuests = new List<Quest_SO>();
     public static Dictionary<RepeatableAccomplishments, int> QuestRepTracker = new Dictionary<RepeatableAccomplishments, int>()
     {
         {RepeatableAccomplishments.EnemiesDefeated, 0},
@@ -66,11 +66,14 @@ public class QuestHandler : MonoBehaviour
         EventDeclarer.QuestStarted?.RemoveListener(AddActiveQuest);
         EventDeclarer.QuestCompleted?.RemoveListener(HandleQuestCompleted);
     }
+    public static bool HasActiveQuest(Quest_SO quest) => ActiveQuests.Contains(quest);
+    public static bool HasCompletedQuest(Quest_SO quest) => CompletedQuests.Contains(quest);
 
 
     public bool CheckQuestCompletion(Quest_SO activeQuest)
     {
         bool complete = true;
+        if (activeQuest.IntQuestReqs.Count == 0 && activeQuest.BoolQuestReqs.Count == 0) return false;
         foreach (RepeatableQuestDict intQuest in activeQuest.IntQuestReqs)
         {
             if (QuestRepTracker.TryGetValue(intQuest.quest, out int reps) && reps >= intQuest.reps)
@@ -105,11 +108,15 @@ public class QuestHandler : MonoBehaviour
 
     public void HandleQuestCompleted(Quest_SO quest)
     {
-        if (ActiveQuests.Contains(quest)) ActiveQuests.Remove(quest);
-        if (!CompletedQuests.Contains(quest)) CompletedQuests.Add(quest);
-        PlayerUIHandler.Instance.ShowCompletedQuestInfo(quest);
-        //EventDeclarer.QuestCompleted?.Invoke(quest);
-        GrantCompletionRewards(quest);
+        if (ActiveQuests.Contains(quest)) // if this quest was even something the player was allowed to be striving after
+        {
+            Debug.Log($"This quest was completeded: {quest}");
+            ActiveQuests.Remove(quest);
+            if (!CompletedQuests.Contains(quest)) CompletedQuests.Add(quest);
+            PlayerUIHandler.Instance.ShowCompletedQuestInfo(quest);
+            GrantCompletionRewards(quest);
+            FloatingInfoHandler.Instance.ShowDialogue(PlayerStats.Instance.transform, "Quest Completed!");
+        }
     }
     public void GrantCompletionRewards(Quest_SO quest)
     {
@@ -179,7 +186,8 @@ public class QuestHandler : MonoBehaviour
     }
     public string GetQuestInfo(Quest_SO quest)
     {
-        string info = $"{quest.QuestName}:\n";
+        string info = $"{quest.QuestName}\n";
+        info += $"{quest.PresentationString}\n";
         foreach (var req in quest.IntQuestReqs)
         {
             info += $"{GeneralFunctions.GetCleanEnumString<RepeatableAccomplishments>(req.quest)}: {QuestRepTracker[req.quest]}/{req.reps}\n";

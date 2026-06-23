@@ -44,15 +44,18 @@ public class MinionStats : LivingBeing
     }
     protected override void Start()
     {
-        StartCoroutine("LateStart");
+        base.Start();
+        StartCoroutine(LateStart());
+    }
+    protected override void Awake()
+    {
+        base.Awake();
     }
     IEnumerator LateStart()
     {
         yield return null; // wartet 1 Frame – nach allen Start()-Methoden
         PlayerUIHandler.Instance.AddMinionHP(this);
-        CommandMinion.AddActiveMinions(this);
         ColorChanger.ChangeAllMatsByAffinity(this);
-        base.Start();
 
 
     }
@@ -65,10 +68,11 @@ public class MinionStats : LivingBeing
         if (ragdollScript != null) ragdollScript.CauseDestruction(true);
         ToggleDeath(true);
     }
-    private void DelayedTestDeath()
+    public void TrueDeath()
     {
-        Debug.Log("Delayed test death happening now");
-        Destroy(gameObject);
+        EventDeclarer.minionDied?.Invoke(gameObject);
+        AlchemyHandler.Instance.RemoveActiveMinion(this);
+        Destroy(gameObject, .1f);
     }
 
     private void ToggleDeath(bool dead)
@@ -111,10 +115,6 @@ public class MinionStats : LivingBeing
         if (ragdollScript != null) ragdollScript.ReverseDestruction();
     }
 
-    public void ApplyStatusEffect(StatusEffectType status, bool apply)
-    {
-        //throw new NotImplementedException();
-    }
 }
 
 

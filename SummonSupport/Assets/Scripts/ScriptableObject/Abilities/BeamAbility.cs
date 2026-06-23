@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Abilities/Beam Ability")]
-public class BeamAbility : Ability
+public class BeamAbility : Ability //#TODO logic of toggle abilities is not supported yet by the potion reload animation system. null reference caused.
 {
     [Header("Beam settings")]
     [field: SerializeField] public GameObject BeamParticleSystem { get; protected set; }

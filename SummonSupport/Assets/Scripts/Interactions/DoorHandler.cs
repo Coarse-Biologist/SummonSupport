@@ -1,5 +1,6 @@
 using Quest;
 using SummonSupportEvents;
+using TMPro;
 using UnityEngine;
 
 public class DoorHandler : MonoBehaviour, I_Interactable
@@ -18,10 +19,13 @@ public class DoorHandler : MonoBehaviour, I_Interactable
     private Collider doorCollider;
     [field: SerializeField] public Transform DestinationDoor { get; protected set; }
     [field: SerializeField] public Transform canvasSpawnLoc { get; private set; }
+    private Quaternion startRotation;
+    private TextMeshProUGUI infoCanvasText;
 
 
     public void Awake()
     {
+        startRotation = transform.rotation;
         doorCollider = GetComponent<Collider>();
         if (canvasSpawnLoc == null) canvasSpawnLoc = transform;
     }
@@ -38,7 +42,7 @@ public class DoorHandler : MonoBehaviour, I_Interactable
 
     public void Interact(GameObject interactor)
     {
-        if (TryGetComponent(out LivingBeing livingBeing))
+        if (interactor.TryGetComponent(out LivingBeing livingBeing))
         {
             if (!Locked || HasElementalRequisite(livingBeing))
                 ToggleOpenDoor();
@@ -47,8 +51,9 @@ public class DoorHandler : MonoBehaviour, I_Interactable
 
     public void ShowInteractionOption()
     {
-        if (!Open) FloatingInfoHandler.Instance.ShowInteractionOption(canvasSpawnLoc.position, "Z to Open");
-        else FloatingInfoHandler.Instance.ShowInteractionOption(canvasSpawnLoc.position, "Z to Close");
+
+        if (!Open) infoCanvasText = FloatingInfoHandler.Instance.ShowInteractionOption(canvasSpawnLoc.position, "Z to Open");
+        else infoCanvasText = FloatingInfoHandler.Instance.ShowInteractionOption(canvasSpawnLoc.position, "Z to Close");
     }
 
     public void HideInteractionOption()
@@ -107,11 +112,11 @@ public class DoorHandler : MonoBehaviour, I_Interactable
     }
     void HandleOpen()
     {
+        infoCanvasText.text = "Z to Close";
         if (DestinationDoor != null)
             PlayerStats.Instance.gameObject.transform.position = DestinationDoor.position;
 
-        if (doorCollider != null)
-            doorCollider.enabled = false;
+
 
         transform.rotation = new Quaternion(0, 90, 0, 0);
         NotReadyToInteract();
@@ -120,9 +125,11 @@ public class DoorHandler : MonoBehaviour, I_Interactable
 
     void HandleClose()
     {
-        if (doorCollider != null)
-            doorCollider.enabled = true;
-        transform.rotation = Quaternion.identity;
+        infoCanvasText.text = "Z to Open";
+
+        //if (doorCollider != null)
+        //    doorCollider.enabled = true;
+        transform.rotation = startRotation;
 
         NotReadyToInteract();
         Open = false;

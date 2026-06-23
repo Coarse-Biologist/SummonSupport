@@ -6,6 +6,8 @@ public class CreatureHPCanvasHandler : MonoBehaviour, I_ResourceBar
     //[field: SerializeField] public Sprite statusEffectSprite;
     private LivingBeing livingBeing;
     private Slider hpSlider;
+    private Image[] sliderImage;
+    private Color sliderNormalColor;
     private Canvas canvas;
     //private Slider manaSlider;
 
@@ -15,7 +17,9 @@ public class CreatureHPCanvasHandler : MonoBehaviour, I_ResourceBar
         Slider[] sliders = GetComponentsInChildren<Slider>();
         hpSlider = sliders[0];
         canvas = GetComponentInChildren<Canvas>();
+        sliderImage = GetComponentsInChildren<Image>();
 
+        sliderNormalColor = sliderImage[1].color;
 
         // manaSlider = sliders[1];
 
@@ -69,6 +73,25 @@ public class CreatureHPCanvasHandler : MonoBehaviour, I_ResourceBar
             rt.anchoredPosition = Vector2.zero;
             rt.sizeDelta = new Vector2(.5f, .5f);
             Destroy(statusImage, 5f);
+        }
+    }
+
+    public void HighlightHealthbar(float duration)
+    {
+        if (hpSlider != null)
+        {
+            Debug.Log("It is not null, but do you rejoice?");
+            foreach (Image i in sliderImage)
+                i.color = Color.yellow;
+        }
+        Invoke("UnHighlightHealthBar", duration);
+    }
+    private void UnHighlightHealthBar()
+    {
+        if (hpSlider != null)
+        {
+            foreach (Image i in sliderImage)
+                i.color = sliderNormalColor;
         }
     }
 }

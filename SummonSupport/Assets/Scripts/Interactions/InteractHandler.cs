@@ -36,7 +36,7 @@ public class InteractHandler : MonoBehaviour
         {
             if (Input.GetKey(KeyCode.Z) && !mostRecentInteractable.Equals(null))
             {
-                mostRecentInteractable.Interact(this.gameObject); // Todo null reference after minon is ressed
+                mostRecentInteractable.Interact(this.gameObject); // #TODO null reference after minon is ressed
             }
         }
     }

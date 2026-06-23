@@ -69,6 +69,8 @@ public class AIStateHandler : MonoBehaviour
 
         currentState = GetComponentInChildren<AIPeacefulState>();
         obedienceState = GetComponent<AIObedienceState>();
+        chaseState = GetComponent<AIChaseState>();
+
         livingBeing = GetComponent<LivingBeing>();
         movementScript = GetComponent<MovementScript>();
         minionStats = GetComponent<MinionStats>();
@@ -82,6 +84,7 @@ public class AIStateHandler : MonoBehaviour
         anim = GetComponent<AnimationControllerScript>();
         currentMachineSpeed = stateMachineSpeed1;
         StartCoroutine(RunStateMachine());
+        if (anim == null) throw new System.Exception($"The animator does not exist on {gameObject}");
 
 
     }
@@ -128,6 +131,7 @@ public class AIStateHandler : MonoBehaviour
     public void SetDead(bool dead)
     {
         Dead = dead;
+        navAgent.speed = 0;
     }
 
     public void SetStateMachineSpeed(int speed)
@@ -176,7 +180,7 @@ public class AIStateHandler : MonoBehaviour
                 }
                 else
                 {
-                    if (livingBeing.CharacterTag == CharacterTag.Minion)
+                    if (charType == CharacterTag.Minion)
                     {
                         //Debug.Log("I will run yee old obedience state");
                         AIState nextState = obedienceState.RunCurrentState();
