@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using SummonSupportEvents;
-
+using Unity.Entities.UniversalDelegates;
 using UnityEngine;
 
 public class EnemySpawnHandler : MonoBehaviour
@@ -167,29 +167,11 @@ public class EnemySpawnHandler : MonoBehaviour
     public void ModifyCreatureAbilties(int level, LivingBeing livingBeing, Element element, PhysicalType physical)
     {
         CreatureAbilityHandler abilityHandler = (CreatureAbilityHandler)livingBeing.abilityHandler;
-        if (level < 2) abilityHandler.LearnAbility(AlchemyHandler.Instance.GetMeleeAbilityByElement(livingBeing));
-        else if (element != Element.None) AddElementalAbilities(level, livingBeing, element);
-        if (physical != PhysicalType.None) AddPhysicalAbilities(level, livingBeing, physical);
-        else livingBeing.abilityHandler.LearnAbility(AbilityLibrary.abilityLibrary.defaultAttack);
+        if (element != Element.None) AbilityLibrary.AddElementalAbilities(level, livingBeing, element);
+        if (physical != PhysicalType.None) AbilityLibrary.AddPhysicalAbilities(level, livingBeing, physical);
+        if (element == Element.None && physical != PhysicalType.None) abilityHandler.AddNextAbilitySlot(AbilityLibrary.abilityLibrary.defaultAttack);
     }
-    private void AddElementalAbilities(int level, LivingBeing livingBeing, Element element)
-    {
-        CreatureAbilityHandler abilityHandler = (CreatureAbilityHandler)livingBeing.abilityHandler;
-        if (UnityEngine.Random.value > .5)
-        {
-            //Ability elementalAbility = SetupManager.Instance.ElementToAbilityLibrary_SO.GetAbilityOfElementType(element);
-            foreach (Ability ability in AbilityLibrary.GetRandomAbilities(element, level + 1))
-            {
-                abilityHandler.LearnAbility(ability);
-            }
-        }
-        else abilityHandler.LearnAbility(AbilityLibrary.GetElementalMeleeAbility(element, 50));
-    }
-    private void AddPhysicalAbilities(int level, LivingBeing livingBeing, PhysicalType physical)
-    {
-        foreach (Ability ability in AbilityLibrary.GetRandomAbilities(physical, level + 1))
-            livingBeing.abilityHandler.LearnAbility(ability);
-    }
+
 
     private int GetNumBasedOnDifficulty()
     {

@@ -177,6 +177,7 @@ public class Projectile : MonoBehaviour
                 return;
             else
             {
+                if (ability.TargetEffects.StatusEffects.Count > 0) throw new Exception($"{ability.name} has status effect {ability.TargetEffects.StatusEffects[0]}");
                 SpawnEffect(otherLivingBeing.transform);
                 CombatStatHandler.HandleEffectPackage(ability, userLivingBeing, otherLivingBeing, ability.TargetEffects);
                 HandleOnHitBehaviour(otherLivingBeing);

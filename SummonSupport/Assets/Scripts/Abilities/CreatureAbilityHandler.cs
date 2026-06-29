@@ -130,15 +130,14 @@ public class CreatureAbilityHandler : AbilityHandler
             abilitiesOnCooldown.Add(ability, false);
 
         }
-        SetAbilityLists();
     }
     public void SlotAbility(Ability ability, int slot)
     {
-
+        bool abilitySlotReplaced = false;
         if (ability == null || SlottedAbilities.Count < slot - 1) throw new System.Exception($"Cannot slot ability ({ability}) in slot ({slot})");
         else
         {
-            for (int i = 0; i < SlottedAbilities.Count; i++)
+            for (int i = 0; i < SlottedAbilities.Count; i++) //Replaces slotted ability if slot is used
             {
                 if (SlottedAbilities[i].slot == slot)
                 {
@@ -147,20 +146,40 @@ public class CreatureAbilityHandler : AbilityHandler
                         slot = slot,
                         ability = ability
                     };
+                    abilitySlotReplaced = true;
                     break;
                 }
             }
+            if (abilitySlotReplaced == false) //otherwise adds a new slot
+            {
+                SlottedAbilities.Add(new()
+                {
+                    slot = slot,
+                    ability = ability
+                });
+            }
             UnityEngine.Debug.Log($"Slotting {ability.Name} in slot {slot}");
         }
+        abilitiesOnCooldown.TryAdd(ability, false);
         SetAbilityLists();
     }
 
+    public void AddNextAbilitySlot(Ability ability)
+    {
+        int slotIndex = SlottedAbilities.Count;
+        SlottedAbilities abilitSlot = new()
+        {
+            slot = slotIndex,
+            ability = ability
+        };
+        SlottedAbilities.Add(abilitSlot);
 
+        abilitiesOnCooldown.TryAdd(ability, false);
+        SetAbilityLists();
+    }
 
     public void AddAbilitySlot(int slotIndex, Ability ability)
     {
-        abilitiesOnCooldown.TryAdd(ability, false);
-
         SlottedAbilities abilitSlot = new()
         {
             slot = slotIndex,
