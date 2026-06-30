@@ -21,6 +21,9 @@ public class SetupManager : MonoBehaviour
     [field: SerializeField] public StatusEffectsLibrary StatusEffectsLibrary { get; private set; }
     [field: SerializeField] public GameObject LocSphere { get; private set; }
     [field: SerializeField] public GameObject PlayerPrefab { get; private set; }
+    [field: SerializeField] public int KnowledgeOverride { get; private set; } = 0;
+    [field: SerializeField] public int CraftingPotentialOverride { get; private set; } = 0;
+
 
 
 
@@ -29,7 +32,10 @@ public class SetupManager : MonoBehaviour
     {
         if (Instance != null) Destroy(this);
         else Instance = this;
-
+        if (CraftingPotentialOverride != 0)
+        {
+            OverrideCraftingPotential();
+        }
         if (colorGradientLibrary != null && BleedEffect != null && GlowMaterials.Count() == 4)
         {
             ColorChanger.Setup(BleedEffect, colorGradientLibrary, GlowMaterials);
@@ -67,6 +73,14 @@ public class SetupManager : MonoBehaviour
         if (PlayerPrefab == null) throw new System.Exception("Player prefab was not set in the SetupManager");
         if (PlayerStats.Instance != null) return PlayerStats.Instance.gameObject;
         else return Instantiate(PlayerPrefab, spawnLoc, rotation);
+    }
+
+    private void OverrideCraftingPotential()
+    {
+        AlchemyInventory.AlterCraftingPotential(CraftingPotential.OrganMass, CraftingPotentialOverride);
+        AlchemyInventory.AlterCraftingPotential(CraftingPotential.EtherDensity, CraftingPotentialOverride);
+        AlchemyInventory.AlterCraftingPotential(CraftingPotential.CorePower, CraftingPotentialOverride);
+
     }
 
 

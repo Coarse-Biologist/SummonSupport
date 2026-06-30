@@ -468,6 +468,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
                     Button button = AddButtonToPanel($"{ability.Name}", bottomLeftPanel, 20, 5);
                     button.RegisterCallback<ClickEvent>(e => SetSelectedAbility(potentiallySelectedAbility));
                     button.RegisterCallback<ClickEvent>(e => DisplayAbilityModOptions(potentiallySelectedAbility));
+
                 }
         }
     }
@@ -476,6 +477,9 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
         if (selectedAbility == null) return;
         ClearPanel(bottomRightPanel);
         SetInstructionsText($"Select an attribute for the ability which you would like to upgrade.");
+        if (selectedAbility != null && selectedModType != AbilityModTypes.None)
+            SetInstructionsText($"Confirm to add a mod ({GeneralFunctions.GetCleanEnumString(selectedModType)}) {selectedAbility.Name}");
+
         foreach (AbilityModTypes modableAttribute in ModHandler.GetModableAttributes(ability))
         {
             Button button = AddButtonToPanel(GeneralFunctions.GetCleanEnumString(modableAttribute), bottomRightPanel, 40, 10);
@@ -878,6 +882,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     }
     private void HandleAbilityandSlotSelected(int abilitySlot, Ability selectedAbility, LivingBeing livingBeing)
     {
+        if (selectedAbility == null) return;
         if (livingBeing == PlayerStats.Instance)
         {
             if (selectedAbility is DashAbility) PlayerAbilityHandler.SetDashAbility((DashAbility)selectedAbility);

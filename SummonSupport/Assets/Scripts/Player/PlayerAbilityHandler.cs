@@ -66,7 +66,7 @@ public class PlayerAbilityHandler : AbilityHandler
         inputActions.Player.TogglePauseGame.performed += OnTogglePauseGame;
 
         inputActions.Player.UseSelectedAbility.performed += OnSelectedAbility;
-        EventDeclarer.SlotChanged?.AddListener(ChangeAbilitySlot);
+        EventDeclarer.SlotChanged?.AddListener(SlotAbility);
 
     }
 
@@ -83,7 +83,7 @@ public class PlayerAbilityHandler : AbilityHandler
         inputActions.Player.AbilityF.performed -= OnAbilityF;
         inputActions.Player.TogglePauseGame.performed -= OnTogglePauseGame;
         inputActions.Player.UseSelectedAbility.performed -= OnSelectedAbility;
-        EventDeclarer.SlotChanged?.RemoveListener(ChangeAbilitySlot);
+        EventDeclarer.SlotChanged?.RemoveListener(SlotAbility);
 
 
         inputActions.Disable();
@@ -111,36 +111,74 @@ public class PlayerAbilityHandler : AbilityHandler
             PotionHandler.SpawnElementalPotionOnBelt(Abilities.IndexOf(ability), ability);
 
     }
-    private void ChangeAbilitySlot(int index, Ability ability)
+    public void SlotAbility(int slot, Ability ability)
     {
-        SS_Structs.SlottedAbilities abilityStruct = default;
-        SS_Structs.SlottedAbilities oldAbilityStruct = default;
-
-        SS_Structs.SlottedAbilities newAbilityStruct = new()
+        bool abilitySlotReplaced = false;
+        if (ability == null || SlottedAbilities.Count < slot - 1) throw new System.Exception($"Cannot slot ability ({ability}) in slot ({slot})");
+        else
         {
-            slot = index,
-            ability = ability
-        };
-
-        foreach (var kvp in SlottedAbilities)
-        {
-            if (kvp.ability == ability)
+            for (int i = 0; i < SlottedAbilities.Count; i++) //Replaces slotted ability if slot is used 
             {
-                SlottedAbilities[kvp.slot] = abilityStruct;
+                if (SlottedAbilities[i].ability == ability) // replaces slot with default if ability is used
+                {
+                    SlottedAbilities[i] = new()
+                    {
+                        slot = i,
+                        ability = null
+                    };
+                }
+                if (SlottedAbilities[i].slot == slot)
+                {
+                    SlottedAbilities[i] = new()
+                    {
+                        slot = slot,
+                        ability = ability
+                    };
+                    abilitySlotReplaced = true;
+                }
+
             }
-            if (kvp.slot == index)
+            if (abilitySlotReplaced == false) //otherwise adds a new slot
             {
-                oldAbilityStruct = newAbilityStruct;
+                SlottedAbilities.Add(new()
+                {
+                    slot = slot,
+                    ability = ability
+                });
             }
         }
-        oldAbilityStruct.ability = newAbilityStruct.ability;
-
-        if (Abilities.Contains(ability))
-            Abilities[Abilities.IndexOf(ability)] = null;
-        while (Abilities.Count < index + 1)
-            Abilities.Add(null);
-        Abilities[index] = ability;
+        abilitiesOnCooldown.TryAdd(ability, false);
     }
+    //private void ChangeAbilitySlot(int index, Ability ability)
+    //{
+    //    SS_Structs.SlottedAbilities abilityStruct = default;
+    //    SS_Structs.SlottedAbilities oldAbilityStruct = default;
+    //
+    //    //    SS_Structs.SlottedAbilities newAbilityStruct = new()
+    //    {
+    //        slot = index,
+    //        ability = ability
+    //    };
+    //
+    //    //    for (int i = 0; i > SlottedAbilities.Count; i++)
+    //    {
+    //        if (SlottedAbilities[i].ability == ability)
+    //        {
+    //            SlottedAbilities[i] = abilityStruct;
+    //        }
+    //        if (SlottedAbilities[i].slot == index)
+    //        {
+    //            oldAbilityStruct = newAbilityStruct;
+    //        }
+    //    }
+    //    oldAbilityStruct.ability = newAbilityStruct.ability;
+    //
+    //    //    if (Abilities.Contains(ability))
+    //        Abilities[Abilities.IndexOf(ability)] = null;
+    //    while (Abilities.Count < index + 1)
+    //        Abilities.Add(null);
+    //    Abilities[index] = ability;
+    //}
     private void SetAllAbilitySlots()
     {
         for (int i = 0; i < Abilities.Count && i < 5; i++)
@@ -254,8 +292,8 @@ public class PlayerAbilityHandler : AbilityHandler
 
     private Ability GetAbilityOfIndex(int index)
     {
-        if (Abilities.Count - 1 < index) return null; // index 3 requires count of 4
-        else return Abilities[index];
+        if (SlottedAbilities.Count - 1 < index) return null; // index 3 requires count of 4
+        else return SlottedAbilities[index].ability;
     }
 
     private void SetSelectedAbility(Ability ability, int index)
