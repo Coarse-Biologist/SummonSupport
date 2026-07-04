@@ -5,24 +5,24 @@ namespace BLINK.Tools
 {
     public class MaterialTilingOffset : EditorWindow
     {
-        
+
         private ScriptableObject scriptableObj;
         private SerializedObject serialObj;
-        
+
         public GameObject[] gameObjectList;
         private float xOffset = 0.0313f;
         private float yOffset;
 
         private Material cachedMaterial;
         private Material newMaterial;
-        
+
         private int sliderValue;
-        
-        
+
+
         [MenuItem("BLINK/Material Tiling Offset")]
         private static void OpenWindow()
         {
-            var window = (MaterialTilingOffset) GetWindow(typeof(MaterialTilingOffset), false,"Blink Material Tiling Offset");
+            var window = (MaterialTilingOffset)GetWindow(typeof(MaterialTilingOffset), false, "Blink Material Tiling Offset");
             window.minSize = new Vector2(300, 400);
             GUI.contentColor = Color.white;
             window.Show();
@@ -55,7 +55,7 @@ namespace BLINK.Tools
                 Init();
             }
             GUILayout.Space(10);
-            
+
             EditorGUI.BeginChangeCheck();
             GUILayout.BeginHorizontal();
             EditorGUILayout.LabelField("Color", GUILayout.MaxWidth(50));
@@ -66,7 +66,7 @@ namespace BLINK.Tools
             {
                 UpdateMaterial();
             }
-            
+
             GUILayout.BeginHorizontal();
             EditorGUILayout.LabelField("Current X Offset");
             EditorGUILayout.FloatField(GetXOffset());
@@ -75,7 +75,7 @@ namespace BLINK.Tools
             EditorGUILayout.LabelField("Current Y Offset");
             EditorGUILayout.FloatField(yOffset);
             GUILayout.EndHorizontal();
-            
+
             GUILayout.Space(10);
             if (GUILayout.Button("CREATE MATERIAL", GUILayout.MinWidth(150), GUILayout.MinHeight(30),
                 GUILayout.ExpandWidth(true)))
@@ -88,7 +88,7 @@ namespace BLINK.Tools
             {
                 SaveSelection();
             }
-            
+
             serialObj.ApplyModifiedProperties();
         }
 
@@ -106,7 +106,7 @@ namespace BLINK.Tools
                     if (r == null) continue;
                     r.sharedMaterial = newMaterial;
                 }
-                        
+
                 UpdateMaterial();
             }
         }
@@ -137,7 +137,7 @@ namespace BLINK.Tools
             {
                 yOffset = 0;
             }
-            
+
             newMaterial.mainTextureOffset = new Vector2(xOffset * offsetValue, yOffset);
         }
 

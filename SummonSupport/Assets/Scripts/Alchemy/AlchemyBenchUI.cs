@@ -418,7 +418,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     {
         foreach (MinionStats minion in alchemyHandler.activeMinions)
         {
-            Button minionButton = AddButtonToPanel($"Upgrade {minion.Name}", bottomLeftPanel, 45, 5);
+            Button minionButton = AddButtonToPanel($"Upgrade {minion.Name}", bottomLeftPanel, 30, 5);
             minionButton.RegisterCallback<ClickEvent>(e => SetMinionToUpgrade(minion));
         }
     }
@@ -455,7 +455,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
         foreach (Ability ability in playerAbilityHandler.Instance.Abilities)
         {
             ///Ability potentiallySelectedAbility = ability;
-            Button button = AddButtonToPanel($"{ability.Name}", bottomLeftPanel, 40, 5);
+            Button button = AddButtonToPanel($"{ability.Name}", bottomLeftPanel, 30, 5);
             button.RegisterCallback<ClickEvent>(e => SetSelectedAbility(ability));
             button.RegisterCallback<ClickEvent>(e => DisplayAbilityModOptions(ability));
         }
@@ -465,7 +465,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
                 foreach (Ability ability in creatureAbilityHandler.Abilities)
                 {
                     Ability potentiallySelectedAbility = ability;
-                    Button button = AddButtonToPanel($"{ability.Name}", bottomLeftPanel, 20, 5);
+                    Button button = AddButtonToPanel($"{ability.Name}", bottomLeftPanel, 30, 5);
                     button.RegisterCallback<ClickEvent>(e => SetSelectedAbility(potentiallySelectedAbility));
                     button.RegisterCallback<ClickEvent>(e => DisplayAbilityModOptions(potentiallySelectedAbility));
 
@@ -482,18 +482,21 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
 
         foreach (AbilityModTypes modableAttribute in ModHandler.GetModableAttributes(ability))
         {
-            Button button = AddButtonToPanel(GeneralFunctions.GetCleanEnumString(modableAttribute), bottomRightPanel, 40, 10);
+            Button button = AddButtonToPanel(GeneralFunctions.GetCleanEnumString(modableAttribute), bottomRightPanel, 30, 10);
             button.RegisterCallback<ClickEvent>(e => SetSelectedModAttribute(modableAttribute));
+            button.RegisterCallback<ClickEvent>(e => SetInstructionsText($"Would you like to add {selectedModType} to {selectedAbility}?"));
+
         }
-        Button statusEffectButton = AddButtonToPanel(GeneralFunctions.GetCleanEnumString(AbilityModTypes.StatusEffect), bottomRightPanel, 40, 10);
+        Button statusEffectButton = AddButtonToPanel(GeneralFunctions.GetCleanEnumString(AbilityModTypes.StatusEffect), bottomRightPanel, 30, 10);
         statusEffectButton.RegisterCallback<ClickEvent>(e => ShowStatusEffectOptionScreen());
 
     }
     private void ShowStatusEffectOptionScreen()
     {
         ClearPanel(bottomRightPanel);
-        StatusEffectType releventStatusEffect = StatusEffectsLibrary.ElementToEffectDict[selectedAbility.ElementTypes[0]];
-        Button button = AddButtonToPanel(GeneralFunctions.GetCleanEnumString(releventStatusEffect), bottomRightPanel, 40, 10);
+        StatusEffectType releventStatusEffect = StatusEffectsLibrary.GetStatusEffect(selectedAbility); //#TODO and what if the ability has no element?
+
+        Button button = AddButtonToPanel(GeneralFunctions.GetCleanEnumString(releventStatusEffect), bottomRightPanel, 30, 10);
         button.RegisterCallback<ClickEvent>(e => SetSelectedModAttribute(AbilityModTypes.StatusEffect, releventStatusEffect));
 
     }
@@ -971,9 +974,6 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
         selectedCraftingPotential[CraftingPotential.OrganMass] = 0;
         selectedCraftingPotential[CraftingPotential.CorePower] = 0;
         selectedCraftingPotential[CraftingPotential.EtherDensity] = 0;
-
-
-
     }
 
 

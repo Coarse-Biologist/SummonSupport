@@ -24,5 +24,7 @@ public enum StatusEffectType
 
 
 }
-
+//slashing 
+//piercing
+//bludgeoning
 

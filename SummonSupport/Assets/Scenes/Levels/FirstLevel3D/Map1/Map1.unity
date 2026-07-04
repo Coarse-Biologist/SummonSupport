@@ -1263,11 +1263,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 211213311}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.19513282, y: 0.000000005984408, z: -0.0000000011906424, w: 0.98077685}
-  m_LocalPosition: {x: 3.6, y: 5.4402056, z: 40.719997}
+  m_LocalRotation: {x: 0.19513288, y: -0.000000024168576, z: 0.000000004808519, w: 0.98077685}
+  m_LocalPosition: {x: 3.6, y: 5.4402065, z: 40.719997}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 2039001834}
   m_Father: {fileID: 993480503}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &211213315
@@ -19743,6 +19744,7 @@ GameObject:
   - component: {fileID: 2039001836}
   - component: {fileID: 2039001835}
   - component: {fileID: 2039001837}
+  - component: {fileID: 2039001838}
   m_Layer: 0
   m_Name: FreeLook Camera
   m_TagString: Untagged
@@ -19970,12 +19972,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2039001828}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.19506633, y: -0.000000014853524, z: 0.000000002954173, w: 0.9807901}
-  m_LocalPosition: {x: 3.6, y: 4.54, z: 40.719997}
+  m_LocalRotation: {x: 0.000000014901159, y: 0.000000028031877, z: -0.000000011614032,
+    w: 1}
+  m_LocalPosition: {x: 0, y: -0.8316525, z: 0.34456632}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 211213314}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!136 &2039001835
 CapsuleCollider:
@@ -20047,6 +20050,18 @@ MonoBehaviour:
   AmplitudeGain: 0
   FrequencyGain: 1
   m_NoiseOffsets: {x: 0, y: 0, z: 0}
+--- !u!114 &2039001838
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2039001828}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e6bd13d6116696f47a91ffbf5b61e18e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CameraFollowPlayer
 --- !u!1001 &2053775708
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -20968,6 +20983,11 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: 102.7
       objectReference: {fileID: 0}
+    - target: {fileID: 4097503172191382468, guid: 2a2faa22d123bd843a6b6a254d32c29c,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4934638107108261576, guid: 2a2faa22d123bd843a6b6a254d32c29c,
         type: 3}
       propertyPath: m_Enabled
@@ -20988,8 +21008,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: FullSet
       objectReference: {fileID: 0}
+    - target: {fileID: 8048216911524221983, guid: 2a2faa22d123bd843a6b6a254d32c29c,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 8048216911524221983, guid: 2a2faa22d123bd843a6b6a254d32c29c, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2a2faa22d123bd843a6b6a254d32c29c, type: 3}
@@ -22002,7 +22028,7 @@ PrefabInstance:
     - target: {fileID: 5700169036039766404, guid: 29cc623553c0c3d4aa9548ba52efed1b,
         type: 3}
       propertyPath: <Abilities>k__BackingField.Array.size
-      value: 5
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5700169036039766404, guid: 29cc623553c0c3d4aa9548ba52efed1b,
         type: 3}
@@ -22867,7 +22893,7 @@ PrefabInstance:
     - target: {fileID: 6558628166124916185, guid: 0ef514e756e1bd540af0884298fc436d,
         type: 3}
       propertyPath: <Waves>k__BackingField
-      value: 10
+      value: 999
       objectReference: {fileID: 0}
     - target: {fileID: 6558628166124916185, guid: 0ef514e756e1bd540af0884298fc436d,
         type: 3}
@@ -23117,7 +23143,6 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 993480503}
-  - {fileID: 2039001834}
   - {fileID: 6132780491778671729}
   - {fileID: 1863413859}
   - {fileID: 7391213267857258512}

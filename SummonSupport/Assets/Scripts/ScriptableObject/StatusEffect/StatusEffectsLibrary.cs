@@ -48,12 +48,15 @@ public class StatusEffectsLibrary : ScriptableObject
         {Element.Virus, StatusEffectType.Infected},
 
         {Element.Water, StatusEffectType.Slipping},
-
-
-
-
-
-
     };
+
+    public static StatusEffectType GetStatusEffect(Ability ability)
+    {
+        if (ability.ElementTypes.Count != 0)
+        {
+            return ElementToEffectDict[ability.ElementTypes[0]];
+        }
+        else return StatusEffectType.None;
+    }
 }
 
