@@ -30,15 +30,15 @@ public class LootSpawnHandler : MonoBehaviour
     private void DecideDropLoot(EnemyStats enemyStats)
     {
         Element strongestElement = enemyStats.GetHighestAffinity(out float value);
-        if (value >= 0)
+        if (value >= Random.value * 100)
         {
             SpawnEther(enemyStats, GetEtherType(value), strongestElement);
         }
-        if (enemyStats.MaxHP > 0)
+        if (enemyStats.MaxHP > Random.value * 100 * LootScaler)
         {
             SpawnOrgans(enemyStats, GetOrganType(enemyStats.MaxHP));
         }
-        if (enemyStats.MaxPower > 0)
+        if (enemyStats.MaxPower > Random.value * 100 * LootScaler)
         {
             SpawnCores(enemyStats, GetCoreType(enemyStats.MaxPower));
         }

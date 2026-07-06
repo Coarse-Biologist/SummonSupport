@@ -33,14 +33,14 @@ public abstract class Ability : ScriptableObject
         abilityInfo += $"\nCost : {Cost} {GeneralFunctions.GetCleanEnumString(CostType)}";
         abilityInfo += $"\nCooldown : {Cooldown} seconds";
 
-        string elementTypes = "";
+        string elementTypes = "\n";
         if (ElementTypes.Count() > 0)
         {
             foreach (Element element in ElementTypes)
             {
                 elementTypes += $"{element}, ";
             }
-            abilityInfo += $"Element Types : {elementTypes}";
+            abilityInfo += $"\nElement Types : {elementTypes}";
         }
 
         if (PhysicalType != PhysicalType.None)

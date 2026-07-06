@@ -54,8 +54,9 @@ public static class AbilityLibrary
     public static List<Ability> GetRandomAbilities(Element element, int number = 1)
     {
         //Debug.Log($"will be attempting to retrieve {number} abilities available for {element}");
-
         List<Ability> abilitiesList = new();
+        if (number <= 0) return abilitiesList;
+
         Ability randomAbility = null;
         int maxAttempts = 10;
         if (abilityLibrary != null)
@@ -154,7 +155,7 @@ public static class AbilityLibrary
             }
         }
 
-        //Debug.Log($"Returning {meleeAbility.Name} in the get Elemental Melee ability function");
+        Debug.Log($"Returning {meleeAbility.Name} in the get Elemental Melee ability function");
         return meleeAbility;
     }
 
@@ -162,33 +163,33 @@ public static class AbilityLibrary
     public static void AddElementalAbilities(int level, LivingBeing livingBeing, Element element)
     {
         CreatureAbilityHandler abilityHandler = (CreatureAbilityHandler)livingBeing.abilityHandler;
-        if (level > 2)
+        Ability meleeAbility = GetElementalMeleeAbility(element);
+        abilityHandler.LearnAbility(meleeAbility);
+        abilityHandler.AddNextAbilitySlot(meleeAbility);
+
+        //Ability elementalAbility = SetupManager.Instance.ElementToAbilityLibrary_SO.GetAbilityOfElementType(element);
+        List<Ability> abilities = GetRandomAbilities(element, level - 1);
+        foreach (Ability ability in abilities)
         {
-            //Ability elementalAbility = SetupManager.Instance.ElementToAbilityLibrary_SO.GetAbilityOfElementType(element);
-            List<Ability> abilities = GetRandomAbilities(element, level + 1);
-            foreach (Ability ability in abilities)
-            {
-                abilityHandler.LearnAbility(ability);
+            if (abilityHandler.LearnAbility(ability))
                 abilityHandler.AddNextAbilitySlot(ability);
-            }
-        }
-        else
-        {
-            Ability meleeAbility = GetElementalMeleeAbility(element);
-            abilityHandler.LearnAbility(meleeAbility);
-            abilityHandler.AddNextAbilitySlot(meleeAbility);
         }
 
     }
     public static void AddPhysicalAbilities(int level, LivingBeing livingBeing, PhysicalType physical)
     {
         CreatureAbilityHandler abilityHandler = (CreatureAbilityHandler)livingBeing.abilityHandler;
-        List<Ability> abilities = GetRandomAbilities(physical, level + 1);
+        abilityHandler.LearnAbility(abilityLibrary.defaultAttack);
+        abilityHandler.AddNextAbilitySlot(abilityLibrary.defaultAttack);
+
+        //Ability elementalAbility = SetupManager.Instance.ElementToAbilityLibrary_SO.GetAbilityOfElementType(element);
+        List<Ability> abilities = GetRandomAbilities(physical, level - 1);
         foreach (Ability ability in abilities)
         {
-            abilityHandler.LearnAbility(ability);
-            abilityHandler.AddNextAbilitySlot(ability);
+            if (abilityHandler.LearnAbility(ability))
+                abilityHandler.AddNextAbilitySlot(ability);
         }
+
     }
 
 

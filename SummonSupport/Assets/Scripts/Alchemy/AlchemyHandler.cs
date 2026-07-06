@@ -15,7 +15,9 @@ public class AlchemyHandler : MonoBehaviour
     private GameObject craftedMinion;
     public GameObject minionPrefab;
     //[field: Tooltip("The amount of minion HP per new extra ability they can use.")]
-    [field: SerializeField] public static int ManaToAbilityRatio { get; private set; } = 50;
+    [field: SerializeField] public static int ManaToRegenRatio { get; private set; } = 100;
+
+    [field: SerializeField] public static int ManaToAbilityRatio { get; private set; } = 100;
     [field: SerializeField] public static float RecycleExchangeRate { get; private set; } = .2f;
     [field: SerializeField] public static float KnowledgeGainRate { get; private set; } = .03f;
     [field: SerializeField] public static float HealthScalar { get; private set; } = 2f;
@@ -81,7 +83,6 @@ public class AlchemyHandler : MonoBehaviour
                 craftedMinion = Instantiate(minionPrefab, spawnPos, Quaternion.identity);
                 MinionStats minionStats = craftedMinion.GetComponent<MinionStats>();
                 craftingResults += UpgradeMinion(minionStats, combinedPotential, elementList);
-                AddAbilitiesToCraftedMinion(minionStats);
 
                 AddActiveMinion(craftedMinion);
 
@@ -151,6 +152,7 @@ public class AlchemyHandler : MonoBehaviour
         EventDeclarer.RepeatableQuestCompleted?.Invoke(Quest.RepeatableAccomplishments.CorePowerUsed, value); //#TODO this should be elswehere
 
         stats.ChangeAttribute(AttributeType.MaxPower, value);
+        stats.ChangeHealthRegeneration(value / ManaToRegenRatio);
         powerUpgrade += value;
 
         return powerUpgrade;
@@ -188,6 +190,7 @@ public class AlchemyHandler : MonoBehaviour
         upgradeResults += $"Power upgraded by {powerUpgrade} \n";
         upgradeResults += $"Elemental affinity upgraded by {elementUpgrade} \n";
         minionStats.RestoreResources();
+        AddAbilitiesToCraftedMinion(minionStats);
         AlterMinionByElement(minionStats);
 
         return upgradeResults;
@@ -196,12 +199,16 @@ public class AlchemyHandler : MonoBehaviour
     private void AddAbilitiesToCraftedMinion(MinionStats minionStats)
     {
         CreatureAbilityHandler abilityHandler = minionStats.GetComponent<CreatureAbilityHandler>();
-
-        for (int i = (int)minionStats.GetAttribute(AttributeType.MaxPower) / ManaToAbilityRatio; i > 0; i--)
-        {
-            abilityHandler.AddAbilitySlot(i, null);
-        }
-        AbilityLibrary.AddElementalAbilities(0, minionStats, minionStats.GetHighestAffinity(out float dontCare));
+        int powerInt = ((int)minionStats.GetAttribute(AttributeType.MaxPower) / ManaToAbilityRatio) - abilityHandler.SlottedAbilities.Count;
+        Debug.Log($"power int = {powerInt} for {minionStats}");
+        //for (int i = powerInt; i > 0; i--)
+        //{
+        //    abilityHandler.AddAbilitySlot(i, null);
+        //}
+        Element element = minionStats.GetHighestAffinity(out float dontCare);
+        if (element != Element.None)
+            AbilityLibrary.AddElementalAbilities(powerInt, minionStats, element);
+        else AbilityLibrary.AddPhysicalAbilities(powerInt, minionStats, PhysicalType.Slashing);
 
 
     }
@@ -236,7 +243,7 @@ public class AlchemyHandler : MonoBehaviour
     /// </summary>
     public static void ModifyToolBasedScaling(int numOfToolsKnown)
     {
-        ManaToAbilityRatio -= numOfToolsKnown;
+        ManaToAbilityRatio -= numOfToolsKnown * 3;
         RecycleExchangeRate += (float)(numOfToolsKnown * .04);
         KnowledgeGainRate += (float)(numOfToolsKnown * .01);
         HealthScalar += (float)(numOfToolsKnown * .01);

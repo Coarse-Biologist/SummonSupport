@@ -35,7 +35,7 @@ public class AbilityHandler : MonoBehaviour
 
         foreach (Ability ability in Abilities)
         {
-            abilitiesOnCooldown.Add(ability, false);
+            AddAbilityCooldownSlot(ability);
         }
     }
     protected void Start()
@@ -222,6 +222,26 @@ public class AbilityHandler : MonoBehaviour
         if (anim != null) anim.ChangeLayerAnimation("Buff", 1, 3f);
 
         return auraAbility.Activate(statsHandler);
+    }
+
+    public void AddAbilityCooldownSlot(Ability ability = null)
+    {
+        if (ability != null)
+        {
+            abilitiesOnCooldown.TryAdd(ability, false);
+        }
+    }
+    public bool CheckAbilityAlreadySlotted(Ability ability)
+    {
+        bool slotted = false;
+        foreach (var slot in SlottedAbilities)
+        {
+            if (slot.ability == ability)
+            {
+                return true;
+            }
+        }
+        return slotted;
     }
 
     public IEnumerator SetOnCooldown(Ability ability)

@@ -246,6 +246,7 @@ public abstract class LivingBeing : MonoBehaviour
     public void ChangeHealthRegeneration(float Value)
     {
         HealthRegeneration = Math.Max(0, HealthRegeneration + Value);
+        TotalHealthRegeneration += Value;
     }
     public void ChangeHealthRegeneration_Limitless(float Value)
     {

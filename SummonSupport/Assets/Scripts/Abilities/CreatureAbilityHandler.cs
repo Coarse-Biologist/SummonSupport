@@ -121,15 +121,19 @@ public class CreatureAbilityHandler : AbilityHandler
         else
             return Random.Range(0, 100) < AI_Hostility;
     }
-    public new void LearnAbility(Ability ability)
+    public new bool LearnAbility(Ability ability)
     {
-        //UnityEngine.Debug.Log($"Creature learning ability {ability.Name}");
+        bool learned = false;
         if (!Abilities.Contains(ability) && ability != null)
         {
+
+            learned = true;
             Abilities.Add(ability);
             abilitiesOnCooldown.Add(ability, false);
-
         }
+        UnityEngine.Debug.Log($"Creature trying to learned {ability.Name}? {learned}");
+
+        return learned;
     }
     public void SlotAbility(Ability ability, int slot)
     {
@@ -160,12 +164,16 @@ public class CreatureAbilityHandler : AbilityHandler
             }
             UnityEngine.Debug.Log($"Slotting {ability.Name} in slot {slot}");
         }
-        abilitiesOnCooldown.TryAdd(ability, false);
+        AddAbilityCooldownSlot(ability);
         SetAbilityLists();
     }
 
-    public void AddNextAbilitySlot(Ability ability)
+    public bool AddNextAbilitySlot(Ability ability)
     {
+        if (CheckAbilityAlreadySlotted(ability))
+        {
+            return false;
+        }
         int slotIndex = SlottedAbilities.Count;
         SlottedAbilities abilitSlot = new()
         {
@@ -174,8 +182,10 @@ public class CreatureAbilityHandler : AbilityHandler
         };
         SlottedAbilities.Add(abilitSlot);
 
-        abilitiesOnCooldown.TryAdd(ability, false);
+        AddAbilityCooldownSlot(ability);
+
         SetAbilityLists();
+        return true;
     }
 
     public void AddAbilitySlot(int slotIndex, Ability ability)

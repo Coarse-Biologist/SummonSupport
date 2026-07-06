@@ -409,6 +409,13 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     private void HandleUpgradeMinion(MinionStats minionToUpgrade)
     {
         if (minionToUpgrade == null) return;
+        int maxEtherUse = 0;
+        foreach (Element element in selectedElements)
+        {
+            maxEtherUse += 200 - minionToUpgrade.GetAffinity(element);
+        }
+        selectedCraftingPotential[CraftingPotential.EtherDensity] = Math.Min(maxEtherUse, selectedCraftingPotential[CraftingPotential.EtherDensity]);
+
         alchemyHandler.UpgradeMinion(minionToUpgrade, selectedCraftingPotential, selectedElements);
         AlchemyInventory.ExpendCraftingPotential(selectedCraftingPotential);
         ClearCraftingSelection();
@@ -418,7 +425,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     {
         foreach (MinionStats minion in alchemyHandler.activeMinions)
         {
-            Button minionButton = AddButtonToPanel($"Upgrade {minion.Name}", bottomLeftPanel, 30, 5);
+            Button minionButton = AddButtonToPanel($"Upgrade {minion.Name}", bottomLeftPanel, 40, 5);
             minionButton.RegisterCallback<ClickEvent>(e => SetMinionToUpgrade(minion));
         }
     }
@@ -484,7 +491,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
         {
             Button button = AddButtonToPanel(GeneralFunctions.GetCleanEnumString(modableAttribute), bottomRightPanel, 30, 10);
             button.RegisterCallback<ClickEvent>(e => SetSelectedModAttribute(modableAttribute));
-            button.RegisterCallback<ClickEvent>(e => SetInstructionsText($"Would you like to add {selectedModType} to {selectedAbility}?"));
+            button.RegisterCallback<ClickEvent>(e => SetInstructionsText($"Would you like to improve the {selectedModType} to {selectedAbility}?"));
 
         }
         Button statusEffectButton = AddButtonToPanel(GeneralFunctions.GetCleanEnumString(AbilityModTypes.StatusEffect), bottomRightPanel, 30, 10);
@@ -954,8 +961,8 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
 
         panel.Add(button);
         SpawnedButtons.Add(button);
-
-        SetButtonSize(button, width, height);
+        int calculatedWidth = Math.Min(buttonText.Length * 5, 50);
+        SetButtonSize(button, calculatedWidth, height);
         return button;
     }
     private void SetButtonSize(Button button, int width, int height)
@@ -969,6 +976,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     private void ResetVars()
     {
         SetSelectedAbility(null);
+        elementsGenerated = false;
         selectedElements.Clear();
         selectedModType = AbilityModTypes.None;
         selectedCraftingPotential[CraftingPotential.OrganMass] = 0;
