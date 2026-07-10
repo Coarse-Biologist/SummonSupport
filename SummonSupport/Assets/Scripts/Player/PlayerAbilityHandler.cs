@@ -181,13 +181,20 @@ public class PlayerAbilityHandler : AbilityHandler
     //}
     private void SetAllAbilitySlots()
     {
-        for (int i = 0; i < Abilities.Count && i < 5; i++)
+        for (int i = 0; i < 6; i++)
         {
-            SlottedAbilities.Add(new()
-            {
-                slot = i,
-                ability = Abilities[i]
-            });
+            if (i < Abilities.Count)
+                SlottedAbilities.Add(new()
+                {
+                    slot = i,
+                    ability = Abilities[i]
+                });
+            else
+                SlottedAbilities.Add(new()
+                {
+                    slot = i,
+                    ability = null
+                });
         }
     }
     private bool CheckAbilityUsePossible(Ability selectedAbility)

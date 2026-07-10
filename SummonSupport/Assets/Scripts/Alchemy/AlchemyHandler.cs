@@ -229,6 +229,7 @@ public class AlchemyHandler : MonoBehaviour
             ColorChanger.ChangeAllMatsByAffinity(stats);
             nameModifier = strongestElement.ToString();
             stats.SetName(nameModifier + " Elemental");
+            EventDeclarer.renameMinion.Invoke(stats);
         }
         else stats.SetName("Flesh Atronach");
     }

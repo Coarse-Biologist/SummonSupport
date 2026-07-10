@@ -39,6 +39,7 @@ public class PlayerUIHandler : MonoBehaviour
 
     void OnEnable()
     {
+        EventDeclarer.renameMinion?.AddListener(SetMinionName);
         EventDeclarer.newMinionAdded?.AddListener(AddMinionHP);
         EventDeclarer.minionRecycled?.AddListener(RemoveMinionHP);
         EventDeclarer.minionDied?.AddListener(RemoveMinionHP);
@@ -47,6 +48,7 @@ public class PlayerUIHandler : MonoBehaviour
 
     void OnDisable()
     {
+        EventDeclarer.renameMinion?.RemoveListener(SetMinionName);
         EventDeclarer.newMinionAdded?.RemoveListener(AddMinionHP);
         EventDeclarer.minionRecycled?.RemoveListener(RemoveMinionHP);
         EventDeclarer.minionDied?.RemoveListener(RemoveMinionHP);
@@ -117,6 +119,12 @@ public class PlayerUIHandler : MonoBehaviour
             minionHP.RegisterCallback<ClickEvent>(evt => OnMinionSelect(minionHP));
         }
         //else Debug.Log("The minion HP progress bar is already present ");
+    }
+    private void SetMinionName(LivingBeing minionStats)
+    {
+        if (HPDict.TryGetValue(minionStats, out ProgressBar minionHP))
+            minionHP.title = $"{minionStats.Name} HP: {minionStats.GetAttribute(AttributeType.CurrentHitpoints)}";
+
     }
 
 

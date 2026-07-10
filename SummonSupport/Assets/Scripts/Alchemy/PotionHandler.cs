@@ -75,6 +75,8 @@ public class PotionHandler : MonoBehaviour
     public static Dictionary<Element, GameObject> ElementToPotion { private set; get; }
 
     public static Dictionary<int, GameObject> AbilitySlotToPotion { private set; get; } = new();
+    public static Dictionary<Ability, GameObject> AbilityToPotion { private set; get; } = new();
+
     #endregion
     private static bool potionInHand = false;
     private static GameObject PotionInHand = null;
@@ -108,26 +110,44 @@ public class PotionHandler : MonoBehaviour
     //#TODO make a function that moves potion back to belt after reload animation. 
     // This can be called whenever an ability is used which should replace the one currently in hand
 
-    public static void SpawnElementalPotionOnBelt(int abilityslot, Ability ability)
+    public static void SpawnElementalPotionOnBelt(int abilitySlot, Ability ability)
     {
+        RemovePotionFromSlot(abilitySlot);
+        RemoveAbilityFromSlot(ability);
 
-        if (AbilitySlotToPotion.TryGetValue(abilityslot, out GameObject PreviouslyEquipped)) Destroy(PreviouslyEquipped);
         Element element = Element.None;
         if (ability.ElementTypes.Count > 0) element = ability.ElementTypes[0]; // for now just take the first element, eventually we can have a way to show multiple elements on the potion
         if (ElementToPotion.TryGetValue(element, out GameObject obj))
         {
-            Transform spawnLoc = PlayerStats.Instance.AbilityPotionTransformList[abilityslot];
+            Transform spawnLoc = PlayerStats.Instance.AbilityPotionTransformList[abilitySlot];
             GameObject instance = Instantiate(obj, spawnLoc.position, Quaternion.identity, spawnLoc);
-            AbilitySlotToPotion.TryAdd(abilityslot, instance);
+            AddValuesToDict(abilitySlot, ability, instance);
+
         }
+
         else
         {
-            Transform spawnLoc = PlayerStats.Instance.AbilityPotionTransformList[abilityslot];
+            Transform spawnLoc = PlayerStats.Instance.AbilityPotionTransformList[abilitySlot];
             GameObject instance = Instantiate(ElementToPotion[Element.Plant], spawnLoc.position, Quaternion.identity, spawnLoc);
-            AbilitySlotToPotion.TryAdd(abilityslot, instance);
+
+            AddValuesToDict(abilitySlot, ability, instance);
 
             //#TODO find more thorough and thoughtful solution// currently spawn plant potion if  the ability has no element. what should the true fix be later?
         }
+    }
+    private static void AddValuesToDict(int abilitySlot, Ability ability, GameObject instance)
+    {
+        AbilitySlotToPotion.TryAdd(abilitySlot, instance);
+        AbilityToPotion.TryAdd(ability, instance);
+    }
+
+    private static void RemovePotionFromSlot(int abilitySlot)
+    {
+        if (AbilitySlotToPotion.TryGetValue(abilitySlot, out GameObject PreviouslyEquipped)) Destroy(PreviouslyEquipped);
+    }
+    private static void RemoveAbilityFromSlot(Ability ability)
+    {
+        if (AbilityToPotion.TryGetValue(ability, out GameObject PreviouslyEquipped)) Destroy(PreviouslyEquipped);
     }
 
     public static void MovePotionToHand(int abilitySlot)

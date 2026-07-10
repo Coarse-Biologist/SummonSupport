@@ -19,6 +19,8 @@ namespace SummonSupportEvents
         public static UnityEvent<AlchemyTool> toolGained = new();
         public static UnityEvent<GameObject> minionDied = new();
         public static UnityEvent<GameObject> minionRecycled = new();
+        public static UnityEvent<LivingBeing> renameMinion = new();
+
         public static UnityEvent<LivingBeing> newMinionAdded = new();
 
         public static UnityEvent<MinionStats> SetActiveMinion = new();
