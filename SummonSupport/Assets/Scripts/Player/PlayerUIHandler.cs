@@ -22,7 +22,9 @@ public class PlayerUIHandler : MonoBehaviour
     private ProgressBar playerPowerBar;
     private ProgressBar playerXP_Bar;
     private VisualElement questInfoContainer;
+    private int activeQuestIndex = 0;
     private Label questInfoLabel;
+    private List<Quest_SO> ActiveQuests = new();
 
 
 
@@ -43,7 +45,8 @@ public class PlayerUIHandler : MonoBehaviour
         EventDeclarer.newMinionAdded?.AddListener(AddMinionHP);
         EventDeclarer.minionRecycled?.AddListener(RemoveMinionHP);
         EventDeclarer.minionDied?.AddListener(RemoveMinionHP);
-
+        EventDeclarer.QuestStarted?.AddListener(AddActiveQuest);
+        EventDeclarer.QuestCompleted?.AddListener(RemoveActiveQuest);
     }
 
     void OnDisable()
@@ -228,9 +231,19 @@ public class PlayerUIHandler : MonoBehaviour
     {
         if (questInfoLabel != null)
         {
-            questInfoLabel.text = $"{QuestHandler.Instance.GetQuestInfo(quest)}";
+            questInfoLabel.text = $"{QuestHandler.GetQuestInfo(quest)}";
         }
     }
+    private void AddActiveQuest(Quest_SO quest) => ActiveQuests.Add(quest);
+    private void RemoveActiveQuest(Quest_SO quest) => ActiveQuests.Remove(quest);
+
+    public void DisplayNextActiveQuest()
+    {
+        activeQuestIndex++;
+        if (activeQuestIndex > ActiveQuests.Count) activeQuestIndex = 0;
+        ShowQuestInfo(ActiveQuests[activeQuestIndex]);
+    }
+
     public void ShowCompletedQuestInfo(Quest_SO quest)
     {
         if (questInfoLabel != null)

@@ -11,7 +11,7 @@ public class QuestHandler : MonoBehaviour
     [field: SerializeField] public Quest_SO sceneStartingQuest;
     public static QuestHandler Instance;
     public static List<Quest_SO> CompletedQuests = new List<Quest_SO>();
-    public List<BoolAccomplishments> CompletedBoolQuests;
+    public static List<BoolAccomplishments> CompletedBoolQuests;
     public static List<Quest_SO> ActiveQuests = new List<Quest_SO>();
     public static Dictionary<RepeatableAccomplishments, int> QuestRepTracker = new Dictionary<RepeatableAccomplishments, int>()
     {
@@ -184,7 +184,7 @@ public class QuestHandler : MonoBehaviour
         }
         return stats;
     }
-    public string GetQuestInfo(Quest_SO quest)
+    public static string GetQuestInfo(Quest_SO quest)
     {
         string info = $"{quest.QuestName}\n";
         info += $"{quest.PresentationString}\n";

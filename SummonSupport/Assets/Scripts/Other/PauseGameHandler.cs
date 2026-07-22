@@ -24,6 +24,8 @@ public class PauseGameHandler : MonoBehaviour
     private static VisualElement PauseMenu;
     private static Button ResumeButton;
     private static Button SettingsButton;
+    private static Button QuestsButton;
+
     private static Button SaveButton;
 
     private static Button LoadButton;
@@ -39,6 +41,8 @@ public class PauseGameHandler : MonoBehaviour
     private static VisualElement PlayerOptions;
     private static int statIndex = 0;
     private static int invIndex = 0;
+    private static int activeQuestIndex = 0;
+
 
 
     private static Button QuitButton;
@@ -84,6 +88,8 @@ public class PauseGameHandler : MonoBehaviour
         #region get buttons from UI editor
         PauseMenu = root.Q<VisualElement>("PauseMenu");
         ResumeButton = PauseMenu.Q<Button>("Resume");
+        QuestsButton = PauseMenu.Q<Button>("Quests");
+
         InventoryButton = PauseMenu.Q<Button>("Inventory");
         RestartButton = PauseMenu.Q<Button>("Restart");
         QuitButton = PauseMenu.Q<Button>("Quit");
@@ -97,6 +103,7 @@ public class PauseGameHandler : MonoBehaviour
         #endregion
 
         #region  register buton callbacks
+        QuestsButton.RegisterCallback<ClickEvent>(e => ShowNextQuestInfo());
         ResumeButton.RegisterCallback<ClickEvent>(e => Resume());
         ResumeButton.RegisterCallback<ClickEvent>(e => EventDeclarer.UnpauseGame?.Invoke());
         ResumeButton.RegisterCallback<ClickEvent>(e => EventDeclarer.HidePauseScreen?.Invoke());
@@ -186,6 +193,10 @@ public class PauseGameHandler : MonoBehaviour
     {
         InfoElement.Clear();
     }
+    private static void SetInfoElementText(string words)
+    {
+        InfoElement.text = words;
+    }
     public static void HidePauseScreen()
     {
         UnityEngine.Cursor.lockState = CursorLockMode.Locked;   // Locks the cursor to the center of the screen
@@ -213,6 +224,16 @@ public class PauseGameHandler : MonoBehaviour
         yield return RecentlyPausedDuration;
         RecentlyPaused = false;
     }
+    #region 
+
+    private static void ShowNextQuestInfo()
+    {
+        activeQuestIndex++;
+        if (activeQuestIndex >= QuestHandler.ActiveQuests.Count) activeQuestIndex = 0;
+        SetInfoElementText(QuestHandler.GetQuestInfo(QuestHandler.ActiveQuests[activeQuestIndex]));
+    }
+
+    #endregion
 
 
     #region level up pause
