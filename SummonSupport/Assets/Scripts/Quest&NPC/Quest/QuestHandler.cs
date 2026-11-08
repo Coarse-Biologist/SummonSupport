@@ -9,6 +9,9 @@ using SummonSupportEvents;
 public class QuestHandler : MonoBehaviour
 {
     [field: SerializeField] public Quest_SO sceneStartingQuest;
+
+    [field: SerializeField] public List<Quest_LocationGoal> QuestGoalLocDict;
+
     public static QuestHandler Instance;
     public static List<Quest_SO> CompletedQuests = new List<Quest_SO>();
     public static List<BoolAccomplishments> CompletedBoolQuests;
@@ -68,7 +71,25 @@ public class QuestHandler : MonoBehaviour
     }
     public static bool HasActiveQuest(Quest_SO quest) => ActiveQuests.Contains(quest);
     public static bool HasCompletedQuest(Quest_SO quest) => CompletedQuests.Contains(quest);
+    public static bool HasActiveLocationQuest(out Transform goalTransform)
+    {
+        goalTransform = null;
+        foreach (Quest_SO q in ActiveQuests)
+        {
 
+            if (q.HasGoalLocation)
+            {
+                foreach (Quest_LocationGoal kvp in Instance.QuestGoalLocDict)
+                    if (kvp.quest == q)
+                        goalTransform = kvp.GoalLocation;
+                return true;
+            }
+            else return false;
+
+        }
+        return false;
+
+    }
 
     public bool CheckQuestCompletion(Quest_SO activeQuest)
     {
@@ -198,6 +219,7 @@ public class QuestHandler : MonoBehaviour
         }
         return info;
     }
+
 
 
 }

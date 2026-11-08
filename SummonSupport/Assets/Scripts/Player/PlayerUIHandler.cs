@@ -9,6 +9,7 @@ using Quest;
 public class PlayerUIHandler : MonoBehaviour
 {
     public static PlayerUIHandler Instance { get; private set; }
+    [SerializeField] public GameObject DirectionArrow = null;
     private UIDocument uiDoc;
     private VisualTreeAsset UIPrefabAssets;
 
@@ -24,6 +25,7 @@ public class PlayerUIHandler : MonoBehaviour
     private VisualElement questInfoContainer;
     private int activeQuestIndex = 0;
     private Label questInfoLabel;
+
     private List<Quest_SO> ActiveQuests = new();
 
 
@@ -31,12 +33,14 @@ public class PlayerUIHandler : MonoBehaviour
     [SerializeField] public List<GameObject> minions;// = new List<GameObject>();
     private Dictionary<LivingBeing, ProgressBar> HPDict = new Dictionary<LivingBeing, ProgressBar>();
     private AlchemyHandler alchemyHandler;
+    private Vector3 ArrowLoc;
     void Awake()
     {
         if (Instance == null)
             Instance = this;
         else
             Destroy(gameObject);
+        ArrowLoc = new Vector3(transform.position.x, transform.position.y + 2, transform.position.z);
     }
 
     void OnEnable()
@@ -65,6 +69,7 @@ public class PlayerUIHandler : MonoBehaviour
         UpdateResourceBar(playerStats, AttributeType.CurrentHitpoints);
         UpdateResourceBar(playerStats, AttributeType.CurrentPower);
         SetPlayerXP(playerStats.CurrentXP);
+        InvokeRepeating("QuestLocCheckLoop", 10, 5f);
 
     }
 
@@ -249,6 +254,27 @@ public class PlayerUIHandler : MonoBehaviour
         if (questInfoLabel != null)
         {
             questInfoLabel.text = $"{quest.QuestName} Completed!\n {quest.CompletionString}";
+        }
+    }
+
+    public void QuestLocCheckLoop()
+    {
+        if (QuestHandler.HasActiveLocationQuest(out Transform goalTransform))
+            ShowQuestArrow(goalTransform);
+    }
+
+    public void ShowQuestArrow(Transform goalTransform)
+    {
+        GameObject arrow = null;
+        Debug.Log($"quest at {transform.position}");
+        if (DirectionArrow != null)
+        {
+            arrow = Instantiate(DirectionArrow, new Vector3(transform.position.x, transform.position.y + 1.4f, transform.position.z), Quaternion.identity, transform);
+            if (arrow.TryGetComponent(out RotateToFace script))
+            {
+                script.Initialize(goalTransform);
+            }
+            else Destroy(arrow);
         }
     }
 }
