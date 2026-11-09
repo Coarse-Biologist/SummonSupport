@@ -20,9 +20,10 @@ MonoBehaviour:
   - quest: 6
     reps: 1
   BoolQuestReqs: 
+  HasGoalLocation: 0
   PresentationString: Gather Creature Remains
-  ProgressString: 
-  CompletionString: 
+  ProgressString: Just a few more...
+  CompletionString: Now what can I do with these...
   GoldReward: 0
   XP_Reward: 20
   KnowledgeReward: 0

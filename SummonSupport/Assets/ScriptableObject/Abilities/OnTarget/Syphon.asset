@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: Syphon
   m_EditorClassIdentifier: 
   <Name>k__BackingField: Syphon
+  <Description>k__BackingField: Withdraws lifeforce from a single ranged target,
+    granting it to the caster
   <Icon>k__BackingField: {fileID: 0}
   <Cooldown>k__BackingField: 3
   <CostType>k__BackingField: 4
@@ -55,6 +57,8 @@ MonoBehaviour:
     <SpecialAbilityAttribute>k__BackingField: 0
   <ElementTypes>k__BackingField: 
   <PhysicalType>k__BackingField: 0
+  <OnHitEffect>k__BackingField: {fileID: 0}
+  <Sounds>k__BackingField: {fileID: 0}
   <SpawnEffectOnHit>k__BackingField: {fileID: 2790420997563984172, guid: 4d4cd1497a1659a43b31e1dd11036df7,
     type: 3}
   <EffectOrientation>k__BackingField: 1

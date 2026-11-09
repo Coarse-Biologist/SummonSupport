@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: Aura_Bacteria
   m_EditorClassIdentifier: 
   <Name>k__BackingField: Bacterial Cloud Aura
+  <Description>k__BackingField: Creates aura with fixed radius, causing repeated
+    effects to others inside
   <Icon>k__BackingField: {fileID: -8172051240425876022, guid: d46d43f87ef93d3448c986a15737f67a,
     type: 3}
   <Cooldown>k__BackingField: 10
@@ -23,7 +25,8 @@ MonoBehaviour:
   <AbilityTypeTag>k__BackingField: 1
   <ListUsableOn>k__BackingField: 01000000
   <TargetEffects>k__BackingField:
-    <EffectDescription>k__BackingField: 
+    <EffectDescription>k__BackingField: Causes continuous damage to all enemies in
+      the aura's range.
     <Heal>k__BackingField:
       <Value>k__BackingField: 0
       <ValueType>k__BackingField: 0

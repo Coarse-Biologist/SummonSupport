@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Ice Ball
   m_EditorClassIdentifier: 
   <Name>k__BackingField: Ice Ball
+  <Description>k__BackingField: Ranged projectile ability
   <Icon>k__BackingField: {fileID: 0}
   <Cooldown>k__BackingField: 2
   <CostType>k__BackingField: 4

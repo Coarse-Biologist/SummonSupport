@@ -16,9 +16,10 @@ MonoBehaviour:
   QuestEnum: 2
   IntQuestReqs: []
   BoolQuestReqs: 
-  PresentationString: 
+  HasGoalLocation: 1
+  PresentationString: Retreat and consider
   ProgressString: 
-  CompletionString: 
+  CompletionString: I think I can make something with these things...
   GoldReward: 0
   XP_Reward: 20
   KnowledgeReward: 0

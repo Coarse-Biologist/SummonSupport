@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Trap_Acid
   m_EditorClassIdentifier: Assembly-CSharp::ConjureAbility
   <Name>k__BackingField: Acid Trap
+  <Description>k__BackingField: Throws a trap which then remains to effect others
   <Icon>k__BackingField: {fileID: 0}
   <Cooldown>k__BackingField: 5
   <CostType>k__BackingField: 4
@@ -57,7 +58,7 @@ MonoBehaviour:
   <PhysicalType>k__BackingField: 0
   <OnHitEffect>k__BackingField: {fileID: 5705030685624713920, guid: 1cf207986de988e47adade098e6119ca,
     type: 3}
-  <AlterParticleSystemGradient>k__BackingField: 0
+  <Sounds>k__BackingField: {fileID: 0}
   <ObjectToSpawn>k__BackingField: {fileID: 4826394975636530581, guid: 2b406fed94868684e90588049d1de8ab,
     type: 3}
   <SpawnOffset>k__BackingField: {x: 0, y: 0, z: 0}

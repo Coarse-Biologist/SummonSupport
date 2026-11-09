@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: teleport_LightSlash
   m_EditorClassIdentifier: 
   <Name>k__BackingField: Lightspeed Slash
+  <Description>k__BackingField: Teleports to an enemy and instantly slashes them
+    with an elemental melee ability with small range
   <Icon>k__BackingField: {fileID: 544104916224676396, guid: 1999786300aba2a4ea58c6b2b395516e,
     type: 3}
   <Cooldown>k__BackingField: 6
@@ -59,7 +61,6 @@ MonoBehaviour:
   <OnHitEffect>k__BackingField: {fileID: 6254874057816512933, guid: 933cfe8c2862c75499ef399a089d01f4,
     type: 3}
   <Sounds>k__BackingField: {fileID: 0}
-  <AlterParticleSystemGradient>k__BackingField: 0
   <ActivateOnUse>k__BackingField: {fileID: 0}
   <ActivateOnArrive>k__BackingField: {fileID: 11400000, guid: 7992f87bc2ef9b44292b7b1437d1b217,
     type: 2}

@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: teleport_PlantAura
   m_EditorClassIdentifier: 
   <Name>k__BackingField: Jungle Jump
+  <Description>k__BackingField: Teleport to an enemy target and activates an elemental
+    aura
   <Icon>k__BackingField: {fileID: 544104916224676396, guid: 1999786300aba2a4ea58c6b2b395516e,
     type: 3}
   <Cooldown>k__BackingField: 6

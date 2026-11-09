@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Ice Wall
   m_EditorClassIdentifier: 
   <Name>k__BackingField: Ice Wall
+  <Description>k__BackingField: Creates an ice wall ahead of the caster.
   <Icon>k__BackingField: {fileID: -3500884675973611128, guid: d181781105797df4595eaa56fb20fb5b,
     type: 3}
   <Cooldown>k__BackingField: 4
@@ -57,10 +58,10 @@ MonoBehaviour:
   <ElementTypes>k__BackingField: 01000000
   <PhysicalType>k__BackingField: 0
   <OnHitEffect>k__BackingField: {fileID: 0}
-  <AlterParticleSystemGradient>k__BackingField: 0
+  <Sounds>k__BackingField: {fileID: 0}
   <ObjectToSpawn>k__BackingField: {fileID: 7005297686067651364, guid: 85859a04212b16e449e495748cba629d,
     type: 3}
-  <SpawnOffset>k__BackingField: {x: 0, y: 0, z: 0}
+  <SpawnOffset>k__BackingField: {x: 0, y: 90, z: 0}
   <RotationOffset>k__BackingField: 0
   Radius: 1
   <IsDecaying>k__BackingField: 1

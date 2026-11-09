@@ -9,6 +9,8 @@ using UnityEngine;
 public abstract class Ability : ScriptableObject
 {
     [field: SerializeField] public string Name { get; protected set; }
+    [field: SerializeField] public string Description { get; protected set; }
+
     [field: SerializeField] public Sprite Icon { get; protected set; }
     [field: SerializeField, Range(0, 50)] public float Cooldown { get; protected set; }
     [field: SerializeField] public AttributeType CostType { get; protected set; }
@@ -29,7 +31,7 @@ public abstract class Ability : ScriptableObject
     {
         string abilityInfo = $"{Name}";
 
-        abilityInfo += $"\nAbility type : {GeneralFunctions.GetCleanEnumString(AbilityTypeTag)}";
+        abilityInfo += $"\n{Description}";
         abilityInfo += $"\nCost : {Cost} {GeneralFunctions.GetCleanEnumString(CostType)}";
         abilityInfo += $"\nCooldown : {Cooldown} seconds";
 

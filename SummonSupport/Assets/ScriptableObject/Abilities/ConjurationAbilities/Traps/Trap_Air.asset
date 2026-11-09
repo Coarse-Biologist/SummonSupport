@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Trap_Air
   m_EditorClassIdentifier: Assembly-CSharp::ConjureAbility
   <Name>k__BackingField: Suffocating Trap
+  <Description>k__BackingField: Throws a trap which then remains to effect others
   <Icon>k__BackingField: {fileID: 0}
   <Cooldown>k__BackingField: 5
   <CostType>k__BackingField: 4
@@ -57,7 +58,7 @@ MonoBehaviour:
   <PhysicalType>k__BackingField: 0
   <OnHitEffect>k__BackingField: {fileID: 9018438208592869522, guid: c5fd21a9f6e4d654cb82200a0fb3e341,
     type: 3}
-  <AlterParticleSystemGradient>k__BackingField: 0
+  <Sounds>k__BackingField: {fileID: 0}
   <ObjectToSpawn>k__BackingField: {fileID: 5963828153382765509, guid: 31ea7e45c3459d54590dda13039e5fe8,
     type: 3}
   <SpawnOffset>k__BackingField: {x: 0, y: 0, z: 0}

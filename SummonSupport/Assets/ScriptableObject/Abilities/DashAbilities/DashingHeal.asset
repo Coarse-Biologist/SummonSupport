@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: DashingHeal
   m_EditorClassIdentifier: Assembly-CSharp::DashAbility
   <Name>k__BackingField: Dashing Heal
+  <Description>k__BackingField: Leave behind a healing surface in addition to dashing.
   <Icon>k__BackingField: {fileID: 0}
   <Cooldown>k__BackingField: 0
   <CostType>k__BackingField: 4
@@ -57,14 +58,15 @@ MonoBehaviour:
   <PhysicalType>k__BackingField: 0
   <OnHitEffect>k__BackingField: {fileID: 7418358774842603446, guid: bd97673f52127cb448b52fb00741f85b,
     type: 3}
+  <Sounds>k__BackingField: {fileID: 0}
   <ObjectToSpawn>k__BackingField: {fileID: 5956584414243811025, guid: bd94c695c4de67c4d8d4fbc009ffbfba,
     type: 3}
-  <SpawnEffectOnHit>k__BackingField: {fileID: 0}
-  <SpawnOffset>k__BackingField: {x: 0, y: 0}
+  <SpawnOffset>k__BackingField: {x: 0, y: 0, z: 0}
   <RotationOffset>k__BackingField: 0
   Radius: 1
   <IsDecaying>k__BackingField: 1
   <LeaveRotation>k__BackingField: 0
+  <SpawnsOnTarget>k__BackingField: 0
   <SeeksTarget>k__BackingField: 0
   <Speed>k__BackingField: 2
   <SearchRadius>k__BackingField: 10

@@ -9,6 +9,7 @@ using SummonSupportEvents;
 public class QuestHandler : MonoBehaviour
 {
     [field: SerializeField] public Quest_SO sceneStartingQuest;
+    [field: SerializeField] public List<Questline_Pair> Questline_Chain;
 
     [field: SerializeField] public List<Quest_LocationGoal> QuestGoalLocDict;
 
@@ -183,6 +184,18 @@ public class QuestHandler : MonoBehaviour
             if (complete)
             {
                 EventDeclarer.QuestCompleted?.Invoke(activeQuest);
+                CheckForNextQuest(activeQuest);
+            }
+        }
+    }
+    private void CheckForNextQuest(Quest_SO completedQuest)
+    {
+        foreach (Questline_Pair pair in Questline_Chain)
+        {
+            if (pair.CompletedQuest == completedQuest)
+            {
+                EventDeclarer.QuestCompleted?.Invoke(pair.NextQuest);
+                break; //#TODO are you sure about this? Limits possibility of quest branching
             }
         }
     }

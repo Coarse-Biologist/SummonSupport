@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Trap_Radiation
   m_EditorClassIdentifier: Assembly-CSharp::ConjureAbility
   <Name>k__BackingField: Cherenkov Trap
+  <Description>k__BackingField: Throws a trap which then remains to effect others
   <Icon>k__BackingField: {fileID: 0}
   <Cooldown>k__BackingField: 5
   <CostType>k__BackingField: 4
@@ -57,7 +58,7 @@ MonoBehaviour:
   <PhysicalType>k__BackingField: 0
   <OnHitEffect>k__BackingField: {fileID: 1847413739128325886, guid: 830db95daa93b6f4cae93aa6d4b33d0b,
     type: 3}
-  <AlterParticleSystemGradient>k__BackingField: 0
+  <Sounds>k__BackingField: {fileID: 0}
   <ObjectToSpawn>k__BackingField: {fileID: 6202576606454132206, guid: 311f4c1a50a109d4697df746965a8ee0,
     type: 3}
   <SpawnOffset>k__BackingField: {x: 0, y: 0, z: 0}

@@ -72,7 +72,7 @@ public class AbilityLibrary_SO : ScriptableObject
     {
         throw new System.Exception("This function does nothing but complain about being useless.");
     }
-    public List<Ability> GetElementalAbilitiesBelowLevel(int level, List<Element> elements)
+    public List<Ability> GetElementalAbilitiesBelowLevel(int level, List<Element> elements, bool includeKnown = false)
     {
         List<Ability> abilities = new();
         foreach (ElementCategories category in ElementalEntries)
@@ -82,8 +82,8 @@ public class AbilityLibrary_SO : ScriptableObject
 
                 foreach (Ability ability in category.Abilities)
                 {
-                    Debug.Log($"Checking if {ability.Name} is craftable at level {level} with core cost {Ability.GetCoreCraftingCost(ability)}");
-                    if (Ability.GetCoreCraftingCost(ability) <= level * LevelUpHandler.CraftingPowerScalar) abilities.Add(ability);
+                    if (!includeKnown && PlayerStats.Instance.abilityHandler.Abilities.Contains(ability)) continue;
+                    else if (Ability.GetCoreCraftingCost(ability) <= level * LevelUpHandler.CraftingPowerScalar) abilities.Add(ability);
                 }
             }
         }

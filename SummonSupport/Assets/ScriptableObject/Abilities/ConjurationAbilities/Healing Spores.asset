@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Healing Spores
   m_EditorClassIdentifier: 
   <Name>k__BackingField: Healing Spores
+  <Description>k__BackingField: Creates a healing surface at the location of an ally.
   <Icon>k__BackingField: {fileID: 3009121960904003764, guid: 950a793d476a8e94ca34e5d515470651,
     type: 3}
   <Cooldown>k__BackingField: 2

@@ -9,7 +9,10 @@ using Quest;
 public class PlayerUIHandler : MonoBehaviour
 {
     public static PlayerUIHandler Instance { get; private set; }
+
     [SerializeField] public GameObject DirectionArrow = null;
+    [SerializeField] public bool ShowDirection = false;
+
     private UIDocument uiDoc;
     private VisualTreeAsset UIPrefabAssets;
 
@@ -32,15 +35,12 @@ public class PlayerUIHandler : MonoBehaviour
 
     [SerializeField] public List<GameObject> minions;// = new List<GameObject>();
     private Dictionary<LivingBeing, ProgressBar> HPDict = new Dictionary<LivingBeing, ProgressBar>();
-    private AlchemyHandler alchemyHandler;
-    private Vector3 ArrowLoc;
     void Awake()
     {
         if (Instance == null)
             Instance = this;
         else
             Destroy(gameObject);
-        ArrowLoc = new Vector3(transform.position.x, transform.position.y + 2, transform.position.z);
     }
 
     void OnEnable()
@@ -265,8 +265,8 @@ public class PlayerUIHandler : MonoBehaviour
 
     public void ShowQuestArrow(Transform goalTransform)
     {
+        if (!ShowDirection) return;
         GameObject arrow = null;
-        Debug.Log($"quest at {transform.position}");
         if (DirectionArrow != null)
         {
             arrow = Instantiate(DirectionArrow, new Vector3(transform.position.x, transform.position.y + 1.4f, transform.position.z), Quaternion.identity, transform);

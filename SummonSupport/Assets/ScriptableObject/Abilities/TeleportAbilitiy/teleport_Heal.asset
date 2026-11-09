@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: teleport_Heal
   m_EditorClassIdentifier: 
   <Name>k__BackingField: Healing Port
+  <Description>k__BackingField: Teleports to an ally and heals them
   <Icon>k__BackingField: {fileID: 544104916224676396, guid: 1999786300aba2a4ea58c6b2b395516e,
     type: 3}
   <Cooldown>k__BackingField: 6

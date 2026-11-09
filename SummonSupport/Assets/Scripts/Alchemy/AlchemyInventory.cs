@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
-
+using System.Diagnostics;
 using Quest;
+using SS_Structs;
 using SummonSupportEvents;
 
 
@@ -167,7 +169,18 @@ public static class AlchemyInventory
     #endregion
     #region Check suffient resource
 
+    public static List<Element> GetHighKnowledges(float min = 20)
+    {
+        List<Element> knowledgeList = new();
 
+        foreach (var Kvp in knowledgeDict)
+
+        {
+            //if (Kvp.Value > min)
+            knowledgeList.Add(Kvp.Key);
+        }
+        return knowledgeList;
+    }
 
     public static int GetCraftingPotential(CraftingPotential potentialType)
     {

@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Trap_Bacteria
   m_EditorClassIdentifier: Assembly-CSharp::ConjureAbility
   <Name>k__BackingField: Putrid Trap
+  <Description>k__BackingField: Throws a trap which then remains to effect others
   <Icon>k__BackingField: {fileID: 0}
   <Cooldown>k__BackingField: 5
   <CostType>k__BackingField: 4
@@ -57,7 +58,7 @@ MonoBehaviour:
   <PhysicalType>k__BackingField: 0
   <OnHitEffect>k__BackingField: {fileID: 9018438208592869522, guid: 53aa11c4626a52e45b54ea1689ad41de,
     type: 3}
-  <AlterParticleSystemGradient>k__BackingField: 0
+  <Sounds>k__BackingField: {fileID: 0}
   <ObjectToSpawn>k__BackingField: {fileID: 991466764284751688, guid: c7f6809274917b144a3c5bd4566f48c8,
     type: 3}
   <SpawnOffset>k__BackingField: {x: 0, y: 0, z: 0}

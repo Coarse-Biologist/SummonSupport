@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: Beam_Heal
   m_EditorClassIdentifier: 
   <Name>k__BackingField: Healing Flow
+  <Description>k__BackingField: Creates a ranged beam which continually inflicts
+    its effects.
   <Icon>k__BackingField: {fileID: 0}
   <Cooldown>k__BackingField: 1
   <CostType>k__BackingField: 4
@@ -22,7 +24,8 @@ MonoBehaviour:
   <AbilityTypeTag>k__BackingField: 0
   <ListUsableOn>k__BackingField: 00000000
   <TargetEffects>k__BackingField:
-    <EffectDescription>k__BackingField: Casts a healing beam.
+    <EffectDescription>k__BackingField: Causes continuous damage to all enemies in
+      the beams range.
     <Heal>k__BackingField:
       <Value>k__BackingField: 20
       <ValueType>k__BackingField: 0
@@ -57,7 +60,7 @@ MonoBehaviour:
   <PhysicalType>k__BackingField: 0
   <OnHitEffect>k__BackingField: {fileID: 7418358774842603446, guid: bd97673f52127cb448b52fb00741f85b,
     type: 3}
-  <AlterParticleSystemGradient>k__BackingField: 0
+  <Sounds>k__BackingField: {fileID: 0}
   <BeamParticleSystem>k__BackingField: {fileID: 6160839790432331053, guid: d7db817d847e3f84987bb5ffb2239da1,
     type: 3}
   <TickRate>k__BackingField: 0.5

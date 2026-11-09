@@ -14,7 +14,7 @@ public class RotateToFace : MonoBehaviour
     // Update is called once per frame
     void LateUpdate()
     {
-        if (initialized)
+        if (initialized && LookAtLocation != null)
         {
             transform.rotation = Quaternion.LookRotation(transform.position - LookAtLocation.position);
             Destroy(gameObject, 2f);

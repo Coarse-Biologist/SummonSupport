@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: Charge_Cold
   m_EditorClassIdentifier: 
   <Name>k__BackingField: Blizzard Charge
+  <Description>k__BackingField: Caster charges with enhanced speed, affecting all
+    creatures in their path.
   <Icon>k__BackingField: {fileID: 0}
   <Cooldown>k__BackingField: 5
   <CostType>k__BackingField: 4

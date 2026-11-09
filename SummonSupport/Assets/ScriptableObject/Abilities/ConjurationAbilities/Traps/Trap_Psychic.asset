@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Trap_Psychic
   m_EditorClassIdentifier: Assembly-CSharp::ConjureAbility
   <Name>k__BackingField: Psychic Trap
+  <Description>k__BackingField: Throws a trap which then remains to effect others
   <Icon>k__BackingField: {fileID: 0}
   <Cooldown>k__BackingField: 5
   <CostType>k__BackingField: 4
@@ -57,7 +58,7 @@ MonoBehaviour:
   <PhysicalType>k__BackingField: 0
   <OnHitEffect>k__BackingField: {fileID: 1847413739128325886, guid: af3daea78fb84b541a9b871b3917d9a9,
     type: 3}
-  <AlterParticleSystemGradient>k__BackingField: 0
+  <Sounds>k__BackingField: {fileID: 0}
   <ObjectToSpawn>k__BackingField: {fileID: 897739716388178328, guid: 3054defe569c3af4e9e524ebb14fe763,
     type: 3}
   <SpawnOffset>k__BackingField: {x: 0, y: 0, z: 0}

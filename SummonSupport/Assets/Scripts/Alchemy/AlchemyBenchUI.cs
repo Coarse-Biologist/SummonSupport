@@ -41,6 +41,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     #region Ability crafting / slotting
     private Ability selectedAbility;
     private Ability selectedMinionAbility;
+    private DropdownField dropdownField;
 
     private List<string> SlotNames = new List<string>() { "1", "2", "3", "Q", "E", "F" };
     private int abilitySlot;
@@ -112,6 +113,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     {
         ui = UI_DocHandler.Instance.ui;
         UIPrefabAssets = UI_DocHandler.Instance.UIPrefabAssets;
+
         root = ui.rootVisualElement;
         interactWindow = root.Q<VisualElement>("Interact");
         craftingUI = root.Q<VisualElement>("CraftingUI");
@@ -652,11 +654,12 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
         {
             elementsGenerated = true;
             List<Element> elementsList = Enum.GetValues(typeof(Element)).Cast<Element>().ToList();
+            TemplateContainer prefabContainer = UIPrefabAssets.Instantiate();
+
             foreach (Element element in elementsList)
             {
                 if (AlchemyInventory.GetElementalKnowledge(element) >= 50)
                 {
-                    TemplateContainer prefabContainer = UIPrefabAssets.Instantiate();
                     Toggle elementToggle = prefabContainer.Q<Toggle>("TogglePrefab");
                     //elementToggle.AddToClassList("ElementToggle");
                     elementToggle.text = element.ToString();
@@ -794,9 +797,11 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     }
     private void SpawnCraftablePlayerAbilities()
     {
-        foreach (Ability ability in AbilityLibrary.abilityLibrary.GetElementalAbilitiesBelowLevel(LevelUpHandler.CraftingPowerScalar, PlayerStats.Instance.GetHighAffinities()))
+        TemplateContainer prefabContainer = UIPrefabAssets.Instantiate();
+
+        foreach (Ability ability in AbilityLibrary.abilityLibrary.GetElementalAbilitiesBelowLevel(LevelUpHandler.CraftingPowerScalar, AlchemyInventory.GetHighKnowledges()))
         {
-            Button abilityButton = AddButtonToPanel($"{ability.Name}", bottomLeftPanel, 70, 5);
+            Button abilityButton = AddButtonToPanel($"{ability.Name}", bottomLeftPanel, 10, 10);
             //Debug.Log("made it this far2");
 
             abilityButton.RegisterCallback<ClickEvent>(e => SetSelectedAbility(ability));
@@ -953,7 +958,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     #endregion
 
     #region General UI functions
-    public Button AddButtonToPanel(string buttonText, VisualElement panel, int width, int height)
+    public Button AddButtonToPanel(string buttonText, VisualElement panel, float width, float height)
     {
         TemplateContainer prefabContainer = UIPrefabAssets.Instantiate();
         Button button = prefabContainer.Q<Button>("ButtonPrefab");
@@ -961,11 +966,11 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
 
         panel.Add(button);
         SpawnedButtons.Add(button);
-        int calculatedWidth = Math.Min(buttonText.Length * 5, 50);
+        int calculatedWidth = Math.Min(buttonText.Length * (int)width, 50);
         SetButtonSize(button, calculatedWidth, height);
         return button;
     }
-    private void SetButtonSize(Button button, int width, int height)
+    private void SetButtonSize(Button button, float width, float height)
     {
         button.style.width = Length.Percent(width);
         button.style.height = Length.Percent(height);

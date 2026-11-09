@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Trap_Light
   m_EditorClassIdentifier: Assembly-CSharp::ConjureAbility
   <Name>k__BackingField: Bright Trap
+  <Description>k__BackingField: Throws a trap which then remains to effect others
   <Icon>k__BackingField: {fileID: 0}
   <Cooldown>k__BackingField: 5
   <CostType>k__BackingField: 4
@@ -57,7 +58,7 @@ MonoBehaviour:
   <PhysicalType>k__BackingField: 0
   <OnHitEffect>k__BackingField: {fileID: 6254874057816512933, guid: 933cfe8c2862c75499ef399a089d01f4,
     type: 3}
-  <AlterParticleSystemGradient>k__BackingField: 0
+  <Sounds>k__BackingField: {fileID: 0}
   <ObjectToSpawn>k__BackingField: {fileID: 8514706268804719489, guid: 2ea22eefceea2f64985fa97fc2c61ee5,
     type: 3}
   <SpawnOffset>k__BackingField: {x: 0, y: 0, z: 0}

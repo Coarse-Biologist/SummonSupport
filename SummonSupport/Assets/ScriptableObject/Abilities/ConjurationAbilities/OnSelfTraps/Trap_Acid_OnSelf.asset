@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Trap_Acid_OnSelf
   m_EditorClassIdentifier: Assembly-CSharp::ConjureAbility
   <Name>k__BackingField: Acid Trap
+  <Description>k__BackingField: Crafts a trap on casters location
   <Icon>k__BackingField: {fileID: 0}
   <Cooldown>k__BackingField: 5
   <CostType>k__BackingField: 4

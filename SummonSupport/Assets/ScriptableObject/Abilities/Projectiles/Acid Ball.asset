@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Acid Ball
   m_EditorClassIdentifier: 
   <Name>k__BackingField: Acid Ball
+  <Description>k__BackingField: Ranged projectile ability
   <Icon>k__BackingField: {fileID: 0}
   <Cooldown>k__BackingField: 2
   <CostType>k__BackingField: 4
@@ -57,7 +58,7 @@ MonoBehaviour:
   <PhysicalType>k__BackingField: 0
   <OnHitEffect>k__BackingField: {fileID: 5705030685624713920, guid: 1cf207986de988e47adade098e6119ca,
     type: 3}
-  <AlterParticleSystemGradient>k__BackingField: 0
+  <Sounds>k__BackingField: {fileID: 0}
   <Speed>k__BackingField: 30
   <Projectile>k__BackingField: {fileID: 6033447785082643316, guid: 706fd26b292fae4488c9b19eec3811fc,
     type: 3}

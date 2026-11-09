@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Meteor_Cold
   m_EditorClassIdentifier: 
   <Name>k__BackingField: Ice Comet
+  <Description>k__BackingField: Summons a meteor which seeks enemies
   <Icon>k__BackingField: {fileID: 8095344145157262792, guid: c3bce2abce0ec0e47ba9c908fd690f04,
     type: 3}
   <Cooldown>k__BackingField: 5
@@ -58,7 +59,7 @@ MonoBehaviour:
   <PhysicalType>k__BackingField: 0
   <OnHitEffect>k__BackingField: {fileID: 1847413739128325886, guid: 442943b449157d84997cfa1dee2332fc,
     type: 3}
-  <AlterParticleSystemGradient>k__BackingField: 0
+  <Sounds>k__BackingField: {fileID: 0}
   <ObjectToSpawn>k__BackingField: {fileID: 1142077846852881211, guid: e5a63090a61216549902cdc460733e08,
     type: 3}
   <SpawnOffset>k__BackingField: {x: 0, y: 10, z: 0}

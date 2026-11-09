@@ -43,6 +43,8 @@ public class PauseGameHandler : MonoBehaviour
     private static int invIndex = 0;
     private static int activeQuestIndex = 0;
 
+    private static List<Button> SpawnedButtons = new();
+
 
 
     private static Button QuitButton;
@@ -113,11 +115,13 @@ public class PauseGameHandler : MonoBehaviour
         SettingsButton.RegisterCallback<ClickEvent>(e => ShowSettingsOptions());
 
 
+        StatsButton.RegisterCallback<ClickEvent>(e => ShowStats());
         StatsButton.RegisterCallback<ClickEvent>(e => ChangeStatIndex());
+
 
         InventoryButton.RegisterCallback<ClickEvent>(e => ShowInventory());
 
-        StatsButton.RegisterCallback<ClickEvent>(e => ClearInfoElement());
+        // StatsButton.RegisterCallback<ClickEvent>(e => ClearInfoElement());
         InventoryButton.RegisterCallback<ClickEvent>(e => ClearInfoElement());
         QuitButton.RegisterCallback<ClickEvent>(e => QuitToMainMenu());
 
@@ -191,6 +195,7 @@ public class PauseGameHandler : MonoBehaviour
     }
     private static void ClearInfoElement()
     {
+        ClearSpawnedButtons(PlayerOptions);
         InfoElement.Clear();
     }
     private static void SetInfoElementText(string words)
@@ -241,24 +246,6 @@ public class PauseGameHandler : MonoBehaviour
     #region level up pause
     private static void LevelUpPause(List<string> ImprovedAttributesList)
     {
-        //UnityEngine.Cursor.lockState = CursorLockMode.None;   // Locks the cursor to the center of the screen
-        //UnityEngine.Cursor.visible = true;
-
-        //PauseMenu.style.opacity = 0f;
-        //PlayerOptions.style.opacity = 0f;
-        //PauseMenu.SetEnabled(true);
-        //PauseMenu.style.display = DisplayStyle.Flex;
-        //
-        //ResumeButton.text = "Continue";
-        //ResumeButton.style.display = DisplayStyle.Flex;
-        //InventoryButton.style.display = DisplayStyle.Flex;
-        //QuitButton.style.display = DisplayStyle.Flex;
-        //RestartButton.style.display = DisplayStyle.Flex;
-        //PlayerOptions.style.display = DisplayStyle.Flex;
-        //
-        //InfoElement.style.display = DisplayStyle.Flex;
-        //EaseInOpacity(PauseMenu, 350);
-        //EaseInOpacity(PlayerOptions, 350);
 
         ShowPauseScreen();
 
@@ -333,34 +320,69 @@ public class PauseGameHandler : MonoBehaviour
     }
     private static void ChangeStatIndex()
     {
-        ShowStats();
         statIndex++;
+
         Debug.Log($"stat index: {statIndex}");
 
     }
     private static void ShowStats()
     {
-        PlayerOptions.style.display = DisplayStyle.Flex;
+        InfoElement.style.display = DisplayStyle.Flex;
+        InfoElement.text = "";
+        ClearSpawnedButtons(PlayerOptions);
+
 
         int minionsNum = AlchemyHandler.Instance.activeMinions.Count;
         if (statIndex == 0)
         {
             ShowPlayerstats();
         }
+        else if (statIndex == 1)
+        {
+            ShowKnownAbilities();
+        }
         else
         {
-            if (minionsNum >= statIndex)
+            if (minionsNum >= statIndex - 1)
             {
-                LivingBeing minion = AlchemyHandler.Instance.activeMinions[statIndex - 1];
+                LivingBeing minion = AlchemyHandler.Instance.activeMinions[statIndex - 2];
                 string minionStats = minion.GetLivingBeingStats();
                 InfoElement.text = $"{minion.Name} stats:\n {minionStats}\n";
+                return;
             }
             else
             {
                 statIndex = 0;
                 ShowPlayerstats();
+                return;
+
             }
         }
+    }
+    private static void ShowKnownAbilities()
+    {
+        InfoElement.style.display = DisplayStyle.None;
+
+        foreach (Ability ability in PlayerStats.Instance.abilityHandler.Abilities)
+        {
+            TemplateContainer prefabContainer = UIPrefabAssets.Instantiate();
+            Button button = prefabContainer.Q<Button>("ButtonPrefab");
+
+            PlayerOptions.Add(button);
+            SpawnedButtons.Add(button);
+
+
+            button.text = $"{ability.Name}";
+
+            button.RegisterCallback<ClickEvent>(e => ShowAbilityInfo(ability.DisplayAbilityInfo()));
+
+        }
+    }
+    private static void ShowAbilityInfo(string info)
+    {
+        InfoElement.style.display = DisplayStyle.Flex;
+
+        InfoElement.text = info;
     }
 
     private static void ShowInventory()
@@ -470,6 +492,15 @@ public class PauseGameHandler : MonoBehaviour
         panel.Add(button);
         return button;
 
+    }
+    private static void ClearSpawnedButtons(VisualElement panel)
+    {
+        foreach (Button b in SpawnedButtons)
+        {
+            panel.Remove(b);
+
+        }
+        SpawnedButtons.Clear();
     }
     #endregion
 

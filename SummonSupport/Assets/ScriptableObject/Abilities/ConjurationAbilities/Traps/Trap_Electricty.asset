@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Trap_Electricty
   m_EditorClassIdentifier: Assembly-CSharp::ConjureAbility
   <Name>k__BackingField: Electrical Trap
+  <Description>k__BackingField: Throws a trap which then remains to effect others
   <Icon>k__BackingField: {fileID: 0}
   <Cooldown>k__BackingField: 5
   <CostType>k__BackingField: 4
@@ -57,7 +58,7 @@ MonoBehaviour:
   <PhysicalType>k__BackingField: 0
   <OnHitEffect>k__BackingField: {fileID: 3120327116199938787, guid: 1c8e879845899e24290d617f97db8328,
     type: 3}
-  <AlterParticleSystemGradient>k__BackingField: 0
+  <Sounds>k__BackingField: {fileID: 0}
   <ObjectToSpawn>k__BackingField: {fileID: 7264173857126514964, guid: 4e44cd982f64757419611a3884533d04,
     type: 3}
   <SpawnOffset>k__BackingField: {x: 0, y: 0, z: 0}

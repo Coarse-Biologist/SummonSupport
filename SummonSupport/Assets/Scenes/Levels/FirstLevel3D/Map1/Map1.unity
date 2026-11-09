@@ -5081,6 +5081,12 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3388c2193e6a56841b1082aa7f3f5844, type: 3}
+--- !u!4 &629159069 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 896016103627856636, guid: 9d0791f7a10234949be8cdc4aeabac64,
+    type: 3}
+  m_PrefabInstance: {fileID: 1102778640}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &653653230
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9069,13 +9075,28 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 896016103627856636, guid: 9d0791f7a10234949be8cdc4aeabac64,
         type: 3}
+      propertyPath: m_LocalScale.x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 896016103627856636, guid: 9d0791f7a10234949be8cdc4aeabac64,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 896016103627856636, guid: 9d0791f7a10234949be8cdc4aeabac64,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 896016103627856636, guid: 9d0791f7a10234949be8cdc4aeabac64,
+        type: 3}
       propertyPath: m_LocalPosition.x
       value: 7.19
       objectReference: {fileID: 0}
     - target: {fileID: 896016103627856636, guid: 9d0791f7a10234949be8cdc4aeabac64,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.48
+      value: 0.87
       objectReference: {fileID: 0}
     - target: {fileID: 896016103627856636, guid: 9d0791f7a10234949be8cdc4aeabac64,
         type: 3}
@@ -15893,9 +15914,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sceneStartingQuest: {fileID: 11400000, guid: dc21ef7a537ac6a4f85a2b854c97365e, type: 2}
+  Questline_Chain:
+  - CompletedQuest: {fileID: 11400000, guid: 3c1194575657cb1438cd3916b67df92e, type: 2}
+    NextQuest: {fileID: 11400000, guid: 02adaacb623f6b74a96553b9f08cea18, type: 2}
   QuestGoalLocDict:
   - quest: {fileID: 11400000, guid: dc21ef7a537ac6a4f85a2b854c97365e, type: 2}
-    GoalLocation: {fileID: 8138424183924678518}
+    GoalLocation: {fileID: 1769241317}
+  - quest: {fileID: 11400000, guid: 57baa31c864c3864d88fdc5d3ecfd02f, type: 2}
+    GoalLocation: {fileID: 629159069}
 --- !u!114 &1724141751
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22057,6 +22083,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 485068674075403870, guid: 29cc623553c0c3d4aa9548ba52efed1b,
         type: 3}
+      propertyPath: ShowDirection
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 485068674075403870, guid: 29cc623553c0c3d4aa9548ba52efed1b,
+        type: 3}
       propertyPath: DirectionArrow
       value: 
       objectReference: {fileID: 6442393035295932751, guid: 63eac0c4c0d75c441bf45073e690a385,
@@ -22095,6 +22126,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 5469552160048565923, guid: 29cc623553c0c3d4aa9548ba52efed1b,
+        type: 3}
+      propertyPath: <Acid>k__BackingField
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 5469552160048565923, guid: 29cc623553c0c3d4aa9548ba52efed1b,
         type: 3}
