@@ -37,8 +37,11 @@ public class ProjectileAbility : Ability
             projectile.transform.localScale += sizeMod;
             Projectile projectileScript = projectile.GetComponent<Projectile>();
 
-            Material glowMaterial = ColorChanger.GetGlowStrengthByElement(ElementTypes[0]);
-            ColorChanger.ChangeMatByAffinity(projectile.GetComponent<Renderer>(), glowMaterial);
+            if (ElementTypes.Count != 0)
+            {
+                Material glowMaterial = ColorChanger.GetGlowStrengthByElement(ElementTypes[0]);
+                ColorChanger.ChangeMatByAffinity(projectile.GetComponent<Renderer>(), glowMaterial);
+            }
 
             float rotY = (float)Math.Sin(45 * i) * (10 + 5 * i);
             Quaternion rotation = Quaternion.Euler(0, rotY, 0);

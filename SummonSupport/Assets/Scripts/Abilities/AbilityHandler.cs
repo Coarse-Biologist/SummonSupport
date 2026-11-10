@@ -108,9 +108,11 @@ public class AbilityHandler : MonoBehaviour
                 usedAbility = HandleAuraAbility(auraAbility);
                 break;
             case TeleportAbility teleportAbility:
+                if (anim != null) anim.ChangeLayerAnimation("Buff", 1, 2f, true);
                 usedAbility = teleportAbility.Activate(statsHandler, targetPosition);
                 break;
             case MeleeAbility meleeAbility:
+                if (anim != null) anim.ChangeLayerAnimation("Buff", 1, 2f, true);
                 usedAbility = meleeAbility.Activate(statsHandler);
                 break;
             case BeamAbility beamAbility:

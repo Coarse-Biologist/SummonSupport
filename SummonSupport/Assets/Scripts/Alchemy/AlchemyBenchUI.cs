@@ -37,7 +37,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     private VisualElement centerPanel;
     private VisualElement topRightPanel;
     private VisualElement bottomRightPanel;
-    private VisualElement bottomLeftPanel;
+    private ScrollView bottomLeftPanel;
     #region Ability crafting / slotting
     private Ability selectedAbility;
     private Ability selectedMinionAbility;
@@ -119,7 +119,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
         craftingUI = root.Q<VisualElement>("CraftingUI");
         centerPanel = craftingUI.Q<VisualElement>("CenterPanel");
         topRightPanel = craftingUI.Q<VisualElement>("TopRightPanel");
-        bottomLeftPanel = craftingUI.Q<VisualElement>("BottomLeftPanel");
+        bottomLeftPanel = craftingUI.Q<ScrollView>("BottomLeftPanel");
         //craftAbilityButton = mainCraftingOptions.Q<VisualElement>("ConcoctButton");
 
         instructions = craftingUI.Q<Label>("Instructions");
@@ -801,7 +801,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
 
         foreach (Ability ability in AbilityLibrary.abilityLibrary.GetElementalAbilitiesBelowLevel(LevelUpHandler.CraftingPowerScalar, AlchemyInventory.GetHighKnowledges()))
         {
-            Button abilityButton = AddButtonToPanel($"{ability.Name}", bottomLeftPanel, 10, 10);
+            Button abilityButton = AddButtonToPanel($"{ability.Name}", bottomLeftPanel, 10, 5);
             //Debug.Log("made it this far2");
 
             abilityButton.RegisterCallback<ClickEvent>(e => SetSelectedAbility(ability));
@@ -915,7 +915,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
             for (int i = 0; i < maxSlots; i++)
             {
                 int slotNum = i;
-                Button slotButton = AddButtonToPanel($"Slot: {SlotNames[i]}", bottomLeftPanel, 20, 5);
+                Button slotButton = AddButtonToPanel($"Slot: {SlotNames[i]}", bottomRightPanel, 20, 5);
                 slotButton.RegisterCallback<ClickEvent>(e => SetSelectedSlot(slotNum));
 
             }

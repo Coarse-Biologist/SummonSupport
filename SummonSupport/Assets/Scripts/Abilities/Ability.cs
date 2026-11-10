@@ -71,6 +71,7 @@ public abstract class Ability : ScriptableObject
         return ListUsableOn.Contains(CrewsRelationshipHandler.GetRelationshipType(caster, target));
     }
 
+
     public static bool HasElementalSynergy(Ability ability, LivingBeing potentialTarget)
     {
         foreach (Element element in ability.ElementTypes)

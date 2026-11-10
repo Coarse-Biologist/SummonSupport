@@ -18,6 +18,8 @@ public class SetupManager : MonoBehaviour
 
     [field: SerializeField] public AbilityLibrary_SO ElementToAbilityLibrary_SO { get; private set; } = null;
     [field: SerializeField] public List<Ability> AllAbilities { get; private set; } = null;
+    [field: SerializeField] public List<Ability> AllHealAbilities { get; private set; } = null;
+
     [field: SerializeField] public StatusEffectsLibrary StatusEffectsLibrary { get; private set; }
     [field: SerializeField] public GameObject LocSphere { get; private set; }
     [field: SerializeField] public GameObject PlayerPrefab { get; private set; }

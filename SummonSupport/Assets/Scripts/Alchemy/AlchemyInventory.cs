@@ -176,8 +176,8 @@ public static class AlchemyInventory
         foreach (var Kvp in knowledgeDict)
 
         {
-            //if (Kvp.Value > min)
-            knowledgeList.Add(Kvp.Key);
+            if (Kvp.Value > min)
+                knowledgeList.Add(Kvp.Key);
         }
         return knowledgeList;
     }
