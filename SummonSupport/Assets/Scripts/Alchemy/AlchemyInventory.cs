@@ -15,9 +15,9 @@ public static class AlchemyInventory
     #region Class variables
     public static Dictionary<CraftingPotential, int> AvailableCraftingPotential { get; private set; } = new()
     {
-        {CraftingPotential.OrganMass, 100 },
-        {CraftingPotential.CorePower, 100 },
-        {CraftingPotential.EtherDensity, 100 },
+        {CraftingPotential.OrganMass, 10 },
+        {CraftingPotential.CorePower, 10 },
+        {CraftingPotential.EtherDensity, 10 },
 
     };
 
@@ -60,7 +60,7 @@ public static class AlchemyInventory
                 { Element.Acid, 0 },
                 { Element.Bacteria, 0 },
                 { Element.Fungi, 0 },
-                { Element.Plant, 100 },
+                { Element.Plant, 0 },
                 { Element.Virus, 0 },
                 { Element.Radiation, 0 },
                 { Element.Light, 0 },

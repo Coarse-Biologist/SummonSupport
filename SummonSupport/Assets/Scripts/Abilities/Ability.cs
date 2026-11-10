@@ -36,7 +36,7 @@ public abstract class Ability : ScriptableObject
         abilityInfo += $"\nCooldown : {Cooldown} seconds";
 
         string elementTypes = "\n";
-        if (ElementTypes.Count() > 0)
+        if (ElementTypes.Count() > 0 && !ElementTypes.Contains(Element.None))
         {
             foreach (Element element in ElementTypes)
             {
@@ -86,8 +86,8 @@ public abstract class Ability : ScriptableObject
     {
         if (ability == null) throw new System.Exception("You are trying to access the core cost of an ability which is null.");
         int modifier = 1; //#TODO find better solution
-        if (ability is BeamAbility beam) modifier += 10;
-        return ((int)ability.Cooldown + 1) * ((int)ability.Cost + 1) * (1 + modifier);
+        if (ability is BeamAbility beam) modifier += 3;
+        return ((int)ability.Cooldown + 1) * ((int)ability.Cost + 1) * (modifier);
     }
 
     public List<LivingBeing> GetTargetfromSphereCast(LivingBeing casterStats, Transform directionTransform, int desiredTargetNum, TeamType teamType)
