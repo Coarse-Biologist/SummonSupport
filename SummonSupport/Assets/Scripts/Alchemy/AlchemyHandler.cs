@@ -65,9 +65,10 @@ public class AlchemyHandler : MonoBehaviour
     /// <summary>
     /// Crafts a minion and spawns it by the alchemy bench.
     /// </summary>
-    /// <param name="combinedPotential">The enemy to damage.</param>
-    /// <param name="elementList">The enemy to damage.</param>
+    /// <param name="combinedPotential">The selected ingredient types.</param>
+    /// <param name="elementList">The list of elements which the ether will affect.</param>
     /// <returns> A description string of the resuls of crafting.</returns>
+    /// 
     public string HandleCraftingResults(Dictionary<CraftingPotential, int> combinedPotential, List<Element> elementList)
     {
         string craftingResults = "";

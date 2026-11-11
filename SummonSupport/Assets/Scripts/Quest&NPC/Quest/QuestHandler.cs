@@ -18,6 +18,7 @@ public class QuestHandler : MonoBehaviour
     public static List<BoolAccomplishments> CompletedBoolQuests;
     public static List<Quest_SO> ActiveQuests = new List<Quest_SO>();
     public static Dictionary<RepeatableAccomplishments, int> QuestRepTracker = new Dictionary<RepeatableAccomplishments, int>()
+
     {
         {RepeatableAccomplishments.EnemiesDefeated, 0},
         {RepeatableAccomplishments.KnowledgeGained, 0},

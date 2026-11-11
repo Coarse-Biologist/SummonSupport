@@ -18,10 +18,10 @@ public class EnemySpawnHandler : MonoBehaviour
     [field: SerializeField] public float Hp_Scalar { get; private set; } = 1.5f;
     [field: SerializeField] public float Power_Scalar { get; private set; } = 1.5f;
     [field: SerializeField] public float Regen_Scalar { get; private set; } = 1.5f;
-    [field: SerializeField] public float Damage_Scalar { get; private set; } = 1.5f;
+    //[field: SerializeField] public float Damage_Scalar { get; private set; } = 1.5f;
     [field: SerializeField] public float Affinity_Scalar { get; private set; } = 25; // amount of affinity (strongest affinity) gained per difficulty increase
 
-    [field: SerializeField] public float Difficulty_Scalar { get; private set; } = .25f; //Likelihood of each successive creature difficulty spawn is multiplied by this
+    //[field: SerializeField] public float Difficulty_Scalar { get; private set; } = .25f; //Likelihood of each successive creature difficulty spawn is multiplied by this
     [field: SerializeField] public Difficulty Difficulty { get; private set; } = Difficulty.Novice;
     private static readonly Dictionary<Difficulty, (int lvl1, int lvl2, int lvl3, int lvl4)> CreatureProbabilities
         = new()

@@ -12,9 +12,10 @@ public class LootSpawnHandler : MonoBehaviour
     [field: SerializeField] GameObject CorePrefab;
 
 
-
     #endregion
+    [field: Tooltip("Alters loot-drop chance. 1 is default, 2 would double chances")]
     [field: SerializeField] float LootScaler = 1f;
+    [field: SerializeField] public int KnowledgeGainRate { private set; get; } = 1;
 
 
 
@@ -30,27 +31,30 @@ public class LootSpawnHandler : MonoBehaviour
     private void DecideDropLoot(EnemyStats enemyStats)
     {
         Element strongestElement = enemyStats.GetHighestAffinity(out float value);
-        if (value >= Random.value * 100)
+        if (value * LootScaler >= Random.Range(0, 100))
+        {
+            AlchemyInventory.IncemementElementalKnowledge(strongestElement, KnowledgeGainRate);
+            FloatingInfoHandler.Instance.DisplayGoldenLetters($"+{KnowledgeGainRate} {strongestElement} knowledge!", 1.5f);
+        }
+        if (value * LootScaler >= Random.Range(0, 100))
         {
             SpawnEther(enemyStats, GetEtherType(value), strongestElement);
         }
-        if (enemyStats.MaxHP > Random.value * 100 * LootScaler)
+        if (enemyStats.MaxHP * LootScaler > Random.Range(0, 100))
         {
             SpawnOrgans(enemyStats, GetOrganType(enemyStats.MaxHP));
         }
-        if (enemyStats.MaxPower > Random.value * 100 * LootScaler)
+        if (enemyStats.MaxPower * LootScaler > Random.Range(0, 100))
         {
             SpawnCores(enemyStats, GetCoreType(enemyStats.MaxPower));
         }
     }
     private void SpawnEther(EnemyStats enemyStats, GameObject etherPrefab, Element element)
     {
-        //Debug.Log("Spawning ether");
 
         if (etherPrefab == null) return;
 
         GameObject instance = Instantiate(etherPrefab, enemyStats.transform.position, Quaternion.identity);
-        //Debug.Log("Indeed, Spawning organ");
 
         if (instance.TryGetComponent(out LootableAlchemyMaterial lootScript))
         {
@@ -64,13 +68,10 @@ public class LootSpawnHandler : MonoBehaviour
 
     private GameObject GetEtherType(float etherValue)
     {
-        float lootRoll = Random.Range(0, 120) + (etherValue * LootScaler);
 
-        if (lootRoll < 50) return null;
-        if (lootRoll > 50 && lootRoll < 100) return FaintEtherPrefab;
-        if (lootRoll > 100 && lootRoll < 150) return PowerfulEtherPrefab;
-        if (lootRoll > 150) return IntenseEtherPrefab;
-        else return null;
+        if (etherValue > 150) return IntenseEtherPrefab;
+        else if (etherValue > 100) return PowerfulEtherPrefab;
+        else return FaintEtherPrefab;
     }
 
     private void SpawnOrgans(EnemyStats enemy, AlchemyLoot organType)
@@ -88,18 +89,15 @@ public class LootSpawnHandler : MonoBehaviour
 
     private AlchemyLoot GetOrganType(float HP)
     {
-        float lootRoll = Random.Range(0, 120) + (HP * LootScaler);
 
-        if (lootRoll < 50) return AlchemyLoot.WeakCore;
-        if (lootRoll > 50 && lootRoll < 100) return AlchemyLoot.WretchedOrgans;
-        if (lootRoll > 100 && lootRoll < 150) return AlchemyLoot.FunctionalOrgans;
-        if (lootRoll > 150) return AlchemyLoot.HulkingOrgans;
+        if (HP > 150) return AlchemyLoot.HulkingOrgans;
+        else if (HP > 100) return AlchemyLoot.FunctionalOrgans;
+        else if (HP > 50) return AlchemyLoot.WretchedOrgans;
         else return AlchemyLoot.WeakCore;
     }
 
     private void SpawnCores(EnemyStats enemy, AlchemyLoot coreType)
     {
-        //Debug.Log("Spawning core?");
 
         if (coreType == AlchemyLoot.WretchedOrgans) return;
         GameObject instance = Instantiate(CorePrefab, enemy.transform.position, Quaternion.identity);

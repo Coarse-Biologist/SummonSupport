@@ -11,7 +11,7 @@ public class PlayerUIHandler : MonoBehaviour
     public static PlayerUIHandler Instance { get; private set; }
 
     [SerializeField] public GameObject DirectionArrow = null;
-    [SerializeField] public bool ShowDirection = false;
+    [field: SerializeField] public bool ShowDirection { private set; get; } = false;
 
     private UIDocument uiDoc;
     private VisualTreeAsset UIPrefabAssets;
@@ -262,7 +262,10 @@ public class PlayerUIHandler : MonoBehaviour
         if (QuestHandler.HasActiveLocationQuest(out Transform goalTransform))
             ShowQuestArrow(goalTransform);
     }
-
+    public void ToggleShowQuestDirection(bool setActive)
+    {
+        ShowDirection = setActive;
+    }
     public void ShowQuestArrow(Transform goalTransform)
     {
         if (!ShowDirection) return;

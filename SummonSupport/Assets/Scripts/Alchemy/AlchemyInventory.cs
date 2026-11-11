@@ -1,8 +1,5 @@
-using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using Quest;
-using SS_Structs;
 using SummonSupportEvents;
 
 
@@ -88,7 +85,7 @@ public static class AlchemyInventory
         }
         else return 0;
     }
-    public static int GainKnowledge(List<Element> elementsList, Dictionary<CraftingPotential, int> usedPotential)
+    public static int GainKnowledge(List<Element> elementsList, Dictionary<CraftingPotential, int> usedPotential = null)
     {
         int total = 0;
         foreach (KeyValuePair<CraftingPotential, int> kvp in usedPotential)
@@ -105,6 +102,8 @@ public static class AlchemyInventory
 
         return total;
     }
+
+
     public static void ConvertIngredientsToPotential(AlchemyLoot ingredient, int numberOfIngredients = 1)
     {
         // #TODO i hate this conditional business

@@ -836,12 +836,12 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     {
 
         if (selectedAbility == null)
-            SetInstructionsText("Select an ability which you would like to concoct.");
+            SetInstructionsText("Select an ability which you would like to concoct. You have a {AlchemyInventory.GetCraftingPotential(CraftingPotential.CorePower)} core power.");
         else if (selectedAbility != null)
         {
             SetInstructionsText($"{selectedAbility.DisplayAbilityInfo()} \n Confirm to concoct {selectedAbility.Name} for {Ability.GetCoreCraftingCost(selectedAbility)} core power.");
         }
-        SetInstructionsText($" You have a total of {AlchemyInventory.GetCraftingPotential(CraftingPotential.CorePower)} core power.", true);
+        SetInstructionsText($"You have {AlchemyInventory.GetCraftingPotential(CraftingPotential.CorePower)} core power.", true);
 
     }
 
