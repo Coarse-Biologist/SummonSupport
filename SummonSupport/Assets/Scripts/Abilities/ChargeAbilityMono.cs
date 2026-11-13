@@ -23,12 +23,13 @@ public class ChargeAbilityMono : MonoBehaviour
 
     public void Charge(LivingBeing casterStats, ChargeAbility assignedAbility)
     {
+        Debug.Log($"caster = {casterStats}. Assigned ability = {assignedAbility}");
         GameObject user = transform.parent.gameObject;
-        ToggleStuckInAbilityAnimation(user, true);
         chargeAbility = assignedAbility;
         abilityHandler = casterStats.abilityHandler;
-        abilityHandler.SetCharging(true);
         caster = casterStats;
+        abilityHandler.SetCharging(true);
+        ToggleStuckInAbilityAnimation(user, true);
 
         SetModHandler(casterStats);
         SetRunAnimation();
@@ -121,6 +122,7 @@ public class ChargeAbilityMono : MonoBehaviour
 
     private void ToggleStuckInAbilityAnimation(GameObject user, bool stuck)
     {
+        Debug.Log($"user = {user} caster = {caster}");
         if (caster.CharacterTag != CharacterTag.Player)
         {
             AIStateHandler stateHandler = user.GetComponent<AIStateHandler>();

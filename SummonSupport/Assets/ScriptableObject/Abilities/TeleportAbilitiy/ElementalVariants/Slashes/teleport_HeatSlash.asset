@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: teleport_HeatSlash
   m_EditorClassIdentifier: 
   <Name>k__BackingField: Infernal Port
+  <Description>k__BackingField: Teleports to an enemy and instantly slashes them
+    with an elemental melee ability with small range
   <Icon>k__BackingField: {fileID: 544104916224676396, guid: 1999786300aba2a4ea58c6b2b395516e,
     type: 3}
   <Cooldown>k__BackingField: 6
@@ -59,7 +61,6 @@ MonoBehaviour:
   <OnHitEffect>k__BackingField: {fileID: 1847413739128325886, guid: fdd6b57c8dce4ee4fb54dd00a49814ff,
     type: 3}
   <Sounds>k__BackingField: {fileID: 0}
-  <AlterParticleSystemGradient>k__BackingField: 0
   <ActivateOnUse>k__BackingField: {fileID: 0}
   <ActivateOnArrive>k__BackingField: {fileID: 11400000, guid: e65b83780f45fc649aa4032ffdecb241,
     type: 2}

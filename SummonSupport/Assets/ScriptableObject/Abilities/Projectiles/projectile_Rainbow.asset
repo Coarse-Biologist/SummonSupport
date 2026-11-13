@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: projectile_Rainbow
   m_EditorClassIdentifier: 
   <Name>k__BackingField: Rainbow Ball
+  <Description>k__BackingField: Ranged projectile ability
   <Icon>k__BackingField: {fileID: 6499692489935122731, guid: badfaf6775b237f458f28e356d130946,
     type: 3}
   <Cooldown>k__BackingField: 2

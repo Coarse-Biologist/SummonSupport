@@ -9,6 +9,8 @@ using UnityEngine;
 public abstract class Ability : ScriptableObject
 {
     [field: SerializeField] public string Name { get; protected set; }
+    [field: SerializeField] public string Description { get; protected set; }
+
     [field: SerializeField] public Sprite Icon { get; protected set; }
     [field: SerializeField, Range(0, 50)] public float Cooldown { get; protected set; }
     [field: SerializeField] public AttributeType CostType { get; protected set; }
@@ -29,18 +31,18 @@ public abstract class Ability : ScriptableObject
     {
         string abilityInfo = $"{Name}";
 
-        abilityInfo += $"\nAbility type : {GeneralFunctions.GetCleanEnumString(AbilityTypeTag)}";
+        abilityInfo += $"\n{Description}";
         abilityInfo += $"\nCost : {Cost} {GeneralFunctions.GetCleanEnumString(CostType)}";
         abilityInfo += $"\nCooldown : {Cooldown} seconds";
 
-        string elementTypes = "";
-        if (ElementTypes.Count() > 0)
+        string elementTypes = "\n";
+        if (ElementTypes.Count() > 0 && !ElementTypes.Contains(Element.None))
         {
             foreach (Element element in ElementTypes)
             {
                 elementTypes += $"{element}, ";
             }
-            abilityInfo += $"Element Types : {elementTypes}";
+            abilityInfo += $"\nElement Types : {elementTypes}";
         }
 
         if (PhysicalType != PhysicalType.None)
@@ -69,6 +71,7 @@ public abstract class Ability : ScriptableObject
         return ListUsableOn.Contains(CrewsRelationshipHandler.GetRelationshipType(caster, target));
     }
 
+
     public static bool HasElementalSynergy(Ability ability, LivingBeing potentialTarget)
     {
         foreach (Element element in ability.ElementTypes)
@@ -83,8 +86,8 @@ public abstract class Ability : ScriptableObject
     {
         if (ability == null) throw new System.Exception("You are trying to access the core cost of an ability which is null.");
         int modifier = 1; //#TODO find better solution
-        if (ability is BeamAbility beam) modifier += 10;
-        return ((int)ability.Cooldown + 1) * ((int)ability.Cost + 1) * (1 + modifier);
+        if (ability is BeamAbility beam) modifier += 3;
+        return ((int)ability.Cooldown + 1) * ((int)ability.Cost + 1) * (modifier);
     }
 
     public List<LivingBeing> GetTargetfromSphereCast(LivingBeing casterStats, Transform directionTransform, int desiredTargetNum, TeamType teamType)

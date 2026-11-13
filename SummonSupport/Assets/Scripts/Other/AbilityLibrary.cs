@@ -45,12 +45,18 @@ public static class AbilityLibrary
         if (library != null) StatusEffectsLibrary = library;
         else throw new System.Exception("No status effect library asset set by the asset manager.");
     }
-
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="element"></param>
+    /// <param name="number"></param>
+    /// <returns> One elemental ability or more if specified </returns>
     public static List<Ability> GetRandomAbilities(Element element, int number = 1)
     {
         //Debug.Log($"will be attempting to retrieve {number} abilities available for {element}");
-
         List<Ability> abilitiesList = new();
+        if (number <= 0) return abilitiesList;
+
         Ability randomAbility = null;
         int maxAttempts = 10;
         if (abilityLibrary != null)
@@ -89,21 +95,7 @@ public static class AbilityLibrary
             return null;
         }
     }
-    public static Ability GetElementalMeleeAbility(Element element, float affinityValue)
-    {
-        Ability meleeAbility = null;
-        foreach (MeleeCategories meleeCategory in abilityLibrary.MeleeEntries)
-        {
-            if (meleeCategory.Element == element)
-            {
-                meleeAbility = meleeCategory.Abilities[0];
-                break;
-            }
-        }
 
-        //Debug.Log($"Returning {meleeAbility.Name} in the get Elemental Melee ability function");
-        return meleeAbility;
-    }
     public static List<Ability> GetRandomAbilities(PhysicalType physical, int number = 1)
     {
         //Debug.Log($"will be attempting to retrieve {number} abilities available for {physical}");
@@ -146,6 +138,97 @@ public static class AbilityLibrary
             throw new System.Exception($"ability handler scriptable object is not placed in the Ability library.");
         }
     }
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="element"></param>
+    /// <returns>A single elemental melee ability</returns>
+    public static Ability GetElementalMeleeAbility(Element element)
+    {
+        Ability meleeAbility = null;
+        foreach (MeleeCategories meleeCategory in abilityLibrary.MeleeEntries)
+        {
+            if (meleeCategory.Element == element)
+            {
+                meleeAbility = meleeCategory.Abilities[0];
+                break;
+            }
+        }
+
+        Debug.Log($"Returning {meleeAbility.Name} in the get Elemental Melee ability function");
+        return meleeAbility;
+    }
+
+
+    public static void AddElementalAbilities(int level, LivingBeing livingBeing, Element element)
+    {
+        CreatureAbilityHandler abilityHandler = (CreatureAbilityHandler)livingBeing.abilityHandler;
+        Ability meleeAbility = GetElementalMeleeAbility(element);
+        abilityHandler.LearnAbility(meleeAbility);
+        abilityHandler.AddNextAbilitySlot(meleeAbility);
+
+        //Ability elementalAbility = SetupManager.Instance.ElementToAbilityLibrary_SO.GetAbilityOfElementType(element);
+        List<Ability> abilities = GetRandomAbilities(element, level - 1);
+        foreach (Ability ability in abilities)
+        {
+            if (abilityHandler.LearnAbility(ability))
+                abilityHandler.AddNextAbilitySlot(ability);
+        }
+
+    }
+    public static void AddPhysicalAbilities(int level, LivingBeing livingBeing, PhysicalType physical)
+    {
+        CreatureAbilityHandler abilityHandler = (CreatureAbilityHandler)livingBeing.abilityHandler;
+        abilityHandler.LearnAbility(abilityLibrary.defaultAttack);
+        abilityHandler.AddNextAbilitySlot(abilityLibrary.defaultAttack);
+
+        //Ability elementalAbility = SetupManager.Instance.ElementToAbilityLibrary_SO.GetAbilityOfElementType(element);
+        List<Ability> abilities = GetRandomAbilities(physical, level - 1);
+        foreach (Ability ability in abilities)
+        {
+            if (abilityHandler.LearnAbility(ability))
+                abilityHandler.AddNextAbilitySlot(ability);
+        }
+
+    }
 
 
 }
+
+
+
+//private List<Ability> GetAbilitiesByElement(LivingBeing livingBeing, int minionPower) //broken
+//{
+//    List<Ability> abilitiesToLearn = new();
+//    int abilitySlotsToAdd = (int)minionPower / ManaToAbilityRatio;
+//    Debug.Log($"ability slots to add: {abilitySlotsToAdd}. power used: {minionPower}");
+//
+//    CreatureAbilityHandler abilityHandler = livingBeing.gameObject.GetComponent<CreatureAbilityHandler>();
+//
+//    for (int i = abilitySlotsToAdd; i > 0; i--)
+//    {
+//        //abilityHandler.AddAbilitySlot();
+//    }
+//    int abilitiesAdded = 0;
+//    if (abilityHandler == null) throw new Exception($"Ability handler is null for {livingBeing.Name}");
+//    Element strongestElement = livingBeing.GetHighestAffinity(out float value);
+//    if (strongestElement != Element.None)
+//    {
+//        List<Ability> abilities = AbilityLibrary.abilityLibrary.GetElementalAbilitiesBelowLevel(minionPower, new() { strongestElement });
+//
+//        if (abilities != null)
+//        {
+//            foreach (Ability ability in abilities)
+//            {
+//                if (abilityHandler.SlottedAbilities.Count <= abilitiesAdded)
+//                {
+//                    Debug.Log($"Breaking because the number of ability slots is {abilityHandler.SlottedAbilities.Count} and the numbe ralready added was {abilitiesAdded}");
+//                    break;
+//                }
+//                abilitiesToLearn.Add(ability);
+//                abilitiesAdded++;
+//            }
+//        }
+//    }
+//    return abilitiesToLearn;
+//}

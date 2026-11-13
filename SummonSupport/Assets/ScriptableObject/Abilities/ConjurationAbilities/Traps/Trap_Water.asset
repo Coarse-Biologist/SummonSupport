@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Trap_Water
   m_EditorClassIdentifier: Assembly-CSharp::ConjureAbility
   <Name>k__BackingField: Water Trap
+  <Description>k__BackingField: Throws a trap which then remains to effect others
   <Icon>k__BackingField: {fileID: 0}
   <Cooldown>k__BackingField: 5
   <CostType>k__BackingField: 4
@@ -57,7 +58,7 @@ MonoBehaviour:
   <PhysicalType>k__BackingField: 0
   <OnHitEffect>k__BackingField: {fileID: 1847413739128325886, guid: ac4fc238eec66bf4ea51106078fde20d,
     type: 3}
-  <AlterParticleSystemGradient>k__BackingField: 0
+  <Sounds>k__BackingField: {fileID: 0}
   <ObjectToSpawn>k__BackingField: {fileID: 3790913944815698814, guid: 0b3e0904509322047a61e6551832fd35,
     type: 3}
   <SpawnOffset>k__BackingField: {x: 0, y: 0, z: 0}

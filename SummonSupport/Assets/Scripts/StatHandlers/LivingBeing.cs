@@ -154,7 +154,7 @@ public abstract class LivingBeing : MonoBehaviour
         {
             Affinities[element].Set(newAffinity);
         }
-        //Debug.Log($"Change affinity: current Affinity = {newAffinity}");
+        Debug.Log($"Change affinity: current Affinity = {newAffinity}");
 
     }
     public void SetAffinity(Element element, float amount)
@@ -246,6 +246,7 @@ public abstract class LivingBeing : MonoBehaviour
     public void ChangeHealthRegeneration(float Value)
     {
         HealthRegeneration = Math.Max(0, HealthRegeneration + Value);
+        TotalHealthRegeneration += Value;
     }
     public void ChangeHealthRegeneration_Limitless(float Value)
     {

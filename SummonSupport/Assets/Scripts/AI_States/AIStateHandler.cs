@@ -1,8 +1,5 @@
 using UnityEngine;
 using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
-using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine.AI;
 
 public class AIStateHandler : MonoBehaviour
@@ -73,6 +70,7 @@ public class AIStateHandler : MonoBehaviour
 
         livingBeing = GetComponent<LivingBeing>();
         movementScript = GetComponent<MovementScript>();
+        movementScript.SetMovementAttribute(MovementAttributes.MovementSpeed, navAgent.speed);
         minionStats = GetComponent<MinionStats>();
         //ccState = GetComponent<AI_CC_State>();
         abilityHandler = GetComponent<CreatureAbilityHandler>();
@@ -131,7 +129,14 @@ public class AIStateHandler : MonoBehaviour
     public void SetDead(bool dead)
     {
         Dead = dead;
-        navAgent.speed = 0;
+
+        if (dead)
+
+            navAgent.speed = 0;
+
+
+        else
+            navAgent.speed = movementScript.MovementSpeed;
     }
 
     public void SetStateMachineSpeed(int speed)
@@ -176,7 +181,7 @@ public class AIStateHandler : MonoBehaviour
                     {
                         SwitchToNextState(nextState);
                     }
-                    else Debug.Log("nextState state was null");
+                    else throw new System.Exception("nextState state was null");
                 }
                 else
                 {

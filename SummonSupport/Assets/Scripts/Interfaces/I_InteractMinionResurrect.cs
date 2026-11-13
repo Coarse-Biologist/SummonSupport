@@ -12,11 +12,11 @@ public class I_InteractMinionResurrect : MonoBehaviour, I_Interactable
     public void Interact(GameObject interactor)
     {
         if (!resurrecting)
-            if (interactor.TryGetComponent(out PlayerStats playerStats))
+            if (interactor.TryGetComponent(out I_Resurrector resurrector))
             {
                 SetResurrecting(true);
-                FloatingInfoHandler.Instance.DisplayIncrementalText(transform, "Resurrecting...", playerStats.ResurrectTime);
-                playerStats.ResurrectMinion(gameObject, this);
+                FloatingInfoHandler.Instance.DisplayIncrementalText(transform, "Resurrecting...", resurrector.ResurrectTime);
+                resurrector.ResurrectMinion(gameObject, this);
             }
     }
 

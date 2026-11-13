@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Explode
   m_EditorClassIdentifier: 
   <Name>k__BackingField: Explode
+  <Description>k__BackingField: Inflicts fire damage on a single ranged target
   <Icon>k__BackingField: {fileID: 0}
   <Cooldown>k__BackingField: 3
   <CostType>k__BackingField: 4
@@ -57,7 +58,7 @@ MonoBehaviour:
   <PhysicalType>k__BackingField: 0
   <OnHitEffect>k__BackingField: {fileID: 1847413739128325886, guid: fdd6b57c8dce4ee4fb54dd00a49814ff,
     type: 3}
-  <AlterParticleSystemGradient>k__BackingField: 0
+  <Sounds>k__BackingField: {fileID: 0}
   <SpawnEffectOnHit>k__BackingField: {fileID: 1847413739128325886, guid: 704913a3a10ed9a45bdca983af7ed99f,
     type: 3}
   <EffectOrientation>k__BackingField: 0

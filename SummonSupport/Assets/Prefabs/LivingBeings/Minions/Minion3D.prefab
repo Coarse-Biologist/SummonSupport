@@ -25,6 +25,7 @@ GameObject:
   - component: {fileID: 6733036572246354634}
   - component: {fileID: -521767270320588812}
   - component: {fileID: -1068025400344585520}
+  - component: {fileID: 1621131280296648166}
   m_Layer: 7
   m_Name: Minion3D
   m_TagString: Minion
@@ -75,8 +76,6 @@ MonoBehaviour:
   <TickRateRegenerationInSeconds>k__BackingField: 1
   <HealthRegeneration>k__BackingField: 1
   <PowerRegeneration>k__BackingField: 1
-  locSphere: {fileID: 2348392144360596245, guid: 0eadd3dda22abf8478968ace02e90721,
-    type: 3}
   <Cold>k__BackingField: 0
   <Water>k__BackingField: 0
   <Earth>k__BackingField: 0
@@ -97,7 +96,6 @@ MonoBehaviour:
   <Slashing>k__BackingField: 0
   <AffectedByAbilities>k__BackingField: []
   <XP_OnDeath>k__BackingField: 5
-  SE_Handler: {fileID: 0}
 --- !u!114 &6420015540202892481
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -111,9 +109,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CreatureAbilityHandler
   <abilitySpawn>k__BackingField: {fileID: 8925903879776759123}
-  statsHandler: {fileID: 0}
   <Abilities>k__BackingField:
   - {fileID: 11400000, guid: 5d20d6cc1fa7eb547ba5d0f9aefcc225, type: 2}
+  <SlottedAbilities>k__BackingField: []
 --- !u!114 &-1751600132297120680
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -341,6 +339,18 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+--- !u!114 &1621131280296648166
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 810306928598971056}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41bb13743c0f48d4b85f73542342d0f2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::I_Resurrector
 --- !u!1 &8925903879776759123
 GameObject:
   m_ObjectHideFlags: 0

@@ -9,11 +9,16 @@ using SummonSupportEvents;
 public class QuestHandler : MonoBehaviour
 {
     [field: SerializeField] public Quest_SO sceneStartingQuest;
+    [field: SerializeField] public List<Questline_Pair> Questline_Chain;
+
+    [field: SerializeField] public List<Quest_LocationGoal> QuestGoalLocDict;
+
     public static QuestHandler Instance;
     public static List<Quest_SO> CompletedQuests = new List<Quest_SO>();
-    public List<BoolAccomplishments> CompletedBoolQuests;
+    public static List<BoolAccomplishments> CompletedBoolQuests;
     public static List<Quest_SO> ActiveQuests = new List<Quest_SO>();
     public static Dictionary<RepeatableAccomplishments, int> QuestRepTracker = new Dictionary<RepeatableAccomplishments, int>()
+
     {
         {RepeatableAccomplishments.EnemiesDefeated, 0},
         {RepeatableAccomplishments.KnowledgeGained, 0},
@@ -68,7 +73,25 @@ public class QuestHandler : MonoBehaviour
     }
     public static bool HasActiveQuest(Quest_SO quest) => ActiveQuests.Contains(quest);
     public static bool HasCompletedQuest(Quest_SO quest) => CompletedQuests.Contains(quest);
+    public static bool HasActiveLocationQuest(out Transform goalTransform)
+    {
+        goalTransform = null;
+        foreach (Quest_SO q in ActiveQuests)
+        {
 
+            if (q.HasGoalLocation)
+            {
+                foreach (Quest_LocationGoal kvp in Instance.QuestGoalLocDict)
+                    if (kvp.quest == q)
+                        goalTransform = kvp.GoalLocation;
+                return true;
+            }
+            else return false;
+
+        }
+        return false;
+
+    }
 
     public bool CheckQuestCompletion(Quest_SO activeQuest)
     {
@@ -135,7 +158,7 @@ public class QuestHandler : MonoBehaviour
     }
     public void IncrementIntQuest(RepeatableAccomplishments intQuest, int value = 1)
     {
-        Debug.Log($"Increment func called for {intQuest}. change value  = {value}");
+        //Debug.Log($"Increment func called for {intQuest}. change value  = {value}");
 
 
         if (QuestRepTracker.TryGetValue(intQuest, out int reps))
@@ -162,6 +185,18 @@ public class QuestHandler : MonoBehaviour
             if (complete)
             {
                 EventDeclarer.QuestCompleted?.Invoke(activeQuest);
+                CheckForNextQuest(activeQuest);
+            }
+        }
+    }
+    private void CheckForNextQuest(Quest_SO completedQuest)
+    {
+        foreach (Questline_Pair pair in Questline_Chain)
+        {
+            if (pair.CompletedQuest == completedQuest)
+            {
+                EventDeclarer.QuestCompleted?.Invoke(pair.NextQuest);
+                break; //#TODO are you sure about this? Limits possibility of quest branching
             }
         }
     }
@@ -184,7 +219,7 @@ public class QuestHandler : MonoBehaviour
         }
         return stats;
     }
-    public string GetQuestInfo(Quest_SO quest)
+    public static string GetQuestInfo(Quest_SO quest)
     {
         string info = $"{quest.QuestName}\n";
         info += $"{quest.PresentationString}\n";
@@ -198,6 +233,7 @@ public class QuestHandler : MonoBehaviour
         }
         return info;
     }
+
 
 
 }

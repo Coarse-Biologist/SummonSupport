@@ -1,9 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using NUnit.Framework;
-using NUnit.Framework.Constraints;
-using UnityEditor;
 using UnityEngine;
 
 public static class ColorChanger
@@ -71,7 +68,7 @@ public static class ColorChanger
     public static void ChangeParticleSystemColor(LivingBeing livingBeing, ParticleSystem particleSystem)
     {
         Element strongestElement = livingBeing.GetHighestAffinity(out float value);
-        if (livingBeing.Affinities[strongestElement].Get() > 0)
+        if (livingBeing.GetAffinity(strongestElement) > 0)
         {
             var colorGradient = colorGradientLibrary.GetGradientByElement(strongestElement);
             SetparticleSystemGradient(particleSystem, colorGradient);
@@ -155,7 +152,7 @@ public static class ColorChanger
             for (int i = 0; i < mats.Length; i++)
             {
                 int theRoll = UnityEngine.Random.Range(0, 200);
-                Debug.Log($"{affinityDisplayStrength} = creature affinity. roll to beat = {theRoll}");
+                //Debug.Log($"{affinityDisplayStrength} = creature affinity. roll to beat = {theRoll}");
                 if (UnityEngine.Random.Range(0, 200) <= affinityDisplayStrength)
                 {
                     Material newMaterial = new(GetGlowStrengthByElement(element));
@@ -167,7 +164,7 @@ public static class ColorChanger
             meshRenderer.materials = mats;
         }
         else
-            Debug.Log($"No renderer found for {livingBeing.Name}");
+            throw new Exception($"No renderer found for {livingBeing.Name}");
 
     }
     public static void ChangeElementalIndicatorByAffinity(LivingBeing livingBeing)

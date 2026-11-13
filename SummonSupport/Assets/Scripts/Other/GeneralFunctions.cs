@@ -1,4 +1,8 @@
+using System;
+using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
+
 
 public static class GeneralFunctions
 {
@@ -8,6 +12,12 @@ public static class GeneralFunctions
     }
     public static Element GetRandomElement()
     {
-        return (Element)Random.Range(1, System.Enum.GetValues(typeof(Element)).Length); // not 0, which is element.None
+        return (Element)UnityEngine.Random.Range(1, System.Enum.GetValues(typeof(Element)).Length); // not 0, which is element.None
     }
+
+    public static List<Enum> GetIteratableEnum(Enum anEnum)
+    {
+        return Enum.GetValues(anEnum.GetType()).Cast<Enum>().ToList();
+    }
+
 }

@@ -54,6 +54,7 @@ public class MinionStats : LivingBeing
     IEnumerator LateStart()
     {
         yield return null; // wartet 1 Frame – nach allen Start()-Methoden
+        EventDeclarer.newMinionAdded?.Invoke(this);
         PlayerUIHandler.Instance.AddMinionHP(this);
         ColorChanger.ChangeAllMatsByAffinity(this);
 
@@ -80,9 +81,10 @@ public class MinionStats : LivingBeing
         if (dead)
         {
             gameObject.AddComponent<I_InteractMinionResurrect>();
-            if (TryGetComponent(out Collider collider))
+            if (TryGetComponent(out BoxCollider collider))
             {
                 collider.isTrigger = true;
+                collider.size *= 3f;
             }
             if (gameObject.TryGetComponent(out AIStateHandler stateHandler))
             {
@@ -93,13 +95,16 @@ public class MinionStats : LivingBeing
         {
             if (gameObject.TryGetComponent(out I_InteractMinionResurrect resurrectScript))
                 Destroy(resurrectScript);
-            if (TryGetComponent(out Collider collider))
+            if (TryGetComponent(out BoxCollider collider))
             {
                 collider.isTrigger = false;
+                collider.size /= 3f;
+
             }
             if (gameObject.TryGetComponent(out AIStateHandler stateHandler))
             {
                 stateHandler.SetDead(false);
+
                 //Debug.Log("Setting state handler death to false");
                 //stateHandler.StartCoroutine(stateHandler.RunStateMachine());
             }

@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: teleport_FungiSlash
   m_EditorClassIdentifier: 
   <Name>k__BackingField: Spore Portal
+  <Description>k__BackingField: Teleports to an enemy and instantly slashes them
+    with an elemental melee ability with small range
   <Icon>k__BackingField: {fileID: 544104916224676396, guid: 1999786300aba2a4ea58c6b2b395516e,
     type: 3}
   <Cooldown>k__BackingField: 6
@@ -59,7 +61,6 @@ MonoBehaviour:
   <OnHitEffect>k__BackingField: {fileID: 8554696951228805582, guid: 7bfcb6e9a8dfc5544ae6f2975f7ebf45,
     type: 3}
   <Sounds>k__BackingField: {fileID: 0}
-  <AlterParticleSystemGradient>k__BackingField: 0
   <ActivateOnUse>k__BackingField: {fileID: 0}
   <ActivateOnArrive>k__BackingField: {fileID: 11400000, guid: 57b2100f6ea979d48a01035ec42f5cf4,
     type: 2}

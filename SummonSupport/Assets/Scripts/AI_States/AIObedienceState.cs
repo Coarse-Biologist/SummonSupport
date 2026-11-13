@@ -84,7 +84,7 @@ public class AIObedienceState : AIState
         if (currentCommand == MinionCommands.FocusTarget) commandLoc = commandTarget.transform.position;
         if (direction.magnitude > stateHandler.navAgent.stoppingDistance)
         {
-            Debug.Log($"traveling to commanded loc {commandLoc}. distance to target = {direction.sqrMagnitude}");
+            //Debug.Log($"traveling to commanded loc {commandLoc}. distance to target = {direction.sqrMagnitude}");
             navMesh.SetDestination(commandLoc);
             anim.ChangeAnimation("Run", .2f);
 
@@ -94,7 +94,7 @@ public class AIObedienceState : AIState
         {
             anim.ChangeAnimation("Idle", .2f);
 
-            Debug.Log("no longer setting destination to the commanded loc because sufficiently close");
+            Debug.Log($"no longer setting destination to the commanded loc because sufficiently close {direction.magnitude}");
             navMesh.ResetPath();
             minionStats.SetCommand(MinionCommands.None);
             if (currentCommand == MinionCommands.GoTo) stateHandler.SetTarget(null); // is this good?

@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: teleport_PoisonSlash
   m_EditorClassIdentifier: 
   <Name>k__BackingField: Poison Assassin
+  <Description>k__BackingField: Teleports to an enemy and instantly slashes them
+    with an elemental melee ability with small range
   <Icon>k__BackingField: {fileID: 544104916224676396, guid: 1999786300aba2a4ea58c6b2b395516e,
     type: 3}
   <Cooldown>k__BackingField: 6
@@ -59,7 +61,6 @@ MonoBehaviour:
   <OnHitEffect>k__BackingField: {fileID: 1847413739128325886, guid: 1f5b696009be5754e91bc3e1b94af7b7,
     type: 3}
   <Sounds>k__BackingField: {fileID: 0}
-  <AlterParticleSystemGradient>k__BackingField: 0
   <ActivateOnUse>k__BackingField: {fileID: 0}
   <ActivateOnArrive>k__BackingField: {fileID: 11400000, guid: b04ed68ca7ecc4c44837875d49396de4,
     type: 2}

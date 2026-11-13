@@ -9,6 +9,10 @@ using Quest;
 public class PlayerUIHandler : MonoBehaviour
 {
     public static PlayerUIHandler Instance { get; private set; }
+
+    [SerializeField] public GameObject DirectionArrow = null;
+    [field: SerializeField] public bool ShowDirection { private set; get; } = false;
+
     private UIDocument uiDoc;
     private VisualTreeAsset UIPrefabAssets;
 
@@ -22,13 +26,15 @@ public class PlayerUIHandler : MonoBehaviour
     private ProgressBar playerPowerBar;
     private ProgressBar playerXP_Bar;
     private VisualElement questInfoContainer;
+    private int activeQuestIndex = 0;
     private Label questInfoLabel;
+
+    private List<Quest_SO> ActiveQuests = new();
 
 
 
     [SerializeField] public List<GameObject> minions;// = new List<GameObject>();
     private Dictionary<LivingBeing, ProgressBar> HPDict = new Dictionary<LivingBeing, ProgressBar>();
-    private AlchemyHandler alchemyHandler;
     void Awake()
     {
         if (Instance == null)
@@ -39,14 +45,17 @@ public class PlayerUIHandler : MonoBehaviour
 
     void OnEnable()
     {
+        EventDeclarer.renameMinion?.AddListener(SetMinionName);
         EventDeclarer.newMinionAdded?.AddListener(AddMinionHP);
         EventDeclarer.minionRecycled?.AddListener(RemoveMinionHP);
         EventDeclarer.minionDied?.AddListener(RemoveMinionHP);
-
+        EventDeclarer.QuestStarted?.AddListener(AddActiveQuest);
+        EventDeclarer.QuestCompleted?.AddListener(RemoveActiveQuest);
     }
 
     void OnDisable()
     {
+        EventDeclarer.renameMinion?.RemoveListener(SetMinionName);
         EventDeclarer.newMinionAdded?.RemoveListener(AddMinionHP);
         EventDeclarer.minionRecycled?.RemoveListener(RemoveMinionHP);
         EventDeclarer.minionDied?.RemoveListener(RemoveMinionHP);
@@ -60,6 +69,7 @@ public class PlayerUIHandler : MonoBehaviour
         UpdateResourceBar(playerStats, AttributeType.CurrentHitpoints);
         UpdateResourceBar(playerStats, AttributeType.CurrentPower);
         SetPlayerXP(playerStats.CurrentXP);
+        InvokeRepeating("QuestLocCheckLoop", 10, 5f);
 
     }
 
@@ -117,6 +127,12 @@ public class PlayerUIHandler : MonoBehaviour
             minionHP.RegisterCallback<ClickEvent>(evt => OnMinionSelect(minionHP));
         }
         //else Debug.Log("The minion HP progress bar is already present ");
+    }
+    private void SetMinionName(LivingBeing minionStats)
+    {
+        if (HPDict.TryGetValue(minionStats, out ProgressBar minionHP))
+            minionHP.title = $"{minionStats.Name} HP: {minionStats.GetAttribute(AttributeType.CurrentHitpoints)}";
+
     }
 
 
@@ -220,14 +236,48 @@ public class PlayerUIHandler : MonoBehaviour
     {
         if (questInfoLabel != null)
         {
-            questInfoLabel.text = $"{QuestHandler.Instance.GetQuestInfo(quest)}";
+            questInfoLabel.text = $"{QuestHandler.GetQuestInfo(quest)}";
         }
     }
+    private void AddActiveQuest(Quest_SO quest) => ActiveQuests.Add(quest);
+    private void RemoveActiveQuest(Quest_SO quest) => ActiveQuests.Remove(quest);
+
+    public void DisplayNextActiveQuest()
+    {
+        activeQuestIndex++;
+        if (activeQuestIndex > ActiveQuests.Count) activeQuestIndex = 0;
+        ShowQuestInfo(ActiveQuests[activeQuestIndex]);
+    }
+
     public void ShowCompletedQuestInfo(Quest_SO quest)
     {
         if (questInfoLabel != null)
         {
             questInfoLabel.text = $"{quest.QuestName} Completed!\n {quest.CompletionString}";
+        }
+    }
+
+    public void QuestLocCheckLoop()
+    {
+        if (QuestHandler.HasActiveLocationQuest(out Transform goalTransform))
+            ShowQuestArrow(goalTransform);
+    }
+    public void ToggleShowQuestDirection(bool setActive)
+    {
+        ShowDirection = setActive;
+    }
+    public void ShowQuestArrow(Transform goalTransform)
+    {
+        if (!ShowDirection) return;
+        GameObject arrow = null;
+        if (DirectionArrow != null)
+        {
+            arrow = Instantiate(DirectionArrow, new Vector3(transform.position.x, transform.position.y + 1.4f, transform.position.z), Quaternion.identity, transform);
+            if (arrow.TryGetComponent(out RotateToFace script))
+            {
+                script.Initialize(goalTransform);
+            }
+            else Destroy(arrow);
         }
     }
 }

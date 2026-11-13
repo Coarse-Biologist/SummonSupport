@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Trap_Virus
   m_EditorClassIdentifier: Assembly-CSharp::ConjureAbility
   <Name>k__BackingField: Viral Trap
+  <Description>k__BackingField: Throws a trap which then remains to effect others
   <Icon>k__BackingField: {fileID: 0}
   <Cooldown>k__BackingField: 5
   <CostType>k__BackingField: 4
@@ -57,7 +58,7 @@ MonoBehaviour:
   <PhysicalType>k__BackingField: 0
   <OnHitEffect>k__BackingField: {fileID: 5705030685624713920, guid: e378c4ebb8c3f9d43b451efa5c71483d,
     type: 3}
-  <AlterParticleSystemGradient>k__BackingField: 0
+  <Sounds>k__BackingField: {fileID: 0}
   <ObjectToSpawn>k__BackingField: {fileID: 8446081768560646030, guid: 15c636ea33b9fde40a326d8e5595da61,
     type: 3}
   <SpawnOffset>k__BackingField: {x: 0, y: 0, z: 0}

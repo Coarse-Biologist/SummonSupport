@@ -10,6 +10,7 @@ using System.Text.RegularExpressions;
 using SummonSupportEvents;
 using static StatusEffectsLibrary;
 using Unity.Entities.UniversalDelegates;
+using SS_Structs;
 //using UnityEditorInternal.Profiling.Memory.Experimental.FileFormat;
 
 
@@ -36,10 +37,11 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     private VisualElement centerPanel;
     private VisualElement topRightPanel;
     private VisualElement bottomRightPanel;
-    private VisualElement bottomLeftPanel;
+    private ScrollView bottomLeftPanel;
     #region Ability crafting / slotting
     private Ability selectedAbility;
     private Ability selectedMinionAbility;
+    private DropdownField dropdownField;
 
     private List<string> SlotNames = new List<string>() { "1", "2", "3", "Q", "E", "F" };
     private int abilitySlot;
@@ -47,7 +49,9 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
 
     #endregion
 
-    private Label instructions;
+    //private Label instructions;
+    private Label moreInfoContainer;
+
     private AlchemyHandler alchemyHandler;
 
     #endregion
@@ -62,8 +66,8 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
 
     //private Dictionary<AlchemyLoot, int> selectedIngredients = new();
     private List<Element> selectedElements = new List<Element>();
-    private LivingBeing minionToUpgrade;
-    private LivingBeing minionToRecycle;
+    private MinionStats minionToUpgrade;
+    private MinionStats minionToRecycle;
 
     #region ability modding
     private AbilityModHandler ModHandler;
@@ -111,16 +115,18 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     {
         ui = UI_DocHandler.Instance.ui;
         UIPrefabAssets = UI_DocHandler.Instance.UIPrefabAssets;
+
         root = ui.rootVisualElement;
         interactWindow = root.Q<VisualElement>("Interact");
         craftingUI = root.Q<VisualElement>("CraftingUI");
         centerPanel = craftingUI.Q<VisualElement>("CenterPanel");
         topRightPanel = craftingUI.Q<VisualElement>("TopRightPanel");
-        bottomLeftPanel = craftingUI.Q<VisualElement>("BottomLeftPanel");
+        bottomLeftPanel = craftingUI.Q<ScrollView>("BottomLeftPanel");
         //craftAbilityButton = mainCraftingOptions.Q<VisualElement>("ConcoctButton");
 
-        instructions = craftingUI.Q<Label>("Instructions");
+        //instructions = craftingUI.Q<Label>("Instructions");
         bottomRightPanel = craftingUI.Q<VisualElement>("BottomRightPanel");
+        moreInfoContainer = bottomRightPanel.Q<Label>("CraftingResults");
         interactWindow.style.display = DisplayStyle.None;
         craftingUI.style.display = DisplayStyle.None;
 
@@ -358,15 +364,15 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     #region Show Info in instructions panel
     private void ShowUpgradeInfo()
     {
-        instructions.text = "Which Minion would you like to upgrade?";
-        string ingredientInfo = "Allocated Crating Potential: ";
+        SetInstructionsText("Which Minion would you like to upgrade?");
+        string ingredientInfo = "\nAllocated Crafting Potential: ";
 
         foreach (KeyValuePair<CraftingPotential, int> kvp in selectedCraftingPotential)
         {
             if (kvp.Value > 0)
-                ingredientInfo += $"{kvp.Key}: {kvp.Value}. ";
+                ingredientInfo += $"\n{kvp.Key}: {kvp.Value}. ";
         }
-        instructions.text += ingredientInfo;
+        SetInstructionsText(ingredientInfo, true);
 
     }
 
@@ -374,8 +380,8 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     private void ShowCraftingInfo()
     {
         string craftingInfo = "";
-        instructions.text = "Combine Cores, Ether and Body Parts to make minons of selected Elemental Affinity.";
-        if (!CheckUsingCoresandOrgans()) instructions.text += $"\nYou must use cores and organs in order to craft a minion.";
+        SetInstructionsText("Combine Cores, Ether and Body Parts to make minons of selected Elemental Affinity.");
+        if (!CheckUsingCoresandOrgans()) SetInstructionsText($"\nYou must use cores and organs in order to craft a minion.", true);
 
         craftingInfo += "\nSelected Ingredients: ";
 
@@ -384,7 +390,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
             if (kvp.Value > 0)
                 craftingInfo += $"{AlchemyInventory.GetCraftingPotentialString()}: {kvp.Value}. ";
         }
-        instructions.text += craftingInfo;
+        SetInstructionsText(craftingInfo, true);
 
 
     }
@@ -405,9 +411,16 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
         clearButton.RegisterCallback<ClickEvent>(e => ClearCraftingSelection());
         clearButton.RegisterCallback<ClickEvent>(e => HandleUpgradeDisplay());
     }
-    private void HandleUpgradeMinion(LivingBeing minionToUpgrade)
+    private void HandleUpgradeMinion(MinionStats minionToUpgrade)
     {
         if (minionToUpgrade == null) return;
+        int maxEtherUse = 0;
+        foreach (Element element in selectedElements)
+        {
+            maxEtherUse += 200 - minionToUpgrade.GetAffinity(element);
+        }
+        selectedCraftingPotential[CraftingPotential.EtherDensity] = Math.Min(maxEtherUse, selectedCraftingPotential[CraftingPotential.EtherDensity]);
+
         alchemyHandler.UpgradeMinion(minionToUpgrade, selectedCraftingPotential, selectedElements);
         AlchemyInventory.ExpendCraftingPotential(selectedCraftingPotential);
         ClearCraftingSelection();
@@ -415,16 +428,16 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     }
     private void ShowUpgradableMinions()
     {
-        foreach (LivingBeing minion in alchemyHandler.activeMinions)
+        foreach (MinionStats minion in alchemyHandler.activeMinions)
         {
-            Button minionButton = AddButtonToPanel($"Upgrade {minion.Name}", bottomLeftPanel, 45, 5);
+            Button minionButton = AddButtonToPanel($"Upgrade {minion.Name}", bottomLeftPanel, 40, 5);
             minionButton.RegisterCallback<ClickEvent>(e => SetMinionToUpgrade(minion));
         }
     }
-    private void SetMinionToUpgrade(LivingBeing minion)
+    private void SetMinionToUpgrade(MinionStats minion)
     {
         minionToUpgrade = minion;
-        instructions.text = $"Select ingredients and element with which to upgrade {minion.Name}.";
+        SetInstructionsText($"Select ingredients and element with which to upgrade {minion.Name}.");
         SpawnCraftingPotentialButtons();
         ShowElementToggles(bottomRightPanel);
     }
@@ -454,7 +467,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
         foreach (Ability ability in playerAbilityHandler.Instance.Abilities)
         {
             ///Ability potentiallySelectedAbility = ability;
-            Button button = AddButtonToPanel($"{ability.Name}", bottomLeftPanel, 40, 5);
+            Button button = AddButtonToPanel($"{ability.Name}", bottomLeftPanel, 30, 5);
             button.RegisterCallback<ClickEvent>(e => SetSelectedAbility(ability));
             button.RegisterCallback<ClickEvent>(e => DisplayAbilityModOptions(ability));
         }
@@ -464,31 +477,38 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
                 foreach (Ability ability in creatureAbilityHandler.Abilities)
                 {
                     Ability potentiallySelectedAbility = ability;
-                    Button button = AddButtonToPanel($"{ability.Name}", bottomLeftPanel, 20, 5);
+                    Button button = AddButtonToPanel($"{ability.Name}", bottomLeftPanel, 30, 5);
                     button.RegisterCallback<ClickEvent>(e => SetSelectedAbility(potentiallySelectedAbility));
                     button.RegisterCallback<ClickEvent>(e => DisplayAbilityModOptions(potentiallySelectedAbility));
+
                 }
         }
     }
     private void DisplayAbilityModOptions(Ability ability)
     {
         if (selectedAbility == null) return;
-        ClearPanel(bottomRightPanel);
+        ClearPanel(bottomLeftPanel);
         SetInstructionsText($"Select an attribute for the ability which you would like to upgrade.");
+        if (selectedAbility != null && selectedModType != AbilityModTypes.None)
+            SetInstructionsText($"Confirm to add a mod ({GeneralFunctions.GetCleanEnumString(selectedModType)}) {selectedAbility.Name}");
+
         foreach (AbilityModTypes modableAttribute in ModHandler.GetModableAttributes(ability))
         {
-            Button button = AddButtonToPanel(GeneralFunctions.GetCleanEnumString(modableAttribute), bottomRightPanel, 40, 10);
+            Button button = AddButtonToPanel(GeneralFunctions.GetCleanEnumString(modableAttribute), bottomLeftPanel, 30, 10);
             button.RegisterCallback<ClickEvent>(e => SetSelectedModAttribute(modableAttribute));
+            button.RegisterCallback<ClickEvent>(e => SetInstructionsText($"Would you like to improve the {selectedModType} to {selectedAbility}?"));
+
         }
-        Button statusEffectButton = AddButtonToPanel(GeneralFunctions.GetCleanEnumString(AbilityModTypes.StatusEffect), bottomRightPanel, 40, 10);
+        Button statusEffectButton = AddButtonToPanel(GeneralFunctions.GetCleanEnumString(AbilityModTypes.StatusEffect), bottomLeftPanel, 30, 10);
         statusEffectButton.RegisterCallback<ClickEvent>(e => ShowStatusEffectOptionScreen());
 
     }
     private void ShowStatusEffectOptionScreen()
     {
-        ClearPanel(bottomRightPanel);
-        StatusEffectType releventStatusEffect = StatusEffectsLibrary.ElementToEffectDict[selectedAbility.ElementTypes[0]];
-        Button button = AddButtonToPanel(GeneralFunctions.GetCleanEnumString(releventStatusEffect), bottomRightPanel, 40, 10);
+        ClearPanel(bottomLeftPanel);
+        StatusEffectType releventStatusEffect = StatusEffectsLibrary.GetStatusEffect(selectedAbility); //#TODO and what if the ability has no element?
+
+        Button button = AddButtonToPanel(GeneralFunctions.GetCleanEnumString(releventStatusEffect), bottomLeftPanel, 30, 10);
         button.RegisterCallback<ClickEvent>(e => SetSelectedModAttribute(AbilityModTypes.StatusEffect, releventStatusEffect));
 
     }
@@ -561,7 +581,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
         ResetVars();
         if (AlchemyHandler.Instance.activeMinions.Count() == PlayerStats.Instance.TotalControlllableMinions)
         {
-            instructions.text = "You already have your maximum number of minions. Upgrade your current minions, recycle and replace them, or acquire more minion slots.";
+            SetInstructionsText("You already have your maximum number of minions. Upgrade your current minions, recycle and replace them, or acquire more minion slots.");
         }
         else
         {
@@ -606,7 +626,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
         string craftinPotentialInfo = "Currently selected crafting potential:";
         foreach (KeyValuePair<CraftingPotential, int> kvp in selectedCraftingPotential)
         {
-            craftinPotentialInfo += $"{GeneralFunctions.GetCleanEnumString(kvp.Key)} : {kvp.Value}\n";
+            craftinPotentialInfo += $"\n{GeneralFunctions.GetCleanEnumString(kvp.Key)} : {kvp.Value}";
         }
 
         SetInstructionsText(craftinPotentialInfo);
@@ -637,11 +657,12 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
         {
             elementsGenerated = true;
             List<Element> elementsList = Enum.GetValues(typeof(Element)).Cast<Element>().ToList();
+            TemplateContainer prefabContainer = UIPrefabAssets.Instantiate();
+
             foreach (Element element in elementsList)
             {
                 if (AlchemyInventory.GetElementalKnowledge(element) >= 50)
                 {
-                    TemplateContainer prefabContainer = UIPrefabAssets.Instantiate();
                     Toggle elementToggle = prefabContainer.Q<Toggle>("TogglePrefab");
                     //elementToggle.AddToClassList("ElementToggle");
                     elementToggle.text = element.ToString();
@@ -680,7 +701,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
         ClearAllPanels();
         ResetVars();
 
-        instructions.text = "Which Minion would you like to recycle for components?";
+        SetInstructionsText("Which Minion would you like to recycle for components?");
         ShowRecyclableMinions();
     }
     private void ShowRecyclableMinions()
@@ -690,7 +711,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
         Button clearButton = AddButtonToPanel("Clear Selection", topRightPanel, 50, 5);
         confirmButton.RegisterCallback<ClickEvent>(e => AlchemyHandler.HandleMinionRecycling(minionToRecycle));
         clearButton.RegisterCallback<ClickEvent>(e => SetMinionToRecycle(null));
-        foreach (LivingBeing minion in alchemyHandler.activeMinions)
+        foreach (MinionStats minion in alchemyHandler.activeMinions)
         {
             Debug.Log("Minion should be shown in alchemy inventory panel");
             Button minionButton = AddButtonToPanel($"Recycle {minion.Name}", bottomLeftPanel, 45, 5);
@@ -698,7 +719,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
         }
     }
 
-    private void SetMinionToRecycle(LivingBeing minion)
+    private void SetMinionToRecycle(MinionStats minion)
     {
         minionToRecycle = minion;
     }
@@ -745,7 +766,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
                 }
             }
         }
-        else SetInstructionsText($"You do not have sufficient core resources to concoct {selectedAbility.name}.");
+        else SetInstructionsText($"You do not have sufficient core resources to concoct {selectedAbility.Name}.");
 
 
     }
@@ -779,9 +800,18 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     }
     private void SpawnCraftablePlayerAbilities()
     {
-        foreach (Ability ability in AbilityLibrary.abilityLibrary.GetElementalAbilitiesBelowLevel(LevelUpHandler.CraftingPowerScalar, PlayerStats.Instance.GetHighAffinities()))
+        TemplateContainer prefabContainer = UIPrefabAssets.Instantiate();
+        foreach (Ability a in SetupManager.Instance.AllHealAbilities)
         {
-            Button abilityButton = AddButtonToPanel($"{ability.Name}", bottomLeftPanel, 70, 5);
+            Button abilityButton = AddButtonToPanel($"{a.Name}", bottomLeftPanel, 10, 5);
+            //Debug.Log("made it this far2");
+
+            abilityButton.RegisterCallback<ClickEvent>(e => SetSelectedAbility(a));
+            abilityButton.RegisterCallback<ClickEvent>(e => ShowAbilityCraftingInfo());
+        }
+        foreach (Ability ability in AbilityLibrary.abilityLibrary.GetElementalAbilitiesBelowLevel(LevelUpHandler.CraftingPowerScalar, AlchemyInventory.GetHighKnowledges()))
+        {
+            Button abilityButton = AddButtonToPanel($"{ability.Name}", bottomLeftPanel, 10, 5);
             //Debug.Log("made it this far2");
 
             abilityButton.RegisterCallback<ClickEvent>(e => SetSelectedAbility(ability));
@@ -806,12 +836,12 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     {
 
         if (selectedAbility == null)
-            instructions.text = "Select an ability which you would like to concoct.";
+            SetInstructionsText("Select an ability which you would like to concoct. You have a {AlchemyInventory.GetCraftingPotential(CraftingPotential.CorePower)} core power.");
         else if (selectedAbility != null)
         {
-            instructions.text = $"{selectedAbility.DisplayAbilityInfo()} \n Confirm to concoct {selectedAbility.Name} for {Ability.GetCoreCraftingCost(selectedAbility)} core power.";
+            SetInstructionsText($"{selectedAbility.DisplayAbilityInfo()} \n Confirm to concoct {selectedAbility.Name} for {Ability.GetCoreCraftingCost(selectedAbility)} core power.");
         }
-        instructions.text += $" You have a total of {AlchemyInventory.GetCraftingPotential(CraftingPotential.CorePower)} core power.";
+        SetInstructionsText($"You have {AlchemyInventory.GetCraftingPotential(CraftingPotential.CorePower)} core power.", true);
 
     }
 
@@ -877,6 +907,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     }
     private void HandleAbilityandSlotSelected(int abilitySlot, Ability selectedAbility, LivingBeing livingBeing)
     {
+        if (selectedAbility == null) return;
         if (livingBeing == PlayerStats.Instance)
         {
             if (selectedAbility is DashAbility) PlayerAbilityHandler.SetDashAbility((DashAbility)selectedAbility);
@@ -887,14 +918,23 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     }
     private void SpawnAbilitySlotButtons(LivingBeing livingBeing)
     {
-        int maxSlots = livingBeing.abilityHandler.SlottedAbilities.Count;
-        if (livingBeing.CharacterTag == CharacterTag.Player) maxSlots = 6;
-        for (int i = 0; i < maxSlots; i++)
+        int maxSlots = 0;
+        if (livingBeing.CharacterTag == CharacterTag.Player)
         {
-            int slotNum = i;
-            Button slotButton = AddButtonToPanel($"Slot: {SlotNames[i]}", bottomLeftPanel, 20, 5);
-            slotButton.RegisterCallback<ClickEvent>(e => SetSelectedSlot(slotNum));
+            maxSlots = 6;
+            for (int i = 0; i < maxSlots; i++)
+            {
+                int slotNum = i;
+                Button slotButton = AddButtonToPanel($"Slot: {SlotNames[i]}", bottomRightPanel, 20, 5);
+                slotButton.RegisterCallback<ClickEvent>(e => SetSelectedSlot(slotNum));
 
+            }
+        }
+        else foreach (SlottedAbilities slottedAbilities in livingBeing.abilityHandler.SlottedAbilities)
+        {
+            int slotNum = slottedAbilities.slot;
+            Button slotButton = AddButtonToPanel($"Slot: {SlotNames[slotNum]}", bottomLeftPanel, 20, 5);
+            slotButton.RegisterCallback<ClickEvent>(e => SetSelectedSlot(slotNum));
         }
     }
     private void SpawnKnownAbilityButtons()
@@ -916,9 +956,9 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     }
     private void SetAbilitySlottingInstructions(Ability ability)
     {
-        if (ability is DashAbility) instructions.text = $"Confirm if you would like {ability.Name} to be used upon dashing.";
+        if (ability is DashAbility) SetInstructionsText($"Confirm if you would like {ability.Name} to be used upon dashing.");
 
-        else instructions.text = $"Select the slot in which you would like to store the ability {ability.Name}.";
+        else SetInstructionsText($"Select the slot in which you would like to store the ability {ability.Name}.");
     }
     private void SetSelectedSlot(int slotIndex)
     {
@@ -928,7 +968,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     #endregion
 
     #region General UI functions
-    public Button AddButtonToPanel(string buttonText, VisualElement panel, int width, int height)
+    public Button AddButtonToPanel(string buttonText, VisualElement panel, float width, float height)
     {
         TemplateContainer prefabContainer = UIPrefabAssets.Instantiate();
         Button button = prefabContainer.Q<Button>("ButtonPrefab");
@@ -936,11 +976,11 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
 
         panel.Add(button);
         SpawnedButtons.Add(button);
-
-        SetButtonSize(button, width, height);
+        int calculatedWidth = Math.Min(buttonText.Length * (int)width, 50);
+        SetButtonSize(button, calculatedWidth, height);
         return button;
     }
-    private void SetButtonSize(Button button, int width, int height)
+    private void SetButtonSize(Button button, float width, float height)
     {
         button.style.width = Length.Percent(width);
         button.style.height = Length.Percent(height);
@@ -951,14 +991,12 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     private void ResetVars()
     {
         SetSelectedAbility(null);
+        elementsGenerated = false;
         selectedElements.Clear();
         selectedModType = AbilityModTypes.None;
         selectedCraftingPotential[CraftingPotential.OrganMass] = 0;
         selectedCraftingPotential[CraftingPotential.CorePower] = 0;
         selectedCraftingPotential[CraftingPotential.EtherDensity] = 0;
-
-
-
     }
 
 
@@ -968,7 +1006,12 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
         if (andTopLeft) centerPanel.Clear();
         topRightPanel.Clear();
         bottomLeftPanel.Clear();
-        bottomRightPanel.Clear();
+        foreach (var child in bottomRightPanel.Children().ToList())
+        {
+            if (child is not Label)
+                child.RemoveFromHierarchy();
+        }
+
     }
 
     private void ShowBackground(bool show = false)
@@ -979,9 +1022,13 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
         }
 
     }
-    private void SetInstructionsText(string words)
+    private void SetInstructionsText(string words, bool add = false)
     {
-        instructions.text = words;
+        moreInfoContainer.style.display = DisplayStyle.Flex;
+
+        if (add) moreInfoContainer.text += words;
+        else
+            moreInfoContainer.text = words;
     }
 
 

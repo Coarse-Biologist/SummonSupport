@@ -92,7 +92,7 @@ public static class CombatStatHandler
         {
             foreach (StatusEffects status in currentStatusEffects)
             {
-                //UnityEngine.Debug.Log("gimmi stack trace du Pilzchen :)");
+                UnityEngine.Debug.Log("gimmi stack trace du Pilzchen :)");
 
                 currentTarget.SE_Handler.AlterStatusEffectList(status, true);
             }
@@ -100,9 +100,9 @@ public static class CombatStatHandler
     }
     private static void SetCurrentValues(EffectPackage currentAbilityEffects)
     {
-        //UnityEngine.Debug.Log($"current status efffects in combatStatsHandlerClass = {currentStatusEffects}. statusEffects of ability itself = {currentAbilityEffects.StatusEffects}");
+        UnityEngine.Debug.Log($"current status efffects in combatStatsHandlerClass = {currentStatusEffects.Count}. statusEffects of ability itself = {currentAbilityEffects.StatusEffects.Count}");
         currentStatusEffects = currentAbilityEffects.StatusEffects;
-        //UnityEngine.Debug.Log($"After setting equal: current status efffects in combatStatsHandlerClass = {currentStatusEffects}. statusEffects of ability itself = {currentAbilityEffects.StatusEffects}");
+        UnityEngine.Debug.Log($"After setting equal: current status efffects in combatStatsHandlerClass = {currentStatusEffects.Count}. statusEffects of ability itself = {currentAbilityEffects.StatusEffects.Count}");
 
         currentDamageValue = currentAbilityEffects.Damage.Value;
         currentDotValue = currentAbilityEffects.DamageOverTime.Value;
@@ -118,7 +118,9 @@ public static class CombatStatHandler
             foreach (StatusEffects se in modHandler.GetModStatusEffects(currentAbility))
             {
                 currentStatusEffects.Add(se);
+                UnityEngine.Debug.Log($"{se} = status effect of {currentAbility}");
             }
+            UnityEngine.Debug.Log($"{modHandler.ModdedAbilities.Count} = num modded abilities");
 
             currentDamageValue += modHandler.GetModAttributeByType(currentAbility, AbilityModTypes.Damage); // damage increase from mods
             currentDotValue += modHandler.GetModAttributeByType(currentAbility, AbilityModTypes.DamageOverTime); // DOT increase from mods

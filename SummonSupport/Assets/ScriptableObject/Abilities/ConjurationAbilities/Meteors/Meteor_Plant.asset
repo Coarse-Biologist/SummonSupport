@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Meteor_Plant
   m_EditorClassIdentifier: 
   <Name>k__BackingField: Floral Comet
+  <Description>k__BackingField: Summons a meteor which seeks enemies
   <Icon>k__BackingField: {fileID: 8095344145157262792, guid: c3bce2abce0ec0e47ba9c908fd690f04,
     type: 3}
   <Cooldown>k__BackingField: 5

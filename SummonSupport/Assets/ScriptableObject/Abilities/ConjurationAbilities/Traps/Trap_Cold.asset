@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Trap_Cold
   m_EditorClassIdentifier: Assembly-CSharp::ConjureAbility
   <Name>k__BackingField: Cold Trap
+  <Description>k__BackingField: Throws a trap which then remains to effect others
   <Icon>k__BackingField: {fileID: 0}
   <Cooldown>k__BackingField: 5
   <CostType>k__BackingField: 4
@@ -57,7 +58,7 @@ MonoBehaviour:
   <PhysicalType>k__BackingField: 0
   <OnHitEffect>k__BackingField: {fileID: 8554696951228805582, guid: 04a0e3d9ceed1e0489e4f5e4785af120,
     type: 3}
-  <AlterParticleSystemGradient>k__BackingField: 0
+  <Sounds>k__BackingField: {fileID: 0}
   <ObjectToSpawn>k__BackingField: {fileID: 3711147314991017040, guid: 744dd8980eb8e3d43aa4adc8538c350d,
     type: 3}
   <SpawnOffset>k__BackingField: {x: 0, y: 0, z: 0}

@@ -44,7 +44,7 @@ public class MeleeAbility : Ability
         return AttemptActivation(casterStats);
 
     }
-    
+
     private void SetModHandler(LivingBeing casterStats)
     {
         if (casterStats.CharacterTag != CharacterTag.Enemy)
@@ -87,6 +87,7 @@ public class MeleeAbility : Ability
     {
 
         Target = targetStats;
+        // if (AbilityTypeTag == AbilityTypeTag.BuffsTarget) return VerifyWithinShape(casterStats, targetStats);
 
         if (!ThoroughIsUsableOn(casterStats, Target))
         {

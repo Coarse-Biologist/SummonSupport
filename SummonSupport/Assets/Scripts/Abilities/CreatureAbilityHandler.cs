@@ -121,29 +121,27 @@ public class CreatureAbilityHandler : AbilityHandler
         else
             return Random.Range(0, 100) < AI_Hostility;
     }
-    public new void LearnAbility(Ability ability)
+    public new bool LearnAbility(Ability ability)
     {
-        //UnityEngine.Debug.Log($"Creature learning ability {ability.Name}");
+        bool learned = false;
         if (!Abilities.Contains(ability) && ability != null)
         {
+
+            learned = true;
             Abilities.Add(ability);
             abilitiesOnCooldown.Add(ability, false);
-            SlottedAbilities abilitSlot = new()
-            {
-                slot = SlottedAbilities.Count + 1,
-                ability = ability
-            };
-            SlottedAbilities.Add(abilitSlot);
         }
-        SetAbilityLists();
+        UnityEngine.Debug.Log($"Creature trying to learned {ability.Name}? {learned}");
+
+        return learned;
     }
     public void SlotAbility(Ability ability, int slot)
     {
-
+        bool abilitySlotReplaced = false;
         if (ability == null || SlottedAbilities.Count < slot - 1) throw new System.Exception($"Cannot slot ability ({ability}) in slot ({slot})");
         else
         {
-            for (int i = 0; i < SlottedAbilities.Count; i++)
+            for (int i = 0; i < SlottedAbilities.Count; i++) //Replaces slotted ability if slot is used
             {
                 if (SlottedAbilities[i].slot == slot)
                 {
@@ -152,21 +150,52 @@ public class CreatureAbilityHandler : AbilityHandler
                         slot = slot,
                         ability = ability
                     };
+                    abilitySlotReplaced = true;
                     break;
                 }
             }
+            if (abilitySlotReplaced == false) //otherwise adds a new slot
+            {
+                SlottedAbilities.Add(new()
+                {
+                    slot = slot,
+                    ability = ability
+                });
+            }
             UnityEngine.Debug.Log($"Slotting {ability.Name} in slot {slot}");
         }
+        AddAbilityCooldownSlot(ability);
         SetAbilityLists();
     }
 
-
-
-    public void AddAbilitySlot()
+    public bool AddNextAbilitySlot(Ability ability)
     {
-        SlottedAbilities.Add(new());
-        UnityEngine.Debug.Log($"Adding slot ");
+        if (CheckAbilityAlreadySlotted(ability))
+        {
+            return false;
+        }
+        int slotIndex = SlottedAbilities.Count;
+        SlottedAbilities abilitSlot = new()
+        {
+            slot = slotIndex,
+            ability = ability
+        };
+        SlottedAbilities.Add(abilitSlot);
 
+        AddAbilityCooldownSlot(ability);
+
+        SetAbilityLists();
+        return true;
+    }
+
+    public void AddAbilitySlot(int slotIndex, Ability ability)
+    {
+        SlottedAbilities abilitSlot = new()
+        {
+            slot = slotIndex,
+            ability = ability
+        };
+        SlottedAbilities.Add(abilitSlot);
     }
 
 

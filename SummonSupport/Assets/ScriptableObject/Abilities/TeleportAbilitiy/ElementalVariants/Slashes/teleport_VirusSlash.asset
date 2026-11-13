@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: teleport_VirusSlash
   m_EditorClassIdentifier: 
   <Name>k__BackingField: Instant Infection
+  <Description>k__BackingField: Teleports to an enemy and instantly slashes them
+    with an elemental melee ability with small range
   <Icon>k__BackingField: {fileID: 544104916224676396, guid: 1999786300aba2a4ea58c6b2b395516e,
     type: 3}
   <Cooldown>k__BackingField: 6
@@ -59,7 +61,6 @@ MonoBehaviour:
   <OnHitEffect>k__BackingField: {fileID: 5705030685624713920, guid: e378c4ebb8c3f9d43b451efa5c71483d,
     type: 3}
   <Sounds>k__BackingField: {fileID: 0}
-  <AlterParticleSystemGradient>k__BackingField: 0
   <ActivateOnUse>k__BackingField: {fileID: 0}
   <ActivateOnArrive>k__BackingField: {fileID: 11400000, guid: 623300a7d7cec1f4ea1f69746a25da5a,
     type: 2}

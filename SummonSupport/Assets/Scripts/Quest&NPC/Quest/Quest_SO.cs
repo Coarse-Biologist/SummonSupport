@@ -12,6 +12,8 @@ namespace Quest
         [Header("Requirements")]
         [SerializeField] public List<RepeatableQuestDict> IntQuestReqs = new List<RepeatableQuestDict>();
         [SerializeField] public List<BoolAccomplishments> BoolQuestReqs = new List<BoolAccomplishments>();
+        [SerializeField] public bool HasGoalLocation = false;
+
 
         [Header("String values")]
         [SerializeField] public string PresentationString = "";

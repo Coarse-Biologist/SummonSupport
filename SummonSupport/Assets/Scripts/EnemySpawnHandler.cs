@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using SummonSupportEvents;
-
+using Unity.Entities.UniversalDelegates;
 using UnityEngine;
 
 public class EnemySpawnHandler : MonoBehaviour
@@ -17,11 +17,11 @@ public class EnemySpawnHandler : MonoBehaviour
     #region Creature Scaling numbers
     [field: SerializeField] public float Hp_Scalar { get; private set; } = 1.5f;
     [field: SerializeField] public float Power_Scalar { get; private set; } = 1.5f;
-    [field: SerializeField] public float Regen_Scalar { get; private set; } = 1.5f;
-    [field: SerializeField] public float Damage_Scalar { get; private set; } = 1.5f;
+    [field: SerializeField] public float Regen_Scalar { get; private set; } = 1.5f;// amount of regen (hp and power) gained per difficulty increase
+    //[field: SerializeField] public float Damage_Scalar { get; private set; } = 1.5f;
     [field: SerializeField] public float Affinity_Scalar { get; private set; } = 25; // amount of affinity (strongest affinity) gained per difficulty increase
 
-    [field: SerializeField] public float Difficulty_Scalar { get; private set; } = .25f; //Likelihood of each successive creature difficulty spawn is multiplied by this
+    //[field: SerializeField] public float Difficulty_Scalar { get; private set; } = .25f; //Likelihood of each successive creature difficulty spawn is multiplied by this
     [field: SerializeField] public Difficulty Difficulty { get; private set; } = Difficulty.Novice;
     private static readonly Dictionary<Difficulty, (int lvl1, int lvl2, int lvl3, int lvl4)> CreatureProbabilities
         = new()
@@ -130,19 +130,17 @@ public class EnemySpawnHandler : MonoBehaviour
     #region Creature Modification and Specialization
     public void ModifyCreatureStats(int level, LivingBeing originalCreatureStats, SpawnLocationInfo spawnInfo = null) // should pass the stats of a creature which has already been instantiated
     {
-        //Debug.Log("Modifying creature stats for level " + level);
         Element element = SelectCreatureElement(spawnInfo);
         PhysicalType physical = SelectCreaturePhysical(spawnInfo);
         if (level > 0)
         {
-            //Debug.Log($"modifying stats to be {level}");
             originalCreatureStats.SetAttribute(AttributeType.MaxHitpoints, originalCreatureStats.GetAttribute(AttributeType.MaxHitpoints) * Hp_Scalar * level);
             originalCreatureStats.SetAttribute(AttributeType.MaxPower, originalCreatureStats.GetAttribute(AttributeType.MaxPower) * Power_Scalar * level);
             originalCreatureStats.RestoreResources();
-            originalCreatureStats.ChangeRegeneration(AttributeType.CurrentHitpoints, spawnInfo.CreatureStrengthScalar * originalCreatureStats.HealthRegeneration * Regen_Scalar * level);
-            originalCreatureStats.ChangeRegeneration(AttributeType.CurrentPower, spawnInfo.CreatureStrengthScalar * originalCreatureStats.PowerRegeneration * Regen_Scalar * level);
-            originalCreatureStats.ChangePhysicalResistance(physical, spawnInfo.CreatureStrengthScalar * level * Affinity_Scalar);
-            originalCreatureStats.ChangeAffinity(element, spawnInfo.CreatureStrengthScalar * level * Affinity_Scalar);
+            originalCreatureStats.ChangeRegeneration(AttributeType.CurrentHitpoints, spawnInfo.CreaturStrengthScalar * originalCreatureStats.HealthRegeneration * Regen_Scalar * level);
+            originalCreatureStats.ChangeRegeneration(AttributeType.CurrentPower, spawnInfo.CreaturStrengthScalar * originalCreatureStats.PowerRegeneration * Regen_Scalar * level);
+            originalCreatureStats.ChangePhysicalResistance(physical, spawnInfo.CreaturStrengthScalar * level * Affinity_Scalar);
+            originalCreatureStats.ChangeAffinity(element, spawnInfo.CreaturStrengthScalar * level * Affinity_Scalar);
         }
         ModifyCreatureAbilties(level, originalCreatureStats, element, physical);
         ColorChanger.ChangeElementalIndicatorByAffinity(originalCreatureStats);
@@ -167,29 +165,11 @@ public class EnemySpawnHandler : MonoBehaviour
     public void ModifyCreatureAbilties(int level, LivingBeing livingBeing, Element element, PhysicalType physical)
     {
         CreatureAbilityHandler abilityHandler = (CreatureAbilityHandler)livingBeing.abilityHandler;
-        if (level < 2) abilityHandler.LearnAbility(AlchemyHandler.Instance.GetMeleeAbilityByElement(livingBeing));
-        else if (element != Element.None) AddElementalAbilities(level, livingBeing, element);
-        if (physical != PhysicalType.None) AddPhysicalAbilities(level, livingBeing, physical);
-        else livingBeing.abilityHandler.LearnAbility(AbilityLibrary.abilityLibrary.defaultAttack);
+        if (element != Element.None) AbilityLibrary.AddElementalAbilities(level, livingBeing, element);
+        if (physical != PhysicalType.None) AbilityLibrary.AddPhysicalAbilities(level, livingBeing, physical);
+        if (element == Element.None && physical != PhysicalType.None) abilityHandler.AddNextAbilitySlot(AbilityLibrary.abilityLibrary.defaultAttack);
     }
-    private void AddElementalAbilities(int level, LivingBeing livingBeing, Element element)
-    {
-        CreatureAbilityHandler abilityHandler = (CreatureAbilityHandler)livingBeing.abilityHandler;
-        if (UnityEngine.Random.value > .5)
-        {
-            //Ability elementalAbility = SetupManager.Instance.ElementToAbilityLibrary_SO.GetAbilityOfElementType(element);
-            foreach (Ability ability in AbilityLibrary.GetRandomAbilities(element, level + 1))
-            {
-                abilityHandler.LearnAbility(ability);
-            }
-        }
-        else abilityHandler.LearnAbility(AbilityLibrary.GetElementalMeleeAbility(element, 50));
-    }
-    private void AddPhysicalAbilities(int level, LivingBeing livingBeing, PhysicalType physical)
-    {
-        foreach (Ability ability in AbilityLibrary.GetRandomAbilities(physical, level + 1))
-            livingBeing.abilityHandler.LearnAbility(ability);
-    }
+
 
     private int GetNumBasedOnDifficulty()
     {

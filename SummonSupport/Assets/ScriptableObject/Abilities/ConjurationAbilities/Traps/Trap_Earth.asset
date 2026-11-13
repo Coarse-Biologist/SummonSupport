@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Trap_Earth
   m_EditorClassIdentifier: Assembly-CSharp::ConjureAbility
   <Name>k__BackingField: Rocky Trap
+  <Description>k__BackingField: Throws a trap which then remains to effect others
   <Icon>k__BackingField: {fileID: 0}
   <Cooldown>k__BackingField: 5
   <CostType>k__BackingField: 4
@@ -57,7 +58,7 @@ MonoBehaviour:
   <PhysicalType>k__BackingField: 0
   <OnHitEffect>k__BackingField: {fileID: 5647196156128557912, guid: ef1808408a91fa0408f32d644044be96,
     type: 3}
-  <AlterParticleSystemGradient>k__BackingField: 0
+  <Sounds>k__BackingField: {fileID: 0}
   <ObjectToSpawn>k__BackingField: {fileID: 659772886997862303, guid: 4192ca73bafb3374f9a3d28efad11dcc,
     type: 3}
   <SpawnOffset>k__BackingField: {x: 0, y: 0, z: 0}

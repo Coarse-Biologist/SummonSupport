@@ -6,6 +6,7 @@ public class MinionInteractionHandler : MonoBehaviour
 
     public void SetCommandToInteract(bool isCommanded)
     {
+        Debug.Log($"{gameObject.name} has been commanded to interact : {isCommanded}");
         CommandedToInteract = isCommanded;
     }
 

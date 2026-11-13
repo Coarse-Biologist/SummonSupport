@@ -18,11 +18,13 @@ public enum StatusEffectType
     Dissolving, //acid lowers all physical resistences
     Blinded, //light blinds /// works amazingly
     Ionized, //radiation casting an ability causes caster damage /// sorted but not sufficiently tested
-
     Electrified, //electricity casting an ability stuns caster
 
 
 
-}
 
+}
+//slashing 
+//piercing
+//bludgeoning
 

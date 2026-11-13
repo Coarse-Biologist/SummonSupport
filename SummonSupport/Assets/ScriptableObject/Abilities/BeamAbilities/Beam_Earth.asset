@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: Beam_Earth
   m_EditorClassIdentifier: 
   <Name>k__BackingField: Rock Beam
+  <Description>k__BackingField: Creates a ranged beam which continually inflicts
+    its effects.
   <Icon>k__BackingField: {fileID: 0}
   <Cooldown>k__BackingField: 5
   <CostType>k__BackingField: 4
@@ -22,7 +24,8 @@ MonoBehaviour:
   <AbilityTypeTag>k__BackingField: 1
   <ListUsableOn>k__BackingField: 01000000
   <TargetEffects>k__BackingField:
-    <EffectDescription>k__BackingField: Damage
+    <EffectDescription>k__BackingField: Causes continuous damage to all enemies in
+      the beams range.
     <Heal>k__BackingField:
       <Value>k__BackingField: 0
       <ValueType>k__BackingField: 0
@@ -57,7 +60,7 @@ MonoBehaviour:
   <PhysicalType>k__BackingField: 0
   <OnHitEffect>k__BackingField: {fileID: 5647196156128557912, guid: ef1808408a91fa0408f32d644044be96,
     type: 3}
-  <AlterParticleSystemGradient>k__BackingField: 0
+  <Sounds>k__BackingField: {fileID: 0}
   <BeamParticleSystem>k__BackingField: {fileID: 6444293117290242730, guid: 6b86311e462fca44eaae1781030ec3f4,
     type: 3}
   <TickRate>k__BackingField: 0.5

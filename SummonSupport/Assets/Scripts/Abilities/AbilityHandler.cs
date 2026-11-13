@@ -35,7 +35,7 @@ public class AbilityHandler : MonoBehaviour
 
         foreach (Ability ability in Abilities)
         {
-            abilitiesOnCooldown.Add(ability, false);
+            AddAbilityCooldownSlot(ability);
         }
     }
     protected void Start()
@@ -108,9 +108,11 @@ public class AbilityHandler : MonoBehaviour
                 usedAbility = HandleAuraAbility(auraAbility);
                 break;
             case TeleportAbility teleportAbility:
+                if (anim != null) anim.ChangeLayerAnimation("Buff", 1, 2f, true);
                 usedAbility = teleportAbility.Activate(statsHandler, targetPosition);
                 break;
             case MeleeAbility meleeAbility:
+                if (anim != null) anim.ChangeLayerAnimation("Buff", 1, 2f, true);
                 usedAbility = meleeAbility.Activate(statsHandler);
                 break;
             case BeamAbility beamAbility:
@@ -224,6 +226,26 @@ public class AbilityHandler : MonoBehaviour
         return auraAbility.Activate(statsHandler);
     }
 
+    public void AddAbilityCooldownSlot(Ability ability = null)
+    {
+        if (ability != null)
+        {
+            abilitiesOnCooldown.TryAdd(ability, false);
+        }
+    }
+    public bool CheckAbilityAlreadySlotted(Ability ability)
+    {
+        bool slotted = false;
+        foreach (var slot in SlottedAbilities)
+        {
+            if (slot.ability == ability)
+            {
+                return true;
+            }
+        }
+        return slotted;
+    }
+
     public IEnumerator SetOnCooldown(Ability ability)
     {
         try
@@ -260,7 +282,6 @@ public class AbilityHandler : MonoBehaviour
     {
         if (ability.Sounds != null && ability.Sounds.CastSounds.Length != 0)
         {
-            Debug.Log($"{audioHandler} = audio handler. does it exist? trying to play cast sound");
             audioHandler.PlayAbilityCastSound(ability);
         }
     }

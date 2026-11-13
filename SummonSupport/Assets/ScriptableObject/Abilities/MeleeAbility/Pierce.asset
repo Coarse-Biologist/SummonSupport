@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Pierce
   m_EditorClassIdentifier: 
   <Name>k__BackingField: Pierce
+  <Description>k__BackingField: Pierces enemies ahead of caster
   <Icon>k__BackingField: {fileID: 0}
   <Cooldown>k__BackingField: 3
   <CostType>k__BackingField: 4
@@ -54,13 +55,13 @@ MonoBehaviour:
     <StatusEffects>k__BackingField: []
     <SpecialAbilityAttribute>k__BackingField: 0
   <ElementTypes>k__BackingField: 
-  <PhysicalType>k__BackingField: 3
+  <PhysicalType>k__BackingField: 1
   <OnHitEffect>k__BackingField: {fileID: 4439306374306288678, guid: ad3ebfe5da0c21f43a7253ff8277fd9c,
     type: 3}
+  <Sounds>k__BackingField: {fileID: 0}
   <Angle>k__BackingField: 0
   <Width>k__BackingField: 2
+  <SpawnLocEnum>k__BackingField: 0
   <Shape>k__BackingField: 2
-  <SpawnEffectOnHit>k__BackingField: {fileID: 4439306374306288678, guid: ad3ebfe5da0c21f43a7253ff8277fd9c,
-    type: 3}
   <MeleeParticleSystem>k__BackingField: {fileID: 3833596520723288618, guid: 63d70ca71f984254aa100f374d860057,
     type: 3}

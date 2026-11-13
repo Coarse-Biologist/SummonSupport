@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: teleport_PlantTrap
   m_EditorClassIdentifier: 
   <Name>k__BackingField: Gaias Escape
+  <Description>k__BackingField: Teleports to a location ahead of the user and leaves
+    behind a trap
   <Icon>k__BackingField: {fileID: 544104916224676396, guid: 1999786300aba2a4ea58c6b2b395516e,
     type: 3}
   <Cooldown>k__BackingField: 6

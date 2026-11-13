@@ -17,7 +17,7 @@ public class LootableAlchemyMaterial : MonoBehaviour, I_LootInterface
         {
             if (AlchemyHandler.AlchemyLootValueDict.TryGetValue(alchemyMaterial, out int num))
             {
-                AlchemyInventory.IncemementElementalKnowledge(Element, (int)(num * AlchemyHandler.Instance.KnowledgeGainRate));
+                AlchemyInventory.IncemementElementalKnowledge(Element, (int)(num * AlchemyHandler.KnowledgeGainRate));
             }
         }
         if (LootedParticleSystem != null)

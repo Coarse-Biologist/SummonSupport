@@ -16,9 +16,12 @@ namespace SummonSupportEvents
         public static UnityEvent<EnemyStats> EnemyDefeated = new();
 
         #endregion
+        public static UnityEvent<AlchemyTool> toolGained = new();
         public static UnityEvent<GameObject> minionDied = new();
         public static UnityEvent<GameObject> minionRecycled = new();
-        public static UnityEvent<LivingBeing> newMinionAdded = new();
+        public static UnityEvent<LivingBeing> renameMinion = new();
+
+        public static UnityEvent<MinionStats> newMinionAdded = new();
 
         public static UnityEvent<MinionStats> SetActiveMinion = new();
         public static UnityEvent<MovementAttributes, float> SpeedAttributeChanged = new();
@@ -35,6 +38,8 @@ namespace SummonSupportEvents
         public static UnityEvent<bool> PlayerDead = new();
         public static UnityEvent<List<string>> PlayerLevelUp = new(); // should I be passing this?
         public static UnityEvent PlayerFootstep = new();
+        public static UnityEvent<Vector3> ShowQuestDirectionArrow = new();
+
 
 
         public static UnityEvent<Ability> PlayerLearnedAbility = new();

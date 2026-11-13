@@ -18,9 +18,16 @@ public class SetupManager : MonoBehaviour
 
     [field: SerializeField] public AbilityLibrary_SO ElementToAbilityLibrary_SO { get; private set; } = null;
     [field: SerializeField] public List<Ability> AllAbilities { get; private set; } = null;
+    [field: SerializeField] public List<Ability> AllHealAbilities { get; private set; } = null;
+
     [field: SerializeField] public StatusEffectsLibrary StatusEffectsLibrary { get; private set; }
-    [field: SerializeField] public GameObject LocSphere { get; private set; }
     [field: SerializeField] public GameObject PlayerPrefab { get; private set; }
+    [field: SerializeField] public int KnowledgeOverride { get; private set; } = 0;
+    [field: SerializeField] public int CraftingPotentialOverride { get; private set; } = 0;
+
+    [field: SerializeField] public bool DebugMode { get; private set; } = false;
+    [field: SerializeField] public GameObject LocSphere { get; private set; }
+
 
 
 
@@ -29,7 +36,10 @@ public class SetupManager : MonoBehaviour
     {
         if (Instance != null) Destroy(this);
         else Instance = this;
-
+        if (CraftingPotentialOverride != 0)
+        {
+            OverrideCraftingPotential();
+        }
         if (colorGradientLibrary != null && BleedEffect != null && GlowMaterials.Count() == 4)
         {
             ColorChanger.Setup(BleedEffect, colorGradientLibrary, GlowMaterials);
@@ -54,6 +64,7 @@ public class SetupManager : MonoBehaviour
     }
     public void DebugLocation(Vector3 loc, Color specialColorRequest, int duration = 2)
     {
+        if (!DebugMode) return;
         if (loc == Vector3.negativeInfinity) return;
         //Debug.Log($"Debugging location. {Instance.transform.position}");
         GameObject instance = Instantiate(LocSphere, loc, Quaternion.identity);
@@ -67,6 +78,14 @@ public class SetupManager : MonoBehaviour
         if (PlayerPrefab == null) throw new System.Exception("Player prefab was not set in the SetupManager");
         if (PlayerStats.Instance != null) return PlayerStats.Instance.gameObject;
         else return Instantiate(PlayerPrefab, spawnLoc, rotation);
+    }
+
+    private void OverrideCraftingPotential()
+    {
+        AlchemyInventory.AlterCraftingPotential(CraftingPotential.OrganMass, CraftingPotentialOverride);
+        AlchemyInventory.AlterCraftingPotential(CraftingPotential.EtherDensity, CraftingPotentialOverride);
+        AlchemyInventory.AlterCraftingPotential(CraftingPotential.CorePower, CraftingPotentialOverride);
+
     }
 
 

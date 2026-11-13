@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: teleport_AirSlash
   m_EditorClassIdentifier: 
   <Name>k__BackingField: Turbine Portal
+  <Description>k__BackingField: Teleports to an enemy and instantly slashes them
+    with an elemental melee ability with small range
   <Icon>k__BackingField: {fileID: 544104916224676396, guid: 1999786300aba2a4ea58c6b2b395516e,
     type: 3}
   <Cooldown>k__BackingField: 6
@@ -59,7 +61,6 @@ MonoBehaviour:
   <OnHitEffect>k__BackingField: {fileID: 9018438208592869522, guid: c5fd21a9f6e4d654cb82200a0fb3e341,
     type: 3}
   <Sounds>k__BackingField: {fileID: 0}
-  <AlterParticleSystemGradient>k__BackingField: 0
   <ActivateOnUse>k__BackingField: {fileID: 0}
   <ActivateOnArrive>k__BackingField: {fileID: 11400000, guid: a9d7f1d84b426dc4fa180ca917e506f5,
     type: 2}

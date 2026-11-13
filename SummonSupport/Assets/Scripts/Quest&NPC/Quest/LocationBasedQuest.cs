@@ -9,6 +9,7 @@ public class LocationBasedQuest : MonoBehaviour, IQuest
     [SerializeField] public Quest_SO grantsQuest;
     [field: SerializeField] private DialogueAndAudio_SO AudioAndDialogue;
 
+
     void OnTriggerEnter(Collider collision)
     {
         if (collision.gameObject.TryGetComponent(out PlayerStats playerAudio))
@@ -49,5 +50,7 @@ public class LocationBasedQuest : MonoBehaviour, IQuest
                 EventDeclarer.QuestStarted?.Invoke(grantsQuest);
         }
     }
+
+
 
 }

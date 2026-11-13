@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: Wave_Plant
   m_EditorClassIdentifier: 
   <Name>k__BackingField: Gaea's Wave
+  <Description>k__BackingField: Creates a wide wavefront which travels away from
+    the caster in the direction they are aiming.
   <Icon>k__BackingField: {fileID: 0}
   <Cooldown>k__BackingField: 2
   <CostType>k__BackingField: 4

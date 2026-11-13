@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: Beam_Fungi
   m_EditorClassIdentifier: 
   <Name>k__BackingField: Spore Beam
+  <Description>k__BackingField: Creates a ranged beam which continually inflicts
+    its effects.
   <Icon>k__BackingField: {fileID: 0}
   <Cooldown>k__BackingField: 5
   <CostType>k__BackingField: 4
@@ -22,7 +24,8 @@ MonoBehaviour:
   <AbilityTypeTag>k__BackingField: 1
   <ListUsableOn>k__BackingField: 01000000
   <TargetEffects>k__BackingField:
-    <EffectDescription>k__BackingField: Damage
+    <EffectDescription>k__BackingField: Causes continuous damage to all enemies in
+      the beams range.
     <Heal>k__BackingField:
       <Value>k__BackingField: 0
       <ValueType>k__BackingField: 0
@@ -57,7 +60,7 @@ MonoBehaviour:
   <PhysicalType>k__BackingField: 0
   <OnHitEffect>k__BackingField: {fileID: 8554696951228805582, guid: 7bfcb6e9a8dfc5544ae6f2975f7ebf45,
     type: 3}
-  <AlterParticleSystemGradient>k__BackingField: 0
+  <Sounds>k__BackingField: {fileID: 0}
   <BeamParticleSystem>k__BackingField: {fileID: 4236570946508348943, guid: 5e1c6818f94f120449d1bc9eda1d7afd,
     type: 3}
   <TickRate>k__BackingField: 0.5
