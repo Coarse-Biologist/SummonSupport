@@ -116,6 +116,7 @@ GameObject:
   - component: {fileID: 8560957201525694217}
   - component: {fileID: 1250799472033989183}
   - component: {fileID: 4870548447758643146}
+  - component: {fileID: -8268903097701127060}
   m_Layer: 3
   m_Name: 3DPlayer
   m_TagString: Player
@@ -226,12 +227,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerAbilityHandler
   <abilitySpawn>k__BackingField: {fileID: 7538319549239340809}
-  statsHandler: {fileID: 5469552160048565923}
   <Abilities>k__BackingField:
   - {fileID: 11400000, guid: 52df8a72e35f5bf4791204fe3fa0bb2c, type: 2}
   - {fileID: 11400000, guid: 0999d27560ed722448af8ac1aa8ec450, type: 2}
   - {fileID: 11400000, guid: 47722ea3acd0b2a47b8f3a976e2c88d6, type: 2}
   - {fileID: 11400000, guid: 3ae7c83f398a8bb44aa09566b7180248, type: 2}
+  <SlottedAbilities>k__BackingField: []
   currentAnimation: 
 --- !u!114 &5469552160048565923
 MonoBehaviour:
@@ -258,7 +259,6 @@ MonoBehaviour:
   <TickRateRegenerationInSeconds>k__BackingField: 2
   <HealthRegeneration>k__BackingField: 2
   <PowerRegeneration>k__BackingField: 2
-  locSphere: {fileID: 0}
   <Cold>k__BackingField: 0
   <Water>k__BackingField: 0
   <Earth>k__BackingField: 0
@@ -279,13 +279,11 @@ MonoBehaviour:
   <Slashing>k__BackingField: 0
   <AffectedByAbilities>k__BackingField: []
   <XP_OnDeath>k__BackingField: 5
-  SE_Handler: {fileID: 0}
   <CurrentLevel>k__BackingField: 1
   <CurrentXP>k__BackingField: 0
   <MaxXP>k__BackingField: 100
   <SkillPoints>k__BackingField: 100
   <TotalControlllableMinions>k__BackingField: 2
-  <AbilitySlots>k__BackingField: 2
   <HandTransform>k__BackingField: {fileID: 4530512619568342574}
   <AbilityPotionTransformList>k__BackingField:
   - {fileID: 4162533450536116682}
@@ -330,6 +328,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a4da05eec575c354a86ee554fb9f6f5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerUIHandler
+  DirectionArrow: {fileID: 0}
+  <ShowDirection>k__BackingField: 0
   minions: []
 --- !u!114 &4913614373251763327
 MonoBehaviour:
@@ -517,6 +517,18 @@ MonoBehaviour:
   - {fileID: 8300000, guid: abaccc3cafdf54f4e821b3f20fd08c24, type: 3}
   - {fileID: 8300000, guid: be3eb96239200b74d83345a422a5efe7, type: 3}
   - {fileID: 8300000, guid: 1331a16e0d58e9e48a55c52d8f0f4a13, type: 3}
+--- !u!114 &-8268903097701127060
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5369172574488311089}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41bb13743c0f48d4b85f73542342d0f2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::I_Resurrector
 --- !u!1 &6400544845381037093
 GameObject:
   m_ObjectHideFlags: 0

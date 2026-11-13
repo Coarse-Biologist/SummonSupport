@@ -265,7 +265,7 @@ public static class SaveHandler
                 SetBeingLoadedAbilities(minionData.abilityData, minionStats);
                 SetBeingAffinities(minionData.statData, minionStats);
             }
-            AlchemyHandler.Instance.AddActiveMinion(minion);
+            AlchemyHandler.Instance.AddActiveMinion(minionStats);
 
         }
     }

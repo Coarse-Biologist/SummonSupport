@@ -17,7 +17,7 @@ public class EnemySpawnHandler : MonoBehaviour
     #region Creature Scaling numbers
     [field: SerializeField] public float Hp_Scalar { get; private set; } = 1.5f;
     [field: SerializeField] public float Power_Scalar { get; private set; } = 1.5f;
-    [field: SerializeField] public float Regen_Scalar { get; private set; } = 1.5f;
+    [field: SerializeField] public float Regen_Scalar { get; private set; } = 1.5f;// amount of regen (hp and power) gained per difficulty increase
     //[field: SerializeField] public float Damage_Scalar { get; private set; } = 1.5f;
     [field: SerializeField] public float Affinity_Scalar { get; private set; } = 25; // amount of affinity (strongest affinity) gained per difficulty increase
 
@@ -130,19 +130,17 @@ public class EnemySpawnHandler : MonoBehaviour
     #region Creature Modification and Specialization
     public void ModifyCreatureStats(int level, LivingBeing originalCreatureStats, SpawnLocationInfo spawnInfo = null) // should pass the stats of a creature which has already been instantiated
     {
-        //Debug.Log("Modifying creature stats for level " + level);
         Element element = SelectCreatureElement(spawnInfo);
         PhysicalType physical = SelectCreaturePhysical(spawnInfo);
         if (level > 0)
         {
-            //Debug.Log($"modifying stats to be {level}");
             originalCreatureStats.SetAttribute(AttributeType.MaxHitpoints, originalCreatureStats.GetAttribute(AttributeType.MaxHitpoints) * Hp_Scalar * level);
             originalCreatureStats.SetAttribute(AttributeType.MaxPower, originalCreatureStats.GetAttribute(AttributeType.MaxPower) * Power_Scalar * level);
             originalCreatureStats.RestoreResources();
-            originalCreatureStats.ChangeRegeneration(AttributeType.CurrentHitpoints, spawnInfo.CreatureStrengthScalar * originalCreatureStats.HealthRegeneration * Regen_Scalar * level);
-            originalCreatureStats.ChangeRegeneration(AttributeType.CurrentPower, spawnInfo.CreatureStrengthScalar * originalCreatureStats.PowerRegeneration * Regen_Scalar * level);
-            originalCreatureStats.ChangePhysicalResistance(physical, spawnInfo.CreatureStrengthScalar * level * Affinity_Scalar);
-            originalCreatureStats.ChangeAffinity(element, spawnInfo.CreatureStrengthScalar * level * Affinity_Scalar);
+            originalCreatureStats.ChangeRegeneration(AttributeType.CurrentHitpoints, spawnInfo.CreaturStrengthScalar * originalCreatureStats.HealthRegeneration * Regen_Scalar * level);
+            originalCreatureStats.ChangeRegeneration(AttributeType.CurrentPower, spawnInfo.CreaturStrengthScalar * originalCreatureStats.PowerRegeneration * Regen_Scalar * level);
+            originalCreatureStats.ChangePhysicalResistance(physical, spawnInfo.CreaturStrengthScalar * level * Affinity_Scalar);
+            originalCreatureStats.ChangeAffinity(element, spawnInfo.CreaturStrengthScalar * level * Affinity_Scalar);
         }
         ModifyCreatureAbilties(level, originalCreatureStats, element, physical);
         ColorChanger.ChangeElementalIndicatorByAffinity(originalCreatureStats);

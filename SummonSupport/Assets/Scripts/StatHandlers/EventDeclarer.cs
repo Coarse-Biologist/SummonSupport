@@ -21,7 +21,7 @@ namespace SummonSupportEvents
         public static UnityEvent<GameObject> minionRecycled = new();
         public static UnityEvent<LivingBeing> renameMinion = new();
 
-        public static UnityEvent<LivingBeing> newMinionAdded = new();
+        public static UnityEvent<MinionStats> newMinionAdded = new();
 
         public static UnityEvent<MinionStats> SetActiveMinion = new();
         public static UnityEvent<MovementAttributes, float> SpeedAttributeChanged = new();

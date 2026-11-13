@@ -205,49 +205,7 @@ public class PlayerStats : LivingBeing
     }
 
 
-    public void ResurrectMinion(GameObject minion, I_InteractMinionResurrect interactable)
-    {
-        StartCoroutine(CheckResurrection(minion, interactable));
-    }
     #endregion
-    private IEnumerator CheckResurrection(GameObject minion, I_InteractMinionResurrect interactable)
-    {
-        Debug.Log($"Starting resurrection of {minion.name}");
-        if (!minion.TryGetComponent(out MinionStats minionStats))
-        {
-            Debug.LogWarning("Trying to resurrect a minion without minion stats component. cancelling res");
-            yield break;
-        }
-        bool resurrecting = true;
-        float timeWaited = 0;
-        float distance;
-
-        abilityHandler.anim.ChangeLayerAnimation("Crafting", 1, ResurrectTime, true);
-
-        while (resurrecting)
-        {
-            yield return resurrectionIncrement;
-            timeWaited += .5f;
-            distance = (minion.transform.position - gameObject.transform.position).magnitude;
-            if (distance >= ResurrectRange)
-            {
-                Debug.Log($"Distance to minion = {distance}. setting res succeeding to false.");
-                interactable.SetResurrecting(false);
-                resurrecting = false;
-            }
-            if (timeWaited >= ResurrectTime)
-            {
-                abilityHandler.anim.SeLayerWeight(1, 0);
-                Debug.Log("Breaking loop because res time has been successfully waited");
-                minionStats.Resurrect();
-                interactable.SetResurrecting(false);
-                resurrecting = false;
-
-            }
-        }
-        abilityHandler.anim.SeLayerWeight(1, 0);
-
-    }
 
     public override void HandleUIAttrDisplay(AttributeType attributeType, float newValue)
     {

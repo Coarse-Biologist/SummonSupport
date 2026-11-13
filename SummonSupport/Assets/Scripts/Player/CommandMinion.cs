@@ -52,28 +52,29 @@ public static class CommandMinion
 
     private static void SendMinionToInteract(Vector3 loc)
     {
-        foreach (LivingBeing minion in AlchemyHandler.Instance.activeMinions)
+        if (AlchemyHandler.Instance.activeMinions.Count > 0)
         {
-            if (minion != null)
+            MinionStats minion = AlchemyHandler.Instance.activeMinions[0];
             {
-
-                MinionStats stats = minion.GetComponent<MinionStats>();
-                AIObedienceState obedienceState = minion.GetComponent<AIObedienceState>();
-                minion.GetComponent<MinionInteractionHandler>().SetCommandToInteract(true); // null minion
-                obedienceState.SetCommandLoc(loc);
-                stats.SetCommand(MinionCommands.GoTo);
+                if (minion != null)
+                {
+                    AIObedienceState obedienceState = minion.GetComponent<AIObedienceState>();
+                    minion.GetComponent<MinionInteractionHandler>().SetCommandToInteract(true); // null minion
+                    obedienceState.SetCommandLoc(loc);
+                    minion.SetCommand(MinionCommands.GoTo);
+                }
+                else AlchemyHandler.Instance.activeMinions.Remove(minion);
             }
-            else AlchemyHandler.Instance.activeMinions.Remove(minion);
-        }
 
+        }
     }
     public static void CommandMinionToGoToLoc(Vector3 loc)
     {
-        foreach (LivingBeing minion in AlchemyHandler.Instance.activeMinions)
+        foreach (MinionStats minion in AlchemyHandler.Instance.activeMinions)
         {
             if (minion == null)
             {
-                AlchemyHandler.Instance.activeMinions.Remove(minion);
+                AlchemyHandler.Instance.RemoveActiveMinion(minion);
                 return;
             }
             MinionStats stats = minion.GetComponent<MinionStats>();

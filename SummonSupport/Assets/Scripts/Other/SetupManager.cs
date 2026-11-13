@@ -21,10 +21,12 @@ public class SetupManager : MonoBehaviour
     [field: SerializeField] public List<Ability> AllHealAbilities { get; private set; } = null;
 
     [field: SerializeField] public StatusEffectsLibrary StatusEffectsLibrary { get; private set; }
-    [field: SerializeField] public GameObject LocSphere { get; private set; }
     [field: SerializeField] public GameObject PlayerPrefab { get; private set; }
     [field: SerializeField] public int KnowledgeOverride { get; private set; } = 0;
     [field: SerializeField] public int CraftingPotentialOverride { get; private set; } = 0;
+
+    [field: SerializeField] public bool DebugMode { get; private set; } = false;
+    [field: SerializeField] public GameObject LocSphere { get; private set; }
 
 
 
@@ -62,6 +64,7 @@ public class SetupManager : MonoBehaviour
     }
     public void DebugLocation(Vector3 loc, Color specialColorRequest, int duration = 2)
     {
+        if (!DebugMode) return;
         if (loc == Vector3.negativeInfinity) return;
         //Debug.Log($"Debugging location. {Instance.transform.position}");
         GameObject instance = Instantiate(LocSphere, loc, Quaternion.identity);

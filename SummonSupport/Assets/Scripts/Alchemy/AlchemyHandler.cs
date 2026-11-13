@@ -27,7 +27,7 @@ public class AlchemyHandler : MonoBehaviour
 
 
     [field: SerializeField] public float SizeScalar { get; private set; } = .1f;
-    [SerializeField] public List<LivingBeing> activeMinions = new List<LivingBeing>();
+    [SerializeField] public List<MinionStats> activeMinions = new List<MinionStats>();
     public static AlchemyHandler Instance { get; private set; }
     public static Dictionary<AlchemyLoot, int> AlchemyLootValueDict = new()
     {
@@ -58,6 +58,15 @@ public class AlchemyHandler : MonoBehaviour
         }
         Instance = this;
     }
+    void OnEnable()
+    {
+        EventDeclarer.newMinionAdded?.AddListener(AddActiveMinion);
+
+    }
+    void OnDisable()
+    {
+        EventDeclarer.newMinionAdded?.RemoveListener(AddActiveMinion);
+    }
 
     #region Crafting Minion
 
@@ -85,7 +94,7 @@ public class AlchemyHandler : MonoBehaviour
                 MinionStats minionStats = craftedMinion.GetComponent<MinionStats>();
                 craftingResults += UpgradeMinion(minionStats, combinedPotential, elementList);
 
-                AddActiveMinion(craftedMinion);
+                AddActiveMinion(minionStats);
 
                 int knowledgeGain = AlchemyInventory.GainKnowledge(elementList, combinedPotential);
 
@@ -256,22 +265,21 @@ public class AlchemyHandler : MonoBehaviour
 
         return minion;
     }
-    public void AddActiveMinion(GameObject minion)
+    public void AddActiveMinion(MinionStats minion)
     {
-        LivingBeing livingBeing = minion.GetComponent<LivingBeing>();
-        Debug.Log($"attempting to add Active minion: {livingBeing.name}");
+        Debug.Log($"attempting to add Active minion: {minion.name}");
 
-        if (!activeMinions.Contains(livingBeing))
+        if (!activeMinions.Contains(minion))
         {
-            Debug.Log($"Indeed adding Active minion: {livingBeing.name}");
+            Debug.Log($"Indeed adding Active minion: {minion.Name}");
 
-            activeMinions.Add(livingBeing);
-            EventDeclarer.newMinionAdded?.Invoke(livingBeing);
+            activeMinions.Add(minion);
+            EventDeclarer.newMinionAdded?.Invoke(minion);
         }
     }
-    public void RemoveActiveMinion(LivingBeing livingBeing)
+    public void RemoveActiveMinion(MinionStats minion)
     {
-        activeMinions.Remove(livingBeing);
+        activeMinions.Remove(minion);
 
     }
 

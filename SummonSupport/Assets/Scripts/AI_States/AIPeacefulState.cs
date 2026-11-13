@@ -157,6 +157,7 @@ public class AIPeacefulState : AIState
     public void GoToPlayer()
     {
         //Debug.Log("Going to player function called");
+        if (stateHandler.StuckInAbilityAnimation) return;
         float distance = (player.transform.position - transform.position).sqrMagnitude;
         if (distance >= stateHandler.navAgent.stoppingDistance + playerFollowRadius || distance >= chaseState.SelectedAbilityAttackRange)
         {
