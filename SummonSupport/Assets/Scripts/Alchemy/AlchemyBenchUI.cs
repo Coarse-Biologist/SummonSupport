@@ -760,7 +760,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
             EventDeclarer.PlayerLearnedAbility?.Invoke(selectedAbility);
             foreach (LivingBeing minion in AlchemyHandler.Instance.activeMinions)
             {
-                if (minion.GetAffinity(selectedMinionAbility.ElementTypes[0]) > 50)
+                if (minion.GetAffinity(selectedMinionAbility.ElementTypes[0]) > 50) // #TODO could potentially have no elements
                 {
                     minion.GetComponent<AbilityHandler>().LearnAbility(selectedMinionAbility);
                 }
