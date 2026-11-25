@@ -21,7 +21,6 @@ public class MeleeAbility : Ability
     private LivingBeing Caster;
     private LivingBeing Target;
     private AbilityHandler abilityHandler;
-    private AbilityModHandler modHandler;
 
     private WaitForSeconds movementWait = new WaitForSeconds(.1f);
 
@@ -34,24 +33,19 @@ public class MeleeAbility : Ability
     {
         abilityHandler = casterStats.abilityHandler;
 
-        originTransform = abilityHandler.abilitySpawn.transform;
-        SetModHandler(casterStats);
-        if (originTransform == null)
+        originTransform = abilityHandler != null && abilityHandler.abilitySpawn != null
+            ? abilityHandler.abilitySpawn.transform
+            : casterStats.transform;
+
+        int swings = 1 + Mathf.Max(0, AbilityModHandler.GetPlayerModValue(this, AbilityModTypes.Number, casterStats));
+        bool activated = false;
+        for (int swing = 0; swing < swings; swing++)
         {
-            originTransform = casterStats.transform;
+            if (AttemptActivation(casterStats)) activated = true;
         }
 
-        return AttemptActivation(casterStats);
+        return activated;
 
-    }
-
-    private void SetModHandler(LivingBeing casterStats)
-    {
-        if (casterStats.CharacterTag != CharacterTag.Enemy)
-        {
-            modHandler = AbilityModHandler.Instance;
-        }
-        else modHandler = null;
     }
 
 
@@ -99,17 +93,15 @@ public class MeleeAbility : Ability
 
     private bool VerifyWithinShape(LivingBeing casterStats, LivingBeing targetStats)
     {
-        float sizeMod = Width;
-        if (modHandler != null)
-        {
-            sizeMod += modHandler.GetModAttributeByType(this, AbilityModTypes.Size);
-        }
+        float sizeMod = Width + Mathf.Max(0, AbilityModHandler.GetPlayerModValue(this, AbilityModTypes.Size, casterStats));
+        float speedMod = Mathf.Max(0, AbilityModHandler.GetPlayerModValue(this, AbilityModTypes.Speed, casterStats));
+        float rangeMod = Range + speedMod * .5f;
         Vector3 hitLocation = targetStats.transform.position;
         if ((hitLocation - originTransform.position).magnitude <= .2)
             return true;
         if (Shape == AreaOfEffectShape.Sphere)
         {
-            if ((casterStats.transform.position - targetStats.transform.position).magnitude <= Range + sizeMod)
+            if ((casterStats.transform.position - targetStats.transform.position).magnitude <= rangeMod + sizeMod)
                 return true;
         }
         if (Shape == AreaOfEffectShape.Cone)
@@ -118,7 +110,7 @@ public class MeleeAbility : Ability
         }
         if (Shape == AreaOfEffectShape.Rectangle)
         {
-            Vector3 halfExtents = new Vector3(Width + sizeMod, Width, Range + sizeMod);
+            Vector3 halfExtents = new Vector3(Width + sizeMod, Width, rangeMod + sizeMod);
             Vector3 offset = originTransform.forward * halfExtents.z;
 
             return Physics.OverlapBox(originTransform.position + offset, halfExtents, originTransform.rotation).Contains(targetStats.gameObject.GetComponent<Collider>());
@@ -154,7 +146,17 @@ public class MeleeAbility : Ability
             particleSystem = Instantiate(MeleeParticleSystem, spawnLoc, Quaternion.identity, caster.transform);
             Quaternion rotation = Quaternion.LookRotation(originTransform.transform.forward);
             particleSystem.transform.rotation = rotation;
-            Destroy(particleSystem, particleSystem.GetComponentInChildren<ParticleSystem>().main.duration);
+
+            int speedMod = Mathf.Max(0, AbilityModHandler.GetPlayerModValue(this, AbilityModTypes.Speed, caster));
+            float simulationSpeed = 1f + speedMod * .1f;
+            ParticleSystem system = particleSystem.GetComponentInChildren<ParticleSystem>();
+            if (system != null)
+            {
+                var main = system.main;
+                main.simulationSpeed *= simulationSpeed;
+                Destroy(particleSystem, main.duration / simulationSpeed);
+            }
+            else Destroy(particleSystem, 3f);
 
         }
     }

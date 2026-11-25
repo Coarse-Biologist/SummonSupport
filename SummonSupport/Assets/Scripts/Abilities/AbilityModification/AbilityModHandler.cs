@@ -48,14 +48,14 @@ public class AbilityModHandler : MonoBehaviour
 
     public static readonly Dictionary<Type, List<AbilityModTypes>> ModOptions = new()
         {
-            {typeof(ProjectileAbility), new List<AbilityModTypes>() { AbilityModTypes.Number, AbilityModTypes.MaxPierce, AbilityModTypes.MaxSplit, AbilityModTypes.MaxRicochet, AbilityModTypes.Size, AbilityModTypes.Cost, AbilityModTypes.Cooldown, AbilityModTypes.Damage, AbilityModTypes.DamageOverTime, AbilityModTypes.Heal, AbilityModTypes.HealOverTime } },
-            {typeof(TargetMouseAbility),new List<AbilityModTypes>() { AbilityModTypes.Cost, AbilityModTypes.Cooldown, AbilityModTypes.Damage, AbilityModTypes.DamageOverTime, AbilityModTypes.Heal, AbilityModTypes.HealOverTime } },
-            {typeof(ConjureAbility), new List<AbilityModTypes>() { AbilityModTypes.MaxPierce, AbilityModTypes.MaxSplit, AbilityModTypes.Number, AbilityModTypes.Cost, AbilityModTypes.Cooldown, AbilityModTypes.Damage, AbilityModTypes.DamageOverTime, AbilityModTypes.Heal, AbilityModTypes.HealOverTime, AbilityModTypes.Size, AbilityModTypes.Duration} },
-            {typeof(AuraAbility), new List<AbilityModTypes>() { AbilityModTypes.Cost, AbilityModTypes.Cooldown, AbilityModTypes.Damage, AbilityModTypes.DamageOverTime, AbilityModTypes.Heal, AbilityModTypes.HealOverTime, AbilityModTypes.Size } },
+            {typeof(ProjectileAbility), new List<AbilityModTypes>() { AbilityModTypes.Number, AbilityModTypes.MaxPierce, AbilityModTypes.MaxSplit, AbilityModTypes.MaxRicochet, AbilityModTypes.Size, AbilityModTypes.Speed, AbilityModTypes.Duration, AbilityModTypes.Cost, AbilityModTypes.Cooldown, AbilityModTypes.Damage, AbilityModTypes.DamageOverTime, AbilityModTypes.Heal, AbilityModTypes.HealOverTime } },
+            {typeof(TargetMouseAbility),new List<AbilityModTypes>() { AbilityModTypes.Number, AbilityModTypes.Size, AbilityModTypes.Speed, AbilityModTypes.Duration, AbilityModTypes.Cost, AbilityModTypes.Cooldown, AbilityModTypes.Damage, AbilityModTypes.DamageOverTime, AbilityModTypes.Heal, AbilityModTypes.HealOverTime } },
+            {typeof(ConjureAbility), new List<AbilityModTypes>() { AbilityModTypes.MaxPierce, AbilityModTypes.MaxSplit, AbilityModTypes.Number, AbilityModTypes.Cost, AbilityModTypes.Cooldown, AbilityModTypes.Damage, AbilityModTypes.DamageOverTime, AbilityModTypes.Heal, AbilityModTypes.HealOverTime, AbilityModTypes.Size, AbilityModTypes.Speed, AbilityModTypes.Duration} },
+            {typeof(AuraAbility), new List<AbilityModTypes>() { AbilityModTypes.Number, AbilityModTypes.MaxPierce, AbilityModTypes.MaxSplit, AbilityModTypes.Size, AbilityModTypes.Speed, AbilityModTypes.Duration, AbilityModTypes.Cost, AbilityModTypes.Cooldown, AbilityModTypes.Damage, AbilityModTypes.DamageOverTime, AbilityModTypes.Heal, AbilityModTypes.HealOverTime } },
             {typeof(TeleportAbility), new List<AbilityModTypes>() { AbilityModTypes.Cost, AbilityModTypes.Cooldown, AbilityModTypes.Damage, AbilityModTypes.DamageOverTime, AbilityModTypes.Heal, AbilityModTypes.HealOverTime, AbilityModTypes.Duration, AbilityModTypes.Size, AbilityModTypes.Speed, AbilityModTypes.Number } },
-            {typeof(MeleeAbility), new List<AbilityModTypes>() { AbilityModTypes.Cost, AbilityModTypes.Cooldown, AbilityModTypes.Damage, AbilityModTypes.DamageOverTime, AbilityModTypes.Heal, AbilityModTypes.HealOverTime, AbilityModTypes.Size } },
+            {typeof(MeleeAbility), new List<AbilityModTypes>() { AbilityModTypes.Number, AbilityModTypes.Size, AbilityModTypes.Speed, AbilityModTypes.Duration, AbilityModTypes.Cost, AbilityModTypes.Cooldown, AbilityModTypes.Damage, AbilityModTypes.DamageOverTime, AbilityModTypes.Heal, AbilityModTypes.HealOverTime } },
             {typeof(BeamAbility), new List<AbilityModTypes>() { AbilityModTypes.Cost, AbilityModTypes.Cooldown, AbilityModTypes.Damage, AbilityModTypes.DamageOverTime, AbilityModTypes.Heal, AbilityModTypes.HealOverTime, AbilityModTypes.Duration, AbilityModTypes.Size, AbilityModTypes.Speed, AbilityModTypes.Number } },
-            {typeof(ChargeAbility), new List<AbilityModTypes>() { AbilityModTypes.MaxPierce, AbilityModTypes.Cost, AbilityModTypes.Cooldown, AbilityModTypes.Damage, AbilityModTypes.DamageOverTime, AbilityModTypes.Heal, AbilityModTypes.HealOverTime }},
+            {typeof(ChargeAbility), new List<AbilityModTypes>() { AbilityModTypes.MaxPierce, AbilityModTypes.Size, AbilityModTypes.Speed, AbilityModTypes.Duration, AbilityModTypes.Cost, AbilityModTypes.Cooldown, AbilityModTypes.Damage, AbilityModTypes.DamageOverTime, AbilityModTypes.Heal, AbilityModTypes.HealOverTime }},
         };
     void Awake()
     {
@@ -160,6 +160,13 @@ public class AbilityModHandler : MonoBehaviour
             return num;
         }
         else return 0;
+    }
+
+    public static int GetPlayerModValue(Ability ability, AbilityModTypes modType, LivingBeing caster)
+    {
+        if (ability == null || modType == AbilityModTypes.None || Instance == null) return 0;
+        if (caster != null && caster.CharacterTag == CharacterTag.Enemy) return 0;
+        return Instance.GetModAttributeByType(ability, modType);
     }
 
 

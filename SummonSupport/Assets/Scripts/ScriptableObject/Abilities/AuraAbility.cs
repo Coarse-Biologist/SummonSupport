@@ -12,10 +12,14 @@ public class AuraAbility : Ability
     public override bool Activate(LivingBeing casterStats)
     {
         int targetNum = 1;
+        int sizeMod = 0;
+        int speedMod = 0;
 
-        if (casterStats.CharacterTag != CharacterTag.Enemy)
+        if (casterStats != null && casterStats.CharacterTag != CharacterTag.Enemy)
         {
-            targetNum += AbilityModHandler.Instance.GetModAttributeByType(this, AbilityModTypes.Number);
+            targetNum += Mathf.Max(0, AbilityModHandler.GetPlayerModValue(this, AbilityModTypes.Number, casterStats));
+            sizeMod = Mathf.Max(0, AbilityModHandler.GetPlayerModValue(this, AbilityModTypes.Size, casterStats));
+            speedMod = Mathf.Max(0, AbilityModHandler.GetPlayerModValue(this, AbilityModTypes.Speed, casterStats));
         }
 
         TeamType desiredTarget = this.GetTargetPreference(casterStats);
@@ -23,7 +27,9 @@ public class AuraAbility : Ability
         Aura auraMonoScript = auraInstance.GetComponent<Aura>();
         if (auraMonoScript != null) auraMonoScript.HandleInstantiation(casterStats, null, this);
 
-        List<LivingBeing> targets = GetTargetfromSphereCast(casterStats, casterStats.abilityHandler.abilitySpawn.transform, targetNum, desiredTarget);
+        float castRadius = Radius + sizeMod;
+        float castRange = Range + speedMod * .5f;
+        List<LivingBeing> targets = GetTargetfromSphereCast(casterStats, casterStats.abilityHandler.abilitySpawn.transform, targetNum, desiredTarget, castRadius, castRange);
 
         foreach (LivingBeing target in targets)
         {

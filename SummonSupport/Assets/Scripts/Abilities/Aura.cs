@@ -11,7 +11,6 @@ public class Aura : MonoBehaviour
     LivingBeing caster;
     Ability ability;
 
-    private AbilityModHandler modHandler;
     private Mod_Base abilityMod;
 
     List<LivingBeing> ignoreTargets = new();
@@ -27,6 +26,8 @@ public class Aura : MonoBehaviour
     private float speed = 1;
     private float duration;
     private int maxPierce = 3;
+    private int pierceMod = 0;
+    private int effectiveMaxPierce = int.MaxValue;
     private int piercedAlready = 0;
     private int maxSplit = 0;
     private int splitAlready = 0;
@@ -44,8 +45,6 @@ public class Aura : MonoBehaviour
 
         SetAuraStats(caster, target, ability);
 
-        CheckTargetsAtSpawnTime(caster);
-
         HandleConjureAbilitySpecifics();
 
         if (ability is AuraAbility auraAbility)
@@ -53,7 +52,13 @@ public class Aura : MonoBehaviour
 
         AddMods();
 
+        effectiveMaxPierce = ConjureAbility != null && ConjureAbility.SeeksTarget
+            ? maxPierce
+            : (pierceMod > 0 ? pierceMod : int.MaxValue);
+
         AlterApparentRadius();
+
+        CheckTargetsAtSpawnTime(caster);
 
         CombatStatHandler.HandleEffectPackage(ability, caster, caster, ability.SelfEffects);
 
@@ -108,17 +113,13 @@ public class Aura : MonoBehaviour
 
     private void AddMods()
     {
-
-        if (caster.CharacterTag != CharacterTag.Enemy)
-        {
-            duration += AbilityModHandler.Instance.GetModAttributeByType(ability, AbilityModTypes.Duration);
-            radius += AbilityModHandler.Instance.GetModAttributeByType(ability, AbilityModTypes.Size);
-            speed += AbilityModHandler.Instance.GetModAttributeByType(ability, AbilityModTypes.Speed);
-            maxPierce += AbilityModHandler.Instance.GetModAttributeByType(ability, AbilityModTypes.MaxPierce);
-            maxSplit += AbilityModHandler.Instance.GetModAttributeByType(ability, AbilityModTypes.MaxSplit);
-            //Debug.Log($"max split = {maxSplit}");
-
-        }
+        duration += AbilityModHandler.GetPlayerModValue(ability, AbilityModTypes.Duration, caster);
+        radius += AbilityModHandler.GetPlayerModValue(ability, AbilityModTypes.Size, caster);
+        speed += AbilityModHandler.GetPlayerModValue(ability, AbilityModTypes.Speed, caster);
+        pierceMod = Mathf.Max(0, AbilityModHandler.GetPlayerModValue(ability, AbilityModTypes.MaxPierce, caster));
+        maxPierce += pierceMod;
+        maxSplit = Mathf.Max(0, AbilityModHandler.GetPlayerModValue(ability, AbilityModTypes.MaxSplit, caster));
+        //Debug.Log($"max split = {maxSplit}");
     }
 
     private void Activate()
@@ -171,35 +172,37 @@ public class Aura : MonoBehaviour
             otherLivingBeing.AlterAbilityList(ability, true);
             CombatStatHandler.HandleEffectPackage(ability, caster, otherLivingBeing, ability.TargetEffects);
             piercedAlready += 1;
-            if (ConjureAbility != null)
+
+            if (splitAlready < maxSplit)
             {
-                if (ConjureAbility.SeeksTarget)
-                {
-                    if (splitAlready < maxSplit)
-                    {
-                        SplitConjuredSeeker(otherLivingBeing);
-                    }
-                    if (piercedAlready >= maxPierce)
-                        Destroy(gameObject, .2f);
-
-                }
-
+                SplitAura(otherLivingBeing);
+            }
+            if (piercedAlready >= effectiveMaxPierce)
+            {
+                Active = false;
+                Destroy(gameObject, .2f);
             }
         }
     }
-    private void SplitConjuredSeeker(LivingBeing livingBeing)
+    private void SplitAura(LivingBeing livingBeing)
     {
         GameObject newObject = null;
         if (ability is ConjureAbility conjureAbility)
             newObject = Instantiate(conjureAbility.ObjectToSpawn, transform.position, transform.rotation);
+        else if (ability is AuraAbility auraAbility)
+            newObject = Instantiate(auraAbility.AuraObject, transform.position, transform.rotation);
+
+        if (newObject == null) return;
 
         splitAlready += 1;
         if (newObject.TryGetComponent(out Aura newAura))
         {
-            newAura.HandleInstantiation(caster, null, ability);
+            // Set split state before spawning so spawn-time target checks cannot cascade.
             newAura.splitAlready = splitAlready;
             newAura.ignoreTargets.Add(livingBeing);
+            newAura.HandleInstantiation(caster, null, ability);
         }
+        else Destroy(newObject);
     }
 
     private IEnumerator SeekTarget(LivingBeing target)

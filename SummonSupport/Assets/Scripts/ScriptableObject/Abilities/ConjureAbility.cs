@@ -38,16 +38,23 @@ public class ConjureAbility : Ability
     {
 
         int targetNum = 1;
+        int sizeMod = 0;
+        int speedMod = 0;
 
-        if (casterStats.CharacterTag != CharacterTag.Enemy)
+        if (casterStats != null && casterStats.CharacterTag != CharacterTag.Enemy)
         {
-            targetNum += AbilityModHandler.Instance.GetModAttributeByType(this, AbilityModTypes.Number);
+            targetNum += Mathf.Max(0, AbilityModHandler.GetPlayerModValue(this, AbilityModTypes.Number, casterStats));
+            sizeMod = Mathf.Max(0, AbilityModHandler.GetPlayerModValue(this, AbilityModTypes.Size, casterStats));
+            speedMod = Mathf.Max(0, AbilityModHandler.GetPlayerModValue(this, AbilityModTypes.Speed, casterStats));
         }
+        float castRadius = 4f + sizeMod * .5f;
+        float castRange = Range + speedMod * .5f;
+
         if (SpawnsOnTarget)
         {
             TeamType desiredTargetType = this.GetTargetPreference(casterStats);
 
-            List<LivingBeing> targets = GetTargetfromSphereCast(casterStats, casterStats.abilityHandler.abilitySpawn.transform, targetNum, desiredTargetType);
+            List<LivingBeing> targets = GetTargetfromSphereCast(casterStats, casterStats.abilityHandler.abilitySpawn.transform, targetNum, desiredTargetType, castRadius, castRange);
             foreach (LivingBeing target in targets)
             {
                 SpawnOnTarget(casterStats, target, rotation);
@@ -84,7 +91,8 @@ public class ConjureAbility : Ability
         if (!LeaveRotation)
             newRotation = rotation * Quaternion.Euler(0, 0, RotationOffset);
 
-        Vector3 SpawnLoc = casterStats.transform.position + casterStats.transform.forward * Range;
+        float spawnDistance = Range + Mathf.Max(0, AbilityModHandler.GetPlayerModValue(this, AbilityModTypes.Speed, casterStats)) * .5f;
+        Vector3 SpawnLoc = casterStats.transform.position + casterStats.transform.forward * spawnDistance;
         Vector3 newSpawnOffset = new Vector3(SpawnOffset.x, SpawnOffset.y, SpawnOffset.z + iterator);
         GameObject spawnedObject = Instantiate(ObjectToSpawn, SpawnLoc + newSpawnOffset, newRotation);
 

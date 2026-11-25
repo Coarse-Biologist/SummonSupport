@@ -24,13 +24,13 @@ public class ProjectileAbility : Ability
     {
         Transform spawnPoint = casterStats.transform;
         //Debug.Log($"spawnpoint rotation = {spawnPoint.rotation.y}");
-        int shots = 1;
-        Vector3 sizeMod = new();
-        if (casterStats.CharacterTag != CharacterTag.Enemy)
-        {
-            shots += AbilityModHandler.Instance.GetModAttributeByType(this, AbilityModTypes.Number);
-            sizeMod.x += AbilityModHandler.Instance.GetModAttributeByType(this, AbilityModTypes.Size) / 2;
-        }
+        int shots = 1 + Mathf.Max(0, AbilityModHandler.GetPlayerModValue(this, AbilityModTypes.Number, casterStats));
+        int sizeModValue = Mathf.Max(0, AbilityModHandler.GetPlayerModValue(this, AbilityModTypes.Size, casterStats));
+        int durationMod = AbilityModHandler.GetPlayerModValue(this, AbilityModTypes.Duration, casterStats);
+        Vector3 sizeMod = new(sizeModValue / 2f, 0f, 0f);
+        float lifetime = Mathf.Max(.1f, Lifetime + durationMod);
+        AbilityModHandler modHandler = casterStats != null && casterStats.CharacterTag != CharacterTag.Enemy ? AbilityModHandler.Instance : null;
+
         for (int i = 0; i < shots; i += 1)
         {
             GameObject projectile = Instantiate(Projectile, spawnPoint.position, Quaternion.identity);
@@ -47,11 +47,11 @@ public class ProjectileAbility : Ability
             Quaternion rotation = Quaternion.Euler(0, rotY, 0);
             Vector3 newDirection = rotation * spawnPoint.forward;
             //Debug.Log($"  user: {user.GetComponent<LivingBeing>().Name} is using the ability {projectileScript.name}");
-            projectileScript.SetActive(this, casterStats, AbilityModHandler.Instance);
+            projectileScript.SetActive(this, casterStats, modHandler);
             projectileScript.SetProjectilePhysics(newDirection);
             projectileScript.SetParticleTrailEffects(newDirection);
 
-            Destroy(projectile, Lifetime);
+            Destroy(projectile, lifetime);
         }
 
         return true;
