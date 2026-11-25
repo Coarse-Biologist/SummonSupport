@@ -254,7 +254,7 @@ public abstract class LivingBeing : MonoBehaviour
     }
     public void ChangePowerRegeneration(float Value)
     {
-        HealthRegeneration = Math.Max(0, PowerRegeneration + Value);
+        PowerRegeneration = Math.Max(0, PowerRegeneration + Value);
 
     }
 
@@ -284,7 +284,7 @@ public abstract class LivingBeing : MonoBehaviour
     {
         SetAttribute(attributeType, GetAttribute(attributeType) + value);
 
-        return GetAttribute(attributeType) + value;
+        return GetAttribute(attributeType);
     }
     public void ChangeMovementAttribute(MovementAttributes attr, float changeValue)
     {

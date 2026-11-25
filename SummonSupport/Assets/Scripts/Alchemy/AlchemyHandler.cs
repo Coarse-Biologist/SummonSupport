@@ -82,6 +82,9 @@ public class AlchemyHandler : MonoBehaviour
     {
         string craftingResults = "";
 
+        if (!AlchemyInventory.CanAfford(combinedPotential))
+            return "You do not have enough crafting potential for that combination.";
+
         AlchemyInventory.ExpendCraftingPotential(combinedPotential);
 
         if (combinedPotential.Keys.Count > 0)
@@ -176,7 +179,7 @@ public class AlchemyHandler : MonoBehaviour
         EventDeclarer.RepeatableQuestCompleted?.Invoke(Quest.RepeatableAccomplishments.EtherDensityUsed, value); // #TODO this ought be elswhere
         foreach (Element element in elementList)
         {
-            int moddedValue = value * (AlchemyInventory.GetElementalKnowledge(element) / 100);
+            int moddedValue = (int)(value * (AlchemyInventory.GetElementalKnowledge(element) / 100f));
             stats.ChangeAffinity(element, moddedValue / elementList.Count);
             elementUpgrade += value;
         }

@@ -76,6 +76,7 @@ public abstract class Ability : ScriptableObject
     {
         foreach (Element element in ability.ElementTypes)
         {
+            if (element == Element.None) continue;
             if (potentialTarget.Affinities[element].Get() > 100)
                 return true;
         }

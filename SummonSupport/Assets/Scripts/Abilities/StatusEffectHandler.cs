@@ -131,7 +131,6 @@ public class StatusEffectHandler : MonoBehaviour
     }
     public void AlterStatusEffectList(StatusEffects status, bool Add) // modifies the list of abilities by which one is affected
     {
-        Debug.Log("gimmi stack trace du arsch");
         if (Add)
         {
             if (livingBeing is EnemyStats enemyStats)
@@ -180,6 +179,7 @@ public class StatusEffectHandler : MonoBehaviour
     {
         Debug.Log($"knocking in the air");
 
+        if (rigidBody == null) return;
         rigidBody.AddForce(-transform.forward * GetStatusEffectValue(StatusEffectType.KnockBack) * 20, ForceMode.Impulse);
     }
 
