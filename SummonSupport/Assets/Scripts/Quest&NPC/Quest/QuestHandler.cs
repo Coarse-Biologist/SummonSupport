@@ -15,7 +15,7 @@ public class QuestHandler : MonoBehaviour
 
     public static QuestHandler Instance;
     public static List<Quest_SO> CompletedQuests = new List<Quest_SO>();
-    public static List<BoolAccomplishments> CompletedBoolQuests;
+    public static List<BoolAccomplishments> CompletedBoolQuests = new();
     public static List<Quest_SO> ActiveQuests = new List<Quest_SO>();
     public static Dictionary<RepeatableAccomplishments, int> QuestRepTracker = new Dictionary<RepeatableAccomplishments, int>()
 
@@ -78,16 +78,16 @@ public class QuestHandler : MonoBehaviour
         goalTransform = null;
         foreach (Quest_SO q in ActiveQuests)
         {
+            if (!q.HasGoalLocation) continue;
 
-            if (q.HasGoalLocation)
+            foreach (Quest_LocationGoal kvp in Instance.QuestGoalLocDict)
             {
-                foreach (Quest_LocationGoal kvp in Instance.QuestGoalLocDict)
-                    if (kvp.quest == q)
-                        goalTransform = kvp.GoalLocation;
-                return true;
+                if (kvp.quest == q)
+                {
+                    goalTransform = kvp.GoalLocation;
+                    return true;
+                }
             }
-            else return false;
-
         }
         return false;
 

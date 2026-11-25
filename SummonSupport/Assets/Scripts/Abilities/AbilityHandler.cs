@@ -183,7 +183,7 @@ public class AbilityHandler : MonoBehaviour
 
     public bool HasEnoughPower(float powerCost, AttributeType costType = AttributeType.CurrentPower)
     {
-        return !statsHandler || powerCost < statsHandler.GetAttribute(AttributeType.CurrentPower);
+        return !statsHandler || powerCost <= statsHandler.GetAttribute(costType);
     }
     public void HandleNoMana()
     {

@@ -140,16 +140,24 @@ public static class AlchemyInventory
         AvailableCraftingPotential[potential] += amount;
     }
 
+    public static bool CanAfford(Dictionary<CraftingPotential, int> usedPotential)
+    {
+        foreach (KeyValuePair<CraftingPotential, int> kvp in usedPotential)
+        {
+            if (AvailableCraftingPotential[kvp.Key] < kvp.Value) return false;
+        }
+        return true;
+    }
     public static void ExpendCraftingPotential(Dictionary<CraftingPotential, int> usedPotential)
     {
         foreach (KeyValuePair<CraftingPotential, int> kvp in usedPotential)
         {
-            if (AvailableCraftingPotential[kvp.Key] > 0) AlterCraftingPotential(kvp.Key, -kvp.Value);
+            AvailableCraftingPotential[kvp.Key] = System.Math.Max(0, AvailableCraftingPotential[kvp.Key] - kvp.Value);
         }
     }
     public static void ExpendCraftingPotential(CraftingPotential potential, int value)
     {
-        if (AvailableCraftingPotential[potential] > value) AlterCraftingPotential(potential, value);
+        if (AvailableCraftingPotential[potential] >= value) AlterCraftingPotential(potential, -value);
         else throw new System.Exception("You are trying to spend more crafting potential than you have available.");
     }
     public static void GainTool(AlchemyTool tool)

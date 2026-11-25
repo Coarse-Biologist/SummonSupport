@@ -63,6 +63,8 @@ public class MinionStats : LivingBeing
 
     public override void Die()
     {
+        if (Dead) return;
+        Dead = true;
         abilityHandler.StopAllToggledAbilities();
         EventDeclarer.minionDied?.Invoke(gameObject);
         SetRegeneration(AttributeType.CurrentHitpoints, 0);
@@ -116,6 +118,7 @@ public class MinionStats : LivingBeing
     {
         //Debug.Log($"Resurrecting minion {Name}");
         ToggleDeath(false);
+        SetDead(false);
         ChangeAttribute(AttributeType.CurrentHitpoints, 50f);
         if (ragdollScript != null) ragdollScript.ReverseDestruction();
     }

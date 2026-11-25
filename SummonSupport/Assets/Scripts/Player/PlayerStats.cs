@@ -194,6 +194,7 @@ public class PlayerStats : LivingBeing
     #region death and resurrection handling
     public override void Die()
     {
+        if (Dead) return;
         SetDead(true);
         Invoke("DelayedDeath", 2f);
     }
