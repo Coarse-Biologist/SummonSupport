@@ -6,11 +6,16 @@ public class DashAbility : ConjureAbility
     public override bool Activate(LivingBeing casterStats)
     {
         Transform originTransform = casterStats.transform;
-        // find backward direction
-        Vector3 spawnPosition = casterStats.transform.position - new Vector3(originTransform.right.x, originTransform.right.y, originTransform.right.z);
         Quaternion rotation = originTransform.rotation;
-        //Debug.Log($"spawn position = {spawnPosition}");
-        SpawnConjuredObject(casterStats, rotation, spawnPosition);
+        int extraObjects = Mathf.Max(0, AbilityModHandler.GetPlayerModValue(this, AbilityModTypes.Number, casterStats));
+
+        for (int i = 0; i <= extraObjects; i++)
+        {
+            // find backward direction, staggering extra conjured objects behind the caster
+            Vector3 spawnPosition = originTransform.position - originTransform.right * (1f + i * .5f);
+            //Debug.Log($"spawn position = {spawnPosition}");
+            SpawnConjuredObject(casterStats, rotation, spawnPosition);
+        }
         return true;
     }
     protected void SpawnConjuredObject(LivingBeing user, Quaternion rotation, Vector3 position)
