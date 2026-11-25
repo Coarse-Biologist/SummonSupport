@@ -13,31 +13,32 @@ public class TeleportAbility : Ability
     [field: SerializeField] public GameObject EffectOnActivate { get; private set; }
     [field: SerializeField] public float ActivationSpeed { get; private set; } = .3f;
 
-
-
-
-
-
+    private const float BaseCastRadius = 4f;
+    private const float SpeedDelayReductionPerMod = .05f;
 
     public bool Activate(LivingBeing casterStats, Vector3 targetLocation)
     {
-        //RaycastHit[] hits = Physics.SphereCastAll(user.transform.position, Range, user.transform.forward, Range);
-        TeamType desiredTargetType = this.GetTargetPreference(casterStats);
+        TeamType desiredTargetType = GetTargetPreference(casterStats);
 
-        List<LivingBeing> targets = GetTargetfromSphereCast(casterStats, casterStats.abilityHandler.abilitySpawn.transform, 1, desiredTargetType);
-        if (ActivateOnUse != null) ActivateOnUse.Activate(casterStats);
+        int desiredTargetNum = 1;
+        float castRadius = BaseCastRadius;
+        if (casterStats != null && casterStats.CharacterTag != CharacterTag.Enemy && AbilityModHandler.Instance != null)
+        {
+            desiredTargetNum += AbilityModHandler.Instance.GetModAttributeByType(this, AbilityModTypes.Number);
+            castRadius += AbilityModHandler.Instance.GetModAttributeByType(this, AbilityModTypes.Size) * .5f;
+        }
+
+        List<LivingBeing> targets = GetTargetfromSphereCast(casterStats, casterStats.abilityHandler.abilitySpawn.transform, desiredTargetNum, desiredTargetType, castRadius);
+        List<LivingBeing> validTargets = new();
         foreach (LivingBeing target in targets)
         {
-
-            if (ThoroughIsUsableOn(casterStats, target))
-            {
-                CoroutineManager.Instance.StartCustomCoroutine(TeleportToBeing(casterStats, target));
-
-                return true;
-            }
-
+            if (ThoroughIsUsableOn(casterStats, target)) validTargets.Add(target);
         }
-        return false;
+        if (validTargets.Count == 0) return false;
+
+        if (ActivateOnUse != null) ActivateOnUse.Activate(casterStats);
+        CoroutineManager.Instance.StartCustomCoroutine(TeleportToTargets(casterStats, validTargets));
+        return true;
     }
 
     public override bool Activate(LivingBeing user)
@@ -47,21 +48,49 @@ public class TeleportAbility : Ability
 
     public IEnumerator TeleportToBeing(LivingBeing casterStats, LivingBeing target)
     {
-        if (target != null && casterStats != null)
+        List<LivingBeing> targets = new() { target };
+        yield return TeleportToTargets(casterStats, targets);
+    }
+
+    private IEnumerator TeleportToTargets(LivingBeing casterStats, List<LivingBeing> targets)
+    {
+        float activationDelay = GetActivationDelay(casterStats);
+
+        foreach (LivingBeing target in targets)
         {
-            Instantiate(EffectOnActivate, casterStats.transform.position, Quaternion.identity, casterStats.transform);
+            if (casterStats == null || target == null) continue;
 
-            yield return new WaitForSeconds(ActivationSpeed);
+            if (EffectOnActivate != null)
+                Instantiate(EffectOnActivate, casterStats.transform.position, Quaternion.identity, casterStats.transform);
 
+            yield return new WaitForSeconds(activationDelay);
 
-            //casterStats.transform.position = target.transform.position + (casterStats.transform.position * .1f);
-            casterStats.transform.position = Vector3.Lerp(casterStats.transform.position, target.transform.position, 0.8f
-            );
-            if (ActivateOnArrive != null) ActivateOnArrive.Activate(casterStats);
+            casterStats.transform.position = Vector3.Lerp(casterStats.transform.position, target.transform.position, .8f);
+            ApplyArrivalEffects(casterStats, target);
+        }
+    }
 
+    private float GetActivationDelay(LivingBeing casterStats)
+    {
+        float delay = ActivationSpeed;
+        if (casterStats != null && casterStats.CharacterTag != CharacterTag.Enemy && AbilityModHandler.Instance != null)
+        {
+            int speedMod = AbilityModHandler.Instance.GetModAttributeByType(this, AbilityModTypes.Speed);
+            delay -= speedMod * SpeedDelayReductionPerMod;
+        }
+        return Mathf.Max(.05f, delay);
+    }
+
+    private void ApplyArrivalEffects(LivingBeing casterStats, LivingBeing target)
+    {
+        // Child abilities own their own effect packages, so do not apply this ability's effects twice.
+        if (ActivateOnArrive != null)
+        {
+            ActivateOnArrive.Activate(casterStats);
+            return;
         }
 
-        else yield return new WaitForSeconds(ActivationSpeed);
-
+        CombatStatHandler.HandleEffectPackage(this, casterStats, target, TargetEffects);
+        CombatStatHandler.HandleEffectPackage(this, casterStats, casterStats, SelfEffects);
     }
 }

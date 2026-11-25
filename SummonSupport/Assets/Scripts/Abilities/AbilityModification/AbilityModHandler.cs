@@ -20,6 +20,7 @@ public class AbilityModHandler : MonoBehaviour
         { AbilityModTypes.HealOverTime, 1 },
         { AbilityModTypes.Duration, 1 },
         { AbilityModTypes.Size, 1 },
+        { AbilityModTypes.Speed, 1 },
 
         { AbilityModTypes.MaxPierce, 1 },
         { AbilityModTypes.MaxSplit, 1 },
@@ -37,6 +38,7 @@ public class AbilityModHandler : MonoBehaviour
         { AbilityModTypes.HealOverTime, 50 },
         { AbilityModTypes.Duration, 80 },
         { AbilityModTypes.Size, 100 },
+        { AbilityModTypes.Speed, 150 },
 // projectile perks
         { AbilityModTypes.MaxPierce, 150 },
         { AbilityModTypes.MaxSplit, 150 },
@@ -50,9 +52,9 @@ public class AbilityModHandler : MonoBehaviour
             {typeof(TargetMouseAbility),new List<AbilityModTypes>() { AbilityModTypes.Cost, AbilityModTypes.Cooldown, AbilityModTypes.Damage, AbilityModTypes.DamageOverTime, AbilityModTypes.Heal, AbilityModTypes.HealOverTime } },
             {typeof(ConjureAbility), new List<AbilityModTypes>() { AbilityModTypes.MaxPierce, AbilityModTypes.MaxSplit, AbilityModTypes.Number, AbilityModTypes.Cost, AbilityModTypes.Cooldown, AbilityModTypes.Damage, AbilityModTypes.DamageOverTime, AbilityModTypes.Heal, AbilityModTypes.HealOverTime, AbilityModTypes.Size, AbilityModTypes.Duration} },
             {typeof(AuraAbility), new List<AbilityModTypes>() { AbilityModTypes.Cost, AbilityModTypes.Cooldown, AbilityModTypes.Damage, AbilityModTypes.DamageOverTime, AbilityModTypes.Heal, AbilityModTypes.HealOverTime, AbilityModTypes.Size } },
-            {typeof(TeleportAbility), new List<AbilityModTypes>() { AbilityModTypes.Cost, AbilityModTypes.Cooldown, AbilityModTypes.Damage, AbilityModTypes.DamageOverTime, AbilityModTypes.Heal, AbilityModTypes.HealOverTime } },
+            {typeof(TeleportAbility), new List<AbilityModTypes>() { AbilityModTypes.Cost, AbilityModTypes.Cooldown, AbilityModTypes.Damage, AbilityModTypes.DamageOverTime, AbilityModTypes.Heal, AbilityModTypes.HealOverTime, AbilityModTypes.Duration, AbilityModTypes.Size, AbilityModTypes.Speed, AbilityModTypes.Number } },
             {typeof(MeleeAbility), new List<AbilityModTypes>() { AbilityModTypes.Cost, AbilityModTypes.Cooldown, AbilityModTypes.Damage, AbilityModTypes.DamageOverTime, AbilityModTypes.Heal, AbilityModTypes.HealOverTime, AbilityModTypes.Size } },
-            {typeof(BeamAbility), new List<AbilityModTypes>() { AbilityModTypes.Cost, AbilityModTypes.Cooldown, AbilityModTypes.Damage, AbilityModTypes.DamageOverTime, AbilityModTypes.Heal, AbilityModTypes.HealOverTime } },
+            {typeof(BeamAbility), new List<AbilityModTypes>() { AbilityModTypes.Cost, AbilityModTypes.Cooldown, AbilityModTypes.Damage, AbilityModTypes.DamageOverTime, AbilityModTypes.Heal, AbilityModTypes.HealOverTime, AbilityModTypes.Duration, AbilityModTypes.Size, AbilityModTypes.Speed, AbilityModTypes.Number } },
             {typeof(ChargeAbility), new List<AbilityModTypes>() { AbilityModTypes.MaxPierce, AbilityModTypes.Cost, AbilityModTypes.Cooldown, AbilityModTypes.Damage, AbilityModTypes.DamageOverTime, AbilityModTypes.Heal, AbilityModTypes.HealOverTime }},
         };
     void Awake()
@@ -81,16 +83,23 @@ public class AbilityModHandler : MonoBehaviour
     }
 
 
+    public Ability GetModTarget(Ability ability)
+    {
+        if (ability == null) return null;
+        if (ability is ChargeAbility chargeAbility && chargeAbility.ActivateOnHit != null)
+            return chargeAbility.ActivateOnHit;
+        if (ability is TeleportAbility teleportAbility)
+        {
+            if (teleportAbility.ActivateOnArrive != null) return teleportAbility.ActivateOnArrive;
+            if (teleportAbility.ActivateOnUse != null) return teleportAbility.ActivateOnUse;
+        }
+        return ability;
+    }
+
     public Mod_Base TryAddNewAbilityMod(Ability ability)
     {
-
-        Ability abilityToAdd = ability;
-        if (ability is ChargeAbility chargeAbility) abilityToAdd = chargeAbility.ActivateOnHit;
-        else if (ability is TeleportAbility teleportAbility)
-        {
-            if (teleportAbility.ActivateOnArrive != null) abilityToAdd = teleportAbility.ActivateOnArrive;
-            else if (teleportAbility.ActivateOnUse != null) abilityToAdd = teleportAbility.ActivateOnUse;
-        }
+        Ability abilityToAdd = GetModTarget(ability);
+        if (abilityToAdd == null) return null;
 
         Mod_Base mod;
         if (!ModdedAbilities.TryGetValue(abilityToAdd, out Mod_Base existingMod))
@@ -110,21 +119,24 @@ public class AbilityModHandler : MonoBehaviour
         if (modType == AbilityModTypes.StatusEffect) return;
         Mod_Base mod = TryAddNewAbilityMod(ability);
         mod.Mod_Attribute(modType, changeValue);
-        Debug.Log($"ability = {ability.Name}. mod type = {modType}. change value = {changeValue}");
-        Debug.Log($"modded abilities dict now contains {ModdedAbilities[ability].GetModdedAttribute(modType)} for {modType}!");
+        Ability modTarget = GetModTarget(ability);
+        Debug.Log($"ability = {ability.Name}. mod target = {modTarget.Name}. mod type = {modType}. change value = {changeValue}");
+        Debug.Log($"modded abilities dict now contains {mod.GetModdedAttribute(modType)} for {modType}!");
     }
 
 
 
     public int GetModAttributeByType(Ability ability, AbilityModTypes modType)
     {
-        if (!ModdedAbilities.TryGetValue(ability, out Mod_Base existingMod)) return 0;
+        Ability modTarget = GetModTarget(ability);
+        if (modTarget == null || !ModdedAbilities.TryGetValue(modTarget, out Mod_Base existingMod)) return 0;
         else return existingMod.GetModdedAttribute(modType);
     }
 
     public List<StatusEffects> GetModStatusEffects(Ability ability)
     {
-        if (!ModdedAbilities.TryGetValue(ability, out Mod_Base existingMod))
+        Ability modTarget = GetModTarget(ability);
+        if (modTarget == null || !ModdedAbilities.TryGetValue(modTarget, out Mod_Base existingMod))
         {
             return new();
         }
@@ -153,14 +165,17 @@ public class AbilityModHandler : MonoBehaviour
 
     public List<AbilityModTypes> GetModableAttributes(Ability ability)
     {
-        Mod_Base mod = TryAddNewAbilityMod(ability);
+        if (ability == null) return new List<AbilityModTypes>();
+        TryAddNewAbilityMod(ability);
 
-        if (ModOptions.TryGetValue(ability.GetType(), out List<AbilityModTypes> modOptions))
+        Type abilityType = ability.GetType();
+        while (abilityType != null && abilityType != typeof(object))
         {
-            return modOptions;
+            if (ModOptions.TryGetValue(abilityType, out List<AbilityModTypes> modOptions))
+                return new List<AbilityModTypes>(modOptions);
+            abilityType = abilityType.BaseType;
         }
-        else return new List<AbilityModTypes>();
-
+        return new List<AbilityModTypes>();
     }
     public static List<T> GetUncommon<T>(List<T> listA, List<T> listB)
     {
