@@ -16,12 +16,38 @@ public class BeamAbility : Ability //#TODO logic of toggle abilities is not supp
 
     public GameObject ToggleBeam(LivingBeing casterStats, Transform abilityDirection)
     {
-        Beam beamScript = SpawnBeam(abilityDirection).GetComponent<Beam>();
-        //Debug.Log($"{abilityDirection} = ability direction object");
+        int beamCount = 1 + GetExtraBeamCount(casterStats);
+        GameObject beamGroup = new($"{Name} Beam");
+        beamGroup.transform.SetParent(abilityDirection, false);
+        beamGroup.transform.position = abilityDirection.position;
 
+        for (int i = 0; i < beamCount; i++)
+        {
+            GameObject beam = SpawnBeam(abilityDirection);
+            beam.name = $"{beamGroup.name} {i + 1}";
+            beam.transform.SetParent(beamGroup.transform, true);
+            beam.transform.localPosition = new Vector3(i * .35f, 0f, 0f);
+            ConfigureBeam(beam.GetComponent<Beam>(), casterStats, abilityDirection);
+        }
+
+        return beamGroup;
+    }
+
+    private int GetExtraBeamCount(LivingBeing casterStats)
+    {
+        if (casterStats == null || casterStats.CharacterTag == CharacterTag.Enemy || AbilityModHandler.Instance == null)
+            return 0;
+        return Mathf.Max(0, AbilityModHandler.Instance.GetModAttributeByType(this, AbilityModTypes.Number));
+    }
+
+    private void ConfigureBeam(Beam beamScript, LivingBeing casterStats, Transform abilityDirection)
+    {
+        if (beamScript == null)
+        {
+            Debug.LogError($"{Name} tried to spawn a beam without a Beam component.");
+            return;
+        }
         beamScript.SetAbilitySettings(casterStats, this, abilityDirection);
-
-        return beamScript.gameObject;
     }
 
     private GameObject SpawnBeam(Transform abilityDirection)

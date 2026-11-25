@@ -93,10 +93,15 @@ public abstract class Ability : ScriptableObject
 
     public List<LivingBeing> GetTargetfromSphereCast(LivingBeing casterStats, Transform directionTransform, int desiredTargetNum, TeamType teamType)
     {
+        return GetTargetfromSphereCast(casterStats, directionTransform, desiredTargetNum, teamType, 4f);
+    }
+
+    public List<LivingBeing> GetTargetfromSphereCast(LivingBeing casterStats, Transform directionTransform, int desiredTargetNum, TeamType teamType, float castRadius)
+    {
         List<CharacterTag> targetTypes = CrewsRelationshipHandler.TargetTypeToCharTab(teamType);
 
         List<LivingBeing> targets = new();
-        RaycastHit[] hits = Physics.SphereCastAll(directionTransform.position, 4, directionTransform.transform.forward, Range);
+        RaycastHit[] hits = Physics.SphereCastAll(directionTransform.position, castRadius, directionTransform.forward, Range);
         hits = ArrangeByDistanceFromCenter(hits, directionTransform, desiredTargetNum);
         foreach (RaycastHit hit in hits)
         {
