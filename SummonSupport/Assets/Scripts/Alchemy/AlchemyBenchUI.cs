@@ -496,7 +496,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
         {
             Button button = AddButtonToPanel(GeneralFunctions.GetCleanEnumString(modableAttribute), bottomLeftPanel, 30, 5);
             button.RegisterCallback<ClickEvent>(e => SetSelectedModAttribute(modableAttribute));
-            button.RegisterCallback<ClickEvent>(e => SetInstructionsText($"Would you like to improve the {selectedModType} to {selectedAbility}?"));
+            button.RegisterCallback<ClickEvent>(e => SetInstructionsText($"Would you like to improve the {selectedModType} to {selectedAbility.Name}?"));
 
         }
         Button statusEffectButton = AddButtonToPanel(GeneralFunctions.GetCleanEnumString(AbilityModTypes.StatusEffect), bottomLeftPanel, 30, 5);
