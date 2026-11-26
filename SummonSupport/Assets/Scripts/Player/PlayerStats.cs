@@ -64,6 +64,7 @@ public class PlayerStats : LivingBeing
     #region xp and level 
     private void GainXP(LivingBeing defeatedEnemy)
     {
+        if (NetworkSession.IsOnline) return;
         GainXP((int)defeatedEnemy.XP_OnDeath);
     }
     public void GainXP(int amount)
@@ -83,18 +84,18 @@ public class PlayerStats : LivingBeing
             if (CurrentXP == MaxXP) LevelUp();
         }
 
-        PlayerUIHandler.Instance.SetPlayerXP(CurrentXP);
+        if (PlayerUIHandler.Instance != null) PlayerUIHandler.Instance.SetPlayerXP(CurrentXP);
     }
     public void SetXp(int xp)
     {
         CurrentXP = xp;
-        PlayerUIHandler.Instance.SetPlayerXP(CurrentXP);
+        if (PlayerUIHandler.Instance != null) PlayerUIHandler.Instance.SetPlayerXP(CurrentXP);
 
     }
     public void SetMaxXp(int xp)
     {
         MaxXP = xp;
-        PlayerUIHandler.Instance.SetPlayerXP(CurrentXP);
+        if (PlayerUIHandler.Instance != null) PlayerUIHandler.Instance.SetPlayerXP(CurrentXP);
 
     }
 

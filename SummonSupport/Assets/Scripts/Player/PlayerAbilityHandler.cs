@@ -199,6 +199,8 @@ public class PlayerAbilityHandler : AbilityHandler
     }
     private bool CheckAbilityUsePossible(Ability selectedAbility)
     {
+        if (playerStats == null) playerStats = PlayerStats.Instance;
+        if (playerStats == null) return false;
         if (selectedAbility == null) return false;
         if (IsOnCoolDown(selectedAbility)) return false;
         if (PauseGameHandler.RecentlyPaused) return false;

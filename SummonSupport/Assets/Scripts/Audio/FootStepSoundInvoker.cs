@@ -33,7 +33,7 @@ public class FootStepSoundInvoker : MonoBehaviour
 
     public void TriggerPotionReturnToBelt()
     {
-
+        if (NetworkSession.IsOnline && transform.root.GetComponent<PlayerStats>() != PlayerStats.Instance) return;
         PotionHandler.ReturnPotionToBelt();
     }
 

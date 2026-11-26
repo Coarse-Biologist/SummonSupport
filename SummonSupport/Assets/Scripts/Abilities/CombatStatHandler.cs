@@ -1,3 +1,4 @@
+using Unity.Netcode;
 using UnityEngine;
 using System.Collections;
 using System.Diagnostics;
@@ -43,6 +44,16 @@ public static class CombatStatHandler
 
     public static void HandleEffectPackage(Ability ability, LivingBeing caster, LivingBeing target, EffectPackage effectPackage)
     {
+        if (NetworkSession.IsOnline && !NetworkManager.Singleton.IsServer && caster is PlayerStats && target.GetComponent<NetworkObject>() is { IsSpawned: true })
+        {
+            int abilityIndex = SetupManager.Instance.AllAbilities.IndexOf(ability);
+            NetworkPlayer requester = caster.GetComponent<NetworkPlayer>();
+            if (abilityIndex >= 0 && requester != null)
+                requester.SubmitAbilityEffectServerRpc(abilityIndex, effectPackage == ability.SelfEffects, target.GetComponent<NetworkObject>().NetworkObjectId);
+            else UnityEngine.Debug.LogWarning($"Ability {ability.name} could not be sent to the host; it is not in SetupManager.AllAbilities.");
+            return;
+        }
+
         currentAbility = ability;
         currentCaster = caster;
         currentTarget = target;

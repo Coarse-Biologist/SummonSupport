@@ -227,6 +227,7 @@ public class PlayerUIHandler : MonoBehaviour
 
     private void SetPlayerAttribute(AttributeType attributeType)
     {
+        if (playerHealthBar == null || playerPowerBar == null || playerStats == null) return;
         if (attributeType == AttributeType.CurrentHitpoints)
             playerHealthBar.value = playerStats.GetAttribute(attributeType);
         if (attributeType == AttributeType.CurrentPower)
@@ -234,6 +235,7 @@ public class PlayerUIHandler : MonoBehaviour
     }
     public void SetPlayerXP(float playerXP)
     {
+        if (playerXP_Bar == null || playerStats == null) return;
         playerXP_Bar.value = playerStats.CurrentXP;
         playerXP_Bar.highValue = playerStats.MaxXP;
     }
