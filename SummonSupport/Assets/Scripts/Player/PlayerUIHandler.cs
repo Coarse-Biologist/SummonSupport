@@ -37,10 +37,16 @@ public class PlayerUIHandler : MonoBehaviour
     private Dictionary<LivingBeing, ProgressBar> HPDict = new Dictionary<LivingBeing, ProgressBar>();
     void Awake()
     {
+        if (NetworkSession.IsOnline) return;
         if (Instance == null)
             Instance = this;
         else
             Destroy(gameObject);
+    }
+
+    public static void SetLocal(PlayerUIHandler handler)
+    {
+        Instance = handler;
     }
 
     void OnEnable()

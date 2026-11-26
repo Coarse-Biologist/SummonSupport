@@ -12,6 +12,12 @@ public class AlchemyObjectInteraction : MonoBehaviour, I_Interactable
     private GameObject leftPotion;
     private GameObject rightPotion;
 
+    public void SetPlayerHands(Transform left, Transform right)
+    {
+        playerHand_L = left;
+        playerHand_R = right;
+    }
+
     public void HideInteractionOption()
     {
         //Debug.Log("destroying potions or maybe not?");

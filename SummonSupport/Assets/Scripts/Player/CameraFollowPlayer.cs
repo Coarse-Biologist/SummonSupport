@@ -5,6 +5,7 @@ public class CameraFollowPlayer : MonoBehaviour
 {
     void Start()
     {
+        if (NetworkSession.IsOnline) return;
         if (gameObject.TryGetComponent(out CinemachineCamera cam))
         {
             PlayerStats player = FindFirstObjectByType<PlayerStats>();
@@ -12,6 +13,4 @@ public class CameraFollowPlayer : MonoBehaviour
                 cam.Follow = FindFirstObjectByType<PlayerStats>().transform;
         }
     }
-
-
 }

@@ -40,7 +40,7 @@ public class PlayerStats : LivingBeing
     protected override void Awake()
     {
         base.Awake();
-        Instance = this;
+        if (!NetworkSession.IsOnline) Instance = this;
         UiHandler = GetComponent<PlayerUIHandler>();
     }
 
@@ -210,7 +210,7 @@ public class PlayerStats : LivingBeing
 
     public override void HandleUIAttrDisplay(AttributeType attributeType, float newValue)
     {
-        UiHandler.UpdateResourceBar(this, attributeType);
+        if (UiHandler != null && UiHandler.isActiveAndEnabled) UiHandler.UpdateResourceBar(this, attributeType);
         switch (attributeType)
         {
             case AttributeType.MaxHitpoints:
