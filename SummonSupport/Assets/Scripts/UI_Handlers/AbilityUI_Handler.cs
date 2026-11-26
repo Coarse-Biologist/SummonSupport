@@ -41,6 +41,12 @@ public class AbilityUI_Handler : MonoBehaviour
             Instance = this;
         }
 
+        if (uiDoc == null && UI_DocHandler.Instance != null) uiDoc = UI_DocHandler.Instance.ui;
+        if (uiDoc == null)
+        {
+            Debug.LogWarning("AbilityUI_Handler has no UIDocument; the ability bar will not be set up.");
+            return;
+        }
         Setup();
 
     }

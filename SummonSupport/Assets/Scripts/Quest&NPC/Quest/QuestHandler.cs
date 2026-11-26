@@ -51,6 +51,7 @@ public class QuestHandler : MonoBehaviour
     }
     void Start()
     {
+        if (!NetworkSession.IsAuthority) return;
         playerStats = PlayerStats.Instance;
         EventDeclarer.QuestStarted?.Invoke(sceneStartingQuest);
     }
@@ -123,6 +124,7 @@ public class QuestHandler : MonoBehaviour
     }
     public void AddActiveQuest(Quest_SO quest)
     {
+        if (!NetworkSession.IsAuthority) return;
         if (quest == null) throw new System.Exception("QuestHandler: AddActiveQuest called with null quest");
         //debuf.Log($"Active quest added {quest.QuestName}");
         if (!ActiveQuests.Contains(quest)) ActiveQuests.Add(quest);
@@ -158,6 +160,7 @@ public class QuestHandler : MonoBehaviour
     }
     public void IncrementIntQuest(RepeatableAccomplishments intQuest, int value = 1)
     {
+        if (!NetworkSession.IsAuthority) return;
         //Debug.Log($"Increment func called for {intQuest}. change value  = {value}");
 
 
@@ -202,6 +205,7 @@ public class QuestHandler : MonoBehaviour
     }
     public void IncrementEnemyDefeated(LivingBeing livingBeing)
     {
+        if (!NetworkSession.IsAuthority) return;
         QuestRepTracker[RepeatableAccomplishments.EnemiesDefeated]++;
         TotalRepTracker[RepeatableAccomplishments.EnemiesDefeated]++;
         CheckQuestCompletionsForActiveQuests(RepeatableAccomplishments.EnemiesDefeated);
