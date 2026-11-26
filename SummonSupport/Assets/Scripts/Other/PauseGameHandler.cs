@@ -421,7 +421,8 @@ public class PauseGameHandler : MonoBehaviour
     {
         PlayerOptions.style.display = DisplayStyle.Flex;
         ClearInfoElement();
-        InfoElement.text = "";
+        string joinCode = RelayConnectionManager.Instance != null ? RelayConnectionManager.Instance.JoinCode : null;
+        InfoElement.text = string.IsNullOrEmpty(joinCode) ? "" : $"Multiplayer join code: {joinCode}\n";
         Button audioSettingsButton = AddButtons("Audio Settings", InfoElement, 50, 25);
         Button saveLoadButton = AddButtons("Save/Load", InfoElement, 50, 25);
 

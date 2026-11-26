@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using SummonSupportEvents;
 using Unity.Entities.UniversalDelegates;
+using Unity.Netcode;
 using UnityEngine;
 
 public class EnemySpawnHandler : MonoBehaviour
@@ -63,6 +64,7 @@ public class EnemySpawnHandler : MonoBehaviour
     }
     private IEnumerator SpawnWavesOfEnemies(SpawnLocationInfo spawnInfo = null)
     {
+        if (!NetworkSession.IsAuthority) yield break;
         if (spawnInfo == null) spawnInfo = SpawnCenter.GetComponentInChildren<SpawnLocationInfo>();
         if (spawnInfo == null) throw new Exception("Spawn info doesnt exist for the function: (Spawn waves of enemies)!");
         if (spawnInfo.Creatures.Length > 0)
@@ -79,6 +81,7 @@ public class EnemySpawnHandler : MonoBehaviour
                     LivingBeing livingBeing = SpawnedCreature.GetComponent<LivingBeing>();
                     int level = GetNumBasedOnDifficulty();
                     ModifyCreatureStats(level, livingBeing, spawnInfo);
+                    if (NetworkSession.IsOnline) SpawnedCreature.GetComponent<NetworkObject>().Spawn();
                     spawnedCreatures.Add(livingBeing);
                 }
                 if (spawnInfo.MoveTowardLocation && spawnInfo.TargetLocation != null)

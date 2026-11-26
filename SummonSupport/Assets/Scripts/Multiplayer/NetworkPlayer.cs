@@ -7,6 +7,7 @@ using UnityEngine.Rendering.Universal;
 [RequireComponent(typeof(PlayerMovement))]
 [RequireComponent(typeof(PlayerAbilityHandler))]
 [RequireComponent(typeof(PlayerUIHandler))]
+[RequireComponent(typeof(AbilityUI_Handler))]
 public class NetworkPlayer : NetworkBehaviour
 {
     [SerializeField] private string leftHandPath;
@@ -23,6 +24,7 @@ public class NetworkPlayer : NetworkBehaviour
         GetComponent<PlayerMovement>().enabled = false;
         GetComponent<PlayerAbilityHandler>().enabled = false;
         GetComponent<PlayerUIHandler>().enabled = false;
+        GetComponent<AbilityUI_Handler>().enabled = false;
         GetComponent<Rigidbody>().isKinematic = true;
     }
 

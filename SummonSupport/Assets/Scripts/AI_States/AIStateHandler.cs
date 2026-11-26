@@ -33,8 +33,8 @@ public class AIStateHandler : MonoBehaviour
     public MovementScript movementScript { get; private set; }
     [SerializeField] public MinionStats minionStats { private set; get; }
     public CreatureAbilityHandler abilityHandler { private set; get; }
-    public GameObject player { protected set; get; }
-    public LivingBeing playerStats { protected set; get; }
+    public GameObject player => PlayerStats.Instance != null ? PlayerStats.Instance.gameObject : null;
+    public LivingBeing playerStats => PlayerStats.Instance;
     public LivingBeing target { protected set; get; }
     public CharacterTag charType { protected set; get; }
 
@@ -81,15 +81,19 @@ public class AIStateHandler : MonoBehaviour
 
         anim = GetComponent<AnimationControllerScript>();
         currentMachineSpeed = stateMachineSpeed1;
-        StartCoroutine(RunStateMachine());
+        if (NetworkSession.IsAuthority) StartCoroutine(RunStateMachine());
         if (anim == null) throw new System.Exception($"The animator does not exist on {gameObject}");
 
 
     }
     void Start()
     {
-        player = PlayerStats.Instance.gameObject;
-        playerStats = PlayerStats.Instance;
+        if (!NetworkSession.IsAuthority)
+        {
+            enabled = false;
+            return;
+        }
+
     }
     public void SetTarget(LivingBeing newlyAssignedTarget)
     {

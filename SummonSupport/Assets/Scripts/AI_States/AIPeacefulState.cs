@@ -12,7 +12,7 @@ public class AIPeacefulState : AIState
     private bool canSeeTarget;
     private AIStateHandler stateHandler;
     private AIChaseState chaseState;
-    private GameObject player;
+    private GameObject player => PlayerStats.Instance != null ? PlayerStats.Instance.gameObject : null;
     private Rigidbody rb;
     #region Support ability use handling
     private bool runningSupportLoop = false;
@@ -26,7 +26,11 @@ public class AIPeacefulState : AIState
 
     void Start()
     {
-        player = PlayerStats.Instance.gameObject;
+        if (!NetworkSession.IsAuthority)
+        {
+            enabled = false;
+            return;
+        }
         stateHandler = gameObject.GetComponent<AIStateHandler>();
         chaseState = gameObject.GetComponent<AIChaseState>();
         rb = GetComponent<Rigidbody>();
@@ -157,7 +161,7 @@ public class AIPeacefulState : AIState
     public void GoToPlayer()
     {
         //Debug.Log("Going to player function called");
-        if (stateHandler.StuckInAbilityAnimation) return;
+        if (stateHandler.StuckInAbilityAnimation || player == null) return;
         float distance = (player.transform.position - transform.position).sqrMagnitude;
         if (distance >= stateHandler.navAgent.stoppingDistance + playerFollowRadius || distance >= chaseState.SelectedAbilityAttackRange)
         {

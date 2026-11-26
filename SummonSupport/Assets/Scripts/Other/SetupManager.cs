@@ -57,6 +57,12 @@ public class SetupManager : MonoBehaviour
         }
         else throw new System.Exception("The status effects scriptable objects are not loaded into the SetupManager");
 
+        if (!NetworkSession.IsOnline && PlayerStats.Instance == null && PlayerPrefab != null)
+        {
+            PlayerSpawnPoint spawn = FindFirstObjectByType<PlayerSpawnPoint>();
+            SpawnPlayer(spawn != null ? spawn.transform.position : Vector3.zero, spawn != null ? spawn.transform.rotation : Quaternion.identity);
+        }
+
     }
     public StatusEffectsLibrary GetStatusEffectLibrary()
     {
