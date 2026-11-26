@@ -172,10 +172,7 @@ public class PotionHandler : MonoBehaviour
 
     public static void ReturnPotionToBelt()
     {
-        if (SlotOfPotionInHand == -1 || PotionInHand == null)
-        {
-            throw new Exception("ReturnPotionToBelt was called but there is no potion in hand.");
-        }
+        if (SlotOfPotionInHand == -1 || PotionInHand == null) return;
         PotionInHand.transform.position = PlayerStats.Instance.AbilityPotionTransformList[SlotOfPotionInHand].position;
         PotionInHand.transform.SetParent(PlayerStats.Instance.AbilityPotionTransformList[SlotOfPotionInHand]);
         potionInHand = false;

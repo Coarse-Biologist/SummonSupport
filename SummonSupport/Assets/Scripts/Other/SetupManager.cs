@@ -57,8 +57,10 @@ public class SetupManager : MonoBehaviour
         }
         else throw new System.Exception("The status effects scriptable objects are not loaded into the SetupManager");
 
+        Debug.Log($"[SetupManager] online={NetworkSession.IsOnline} playerInstance={(PlayerStats.Instance != null)}");
         if (!NetworkSession.IsOnline && PlayerStats.Instance == null && PlayerPrefab != null)
         {
+            Debug.Log("[SetupManager] creating an offline local player.");
             PlayerSpawnPoint spawn = FindFirstObjectByType<PlayerSpawnPoint>();
             SpawnPlayer(spawn != null ? spawn.transform.position : Vector3.zero, spawn != null ? spawn.transform.rotation : Quaternion.identity);
         }

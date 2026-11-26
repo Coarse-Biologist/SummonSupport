@@ -161,7 +161,7 @@ public class AbilityHandler : MonoBehaviour
         //if (anim != null) anim.SeLayerWeight(1, 0);
         foreach (KeyValuePair<BeamAbility, GameObject> kvp in toggledAbilitiesDict)
         {
-            PotionHandler.SpawnElementalPotionOnBelt(Abilities.IndexOf(kvp.Key), kvp.Key);
+            if (GetComponent<PlayerStats>() != null) PotionHandler.SpawnElementalPotionOnBelt(Abilities.IndexOf(kvp.Key), kvp.Key);
             statsHandler.ChangeRegeneration(kvp.Key.CostType, GetModifiedCost(kvp.Key));
 
             Destroy(kvp.Value);

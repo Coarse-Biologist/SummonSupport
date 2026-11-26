@@ -303,6 +303,15 @@ public abstract class LivingBeing : MonoBehaviour
             Die();
     }
 
+    public void ApplyReplicatedHitpoints(float current, float max)
+    {
+        if (ResourceAttributesDict == null) return;
+        if (ResourceAttributesDict.TryGetValue(AttributeType.MaxHitpoints, out (Func<float> Get, Action<float> Set) maxAttr)) maxAttr.Set(max);
+        if (ResourceAttributesDict.TryGetValue(AttributeType.CurrentHitpoints, out (Func<float> Get, Action<float> Set) currentAttr)) currentAttr.Set(current);
+        HandleUIAttrDisplay(AttributeType.MaxHitpoints, max);
+        HandleUIAttrDisplay(AttributeType.CurrentHitpoints, current);
+    }
+
     public abstract void HandleUIAttrDisplay(AttributeType attributeType, float newValue);
 
 
@@ -332,6 +341,11 @@ public abstract class LivingBeing : MonoBehaviour
     {
         while (true)
         {
+            if (!NetworkSession.IsAuthority)
+            {
+                yield return regenTickRate;
+                continue;
+            }
             if (CurrentHP <= 0) yield return regenTickRate;
             float newHP = Mathf.Min(CurrentHP + TotalHealthRegeneration, MaxHP);
             if (newHP != CurrentHP)

@@ -541,8 +541,8 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
             if (AlchemyInventory.AvailableCraftingPotential[CraftingPotential.CorePower] >= price)
             {
                 AlchemyInventory.ExpendCraftingPotential(CraftingPotential.CorePower, price);
-                ModHandler.ModAttributeByType(selectedAbility, selectedModType, AbilityModHandler.GetModIncrementValue(selectedModType));
-                if (selectedStatusEffect != null) ModHandler.AddStatusEffectToAbility(selectedAbility, selectedStatusEffect);
+                NetworkAbilityMods.ModAttribute(selectedAbility, selectedModType, AbilityModHandler.GetModIncrementValue(selectedModType));
+                if (selectedStatusEffect != null) NetworkAbilityMods.AddStatusEffect(selectedAbility, selectedStatusEffect);
                 SetInstructionsText($"You have modified the {GeneralFunctions.GetCleanEnumString(selectedModType)} of {selectedAbility.Name} by {AbilityModHandler.GetModIncrementValue(selectedModType)} at the cost of {price} core power.");
             }
         }
@@ -551,7 +551,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
             int thePrice = AbilityModHandler.GetModCost(AbilityModTypes.StatusEffect);
             if (AlchemyInventory.AvailableCraftingPotential[CraftingPotential.CorePower] >= AbilityModHandler.GetModCost(AbilityModTypes.StatusEffect))
             {
-                ModHandler.AddStatusEffectToAbility(selectedAbility, selectedStatusEffect);
+                NetworkAbilityMods.AddStatusEffect(selectedAbility, selectedStatusEffect);
                 SetInstructionsText($"You have modified the {GeneralFunctions.GetCleanEnumString(selectedModType)} of {selectedAbility.Name} by {AbilityModHandler.GetModIncrementValue(selectedModType)} at the cost of {thePrice} core power.");
             }
         }
