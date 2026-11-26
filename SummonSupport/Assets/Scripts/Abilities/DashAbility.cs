@@ -5,6 +5,7 @@ public class DashAbility : ConjureAbility
 {
     public override bool Activate(LivingBeing casterStats)
     {
+        CurrentAuraGroup = null;
         Transform originTransform = casterStats.transform;
         Quaternion rotation = originTransform.rotation;
         int extraObjects = Mathf.Max(0, AbilityModHandler.GetPlayerModValue(this, AbilityModTypes.Number, casterStats));
@@ -20,12 +21,13 @@ public class DashAbility : ConjureAbility
     }
     protected void SpawnConjuredObject(LivingBeing user, Quaternion rotation, Vector3 position)
     {
-        GameObject spawnedObject = Instantiate(ObjectToSpawn, position, rotation);
+        Transform auraParent = GetAuraGroup(user);
+        GameObject spawnedObject = Instantiate(ObjectToSpawn, position, rotation, auraParent);
 
         Aura auraInChildren = spawnedObject.GetComponentInChildren<Aura>();
         if (auraInChildren != null)
         {
-            auraInChildren.HandleInstantiation(user.GetComponent<LivingBeing>(), null, this);
+            auraInChildren.HandleInstantiation(user, null, this);
         }
     }
 }
