@@ -26,7 +26,14 @@ public class ConjureAbility : Ability
     [field: SerializeField] public float Speed { get; private set; } = 2f;
     [field: SerializeField] public float SearchRadius { get; private set; } = 10f;
 
+    protected Transform CurrentAuraGroup { get; set; }
 
+    protected Transform GetAuraGroup(LivingBeing casterStats)
+    {
+        if (ObjectToSpawn == null || ObjectToSpawn.GetComponentInChildren<Aura>() == null) return null;
+        if (CurrentAuraGroup == null) CurrentAuraGroup = Aura.CreateAuraGroup(casterStats, this);
+        return CurrentAuraGroup;
+    }
 
     public override bool Activate(LivingBeing casterStats)
     {
@@ -36,6 +43,7 @@ public class ConjureAbility : Ability
 
     public bool Activate(LivingBeing casterStats, Quaternion rotation)
     {
+        CurrentAuraGroup = null;
 
         int targetNum = 1;
         int sizeMod = 0;
@@ -77,7 +85,8 @@ public class ConjureAbility : Ability
 
         Vector3 SpawnLoc = target.transform.position + SpawnOffset;
 
-        GameObject spawnedObject = Instantiate(ObjectToSpawn, SpawnLoc, newRotation);
+        Transform auraParent = GetAuraGroup(casterStats);
+        GameObject spawnedObject = Instantiate(ObjectToSpawn, SpawnLoc, newRotation, auraParent);
 
         Aura auraInChildren = spawnedObject.GetComponentInChildren<Aura>();
         if (auraInChildren != null)
@@ -94,7 +103,8 @@ public class ConjureAbility : Ability
         float spawnDistance = Range + Mathf.Max(0, AbilityModHandler.GetPlayerModValue(this, AbilityModTypes.Speed, casterStats)) * .5f;
         Vector3 SpawnLoc = casterStats.transform.position + casterStats.transform.forward * spawnDistance;
         Vector3 newSpawnOffset = new Vector3(SpawnOffset.x, SpawnOffset.y, SpawnOffset.z + iterator);
-        GameObject spawnedObject = Instantiate(ObjectToSpawn, SpawnLoc + newSpawnOffset, newRotation);
+        Transform auraParent = GetAuraGroup(casterStats);
+        GameObject spawnedObject = Instantiate(ObjectToSpawn, SpawnLoc + newSpawnOffset, newRotation, auraParent);
 
         Aura auraInChildren = spawnedObject.GetComponentInChildren<Aura>();
         if (auraInChildren != null)
