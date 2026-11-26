@@ -47,6 +47,7 @@ public class PlayerUIHandler : MonoBehaviour
     public static void SetLocal(PlayerUIHandler handler)
     {
         Instance = handler;
+        handler.SetUpUI();
     }
 
     void OnEnable()
@@ -70,7 +71,7 @@ public class PlayerUIHandler : MonoBehaviour
 
     void Start()
     {
-        SetUpUI();
+        if (!NetworkSession.IsOnline) SetUpUI();
         UpdateMaxValueResourceBar(playerStats, AttributeType.CurrentHitpoints);
         UpdateResourceBar(playerStats, AttributeType.CurrentHitpoints);
         UpdateResourceBar(playerStats, AttributeType.CurrentPower);
@@ -99,12 +100,14 @@ public class PlayerUIHandler : MonoBehaviour
         minionHPBars = playerUI.Q<VisualElement>("MinionBarSlots");
         var craftingUI = root.Q<VisualElement>("CraftingUI");
         if (craftingUI != null)
+        {
             craftingUI.style.display = DisplayStyle.None;
+            craftingUI.style.opacity = 100f;
+        }
 
 
         playerUI.style.opacity = 100f;
-        craftingUI.style.opacity = 100f;
-        playerStats = PlayerStats.Instance;
+        playerStats = GetComponent<PlayerStats>();
     }
 
     void UpdateMaxValueResourceBar(LivingBeing creature, AttributeType attributeType)

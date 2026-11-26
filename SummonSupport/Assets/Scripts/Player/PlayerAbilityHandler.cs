@@ -31,7 +31,7 @@ public class PlayerAbilityHandler : AbilityHandler
         SetAllAbilitySlots();
         //playerStats = GetComponent<LivingBeing>();
         //modHandler = AbilityModHandler.Instance;
-        playerStats = PlayerStats.Instance;
+        playerStats = GetComponent<PlayerStats>();
         EquipAllPotions();
         //audioHandler = GetComponent<LivingBeingAudioHandler>();
         //Debug.Log($"{audioHandler} = audioHandler");
