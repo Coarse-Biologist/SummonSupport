@@ -40,7 +40,7 @@ public class AIStateHandler : MonoBehaviour
 
     public Vector3 lastSeenLoc;
     public AnimationControllerScript anim;
-    public WaitForSeconds stateMachineSpeed1 = new WaitForSeconds(1);
+    public WaitForSeconds stateMachineSpeed1 = new WaitForSeconds(.5f);
     public WaitForSeconds stateMachineSpeed2 = new WaitForSeconds(1.3f);
     public WaitForSeconds stateMachineSpeed3 = new WaitForSeconds(1.6f);
     public WaitForSeconds stateMachineSpeed4 = new WaitForSeconds(1.9f);

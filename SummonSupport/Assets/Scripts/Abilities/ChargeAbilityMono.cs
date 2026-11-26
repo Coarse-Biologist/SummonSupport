@@ -15,7 +15,6 @@ public class ChargeAbilityMono : MonoBehaviour
     private LivingBeing caster;
     private WaitForSeconds chargeTickRate = new WaitForSeconds(.1f);
     private GameObject trailEffect;
-    private AbilityModHandler modHandler;
     [field: SerializeField] public float SpeedBoost { private set; get; } = 10;
     private float range = 0;
     private int alreadypierced = 0;
@@ -31,11 +30,9 @@ public class ChargeAbilityMono : MonoBehaviour
         abilityHandler.SetCharging(true);
         ToggleStuckInAbilityAnimation(user, true);
 
-        SetModHandler(casterStats);
         SetRunAnimation();
-        SetAndApplyMods();
-
         range = chargeAbility.Range;
+        SetAndApplyMods();
 
 
         //Debug.Log($"Max pierce = {maxPierce}");
@@ -46,13 +43,10 @@ public class ChargeAbilityMono : MonoBehaviour
     }
     private void SetAndApplyMods()
     {
-        if (modHandler != null)
-        {
-            maxPierce = modHandler.GetModAttributeByType(chargeAbility.ActivateOnHit, AbilityModTypes.MaxPierce);
-            range += modHandler.GetModAttributeByType(chargeAbility.ActivateOnHit, AbilityModTypes.Size);
-            SpeedBoost += modHandler.GetModAttributeByType(chargeAbility, AbilityModTypes.Speed);
-
-        }
+        Ability onHitAbility = chargeAbility.ActivateOnHit;
+        maxPierce = Mathf.Max(0, AbilityModHandler.GetPlayerModValue(onHitAbility, AbilityModTypes.MaxPierce, caster));
+        range += Mathf.Max(0, AbilityModHandler.GetPlayerModValue(onHitAbility, AbilityModTypes.Size, caster));
+        SpeedBoost += Mathf.Max(0, AbilityModHandler.GetPlayerModValue(chargeAbility, AbilityModTypes.Speed, caster));
 
         if (caster.gameObject.TryGetComponent(out MovementScript movementScript))
         {
@@ -84,7 +78,7 @@ public class ChargeAbilityMono : MonoBehaviour
             Debug.Log("Charging");
 
             rb.linearVelocity = originTransform.forward * SpeedBoost;
-            if ((gameObject.transform.position - startLoc).magnitude > chargeAbility.Range)
+            if ((gameObject.transform.position - startLoc).magnitude > range)
             {
                 EndCharge();
             }
@@ -96,6 +90,11 @@ public class ChargeAbilityMono : MonoBehaviour
     {
         //if (collision is BoxCollider wall) EndCharge();
         Ability abilityToCast = chargeAbility.ActivateOnHit;
+        if (abilityToCast == null)
+        {
+            EndCharge();
+            return;
+        }
         bool success = abilityToCast.Activate(caster);
         if (success)
         {
@@ -138,14 +137,4 @@ public class ChargeAbilityMono : MonoBehaviour
 
         else Debug.Log($"No CcState script or playermovement script found on the sought gameObject: {user}");
     }
-    private void SetModHandler(LivingBeing casterStats)
-    {
-        if (casterStats.CharacterTag != CharacterTag.Enemy)
-        {
-            modHandler = AbilityModHandler.Instance;
-        }
-        else modHandler = null;
-    }
-
-
 }

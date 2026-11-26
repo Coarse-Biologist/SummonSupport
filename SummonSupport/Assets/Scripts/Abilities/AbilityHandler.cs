@@ -80,8 +80,7 @@ public class AbilityHandler : MonoBehaviour
             EventDeclarer.IonizedAttack?.Invoke(statsHandler);
         }
         StartCoroutine(SetOnCooldown(ability));
-        int costMod = modHandler.GetModAttributeByType(ability, AbilityModTypes.Cost);
-        statsHandler?.ChangeAttribute(AttributeType.CurrentPower, -ability.Cost + costMod);
+        statsHandler?.ChangeAttribute(AttributeType.CurrentPower, -GetModifiedCost(ability));
 
         return true;
     }
@@ -146,7 +145,7 @@ public class AbilityHandler : MonoBehaviour
 
             beamInstance = beamAbility.ToggleBeam(statsHandler, abilitySpawn.transform);
             toggledAbilitiesDict.TryAdd(beamAbility, beamInstance);
-            statsHandler.ChangeRegeneration(beamAbility.CostType, -beamAbility.Cost);
+            statsHandler.ChangeRegeneration(beamAbility.CostType, -GetModifiedCost(beamAbility));
             //AbilityToggledRecently = true;
             return true;
         }
@@ -163,7 +162,7 @@ public class AbilityHandler : MonoBehaviour
         foreach (KeyValuePair<BeamAbility, GameObject> kvp in toggledAbilitiesDict)
         {
             PotionHandler.SpawnElementalPotionOnBelt(Abilities.IndexOf(kvp.Key), kvp.Key);
-            statsHandler.ChangeRegeneration(AttributeType.CurrentPower, kvp.Key.Cost);
+            statsHandler.ChangeRegeneration(kvp.Key.CostType, GetModifiedCost(kvp.Key));
 
             Destroy(kvp.Value);
         }
@@ -175,15 +174,22 @@ public class AbilityHandler : MonoBehaviour
         {
             anim.SeLayerWeight(1, 0);
         }
-        statsHandler.ChangeRegeneration(AttributeType.CurrentPower, beamAbility.Cost);
+        statsHandler.ChangeRegeneration(beamAbility.CostType, GetModifiedCost(beamAbility));
         toggledAbilitiesDict.Remove(beamAbility);
         //AbilityToggledRecently = false;
         Destroy(activeAbility);
     }
 
+    private float GetModifiedCost(Ability ability)
+    {
+        if (ability == null) return 0f;
+        if (modHandler == null) return ability.Cost;
+        return Mathf.Max(0f, ability.Cost + modHandler.GetModAttributeByType(ability, AbilityModTypes.Cost));
+    }
+
     public bool HasEnoughPower(float powerCost, AttributeType costType = AttributeType.CurrentPower)
     {
-        return !statsHandler || powerCost < statsHandler.GetAttribute(AttributeType.CurrentPower);
+        return !statsHandler || powerCost <= statsHandler.GetAttribute(costType);
     }
     public void HandleNoMana()
     {

@@ -64,10 +64,6 @@ public static class CombatStatHandler
 
         HandleApplyStatusEffects();
 
-        currentStatusEffects.Clear(); //WTF, this is a band-aid for the fact that status effects from mods are being added to the static currentStatusEffects list and not being removed, 
-        // causing unintended stacking of status effects from mods. need to find better solution later.
-        // why are status effects being added to sbility scriptable objects?
-
         if (effectPackage.AttributeUp.Count > 0)
         {
             foreach (TempAttrIncrease_AT tempChange in effectPackage.AttributeUp)
@@ -92,17 +88,13 @@ public static class CombatStatHandler
         {
             foreach (StatusEffects status in currentStatusEffects)
             {
-                UnityEngine.Debug.Log("gimmi stack trace du Pilzchen :)");
-
                 currentTarget.SE_Handler.AlterStatusEffectList(status, true);
             }
         }
     }
     private static void SetCurrentValues(EffectPackage currentAbilityEffects)
     {
-        UnityEngine.Debug.Log($"current status efffects in combatStatsHandlerClass = {currentStatusEffects.Count}. statusEffects of ability itself = {currentAbilityEffects.StatusEffects.Count}");
-        currentStatusEffects = currentAbilityEffects.StatusEffects;
-        UnityEngine.Debug.Log($"After setting equal: current status efffects in combatStatsHandlerClass = {currentStatusEffects.Count}. statusEffects of ability itself = {currentAbilityEffects.StatusEffects.Count}");
+        currentStatusEffects = new List<StatusEffects>(currentAbilityEffects.StatusEffects);
 
         currentDamageValue = currentAbilityEffects.Damage.Value;
         currentDotValue = currentAbilityEffects.DamageOverTime.Value;
@@ -118,9 +110,7 @@ public static class CombatStatHandler
             foreach (StatusEffects se in modHandler.GetModStatusEffects(currentAbility))
             {
                 currentStatusEffects.Add(se);
-                UnityEngine.Debug.Log($"{se} = status effect of {currentAbility}");
             }
-            UnityEngine.Debug.Log($"{modHandler.ModdedAbilities.Count} = num modded abilities");
 
             currentDamageValue += modHandler.GetModAttributeByType(currentAbility, AbilityModTypes.Damage); // damage increase from mods
             currentDotValue += modHandler.GetModAttributeByType(currentAbility, AbilityModTypes.DamageOverTime); // DOT increase from mods

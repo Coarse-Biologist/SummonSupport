@@ -76,6 +76,7 @@ public abstract class Ability : ScriptableObject
     {
         foreach (Element element in ability.ElementTypes)
         {
+            if (element == Element.None) continue;
             if (potentialTarget.Affinities[element].Get() > 100)
                 return true;
         }
@@ -92,10 +93,20 @@ public abstract class Ability : ScriptableObject
 
     public List<LivingBeing> GetTargetfromSphereCast(LivingBeing casterStats, Transform directionTransform, int desiredTargetNum, TeamType teamType)
     {
+        return GetTargetfromSphereCast(casterStats, directionTransform, desiredTargetNum, teamType, 4f);
+    }
+
+    public List<LivingBeing> GetTargetfromSphereCast(LivingBeing casterStats, Transform directionTransform, int desiredTargetNum, TeamType teamType, float castRadius)
+    {
+        return GetTargetfromSphereCast(casterStats, directionTransform, desiredTargetNum, teamType, castRadius, Range);
+    }
+
+    public List<LivingBeing> GetTargetfromSphereCast(LivingBeing casterStats, Transform directionTransform, int desiredTargetNum, TeamType teamType, float castRadius, float castRange)
+    {
         List<CharacterTag> targetTypes = CrewsRelationshipHandler.TargetTypeToCharTab(teamType);
 
         List<LivingBeing> targets = new();
-        RaycastHit[] hits = Physics.SphereCastAll(directionTransform.position, 4, directionTransform.transform.forward, Range);
+        RaycastHit[] hits = Physics.SphereCastAll(directionTransform.position, castRadius, directionTransform.forward, castRange);
         hits = ArrangeByDistanceFromCenter(hits, directionTransform, desiredTargetNum);
         foreach (RaycastHit hit in hits)
         {

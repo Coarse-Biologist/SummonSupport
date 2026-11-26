@@ -17,6 +17,7 @@ public class Beam : MonoBehaviour
 
     private float deletionDelay = 5f;
     private float TickRate = .5f;
+    private float speedMultiplier = 1f;
 
     private bool onCoolDown = false;
 
@@ -54,6 +55,15 @@ public class Beam : MonoBehaviour
     void SetParticleSettings()
     {
         ParticleSystem = GetComponent<ParticleSystem>();
+        if (ParticleSystem == null)
+        {
+            Debug.LogError($"{name} is missing its ParticleSystem and cannot act as a beam.");
+            return;
+        }
+
+        var main = ParticleSystem.main;
+        main.simulationSpeed *= speedMultiplier;
+
         var collision = ParticleSystem.collision;
         collision.mode = ParticleSystemCollisionMode.Collision3D; // Use 3D collisions
         InvokeRepeating("UpdateRotation", 0f, .1f);
@@ -64,11 +74,29 @@ public class Beam : MonoBehaviour
     {
         TickRate = ability.TickRate;
         Range = ability.Range;
+        deletionDelay = Mathf.Max(5f, ability.Duration);
+        speedMultiplier = 1f;
+
+        if (caster != null && caster.CharacterTag != CharacterTag.Enemy && AbilityModHandler.Instance != null)
+        {
+            AbilityModHandler modHandler = AbilityModHandler.Instance;
+            int sizeMod = modHandler.GetModAttributeByType(ability, AbilityModTypes.Size);
+            int speedMod = modHandler.GetModAttributeByType(ability, AbilityModTypes.Speed);
+            int durationMod = modHandler.GetModAttributeByType(ability, AbilityModTypes.Duration);
+
+            TickRate = Mathf.Max(.05f, ability.TickRate - speedMod * .05f);
+            Range += sizeMod;
+            deletionDelay += durationMod;
+            speedMultiplier = 1f + speedMod * .1f;
+            transform.localScale *= 1f + sizeMod * .15f;
+        }
+
         abilityRotation = rotationObject;
         //Debug.Log($"does the rotation object exist? ({rotationObject})");
         Caster = caster;
         Ability = ability;
-        AlreadyCollided.Add(caster);
+        AlreadyCollided.Clear();
+        if (caster != null) AlreadyCollided.Add(caster);
     }
 
     private void UpdateRotation()

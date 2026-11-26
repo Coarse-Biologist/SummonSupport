@@ -7,18 +7,19 @@ using SS_Structs;
 
 public static class SaveHandler
 {
-    public static Dictionary<int, SaveData> saves { private set; get; } = new() { { 1, null } };
+    public static Dictionary<int, SaveData> saves { private set; get; } = new();
     public static string GetSaveFileInfo(int slot)
     {
         string saveInfo = "Empty";
-        SaveData saveData = saves[slot];
+        saves.TryGetValue(slot, out SaveData saveData);
         if (saveData != null) saveInfo = $"Slot {slot}: " + saveData.saveTime;
         return saveInfo;
     }
     public static void SaveGameData(int slot)
     {
         SaveData saveData = new SaveData();
-        saves[slot] = saveData;
+        if (!saves.ContainsKey(slot)) saves.Add(slot, saveData);
+        else saves[slot] = saveData;
 
         saveData = SaveAlchemyData(saveData);
         saveData = SaveMinionData(saveData);
@@ -125,7 +126,7 @@ public static class SaveHandler
             ElementAffinity data = new()
             {
                 elementType = element,
-                value = PlayerStats.Instance.GetAffinity(element)
+                value = minionStats.GetAffinity(element)
             };
             affinityData.Add(data);
         }
@@ -250,9 +251,8 @@ public static class SaveHandler
     }
     private static void SetMinionData(SaveData loadedData)
     {
-        for (int i = 0; i < AlchemyHandler.Instance.activeMinions.Count; i++)
+        foreach (MinionStats minionToUnload in AlchemyHandler.Instance.activeMinions.ToArray())
         {
-            MinionStats minionToUnload = (MinionStats)AlchemyHandler.Instance.activeMinions[i];
             minionToUnload.TrueDeath();
         }
         foreach (MinionData minionData in loadedData.minions)

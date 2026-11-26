@@ -13,14 +13,20 @@ public class TargetMouseAbility : Ability
     private List<LivingBeing> GetTargets(LivingBeing caster)
     {
         int targetNum = 1;
-        if (caster.CharacterTag != CharacterTag.Enemy)
+        int sizeMod = 0;
+        int speedMod = 0;
+        if (caster != null && caster.CharacterTag != CharacterTag.Enemy)
         {
-            targetNum += AbilityModHandler.Instance.GetModAttributeByType(this, AbilityModTypes.Number);
+            targetNum += Mathf.Max(0, AbilityModHandler.GetPlayerModValue(this, AbilityModTypes.Number, caster));
+            sizeMod = Mathf.Max(0, AbilityModHandler.GetPlayerModValue(this, AbilityModTypes.Size, caster));
+            speedMod = Mathf.Max(0, AbilityModHandler.GetPlayerModValue(this, AbilityModTypes.Speed, caster));
         }
         TeamType desiredTargetType = GetTargetPreference(caster);
         Transform spawnPoint = caster.GetComponent<AbilityHandler>().abilitySpawn.transform;
+        float castRadius = 4f + sizeMod * .5f;
+        float castRange = Range + speedMod * .5f;
         //Debug.Log($"number of Targets found: {targets.Count}. max targets = {targetNum}");
-        return GetTargetfromSphereCast(caster, spawnPoint, targetNum, desiredTargetType);
+        return GetTargetfromSphereCast(caster, spawnPoint, targetNum, desiredTargetType, castRadius, castRange);
     }
 
     public override bool Activate(LivingBeing casterStats)

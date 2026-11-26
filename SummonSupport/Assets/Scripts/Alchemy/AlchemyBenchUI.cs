@@ -439,7 +439,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
         minionToUpgrade = minion;
         SetInstructionsText($"Select ingredients and element with which to upgrade {minion.Name}.");
         SpawnCraftingPotentialButtons();
-        ShowElementToggles(bottomRightPanel);
+        ShowElementToggles(bottomLeftPanel);
     }
     #endregion
 
@@ -494,12 +494,12 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
 
         foreach (AbilityModTypes modableAttribute in ModHandler.GetModableAttributes(ability))
         {
-            Button button = AddButtonToPanel(GeneralFunctions.GetCleanEnumString(modableAttribute), bottomLeftPanel, 30, 10);
+            Button button = AddButtonToPanel(GeneralFunctions.GetCleanEnumString(modableAttribute), bottomLeftPanel, 30, 5);
             button.RegisterCallback<ClickEvent>(e => SetSelectedModAttribute(modableAttribute));
-            button.RegisterCallback<ClickEvent>(e => SetInstructionsText($"Would you like to improve the {selectedModType} to {selectedAbility}?"));
+            button.RegisterCallback<ClickEvent>(e => SetInstructionsText($"Would you like to improve the {selectedModType} to {selectedAbility.Name}?"));
 
         }
-        Button statusEffectButton = AddButtonToPanel(GeneralFunctions.GetCleanEnumString(AbilityModTypes.StatusEffect), bottomLeftPanel, 30, 10);
+        Button statusEffectButton = AddButtonToPanel(GeneralFunctions.GetCleanEnumString(AbilityModTypes.StatusEffect), bottomLeftPanel, 30, 5);
         statusEffectButton.RegisterCallback<ClickEvent>(e => ShowStatusEffectOptionScreen());
 
     }
@@ -588,7 +588,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
             ShowCraftingInfo();
             SpawnCraftingPotentialButtons();
             //SpawnIngredientButtons();
-            ShowElementToggles(bottomRightPanel);
+            ShowElementToggles(bottomLeftPanel);
             Button confirmButton = AddButtonToPanel("Confirm", topRightPanel, 50, 5);
 
             Button clearButton = AddButtonToPanel("Clear Selection", topRightPanel, 50, 5);
@@ -657,17 +657,19 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
         {
             elementsGenerated = true;
             List<Element> elementsList = Enum.GetValues(typeof(Element)).Cast<Element>().ToList();
-            TemplateContainer prefabContainer = UIPrefabAssets.Instantiate();
 
             foreach (Element element in elementsList)
             {
-                if (AlchemyInventory.GetElementalKnowledge(element) >= 50)
+                if (AlchemyInventory.GetElementalKnowledge(element) >= -50)
                 {
+                    TemplateContainer prefabContainer = UIPrefabAssets.Instantiate();
+
                     Toggle elementToggle = prefabContainer.Q<Toggle>("TogglePrefab");
-                    //elementToggle.AddToClassList("ElementToggle");
+                    Debug.Log($"{elementToggle} found for {element}?");
+                    elementToggle.AddToClassList("ElementToggle");
                     elementToggle.text = element.ToString();
-                    elementToggle.style.width = Length.Percent(30);
-                    elementToggle.style.height = Length.Percent(10);
+                    elementToggle.style.width = Length.Percent(20);
+                    elementToggle.style.height = Length.Percent(5);
                     //elementToggle.style.backgroundColor = Color.green;
 
                     panel.Add(elementToggle);
@@ -760,7 +762,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
             EventDeclarer.PlayerLearnedAbility?.Invoke(selectedAbility);
             foreach (LivingBeing minion in AlchemyHandler.Instance.activeMinions)
             {
-                if (minion.GetAffinity(selectedMinionAbility.ElementTypes[0]) > 50)
+                if (minion.GetAffinity(selectedMinionAbility.ElementTypes[0]) > 50) // #TODO could potentially have no elements
                 {
                     minion.GetComponent<AbilityHandler>().LearnAbility(selectedMinionAbility);
                 }
@@ -863,8 +865,6 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
         ClearAllPanels();
         ResetVars();
 
-
-
         SetInstructionsText("Select whose abilities you would like to slot.");
         Button slotPlayerAbilitiesButton = AddButtonToPanel("Player Abilities", bottomLeftPanel, 50, 5);
         slotPlayerAbilitiesButton.RegisterCallback<ClickEvent>(e => SlotLivingBeingAbilities(PlayerStats.Instance));
@@ -873,7 +873,6 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
         {
             Button button = AddButtonToPanel($"{minion.Name}", bottomLeftPanel, 50, 5);
             button.RegisterCallback<ClickEvent>(e => SlotLivingBeingAbilities(minion));
-
         }
 
 
@@ -925,7 +924,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
             for (int i = 0; i < maxSlots; i++)
             {
                 int slotNum = i;
-                Button slotButton = AddButtonToPanel($"Slot: {SlotNames[i]}", bottomRightPanel, 20, 5);
+                Button slotButton = AddButtonToPanel($"Slot: {SlotNames[i]}", bottomLeftPanel, 20, 5);
                 slotButton.RegisterCallback<ClickEvent>(e => SetSelectedSlot(slotNum));
 
             }
