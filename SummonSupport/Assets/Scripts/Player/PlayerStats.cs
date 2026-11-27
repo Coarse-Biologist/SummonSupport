@@ -144,7 +144,7 @@ public class PlayerStats : LivingBeing
                     AddControllableMinions(1);
                     break;
                 case LevelRewards.ElementalAffinity:
-                    ChangeAffinity(GetHighestAffinity(out float value), 10);
+                    ChangeAffinity(GetAffinityRewardElement(), 10);
                     break;
                 default:
                     Debug.LogWarning($"There is no behavior implimented for the level up reward {reward}");
@@ -152,6 +152,32 @@ public class PlayerStats : LivingBeing
             }
         }
     }
+    /// <summary>
+    /// The element the affinity level-up reward goes to: the player's strongest affinity, or with no affinity yet,
+    /// the element they know most about, or with no knowledge either, a random element.
+    /// </summary>
+    private Element GetAffinityRewardElement()
+    {
+        Element element = GetHighestAffinity(out float _);
+        if (element != Element.None) return element;
+
+        int bestKnowledge = 0;
+        foreach (KeyValuePair<Element, int> kvp in AlchemyInventory.knowledgeDict)
+        {
+            if (kvp.Value > bestKnowledge && Affinities.ContainsKey(kvp.Key))
+            {
+                bestKnowledge = kvp.Value;
+                element = kvp.Key;
+            }
+        }
+        if (element != Element.None) return element;
+
+        List<Element> elements = new();
+        foreach (Element candidate in Affinities.Keys)
+            if (candidate != Element.None) elements.Add(candidate);
+        return elements.Count > 0 ? elements[UnityEngine.Random.Range(0, elements.Count)] : Element.None;
+    }
+
     public void GainLevelRewards(Dictionary<LevelRewards, int> rewards)
     {
         foreach (var reward in rewards)
@@ -181,7 +207,7 @@ public class PlayerStats : LivingBeing
                         AddControllableMinions(1 * reward.Value);
                         break;
                     case LevelRewards.ElementalAffinity:
-                        ChangeAffinity(GetHighestAffinity(out float value), 10 * reward.Value);
+                        ChangeAffinity(GetAffinityRewardElement(), 10 * reward.Value);
                         break;
                     default:
                         Debug.LogWarning($"There is no behavior implimented for the level up reward {reward}");

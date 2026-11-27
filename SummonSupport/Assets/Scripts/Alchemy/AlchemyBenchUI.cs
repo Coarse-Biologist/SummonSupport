@@ -27,6 +27,8 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
     #region UI assets
     private VisualTreeAsset UIPrefabAssets;
     [SerializeField] Sprite alchemyBackground;
+    [Tooltip("Elemental knowledge needed before an element can be selected for crafting minions.")]
+    [SerializeField] private int minKnowledgeForElementToggle = 50;
 
     #endregion
 
@@ -660,7 +662,7 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
 
             foreach (Element element in elementsList)
             {
-                if (AlchemyInventory.GetElementalKnowledge(element) >= -50)
+                if (element != Element.None && AlchemyInventory.GetElementalKnowledge(element) >= minKnowledgeForElementToggle)
                 {
                     TemplateContainer prefabContainer = UIPrefabAssets.Instantiate();
 
