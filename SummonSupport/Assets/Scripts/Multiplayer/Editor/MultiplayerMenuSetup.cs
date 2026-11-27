@@ -14,8 +14,10 @@ public static class MultiplayerMenuSetup
 
     // The connection UI copies its look from this existing Start screen button.
     private const string StyleSourceButtonName = "StartButton";
-    // Top of the connection column, just under the Start/Quit buttons (screen centre = 0).
-    private const float ColumnTop = -63f;
+    // The Quit button goes under this column, at the bottom of the start screen.
+    private const string QuitButtonName = "QuitButton";
+    // Top of the connection column, just under the Start button (screen centre = 0).
+    private const float ColumnTop = -13f;
     private const float ColumnWidth = 360f;
     private const float ColumnSpacing = 10f;
     private const float StatusLabelHeight = 60f;
@@ -75,7 +77,6 @@ public static class MultiplayerMenuSetup
         Button hostButton = CreateButton("HostButton", panelGO.transform, resources, "Host Game");
         TMP_InputField joinCodeInput = CreateInput("JoinCodeInput", panelGO.transform, resources);
         Button joinButton = CreateButton("JoinButton", panelGO.transform, resources, "Join Game");
-        Button cancelButton = CreateButton("CancelButton", panelGO.transform, resources, "Cancel");
         TMP_Text joinCodeLabel = CreateText("JoinCodeLabel", panelGO.transform, resources, "");
 
         GameObject controllerGO = new GameObject("MultiplayerMenuController");
@@ -85,7 +86,6 @@ public static class MultiplayerMenuSetup
         SerializedObject so = new SerializedObject(controller);
         so.FindProperty("hostButton").objectReferenceValue = hostButton;
         so.FindProperty("joinButton").objectReferenceValue = joinButton;
-        so.FindProperty("cancelButton").objectReferenceValue = cancelButton;
         so.FindProperty("joinCodeInput").objectReferenceValue = joinCodeInput;
         so.FindProperty("joinCodeLabel").objectReferenceValue = joinCodeLabel;
         so.FindProperty("statusLabel").objectReferenceValue = statusLabel;
@@ -93,12 +93,11 @@ public static class MultiplayerMenuSetup
 
         UnityEventTools.AddVoidPersistentListener(hostButton.onClick, controller.Host);
         UnityEventTools.AddVoidPersistentListener(joinButton.onClick, controller.Join);
-        UnityEventTools.AddVoidPersistentListener(cancelButton.onClick, controller.Cancel);
         return controller;
     }
 
     // Makes the connection UI match the Start/Quit buttons: same sprite, tint, transition colours,
-    // font asset and size, laid out as one centred column under them.
+    // font asset and size, laid out as one centred column under Start, with Quit at the bottom.
     private static void ApplyStartScreenStyle(MultiplayerMenuController controller)
     {
         GameObject sourceGO = GameObject.Find(StyleSourceButtonName);
@@ -115,11 +114,10 @@ public static class MultiplayerMenuSetup
         SerializedObject so = new SerializedObject(controller);
         Button hostButton = so.FindProperty("hostButton").objectReferenceValue as Button;
         Button joinButton = so.FindProperty("joinButton").objectReferenceValue as Button;
-        Button cancelButton = so.FindProperty("cancelButton").objectReferenceValue as Button;
         TMP_InputField joinCodeInput = so.FindProperty("joinCodeInput").objectReferenceValue as TMP_InputField;
         TMP_Text joinCodeLabel = so.FindProperty("joinCodeLabel").objectReferenceValue as TMP_Text;
         TMP_Text statusLabel = so.FindProperty("statusLabel").objectReferenceValue as TMP_Text;
-        if (hostButton == null || joinButton == null || cancelButton == null || joinCodeInput == null || joinCodeLabel == null || statusLabel == null)
+        if (hostButton == null || joinButton == null || joinCodeInput == null || joinCodeLabel == null || statusLabel == null)
         {
             Debug.LogWarning("MultiplayerMenuController is missing UI references; connection UI left unstyled.");
             return;
@@ -128,12 +126,11 @@ public static class MultiplayerMenuSetup
         StyleButton(hostButton, source, sourceImage, sourceText, buttonSize);
         StyleInput(joinCodeInput, source, sourceImage, sourceText, buttonSize);
         StyleButton(joinButton, source, sourceImage, sourceText, buttonSize);
-        StyleButton(cancelButton, source, sourceImage, sourceText, buttonSize);
         StyleLabel(joinCodeLabel, sourceText, new Vector2(ColumnWidth, buttonSize.y));
         StyleLabel(statusLabel, sourceText, new Vector2(ColumnWidth, StatusLabelHeight));
 
         // Column order, top to bottom.
-        Transform[] order = { hostButton.transform, joinCodeInput.transform, joinButton.transform, cancelButton.transform, joinCodeLabel.transform, statusLabel.transform };
+        Transform[] order = { hostButton.transform, joinCodeInput.transform, joinButton.transform, joinCodeLabel.transform, statusLabel.transform };
         for (int i = 0; i < order.Length; i++) order[i].SetSiblingIndex(i);
 
         RectTransform panel = (RectTransform)hostButton.transform.parent;
@@ -141,7 +138,8 @@ public static class MultiplayerMenuSetup
         panel.anchorMax = new Vector2(0.5f, 0.5f);
         panel.pivot = new Vector2(0.5f, 1f);
         panel.anchoredPosition = new Vector2(0, ColumnTop);
-        panel.sizeDelta = new Vector2(ColumnWidth, buttonSize.y * 5 + StatusLabelHeight + ColumnSpacing * 5);
+        float columnHeight = buttonSize.y * 4 + StatusLabelHeight + ColumnSpacing * 4;
+        panel.sizeDelta = new Vector2(ColumnWidth, columnHeight);
 
         // The Start/Quit buttons have no box of their own, so neither does this column.
         Image panelImage = panel.GetComponent<Image>();
@@ -155,6 +153,25 @@ public static class MultiplayerMenuSetup
         layout.childControlHeight = false;
         layout.childForceExpandWidth = false;
         layout.childForceExpandHeight = false;
+
+        PlaceQuitButtonBelow(panel, columnHeight);
+    }
+
+    // Both canvases are centred on the screen, so the column's bottom edge is ColumnTop - columnHeight from the centre.
+    private static void PlaceQuitButtonBelow(RectTransform column, float columnHeight)
+    {
+        GameObject quitGO = GameObject.Find(QuitButtonName);
+        if (quitGO == null)
+        {
+            Debug.LogWarning($"No '{QuitButtonName}' button in StartScreen; it was left where it was.");
+            return;
+        }
+        RectTransform quit = (RectTransform)quitGO.transform;
+        RectTransform parent = quit.parent as RectTransform;
+        float parentOffset = parent != null ? parent.anchoredPosition.y : 0f;
+        float centreY = ColumnTop - columnHeight - ColumnSpacing * 2 - quit.sizeDelta.y / 2;
+        quit.anchoredPosition = new Vector2(0, centreY - parentOffset);
+        EditorUtility.SetDirty(quit);
     }
 
     private static void StyleButton(Button button, Button source, Image sourceImage, TMP_Text sourceText, Vector2 size)

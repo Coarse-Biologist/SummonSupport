@@ -10,7 +10,6 @@ public class MultiplayerMenuController : MonoBehaviour
     [SerializeField] private string gameplaySceneName = "Map1";
     [SerializeField] private Button hostButton;
     [SerializeField] private Button joinButton;
-    [SerializeField] private Button cancelButton;
     [SerializeField] private TMP_InputField joinCodeInput;
     [SerializeField] private TMP_Text joinCodeLabel;
     [SerializeField] private TMP_Text statusLabel;
@@ -111,14 +110,6 @@ public class MultiplayerMenuController : MonoBehaviour
         }
     }
 
-    public void Cancel()
-    {
-        RelayConnectionManager.Instance.Disconnect();
-        SetJoinCode("");
-        SetStatus("");
-        SetBusy(false);
-    }
-
     private void OnClientConnected(ulong clientId)
     {
         if (NetworkManager.Singleton.IsClient && !NetworkManager.Singleton.IsHost)
@@ -146,7 +137,6 @@ public class MultiplayerMenuController : MonoBehaviour
         busy = value;
         if (hostButton != null) hostButton.interactable = !value;
         if (joinButton != null) joinButton.interactable = !value;
-        if (cancelButton != null) cancelButton.interactable = value;
     }
 
     private void SetStatus(string text)
