@@ -17,7 +17,8 @@ public class LootableAlchemyMaterial : MonoBehaviour, I_LootInterface
         {
             if (AlchemyHandler.AlchemyLootValueDict.TryGetValue(alchemyMaterial, out int num))
             {
-                AlchemyInventory.IncemementElementalKnowledge(Element, (int)(num * AlchemyHandler.KnowledgeGainRate));
+                // Rounding down gave small ether 0 knowledge at the starting gain rate, so every ether gives at least 1.
+                AlchemyInventory.IncemementElementalKnowledge(Element, Mathf.Max(1, Mathf.RoundToInt(num * AlchemyHandler.KnowledgeGainRate)));
             }
         }
         if (LootedParticleSystem != null)
