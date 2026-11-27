@@ -6,15 +6,14 @@ using UnityEngine.UI;
 
 /// <summary>
 /// Start screen panel shown before starting or hosting a game: pick one of the save slots (an empty one starts
-/// a new game), pick the difficulty, then begin. Built from a copy of an existing start screen button, so it
-/// matches the rest of the menu.
+/// a new game), pick the difficulty, then begin. It lists the used slots and one empty slot, if there is one.
+/// Built from a copy of an existing start screen button, so it matches the rest of the menu.
 /// </summary>
 public class GameSetupMenu : MonoBehaviour
 {
     private const float SlotWidth = 360f;
     private const float ButtonWidth = 240f;
     private const float Spacing = 8f;
-    private const int Rows = 10; // heading, five slots, difficulty, begin, erase, back
 
     private static readonly Difficulty[] Difficulties = (Difficulty[])Enum.GetValues(typeof(Difficulty));
 
@@ -41,7 +40,6 @@ public class GameSetupMenu : MonoBehaviour
         rect.anchorMax = templateRect.anchorMax;
         rect.pivot = new Vector2(0.5f, 1f);
         rect.anchoredPosition = templateRect.anchoredPosition + new Vector2(0, rowHeight / 2);
-        rect.sizeDelta = new Vector2(SlotWidth, Rows * rowHeight + (Rows - 1) * Spacing);
 
         VerticalLayoutGroup layout = go.GetComponent<VerticalLayoutGroup>();
         layout.childAlignment = TextAnchor.UpperCenter;
@@ -78,14 +76,41 @@ public class GameSetupMenu : MonoBehaviour
             selectedSlot = slot;
         }
         if (saves[selectedSlot] != null) difficulty = saves[selectedSlot].difficulty;
+        else selectedSlot = VisibleSlots()[0];
+    }
+
+    // Every used slot, and the first empty one (up to SaveHandler.SlotCount in all), in slot order.
+    private List<int> VisibleSlots()
+    {
+        List<int> slots = new();
+        bool emptyShown = false;
+        for (int slot = 1; slot <= SaveHandler.SlotCount; slot++)
+        {
+            if (saves[slot] != null) slots.Add(slot);
+            else if (!emptyShown)
+            {
+                slots.Add(slot);
+                emptyShown = true;
+            }
+        }
+        return slots;
     }
 
     private void Build()
     {
-        foreach (Transform child in transform) Destroy(child.gameObject);
+        // Detach the old rows first: Destroy waits for the end of the frame, and the panel is sized from its rows.
+        for (int i = transform.childCount - 1; i >= 0; i--)
+        {
+            Transform child = transform.GetChild(i);
+            child.SetParent(null, false);
+            Destroy(child.gameObject);
+        }
 
         AddLabel(heading);
-        for (int slot = 1; slot <= SaveHandler.SlotCount; slot++)
+        List<int> visibleSlots = VisibleSlots();
+        // An erased slot can drop out of the list; fall back to the empty slot that is shown.
+        if (!visibleSlots.Contains(selectedSlot)) selectedSlot = visibleSlots.Find(slot => saves[slot] == null);
+        foreach (int slot in visibleSlots)
         {
             int slotNumber = slot;
             string text = SaveHandler.DescribeSlot(slotNumber);
@@ -98,6 +123,10 @@ public class GameSetupMenu : MonoBehaviour
         AddButton(selected == null ? $"New Game in Slot {selectedSlot}" : $"Continue Slot {selectedSlot}", ButtonWidth, Begin);
         if (selected != null) AddButton(confirmingErase ? "Click again to erase" : "Erase Slot", ButtonWidth, Erase);
         AddButton("Back", ButtonWidth, Back);
+
+        int rows = transform.childCount;
+        float rowHeight = ((RectTransform)template.transform).sizeDelta.y;
+        ((RectTransform)transform).sizeDelta = new Vector2(SlotWidth, rows * rowHeight + (rows - 1) * Spacing);
     }
 
     private void SelectSlot(int slot)
