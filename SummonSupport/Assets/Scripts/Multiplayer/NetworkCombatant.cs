@@ -38,7 +38,7 @@ public abstract class NetworkCombatant : NetworkBehaviour
         int abilityIndex = AbilityRegistry.IndexOf(ability);
         if (abilityIndex < 0)
         {
-            Debug.LogWarning($"{name} cast {ability.name}, but it is not in SetupManager.AllAbilities, so other players will not see it.");
+            Debug.LogWarning($"{name} cast {ability.name}, but it is not in SetupManager.AllAbilities, so other players will not see it. Save the scene or run SummonSupport > Refresh Ability Registry to add it.");
             return;
         }
 
