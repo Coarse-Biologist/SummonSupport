@@ -194,6 +194,9 @@ public class PlayerMovement : MovementScript
     }
     private void HandleLook()
     {
+        // The camera found at Awake can be gone: the player may have been created before the level it plays in.
+        if (mainCamera == null) mainCamera = Camera.main;
+        if (mainCamera == null) return;
         transform.rotation = Quaternion.Euler(0f, mainCamera.transform.eulerAngles.y, 0f);
     }
 

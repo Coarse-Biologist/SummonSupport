@@ -31,6 +31,8 @@ public class AbilityUI_Handler : MonoBehaviour
     private AbilityModHandler modHandler;
     #endregion
 
+    private bool isSetUp;
+
     #endregion
 
     #region SetUp
@@ -41,18 +43,25 @@ public class AbilityUI_Handler : MonoBehaviour
             Instance = this;
         }
 
-        if (uiDoc == null && UI_DocHandler.Instance != null) uiDoc = UI_DocHandler.Instance.ui;
-        if (uiDoc == null)
-        {
-            Debug.LogWarning("AbilityUI_Handler has no UIDocument; the ability bar will not be set up.");
-            return;
-        }
-        Setup();
-
+        EnsureSetUp();
     }
     void Start()
     {
         modHandler = AbilityModHandler.Instance;
+        if (!EnsureSetUp()) Debug.LogWarning("AbilityUI_Handler has no UIDocument yet; the ability bar will be set up when one exists.");
+    }
+
+    // The player can be created before the level's UI document (e.g. spawned while a level is loading),
+    // so the bar is set up on first use, from the level's UI document, instead of only in Awake.
+    private bool EnsureSetUp()
+    {
+        if (isSetUp && uiDoc != null) return true;
+        // A player that outlives a level (e.g. a restart online) has to bind to the new level's UI document.
+        isSetUp = false;
+        if (uiDoc == null && UI_DocHandler.Instance != null) uiDoc = UI_DocHandler.Instance.ui;
+        if (uiDoc == null) return false;
+        Setup();
+        return isSetUp;
     }
 
     void OnEnable()
@@ -114,9 +123,12 @@ public class AbilityUI_Handler : MonoBehaviour
 
     private void Setup()
     {
+        ProgressBarDict.Clear();
+        abilityIntProgressBarDict.Clear();
+        ProgressBarButtonNameDict.Clear();
         GetAllProgressBars();
         InitializeProgressBarDict();
-
+        isSetUp = true;
     }
     #endregion
 
@@ -124,7 +136,7 @@ public class AbilityUI_Handler : MonoBehaviour
     public void SetAbilitySlot(int slotIndex, Ability ability)
     {
 
-        if (ability == null) return;
+        if (ability == null || !EnsureSetUp() || !abilityIntProgressBarDict.ContainsKey(slotIndex)) return;
         else
         {
             foreach (KeyValuePair<int, Ability> intAbilityKVP in abilityIntProgressBarDict)
@@ -157,10 +169,11 @@ public class AbilityUI_Handler : MonoBehaviour
 
     private void AbilityUsed(int index)
     {
-        ProgressBar abilityProgressBar = ProgressBarDict[index];
-        Ability ability = abilityIntProgressBarDict[index];
+        if (!EnsureSetUp() || !ProgressBarDict.TryGetValue(index, out ProgressBar abilityProgressBar)) return;
+        abilityIntProgressBarDict.TryGetValue(index, out Ability ability);
         if (abilityProgressBar == null) return;
         if (ability == null) return;
+        if (modHandler == null) modHandler = AbilityModHandler.Instance;
         float cooldown = ability.Cooldown + modHandler.GetModAttributeByType(ability, AbilityModTypes.Cooldown);
         //Logging.Info($"Ability {ability.name} with cooldown {cooldown} has been used.");
 
