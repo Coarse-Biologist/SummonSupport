@@ -107,7 +107,31 @@ public abstract class NetworkCombatant : NetworkBehaviour
         if (Handler != null) Handler.StopAllToggledAbilities();
     }
 
-    private void Replay(AbilityCastData cast, Ability ability)
+    /// <summary>Host side: tells every client that a status effect started or ended on this being.</summary>
+    public void ShareStatusEffect(StatusEffects effect, bool add)
+    {
+        if (!IsSpawned || !IsServer) return;
+
+        int effectIndex = AbilityRegistry.IndexOf(effect);
+        if (effectIndex < 0)
+        {
+            Debug.LogWarning($"{effect.name} on {name} is not in the status effect library, so clients will not see it.");
+            return;
+        }
+        StatusEffectChangedClientRpc(effectIndex, add);
+    }
+
+    [ClientRpc]
+    private void StatusEffectChangedClientRpc(int effectIndex, bool add)
+    {
+        if (IsServer) return;
+
+        StatusEffects effect = AbilityRegistry.StatusEffectAt(effectIndex);
+        if (effect != null && TryGetComponent(out StatusEffectHandler statusEffectHandler))
+            statusEffectHandler.ApplyReplicatedStatusEffect(effect, add);
+    }
+
+        private void Replay(AbilityCastData cast, Ability ability)
     {
         if (Handler == null) return;
 
