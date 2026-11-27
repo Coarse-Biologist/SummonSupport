@@ -145,6 +145,12 @@ public class AbilityModHandler : MonoBehaviour
             return existingMod.GetStatusEffects();
         }
     }
+    /// <summary>Removes every mod, so a client joining a game can take the host's mods instead.</summary>
+    public void ClearMods()
+    {
+        ModdedAbilities.Clear();
+    }
+
     public void AddStatusEffectToAbility(Ability ability, StatusEffects effectType)
     {
         Debug.Log($"Modding to add {effectType} to {ability}!@#$%^&*()!");

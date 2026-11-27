@@ -43,6 +43,8 @@ public class NetworkPlayer : NetworkCombatant
         if (IsOwner)
         {
             AttachLocalPlayer();
+            // Mods belong to everyone in the game, so a joining player takes the ones made before they joined.
+            if (!IsServer) RequestAllModsServerRpc();
             return;
         }
 
@@ -293,6 +295,26 @@ public class NetworkPlayer : NetworkCombatant
     {
         if (IsServer || LootSpawnHandler.Instance == null) return;
         LootSpawnHandler.Instance.CollectLoot(lootId);
+    }
+
+    [ServerRpc]
+    private void RequestAllModsServerRpc()
+    {
+        if (AbilityModHandler.Instance == null) return;
+        NetworkAbilityMods.CollectAllMods(out AbilityAttributeModData[] attributeMods, out AbilityStatusModData[] statusMods);
+
+        ClientRpcParams toOwner = new ClientRpcParams
+        {
+            Send = new ClientRpcSendParams { TargetClientIds = new[] { OwnerClientId } }
+        };
+        AllModsClientRpc(attributeMods, statusMods, toOwner);
+    }
+
+    [ClientRpc]
+    private void AllModsClientRpc(AbilityAttributeModData[] attributeMods, AbilityStatusModData[] statusMods, ClientRpcParams rpcParams = default)
+    {
+        if (IsServer || !IsOwner || AbilityModHandler.Instance == null) return;
+        NetworkAbilityMods.ApplyAllMods(attributeMods, statusMods);
     }
 
     public void GrantXp(int amount, ulong clientId)
