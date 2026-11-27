@@ -16410,6 +16410,8 @@ MonoBehaviour:
     type: 2}
   <PlayerPrefab>k__BackingField: {fileID: 5369172574488311089, guid: 29cc623553c0c3d4aa9548ba52efed1b,
     type: 3}
+  <CharacterCreationProfile>k__BackingField: {fileID: 11400000, guid: 6cf0e9805e0c42fcb9d2840d7ac64564,
+    type: 2}
   <KnowledgeOverride>k__BackingField: 0
   <CraftingPotentialOverride>k__BackingField: 500
   <DebugMode>k__BackingField: 0

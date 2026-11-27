@@ -22,6 +22,7 @@ public class SetupManager : MonoBehaviour
 
     [field: SerializeField] public StatusEffectsLibrary StatusEffectsLibrary { get; private set; }
     [field: SerializeField] public GameObject PlayerPrefab { get; private set; }
+    [field: SerializeField] public CharacterCreationProfile_SO CharacterCreationProfile { get; private set; }
     [field: SerializeField] public int KnowledgeOverride { get; private set; } = 0;
     [field: SerializeField] public int CraftingPotentialOverride { get; private set; } = 0;
 
@@ -65,8 +66,8 @@ public class SetupManager : MonoBehaviour
             GameObject player = SpawnPlayer(spawn != null ? spawn.transform.position : Vector3.zero, spawn != null ? spawn.transform.rotation : Quaternion.identity);
             if (player.TryGetComponent(out NetworkPlayer localPlayer)) StartCoroutine(AttachOfflinePlayer(localPlayer));
         }
-        // Offline, load the character from the save chosen on the start screen. Online, NetworkPlayer does it.
-        if (!NetworkSession.IsOnline) StartCoroutine(SaveHandler.ApplyCharacterWhenReady(GameSession.TakeHostCharacter()));
+        // Offline, load the character from the save chosen on the start screen, or make a new one. Online, NetworkPlayer does it.
+        if (!NetworkSession.IsOnline) StartCoroutine(CharacterCreationPipeline.LoadOrCreateWhenReady(GameSession.TakeHostCharacter()));
 
     }
     public StatusEffectsLibrary GetStatusEffectLibrary()

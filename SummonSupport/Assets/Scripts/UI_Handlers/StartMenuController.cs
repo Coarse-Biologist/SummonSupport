@@ -1,4 +1,5 @@
 using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -11,6 +12,9 @@ public class StartMenuController : MonoBehaviour
     // The setup panel is built from copies of these buttons; found by name if not set.
     [SerializeField] private Button startButton;
     [SerializeField] private Button quitButton;
+    // The character name field is a copy of this one; found by name if not set.
+    [SerializeField] private TMP_InputField nameInputTemplate;
+    [SerializeField] private CharacterCreationProfile_SO characterCreationProfile;
 
     void Start()
     {
@@ -18,6 +22,7 @@ public class StartMenuController : MonoBehaviour
         else Instance = this;
         if (startButton == null) startButton = FindButton("StartButton");
         if (quitButton == null) quitButton = FindButton("QuitButton");
+        if (nameInputTemplate == null) nameInputTemplate = FindComponent<TMP_InputField>("JoinCodeInput");
     }
 
     public void StartGame()
@@ -32,13 +37,43 @@ public class StartMenuController : MonoBehaviour
     /// <summary>
     /// Shows the save slot and difficulty choice in place of the start screen buttons. onBegin gets the chosen
     /// slot, difficulty and save (null for a new game); onBack runs if the player backs out.
+    /// A new game asks for the new character first; a continued game brings its saved character.
     /// </summary>
     public void OpenGameSetup(string heading, Action<int, Difficulty, SessionSaveData> onBegin, Action onBack)
     {
         if (startButton == null) return;
         SetMenuButtonsVisible(false);
         GameSetupMenu.Open(startButton, heading,
-            (slot, difficulty, save) => { SetMenuButtonsVisible(true); onBegin?.Invoke(slot, difficulty, save); },
+            (slot, difficulty, save) =>
+            {
+                if (save != null)
+                {
+                    SetMenuButtonsVisible(true);
+                    onBegin?.Invoke(slot, difficulty, save);
+                    return;
+                }
+                // Back returns to the slot choice.
+                CharacterCreationMenu.Open(startButton, nameInputTemplate, characterCreationProfile, heading,
+                    _ => { SetMenuButtonsVisible(true); onBegin?.Invoke(slot, difficulty, null); },
+                    () => OpenGameSetup(heading, onBegin, onBack));
+            },
+            () => { SetMenuButtonsVisible(true); onBack?.Invoke(); });
+    }
+
+    /// <summary>
+    /// Shows the new character choice (name and element) in place of the start screen buttons, e.g. before joining.
+    /// onConfirm runs once the player confirms it; onBack runs if they back out.
+    /// </summary>
+    public void OpenCharacterCreation(string heading, Action<CharacterCreationData> onConfirm, Action onBack)
+    {
+        if (startButton == null)
+        {
+            onConfirm?.Invoke(CharacterSelection.Current);
+            return;
+        }
+        SetMenuButtonsVisible(false);
+        CharacterCreationMenu.Open(startButton, nameInputTemplate, characterCreationProfile, heading,
+            data => { SetMenuButtonsVisible(true); onConfirm?.Invoke(data); },
             () => { SetMenuButtonsVisible(true); onBack?.Invoke(); });
     }
 
@@ -51,10 +86,12 @@ public class StartMenuController : MonoBehaviour
         if (multiplayerMenu != null) multiplayerMenu.SetPanelVisible(visible);
     }
 
-    private static Button FindButton(string objectName)
+    private static Button FindButton(string objectName) => FindComponent<Button>(objectName);
+
+    private static T FindComponent<T>(string objectName) where T : Component
     {
         GameObject go = GameObject.Find(objectName);
-        return go != null ? go.GetComponent<Button>() : null;
+        return go != null ? go.GetComponent<T>() : null;
     }
 
     public void QuitGame()

@@ -426,6 +426,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c842bc6059e9cd44184928e1411c82ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StartMenuController
+  characterCreationProfile: {fileID: 11400000, guid: 6cf0e9805e0c42fcb9d2840d7ac64564,
+    type: 2}
 --- !u!1 &262669440
 GameObject:
   m_ObjectHideFlags: 0

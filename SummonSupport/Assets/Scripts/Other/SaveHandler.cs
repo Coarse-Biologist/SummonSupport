@@ -231,6 +231,7 @@ public static class SaveHandler
     private static void SetPlayerData(PlayerStats stats, PlayerData data)
     {
         LivingBeingData statData = data.statData;
+        if (!string.IsNullOrEmpty(statData.Name)) stats.SetName(statData.Name);
         stats.SetAttribute(AttributeType.MaxHitpoints, statData.maxHP);
         stats.SetAttribute(AttributeType.MaxPower, statData.maxPower);
         stats.SetRegeneration(AttributeType.CurrentHitpoints, statData.hpRegen);

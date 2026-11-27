@@ -8,7 +8,8 @@ using UnityEngine;
 /// <summary>
 /// Saving and loading characters online (see SaveHandler and GameSession).
 /// Each player's machine owns its character, so:
-/// - a joining player tells the host who they are, and the host sends back their saved character, if the session has one;
+/// - a joining player tells the host who they are, and the host sends back their saved character, if the session has one,
+///   or tells them to make a new one (see CharacterCreationPipeline);
 /// - players send their character to the host every so often, when the host saves, and before they leave,
 ///   so the host always has a recent copy to write when it saves or when someone leaves.
 /// Characters travel as JSON in chunks, to stay under the transport's message size.
@@ -31,7 +32,7 @@ public partial class NetworkPlayer
     private void StartSaveSession()
     {
         if (!IsOwner) return;
-        if (IsServer) StartCoroutine(SaveHandler.ApplyCharacterWhenReady(GameSession.TakeHostCharacter()));
+        if (IsServer) StartCoroutine(CharacterCreationPipeline.LoadOrCreateWhenReady(GameSession.TakeHostCharacter()));
         else SubmitPlayerIdServerRpc(SaveHandler.LocalPlayerId);
     }
 
@@ -51,7 +52,11 @@ public partial class NetworkPlayer
     private void SubmitPlayerIdServerRpc(string playerId)
     {
         PlayerSaveRecord record = GameSession.RegisterPlayer(OwnerClientId, playerId);
-        if (record == null) return;
+        if (record == null)
+        {
+            NewCharacterClientRpc(ToOwner());
+            return;
+        }
         SendChunks(JsonUtility.ToJson(record.data), (id, index, count, chunk) => LoadCharacterChunkClientRpc(id, index, count, chunk, ToOwner()));
     }
 
@@ -61,6 +66,14 @@ public partial class NetworkPlayer
         if (!IsOwner || IsServer) return;
         if (TryReceiveChunk(transferId, index, count, chunk, out string json))
             StartCoroutine(SaveHandler.ApplyCharacterWhenReady(JsonUtility.FromJson<SaveData>(json)));
+    }
+
+    // The session has no character for this player, so they make a new one from their start screen choices.
+    [ClientRpc]
+    private void NewCharacterClientRpc(ClientRpcParams rpcParams = default)
+    {
+        if (!IsOwner || IsServer) return;
+        StartCoroutine(CharacterCreationPipeline.LoadOrCreateWhenReady(null));
     }
 
     #endregion

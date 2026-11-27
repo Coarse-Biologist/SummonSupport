@@ -231,10 +231,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerAbilityHandler
   <abilitySpawn>k__BackingField: {fileID: 7538319549239340809}
   <Abilities>k__BackingField:
-  - {fileID: 11400000, guid: 52df8a72e35f5bf4791204fe3fa0bb2c, type: 2}
-  - {fileID: 11400000, guid: 0999d27560ed722448af8ac1aa8ec450, type: 2}
-  - {fileID: 11400000, guid: 47722ea3acd0b2a47b8f3a976e2c88d6, type: 2}
-  - {fileID: 11400000, guid: 3ae7c83f398a8bb44aa09566b7180248, type: 2}
+  - {fileID: 11400000, guid: 9c57ed916a2e3d544bd66fb65d46f187, type: 2}
   <SlottedAbilities>k__BackingField: []
   currentAnimation: 
 --- !u!114 &5469552160048565923
