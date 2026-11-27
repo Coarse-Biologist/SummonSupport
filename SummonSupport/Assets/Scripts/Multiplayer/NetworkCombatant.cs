@@ -31,7 +31,7 @@ public abstract class NetworkCombatant : NetworkBehaviour
     /// <summary>True on the one machine that decides when this being casts.</summary>
     public bool HasCastAuthority => !IsSpawned || IsOwner;
 
-    public void ShareCast(Ability ability, Vector3 targetPosition, Quaternion aimRotation)
+    public void ShareCast(Ability ability, Vector3 targetPosition, Quaternion aimRotation, AbilityCastKind kind = AbilityCastKind.Cast, bool toggledOn = false)
     {
         if (!IsSpawned || !IsOwner) return;
 
@@ -45,10 +45,12 @@ public abstract class NetworkCombatant : NetworkBehaviour
         AbilityCastData cast = new AbilityCastData
         {
             abilityIndex = abilityIndex,
+            kind = kind,
             casterPosition = transform.position,
             casterRotation = transform.rotation,
             targetPosition = targetPosition,
-            aimRotation = aimRotation
+            aimRotation = aimRotation,
+            toggledOn = toggledOn
         };
 
         if (IsServer) BroadcastCastClientRpc(cast);
@@ -94,7 +96,7 @@ public abstract class NetworkCombatant : NetworkBehaviour
     [ServerRpc]
     private void RequestToggledAbilitiesClearedServerRpc()
     {
-        if (Handler != null) Handler.ClearToggledAbilities();
+        if (Handler != null) Handler.StopAllToggledAbilities();
         BroadcastToggledAbilitiesClearedClientRpc();
     }
 
@@ -102,7 +104,7 @@ public abstract class NetworkCombatant : NetworkBehaviour
     private void BroadcastToggledAbilitiesClearedClientRpc()
     {
         if (IsServer || IsOwner) return;
-        if (Handler != null) Handler.ClearToggledAbilities();
+        if (Handler != null) Handler.StopAllToggledAbilities();
     }
 
     private void Replay(AbilityCastData cast, Ability ability)
@@ -112,6 +114,6 @@ public abstract class NetworkCombatant : NetworkBehaviour
         // This copy of the caster is interpolated and lags behind. Line it up with where the caster really was,
         // so the cast starts there and aims the same way. NetworkTransform takes over again on its next update.
         transform.SetPositionAndRotation(cast.casterPosition, cast.casterRotation);
-        Handler.ReplayCast(ability, cast.targetPosition, cast.aimRotation);
+        Handler.ReplayCast(ability, cast);
     }
 }

@@ -73,13 +73,14 @@ public class ChargeAbilityMono : MonoBehaviour
 
         bool stillCharging = true;
         startLoc = transform.position;
+        // A charge that gets blocked, or a copy of the caster on another machine that is moved by the network
+        // and stops short, would otherwise never end and leave the caster stuck charging.
+        float endTime = Time.time + range / Mathf.Max(1f, SpeedBoost) * 1.5f + .5f;
         while (stillCharging)
         {
-            Debug.Log("Charging");
-
             // Copies of the caster on other machines are kinematic and moved by NetworkTransform.
             if (!rb.isKinematic) rb.linearVelocity = originTransform.forward * SpeedBoost;
-            if ((gameObject.transform.position - startLoc).magnitude > range)
+            if ((gameObject.transform.position - startLoc).magnitude > range || Time.time > endTime)
             {
                 EndCharge();
             }
