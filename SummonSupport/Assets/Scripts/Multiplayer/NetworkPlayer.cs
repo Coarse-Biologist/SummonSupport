@@ -65,6 +65,7 @@ public partial class NetworkPlayer : NetworkCombatant
         GetComponent<PlayerAbilityHandler>().enabled = false;
         GetComponent<PlayerUIHandler>().enabled = false;
         GetComponent<AbilityUI_Handler>().enabled = false;
+        GetComponent<InteractHandler>().enabled = false; // doors, benches and NPCs react to the local player only
         GetComponent<Rigidbody>().isKinematic = true;
     }
 
