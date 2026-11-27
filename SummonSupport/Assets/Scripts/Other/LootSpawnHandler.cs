@@ -1,8 +1,20 @@
+using System.Collections.Generic;
 using SummonSupportEvents;
 using UnityEngine;
 
+/// <summary>
+/// Drops loot when an enemy is defeated.
+///
+/// Online, the host rolls the drops and every machine shows them (see NetworkEnemy.ShareDefeatLoot). Each drop
+/// has an id that is the same on every machine. Any player can pick one up: their machine asks the host
+/// (NetworkPlayer.RequestLoot), the host gives it to the first player who asks, and every machine then removes
+/// it and adds it to its own player's inventory (<see cref="CollectLoot"/>).
+/// Knowledge from a defeat is rolled by each player for themselves.
+/// </summary>
 public class LootSpawnHandler : MonoBehaviour
 {
+    public static LootSpawnHandler Instance { get; private set; }
+
     [field: SerializeField] GameObject FaintEtherPrefab;
     [field: SerializeField] GameObject PowerfulEtherPrefab;
     [field: SerializeField] GameObject IntenseEtherPrefab;
@@ -17,7 +29,28 @@ public class LootSpawnHandler : MonoBehaviour
     [field: SerializeField] float LootScaler = 1f;
     [field: SerializeField] public int KnowledgeGainRate { private set; get; } = 1;
 
+    // Loot prefabs by the index sent over the network: ethers, then organs, then the core.
+    private GameObject[] lootPrefabs;
+    private const int FirstOrganIndex = 3;
 
+    private uint nextLootId;
+    private readonly Dictionary<uint, GameObject> lootById = new();
+    private readonly Dictionary<GameObject, uint> idByLoot = new();
+
+    void Awake()
+    {
+        if (Instance == null) Instance = this;
+
+        List<GameObject> prefabs = new() { FaintEtherPrefab, PowerfulEtherPrefab, IntenseEtherPrefab };
+        prefabs.AddRange(OrganPrefabs);
+        prefabs.Add(CorePrefab);
+        lootPrefabs = prefabs.ToArray();
+    }
+
+    void OnDestroy()
+    {
+        if (Instance == this) Instance = null;
+    }
 
     void OnEnable()
     {
@@ -25,66 +58,146 @@ public class LootSpawnHandler : MonoBehaviour
     }
     void OnDisable()
     {
-        EventDeclarer.EnemyDefeated?.AddListener(DecideDropLoot);
+        EventDeclarer.EnemyDefeated?.RemoveListener(DecideDropLoot);
     }
 
     private void DecideDropLoot(EnemyStats enemyStats)
     {
+        // Enemies are only defeated on the host (or offline), so this is where drops are decided.
+        if (!NetworkSession.IsAuthority) return;
+
         Element strongestElement = enemyStats.GetHighestAffinity(out float value);
+        LootDropData[] drops = RollDrops(enemyStats, strongestElement, value);
+
+        RollKnowledge(strongestElement, value);
+        SpawnDrops(drops);
+
+        if (NetworkSession.IsOnline && enemyStats.TryGetComponent(out NetworkEnemy networkEnemy))
+            networkEnemy.ShareDefeatLoot(strongestElement, value, drops);
+    }
+
+    /// <summary>Client side: shows the loot of an enemy the host defeated, and rolls this player's knowledge.</summary>
+    public void ApplyRemoteDefeatLoot(Element strongestElement, float affinityValue, LootDropData[] drops)
+    {
+        RollKnowledge(strongestElement, affinityValue);
+        SpawnDrops(drops);
+    }
+
+    private void RollKnowledge(Element strongestElement, float value)
+    {
         if (value * LootScaler >= Random.Range(0, 100))
         {
             AlchemyInventory.IncemementElementalKnowledge(strongestElement, KnowledgeGainRate);
             FloatingInfoHandler.Instance.DisplayGoldenLetters($"+{KnowledgeGainRate} {strongestElement} knowledge!", 1.5f);
         }
+    }
+
+    private LootDropData[] RollDrops(EnemyStats enemyStats, Element strongestElement, float value)
+    {
+        List<LootDropData> drops = new();
+        Vector3 position = enemyStats.transform.position;
+
         if (value * LootScaler >= Random.Range(0, 100))
         {
-            SpawnEther(enemyStats, GetEtherType(value), strongestElement);
+            int etherIndex = GetEtherIndex(value);
+            if (lootPrefabs[etherIndex] != null)
+                drops.Add(NewDrop(etherIndex, position, strongestElement, AlchemyLoot.FaintEther, setMaterial: false));
         }
         if (enemyStats.MaxHP * LootScaler > Random.Range(0, 100))
         {
-            SpawnOrgans(enemyStats, GetOrganType(enemyStats.MaxHP));
+            AlchemyLoot organType = GetOrganType(enemyStats.MaxHP);
+            if (organType != AlchemyLoot.WeakCore)
+                drops.Add(NewDrop(FirstOrganIndex + Random.Range(0, 2), position, strongestElement, organType, setMaterial: true));
         }
         if (enemyStats.MaxPower * LootScaler > Random.Range(0, 100))
         {
-            SpawnCores(enemyStats, GetCoreType(enemyStats.MaxPower));
+            AlchemyLoot coreType = GetCoreType(enemyStats.MaxPower);
+            if (coreType != AlchemyLoot.WretchedOrgans)
+                drops.Add(NewDrop(lootPrefabs.Length - 1, position, strongestElement, coreType, setMaterial: true));
         }
+        return drops.ToArray();
     }
-    private void SpawnEther(EnemyStats enemyStats, GameObject etherPrefab, Element element)
+
+    private LootDropData NewDrop(int prefabIndex, Vector3 position, Element element, AlchemyLoot material, bool setMaterial)
     {
+        return new LootDropData
+        {
+            lootId = ++nextLootId,
+            prefabIndex = prefabIndex,
+            position = position,
+            element = element,
+            material = material,
+            setMaterial = setMaterial
+        };
+    }
 
-        if (etherPrefab == null) return;
+    private void SpawnDrops(LootDropData[] drops)
+    {
+        foreach (LootDropData drop in drops) SpawnDrop(drop);
+    }
 
-        GameObject instance = Instantiate(etherPrefab, enemyStats.transform.position, Quaternion.identity);
+    private void SpawnDrop(LootDropData drop)
+    {
+        if (drop.prefabIndex < 0 || drop.prefabIndex >= lootPrefabs.Length || lootPrefabs[drop.prefabIndex] == null) return;
+
+        GameObject instance = Instantiate(lootPrefabs[drop.prefabIndex], drop.position, Quaternion.identity);
+        lootById[drop.lootId] = instance;
+        idByLoot[instance] = drop.lootId;
 
         if (instance.TryGetComponent(out LootableAlchemyMaterial lootScript))
         {
-            lootScript.SetElement(element);
+            if (drop.setMaterial) lootScript.SetAlchemyMaterial(drop.material);
+            else lootScript.SetElement(drop.element);
         }
-        if (instance.TryGetComponent(out ParticleSystem ps))
+
+        bool isCore = drop.prefabIndex == lootPrefabs.Length - 1;
+        if (!isCore)
         {
-            ColorChanger.ChangeParticleSystemColor(enemyStats, ps);
+            if (!drop.setMaterial && drop.element != Element.None && instance.TryGetComponent(out ParticleSystem ps))
+                ColorChanger.ChangeParticleSystemColor(drop.element, ps);
+            return;
+        }
+
+        Renderer renderer = instance.GetComponentInChildren<Renderer>();
+        if (renderer != null && drop.element != Element.None)
+        {
+            Material glowMaterial = ColorChanger.GetGlowStrengthByElement(drop.element);
+            ColorChanger.ChangeMatByAffinity(renderer, glowMaterial);
         }
     }
 
-    private GameObject GetEtherType(float etherValue)
+    /// <summary>The network id of a dropped loot object, if it was dropped by an enemy.</summary>
+    public bool TryGetLootId(GameObject loot, out uint lootId)
     {
-
-        if (etherValue > 150) return IntenseEtherPrefab;
-        else if (etherValue > 100) return PowerfulEtherPrefab;
-        else return FaintEtherPrefab;
+        return idByLoot.TryGetValue(loot, out lootId);
     }
 
-    private void SpawnOrgans(EnemyStats enemy, AlchemyLoot organType)
+    /// <summary>Host side: whether the loot is still on the ground, so the first player to ask gets it.</summary>
+    public bool IsLootAvailable(uint lootId)
     {
-        //Debug.Log("Spawning organ!");
-        if (organType == AlchemyLoot.WeakCore) return;
-        GameObject randomOrgan = Instantiate(OrganPrefabs[Random.Range(0, 2)], enemy.transform.position, Quaternion.identity);
-        //Debug.Log("Indeed, Spawning organ");
+        return lootById.ContainsKey(lootId);
+    }
 
-        if (randomOrgan.TryGetComponent(out LootableAlchemyMaterial lootScript))
-        {
-            lootScript.SetAlchemyMaterial(organType);
-        }
+    /// <summary>
+    /// Removes a dropped loot object and adds it to this machine's player's inventory.
+    /// Online, every machine calls this when any player picks the loot up.
+    /// </summary>
+    public void CollectLoot(uint lootId)
+    {
+        if (!lootById.TryGetValue(lootId, out GameObject loot)) return;
+        lootById.Remove(lootId);
+        if (loot == null) return;
+        idByLoot.Remove(loot);
+
+        if (loot.TryGetComponent(out I_LootInterface lootable)) lootable.Loot();
+        else Destroy(loot);
+    }
+
+    private int GetEtherIndex(float etherValue)
+    {
+        if (etherValue > 150) return 2; // IntenseEtherPrefab
+        else if (etherValue > 100) return 1; // PowerfulEtherPrefab
+        else return 0; // FaintEtherPrefab
     }
 
     private AlchemyLoot GetOrganType(float HP)
@@ -94,28 +207,6 @@ public class LootSpawnHandler : MonoBehaviour
         else if (HP > 100) return AlchemyLoot.FunctionalOrgans;
         else if (HP > 50) return AlchemyLoot.WretchedOrgans;
         else return AlchemyLoot.WeakCore;
-    }
-
-    private void SpawnCores(EnemyStats enemy, AlchemyLoot coreType)
-    {
-
-        if (coreType == AlchemyLoot.WretchedOrgans) return;
-        GameObject instance = Instantiate(CorePrefab, enemy.transform.position, Quaternion.identity);
-        //Debug.Log("Indeed, Spawning Core");
-
-        if (instance.TryGetComponent(out LootableAlchemyMaterial lootScript))
-        {
-            lootScript.SetAlchemyMaterial(coreType);
-        }
-        Renderer renderer = instance.GetComponentInChildren<Renderer>();
-        Element strongestElement = enemy.GetHighestAffinity(out float value);
-
-        if (renderer != null && strongestElement != Element.None)
-        {
-            //Debug.Log("trying to change core color");
-            Material glowMaterial = ColorChanger.GetGlowStrengthByElement(strongestElement);
-            ColorChanger.ChangeMatByAffinity(renderer, glowMaterial);
-        }
     }
 
     private AlchemyLoot GetCoreType(float power)
