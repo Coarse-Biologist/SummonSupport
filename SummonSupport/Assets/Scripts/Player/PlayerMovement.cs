@@ -109,13 +109,21 @@ public class PlayerMovement : MovementScript
             if (PlayerAbilityHandler.DashAbility != null) playerStats.abilityHandler.TriggerAbility(PlayerAbilityHandler.DashAbility);
             else
             {
-                DashDustInstance = Instantiate(DashDust, transform.position, Quaternion.identity);
                 Vector3 moveDirection = new Vector3(moveInput.x, 0, moveInput.y);
                 // make dash dust instance face the opposite direction of player movement. 
-                DashDustInstance.transform.rotation = Quaternion.LookRotation(-moveDirection, Vector3.right);
-                Destroy(DashDustInstance, DashDuration);
+                Quaternion dustRotation = Quaternion.LookRotation(-moveDirection, Vector3.right);
+                SpawnDashDust(transform.position, dustRotation);
+                if (TryGetComponent(out NetworkPlayer networkPlayer)) networkPlayer.ShareDashDust(transform.position, dustRotation);
             }
         }
+    }
+
+    /// <summary>Shows the dust of a dash made without a dash ability. Also used for other players' dashes.</summary>
+    public void SpawnDashDust(Vector3 position, Quaternion rotation)
+    {
+        if (DashDust == null) return;
+        DashDustInstance = Instantiate(DashDust, position, rotation);
+        Destroy(DashDustInstance, DashDuration);
     }
 
 

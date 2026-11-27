@@ -10,6 +10,7 @@ public class MeleeAbility : Ability
     [Header("Melee Ability settings")]
 
 
+    [field: Tooltip("Cone shape only: the full width of the cone in degrees, centred on the caster's facing.")]
     [field: SerializeField] public float Angle { get; private set; }
     [field: SerializeField] public float Width { get; private set; }
     [field: SerializeField] public EffectSpawnLoc SpawnLocEnum { get; private set; }
@@ -106,7 +107,12 @@ public class MeleeAbility : Ability
         }
         if (Shape == AreaOfEffectShape.Cone)
         {
-            return Vector3.Angle(hitLocation, originTransform.position) <= Angle + sizeMod;
+            // Compare the caster's facing with the direction to the target, both flattened onto the ground,
+            // so a target's height doesn't push it out of the cone.
+            Vector3 toTarget = Vector3.ProjectOnPlane(hitLocation - originTransform.position, Vector3.up);
+            Vector3 facing = Vector3.ProjectOnPlane(originTransform.forward, Vector3.up);
+            if (toTarget.magnitude > rangeMod + sizeMod) return false;
+            return Vector3.Angle(facing, toTarget) <= (Angle + sizeMod) * 0.5f;
         }
         if (Shape == AreaOfEffectShape.Rectangle)
         {

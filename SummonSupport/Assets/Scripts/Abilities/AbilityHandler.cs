@@ -226,6 +226,9 @@ public class AbilityHandler : MonoBehaviour
             return true;
         }
     }
+    /// <summary>The beams that are switched on right now.</summary>
+    public IEnumerable<BeamAbility> ActiveBeams => toggledAbilitiesDict.Keys;
+
     public void SetCharging(bool alreadyCharging)
     {
         if (anim != null) anim.ChangeLayerAnimation("Sprint", 1, .1f);
