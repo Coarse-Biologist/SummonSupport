@@ -1428,7 +1428,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TitleDisplayHandler
   text: {fileID: 857593257}
-  GameTitle: Summon Support?
+  GameTitle: Summon Support
 --- !u!4 &940171009
 Transform:
   m_ObjectHideFlags: 0
@@ -2314,6 +2314,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RelayConnectionManager
   maxPlayers: 4
   connectionType: dtls
+  startSceneName: StartScreen
 --- !u!114 &1776827010
 MonoBehaviour:
   m_ObjectHideFlags: 0
