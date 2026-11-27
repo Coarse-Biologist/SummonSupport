@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Linq;
+using Unity.Netcode;
+
 
 //using System.Numerics;
 using UnityEngine;
@@ -235,7 +237,7 @@ public class Projectile : MonoBehaviour
             rotation = Quaternion.Euler(0, 0, (float)Math.Sin(45 * i) * (30 + 5 * i));
 
             Vector3 direction = rotation * transform.forward;
-            GameObject newProjectile = Instantiate(ability.Projectile, transform.position, Quaternion.identity);
+            NetworkObject newProjectile = Instantiate(ability.Projectile, transform.position, Quaternion.identity);
             Projectile projectileScript = newProjectile.GetComponent<Projectile>();
 
             Material glowMaterial = ColorChanger.GetGlowStrengthByElement(ability.ElementTypes[0]);
