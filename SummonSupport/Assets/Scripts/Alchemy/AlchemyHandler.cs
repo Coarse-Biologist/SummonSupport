@@ -320,6 +320,15 @@ public class AlchemyHandler : MonoBehaviour
     /// Called by an Alchemy Inventory when a tool is gained.
     /// Modifies crafting scalars based on the number of tools the player has.
     /// </summary>
+    /// <summary>Puts the tool-based crafting scalars back to how they are with no tools (see AlchemyInventory.ResetInventory).</summary>
+    public static void ResetToolBasedScaling()
+    {
+        ManaToAbilityRatio = 100;
+        RecycleExchangeRate = .2f;
+        KnowledgeGainRate = .03f;
+        HealthScalar = 2f;
+    }
+
     public static void ModifyToolBasedScaling(int numOfToolsKnown)
     {
         ManaToAbilityRatio -= numOfToolsKnown * 3;

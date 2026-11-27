@@ -260,8 +260,11 @@ public static class SaveHandler
         }
     }
 
+    // The save replaces the alchemy entirely, so nothing from an earlier game in this run is kept.
     private static void SetAlchemyData(AlchemyData data)
     {
+        AlchemyInventory.ResetInventory();
+        if (data == null) return;
         foreach (ElementKnowledge knowledge in data.ElementalKnowledge)
             AlchemyInventory.SetElementalKnowledge(knowledge.elementType, knowledge.value);
         foreach (CraftingPotentialDict potential in data.PlayerCraftingPotential)
