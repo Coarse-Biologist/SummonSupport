@@ -34,7 +34,8 @@ public class ProjectileAbility : Ability
 
         for (int i = 0; i < shots; i += 1)
         {
-            NetworkObject projectile = Instantiate(Projectile, spawnPoint.position, Quaternion.identity);
+            NetworkObject projectile = Instantiate(Projectile, spawnPoint.position, Quaternion.identity).GetComponent<NetworkObject>();
+            projectile.Spawn();
             projectile.transform.localScale += sizeMod;
             Projectile projectileScript = projectile.GetComponent<Projectile>();
 
