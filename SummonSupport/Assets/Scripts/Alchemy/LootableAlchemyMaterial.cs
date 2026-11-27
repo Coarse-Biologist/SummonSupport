@@ -1,5 +1,4 @@
 using UnityEngine;
-using System.Collections.Generic;
 
 public class LootableAlchemyMaterial : MonoBehaviour, I_LootInterface
 {

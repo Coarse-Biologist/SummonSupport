@@ -4,7 +4,6 @@ using UnityEngine;
 using System.Collections;
 using SummonSupportEvents;
 using System.Linq;
-using Unity.Entities.UniversalDelegates;
 public abstract class LivingBeing : MonoBehaviour
 {
     #region Declarations

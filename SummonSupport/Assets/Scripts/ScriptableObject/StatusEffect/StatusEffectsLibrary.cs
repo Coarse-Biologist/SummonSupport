@@ -1,6 +1,4 @@
 using System.Collections.Generic;
-using Unity.Entities.UniversalDelegates;
-using Unity.VisualScripting;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "StatuEffectsLibraryAssets", menuName = "StatusEffectLibraryAsset")]
