@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using Unity.Cinemachine;
 using Unity.Netcode;
+using SummonSupportEvents;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
@@ -10,7 +11,7 @@ using UnityEngine.Rendering.Universal;
 [RequireComponent(typeof(PlayerAbilityHandler))]
 [RequireComponent(typeof(PlayerUIHandler))]
 [RequireComponent(typeof(AbilityUI_Handler))]
-public class NetworkPlayer : NetworkCombatant
+public partial class NetworkPlayer : NetworkCombatant
 {
     [SerializeField] private string leftHandPath;
     [SerializeField] private string rightHandPath;
@@ -50,6 +51,8 @@ public class NetworkPlayer : NetworkCombatant
             else if (sharedPaused) SharedPauseClientRpc(true, sharedPausedBy, ToOwner());
         }
 
+        StartSaveSession();
+
         if (IsOwner)
         {
             AttachLocalPlayer();
@@ -69,6 +72,8 @@ public class NetworkPlayer : NetworkCombatant
     {
         vitals.OnValueChanged -= OnVitalsChanged;
         power.OnValueChanged -= OnPowerChanged;
+        // If the one player still standing leaves, everyone left is down.
+        if (IsServer && !IsOwner) CheckAllPlayersDown(this);
     }
 
     private void Update()
@@ -76,6 +81,7 @@ public class NetworkPlayer : NetworkCombatant
         if (!IsSpawned) return;
         if (IsServer) PushVitals();
         if (!IsOwner) return;
+        UpdateSaves();
 
         pushTimer -= Time.unscaledDeltaTime;
         if (pushTimer > 0f) return;
@@ -123,7 +129,43 @@ public class NetworkPlayer : NetworkCombatant
     {
         PlayerStats stats = GetComponent<PlayerStats>();
         stats.ApplyReplicatedHitpoints(next.current, IsOwner ? (float?)null : next.max);
-        if (next.dead && IsOwner && !stats.Dead) stats.Die();
+        // Every machine shows a downed player, so anyone nearby can resurrect them.
+        if (next.dead && !stats.Dead) stats.Die();
+        else if (!next.dead && stats.Dead) stats.ApplyReplicatedResurrection();
+    }
+
+    /// <summary>Any player or minion can resurrect a downed player; the host does it, and everyone sees it.</summary>
+    public void RequestResurrect()
+    {
+        if (IsSpawned) ResurrectServerRpc();
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void ResurrectServerRpc()
+    {
+        GetComponent<PlayerStats>().Resurrect();
+    }
+
+    /// <summary>Host side: shows the death screen to everyone once every player in the session is down.</summary>
+    public static void CheckAllPlayersDown(NetworkPlayer leaving = null)
+    {
+        NetworkManager networkManager = NetworkManager.Singleton;
+        if (networkManager == null || !networkManager.IsServer) return;
+
+        NetworkPlayer messenger = null;
+        foreach (NetworkClient client in networkManager.ConnectedClientsList)
+        {
+            if (client.PlayerObject == null || !client.PlayerObject.TryGetComponent(out NetworkPlayer player) || player == leaving) continue;
+            if (!player.GetComponent<PlayerStats>().Dead) return;
+            messenger ??= player;
+        }
+        if (messenger != null) messenger.AllPlayersDownClientRpc();
+    }
+
+    [ClientRpc]
+    private void AllPlayersDownClientRpc()
+    {
+        EventDeclarer.PlayerDead?.Invoke(true);
     }
 
     private void OnPowerChanged(NetworkPower previous, NetworkPower next)

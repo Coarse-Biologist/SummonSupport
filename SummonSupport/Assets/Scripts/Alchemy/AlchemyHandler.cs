@@ -1,5 +1,6 @@
 #region Imports
 using UnityEngine;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System;
@@ -49,6 +50,8 @@ public class AlchemyHandler : MonoBehaviour
     // Online crafting: what the local player paid for each minion it asked the host to spawn.
     private uint nextCraftRequestId;
     private readonly Dictionary<uint, (Dictionary<CraftingPotential, int> potential, List<Element> elements)> pendingCrafts = new();
+    // Saved minions that the host is spawning for the local player; built from their profile instead of a craft.
+    private readonly Dictionary<uint, MinionProfileData> pendingSavedMinions = new();
 
 
     #endregion
@@ -155,6 +158,12 @@ public class AlchemyHandler : MonoBehaviour
     /// <summary>Crafter side: builds a minion the host spawned for the local player, from what the player paid.</summary>
     public void CompleteNetworkCraft(MinionStats minionStats, uint requestId)
     {
+        if (pendingSavedMinions.TryGetValue(requestId, out MinionProfileData savedProfile))
+        {
+            pendingSavedMinions.Remove(requestId);
+            BuildSavedMinion(minionStats, savedProfile);
+            return;
+        }
         if (!pendingCrafts.TryGetValue(requestId, out var craft)) return;
         pendingCrafts.Remove(requestId);
 
@@ -323,6 +332,39 @@ public class AlchemyHandler : MonoBehaviour
         GameObject minion = Instantiate(minionPrefab, location, rotation);
 
         return minion;
+    }
+
+    /// <summary>
+    /// Brings back a minion from a save for the local player. Online the host spawns it, like a crafted minion,
+    /// and this machine builds it from the saved profile when it arrives (see CompleteNetworkCraft).
+    /// </summary>
+    public void RestoreSavedMinion(MinionData minionData)
+    {
+        if (NetworkSession.IsOnline)
+        {
+            NetworkPlayer requester = PlayerStats.Instance != null ? PlayerStats.Instance.GetComponent<NetworkPlayer>() : null;
+            if (requester == null) return;
+            uint requestId = ++nextCraftRequestId;
+            pendingSavedMinions[requestId] = minionData.profile;
+            requester.RequestCraftMinion(minionData.location, requestId);
+            return;
+        }
+
+        GameObject minion = SpawnMinion(minionData.location, minionData.rotation);
+        if (minion.TryGetComponent(out MinionStats minionStats)) StartCoroutine(BuildSavedMinionWhenReady(minionStats, minionData.profile));
+    }
+
+    private IEnumerator BuildSavedMinionWhenReady(MinionStats minionStats, MinionProfileData profile)
+    {
+        yield return null; // let the minion's Start run first
+        if (minionStats != null) BuildSavedMinion(minionStats, profile);
+    }
+
+    private void BuildSavedMinion(MinionStats minionStats, MinionProfileData profile)
+    {
+        profile.ApplyTo(minionStats);
+        minionStats.RestoreResources();
+        AddActiveMinion(minionStats);
     }
     public void AddActiveMinion(MinionStats minion)
     {

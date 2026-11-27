@@ -257,34 +257,7 @@ public class NetworkEnemy : NetworkCombatant
 
     private void ApplyMinionProfile(MinionProfileData profile)
     {
-        minionStats.ApplyReplicatedMaximums(profile.maxHitpoints, profile.maxPower);
-
-        // Change the base rates by the difference, so temporary changes (heal and damage over time) stay in the totals.
-        float healthRegenChange = profile.healthRegeneration - minionStats.HealthRegeneration;
-        if (healthRegenChange != 0) minionStats.ChangeHealthRegeneration(healthRegenChange);
-        float powerRegenChange = profile.powerRegeneration - minionStats.PowerRegeneration;
-        if (powerRegenChange != 0) minionStats.ChangePowerRegeneration(powerRegenChange);
-
-        if (profile.affinities != null)
-            for (int i = 0; i < profile.affinities.Length && i < MinionProfileData.ProfileElements.Length; i++)
-                minionStats.SetAffinity(MinionProfileData.ProfileElements[i], profile.affinities[i]);
-
-        minionStats.SetBodyScale(profile.bodyScale);
-        if (!string.IsNullOrEmpty(profile.name)) minionStats.SetName(profile.name);
-
-        List<Ability> known = new();
-        if (profile.knownAbilities != null)
-            foreach (int index in profile.knownAbilities)
-                if (AbilityRegistry.AbilityAt(index) is Ability ability) known.Add(ability);
-
-        List<(int slot, Ability ability)> slotted = new();
-        if (profile.slotNumbers != null && profile.slottedAbilities != null)
-            for (int i = 0; i < profile.slotNumbers.Length && i < profile.slottedAbilities.Length; i++)
-                if (AbilityRegistry.AbilityAt(profile.slottedAbilities[i]) is Ability ability) slotted.Add((profile.slotNumbers[i], ability));
-
-        if (TryGetComponent(out CreatureAbilityHandler creatureAbilityHandler)) creatureAbilityHandler.ReplaceAbilities(known, slotted);
-
-        ColorChanger.ChangeAllMatsByAffinity(minionStats);
+        profile.ApplyTo(minionStats);
     }
 
     /// <summary>Crafter side: fills the minion's hitpoints and power on the host, with the crafter's maximums.</summary>

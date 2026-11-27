@@ -25,6 +25,9 @@ public class RelayConnectionManager : MonoBehaviour
         NetworkManager.Singleton != null && NetworkManager.Singleton.IsListening && !string.IsNullOrEmpty(JoinCode) ? JoinCode : null;
     public bool ServicesReady { get; private set; }
 
+    /// <summary>This player's Unity Authentication id, which stays the same between sessions on this device.</summary>
+    public string LocalPlayerId => ServicesReady && AuthenticationService.Instance.IsSignedIn ? AuthenticationService.Instance.PlayerId : null;
+
     /// <summary>Why this client was last dropped from a session (e.g. removed by the host); the start screen shows it once.</summary>
     public string LastDisconnectReason { get; set; }
 
@@ -52,7 +55,12 @@ public class RelayConnectionManager : MonoBehaviour
     private void OnClientDisconnected(ulong clientId)
     {
         NetworkManager networkManager = NetworkManager.Singleton;
-        if (leaving || networkManager.IsServer) return;
+        if (leaving) return;
+        if (networkManager.IsServer)
+        {
+            if (clientId != NetworkManager.ServerClientId) GameSession.HandleGuestLeft(clientId);
+            return;
+        }
         if (clientId != networkManager.LocalClientId && clientId != NetworkManager.ServerClientId) return;
 
         LastDisconnectReason = string.IsNullOrEmpty(networkManager.DisconnectReason) ? "Lost connection to the host." : networkManager.DisconnectReason;

@@ -25,10 +25,9 @@ public class EnemySpawnHandler : MonoBehaviour
     //[field: SerializeField] public float Difficulty_Scalar { get; private set; } = .25f; //Likelihood of each successive creature difficulty spawn is multiplied by this
     [field: SerializeField] public Difficulty Difficulty { get; private set; } = Difficulty.Novice;
 
-    // Chosen by the host in the pause menu's Host Options; overrides every spawner's own Difficulty.
+    // The difficulty chosen when the game was started or hosted overrides every spawner's own Difficulty.
     // Only the host spawns enemies, so this does not need to reach clients.
-    public static Difficulty? HostDifficulty { get; set; }
-    public Difficulty CurrentDifficulty => HostDifficulty ?? Difficulty;
+    public Difficulty CurrentDifficulty => GameSession.Difficulty ?? Difficulty;
     private static readonly Dictionary<Difficulty, (int lvl1, int lvl2, int lvl3, int lvl4)> CreatureProbabilities
         = new()
     {

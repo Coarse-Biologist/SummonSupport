@@ -333,9 +333,17 @@ public class PauseGameHandler : MonoBehaviour
         UnityEngine.Cursor.lockState = CursorLockMode.Locked;   // Locks the cursor to the center of the screen
         UnityEngine.Cursor.visible = false;
         Time.timeScale = 1f;
+        // Restarting goes back to the slot's last save (or a fresh start if the game was never saved).
+        GameSession.ReloadFromSlot();
         if (NetworkSession.IsHost)
         {
-            // Unpause everyone, then reload the level for the whole session.
+            // Bring everyone back, unpause them, then reload the level for the whole session.
+            foreach (Unity.Netcode.NetworkClient client in Unity.Netcode.NetworkManager.Singleton.ConnectedClientsList)
+            {
+                if (client.PlayerObject == null || !client.PlayerObject.TryGetComponent(out PlayerStats stats)) continue;
+                stats.Resurrect();
+                stats.RestoreResources();
+            }
             RequestPauseMenu(false);
             Unity.Netcode.NetworkManager.Singleton.SceneManager.LoadScene(SceneManager.GetActiveScene().name, LoadSceneMode.Single);
             return;
@@ -347,9 +355,11 @@ public class PauseGameHandler : MonoBehaviour
     #region quit to main menu
     private static void QuitToMainMenu()
     {
+        // A client sends its character to the host first, so the host saves it as the client leaves.
+        if (NetworkSession.IsClientOnly && NetworkPlayer.Local != null) NetworkPlayer.Local.PushCharacter();
         // Leaving ends this machine's part in an online session; when the host leaves, everyone returns to the start screen.
         if (NetworkSession.IsOnline && RelayConnectionManager.Instance != null) RelayConnectionManager.Instance.Disconnect();
-        EnemySpawnHandler.HostDifficulty = null;
+        GameSession.End();
         SceneManager.LoadSceneAsync("StartScreen");
         Time.timeScale = 1f;
 
@@ -475,11 +485,11 @@ public class PauseGameHandler : MonoBehaviour
         InfoElement.text = "";
         Button audioSettingsButton = AddButtons("Audio Settings", InfoElement, 50, 25);
         audioSettingsButton.RegisterCallback<ClickEvent>(e => ShowAudioSettings());
-        // Online, saving and loading belong to the host.
+        // Online, saving belongs to the host. Saves are loaded from the start screen, when a game starts.
         if (!NetworkSession.IsClientOnly)
         {
-            Button saveLoadButton = AddButtons("Save/Load", InfoElement, 50, 25);
-            saveLoadButton.RegisterCallback<ClickEvent>(e => ShowSaveLoad());
+            Button saveButton = AddButtons("Save Game", InfoElement, 50, 25);
+            saveButton.RegisterCallback<ClickEvent>(e => ShowSaveScreen());
         }
         Button joinCodeButton = AddButtons("Join Code", InfoElement, 50, 25);
         joinCodeButton.RegisterCallback<ClickEvent>(e => ShowJoinCode());
@@ -542,35 +552,39 @@ public class PauseGameHandler : MonoBehaviour
 
 
     }
-    private static void ShowSaveLoad()
+    private static void ShowSaveScreen(string status = null)
     {
+        if (NetworkSession.IsClientOnly) return;
+        PlayerOptions.style.display = DisplayStyle.Flex;
         ClearInfoElement();
+        InfoElement.text = "";
 
-        Button saveButton = AddButtons("Save Game", InfoElement, 4, 20);
-        saveButton.RegisterCallback<ClickEvent>(e => ShowSaveableSlots());
-        Button loadButton = AddButtons("Load Game", InfoElement, 4, 20);
-        loadButton.RegisterCallback<ClickEvent>(e => ShowLoadbleSlots());
-    }
-    private static void ShowSaveableSlots()
-    {
-        ClearInfoElement();
+        int activeSlot = GameSession.ActiveSlot;
+        AddInfoLabel(status ?? (activeSlot == GameSession.NoSlot ? "Choose a slot to save this game to." : $"This game saves to slot {activeSlot}."), 26);
+        if (NetworkSession.IsHost) AddInfoLabel("Saves every player's character.", 20);
 
-        foreach (var saveDataKvp in SaveHandler.saves)
+        for (int slot = 1; slot <= SaveHandler.SlotCount; slot++)
         {
-            Button saveButton = AddButtons(SaveHandler.GetSaveFileInfo(saveDataKvp.Key), InfoElement, 4, 20);
-            saveButton.RegisterCallback<ClickEvent>(e => SaveHandler.SaveGameData(saveDataKvp.Key));
-            saveButton.RegisterCallback<ClickEvent>(e => saveButton.text = SaveHandler.GetSaveFileInfo(saveDataKvp.Key));
-
-        }
-    }
-    private static void ShowLoadbleSlots()
-    {
-        ClearInfoElement();
-
-        foreach (var saveDataKvp in SaveHandler.saves)
-        {
-            Button loadButton = AddButtons(SaveHandler.GetSaveFileInfo(saveDataKvp.Key), InfoElement, 4, 20);
-            loadButton.RegisterCallback<ClickEvent>(e => SaveHandler.LoadGameData(saveDataKvp.Key));
+            int slotNumber = slot;
+            string description = SaveHandler.DescribeSlot(slotNumber) + (slotNumber == activeSlot ? " (current)" : "");
+            bool needsConfirm = slotNumber != activeSlot && SaveHandler.ReadSlot(slotNumber) != null;
+            Button slotButton = AddButtons(description, InfoElement, 4, 20);
+            bool confirming = false;
+            bool saving = false;
+            slotButton.RegisterCallback<ClickEvent>(e =>
+            {
+                if (saving) return;
+                if (needsConfirm && !confirming)
+                {
+                    confirming = true;
+                    slotButton.text = $"Click again to overwrite slot {slotNumber}";
+                    return;
+                }
+                saving = true;
+                slotButton.text = "Saving...";
+                NetworkPlayer.SaveSession(slotNumber, saved =>
+                    ShowSaveScreen(saved ? $"Saved to slot {slotNumber}." : "Could not save; see the console."));
+            });
         }
     }
     private static void DisplayVolume()
@@ -600,8 +614,6 @@ public class PauseGameHandler : MonoBehaviour
     #endregion
 
     #region Host Options
-    private static readonly Difficulty[] Difficulties = (Difficulty[])System.Enum.GetValues(typeof(Difficulty));
-
     private static void ShowHostOptions()
     {
         if (!NetworkSession.IsHost) return;
@@ -609,15 +621,7 @@ public class PauseGameHandler : MonoBehaviour
         ClearInfoElement();
         InfoElement.text = "";
 
-        AddInfoLabel("Enemy difficulty", 30);
-        Button difficultyButton = AddButtons(GetHostDifficulty().ToString(), InfoElement, 50, 25);
-        difficultyButton.RegisterCallback<ClickEvent>(e =>
-        {
-            int next = (System.Array.IndexOf(Difficulties, GetHostDifficulty()) + 1) % Difficulties.Length;
-            EnemySpawnHandler.HostDifficulty = Difficulties[next];
-            difficultyButton.text = Difficulties[next].ToString();
-        });
-        AddInfoLabel("Applies to enemies spawned from now on.", 20);
+        AddInfoLabel($"Difficulty: {GameSession.Difficulty?.ToString() ?? "set by the level"}", 24);
 
         AddInfoLabel("Players", 30);
         Unity.Netcode.NetworkManager networkManager = Unity.Netcode.NetworkManager.Singleton;
@@ -638,18 +642,13 @@ public class PauseGameHandler : MonoBehaviour
                     removeButton.text = $"Click again to remove {playerName}";
                     return;
                 }
-                RelayConnectionManager.Instance.RemovePlayer(clientId);
-                ShowHostOptions();
+                // Their newest character is saved as they go (see NetworkPlayer.RemovePlayerAfterSaving).
+                removeButton.text = $"Saving and removing {playerName}...";
+                removeButton.SetEnabled(false);
+                NetworkPlayer.RemovePlayerAfterSaving(clientId);
             });
         }
         if (!anyGuests) AddInfoLabel("No one else has joined yet.", 20);
-    }
-
-    private static Difficulty GetHostDifficulty()
-    {
-        if (EnemySpawnHandler.HostDifficulty.HasValue) return EnemySpawnHandler.HostDifficulty.Value;
-        EnemySpawnHandler spawner = FindFirstObjectByType<EnemySpawnHandler>();
-        return spawner != null ? spawner.Difficulty : Difficulty.Novice;
     }
 
     private static string GetPlayerName(Unity.Netcode.NetworkClient client)

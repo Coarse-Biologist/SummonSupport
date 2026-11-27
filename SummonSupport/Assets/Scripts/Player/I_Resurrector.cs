@@ -27,23 +27,26 @@ public class I_Resurrector : MonoBehaviour
             throw new System.Exception($"You placed {this} on a thing which doesn't have a LivingBeing mono.");
         }
     }
-    public void ResurrectMinion(GameObject minion, I_InteractMinionResurrect interactable)
+    /// <summary>Resurrects a dead minion or a downed player, if this being stays close for ResurrectTime.</summary>
+    public void Resurrect(GameObject target, I_InteractResurrect interactable)
     {
-        StartCoroutine(CheckResurrection(minion, interactable));
+        StartCoroutine(CheckResurrection(target, interactable));
         if (TryGetComponent(out AIStateHandler sH))
         {
             stateHandler = sH;
             stateHandler.SetStuckInAbilityAnimation(true);
         }
     }
-    private IEnumerator CheckResurrection(GameObject minion, I_InteractMinionResurrect interactable)
+    private IEnumerator CheckResurrection(GameObject target, I_InteractResurrect interactable)
     {
 
-        if (!minion.TryGetComponent(out MinionStats minionStats))
+        if (!target.TryGetComponent(out LivingBeing targetStats))
         {
-            Debug.LogWarning("Trying to resurrect a minion without minion stats component. cancelling res");
+            Debug.LogWarning("Trying to resurrect something without a LivingBeing component. cancelling res");
+            interactable.SetResurrecting(false);
             yield break;
         }
+        LivingBeing ownStats = GetComponent<LivingBeing>();
         bool resurrecting = true;
         float timeWaited = 0;
         float distance;
@@ -56,8 +59,10 @@ public class I_Resurrector : MonoBehaviour
         {
             yield return resurrectionIncrement;
             timeWaited += .5f;
-            distance = (minion.transform.position - gameObject.transform.position).magnitude;
-            if (distance >= ResurrectRange)
+            if (target == null || interactable == null) break;
+            distance = (target.transform.position - gameObject.transform.position).magnitude;
+            // Stop if this being moved away or fell, or someone else already brought the target back.
+            if (distance >= ResurrectRange || ownStats.Dead || !targetStats.Dead)
             {
                 Debug.Log($"Distance to minion = {distance}. setting res succeeding to false.");
                 interactable.SetResurrecting(false);
@@ -67,7 +72,8 @@ public class I_Resurrector : MonoBehaviour
             {
                 anim.SeLayerWeight(1, 0);
                 Debug.Log("Breaking loop because res time has been successfully waited");
-                minionStats.Resurrect();
+                if (targetStats is MinionStats minionStats) minionStats.Resurrect();
+                else if (targetStats is PlayerStats playerStats) playerStats.Resurrect();
                 interactable.SetResurrecting(false);
                 resurrecting = false;
 

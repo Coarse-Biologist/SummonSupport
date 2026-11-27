@@ -1,314 +1,271 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using System.Collections;
 using System.Collections.Generic;
 using System;
 using System.IO;
 using SummonSupportEvents;
 using SS_Structs;
 
+/// <summary>
+/// Five save slots, each holding a whole session (see SessionSaveData).
+/// Each player's machine builds its own character (BuildCharacter), because it owns that player's level,
+/// abilities, alchemy inventory and minions. Online, clients send theirs to the host (NetworkPlayer), and the
+/// host writes the slot with everyone's newest copy (WriteSession). Loading happens when a game starts:
+/// the host (or single player) loads its own character, and the host sends each joining player theirs.
+/// </summary>
 public static class SaveHandler
 {
-    public static Dictionary<int, SaveData> saves { private set; get; } = new();
-    public static string GetSaveFileInfo(int slot)
+    public const int SlotCount = 5;
+    private const string LocalPlayerIdKey = "SummonSupport.LocalPlayerId";
+
+    private static string Folder => Path.Combine(Application.persistentDataPath, "Saves");
+    private static string SlotPath(int slot) => Path.Combine(Folder, $"SummonSupport_Slot{slot}.json");
+
+    #region Slots
+
+    public static SessionSaveData ReadSlot(int slot)
     {
-        string saveInfo = "Empty";
-        saves.TryGetValue(slot, out SaveData saveData);
-        if (saveData != null) saveInfo = $"Slot {slot}: " + saveData.saveTime;
-        return saveInfo;
-    }
-    public static void SaveGameData(int slot)
-    {
-        SaveData saveData = new SaveData();
-        if (!saves.ContainsKey(slot)) saves.Add(slot, saveData);
-        else saves[slot] = saveData;
-
-        saveData = SaveAlchemyData(saveData);
-        saveData = SaveMinionData(saveData);
-        saveData = SavePlayerData(saveData);
-        saveData.saveTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm");
-        string data = JsonUtility.ToJson(saveData, true);
-
-        string folder = Path.Combine(
-            Application.persistentDataPath,
-            "Saves"
-        );
-
-        Directory.CreateDirectory(folder);
-
-        string path = Path.Combine(
-            folder,
-            $"SummonSupport_SaveSlot{slot}.json"
-        );
-
-        File.WriteAllText(path, data);
-
-        Debug.Log(JsonUtility.ToJson(saveData, true));
+        string path = SlotPath(slot);
+        if (!File.Exists(path)) return null;
+        try
+        {
+            SessionSaveData save = JsonUtility.FromJson<SessionSaveData>(File.ReadAllText(path));
+            return save != null && save.version == SessionSaveData.CurrentVersion ? save : null;
+        }
+        catch (Exception e)
+        {
+            Debug.LogWarning($"Could not read save slot {slot}: {e.Message}");
+            return null;
+        }
     }
 
-    private static SaveData SaveAlchemyData(SaveData saveData)
+    public static string DescribeSlot(int slot)
+    {
+        SessionSaveData save = ReadSlot(slot);
+        if (save == null) return $"Slot {slot}: Empty";
+
+        PlayerSaveRecord host = save.HostRecord;
+        string character = host != null ? $"Lv {host.data.player.levelData.level} {host.playerName}" : "No host character";
+        string players = save.players.Count == 1 ? "1 player" : $"{save.players.Count} players";
+        return $"Slot {slot}: {character} - {save.difficulty} - {players} - {save.saveTime}";
+    }
+
+    public static void EraseSlot(int slot)
+    {
+        string path = SlotPath(slot);
+        if (File.Exists(path)) File.Delete(path);
+    }
+
+    /// <summary>
+    /// Writes the session to a slot: the host's character as it is now, and the newest copy of every other
+    /// player's, including players who have left and players from the loaded save who did not join this time.
+    /// </summary>
+    public static bool WriteSession(int slot)
+    {
+        if (slot < 1 || slot > SlotCount) throw new ArgumentOutOfRangeException(nameof(slot));
+        // Without the host's own character this would wipe it from the slot (e.g. the host is on the start screen).
+        SaveData hostCharacter = BuildCharacter();
+        if (hostCharacter == null)
+        {
+            Debug.LogWarning($"No local player to save, so slot {slot} was left as it was.");
+            return false;
+        }
+        string now = DateTime.Now.ToString("yyyy-MM-dd HH:mm");
+
+        SessionSaveData save = new()
+        {
+            saveTime = now,
+            sceneName = SceneManager.GetActiveScene().name,
+            difficulty = CurrentDifficulty()
+        };
+        save.players.Add(new PlayerSaveRecord
+        {
+            playerId = LocalPlayerId,
+            playerName = PlayerStats.Instance.Name,
+            isHost = true,
+            saveTime = now,
+            data = hostCharacter
+        });
+        save.players.AddRange(GameSession.GuestRecords);
+
+        Directory.CreateDirectory(Folder);
+        File.WriteAllText(SlotPath(slot), JsonUtility.ToJson(save));
+        GameSession.SetActiveSlot(slot);
+        Debug.Log($"Saved {save.players.Count} character(s) to slot {slot}.");
+        return true;
+    }
+
+    private static Difficulty CurrentDifficulty()
+    {
+        if (GameSession.Difficulty.HasValue) return GameSession.Difficulty.Value;
+        EnemySpawnHandler spawner = UnityEngine.Object.FindFirstObjectByType<EnemySpawnHandler>();
+        return spawner != null ? spawner.CurrentDifficulty : Difficulty.Novice;
+    }
+
+    /// <summary>Who this machine's player is between sessions: the Unity Authentication player id when signed in.</summary>
+    public static string LocalPlayerId
+    {
+        get
+        {
+            string servicesId = RelayConnectionManager.Instance != null ? RelayConnectionManager.Instance.LocalPlayerId : null;
+            if (!string.IsNullOrEmpty(servicesId)) return servicesId;
+            if (!PlayerPrefs.HasKey(LocalPlayerIdKey)) PlayerPrefs.SetString(LocalPlayerIdKey, Guid.NewGuid().ToString("N"));
+            return PlayerPrefs.GetString(LocalPlayerIdKey);
+        }
+    }
+
+    #endregion
+
+    #region Building the local character
+
+    /// <summary>The local player's character as it is now, or null when there is no local player.</summary>
+    public static SaveData BuildCharacter()
+    {
+        if (PlayerStats.Instance == null) return null;
+        SaveData saveData = new();
+        SaveAlchemyData(saveData);
+        SaveMinionData(saveData);
+        SavePlayerData(saveData);
+        return saveData;
+    }
+
+    private static void SaveAlchemyData(SaveData saveData)
     {
         foreach (var kvp in AlchemyInventory.knowledgeDict)
-        {
-            SS_Structs.ElementKnowledge knowledgeStruct = new()
-            {
-                elementType = kvp.Key,
-                value = kvp.Value
-            };
-            saveData.alchemy.ElementalKnowledge.Add(knowledgeStruct);
-        }
+            saveData.alchemy.ElementalKnowledge.Add(new ElementKnowledge { elementType = kvp.Key, value = kvp.Value });
 
         foreach (var kvp in AlchemyInventory.AvailableCraftingPotential)
-        {
-            SS_Structs.CraftingPotentialDict craftingPotentialStruct = new()
-            {
-                craftingPotential = kvp.Key,
-                value = kvp.Value
-            };
-            saveData.alchemy.PlayerCraftingPotential.Add(craftingPotentialStruct);
+            saveData.alchemy.PlayerCraftingPotential.Add(new CraftingPotentialDict { craftingPotential = kvp.Key, value = kvp.Value });
 
-        }
         saveData.alchemy.KnownTools = new List<AlchemyTool>(AlchemyInventory.KnownTools);
-
-
-        return saveData;
     }
 
-    private static SaveData SaveMinionData(SaveData saveData)
+    private static void SaveMinionData(SaveData saveData)
     {
-        saveData.minions.Clear();
-
+        if (AlchemyHandler.Instance == null) return;
         foreach (MinionStats minion in AlchemyHandler.Instance.activeMinions)
         {
-            Debug.Log($"ss  aving minion edata = {minion}");
-
-            SaveNewMinionData(saveData, minion);
-        }
-        Debug.Log("number of minions:" + saveData.minions.Count);
-
-        return saveData;
-    }
-
-    private static SaveData SavePlayerData(SaveData saveData)
-    {
-
-        SavePlayerAffinity(saveData);
-
-        saveData.player.statData.currentHP = (int)PlayerStats.Instance.GetAttribute(AttributeType.CurrentHitpoints);
-        saveData.player.statData.maxHP = (int)PlayerStats.Instance.GetAttribute(AttributeType.MaxHitpoints);
-        saveData.player.statData.hpRegen = (int)PlayerStats.Instance.HealthRegeneration;
-        saveData.player.statData.location = PlayerStats.Instance.transform.position;
-        saveData.player.statData.powerRegen = (int)PlayerStats.Instance.PowerRegeneration;
-        saveData.player.statData.currentPower = (int)PlayerStats.Instance.GetAttribute(AttributeType.CurrentPower);
-        saveData.player.statData.maxPower = (int)PlayerStats.Instance.GetAttribute(AttributeType.MaxPower);
-        SaveAbilities(saveData.player.abilityData, PlayerStats.Instance.abilityHandler);
-        SaveSlottedAbilities(saveData.player.abilityData);
-        SavePlayerLevelData(saveData);
-
-        return saveData;
-    }
-
-    private static void SavePlayerAffinity(SaveData saveData)
-    {
-        saveData.player.statData.Affinity.Clear();
-        foreach (Element element in Enum.GetValues(typeof(Element)))
-        {
-            SS_Structs.ElementAffinity affinityStruct = new();
-            affinityStruct.elementType = element;
-            affinityStruct.value = PlayerStats.Instance.GetAffinity(element);
-            saveData.player.statData.Affinity.Add(affinityStruct);
-        }
-    }
-
-    private static List<ElementAffinity> SaveMinionAffinity(SaveData saveData, MinionStats minionStats)
-    {
-        List<ElementAffinity> affinityData = new();
-        foreach (Element element in Enum.GetValues(typeof(Element)))
-        {
-            ElementAffinity data = new()
+            if (minion == null) continue;
+            saveData.minions.Add(new MinionData
             {
-                elementType = element,
-                value = minionStats.GetAffinity(element)
-            };
-            affinityData.Add(data);
+                profile = MinionProfileData.Read(minion),
+                location = minion.transform.position,
+                rotation = minion.transform.rotation
+            });
         }
-        return affinityData;
     }
 
-    private static void SaveNewMinionData(SaveData saveData, MinionStats minionStats)
+    private static void SavePlayerData(SaveData saveData)
     {
-        MinionData minionData = new();
+        PlayerStats stats = PlayerStats.Instance;
+        LivingBeingData statData = saveData.player.statData;
 
-        List<ElementAffinity> affinityData = SaveMinionAffinity(saveData, minionStats);
+        statData.Name = stats.Name;
+        statData.currentHP = (int)stats.GetAttribute(AttributeType.CurrentHitpoints);
+        statData.maxHP = (int)stats.GetAttribute(AttributeType.MaxHitpoints);
+        statData.hpRegen = (int)stats.HealthRegeneration;
+        statData.currentPower = (int)stats.GetAttribute(AttributeType.CurrentPower);
+        statData.maxPower = (int)stats.GetAttribute(AttributeType.MaxPower);
+        statData.powerRegen = (int)stats.PowerRegeneration;
+        statData.location = stats.transform.position;
+        statData.rotation = stats.transform.rotation;
 
-        minionData.statData.Affinity = affinityData;
+        foreach (Element element in Enum.GetValues(typeof(Element)))
+            statData.Affinity.Add(new ElementAffinity { elementType = element, value = stats.GetAffinity(element) });
 
-        minionData.statData.Name = minionStats.Name;
-        minionData.statData.currentHP = (int)minionStats.GetAttribute(AttributeType.CurrentHitpoints);
-        minionData.statData.maxHP = (int)minionStats.GetAttribute(AttributeType.MaxHitpoints);
-        minionData.statData.hpRegen = (int)minionStats.HealthRegeneration;
-        minionData.statData.location = minionStats.transform.position;
-
-        minionData.abilityData = SaveAbilities(minionData.abilityData, minionStats.abilityHandler);
-        saveData.minions.Add(minionData);
-    }
-
-    private static AbilityData SaveAbilities(AbilityData abilityData, AbilityHandler abilityHandler)
-    {
-        abilityData.knownAbilities = new List<Ability>(abilityHandler.Abilities);
-        return abilityData;
-    }
-    private static AbilityData SaveSlottedAbilities(AbilityData abilityData)
-    {
-        foreach (var kvp in PlayerStats.Instance.abilityHandler.SlottedAbilities)
+        foreach (Ability ability in stats.abilityHandler.Abilities)
         {
-            SS_Structs.SlottedAbilities slottedAbilitiesStruct = new()
-            {
-                ability = kvp.ability,
-                slot = kvp.slot
-            };
-            abilityData.SlottedAbilities.Add(slottedAbilitiesStruct);
+            int index = AbilityRegistry.IndexOf(ability);
+            if (index >= 0) saveData.player.abilityData.knownAbilities.Add(index);
         }
-        return abilityData;
-    }
-
-    private static SaveData SavePlayerLevelData(SaveData saveData)
-    {
-        saveData.player.statData.Name = PlayerStats.Instance.Name;
-        saveData.player.levelData.level = PlayerStats.Instance.CurrentLevel;
-        saveData.player.levelData.currentXp = (int)PlayerStats.Instance.CurrentXP;
-        saveData.player.levelData.maxXp = (int)PlayerStats.Instance.MaxXP;
-
-        saveData.player.levelData.skillPoints = PlayerStats.Instance.SkillPoints;
-
-        return saveData;
-    }
-
-    #region load
-    public static void LoadGameData(int slot)
-    {
-
-        string path = Path.Combine(
-            Application.persistentDataPath,
-            "Saves",
-            $"SummonSupport_SaveSlot{slot}.json"
-        );
-
-        if (!File.Exists(path))
+        foreach (SlottedAbilities slotted in stats.abilityHandler.SlottedAbilities)
         {
-            throw new Exception($"The save file path did not exist: {path}");
+            int index = AbilityRegistry.IndexOf(slotted.ability);
+            if (index >= 0) saveData.player.abilityData.SlottedAbilities.Add(new SavedAbilitySlot { slot = slotted.slot, ability = index });
         }
 
-        string data = File.ReadAllText(path);
-
-        SaveData saveData = JsonUtility.FromJson<SaveData>(data);
-
-        HandleLoadedData(saveData);
+        saveData.player.levelData.level = stats.CurrentLevel;
+        saveData.player.levelData.currentXp = (int)stats.CurrentXP;
+        saveData.player.levelData.maxXp = (int)stats.MaxXP;
+        saveData.player.levelData.skillPoints = stats.SkillPoints;
     }
 
-    private static void HandleLoadedData(SaveData loadedData)
+    #endregion
+
+    #region Loading a character into the local player
+
+    /// <summary>Loads a saved character into the local player once the player and the level have started.</summary>
+    public static IEnumerator ApplyCharacterWhenReady(SaveData character)
     {
-        //#TODO
-        GameObject player = SetupManager.Instance.SpawnPlayer(loadedData.player.statData.location, loadedData.player.statData.rotation);
-        player.transform.position = loadedData.player.statData.location;
-        if (player.TryGetComponent(out LivingBeing livingBeing))
-        {
-            SetPlayerData(loadedData);
-        }
-        SetMinionData(loadedData);
-        SetAlchemyData(loadedData.alchemy);
+        if (character == null) yield break;
+        while (PlayerStats.Instance == null || AlchemyHandler.Instance == null) yield return null;
+        yield return null; // let the player's own Start run first
+        ApplyCharacter(character);
     }
+
+    public static void ApplyCharacter(SaveData character)
+    {
+        PlayerStats stats = PlayerStats.Instance;
+        if (stats == null || character == null) return;
+
+        MovePlayer(stats, character.player.statData.location, character.player.statData.rotation);
+        SetPlayerData(stats, character.player);
+        SetAlchemyData(character.alchemy);
+        foreach (MinionData minion in character.minions) AlchemyHandler.Instance.RestoreSavedMinion(minion);
+    }
+
+    private static void MovePlayer(PlayerStats stats, Vector3 location, Quaternion rotation)
+    {
+        if (location == Vector3.zero) return;
+        // The owner moves its own player online, so moving it here moves it for everyone.
+        if (stats.TryGetComponent(out Unity.Netcode.Components.NetworkTransform networkTransform) && networkTransform.IsSpawned)
+            networkTransform.Teleport(location, rotation, stats.transform.localScale);
+        else stats.transform.SetPositionAndRotation(location, rotation);
+        if (stats.TryGetComponent(out Rigidbody body)) body.position = location;
+    }
+
+    private static void SetPlayerData(PlayerStats stats, PlayerData data)
+    {
+        LivingBeingData statData = data.statData;
+        stats.SetAttribute(AttributeType.MaxHitpoints, statData.maxHP);
+        stats.SetAttribute(AttributeType.MaxPower, statData.maxPower);
+        stats.SetRegeneration(AttributeType.CurrentHitpoints, statData.hpRegen);
+        stats.SetRegeneration(AttributeType.CurrentPower, statData.powerRegen);
+        foreach (ElementAffinity affinity in statData.Affinity) stats.SetAffinity(affinity.elementType, affinity.value);
+
+        stats.SetLevel(data.levelData.level);
+        stats.SetMaxXp(data.levelData.maxXp);
+        stats.SetXp(data.levelData.currentXp);
+        stats.SetSkillPoints(data.levelData.skillPoints);
+
+        foreach (int index in data.abilityData.knownAbilities)
+            if (AbilityRegistry.AbilityAt(index) is Ability ability) stats.abilityHandler.LearnAbility(ability);
+        foreach (SavedAbilitySlot slot in data.abilityData.SlottedAbilities)
+            if (AbilityRegistry.AbilityAt(slot.ability) is Ability ability) EventDeclarer.SlotChanged?.Invoke(slot.slot, ability);
+
+        if (NetworkSession.IsOnline)
+        {
+            // The host owns current hitpoints and power; have it fill them to the loaded maximums.
+            if (stats.TryGetComponent(out NetworkPlayer networkPlayer)) networkPlayer.RequestRestoreResources();
+            if (NetworkSession.IsAuthority) stats.RestoreResources();
+        }
+        else
+        {
+            stats.SetAttribute(AttributeType.CurrentHitpoints, Mathf.Max(1, statData.currentHP));
+            stats.SetAttribute(AttributeType.CurrentPower, statData.currentPower);
+        }
+    }
+
     private static void SetAlchemyData(AlchemyData data)
     {
-        foreach (var dataStruct in data.ElementalKnowledge)
-        {
-            AlchemyInventory.SetElementalKnowledge(dataStruct.elementType, dataStruct.value);
-        }
-        foreach (var dataStruct in data.PlayerCraftingPotential)
-        {
-            AlchemyInventory.SetCraftingPotential(dataStruct.craftingPotential, dataStruct.value);
-        }
+        foreach (ElementKnowledge knowledge in data.ElementalKnowledge)
+            AlchemyInventory.SetElementalKnowledge(knowledge.elementType, knowledge.value);
+        foreach (CraftingPotentialDict potential in data.PlayerCraftingPotential)
+            AlchemyInventory.SetCraftingPotential(potential.craftingPotential, potential.value);
+        foreach (AlchemyTool tool in data.KnownTools)
+            AlchemyInventory.GainTool(tool);
     }
-    private static void SetPlayerData(SaveData loadedData)
-    {
-        if (PlayerStats.Instance != null)
-        {
-            PlayerStats.Instance.SetAttribute(AttributeType.CurrentHitpoints, loadedData.player.statData.currentHP);
-            PlayerStats.Instance.SetAttribute(AttributeType.MaxHitpoints, loadedData.player.statData.maxHP);
-            PlayerStats.Instance.SetAttribute(AttributeType.CurrentPower, loadedData.player.statData.currentPower);
-            PlayerStats.Instance.SetAttribute(AttributeType.MaxPower, loadedData.player.statData.maxPower);
-
-            PlayerStats.Instance.SetRegeneration(AttributeType.CurrentHitpoints, loadedData.player.statData.hpRegen);
-            PlayerStats.Instance.SetRegeneration(AttributeType.CurrentPower, loadedData.player.statData.powerRegen);
-            PlayerStats.Instance.SetLevel(loadedData.player.levelData.level);
-            PlayerStats.Instance.SetXp(loadedData.player.levelData.currentXp);
-            PlayerStats.Instance.SetMaxXp(loadedData.player.levelData.maxXp);
-            SetBeingLoadedAbilities(loadedData.player.abilityData, PlayerStats.Instance);
-            SetBeingAffinities(loadedData.player.statData, PlayerStats.Instance);
-            SetPlayerAbilitySlots(loadedData);
-
-
-        }
-        else throw new Exception("The Player does not exist to be modified.");
-    }
-    private static void SetMinionData(SaveData loadedData)
-    {
-        foreach (MinionStats minionToUnload in AlchemyHandler.Instance.activeMinions.ToArray())
-        {
-            minionToUnload.TrueDeath();
-        }
-        foreach (MinionData minionData in loadedData.minions)
-        {
-            GameObject minion = AlchemyHandler.Instance.SpawnMinion(minionData.statData.location, minionData.statData.rotation);
-
-            if (minion.TryGetComponent(out MinionStats minionStats))
-            {
-                SetMinionStats(minionData, minionStats);
-                SetBeingLoadedAbilities(minionData.abilityData, minionStats);
-                SetBeingAffinities(minionData.statData, minionStats);
-            }
-            AlchemyHandler.Instance.AddActiveMinion(minionStats);
-
-        }
-    }
-    private static void SetMinionStats(MinionData minionData, MinionStats minionStats)
-    {
-        minionStats.SetName(minionData.statData.Name);
-        minionStats.SetAttribute(AttributeType.CurrentHitpoints, minionData.statData.currentHP);
-        minionStats.SetAttribute(AttributeType.MaxHitpoints, minionData.statData.maxHP);
-        minionStats.SetRegeneration(AttributeType.CurrentHitpoints, minionData.statData.hpRegen);
-        minionStats.SetRegeneration(AttributeType.CurrentPower, minionData.statData.powerRegen);
-
-
-    }
-    private static void SetBeingAffinities(LivingBeingData lb_Data, LivingBeing being)
-    {
-        foreach (var kvp in lb_Data.Affinity)
-        {
-            being.SetAffinity(kvp.elementType, kvp.value);
-        }
-    }
-    private static void SetBeingLoadedAbilities(AbilityData livingBeingAbilityData, LivingBeing lb)
-    {
-        if (!lb.TryGetComponent(out AbilityHandler aHandler))
-        {
-            throw new Exception("You wont see this message because every minion has it");
-        }
-        else lb.SetAbilityHandler(aHandler);
-
-        foreach (Ability ability in livingBeingAbilityData.knownAbilities)
-        {
-
-            lb.abilityHandler.LearnAbility(ability); //#TODO null reference
-        }
-    }
-
-    private static void SetPlayerAbilitySlots(SaveData saveData)
-    {
-        foreach (var kvp in saveData.player.abilityData.SlottedAbilities)
-        {
-            EventDeclarer.SlotChanged?.Invoke(kvp.slot, kvp.ability);
-        }
-    }
-
 
     #endregion
 }

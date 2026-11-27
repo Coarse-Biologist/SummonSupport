@@ -64,6 +64,8 @@ public class SetupManager : MonoBehaviour
             PlayerSpawnPoint spawn = FindFirstObjectByType<PlayerSpawnPoint>();
             SpawnPlayer(spawn != null ? spawn.transform.position : Vector3.zero, spawn != null ? spawn.transform.rotation : Quaternion.identity);
         }
+        // Offline, load the character from the save chosen on the start screen. Online, NetworkPlayer does it.
+        if (!NetworkSession.IsOnline) StartCoroutine(SaveHandler.ApplyCharacterWhenReady(GameSession.TakeHostCharacter()));
 
     }
     public StatusEffectsLibrary GetStatusEffectLibrary()

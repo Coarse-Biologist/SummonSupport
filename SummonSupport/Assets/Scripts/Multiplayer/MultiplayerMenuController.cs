@@ -49,13 +49,37 @@ public class MultiplayerMenuController : MonoBehaviour
         }
     }
 
-    public async void Host()
+    /// <summary>Asks for the save slot and difficulty first, then hosts (see StartMenuController.OpenGameSetup).</summary>
+    public void Host()
+    {
+        if (busy) return;
+        if (StartMenuController.Instance == null)
+        {
+            HostSession(GameSession.NoSlot, Difficulty.Novice, null);
+            return;
+        }
+        SetPanelVisible(false);
+        StartMenuController.Instance.OpenGameSetup("Host Game", (slot, difficulty, save) =>
+        {
+            SetPanelVisible(true);
+            HostSession(slot, difficulty, save);
+        }, () => SetPanelVisible(true));
+    }
+
+    private void SetPanelVisible(bool visible)
+    {
+        if (hostButton != null) hostButton.transform.parent.gameObject.SetActive(visible);
+    }
+
+    private async void HostSession(int slot, Difficulty difficulty, SessionSaveData save)
     {
         if (busy) return;
         SetBusy(true);
         SetStatus("Creating session...");
         try
         {
+            if (slot == GameSession.NoSlot) GameSession.End();
+            else GameSession.Begin(slot, difficulty, save);
             await RelayConnectionManager.Instance.HostAsync();
             SetJoinCode(RelayConnectionManager.Instance.JoinCode);
             SetStatus("Hosting. Share the code with your friends.");
@@ -63,6 +87,7 @@ public class MultiplayerMenuController : MonoBehaviour
         }
         catch (Exception e)
         {
+            GameSession.End();
             Fail("Could not host", e);
         }
     }
@@ -70,6 +95,7 @@ public class MultiplayerMenuController : MonoBehaviour
     public async void Join()
     {
         if (busy) return;
+        GameSession.End(); // the host decides the save and difficulty
         string code = joinCodeInput != null ? joinCodeInput.text.Trim() : "";
         if (string.IsNullOrEmpty(code))
         {

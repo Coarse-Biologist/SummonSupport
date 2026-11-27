@@ -122,7 +122,7 @@ public class MinionStats : LivingBeing
     {
         if (dead)
         {
-            gameObject.AddComponent<I_InteractMinionResurrect>();
+            gameObject.AddComponent<I_InteractResurrect>();
             if (TryGetComponent(out BoxCollider collider))
             {
                 collider.isTrigger = true;
@@ -135,7 +135,7 @@ public class MinionStats : LivingBeing
         }
         else
         {
-            if (gameObject.TryGetComponent(out I_InteractMinionResurrect resurrectScript))
+            if (gameObject.TryGetComponent(out I_InteractResurrect resurrectScript))
                 Destroy(resurrectScript);
             if (TryGetComponent(out BoxCollider collider))
             {

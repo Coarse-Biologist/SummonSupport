@@ -119,6 +119,10 @@ public class PlayerStats : LivingBeing
     {
         CurrentLevel = level;
     }
+    public void SetSkillPoints(int value)
+    {
+        SkillPoints = value;
+    }
     public void ExpendSkillPoints(int value = 1)
     {
         SkillPoints -= value;
@@ -226,17 +230,70 @@ public class PlayerStats : LivingBeing
     #endregion
 
     #region death and resurrection handling
+    // A player who falls is downed: any living player or a commanded minion can resurrect them
+    // (I_InteractResurrect). The death screen only comes once every player is down.
     public override void Die()
     {
         if (Dead) return;
         SetDead(true);
-        Invoke("DelayedDeath", 2f);
+        abilityHandler.StopAllToggledAbilities();
+        SetDowned(true);
+        if (this == Instance && NetworkSession.IsOnline && FloatingInfoHandler.Instance != null)
+            FloatingInfoHandler.Instance.DisplayGoldenLetters("You have fallen. An ally or a minion can resurrect you.", 4f);
+        if (NetworkSession.IsAuthority) Invoke(nameof(DelayedDeath), 2f);
     }
 
     private void DelayedDeath()
     {
-        EventDeclarer.PlayerDead?.Invoke(true);
+        if (!Dead) return;
+        if (NetworkSession.IsOnline) NetworkPlayer.CheckAllPlayersDown();
+        else EventDeclarer.PlayerDead?.Invoke(true);
+    }
 
+    /// <summary>Brings a downed player back. Online the host does it, and every machine sees it (see NetworkPlayer).</summary>
+    public void Resurrect()
+    {
+        if (!Dead) return;
+        if (!NetworkSession.IsAuthority)
+        {
+            if (TryGetComponent(out NetworkPlayer networkPlayer)) networkPlayer.RequestResurrect();
+            return;
+        }
+        CancelInvoke(nameof(DelayedDeath));
+        SetDead(false);
+        SetDowned(false);
+        SetAttribute(AttributeType.CurrentHitpoints, Mathf.Max(1, GetAttribute(AttributeType.MaxHitpoints) / 2));
+    }
+
+    /// <summary>Client side: shows a resurrection the host made. The host also sends the new hitpoints.</summary>
+    public void ApplyReplicatedResurrection()
+    {
+        SetDead(false);
+        SetDowned(false);
+    }
+
+    private const float DownedInteractRadius = 2.5f;
+    private SphereCollider downedTrigger;
+
+    // A downed player gets a trigger around them, so the living can reach them to resurrect them.
+    private void SetDowned(bool downed)
+    {
+        if (downed)
+        {
+            if (!TryGetComponent(out I_InteractResurrect _)) gameObject.AddComponent<I_InteractResurrect>();
+            if (downedTrigger == null)
+            {
+                downedTrigger = gameObject.AddComponent<SphereCollider>();
+                downedTrigger.isTrigger = true;
+                downedTrigger.radius = DownedInteractRadius;
+            }
+        }
+        else
+        {
+            if (TryGetComponent(out I_InteractResurrect resurrectScript)) Destroy(resurrectScript);
+            if (downedTrigger != null) Destroy(downedTrigger);
+            downedTrigger = null;
+        }
     }
 
 
