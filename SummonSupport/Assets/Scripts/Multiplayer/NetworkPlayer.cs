@@ -26,6 +26,7 @@ public class NetworkPlayer : NetworkCombatant
 
     public override void OnNetworkSpawn()
     {
+        base.OnNetworkSpawn();
         vitals.OnValueChanged += OnVitalsChanged;
         if (!IsServer) ApplyVitals(vitals.Value);
 
@@ -145,6 +146,28 @@ public class NetworkPlayer : NetworkCombatant
         StatusEffects effect = AbilityRegistry.StatusEffectAt(effectIndex);
         if (ability == null || effect == null) return;
         AbilityModHandler.Instance.AddStatusEffectToAbility(ability, effect);
+    }
+
+    /// <summary>Owner side: shows this player's dash dust to everyone else.</summary>
+    public void ShareDashDust(Vector3 position, Quaternion rotation)
+    {
+        if (!IsSpawned || !IsOwner) return;
+        if (IsServer) DashDustClientRpc(position, rotation);
+        else DashDustServerRpc(position, rotation);
+    }
+
+    [ServerRpc]
+    private void DashDustServerRpc(Vector3 position, Quaternion rotation)
+    {
+        GetComponent<PlayerMovement>().SpawnDashDust(position, rotation);
+        DashDustClientRpc(position, rotation);
+    }
+
+    [ClientRpc]
+    private void DashDustClientRpc(Vector3 position, Quaternion rotation)
+    {
+        if (IsServer || IsOwner) return;
+        GetComponent<PlayerMovement>().SpawnDashDust(position, rotation);
     }
 
     public void GrantXp(int amount, ulong clientId)
