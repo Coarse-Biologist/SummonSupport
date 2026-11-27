@@ -96,10 +96,11 @@ public class RelayConnectionManager : MonoBehaviour
         Allocation allocation = await RelayService.Instance.CreateAllocationAsync(maxPlayers - 1);
         JoinCode = await RelayService.Instance.GetJoinCodeAsync(allocation.AllocationId);
 
+        await WaitForShutdown();
         UnityTransport transport = NetworkManager.Singleton.GetComponent<UnityTransport>();
         transport.SetRelayServerData(new RelayServerData(allocation, connectionType));
 
-        NetworkManager.Singleton.StartHost();
+        if (!NetworkManager.Singleton.StartHost()) throw new System.InvalidOperationException("Netcode could not start the host.");
     }
 
     public async Task JoinAsync(string joinCode)
@@ -110,10 +111,17 @@ public class RelayConnectionManager : MonoBehaviour
         JoinAllocation joinAllocation = await RelayService.Instance.JoinAllocationAsync(joinCode);
         JoinCode = joinCode;
 
+        await WaitForShutdown();
         UnityTransport transport = NetworkManager.Singleton.GetComponent<UnityTransport>();
         transport.SetRelayServerData(new RelayServerData(joinAllocation, connectionType));
 
-        NetworkManager.Singleton.StartClient();
+        if (!NetworkManager.Singleton.StartClient()) throw new System.InvalidOperationException("Netcode could not start the client.");
+    }
+
+    // A session that was just left finishes shutting down a frame later; a new one can't start before that.
+    private static async Task WaitForShutdown()
+    {
+        while (NetworkManager.Singleton != null && NetworkManager.Singleton.ShutdownInProgress) await Task.Yield();
     }
 
     public void Disconnect()

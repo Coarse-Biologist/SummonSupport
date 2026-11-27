@@ -22,7 +22,7 @@ public class StartMenuController : MonoBehaviour
 
     public void StartGame()
     {
-        OpenGameSetup("Single Player", (slot, difficulty, save) =>
+        OpenGameSetup("Single Player (offline)", (slot, difficulty, save) =>
         {
             GameSession.Begin(slot, difficulty, save);
             SceneManager.LoadSceneAsync(gameplaySceneName);
@@ -42,10 +42,13 @@ public class StartMenuController : MonoBehaviour
             () => { SetMenuButtonsVisible(true); onBack?.Invoke(); });
     }
 
+    // The slot panel takes the place of every other start screen button, including the host/join column.
     private void SetMenuButtonsVisible(bool visible)
     {
         if (startButton != null) startButton.gameObject.SetActive(visible);
         if (quitButton != null) quitButton.gameObject.SetActive(visible);
+        MultiplayerMenuController multiplayerMenu = FindFirstObjectByType<MultiplayerMenuController>();
+        if (multiplayerMenu != null) multiplayerMenu.SetPanelVisible(visible);
     }
 
     private static Button FindButton(string objectName)

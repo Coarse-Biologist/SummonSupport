@@ -83,6 +83,9 @@ public class PauseGameHandler : MonoBehaviour
 
         if (Instance == null) Instance = this;
         else Destroy(this);
+        // These are static, so a level that was left while paused (quit to menu, restart) would start paused.
+        paused = false;
+        RecentlyPaused = false;
 
         ui = UI_DocHandler.Instance.ui;
         UIPrefabAssets = UI_DocHandler.Instance.UIPrefabAssets;

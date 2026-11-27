@@ -46,9 +46,11 @@ public static class SaveHandler
         if (save == null) return $"Slot {slot}: Empty";
 
         PlayerSaveRecord host = save.HostRecord;
-        string character = host != null ? $"Lv {host.data.player.levelData.level} {host.playerName}" : "No host character";
-        string players = save.players.Count == 1 ? "1 player" : $"{save.players.Count} players";
-        return $"Slot {slot}: {character} - {save.difficulty} - {players} - {save.saveTime}";
+        string character = host != null ? $"Lv {host.data.player.levelData.level} {host.playerName}" : "Saved game";
+        string players = save.players.Count > 1 ? $" ({save.players.Count}p)" : "";
+        // "yyyy-MM-dd HH:mm" -> "MM-dd HH:mm"; the difficulty shows on the difficulty button.
+        string when = save.saveTime.Length > 5 ? save.saveTime.Substring(5) : save.saveTime;
+        return $"Slot {slot}: {character}{players} - {when}";
     }
 
     public static void EraseSlot(int slot)

@@ -58,15 +58,11 @@ public class MultiplayerMenuController : MonoBehaviour
             HostSession(GameSession.NoSlot, Difficulty.Novice, null);
             return;
         }
-        SetPanelVisible(false);
-        StartMenuController.Instance.OpenGameSetup("Host Game", (slot, difficulty, save) =>
-        {
-            SetPanelVisible(true);
-            HostSession(slot, difficulty, save);
-        }, () => SetPanelVisible(true));
+        StartMenuController.Instance.OpenGameSetup("Host Game (online)", HostSession, null);
     }
 
-    private void SetPanelVisible(bool visible)
+    /// <summary>Shows or hides the host/join column, e.g. while the save slot panel is open.</summary>
+    public void SetPanelVisible(bool visible)
     {
         if (hostButton != null) hostButton.transform.parent.gameObject.SetActive(visible);
     }
@@ -83,7 +79,8 @@ public class MultiplayerMenuController : MonoBehaviour
             await RelayConnectionManager.Instance.HostAsync();
             SetJoinCode(RelayConnectionManager.Instance.JoinCode);
             SetStatus("Hosting. Share the code with your friends.");
-            NetworkManager.Singleton.SceneManager.LoadScene(gameplaySceneName, LoadSceneMode.Single);
+            SceneEventProgressStatus loadStatus = NetworkManager.Singleton.SceneManager.LoadScene(gameplaySceneName, LoadSceneMode.Single);
+            if (loadStatus != SceneEventProgressStatus.Started) throw new InvalidOperationException($"Could not load {gameplaySceneName}: {loadStatus}");
         }
         catch (Exception e)
         {

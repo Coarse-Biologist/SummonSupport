@@ -11,9 +11,10 @@ using UnityEngine.UI;
 /// </summary>
 public class GameSetupMenu : MonoBehaviour
 {
-    private const float SlotWidth = 640f;
+    private const float SlotWidth = 360f;
     private const float ButtonWidth = 240f;
-    private const float Spacing = 10f;
+    private const float Spacing = 8f;
+    private const int Rows = 10; // heading, five slots, difficulty, begin, erase, back
 
     private static readonly Difficulty[] Difficulties = (Difficulty[])Enum.GetValues(typeof(Difficulty));
 
@@ -32,11 +33,15 @@ public class GameSetupMenu : MonoBehaviour
     {
         GameObject go = new GameObject("GameSetupMenu", typeof(RectTransform), typeof(VerticalLayoutGroup));
         go.transform.SetParent(template.transform.parent, false);
+        // Grow down from where the Start button sits, like the rest of the start screen column.
+        RectTransform templateRect = (RectTransform)template.transform;
+        float rowHeight = templateRect.sizeDelta.y;
         RectTransform rect = (RectTransform)go.transform;
-        rect.anchorMin = rect.anchorMax = new Vector2(0.5f, 0.5f);
-        rect.pivot = new Vector2(0.5f, 0.5f);
-        rect.anchoredPosition = Vector2.zero;
-        rect.sizeDelta = new Vector2(SlotWidth, 10 * 40f);
+        rect.anchorMin = templateRect.anchorMin;
+        rect.anchorMax = templateRect.anchorMax;
+        rect.pivot = new Vector2(0.5f, 1f);
+        rect.anchoredPosition = templateRect.anchoredPosition + new Vector2(0, rowHeight / 2);
+        rect.sizeDelta = new Vector2(SlotWidth, Rows * rowHeight + (Rows - 1) * Spacing);
 
         VerticalLayoutGroup layout = go.GetComponent<VerticalLayoutGroup>();
         layout.childAlignment = TextAnchor.UpperCenter;

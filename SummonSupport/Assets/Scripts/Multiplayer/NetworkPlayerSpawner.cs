@@ -12,32 +12,56 @@ public class NetworkPlayerSpawner : MonoBehaviour
     private readonly Dictionary<ulong, NetworkObject> players = new();
     private NetworkManager networkManager;
     private bool gameplayLoaded;
-    private bool subscribed;
+    private NetworkSceneManager sceneManager;
 
     private void Start()
     {
         networkManager = GetComponent<NetworkManager>();
         networkManager.OnServerStarted += OnServerStarted;
+        networkManager.OnServerStopped += OnServerStopped;
+        EventDeclarer.EnemyDefeated?.AddListener(OnEnemyDefeated);
     }
 
     private void OnDestroy()
     {
-        if (networkManager != null) networkManager.OnServerStarted -= OnServerStarted;
+        EventDeclarer.EnemyDefeated?.RemoveListener(OnEnemyDefeated);
+        if (networkManager == null) return;
+        networkManager.OnServerStarted -= OnServerStarted;
+        networkManager.OnServerStopped -= OnServerStopped;
+        Unsubscribe();
     }
 
+    // This lives on the NetworkManager, which outlasts each session, and Netcode makes a new SceneManager for
+    // every session: so subscribe again, and forget the last session's players, each time a session starts.
     private void OnServerStarted()
     {
-        if (subscribed) return;
-        subscribed = true;
+        Unsubscribe();
+        players.Clear();
+        gameplayLoaded = false;
         networkManager.OnClientConnectedCallback += OnClientConnected;
         networkManager.OnClientDisconnectCallback += OnClientDisconnected;
-        networkManager.SceneManager.OnLoadEventCompleted += OnLoadEventCompleted;
-        EventDeclarer.EnemyDefeated?.AddListener(OnEnemyDefeated);
+        sceneManager = networkManager.SceneManager;
+        sceneManager.OnLoadEventCompleted += OnLoadEventCompleted;
+    }
+
+    private void OnServerStopped(bool wasHost)
+    {
+        Unsubscribe();
+        players.Clear();
+        gameplayLoaded = false;
+    }
+
+    private void Unsubscribe()
+    {
+        networkManager.OnClientConnectedCallback -= OnClientConnected;
+        networkManager.OnClientDisconnectCallback -= OnClientDisconnected;
+        if (sceneManager != null) sceneManager.OnLoadEventCompleted -= OnLoadEventCompleted;
+        sceneManager = null;
     }
 
     private void OnEnemyDefeated(EnemyStats enemy)
     {
-        if (!networkManager.IsServer) return;
+        if (networkManager == null || !networkManager.IsListening || !networkManager.IsServer) return;
 
         ulong killer = enemy.GetComponent<NetworkEnemy>() is NetworkEnemy networkEnemy ? networkEnemy.LastAttackerClientId : NetworkManager.ServerClientId;
         float baseXp = enemy.XP_OnDeath;
