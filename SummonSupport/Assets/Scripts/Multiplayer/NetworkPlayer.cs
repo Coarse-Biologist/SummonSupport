@@ -49,6 +49,7 @@ public partial class NetworkPlayer : NetworkCombatant
         {
             if (IsOwner) sharedPaused = false; // the host's own player spawning starts a new session
             else if (sharedPaused) SharedPauseClientRpc(true, sharedPausedBy, ToOwner());
+            if (!IsOwner) SendOpenDoorsToOwner();
         }
 
         StartSaveSession();
