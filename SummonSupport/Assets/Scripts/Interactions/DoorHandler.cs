@@ -180,8 +180,4 @@ public class DoorHandler : MonoBehaviour, I_Interactable
         if (localPlayerInRange && infoCanvasText != null) infoCanvasText.text = text;
     }
 
-    private void RequestCanvasText(string temporaryText)
-    {
-        FloatingInfoHandler.Instance.SetTemporaryCanvasText(transform, temporaryText);
-    }
 }

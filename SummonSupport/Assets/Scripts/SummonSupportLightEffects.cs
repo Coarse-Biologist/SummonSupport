@@ -45,8 +45,4 @@ public class SummonSupportLightEffects : MonoBehaviour
         flashing = false;
     }
 
-    private void DimLight()
-    {
-        light.intensity = 1;
-    }
 }

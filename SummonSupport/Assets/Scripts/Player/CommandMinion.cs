@@ -8,11 +8,6 @@ public static class CommandMinion
 
     public static List<LivingBeing> selectedMinions { private set; get; } = new();
 
-    public static void RemoveSelectedMinion(LivingBeing minionObject)
-    {
-        if (selectedMinions.Contains(minionObject))
-            selectedMinions.Remove(minionObject);
-    }
     public static void AddSelectedMinion(LivingBeing minionObject)
     {
         if (!selectedMinions.Contains(minionObject))

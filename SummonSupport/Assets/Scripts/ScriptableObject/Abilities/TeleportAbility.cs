@@ -46,11 +46,6 @@ public class TeleportAbility : Ability
         throw new System.NotImplementedException();
     }
 
-    public IEnumerator TeleportToBeing(LivingBeing casterStats, LivingBeing target)
-    {
-        List<LivingBeing> targets = new() { target };
-        yield return TeleportToTargets(casterStats, targets);
-    }
 
     private IEnumerator TeleportToTargets(LivingBeing casterStats, List<LivingBeing> targets)
     {

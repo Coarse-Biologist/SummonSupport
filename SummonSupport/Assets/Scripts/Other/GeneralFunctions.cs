@@ -15,9 +15,5 @@ public static class GeneralFunctions
         return (Element)UnityEngine.Random.Range(1, System.Enum.GetValues(typeof(Element)).Length); // not 0, which is element.None
     }
 
-    public static List<Enum> GetIteratableEnum(Enum anEnum)
-    {
-        return Enum.GetValues(anEnum.GetType()).Cast<Enum>().ToList();
-    }
 
 }

@@ -44,26 +44,6 @@ public static class ColorChanger
 
     }
 
-    public static void SetImmersiveBleedEffect(ParticleSystem particleSystem, LivingBeing livingBeing)
-    {
-        if (!ready || particleSystem == null) return;
-        {
-            if (colorGradientLibrary != null)
-            {
-                ChangeParticleSystemColor(livingBeing, particleSystem);
-            }
-        }
-    }
-    public static void ChangeObjectsParticleSystemColor(LivingBeing livingBeing, GameObject potentialParticleSystemObject)
-    {
-        ParticleSystem ps = potentialParticleSystemObject.GetComponentInChildren<ParticleSystem>();
-        if (ps != null) ChangeParticleSystemColor(livingBeing, ps);
-    }
-    public static void ChangeObjectsParticleSystemColor(Element element, GameObject potentialParticleSystemObject)
-    {
-        ParticleSystem ps = potentialParticleSystemObject.GetComponentInChildren<ParticleSystem>();
-        if (ps != null) ChangeParticleSystemColor(element, ps);
-    }
 
     public static void ChangeParticleSystemColor(LivingBeing livingBeing, ParticleSystem particleSystem)
     {

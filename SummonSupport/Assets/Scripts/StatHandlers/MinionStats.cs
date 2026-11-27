@@ -111,12 +111,6 @@ public class MinionStats : LivingBeing
         if (ragdollScript != null) ragdollScript.CauseDestruction(true);
         ToggleDeath(true);
     }
-    public void TrueDeath()
-    {
-        EventDeclarer.minionDied?.Invoke(gameObject);
-        AlchemyHandler.Instance.RemoveActiveMinion(this);
-        Destroy(gameObject, .1f);
-    }
 
     private void ToggleDeath(bool dead)
     {

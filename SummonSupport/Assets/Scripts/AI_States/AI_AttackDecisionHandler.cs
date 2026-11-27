@@ -72,12 +72,5 @@ public class AI_AttackDecisionHandler : MonoBehaviour
         AI_Hostility /= attackAbilities.Count;
         AI_Hostility *= attackAbilities.Count;
     }
-    private bool RollForAggression() // if true, aggressive ability should be selected if possible.
-    {
-        if (supportAbilities.Count == 0) return true;
-        if (attackAbilities.Count == 0) return false;
-        else
-            return UnityEngine.Random.Range(0, 100) < AI_Hostility;
-    }
 }
 

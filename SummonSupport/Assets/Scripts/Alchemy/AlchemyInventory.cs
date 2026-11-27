@@ -221,10 +221,6 @@ public static class AlchemyInventory
         knowledgeDict[element] = value;
     }
 
-    public static string GetAlchemyLootString(AlchemyLoot lootString)
-    {
-        return System.Text.RegularExpressions.Regex.Replace(lootString.ToString(), "(?<!^)([A-Z])", " $1");
-    }
 
     public static string GetCraftingPotentialString()
     {
