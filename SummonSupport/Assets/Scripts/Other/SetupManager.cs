@@ -62,7 +62,8 @@ public class SetupManager : MonoBehaviour
         {
             Debug.Log("[SetupManager] creating an offline local player.");
             PlayerSpawnPoint spawn = FindFirstObjectByType<PlayerSpawnPoint>();
-            SpawnPlayer(spawn != null ? spawn.transform.position : Vector3.zero, spawn != null ? spawn.transform.rotation : Quaternion.identity);
+            GameObject player = SpawnPlayer(spawn != null ? spawn.transform.position : Vector3.zero, spawn != null ? spawn.transform.rotation : Quaternion.identity);
+            if (player.TryGetComponent(out NetworkPlayer localPlayer)) StartCoroutine(AttachOfflinePlayer(localPlayer));
         }
         // Offline, load the character from the save chosen on the start screen. Online, NetworkPlayer does it.
         if (!NetworkSession.IsOnline) StartCoroutine(SaveHandler.ApplyCharacterWhenReady(GameSession.TakeHostCharacter()));
@@ -81,6 +82,14 @@ public class SetupManager : MonoBehaviour
         instance.GetComponent<MeshRenderer>().material.color = specialColorRequest;
 
         Destroy(instance, duration);
+    }
+
+    // Online, NetworkPlayer attaches the local player when it spawns. Offline nothing else does, so attach it
+    // here, a frame later: the previous scene (e.g. the start screen's camera) is still around during Awake.
+    private System.Collections.IEnumerator AttachOfflinePlayer(NetworkPlayer localPlayer)
+    {
+        yield return null;
+        if (localPlayer != null && !NetworkSession.IsOnline) localPlayer.AttachLocalPlayer();
     }
 
     public GameObject SpawnPlayer(Vector3 spawnLoc, Quaternion rotation)

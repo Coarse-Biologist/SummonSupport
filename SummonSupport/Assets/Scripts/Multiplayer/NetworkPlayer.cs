@@ -440,7 +440,11 @@ public partial class NetworkPlayer : NetworkCombatant
         GetComponent<PlayerStats>().GainXP(amount);
     }
 
-    private void AttachLocalPlayer()
+    /// <summary>
+    /// Makes this the local player: camera, post-processing volume trigger, player UI and alchemy bench hands.
+    /// Online it runs when the owner's player spawns; offline SetupManager calls it for the player it creates.
+    /// </summary>
+    public void AttachLocalPlayer()
     {
         PlayerStats.Instance = GetComponent<PlayerStats>();
         PlayerUIHandler.SetLocal(GetComponent<PlayerUIHandler>());
