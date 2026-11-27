@@ -52,6 +52,12 @@ public abstract class NetworkCombatant : NetworkBehaviour
     /// <summary>True on the one machine that decides when this being casts.</summary>
     public bool HasCastAuthority => !IsSpawned || IsOwner;
 
+    public override void OnNetworkSpawn()
+    {
+        // A client that joins while this being has a beam on never saw it start, so it asks the host.
+        if (!IsServer && !IsOwner) RequestActiveBeamsServerRpc();
+    }
+
     /// <param name="cost">The power the owner paid for this cast, so it can be predicted until the host confirms it.</param>
     public void ShareCast(Ability ability, Vector3 targetPosition, Quaternion aimRotation, AbilityCastKind kind = AbilityCastKind.Cast, bool toggledOn = false, float cost = 0f)
     {
@@ -187,6 +193,74 @@ public abstract class NetworkCombatant : NetworkBehaviour
     {
         if (IsServer || IsOwner) return;
         if (Handler != null) Handler.StopAllToggledAbilities();
+    }
+
+    /// <summary>Host side: tells every client that a status effect started or ended on this being.</summary>
+    public void ShareStatusEffect(StatusEffects effect, bool add)
+    {
+        if (!IsSpawned || !IsServer) return;
+
+        int effectIndex = AbilityRegistry.IndexOf(effect);
+        if (effectIndex < 0)
+        {
+            Debug.LogWarning($"{effect.name} on {name} is not in the status effect library, so clients will not see it.");
+            return;
+        }
+        StatusEffectChangedClientRpc(effectIndex, add);
+    }
+
+    [ClientRpc]
+    private void StatusEffectChangedClientRpc(int effectIndex, bool add)
+    {
+        if (IsServer) return;
+
+        StatusEffects effect = AbilityRegistry.StatusEffectAt(effectIndex);
+        if (effect != null && TryGetComponent(out StatusEffectHandler statusEffectHandler))
+            statusEffectHandler.ApplyReplicatedStatusEffect(effect, add);
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void RequestActiveBeamsServerRpc(ServerRpcParams rpcParams = default)
+    {
+        if (Handler == null) return;
+
+        List<int> beamIndices = new List<int>();
+        foreach (BeamAbility beam in Handler.ActiveBeams)
+        {
+            int index = AbilityRegistry.IndexOf(beam);
+            if (index >= 0) beamIndices.Add(index);
+        }
+        if (beamIndices.Count == 0) return;
+
+        ClientRpcParams toRequester = new ClientRpcParams
+        {
+            Send = new ClientRpcSendParams { TargetClientIds = new[] { rpcParams.Receive.SenderClientId } }
+        };
+        ActiveBeamsClientRpc(beamIndices.ToArray(), toRequester);
+    }
+
+    [ClientRpc]
+    private void ActiveBeamsClientRpc(int[] beamIndices, ClientRpcParams rpcParams = default)
+    {
+        if (IsServer || IsOwner || Handler == null) return;
+
+        foreach (int index in beamIndices)
+        {
+            if (AbilityRegistry.AbilityAt(index) is not BeamAbility beam) continue;
+
+            // Beams follow the caster's ability spawn point, so the caster's current pose is all they need.
+            AbilityCastData cast = new AbilityCastData
+            {
+                abilityIndex = index,
+                kind = AbilityCastKind.Cast,
+                casterPosition = transform.position,
+                casterRotation = transform.rotation,
+                targetPosition = transform.position,
+                aimRotation = transform.rotation,
+                toggledOn = true
+            };
+            Handler.ReplayCast(beam, cast);
+        }
     }
 
     private bool Replay(AbilityCastData cast, Ability ability)

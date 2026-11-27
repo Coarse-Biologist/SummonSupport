@@ -11,11 +11,13 @@ public class StatusEffectHandler : MonoBehaviour
     private AIStateHandler stateHandler;
     public Rigidbody rigidBody { private set; get; }
     private float ai_Speed = 5;
+    private NetworkCombatant networkCombatant;
     public Dictionary<StatusEffectType, int> SufferedStatusEffects { get; private set; } = new();
 
     void Awake()
     {
         InitializeStatusEffectDict();
+        networkCombatant = GetComponent<NetworkCombatant>();
     }
     void Start()
     {
@@ -131,7 +133,27 @@ public class StatusEffectHandler : MonoBehaviour
     }
     public void AlterStatusEffectList(StatusEffects status, bool Add) // modifies the list of abilities by which one is affected
     {
-        if (Add)
+        // Online, the host decides the status effects of networked beings and tells every client
+        // (see NetworkCombatant.ShareStatusEffect), which applies them with ApplyReplicatedStatusEffect.
+        if (networkCombatant != null && networkCombatant.IsSpawned)
+        {
+            if (!networkCombatant.IsServer) return;
+            networkCombatant.ShareStatusEffect(status, Add);
+        }
+
+        ChangeStatusEffect(status, Add);
+        if (Add) StartCoroutine(RemoveStatusEffect(status, 2 * status.Duration));
+    }
+
+    /// <summary>Applies a status effect change the host sent. The host also says when it ends.</summary>
+    public void ApplyReplicatedStatusEffect(StatusEffects status, bool add)
+    {
+        ChangeStatusEffect(status, add);
+    }
+
+    private void ChangeStatusEffect(StatusEffects status, bool add)
+    {
+        if (add)
         {
             if (livingBeing is EnemyStats enemyStats)
             {
@@ -139,14 +161,14 @@ public class StatusEffectHandler : MonoBehaviour
             }
             SufferedStatusEffects[status.EffectType] += 1;
             HandleStatusEffect(status, true);
-            StartCoroutine(RemoveStatusEffect(status, 2 * status.Duration));
         }
-        if (!Add)
+        else
         {
+            // A client that joined while the effect was on never saw it start, so there is nothing to end.
+            if (SufferedStatusEffects[status.EffectType] <= 0) return;
             SufferedStatusEffects[status.EffectType] -= 1;
             HandleStatusEffect(status, false);
         }
-
     }
     private IEnumerator RemoveStatusEffect(StatusEffects status, float duration)
     {

@@ -15,6 +15,7 @@ public class NetworkEnemy : NetworkCombatant
 
     public override void OnNetworkSpawn()
     {
+        base.OnNetworkSpawn();
         vitals.OnValueChanged += OnVitalsChanged;
         if (!IsServer) ApplyVitals(vitals.Value);
 
