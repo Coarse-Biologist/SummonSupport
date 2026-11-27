@@ -43,6 +43,8 @@ public static class GameSession
         guestRecords.Clear();
         playerIdsByClient.Clear();
         QuestHandler.ResetProgress(); // quests belong to one game, so the next one starts without them
+        // The next game's character (its save, or a new one) brings its own alchemy.
+        AlchemyInventory.ResetInventory();
     }
 
     public static void SetActiveSlot(int slot)

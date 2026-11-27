@@ -172,7 +172,7 @@ public class QuestHandler : MonoBehaviour
         {
             AlchemyInventory.IncemementElementalKnowledge(quest.BenefittedElements[i], quest.KnowledgeReward);
         }
-        AlchemyInventory.GainTool(quest.AlchemyToolReward);
+        if (quest.RewardsTool) AlchemyInventory.GainTool(quest.AlchemyToolReward);
         foreach (AlchemyLoot ingredient in quest.AlchemyLootReward)
         {
             AlchemyInventory.ConvertIngredientsToPotential(ingredient, quest.AlchemyLootNum);

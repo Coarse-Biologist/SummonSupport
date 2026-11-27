@@ -5,16 +5,22 @@ using SummonSupportEvents;
 
 
 
+/// <summary>
+/// The local player's alchemy: crafting potential, elemental knowledge and tools. Every machine keeps its own player's,
+/// which is saved and loaded with that player's character (SaveHandler), so each player carries their own between games.
+/// A new game, or a player joining without a saved character, starts from ResetInventory.
+/// </summary>
 public static class AlchemyInventory
 {
+    private const int StartingCraftingPotential = 10;
 
 
     #region Class variables
     public static Dictionary<CraftingPotential, int> AvailableCraftingPotential { get; private set; } = new()
     {
-        {CraftingPotential.OrganMass, 10 },
-        {CraftingPotential.CorePower, 10 },
-        {CraftingPotential.EtherDensity, 10 },
+        {CraftingPotential.OrganMass, StartingCraftingPotential },
+        {CraftingPotential.CorePower, StartingCraftingPotential },
+        {CraftingPotential.EtherDensity, StartingCraftingPotential },
 
     };
 
@@ -69,6 +75,17 @@ public static class AlchemyInventory
     #endregion
 
     #region Set Dict values
+    /// <summary>Back to a new character's alchemy: starting potential, no knowledge and no tools.</summary>
+    public static void ResetInventory()
+    {
+        foreach (CraftingPotential potential in new List<CraftingPotential>(AvailableCraftingPotential.Keys))
+            AvailableCraftingPotential[potential] = StartingCraftingPotential;
+        foreach (Element element in new List<Element>(knowledgeDict.Keys))
+            knowledgeDict[element] = 0;
+        KnownTools.Clear();
+        AlchemyHandler.ResetToolBasedScaling();
+    }
+
     public static void IncemementElementalKnowledge(Element element, int amount)
     {
         if (element != Element.None)
