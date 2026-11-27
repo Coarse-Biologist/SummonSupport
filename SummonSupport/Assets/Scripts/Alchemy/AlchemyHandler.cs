@@ -46,6 +46,10 @@ public class AlchemyHandler : MonoBehaviour
 
     [field: SerializeField] public Transform SpawnLocation { get; private set; }
 
+    // Online crafting: what the local player paid for each minion it asked the host to spawn.
+    private uint nextCraftRequestId;
+    private readonly Dictionary<uint, (Dictionary<CraftingPotential, int> potential, List<Element> elements)> pendingCrafts = new();
+
 
     #endregion
 
@@ -93,6 +97,9 @@ public class AlchemyHandler : MonoBehaviour
             {
                 Vector3 spawnPos = PlayerStats.Instance.transform.position;
                 if (SpawnLocation != null) spawnPos = SpawnLocation.position;
+
+                if (NetworkSession.IsOnline) return RequestNetworkCraft(combinedPotential, elementList, spawnPos);
+
                 craftedMinion = Instantiate(minionPrefab, spawnPos, Quaternion.identity);
                 MinionStats minionStats = craftedMinion.GetComponent<MinionStats>();
                 craftingResults += UpgradeMinion(minionStats, combinedPotential, elementList);
@@ -112,6 +119,51 @@ public class AlchemyHandler : MonoBehaviour
     }
     #endregion
 
+    /// <summary>
+    /// Online: asks the host to spawn a minion that belongs to the local player. When it arrives, the minion is
+    /// built from what the player paid (<see cref="CompleteNetworkCraft"/>), and the result is sent to everyone.
+    /// </summary>
+    private string RequestNetworkCraft(Dictionary<CraftingPotential, int> combinedPotential, List<Element> elementList, Vector3 spawnPos)
+    {
+        NetworkPlayer requester = PlayerStats.Instance.GetComponent<NetworkPlayer>();
+        if (requester == null) throw new Exception("The local player has no NetworkPlayer, so the minion cannot be crafted online.");
+
+        uint requestId = ++nextCraftRequestId;
+        pendingCrafts[requestId] = (new Dictionary<CraftingPotential, int>(combinedPotential), new List<Element>(elementList));
+        requester.RequestCraftMinion(spawnPos, requestId);
+
+        int knowledgeGain = AlchemyInventory.GainKnowledge(elementList, combinedPotential);
+        EventDeclarer.RepeatableQuestCompleted?.Invoke(Quest.RepeatableAccomplishments.KnowledgeGained, knowledgeGain);
+        return $"Your minion is taking shape by the bench.\nYou have gained {knowledgeGain} alchemic knowledge.\n";
+    }
+
+    /// <summary>Host side: spawns a crafted minion that belongs to the player who crafted it.</summary>
+    public void SpawnNetworkedMinion(Vector3 spawnPos, ulong crafterClientId, uint requestId)
+    {
+        if (minionPrefab == null) throw new Exception($"Minion prefab was null when trying to craft minion");
+
+        GameObject minion = Instantiate(minionPrefab, spawnPos, Quaternion.identity);
+        if (!minion.TryGetComponent(out NetworkEnemy networkEnemy) || !minion.TryGetComponent(out Unity.Netcode.NetworkObject networkObject))
+        {
+            Destroy(minion);
+            throw new Exception($"{minionPrefab.name} needs a NetworkObject and a NetworkEnemy to be crafted online.");
+        }
+        networkEnemy.SetCrafter(crafterClientId, requestId);
+        networkObject.Spawn();
+    }
+
+    /// <summary>Crafter side: builds a minion the host spawned for the local player, from what the player paid.</summary>
+    public void CompleteNetworkCraft(MinionStats minionStats, uint requestId)
+    {
+        if (!pendingCrafts.TryGetValue(requestId, out var craft)) return;
+        pendingCrafts.Remove(requestId);
+
+        string results = UpgradeMinion(minionStats, craft.potential, craft.elements);
+        AddActiveMinion(minionStats);
+        Debug.Log($"Crafted {minionStats.Name}:\n{results}");
+        if (FloatingInfoHandler.Instance != null) FloatingInfoHandler.Instance.DisplayGoldenLetters($"{minionStats.Name} has been crafted!", 2f);
+    }
+
     public static void HandleMinionRecycling(MinionStats minionStats)
     {
         if (minionStats == null) throw new SystemException("Minionstats is null when trying to recycle a minion");
@@ -127,7 +179,11 @@ public class AlchemyHandler : MonoBehaviour
         AlchemyInventory.AlterCraftingPotential(CraftingPotential.EtherDensity, (int)(minionAffinity * RecycleExchangeRate));
         AlchemyInventory.AlterCraftingPotential(CraftingPotential.OrganMass, (int)(minionHP * RecycleExchangeRate));
 
-        minionStats.Die();
+        // Online, the host runs the minion, so it ends it.
+        if (NetworkSession.IsOnline && !NetworkSession.IsAuthority && minionStats.TryGetComponent(out NetworkEnemy networkEnemy) && networkEnemy.IsSpawned)
+            networkEnemy.RequestRecycle();
+        else
+            minionStats.Die();
     }
     private static int GetCombinedElementValues(MinionStats stats)
     {
@@ -155,7 +211,7 @@ public class AlchemyHandler : MonoBehaviour
         if (sizeChangeScalar > 1)
         {
             Debug.Log($"changing sie of {stats.Name} by {sizeChangeScalar}");
-            stats.gameObject.transform.localScale *= sizeChangeScalar;
+            stats.ScaleBody(sizeChangeScalar);
         }
     }
     private int HandleCoreUse(MinionStats stats, int value)
