@@ -278,6 +278,11 @@ public class PauseGameHandler : MonoBehaviour
     {
         ClearInfoElement();
 
+        if (QuestHandler.ActiveQuests.Count == 0)
+        {
+            SetInfoElementText("No active quests.");
+            return;
+        }
         activeQuestIndex++;
         if (activeQuestIndex >= QuestHandler.ActiveQuests.Count) activeQuestIndex = 0;
         SetInfoElementText(QuestHandler.GetQuestInfo(QuestHandler.ActiveQuests[activeQuestIndex]));

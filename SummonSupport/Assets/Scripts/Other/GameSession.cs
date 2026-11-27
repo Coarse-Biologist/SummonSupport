@@ -15,6 +15,8 @@ public static class GameSession
 
     // The host's own saved character, loaded once its player exists.
     private static SaveData pendingHostCharacter;
+    // The loaded save's quest progress, taken by the level's QuestHandler when it starts.
+    private static QuestProgressData pendingQuestProgress;
     // Every other player's character, by player id: from the loaded save, then the newest copy each player sent.
     private static readonly Dictionary<string, PlayerSaveRecord> guestRecords = new();
     private static readonly Dictionary<ulong, string> playerIdsByClient = new();
@@ -27,6 +29,7 @@ public static class GameSession
         if (loadedSave == null) return;
 
         pendingHostCharacter = loadedSave.HostRecord?.data;
+        pendingQuestProgress = loadedSave.quests;
         foreach (PlayerSaveRecord record in loadedSave.players)
             if (!record.isHost && !string.IsNullOrEmpty(record.playerId)) guestRecords[record.playerId] = record;
     }
@@ -36,8 +39,10 @@ public static class GameSession
         ActiveSlot = NoSlot;
         Difficulty = null;
         pendingHostCharacter = null;
+        pendingQuestProgress = null;
         guestRecords.Clear();
         playerIdsByClient.Clear();
+        QuestHandler.ResetProgress(); // quests belong to one game, so the next one starts without them
     }
 
     public static void SetActiveSlot(int slot)
@@ -51,6 +56,14 @@ public static class GameSession
         SaveData character = pendingHostCharacter;
         pendingHostCharacter = null;
         return character;
+    }
+
+    /// <summary>The loaded save's quest progress, if any; handed out once.</summary>
+    public static QuestProgressData TakeQuestProgress()
+    {
+        QuestProgressData progress = pendingQuestProgress;
+        pendingQuestProgress = null;
+        return progress;
     }
 
     public static IEnumerable<PlayerSaveRecord> GuestRecords => guestRecords.Values;
@@ -109,6 +122,8 @@ public static class GameSession
     {
         SessionSaveData save = ActiveSlot != NoSlot ? SaveHandler.ReadSlot(ActiveSlot) : null;
         pendingHostCharacter = save?.HostRecord?.data;
+        pendingQuestProgress = save?.quests;
+        QuestHandler.ResetProgress();
         guestRecords.Clear();
         if (save == null) return;
         foreach (PlayerSaveRecord record in save.players)

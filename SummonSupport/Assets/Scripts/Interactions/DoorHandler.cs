@@ -77,6 +77,8 @@ public class DoorHandler : MonoBehaviour, I_Interactable
     void OnEnable()
     {
         EventDeclarer.QuestCompleted?.AddListener(CheckQuestRelatedDoor);
+        // The quest may have been done before this door loaded (a loaded save, or a game joined part way).
+        if (QuestToUnlock != null && QuestHandler.HasCompletedQuest(QuestToUnlock)) SetLocked(false);
     }
 
     void OnDisable()

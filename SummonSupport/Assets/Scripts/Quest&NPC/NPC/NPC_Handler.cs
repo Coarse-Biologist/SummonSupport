@@ -19,6 +19,9 @@ public class NPC_Handler : MonoBehaviour
     void OnEnable()
     {
         EventDeclarer.QuestCompleted.AddListener(CheckUnlockDialogue);
+        // The quest may have been done before this NPC loaded (a loaded save, or a game joined part way).
+        if (npcDialogue != null && npcDialogue.questToUnlockDialogue != null && QuestHandler.HasCompletedQuest(npcDialogue.questToUnlockDialogue))
+            UnlockDialogue();
     }
     void OnDisable()
     {

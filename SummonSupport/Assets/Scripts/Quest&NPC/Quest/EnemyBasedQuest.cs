@@ -18,6 +18,7 @@ public class EnemyBasedQuest : MonoBehaviour, IQuest
 
     void OnDestroy()
     {
-        CompleteQuest();
+        // The enemy is destroyed on every machine; the host decides the quests and tells everyone (see QuestHandler).
+        if (NetworkSession.IsAuthority) CompleteQuest();
     }
 }
