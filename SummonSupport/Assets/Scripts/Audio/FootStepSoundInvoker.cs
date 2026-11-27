@@ -22,10 +22,6 @@ public class FootStepSoundInvoker : MonoBehaviour
 
     }
 
-    public void SetAudioSource(AudioSource source)
-    {
-        audioSource = source;
-    }
     public void OnFootstep()
     {
         audioSource.PlayOneShot(PlayerFootSteps[Random.Range(0, PlayerFootSteps.Length)], AudioHandler.Instance.FootstepVolume * AudioHandler.Instance.GeneralGameVolume);

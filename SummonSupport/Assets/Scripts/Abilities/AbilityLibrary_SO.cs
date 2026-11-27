@@ -50,28 +50,6 @@ public class AbilityLibrary_SO : ScriptableObject
 
     public PlayerAbilitiesByLevel[] abilitiesByLevelEntries;
 
-    public Ability GetAbilityOfElementType(Element element)
-    {
-        Ability ability = null;
-        foreach (ElementCategories category in ElementalEntries)
-        {
-            if (category.Element == element) ability = category.Abilities[0];
-        }
-        return ability;
-    }
-    public Ability GetAbilityOfPhysicalType(PhysicalType physicalType)
-    {
-        Ability ability = null;
-        foreach (PhysicalCategories category in PhysicalEntries)
-        {
-            if (category.PhysicalType == physicalType) ability = category.Abilities[0];
-        }
-        return ability;
-    }
-    public Ability GetPhysicalAbilityOfElementType(Element element)
-    {
-        throw new System.Exception("This function does nothing but complain about being useless.");
-    }
     public List<Ability> GetElementalAbilitiesBelowLevel(int level, List<Element> elements, bool includeKnown = false)
     {
         List<Ability> abilities = new();

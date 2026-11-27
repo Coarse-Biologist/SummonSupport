@@ -21,7 +21,6 @@ public class SessionSaveData
     public QuestProgressData quests = new();
 
     public PlayerSaveRecord HostRecord => players.Find(p => p.isHost);
-    public PlayerSaveRecord FindPlayer(string playerId) => players.Find(p => !p.isHost && p.playerId == playerId);
 }
 
 /// <summary>One player's character in a session save. The host's character is the one marked isHost.</summary>

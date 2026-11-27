@@ -642,16 +642,6 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
 
 
 
-    private void DecrementIngredientButton(Button ingredientButton)
-    {
-        if (ingredientButton.text.EndsWith(": 1")) bottomLeftPanel.Remove(ingredientButton);
-        else
-            ingredientButton.text = Regex.Replace(ingredientButton.text, @"\d+", match =>
-            {
-                int number = int.Parse(match.Value); // Convert found number to int
-                return (number - 1).ToString(); // Decrement and replace
-            });
-    }
     private void ShowElementToggles(VisualElement panel)
     {
         ShowUI(panel);
@@ -1015,14 +1005,6 @@ public class AlchemyBenchUI : MonoBehaviour, I_Interactable
 
     }
 
-    private void ShowBackground(bool show = false)
-    {
-        if (show)
-        {
-            centerPanel.style.backgroundImage = new StyleBackground(alchemyBackground.texture);
-        }
-
-    }
     private void SetInstructionsText(string words, bool add = false)
     {
         moreInfoContainer.style.display = DisplayStyle.Flex;

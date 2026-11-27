@@ -115,13 +115,6 @@ public class CreatureAbilityHandler : AbilityHandler
         // no-op: integer division truncates, so hostility decayed on every SetAbilityLists() call.
         // Hostility now stays at its base value.
     }
-    private bool RollForAggression() // if true, aggressive ability should be selected if possible.
-    {
-        if (supportAbilities.Count == 0) return true;
-        if (attackAbilities.Count == 0) return false;
-        else
-            return Random.Range(0, 100) < AI_Hostility;
-    }
     public new bool LearnAbility(Ability ability)
     {
         bool learned = false;
@@ -216,15 +209,6 @@ public class CreatureAbilityHandler : AbilityHandler
         return true;
     }
 
-    public void AddAbilitySlot(int slotIndex, Ability ability)
-    {
-        SlottedAbilities abilitSlot = new()
-        {
-            slot = slotIndex,
-            ability = ability
-        };
-        SlottedAbilities.Add(abilitSlot);
-    }
 
 
 

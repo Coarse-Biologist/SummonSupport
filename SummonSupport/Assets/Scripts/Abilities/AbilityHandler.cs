@@ -275,10 +275,6 @@ public class AbilityHandler : MonoBehaviour
         return Mathf.Max(0f, ability.Cost + modHandler.GetModAttributeByType(ability, AbilityModTypes.Cost));
     }
 
-    public bool HasEnoughPower(float powerCost, AttributeType costType = AttributeType.CurrentPower)
-    {
-        return !statsHandler || powerCost <= statsHandler.GetAttribute(costType);
-    }
     public void HandleNoMana()
     {
         // Copies of a being on other machines wait for its owner to say the beams have stopped.

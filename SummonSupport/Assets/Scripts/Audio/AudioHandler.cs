@@ -22,15 +22,6 @@ public class AudioHandler : MonoBehaviour
     }
 
 
-    public void SetMusicToIntensity(float intesity, LocationSong locationSong)
-    {
-        roundedInt = (int)Math.Floor(intesity);
-        audioSource.clip = audioClips[(int)locationSong].layers[roundedInt];
-        newVolume = intesity - roundedInt;
-        audioSource.volume = newVolume;
-        if (audioSource.clip != null)
-            audioSource.Play();
-    }
 
 
 

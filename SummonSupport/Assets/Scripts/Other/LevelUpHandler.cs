@@ -39,14 +39,6 @@ public static class LevelUpHandler
     {LevelRewards.TotalControlllableMinions, 10},
     };
 
-    public static int GetSkillPointCost(LevelRewards reward)
-    {
-        if (RewardsCostDict.TryGetValue(reward, out int cost))
-            return cost;
-        else
-            throw new System.Exception($"You want to know the cost of an upgrade which is not yet available.");
-
-    }
 
 
     public static List<LevelRewards> GetLevelRewards(int level)

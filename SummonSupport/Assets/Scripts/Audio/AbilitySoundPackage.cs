@@ -14,12 +14,6 @@ public class AbilitySoundPackage : ScriptableObject
         //if (clip != null) return clip;
         //else throw new System.Exception("No cast sound found in AbilitySoundPackage");
     }
-    public AudioClip GetActiveSound()
-    {
-        if (ActiveSound != null) return ActiveSound;
-        else
-            return ActiveSound;
-    }
     public AudioClip GetImpactSound()
     {
         AudioClip clip = ImpactSounds[Random.Range(0, ImpactSounds.Length)];

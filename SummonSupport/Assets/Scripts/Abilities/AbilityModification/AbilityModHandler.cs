@@ -190,10 +190,6 @@ public class AbilityModHandler : MonoBehaviour
         }
         return new List<AbilityModTypes>();
     }
-    public static List<T> GetUncommon<T>(List<T> listA, List<T> listB)
-    {
-        return listA.Except(listB).Union(listB.Except(listA)).ToList();
-    }
 
 }
 

@@ -253,12 +253,6 @@ public class PlayerUIHandler : MonoBehaviour
     private void AddActiveQuest(Quest_SO quest) => ActiveQuests.Add(quest);
     private void RemoveActiveQuest(Quest_SO quest) => ActiveQuests.Remove(quest);
 
-    public void DisplayNextActiveQuest()
-    {
-        activeQuestIndex++;
-        if (activeQuestIndex > ActiveQuests.Count) activeQuestIndex = 0;
-        ShowQuestInfo(ActiveQuests[activeQuestIndex]);
-    }
 
     public void ShowCompletedQuestInfo(Quest_SO quest)
     {
@@ -272,10 +266,6 @@ public class PlayerUIHandler : MonoBehaviour
     {
         if (QuestHandler.HasActiveLocationQuest(out Transform goalTransform))
             ShowQuestArrow(goalTransform);
-    }
-    public void ToggleShowQuestDirection(bool setActive)
-    {
-        ShowDirection = setActive;
     }
     public void ShowQuestArrow(Transform goalTransform)
     {

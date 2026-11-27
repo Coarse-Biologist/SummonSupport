@@ -120,10 +120,6 @@ public abstract class LivingBeing : MonoBehaviour
         }
         if (abilityHandler == null) throw new Exception($"{Name} has no ability handler some how");
     }
-    public void SetAbilityHandler(AbilityHandler aH)
-    {
-        abilityHandler = aH;
-    }
 
     private void InitializeRegenerationValues()
     {
@@ -196,18 +192,6 @@ public abstract class LivingBeing : MonoBehaviour
             return Element.None;
 
         return highestElement;
-    }
-    public List<Element> GetHighAffinities(float min = 20)
-    {
-        List<Element> elements = new();
-
-        foreach (var elementKvp in Affinities)
-
-        {
-            if (GetAffinity(elementKvp.Key) > min)
-                elements.Add(elementKvp.Key);
-        }
-        return elements;
     }
 
 
@@ -285,10 +269,6 @@ public abstract class LivingBeing : MonoBehaviour
         SetAttribute(attributeType, GetAttribute(attributeType) + value);
 
         return GetAttribute(attributeType);
-    }
-    public void ChangeMovementAttribute(MovementAttributes attr, float changeValue)
-    {
-
     }
 
     /// <summary>
@@ -411,19 +391,11 @@ public abstract class LivingBeing : MonoBehaviour
     #endregion
 
     #region Niche attribute changes
-    public void SetCharacterTag(CharacterTag tag)
-    {
-        CharacterTag = tag;
-    }
     public void SetName(string newName)
     {
         Name = newName;
     }
 
-    public void LearnBattleCry(string newBattleCry)
-    {
-        if (!BattleCries.Contains(newBattleCry)) BattleCries.Add(newBattleCry);
-    }
 
     #endregion
 

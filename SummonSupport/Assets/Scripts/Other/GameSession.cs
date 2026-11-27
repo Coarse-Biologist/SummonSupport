@@ -83,7 +83,6 @@ public static class GameSession
         return guestRecords.TryGetValue(playerId, out PlayerSaveRecord record) ? record : null;
     }
 
-    public static bool IsRegistered(ulong clientId) => playerIdsByClient.ContainsKey(clientId);
 
     /// <summary>Keeps the newest copy of a player's character, which they built on their own machine.</summary>
     public static void StoreCharacter(ulong clientId, string playerName, SaveData character)
