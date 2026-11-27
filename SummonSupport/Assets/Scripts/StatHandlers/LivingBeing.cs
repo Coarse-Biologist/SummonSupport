@@ -341,22 +341,15 @@ public abstract class LivingBeing : MonoBehaviour
     {
         while (true)
         {
-            // Hitpoints are authoritative on the server and replicated to clients through NetworkVitals.
-            // Power is simulated locally by each player, so players keep regenerating it on clients too.
-            bool isAuthority = NetworkSession.IsAuthority;
-            if (!isAuthority && this is not PlayerStats)
+            if (!NetworkSession.IsAuthority)
             {
                 yield return regenTickRate;
                 continue;
             }
             if (CurrentHP <= 0) yield return regenTickRate;
-
-            if (isAuthority)
-            {
-                float newHP = Mathf.Min(CurrentHP + TotalHealthRegeneration, MaxHP);
-                if (newHP != CurrentHP)
-                    SetAttribute(AttributeType.CurrentHitpoints, newHP);
-            }
+            float newHP = Mathf.Min(CurrentHP + TotalHealthRegeneration, MaxHP);
+            if (newHP != CurrentHP)
+                SetAttribute(AttributeType.CurrentHitpoints, newHP);
 
             float newPower = Mathf.Min(CurrentPower + PowerRegeneration, MaxPower);
             if (newPower != CurrentPower)

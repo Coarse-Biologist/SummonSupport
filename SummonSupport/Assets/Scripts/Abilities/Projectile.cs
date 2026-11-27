@@ -155,8 +155,7 @@ public class Projectile : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        // Damage is resolved by the server only. Clients receive hitpoints through NetworkEnemy.
-        if (active && NetworkSession.IsAuthority)
+        if (active)
         {
             if (other.gameObject.TryGetComponent(out NavMeshObstacle obstacle))
             {
@@ -240,7 +239,7 @@ public class Projectile : MonoBehaviour
             Vector3 direction = rotation * transform.forward;
             NetworkObject newProjectile = Instantiate(ability.Projectile, transform.position, Quaternion.identity).GetComponent<NetworkObject>();
 
-            if (NetworkSession.IsOnline) newProjectile.Spawn();
+            newProjectile.Spawn();
             Projectile projectileScript = newProjectile.GetComponent<Projectile>();
 
             Material glowMaterial = ColorChanger.GetGlowStrengthByElement(ability.ElementTypes[0]);
