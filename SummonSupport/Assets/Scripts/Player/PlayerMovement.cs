@@ -234,20 +234,8 @@ public class PlayerMovement : MovementScript
     private void ToggleGamePause(InputAction.CallbackContext context)
     {
         if (usingUI) return;
-        if (!paused)
-        {
-            paused = true;
-            EventDeclarer.PauseGame?.Invoke();
-            EventDeclarer.ShowPauseScreen?.Invoke();
-
-        }
-        else
-        {
-            EventDeclarer.UnpauseGame?.Invoke();
-            EventDeclarer.HidePauseScreen?.Invoke();
-
-            paused = false;
-        }
+        // Online the pause menu is shared: this opens or closes it for everyone.
+        PauseGameHandler.RequestPauseMenu(!paused);
     }
 
 }

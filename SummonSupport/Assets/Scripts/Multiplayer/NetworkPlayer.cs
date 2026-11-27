@@ -23,6 +23,10 @@ public class NetworkPlayer : NetworkCombatant
     private float[] lastPhysicals;
     private Vector4? lastResourceProfile;
 
+    // Host side: the pause menu is shared, so the host keeps whether it is open for everyone.
+    private static bool sharedPaused;
+    private static string sharedPausedBy;
+
     // The host's values are the real ones for current hitpoints and power.
     // Maximums and regeneration rates are the owner's: they come from its own level-ups and upgrades,
     // so the owner sends them to the host (SubmitResourceProfileServerRpc) instead of taking them from it.
@@ -38,6 +42,12 @@ public class NetworkPlayer : NetworkCombatant
         {
             ApplyVitals(vitals.Value);
             ApplyPower(power.Value);
+        }
+
+        if (IsServer)
+        {
+            if (IsOwner) sharedPaused = false; // the host's own player spawning starts a new session
+            else if (sharedPaused) SharedPauseClientRpc(true, sharedPausedBy, ToOwner());
         }
 
         if (IsOwner)
@@ -335,6 +345,41 @@ public class NetworkPlayer : NetworkCombatant
     {
         if (AlchemyHandler.Instance == null) return;
         AlchemyHandler.Instance.SpawnNetworkedMinion(spawnPosition, OwnerClientId, requestId);
+    }
+
+    /// <summary>Owner side: opens or closes the pause menu for everyone, through the host.</summary>
+    public void RequestSharedPause(bool open)
+    {
+        if (!IsSpawned || !IsOwner) return;
+        if (IsServer) SetSharedPause(open);
+        else RequestSharedPauseServerRpc(open);
+    }
+
+    [ServerRpc]
+    private void RequestSharedPauseServerRpc(bool open)
+    {
+        SetSharedPause(open);
+    }
+
+    private void SetSharedPause(bool open)
+    {
+        sharedPaused = open;
+        sharedPausedBy = GetComponent<PlayerStats>().Name;
+        SharedPauseClientRpc(open, sharedPausedBy);
+    }
+
+    [ClientRpc]
+    private void SharedPauseClientRpc(bool open, string pausedBy, ClientRpcParams rpcParams = default)
+    {
+        PauseGameHandler.ApplyPauseMenu(open, pausedBy);
+    }
+
+    private ClientRpcParams ToOwner()
+    {
+        return new ClientRpcParams
+        {
+            Send = new ClientRpcSendParams { TargetClientIds = new[] { OwnerClientId } }
+        };
     }
 
     public void GrantXp(int amount, ulong clientId)

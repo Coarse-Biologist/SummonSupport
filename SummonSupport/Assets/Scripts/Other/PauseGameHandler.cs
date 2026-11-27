@@ -33,6 +33,7 @@ public class PauseGameHandler : MonoBehaviour
     private static Button RestartButton;
     private static Button InventoryButton;
     private static Button StatsButton;
+    private static Button HostOptionsButton;
 
     private static Label InfoElement;
     private static VisualElement MainUI;
@@ -97,6 +98,7 @@ public class PauseGameHandler : MonoBehaviour
         QuitButton = PauseMenu.Q<Button>("Quit");
         StatsButton = PauseMenu.Q<Button>("ShowStats");
         SettingsButton = PauseMenu.Q<Button>("Settings");
+        HostOptionsButton = PauseMenu.Q<Button>("HostOptions");
         MainUI = root.Q<VisualElement>("MainUI");
         QuestInfoContainer = MainUI.Q<VisualElement>("QuestInfoContainer");
         PlayerOptions = MainUI.Q<VisualElement>("PlayerOptions");
@@ -106,13 +108,12 @@ public class PauseGameHandler : MonoBehaviour
 
         #region  register buton callbacks
         QuestsButton.RegisterCallback<ClickEvent>(e => ShowNextQuestInfo());
-        ResumeButton.RegisterCallback<ClickEvent>(e => Resume());
-        ResumeButton.RegisterCallback<ClickEvent>(e => EventDeclarer.UnpauseGame?.Invoke());
-        ResumeButton.RegisterCallback<ClickEvent>(e => EventDeclarer.HidePauseScreen?.Invoke());
+        ResumeButton.RegisterCallback<ClickEvent>(e => RequestPauseMenu(false));
 
 
         RestartButton.RegisterCallback<ClickEvent>(e => Restart());
         SettingsButton.RegisterCallback<ClickEvent>(e => ShowSettingsOptions());
+        HostOptionsButton?.RegisterCallback<ClickEvent>(e => ShowHostOptions());
 
 
         StatsButton.RegisterCallback<ClickEvent>(e => ShowStats());
@@ -133,6 +134,39 @@ public class PauseGameHandler : MonoBehaviour
     }
 
     #region Pause and Resume Methods
+    /// <summary>
+    /// Opens or closes the pause menu. Online the pause menu is shared, so the request goes
+    /// through the host and the menu opens or closes for every player.
+    /// </summary>
+    public static void RequestPauseMenu(bool open)
+    {
+        NetworkPlayer localPlayer = NetworkSession.IsOnline && PlayerStats.Instance != null ? PlayerStats.Instance.GetComponent<NetworkPlayer>() : null;
+        if (localPlayer != null && localPlayer.IsSpawned)
+        {
+            localPlayer.RequestSharedPause(open);
+            return;
+        }
+        ApplyPauseMenu(open, null);
+    }
+
+    /// <summary>Opens or closes the pause menu on this machine. pausedBy names who paused, for online sessions.</summary>
+    public static void ApplyPauseMenu(bool open, string pausedBy)
+    {
+        // A player at an alchemy bench already has their own pause and cursor; leave them in it.
+        if (PlayerStats.Instance != null && PlayerStats.Instance.TryGetComponent(out PlayerMovement movement) && movement.usingUI) return;
+        if (open)
+        {
+            EventDeclarer.PauseGame?.Invoke();
+            EventDeclarer.ShowPauseScreen?.Invoke();
+            if (NetworkSession.IsOnline && !string.IsNullOrEmpty(pausedBy)) InfoElement.text = $"Game paused by {pausedBy}";
+        }
+        else
+        {
+            EventDeclarer.UnpauseGame?.Invoke();
+            EventDeclarer.HidePauseScreen?.Invoke();
+        }
+    }
+
     static public void ShowPauseScreen()
     {
         UnityEngine.Cursor.lockState = CursorLockMode.None;   // Locks the cursor to the center of the screen
@@ -150,10 +184,16 @@ public class PauseGameHandler : MonoBehaviour
         InfoElement.style.display = DisplayStyle.Flex;
         InventoryButton.style.display = DisplayStyle.Flex;
         QuitButton.style.display = DisplayStyle.Flex;
-        RestartButton.style.display = DisplayStyle.Flex;
+        ShowHostOnlyButtons();
 
         EaseInOpacity(PauseMenu, 350);
         EaseInOpacity(PlayerOptions, 350);
+    }
+    // Online, only the host restarts the game or changes host options.
+    private static void ShowHostOnlyButtons()
+    {
+        RestartButton.style.display = NetworkSession.IsClientOnly ? DisplayStyle.None : DisplayStyle.Flex;
+        if (HostOptionsButton != null) HostOptionsButton.style.display = NetworkSession.IsHost ? DisplayStyle.Flex : DisplayStyle.None;
     }
     static public void Pause()
     {
@@ -271,7 +311,7 @@ public class PauseGameHandler : MonoBehaviour
         PauseMenu.style.opacity = 0f;
 
         QuitButton.style.display = DisplayStyle.Flex;
-        RestartButton.style.display = DisplayStyle.Flex;
+        ShowHostOnlyButtons();
         ResumeButton.style.display = DisplayStyle.None;
         InventoryButton.style.display = DisplayStyle.None;
         //InfoScrollElement.style.display = DisplayStyle.Flex;
@@ -289,9 +329,17 @@ public class PauseGameHandler : MonoBehaviour
     #region restart
     private static void Restart()
     {
+        if (NetworkSession.IsClientOnly) return;
         UnityEngine.Cursor.lockState = CursorLockMode.Locked;   // Locks the cursor to the center of the screen
         UnityEngine.Cursor.visible = false;
         Time.timeScale = 1f;
+        if (NetworkSession.IsHost)
+        {
+            // Unpause everyone, then reload the level for the whole session.
+            RequestPauseMenu(false);
+            Unity.Netcode.NetworkManager.Singleton.SceneManager.LoadScene(SceneManager.GetActiveScene().name, LoadSceneMode.Single);
+            return;
+        }
         SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex);
     }
     #endregion
@@ -299,6 +347,9 @@ public class PauseGameHandler : MonoBehaviour
     #region quit to main menu
     private static void QuitToMainMenu()
     {
+        // Leaving ends this machine's part in an online session; when the host leaves, everyone returns to the start screen.
+        if (NetworkSession.IsOnline && RelayConnectionManager.Instance != null) RelayConnectionManager.Instance.Disconnect();
+        EnemySpawnHandler.HostDifficulty = null;
         SceneManager.LoadSceneAsync("StartScreen");
         Time.timeScale = 1f;
 
@@ -423,13 +474,17 @@ public class PauseGameHandler : MonoBehaviour
         ClearInfoElement();
         InfoElement.text = "";
         Button audioSettingsButton = AddButtons("Audio Settings", InfoElement, 50, 25);
-        Button saveLoadButton = AddButtons("Save/Load", InfoElement, 50, 25);
-        Button joinCodeButton = AddButtons("Join Code", InfoElement, 50, 25);
-
         audioSettingsButton.RegisterCallback<ClickEvent>(e => ShowAudioSettings());
-        saveLoadButton.RegisterCallback<ClickEvent>(e => ShowSaveLoad());
+        // Online, saving and loading belong to the host.
+        if (!NetworkSession.IsClientOnly)
+        {
+            Button saveLoadButton = AddButtons("Save/Load", InfoElement, 50, 25);
+            saveLoadButton.RegisterCallback<ClickEvent>(e => ShowSaveLoad());
+        }
+        Button joinCodeButton = AddButtons("Join Code", InfoElement, 50, 25);
         joinCodeButton.RegisterCallback<ClickEvent>(e => ShowJoinCode());
     }
+
     private static void ShowJoinCode()
     {
         ClearInfoElement();
@@ -443,7 +498,7 @@ public class PauseGameHandler : MonoBehaviour
             return;
         }
 
-        bool isHost = Unity.Netcode.NetworkManager.Singleton != null && Unity.Netcode.NetworkManager.Singleton.IsHost;
+        bool isHost = NetworkSession.IsHost;
         AddInfoLabel(isHost ? "Your join code" : "Session join code", 30);
         Label codeLabel = AddInfoLabel(joinCode, 96);
         codeLabel.style.letterSpacing = 12;
@@ -541,6 +596,67 @@ public class PauseGameHandler : MonoBehaviour
 
         }
         SpawnedButtons.Clear();
+    }
+    #endregion
+
+    #region Host Options
+    private static readonly Difficulty[] Difficulties = (Difficulty[])System.Enum.GetValues(typeof(Difficulty));
+
+    private static void ShowHostOptions()
+    {
+        if (!NetworkSession.IsHost) return;
+        PlayerOptions.style.display = DisplayStyle.Flex;
+        ClearInfoElement();
+        InfoElement.text = "";
+
+        AddInfoLabel("Enemy difficulty", 30);
+        Button difficultyButton = AddButtons(GetHostDifficulty().ToString(), InfoElement, 50, 25);
+        difficultyButton.RegisterCallback<ClickEvent>(e =>
+        {
+            int next = (System.Array.IndexOf(Difficulties, GetHostDifficulty()) + 1) % Difficulties.Length;
+            EnemySpawnHandler.HostDifficulty = Difficulties[next];
+            difficultyButton.text = Difficulties[next].ToString();
+        });
+        AddInfoLabel("Applies to enemies spawned from now on.", 20);
+
+        AddInfoLabel("Players", 30);
+        Unity.Netcode.NetworkManager networkManager = Unity.Netcode.NetworkManager.Singleton;
+        bool anyGuests = false;
+        foreach (Unity.Netcode.NetworkClient client in networkManager.ConnectedClientsList)
+        {
+            if (client.ClientId == Unity.Netcode.NetworkManager.ServerClientId) continue;
+            anyGuests = true;
+            ulong clientId = client.ClientId;
+            string playerName = GetPlayerName(client);
+            Button removeButton = AddButtons($"Remove {playerName}", InfoElement, 50, 25);
+            bool confirming = false;
+            removeButton.RegisterCallback<ClickEvent>(e =>
+            {
+                if (!confirming)
+                {
+                    confirming = true;
+                    removeButton.text = $"Click again to remove {playerName}";
+                    return;
+                }
+                RelayConnectionManager.Instance.RemovePlayer(clientId);
+                ShowHostOptions();
+            });
+        }
+        if (!anyGuests) AddInfoLabel("No one else has joined yet.", 20);
+    }
+
+    private static Difficulty GetHostDifficulty()
+    {
+        if (EnemySpawnHandler.HostDifficulty.HasValue) return EnemySpawnHandler.HostDifficulty.Value;
+        EnemySpawnHandler spawner = FindFirstObjectByType<EnemySpawnHandler>();
+        return spawner != null ? spawner.Difficulty : Difficulty.Novice;
+    }
+
+    private static string GetPlayerName(Unity.Netcode.NetworkClient client)
+    {
+        PlayerStats stats = client.PlayerObject != null ? client.PlayerObject.GetComponent<PlayerStats>() : null;
+        string name = stats != null && !string.IsNullOrEmpty(stats.Name) ? stats.Name : "Player";
+        return $"{name} ({client.ClientId})";
     }
     #endregion
 

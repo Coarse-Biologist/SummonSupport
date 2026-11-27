@@ -24,6 +24,11 @@ public class EnemySpawnHandler : MonoBehaviour
 
     //[field: SerializeField] public float Difficulty_Scalar { get; private set; } = .25f; //Likelihood of each successive creature difficulty spawn is multiplied by this
     [field: SerializeField] public Difficulty Difficulty { get; private set; } = Difficulty.Novice;
+
+    // Chosen by the host in the pause menu's Host Options; overrides every spawner's own Difficulty.
+    // Only the host spawns enemies, so this does not need to reach clients.
+    public static Difficulty? HostDifficulty { get; set; }
+    public Difficulty CurrentDifficulty => HostDifficulty ?? Difficulty;
     private static readonly Dictionary<Difficulty, (int lvl1, int lvl2, int lvl3, int lvl4)> CreatureProbabilities
         = new()
     {
@@ -177,10 +182,10 @@ public class EnemySpawnHandler : MonoBehaviour
     private int GetNumBasedOnDifficulty()
     {
         float roll = UnityEngine.Random.Range(0, 100);
-        if (roll < CreatureProbabilities[Difficulty].lvl1) return 0;
-        if (roll < CreatureProbabilities[Difficulty].lvl2) return 1;
-        if (roll < CreatureProbabilities[Difficulty].lvl3) return 2;
-        if (roll < CreatureProbabilities[Difficulty].lvl4) return 3;
+        if (roll < CreatureProbabilities[CurrentDifficulty].lvl1) return 0;
+        if (roll < CreatureProbabilities[CurrentDifficulty].lvl2) return 1;
+        if (roll < CreatureProbabilities[CurrentDifficulty].lvl3) return 2;
+        if (roll < CreatureProbabilities[CurrentDifficulty].lvl4) return 3;
         else return 0;
     }
 

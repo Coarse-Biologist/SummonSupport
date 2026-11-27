@@ -40,6 +40,13 @@ public class MultiplayerMenuController : MonoBehaviour
         SetStatus("");
         SetJoinCode("");
         SetBusy(false);
+
+        RelayConnectionManager relay = RelayConnectionManager.Instance;
+        if (relay != null && !string.IsNullOrEmpty(relay.LastDisconnectReason))
+        {
+            SetStatus(relay.LastDisconnectReason);
+            relay.LastDisconnectReason = null;
+        }
     }
 
     public async void Host()
