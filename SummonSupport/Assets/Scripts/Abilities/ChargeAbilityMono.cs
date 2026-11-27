@@ -77,7 +77,8 @@ public class ChargeAbilityMono : MonoBehaviour
         {
             Debug.Log("Charging");
 
-            rb.linearVelocity = originTransform.forward * SpeedBoost;
+            // Copies of the caster on other machines are kinematic and moved by NetworkTransform.
+            if (!rb.isKinematic) rb.linearVelocity = originTransform.forward * SpeedBoost;
             if ((gameObject.transform.position - startLoc).magnitude > range)
             {
                 EndCharge();

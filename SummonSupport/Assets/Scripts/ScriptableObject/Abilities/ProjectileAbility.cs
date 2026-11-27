@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using Unity.Netcode;
-using UnityEngine.UIElements;
 
 [CreateAssetMenu(menuName = "Abilities/Projectile Ability")]
 public class ProjectileAbility : Ability
@@ -23,8 +21,6 @@ public class ProjectileAbility : Ability
 
     public override bool Activate(LivingBeing casterStats)
     {
-
-
         Transform spawnPoint = casterStats.transform;
         //Debug.Log($"spawnpoint rotation = {spawnPoint.rotation.y}");
         int shots = 1 + Mathf.Max(0, AbilityModHandler.GetPlayerModValue(this, AbilityModTypes.Number, casterStats));

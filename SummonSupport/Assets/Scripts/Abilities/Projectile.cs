@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Linq;
-using Unity.Netcode;
 
 
 //using System.Numerics;
@@ -237,14 +236,15 @@ public class Projectile : MonoBehaviour
             rotation = Quaternion.Euler(0, 0, (float)Math.Sin(45 * i) * (30 + 5 * i));
 
             Vector3 direction = rotation * transform.forward;
-            NetworkObject newProjectile = Instantiate(ability.Projectile, transform.position, Quaternion.identity).GetComponent<NetworkObject>();
-
-            newProjectile.Spawn();
+            // Split projectiles stay local: every machine splits its own copy of the projectile when it hits.
+            GameObject newProjectile = Instantiate(ability.Projectile, transform.position, Quaternion.identity);
             Projectile projectileScript = newProjectile.GetComponent<Projectile>();
 
-            Material glowMaterial = ColorChanger.GetGlowStrengthByElement(ability.ElementTypes[0]);
-
-            ColorChanger.ChangeMatByAffinity(newProjectile.GetComponent<Renderer>(), glowMaterial);
+            if (ability.ElementTypes.Count != 0)
+            {
+                Material glowMaterial = ColorChanger.GetGlowStrengthByElement(ability.ElementTypes[0]);
+                ColorChanger.ChangeMatByAffinity(newProjectile.GetComponent<Renderer>(), glowMaterial);
+            }
             projectileScript.ignoreGameObjects = new List<GameObject>(ignoreGameObjects) { other.gameObject };
 
             projectileScript.splitAlready = this.splitAlready;

@@ -19,7 +19,11 @@ public class AbilityHandler : MonoBehaviour
     public AbilityModHandler modHandler { protected set; get; }
     public AnimationControllerScript anim { private set; get; }
     protected LivingBeingAudioHandler audioHandler;
+    private NetworkCombatant networkCombatant;
     //private bool AbilityToggledRecently = false;
+
+    /// <summary>True on the machine that decides when this being casts: always offline, and the owner online.</summary>
+    protected bool HasCastAuthority => networkCombatant == null || networkCombatant.HasCastAuthority;
 
 
     protected virtual void Awake()
@@ -31,6 +35,8 @@ public class AbilityHandler : MonoBehaviour
             abilitySpawn = gameObject;
 
         statsHandler = gameObject.GetComponent<LivingBeing>();
+        networkCombatant = GetComponent<NetworkCombatant>();
+        audioHandler = GetComponent<LivingBeingAudioHandler>();
 
 
         foreach (Ability ability in Abilities)
@@ -60,33 +66,64 @@ public class AbilityHandler : MonoBehaviour
         }
     }
 
-    protected bool CastAbility(Ability ability, Vector2 targetPosition, Quaternion rotation)
+    /// <summary>
+    /// Entry point for a being that decides to use an ability. Runs the cast here, shares it so every other
+    /// machine replays it, and pays the cost and cooldown.
+    /// </summary>
+    protected bool CastAbility(Ability ability, Vector3 targetPosition, Quaternion rotation)
     {
         if (PauseGameHandler.paused) return false;
-        if (ability is not BeamAbility beam) StopAllToggledAbilities();
-        //when casting a beam which is already toggled on, toggle beam off. 
-        bool usedAbility = HandleAbilityType(ability, targetPosition, rotation);
+        if (!HasCastAuthority) return false; // this copy only replays casts sent by its owner
 
-        PlayCastSound(ability);
+        bool usedAbility = PerformCast(ability, targetPosition, rotation);
+
+        // Turning a beam off reports false but still changes what everyone should see.
+        if (networkCombatant != null && (usedAbility || ability is BeamAbility))
+            networkCombatant.ShareCast(ability, targetPosition, rotation);
 
         if (!usedAbility)
             return false;
 
-        //handle Ionization status effect
-        int ionizationValue = statsHandler.SE_Handler.GetStatusEffectValue(StatusEffectType.Ionized);
-        if (ionizationValue > 0)
-        {
-            statsHandler.ChangeAttributeByPercent(AttributeType.CurrentHitpoints, (float)-.01 * ionizationValue);
-            EventDeclarer.IonizedAttack?.Invoke(statsHandler);
-        }
         StartCoroutine(SetOnCooldown(ability));
         statsHandler?.ChangeAttribute(AttributeType.CurrentPower, -GetModifiedCost(ability));
 
         return true;
     }
 
+    /// <summary>
+    /// Replays a cast that the owner of this being made on another machine. Spawns the same ability objects,
+    /// animation and sound, but pays no cost and starts no cooldown.
+    /// </summary>
+    public void ReplayCast(Ability ability, Vector3 targetPosition, Quaternion rotation)
+    {
+        PerformCast(ability, targetPosition, rotation);
+    }
 
-    bool HandleAbilityType(Ability ability, Vector2 targetPosition, Quaternion rotation)
+    /// <summary>The part of a cast that every machine runs: ability objects, animation and sound.</summary>
+    private bool PerformCast(Ability ability, Vector3 targetPosition, Quaternion rotation)
+    {
+        //when casting a beam which is already toggled on, toggle beam off.
+        if (ability is not BeamAbility) StopAllToggledAbilities();
+        bool usedAbility = HandleAbilityType(ability, targetPosition, rotation);
+
+        PlayCastSound(ability);
+
+        if (usedAbility && NetworkSession.IsAuthority) ApplyIonization();
+        return usedAbility;
+    }
+
+    private void ApplyIonization()
+    {
+        int ionizationValue = statsHandler.SE_Handler.GetStatusEffectValue(StatusEffectType.Ionized);
+        if (ionizationValue > 0)
+        {
+            statsHandler.ChangeAttributeByPercent(AttributeType.CurrentHitpoints, (float)-.01 * ionizationValue);
+            EventDeclarer.IonizedAttack?.Invoke(statsHandler);
+        }
+    }
+
+
+    bool HandleAbilityType(Ability ability, Vector3 targetPosition, Quaternion rotation)
     {
         bool usedAbility = false;
         switch (ability)
@@ -161,7 +198,7 @@ public class AbilityHandler : MonoBehaviour
         //if (anim != null) anim.SeLayerWeight(1, 0);
         foreach (KeyValuePair<BeamAbility, GameObject> kvp in toggledAbilitiesDict)
         {
-            if (GetComponent<PlayerStats>() != null) PotionHandler.SpawnElementalPotionOnBelt(Abilities.IndexOf(kvp.Key), kvp.Key);
+            if (HasCastAuthority && GetComponent<PlayerStats>() != null) PotionHandler.SpawnElementalPotionOnBelt(Abilities.IndexOf(kvp.Key), kvp.Key);
             statsHandler.ChangeRegeneration(kvp.Key.CostType, GetModifiedCost(kvp.Key));
 
             Destroy(kvp.Value);
@@ -183,6 +220,7 @@ public class AbilityHandler : MonoBehaviour
     private float GetModifiedCost(Ability ability)
     {
         if (ability == null) return 0f;
+        if (modHandler == null) modHandler = AbilityModHandler.Instance;
         if (modHandler == null) return ability.Cost;
         return Mathf.Max(0f, ability.Cost + modHandler.GetModAttributeByType(ability, AbilityModTypes.Cost));
     }
@@ -192,6 +230,14 @@ public class AbilityHandler : MonoBehaviour
         return !statsHandler || powerCost <= statsHandler.GetAttribute(costType);
     }
     public void HandleNoMana()
+    {
+        // Copies of a being on other machines wait for its owner to say the beams have stopped.
+        if (!HasCastAuthority) return;
+        ClearToggledAbilities();
+        if (networkCombatant != null) networkCombatant.ShareToggledAbilitiesCleared();
+    }
+
+    public void ClearToggledAbilities()
     {
         foreach (KeyValuePair<BeamAbility, GameObject> ability in toggledAbilitiesDict)
         { Destroy(ability.Value); }
@@ -257,6 +303,7 @@ public class AbilityHandler : MonoBehaviour
         try
         {
             //status effect presense handling
+            if (modHandler == null) modHandler = AbilityModHandler.Instance;
             float coolDown = ability.Cooldown + modHandler.GetModAttributeByType(ability, AbilityModTypes.Cooldown) + statsHandler.SE_Handler.GetStatusEffectValue(StatusEffectType.Lethargic);
             // default, plus modifier, plus lethargy value
             abilitiesOnCooldown[ability] = true;
@@ -286,7 +333,8 @@ public class AbilityHandler : MonoBehaviour
 
     private void PlayCastSound(Ability ability)
     {
-        if (ability.Sounds != null && ability.Sounds.CastSounds.Length != 0)
+        if (audioHandler == null) audioHandler = GetComponent<LivingBeingAudioHandler>();
+        if (audioHandler != null && ability.Sounds != null && ability.Sounds.CastSounds.Length != 0)
         {
             audioHandler.PlayAbilityCastSound(ability);
         }

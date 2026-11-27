@@ -42,16 +42,20 @@ public static class CombatStatHandler
 
 
 
+    private static void RecordAttacker(LivingBeing caster, LivingBeing target)
+    {
+        if (caster == null || !target.TryGetComponent(out NetworkEnemy enemy)) return;
+        if (caster.TryGetComponent(out NetworkPlayer player) && player.IsSpawned) enemy.RecordAttacker(player.OwnerClientId);
+    }
+
     public static void HandleEffectPackage(Ability ability, LivingBeing caster, LivingBeing target, EffectPackage effectPackage)
     {
-        if (NetworkSession.IsOnline && !NetworkManager.Singleton.IsServer && caster is PlayerStats && target.GetComponent<NetworkObject>() is { IsSpawned: true })
+        // Every machine replays every cast (see NetworkCombatant), but only the host's copy changes networked beings.
+        // Clients' copies of the ability are visual only.
+        if (NetworkSession.IsOnline && target.TryGetComponent(out NetworkObject targetObject) && targetObject.IsSpawned)
         {
-            int abilityIndex = SetupManager.Instance.AllAbilities.IndexOf(ability);
-            NetworkPlayer requester = caster.GetComponent<NetworkPlayer>();
-            if (abilityIndex >= 0 && requester != null)
-                requester.SubmitAbilityEffectServerRpc(abilityIndex, effectPackage == ability.SelfEffects, target.GetComponent<NetworkObject>().NetworkObjectId);
-            else UnityEngine.Debug.LogWarning($"Ability {ability.name} could not be sent to the host; it is not in SetupManager.AllAbilities.");
-            return;
+            if (!NetworkManager.Singleton.IsServer) return;
+            RecordAttacker(caster, target);
         }
 
         currentAbility = ability;

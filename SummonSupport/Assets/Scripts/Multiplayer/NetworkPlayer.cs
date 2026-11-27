@@ -10,7 +10,7 @@ using UnityEngine.Rendering.Universal;
 [RequireComponent(typeof(PlayerAbilityHandler))]
 [RequireComponent(typeof(PlayerUIHandler))]
 [RequireComponent(typeof(AbilityUI_Handler))]
-public class NetworkPlayer : NetworkBehaviour
+public class NetworkPlayer : NetworkCombatant
 {
     [SerializeField] private string leftHandPath;
     [SerializeField] private string rightHandPath;
@@ -67,17 +67,6 @@ public class NetworkPlayer : NetworkBehaviour
         lastPhysicals = physicals;
         SubmitCombatProfileServerRpc(affinities, physicals);
     }
-    [ServerRpc]
-    public void SubmitProjectileCastServerRpc(int abilityIndex)
-    {
-        if (AbilityAt(abilityIndex) is not ProjectileAbility ability) return;
-
-        PlayerStats stats = GetComponent<PlayerStats>();
-        if (stats == null || stats.Dead) return;
-
-        ability.Activate(stats);
-    }
-
 
     private void PushVitals()
     {
@@ -117,26 +106,9 @@ public class NetworkPlayer : NetworkBehaviour
     }
 
     [ServerRpc]
-    public void SubmitAbilityEffectServerRpc(int abilityIndex, bool useSelfEffects, ulong targetNetworkObjectId)
-    {
-        if (!NetworkManager.SpawnManager.SpawnedObjects.TryGetValue(targetNetworkObjectId, out NetworkObject targetObject)) return;
-
-        LivingBeing target = targetObject.GetComponent<LivingBeing>();
-        if (target == null) return;
-
-        Ability ability = AbilityAt(abilityIndex);
-        if (ability == null) return;
-
-        NetworkEnemy enemy = targetObject.GetComponent<NetworkEnemy>();
-        if (enemy != null) enemy.RecordAttacker(OwnerClientId);
-
-        CombatStatHandler.HandleEffectPackage(ability, GetComponent<PlayerStats>(), target, useSelfEffects ? ability.SelfEffects : ability.TargetEffects);
-    }
-
-    [ServerRpc]
     public void SubmitAttributeModServerRpc(int abilityIndex, int modType, float changeValue)
     {
-        Ability ability = AbilityAt(abilityIndex);
+        Ability ability = AbilityRegistry.AbilityAt(abilityIndex);
         if (ability == null) return;
 
         AbilityModHandler.Instance.ModAttributeByType(ability, (AbilityModTypes)modType, changeValue);
@@ -148,7 +120,7 @@ public class NetworkPlayer : NetworkBehaviour
     {
         if (IsServer) return;
 
-        Ability ability = AbilityAt(abilityIndex);
+        Ability ability = AbilityRegistry.AbilityAt(abilityIndex);
         if (ability == null) return;
         AbilityModHandler.Instance.ModAttributeByType(ability, (AbilityModTypes)modType, changeValue);
     }
@@ -156,8 +128,8 @@ public class NetworkPlayer : NetworkBehaviour
     [ServerRpc]
     public void SubmitStatusModServerRpc(int abilityIndex, int effectIndex)
     {
-        Ability ability = AbilityAt(abilityIndex);
-        StatusEffects effect = StatusEffectAt(effectIndex);
+        Ability ability = AbilityRegistry.AbilityAt(abilityIndex);
+        StatusEffects effect = AbilityRegistry.StatusEffectAt(effectIndex);
         if (ability == null || effect == null) return;
 
         AbilityModHandler.Instance.AddStatusEffectToAbility(ability, effect);
@@ -169,8 +141,8 @@ public class NetworkPlayer : NetworkBehaviour
     {
         if (IsServer) return;
 
-        Ability ability = AbilityAt(abilityIndex);
-        StatusEffects effect = StatusEffectAt(effectIndex);
+        Ability ability = AbilityRegistry.AbilityAt(abilityIndex);
+        StatusEffects effect = AbilityRegistry.StatusEffectAt(effectIndex);
         if (ability == null || effect == null) return;
         AbilityModHandler.Instance.AddStatusEffectToAbility(ability, effect);
     }
@@ -189,18 +161,6 @@ public class NetworkPlayer : NetworkBehaviour
     {
         if (!IsOwner) return;
         GetComponent<PlayerStats>().GainXP(amount);
-    }
-
-    private static Ability AbilityAt(int index)
-    {
-        var abilities = SetupManager.Instance.AllAbilities;
-        return index >= 0 && index < abilities.Count ? abilities[index] : null;
-    }
-
-    private static StatusEffects StatusEffectAt(int index)
-    {
-        var entries = SetupManager.Instance.GetStatusEffectLibrary().entries;
-        return index >= 0 && index < entries.Length ? entries[index].Effect : null;
     }
 
     private void AttachLocalPlayer()

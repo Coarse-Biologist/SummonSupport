@@ -2,7 +2,7 @@ using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class NetworkEnemy : NetworkBehaviour
+public class NetworkEnemy : NetworkCombatant
 {
     private readonly NetworkVariable<NetworkVitals> vitals = new();
 

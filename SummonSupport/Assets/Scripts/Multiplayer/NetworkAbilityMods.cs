@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 public static class NetworkAbilityMods
@@ -11,7 +10,7 @@ public static class NetworkAbilityMods
             return;
         }
 
-        int abilityIndex = SetupManager.Instance.AllAbilities.IndexOf(ability);
+        int abilityIndex = AbilityRegistry.IndexOf(ability);
         NetworkPlayer requester = PlayerStats.Instance.GetComponent<NetworkPlayer>();
         if (abilityIndex < 0 || requester == null)
         {
@@ -29,8 +28,8 @@ public static class NetworkAbilityMods
             return;
         }
 
-        int abilityIndex = SetupManager.Instance.AllAbilities.IndexOf(ability);
-        int effectIndex = Array.FindIndex(SetupManager.Instance.GetStatusEffectLibrary().entries, entry => entry.Effect == effect);
+        int abilityIndex = AbilityRegistry.IndexOf(ability);
+        int effectIndex = AbilityRegistry.IndexOf(effect);
         NetworkPlayer requester = PlayerStats.Instance.GetComponent<NetworkPlayer>();
         if (abilityIndex < 0 || effectIndex < 0 || requester == null)
         {
