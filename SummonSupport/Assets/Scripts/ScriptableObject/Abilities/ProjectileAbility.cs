@@ -23,6 +23,22 @@ public class ProjectileAbility : Ability
 
     public override bool Activate(LivingBeing casterStats)
     {
+        // Projectiles are NetworkObjects and only the server may spawn them.
+        // Clients therefore ask the host to perform the cast on their behalf.
+        if (NetworkSession.IsOnline && !NetworkManager.Singleton.IsServer && casterStats is PlayerStats playerStats)
+        {
+            int abilityIndex = SetupManager.Instance.AllAbilities.IndexOf(this);
+            NetworkPlayer requester = playerStats.GetComponent<NetworkPlayer>();
+            if (abilityIndex < 0 || requester == null)
+            {
+                Debug.LogWarning($"Ability {name} could not be sent to the host; it is not in SetupManager.AllAbilities.");
+                return false;
+            }
+
+            requester.SubmitProjectileCastServerRpc(abilityIndex);
+            return true;
+        }
+
         Transform spawnPoint = casterStats.transform;
         //Debug.Log($"spawnpoint rotation = {spawnPoint.rotation.y}");
         int shots = 1 + Mathf.Max(0, AbilityModHandler.GetPlayerModValue(this, AbilityModTypes.Number, casterStats));
@@ -35,7 +51,7 @@ public class ProjectileAbility : Ability
         for (int i = 0; i < shots; i += 1)
         {
             NetworkObject projectile = Instantiate(Projectile, spawnPoint.position, Quaternion.identity).GetComponent<NetworkObject>();
-            projectile.Spawn();
+            if (NetworkSession.IsOnline) projectile.Spawn();
             projectile.transform.localScale += sizeMod;
             Projectile projectileScript = projectile.GetComponent<Projectile>();
 
