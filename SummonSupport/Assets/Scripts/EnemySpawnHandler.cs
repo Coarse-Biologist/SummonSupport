@@ -106,7 +106,8 @@ public class EnemySpawnHandler : MonoBehaviour
         if (creature.TryGetComponent(out AIStateHandler stateHandler))
         {
             stateHandler.lastSeenLoc = loc;
-            stateHandler.SetTarget(PlayerStats.Instance);
+            // Marches toward loc; once it sees hostiles it picks its own target (see AIPeacefulState.CheckTargetInRange).
+            stateHandler.SetTarget(NetworkPlayer.NearestLivingPlayer(loc) ?? PlayerStats.Instance);
             stateHandler.SetCurrentState(stateHandler.chaseState);
         }
 

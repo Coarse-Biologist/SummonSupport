@@ -146,6 +146,28 @@ public partial class NetworkPlayer : NetworkCombatant
         GetComponent<PlayerStats>().Resurrect();
     }
 
+    /// <summary>The living player closest to a position: any connected player online, the local player offline. Null if all are down.</summary>
+    public static PlayerStats NearestLivingPlayer(Vector3 position)
+    {
+        NetworkManager networkManager = NetworkManager.Singleton;
+        if (!NetworkSession.IsOnline || networkManager == null || !networkManager.IsServer)
+            return PlayerStats.Instance != null && !PlayerStats.Instance.Dead ? PlayerStats.Instance : null;
+
+        PlayerStats nearest = null;
+        float nearestSqr = float.MaxValue;
+        foreach (NetworkClient client in networkManager.ConnectedClientsList)
+        {
+            if (client.PlayerObject == null || !client.PlayerObject.TryGetComponent(out PlayerStats stats) || stats.Dead) continue;
+            float sqr = (stats.transform.position - position).sqrMagnitude;
+            if (sqr < nearestSqr)
+            {
+                nearestSqr = sqr;
+                nearest = stats;
+            }
+        }
+        return nearest;
+    }
+
     /// <summary>Host side: shows the death screen to everyone once every player in the session is down.</summary>
     public static void CheckAllPlayersDown(NetworkPlayer leaving = null)
     {
