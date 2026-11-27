@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Unity.Entities.UniversalDelegates;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Abilities/Conjure Ability")]

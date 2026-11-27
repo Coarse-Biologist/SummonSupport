@@ -1,7 +1,5 @@
-using Unity.Entities.UniversalDelegates;
 using UnityEngine;
 using UnityEngine.Splines;
-using UnityEngine.UIElements;
 
 public class WeaponMono : MonoBehaviour
 {
