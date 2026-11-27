@@ -77,9 +77,15 @@ public class AbilityHandler : MonoBehaviour
 
         bool usedAbility = PerformCast(ability, targetPosition, rotation);
 
-        // Turning a beam off reports false but still changes what everyone should see.
-        if (networkCombatant != null && (usedAbility || ability is BeamAbility))
-            networkCombatant.ShareCast(ability, targetPosition, rotation);
+        if (networkCombatant != null)
+        {
+            // Turning a beam off reports false but still changes what everyone should see,
+            // so beams always share their new state.
+            if (ability is BeamAbility beam)
+                networkCombatant.ShareCast(ability, targetPosition, rotation, AbilityCastKind.Cast, toggledAbilitiesDict.ContainsKey(beam));
+            else if (usedAbility)
+                networkCombatant.ShareCast(ability, targetPosition, rotation);
+        }
 
         if (!usedAbility)
             return false;
@@ -91,12 +97,45 @@ public class AbilityHandler : MonoBehaviour
     }
 
     /// <summary>
+    /// Fires an ability on behalf of something other than a normal cast (for example the movement dash).
+    /// No cost, cooldown, animation or sound, and toggled abilities keep running. Everyone sees it.
+    /// </summary>
+    public bool TriggerAbility(Ability ability)
+    {
+        if (ability == null || !HasCastAuthority) return false;
+
+        bool usedAbility = ActivateTriggered(ability);
+        if (usedAbility && networkCombatant != null)
+            networkCombatant.ShareCast(ability, transform.position, transform.rotation, AbilityCastKind.Trigger);
+        return usedAbility;
+    }
+
+    /// <summary>
     /// Replays a cast that the owner of this being made on another machine. Spawns the same ability objects,
     /// animation and sound, but pays no cost and starts no cooldown.
     /// </summary>
-    public void ReplayCast(Ability ability, Vector3 targetPosition, Quaternion rotation)
+    public void ReplayCast(Ability ability, AbilityCastData cast)
     {
-        PerformCast(ability, targetPosition, rotation);
+        if (cast.kind == AbilityCastKind.Trigger)
+        {
+            ActivateTriggered(ability);
+            return;
+        }
+
+        // Beams carry their state instead of a toggle, so a copy that missed a cast cannot end up inverted.
+        if (ability is BeamAbility beam && toggledAbilitiesDict.ContainsKey(beam) == cast.toggledOn) return;
+
+        PerformCast(ability, cast.targetPosition, cast.aimRotation);
+    }
+
+    private bool ActivateTriggered(Ability ability)
+    {
+        return ability switch
+        {
+            TeleportAbility teleport => teleport.Activate(statsHandler, transform.position),
+            ConjureAbility conjure and not DashAbility => conjure.Activate(statsHandler, transform.rotation),
+            _ => ability.Activate(statsHandler)
+        };
     }
 
     /// <summary>The part of a cast that every machine runs: ability objects, animation and sound.</summary>
@@ -232,16 +271,10 @@ public class AbilityHandler : MonoBehaviour
     public void HandleNoMana()
     {
         // Copies of a being on other machines wait for its owner to say the beams have stopped.
-        if (!HasCastAuthority) return;
-        ClearToggledAbilities();
+        if (!HasCastAuthority || toggledAbilitiesDict.Count == 0) return;
+        // Same as turning the beams off by hand, so their power drain is given back.
+        StopAllToggledAbilities();
         if (networkCombatant != null) networkCombatant.ShareToggledAbilitiesCleared();
-    }
-
-    public void ClearToggledAbilities()
-    {
-        foreach (KeyValuePair<BeamAbility, GameObject> ability in toggledAbilitiesDict)
-        { Destroy(ability.Value); }
-        toggledAbilitiesDict.Clear();
     }
 
     bool HandleProjectile(ProjectileAbility ability)

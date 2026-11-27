@@ -106,7 +106,7 @@ public class PlayerMovement : MovementScript
             playerCollider.radius = .01f; // make collider slippery thin
             Invoke("ReturnToNormalSpeed", DashDuration);
             Invoke("ReadyDash", DashCoolDown);
-            if (PlayerAbilityHandler.DashAbility != null) PlayerAbilityHandler.DashAbility.Activate(playerStats);
+            if (PlayerAbilityHandler.DashAbility != null) playerStats.abilityHandler.TriggerAbility(PlayerAbilityHandler.DashAbility);
             else
             {
                 DashDustInstance = Instantiate(DashDust, transform.position, Quaternion.identity);
