@@ -12,7 +12,7 @@ public class AIPeacefulState : AIState
     private bool canSeeTarget;
     private AIStateHandler stateHandler;
     private AIChaseState chaseState;
-    private GameObject player => PlayerStats.Instance != null ? PlayerStats.Instance.gameObject : null;
+    private GameObject player => stateHandler != null ? stateHandler.player : null;
     private Rigidbody rb;
     #region Support ability use handling
     private bool runningSupportLoop = false;
@@ -149,7 +149,11 @@ public class AIPeacefulState : AIState
     private LivingBeing SelectFriendlyTarget()
     {
         List<LivingBeing> friendlies = new() { stateHandler.playerStats };
-        foreach (LivingBeing minion in AlchemyHandler.Instance.activeMinions)
+        // A minion supports its own leader and that leader's other minions.
+        List<LivingBeing> minions = stateHandler.livingBeing is MinionStats
+            ? NetworkEnemy.FellowMinionsOf(stateHandler.livingBeing)
+            : new List<LivingBeing>(AlchemyHandler.Instance.activeMinions);
+        foreach (LivingBeing minion in minions)
         {
             friendlies.Add(minion);
         }

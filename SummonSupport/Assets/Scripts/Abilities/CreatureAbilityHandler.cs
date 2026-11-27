@@ -169,6 +169,33 @@ public class CreatureAbilityHandler : AbilityHandler
         SetAbilityLists();
     }
 
+    /// <summary>
+    /// Replaces what the creature knows and has slotted, for example with a crafted minion's abilities sent by
+    /// its crafter (see NetworkEnemy).
+    /// </summary>
+    public void ReplaceAbilities(List<Ability> known, List<(int slot, Ability ability)> slotted)
+    {
+        Abilities.Clear();
+        foreach (Ability ability in known)
+        {
+            if (ability == null || Abilities.Contains(ability)) continue;
+            Abilities.Add(ability);
+            AddAbilityCooldownSlot(ability);
+        }
+
+        SlottedAbilities.Clear();
+        foreach ((int slot, Ability ability) in slotted)
+        {
+            SlottedAbilities.Add(new() { slot = slot, ability = ability });
+            AddAbilityCooldownSlot(ability);
+        }
+
+        supportAbilities = new List<Ability>();
+        attackAbilities = new List<Ability>();
+        synergyAbilities = new List<Ability>();
+        SetAbilityLists();
+    }
+
     public bool AddNextAbilitySlot(Ability ability)
     {
         if (CheckAbilityAlreadySlotted(ability))

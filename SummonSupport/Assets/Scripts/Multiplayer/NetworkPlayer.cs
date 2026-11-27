@@ -317,6 +317,26 @@ public class NetworkPlayer : NetworkCombatant
         NetworkAbilityMods.ApplyAllMods(attributeMods, statusMods);
     }
 
+    /// <summary>Owner side: asks the host to spawn a minion this player crafted (see AlchemyHandler).</summary>
+    public void RequestCraftMinion(Vector3 spawnPosition, uint requestId)
+    {
+        if (!IsSpawned || !IsOwner) return;
+        if (IsServer) SpawnCraftedMinion(spawnPosition, requestId);
+        else RequestCraftMinionServerRpc(spawnPosition, requestId);
+    }
+
+    [ServerRpc]
+    private void RequestCraftMinionServerRpc(Vector3 spawnPosition, uint requestId)
+    {
+        SpawnCraftedMinion(spawnPosition, requestId);
+    }
+
+    private void SpawnCraftedMinion(Vector3 spawnPosition, uint requestId)
+    {
+        if (AlchemyHandler.Instance == null) return;
+        AlchemyHandler.Instance.SpawnNetworkedMinion(spawnPosition, OwnerClientId, requestId);
+    }
+
     public void GrantXp(int amount, ulong clientId)
     {
         ClientRpcParams targetOwner = new ClientRpcParams

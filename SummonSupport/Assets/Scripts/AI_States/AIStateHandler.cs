@@ -33,8 +33,9 @@ public class AIStateHandler : MonoBehaviour
     public MovementScript movementScript { get; private set; }
     [SerializeField] public MinionStats minionStats { private set; get; }
     public CreatureAbilityHandler abilityHandler { private set; get; }
-    public GameObject player => PlayerStats.Instance != null ? PlayerStats.Instance.gameObject : null;
-    public LivingBeing playerStats => PlayerStats.Instance;
+    // A minion follows and protects the player who crafted it (see NetworkEnemy.LeaderOf).
+    public GameObject player => playerStats != null ? playerStats.gameObject : null;
+    public LivingBeing playerStats => livingBeing is MinionStats ? NetworkEnemy.LeaderOf(livingBeing) : PlayerStats.Instance;
     public LivingBeing target { protected set; get; }
     public CharacterTag charType { protected set; get; }
 
