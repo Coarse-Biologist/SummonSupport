@@ -17,8 +17,12 @@ public class LocationBasedQuest : MonoBehaviour, IQuest
             //Logging.Info("player in collider2d");
             //AudioHandler.Instance.PlaySound(QuestAudioClip);
             TriggerDialogue();
-            CompleteQuest();
-            GrantQuest();
+            // Every machine sees any player walk in here; the host decides the quests and tells everyone (see QuestHandler).
+            if (NetworkSession.IsAuthority)
+            {
+                CompleteQuest();
+                GrantQuest();
+            }
             Destroy(gameObject);
         }
     }

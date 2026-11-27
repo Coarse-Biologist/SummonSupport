@@ -79,7 +79,8 @@ public static class SaveHandler
         {
             saveTime = now,
             sceneName = SceneManager.GetActiveScene().name,
-            difficulty = CurrentDifficulty()
+            difficulty = CurrentDifficulty(),
+            quests = QuestHandler.BuildProgress()
         };
         save.players.Add(new PlayerSaveRecord
         {

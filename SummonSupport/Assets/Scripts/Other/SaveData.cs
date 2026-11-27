@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using Quest;
 
 /// <summary>
 /// One save slot: a whole session, so it can hold every player who took part.
@@ -16,6 +17,8 @@ public class SessionSaveData
     public string sceneName = "";
     public Difficulty difficulty = Difficulty.Novice;
     public List<PlayerSaveRecord> players = new();
+    // Quests are shared by everyone in the session (see QuestHandler). Older saves without it start with no progress.
+    public QuestProgressData quests = new();
 
     public PlayerSaveRecord HostRecord => players.Find(p => p.isHost);
     public PlayerSaveRecord FindPlayer(string playerId) => players.Find(p => !p.isHost && p.playerId == playerId);
@@ -99,6 +102,26 @@ public class PlayerData
     public PlayerLevelData levelData = new();
     public LivingBeingData statData = new();
     public AbilityData abilityData = new();
+}
+
+/// <summary>
+/// The session's quest progress. Quests are stored by asset name, which stays the same between runs and machines.
+/// It is also what the host sends a player who joins (see NetworkPlayer.Quests.cs).
+/// </summary>
+[Serializable]
+public class QuestProgressData
+{
+    public List<string> activeQuests = new();
+    public List<string> completedQuests = new();
+    public List<BoolAccomplishments> completedBoolQuests = new();
+    public List<QuestCount> counts = new();
+}
+
+[Serializable]
+public struct QuestCount
+{
+    public RepeatableAccomplishments accomplishment;
+    public int count;
 }
 
 [Serializable]
