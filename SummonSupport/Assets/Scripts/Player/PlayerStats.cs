@@ -55,7 +55,14 @@ public class PlayerStats : LivingBeing
     }
     #endregion
 
-    public void AddControllableMinions(int changeValue)
+    public override void RestoreResources()
+    {
+        base.RestoreResources();
+        // Online, the host's hitpoints and power are the real ones, so it has to fill them too.
+        if (NetworkSession.IsOnline && TryGetComponent(out NetworkPlayer networkPlayer)) networkPlayer.RequestRestoreResources();
+    }
+
+        public void AddControllableMinions(int changeValue)
     {
         TotalControlllableMinions = Math.Max(0, TotalControlllableMinions + changeValue);
         Debug.Log($"Changing total controllable minion number"); //#TODO check  to see if this is being implimented at the crafting station

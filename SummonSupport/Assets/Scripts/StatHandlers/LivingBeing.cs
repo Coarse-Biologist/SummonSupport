@@ -136,7 +136,7 @@ public abstract class LivingBeing : MonoBehaviour
 
     #region Resource Control
 
-    public void RestoreResources()
+    public virtual void RestoreResources()
     {
         SetAttribute(AttributeType.CurrentHitpoints, GetAttribute(AttributeType.MaxHitpoints));
         SetAttribute(AttributeType.CurrentPower, GetAttribute(AttributeType.MaxPower));
@@ -255,7 +255,7 @@ public abstract class LivingBeing : MonoBehaviour
     public void ChangePowerRegeneration(float Value)
     {
         PowerRegeneration = Math.Max(0, PowerRegeneration + Value);
-
+        TotalPowerRegeneration += Value;
     }
 
     public float GetAttribute(AttributeType attribute)
@@ -303,13 +303,35 @@ public abstract class LivingBeing : MonoBehaviour
             Die();
     }
 
-    public void ApplyReplicatedHitpoints(float current, float max)
+    /// <summary>Applies hitpoints sent by the host. Pass a null max to keep this machine's own maximum.</summary>
+    public void ApplyReplicatedHitpoints(float current, float? max)
     {
         if (ResourceAttributesDict == null) return;
-        if (ResourceAttributesDict.TryGetValue(AttributeType.MaxHitpoints, out (Func<float> Get, Action<float> Set) maxAttr)) maxAttr.Set(max);
+        if (max.HasValue && ResourceAttributesDict.TryGetValue(AttributeType.MaxHitpoints, out (Func<float> Get, Action<float> Set) maxAttr))
+        {
+            maxAttr.Set(max.Value);
+            HandleUIAttrDisplay(AttributeType.MaxHitpoints, max.Value);
+        }
         if (ResourceAttributesDict.TryGetValue(AttributeType.CurrentHitpoints, out (Func<float> Get, Action<float> Set) currentAttr)) currentAttr.Set(current);
-        HandleUIAttrDisplay(AttributeType.MaxHitpoints, max);
         HandleUIAttrDisplay(AttributeType.CurrentHitpoints, current);
+    }
+
+    /// <summary>
+    /// Applies power sent by the host. Pass a null max to keep this machine's own maximum.
+    /// Running out of power stops beams, as it does when power is spent locally.
+    /// </summary>
+    public void ApplyReplicatedPower(float current, float? max)
+    {
+        if (ResourceAttributesDict == null) return;
+        if (max.HasValue && ResourceAttributesDict.TryGetValue(AttributeType.MaxPower, out (Func<float> Get, Action<float> Set) maxAttr))
+        {
+            maxAttr.Set(max.Value);
+            HandleUIAttrDisplay(AttributeType.MaxPower, max.Value);
+        }
+        current = Math.Max(0, current);
+        if (ResourceAttributesDict.TryGetValue(AttributeType.CurrentPower, out (Func<float> Get, Action<float> Set) currentAttr)) currentAttr.Set(current);
+        HandleUIAttrDisplay(AttributeType.CurrentPower, current);
+        if (current <= 0 && abilityHandler != null) abilityHandler.HandleNoMana();
     }
 
     public abstract void HandleUIAttrDisplay(AttributeType attributeType, float newValue);
@@ -351,7 +373,8 @@ public abstract class LivingBeing : MonoBehaviour
             if (newHP != CurrentHP)
                 SetAttribute(AttributeType.CurrentHitpoints, newHP);
 
-            float newPower = Mathf.Min(CurrentPower + PowerRegeneration, MaxPower);
+            // The total includes temporary changes, such as a beam's drain.
+            float newPower = Mathf.Min(CurrentPower + TotalPowerRegeneration, MaxPower);
             if (newPower != CurrentPower)
                 SetAttribute(AttributeType.CurrentPower, newPower);
             yield return regenTickRate;
