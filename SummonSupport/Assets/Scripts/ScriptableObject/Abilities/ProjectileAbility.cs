@@ -23,6 +23,8 @@ public class ProjectileAbility : Ability
 
     public override bool Activate(LivingBeing casterStats)
     {
+
+
         Transform spawnPoint = casterStats.transform;
         //Debug.Log($"spawnpoint rotation = {spawnPoint.rotation.y}");
         int shots = 1 + Mathf.Max(0, AbilityModHandler.GetPlayerModValue(this, AbilityModTypes.Number, casterStats));
@@ -34,8 +36,7 @@ public class ProjectileAbility : Ability
 
         for (int i = 0; i < shots; i += 1)
         {
-            NetworkObject projectile = Instantiate(Projectile, spawnPoint.position, Quaternion.identity).GetComponent<NetworkObject>();
-            projectile.Spawn();
+            GameObject projectile = Instantiate(Projectile, spawnPoint.position, Quaternion.identity);
             projectile.transform.localScale += sizeMod;
             Projectile projectileScript = projectile.GetComponent<Projectile>();
 

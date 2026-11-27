@@ -67,6 +67,17 @@ public class NetworkPlayer : NetworkBehaviour
         lastPhysicals = physicals;
         SubmitCombatProfileServerRpc(affinities, physicals);
     }
+    [ServerRpc]
+    public void SubmitProjectileCastServerRpc(int abilityIndex)
+    {
+        if (AbilityAt(abilityIndex) is not ProjectileAbility ability) return;
+
+        PlayerStats stats = GetComponent<PlayerStats>();
+        if (stats == null || stats.Dead) return;
+
+        ability.Activate(stats);
+    }
+
 
     private void PushVitals()
     {
