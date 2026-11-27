@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -137,7 +138,7 @@ public abstract class NetworkCombatant : NetworkBehaviour
             statusEffectHandler.ApplyReplicatedStatusEffect(effect, add);
     }
 
-        [ServerRpc(RequireOwnership = false)]
+    [ServerRpc(RequireOwnership = false)]
     private void RequestActiveBeamsServerRpc(ServerRpcParams rpcParams = default)
     {
         if (Handler == null) return;
