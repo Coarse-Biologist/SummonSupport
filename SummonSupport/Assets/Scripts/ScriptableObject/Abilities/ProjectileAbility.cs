@@ -9,7 +9,7 @@ public class ProjectileAbility : Ability
 {
     [field: Header("Projectile settings")]
     [field: SerializeField] public float Speed { get; protected set; }
-    [field: SerializeField] public NetworkObject Projectile { get; protected set; }
+    [field: SerializeField] public GameObject Projectile { get; protected set; }
     [field: SerializeField] public float MaxRange { get; protected set; } = 15;
     [field: SerializeField] public float Lifetime { get; protected set; } = 3;
     [field: SerializeField] public OnHitBehaviour PiercingMode { get; protected set; }

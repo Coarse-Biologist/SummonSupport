@@ -237,7 +237,9 @@ public class Projectile : MonoBehaviour
             rotation = Quaternion.Euler(0, 0, (float)Math.Sin(45 * i) * (30 + 5 * i));
 
             Vector3 direction = rotation * transform.forward;
-            NetworkObject newProjectile = Instantiate(ability.Projectile, transform.position, Quaternion.identity);
+            NetworkObject newProjectile = Instantiate(ability.Projectile, transform.position, Quaternion.identity).GetComponent<NetworkObject>();
+
+            newProjectile.Spawn();
             Projectile projectileScript = newProjectile.GetComponent<Projectile>();
 
             Material glowMaterial = ColorChanger.GetGlowStrengthByElement(ability.ElementTypes[0]);
