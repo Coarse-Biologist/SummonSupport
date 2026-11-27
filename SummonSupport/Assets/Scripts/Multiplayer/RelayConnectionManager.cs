@@ -16,6 +16,11 @@ public class RelayConnectionManager : MonoBehaviour
     [SerializeField] private string connectionType = "dtls";
 
     public string JoinCode { get; private set; }
+
+    // The join code of the session this machine is in right now, or null when offline.
+    // A client returns the code it joined with, which others can also use.
+    public string ActiveJoinCode =>
+        NetworkManager.Singleton != null && NetworkManager.Singleton.IsListening && !string.IsNullOrEmpty(JoinCode) ? JoinCode : null;
     public bool ServicesReady { get; private set; }
 
     private void Awake()
