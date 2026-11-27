@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -30,25 +29,8 @@ public class GameSetupMenu : MonoBehaviour
     /// <summary>Opens the panel next to <paramref name="template"/>. onBegin gets the slot, the difficulty and the save to continue (null for a new game).</summary>
     public static GameSetupMenu Open(Button template, string heading, Action<int, Difficulty, SessionSaveData> onBegin, Action onBack)
     {
-        GameObject go = new GameObject("GameSetupMenu", typeof(RectTransform), typeof(VerticalLayoutGroup));
-        go.transform.SetParent(template.transform.parent, false);
         // Grow down from where the Start button sits, like the rest of the start screen column.
-        RectTransform templateRect = (RectTransform)template.transform;
-        float rowHeight = templateRect.sizeDelta.y;
-        RectTransform rect = (RectTransform)go.transform;
-        rect.anchorMin = templateRect.anchorMin;
-        rect.anchorMax = templateRect.anchorMax;
-        rect.pivot = new Vector2(0.5f, 1f);
-        rect.anchoredPosition = templateRect.anchoredPosition + new Vector2(0, rowHeight / 2);
-
-        VerticalLayoutGroup layout = go.GetComponent<VerticalLayoutGroup>();
-        layout.childAlignment = TextAnchor.UpperCenter;
-        layout.spacing = Spacing;
-        layout.childControlWidth = false;
-        layout.childControlHeight = false;
-        layout.childForceExpandWidth = false;
-        layout.childForceExpandHeight = false;
-
+        GameObject go = StartMenuRows.CreateColumn("GameSetupMenu", template, Spacing);
         GameSetupMenu menu = go.AddComponent<GameSetupMenu>();
         menu.template = template;
         menu.heading = heading;
@@ -98,13 +80,7 @@ public class GameSetupMenu : MonoBehaviour
 
     private void Build()
     {
-        // Detach the old rows first: Destroy waits for the end of the frame, and the panel is sized from its rows.
-        for (int i = transform.childCount - 1; i >= 0; i--)
-        {
-            Transform child = transform.GetChild(i);
-            child.SetParent(null, false);
-            Destroy(child.gameObject);
-        }
+        StartMenuRows.Clear(transform);
 
         AddLabel(heading);
         List<int> visibleSlots = VisibleSlots();
@@ -124,9 +100,7 @@ public class GameSetupMenu : MonoBehaviour
         if (selected != null) AddButton(confirmingErase ? "Click again to erase" : "Erase Slot", ButtonWidth, Erase);
         AddButton("Back", ButtonWidth, Back);
 
-        int rows = transform.childCount;
-        float rowHeight = ((RectTransform)template.transform).sizeDelta.y;
-        ((RectTransform)transform).sizeDelta = new Vector2(SlotWidth, rows * rowHeight + (rows - 1) * Spacing);
+        StartMenuRows.FitColumn(transform, template, SlotWidth, Spacing);
     }
 
     private void SelectSlot(int slot)
@@ -174,39 +148,9 @@ public class GameSetupMenu : MonoBehaviour
 
     #region Building rows from the template button
 
-    private void AddButton(string text, float width, Action onClick)
-    {
-        Button button = Instantiate(template, transform);
-        button.gameObject.name = text;
-        button.gameObject.SetActive(true);
-        button.interactable = true;
-        button.onClick = new Button.ButtonClickedEvent(); // drop the template's own click calls
-        button.onClick.AddListener(() => onClick());
-        SetRow(button.gameObject, text, width);
-    }
+    private void AddButton(string text, float width, Action onClick) => StartMenuRows.AddButton(transform, template, text, width, onClick);
 
-    private void AddLabel(string text)
-    {
-        Button copy = Instantiate(template, transform);
-        copy.gameObject.name = "Heading";
-        copy.gameObject.SetActive(true);
-        if (copy.TryGetComponent(out Image image)) image.enabled = false;
-        copy.enabled = false;
-        SetRow(copy.gameObject, text, SlotWidth);
-    }
-
-    private void SetRow(GameObject row, string text, float width)
-    {
-        RectTransform rect = (RectTransform)row.transform;
-        rect.sizeDelta = new Vector2(width, ((RectTransform)template.transform).sizeDelta.y);
-        TMP_Text label = row.GetComponentInChildren<TMP_Text>(true);
-        if (label == null) return;
-        label.text = text;
-        // Long slot descriptions shrink to fit instead of spilling out of the button.
-        label.enableAutoSizing = true;
-        label.fontSizeMin = 12;
-        label.fontSizeMax = template.GetComponentInChildren<TMP_Text>(true).fontSize;
-    }
+    private void AddLabel(string text) => StartMenuRows.AddLabel(transform, template, text, SlotWidth);
 
     #endregion
 }

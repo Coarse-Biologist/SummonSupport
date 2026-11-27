@@ -56,6 +56,7 @@ public partial class NetworkPlayer : NetworkCombatant
             }
         }
 
+        StartCharacterName();
         StartSaveSession();
 
         if (IsOwner)
@@ -78,6 +79,7 @@ public partial class NetworkPlayer : NetworkCombatant
     {
         vitals.OnValueChanged -= OnVitalsChanged;
         power.OnValueChanged -= OnPowerChanged;
+        StopCharacterName();
         // If the one player still standing leaves, everyone left is down.
         if (IsServer && !IsOwner) CheckAllPlayersDown(this);
     }
@@ -87,6 +89,7 @@ public partial class NetworkPlayer : NetworkCombatant
         if (!IsSpawned) return;
         if (IsServer) PushVitals();
         if (!IsOwner) return;
+        UpdateCharacterName();
         UpdateSaves();
 
         pushTimer -= Time.unscaledDeltaTime;

@@ -88,16 +88,31 @@ public class MultiplayerMenuController : MonoBehaviour
         }
     }
 
-    public async void Join()
+    /// <summary>
+    /// Asks for the character first (used if the host's save has no character for this player), then joins
+    /// (see StartMenuController.OpenCharacterCreation).
+    /// </summary>
+    public void Join()
     {
         if (busy) return;
-        GameSession.End(); // the host decides the save and difficulty
         string code = joinCodeInput != null ? joinCodeInput.text.Trim() : "";
         if (string.IsNullOrEmpty(code))
         {
             SetStatus("Enter a join code first.");
             return;
         }
+        if (StartMenuController.Instance == null)
+        {
+            JoinSession(code);
+            return;
+        }
+        StartMenuController.Instance.OpenCharacterCreation("Join Game (online)", _ => JoinSession(code), null);
+    }
+
+    private async void JoinSession(string code)
+    {
+        if (busy) return;
+        GameSession.End(); // the host decides the save and difficulty
         SetBusy(true);
         SetStatus("Joining...");
         try
