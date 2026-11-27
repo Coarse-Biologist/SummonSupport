@@ -76,22 +76,23 @@ public class AbilityHandler : MonoBehaviour
         if (!HasCastAuthority) return false; // this copy only replays casts sent by its owner
 
         bool usedAbility = PerformCast(ability, targetPosition, rotation);
+        float cost = usedAbility ? GetModifiedCost(ability) : 0f;
 
         if (networkCombatant != null)
         {
             // Turning a beam off reports false but still changes what everyone should see,
             // so beams always share their new state.
             if (ability is BeamAbility beam)
-                networkCombatant.ShareCast(ability, targetPosition, rotation, AbilityCastKind.Cast, toggledAbilitiesDict.ContainsKey(beam));
+                networkCombatant.ShareCast(ability, targetPosition, rotation, AbilityCastKind.Cast, toggledAbilitiesDict.ContainsKey(beam), cost);
             else if (usedAbility)
-                networkCombatant.ShareCast(ability, targetPosition, rotation);
+                networkCombatant.ShareCast(ability, targetPosition, rotation, AbilityCastKind.Cast, false, cost);
         }
 
         if (!usedAbility)
             return false;
 
         StartCoroutine(SetOnCooldown(ability));
-        statsHandler?.ChangeAttribute(AttributeType.CurrentPower, -GetModifiedCost(ability));
+        statsHandler?.ChangeAttribute(AttributeType.CurrentPower, -cost);
 
         return true;
     }
@@ -112,20 +113,27 @@ public class AbilityHandler : MonoBehaviour
 
     /// <summary>
     /// Replays a cast that the owner of this being made on another machine. Spawns the same ability objects,
-    /// animation and sound, but pays no cost and starts no cooldown.
+    /// animation and sound, but pays no cost and starts no cooldown (the host charges client casts itself,
+    /// see NetworkCombatant). Returns whether the ability was used.
     /// </summary>
-    public void ReplayCast(Ability ability, AbilityCastData cast)
+    public bool ReplayCast(Ability ability, AbilityCastData cast)
     {
         if (cast.kind == AbilityCastKind.Trigger)
-        {
-            ActivateTriggered(ability);
-            return;
-        }
+            return ActivateTriggered(ability);
 
         // Beams carry their state instead of a toggle, so a copy that missed a cast cannot end up inverted.
-        if (ability is BeamAbility beam && toggledAbilitiesDict.ContainsKey(beam) == cast.toggledOn) return;
+        if (ability is BeamAbility beam && toggledAbilitiesDict.ContainsKey(beam) == cast.toggledOn) return false;
 
-        PerformCast(ability, cast.targetPosition, cast.aimRotation);
+        return PerformCast(ability, cast.targetPosition, cast.aimRotation);
+    }
+
+    /// <summary>True while a beam is switched on.</summary>
+    public bool IsToggledOn(BeamAbility beam) => toggledAbilitiesDict.ContainsKey(beam);
+
+    /// <summary>Host only: charges the power for a cast a client made, as the client did when it cast.</summary>
+    public void PayReplayedCastCost(Ability ability)
+    {
+        statsHandler?.ChangeAttribute(AttributeType.CurrentPower, -GetModifiedCost(ability));
     }
 
     private bool ActivateTriggered(Ability ability)
@@ -256,7 +264,7 @@ public class AbilityHandler : MonoBehaviour
         Destroy(activeAbility);
     }
 
-    private float GetModifiedCost(Ability ability)
+    public float GetModifiedCost(Ability ability)
     {
         if (ability == null) return 0f;
         if (modHandler == null) modHandler = AbilityModHandler.Instance;
@@ -335,10 +343,7 @@ public class AbilityHandler : MonoBehaviour
     {
         try
         {
-            //status effect presense handling
-            if (modHandler == null) modHandler = AbilityModHandler.Instance;
-            float coolDown = ability.Cooldown + modHandler.GetModAttributeByType(ability, AbilityModTypes.Cooldown) + statsHandler.SE_Handler.GetStatusEffectValue(StatusEffectType.Lethargic);
-            // default, plus modifier, plus lethargy value
+            float coolDown = GetCooldownDuration(ability);
             abilitiesOnCooldown[ability] = true;
 
             yield return new WaitForSeconds(coolDown);
@@ -348,6 +353,15 @@ public class AbilityHandler : MonoBehaviour
             abilitiesOnCooldown[ability] = false;
 
         }
+    }
+
+    /// <summary>The ability's cooldown, plus its mods and the caster's lethargy.</summary>
+    public float GetCooldownDuration(Ability ability)
+    {
+        if (modHandler == null) modHandler = AbilityModHandler.Instance;
+        float modCooldown = modHandler != null ? modHandler.GetModAttributeByType(ability, AbilityModTypes.Cooldown) : 0f;
+        float lethargy = statsHandler != null && statsHandler.SE_Handler != null ? statsHandler.SE_Handler.GetStatusEffectValue(StatusEffectType.Lethargic) : 0f;
+        return ability.Cooldown + modCooldown + lethargy;
     }
 
     protected virtual bool IsOnCoolDown(Ability ability)
