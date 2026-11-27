@@ -265,6 +265,36 @@ public class NetworkPlayer : NetworkCombatant
         GetComponent<PlayerMovement>().SpawnDashDust(position, rotation);
     }
 
+    /// <summary>Owner side: asks the host for a dropped loot object this player touched.</summary>
+    public void RequestLoot(uint lootId)
+    {
+        if (!IsSpawned || !IsOwner) return;
+        if (IsServer) HandleLootRequest(lootId);
+        else RequestLootServerRpc(lootId);
+    }
+
+    [ServerRpc]
+    private void RequestLootServerRpc(uint lootId)
+    {
+        HandleLootRequest(lootId);
+    }
+
+    private void HandleLootRequest(uint lootId)
+    {
+        // The first player to ask gets it; later requests for the same loot find it gone.
+        if (LootSpawnHandler.Instance == null || !LootSpawnHandler.Instance.IsLootAvailable(lootId)) return;
+        LootSpawnHandler.Instance.CollectLoot(lootId);
+        LootCollectedClientRpc(lootId);
+    }
+
+    /// <summary>Picked-up loot goes into every player's own inventory.</summary>
+    [ClientRpc]
+    private void LootCollectedClientRpc(uint lootId)
+    {
+        if (IsServer || LootSpawnHandler.Instance == null) return;
+        LootSpawnHandler.Instance.CollectLoot(lootId);
+    }
+
     public void GrantXp(int amount, ulong clientId)
     {
         ClientRpcParams targetOwner = new ClientRpcParams

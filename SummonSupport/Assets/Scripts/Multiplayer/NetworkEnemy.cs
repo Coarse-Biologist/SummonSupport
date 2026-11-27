@@ -53,6 +53,20 @@ public class NetworkEnemy : NetworkCombatant
         if (!current.SameAs(vitals.Value)) vitals.Value = current;
     }
 
+    /// <summary>Host side: shows every client the loot this enemy dropped, so each player can roll their knowledge too.</summary>
+    public void ShareDefeatLoot(Element strongestElement, float affinityValue, LootDropData[] drops)
+    {
+        if (!IsSpawned || !IsServer) return;
+        DefeatLootClientRpc(strongestElement, affinityValue, drops);
+    }
+
+    [ClientRpc]
+    private void DefeatLootClientRpc(Element strongestElement, float affinityValue, LootDropData[] drops)
+    {
+        if (IsServer || LootSpawnHandler.Instance == null) return;
+        LootSpawnHandler.Instance.ApplyRemoteDefeatLoot(strongestElement, affinityValue, drops);
+    }
+
     private void OnVitalsChanged(NetworkVitals previous, NetworkVitals next)
     {
         if (!IsServer) ApplyVitals(next);
