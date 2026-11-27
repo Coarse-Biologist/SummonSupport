@@ -94,7 +94,8 @@ public class GameSetupMenu : MonoBehaviour
 
         SessionSaveData selected = saves[selectedSlot];
         AddButton($"Difficulty: {difficulty}", ButtonWidth, CycleDifficulty);
-        AddButton(selected == null ? "New Game" : "Continue", ButtonWidth, Begin);
+        // Name the slot, since one is already selected when the panel opens (the newest save).
+        AddButton(selected == null ? $"New Game in Slot {selectedSlot}" : $"Continue Slot {selectedSlot}", ButtonWidth, Begin);
         if (selected != null) AddButton(confirmingErase ? "Click again to erase" : "Erase Slot", ButtonWidth, Erase);
         AddButton("Back", ButtonWidth, Back);
     }
