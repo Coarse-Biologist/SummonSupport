@@ -421,13 +421,52 @@ public class PauseGameHandler : MonoBehaviour
     {
         PlayerOptions.style.display = DisplayStyle.Flex;
         ClearInfoElement();
-        string joinCode = RelayConnectionManager.Instance != null ? RelayConnectionManager.Instance.JoinCode : null;
-        InfoElement.text = string.IsNullOrEmpty(joinCode) ? "" : $"Multiplayer join code: {joinCode}\n";
+        InfoElement.text = "";
         Button audioSettingsButton = AddButtons("Audio Settings", InfoElement, 50, 25);
         Button saveLoadButton = AddButtons("Save/Load", InfoElement, 50, 25);
+        Button joinCodeButton = AddButtons("Join Code", InfoElement, 50, 25);
 
         audioSettingsButton.RegisterCallback<ClickEvent>(e => ShowAudioSettings());
         saveLoadButton.RegisterCallback<ClickEvent>(e => ShowSaveLoad());
+        joinCodeButton.RegisterCallback<ClickEvent>(e => ShowJoinCode());
+    }
+    private static void ShowJoinCode()
+    {
+        ClearInfoElement();
+        InfoElement.text = "";
+
+        RelayConnectionManager relay = RelayConnectionManager.Instance;
+        string joinCode = relay != null ? relay.ActiveJoinCode : null;
+        if (string.IsNullOrEmpty(joinCode))
+        {
+            AddInfoLabel("Not in an online session.\nHost a game from the start screen to get a join code.", 30);
+            return;
+        }
+
+        bool isHost = Unity.Netcode.NetworkManager.Singleton != null && Unity.Netcode.NetworkManager.Singleton.IsHost;
+        AddInfoLabel(isHost ? "Your join code" : "Session join code", 30);
+        Label codeLabel = AddInfoLabel(joinCode, 96);
+        codeLabel.style.letterSpacing = 12;
+        codeLabel.selection.isSelectable = true;
+        AddInfoLabel(isHost ? "Share it so friends can join your game." : "You joined with this code. Share it so others can join too.", 24);
+
+        Button copyButton = AddButtons("Copy Code", InfoElement, 50, 25);
+        copyButton.RegisterCallback<ClickEvent>(e =>
+        {
+            GUIUtility.systemCopyBuffer = joinCode;
+            copyButton.text = "Copied!";
+        });
+    }
+    private static Label AddInfoLabel(string text, float fontSize)
+    {
+        Label label = new Label(text);
+        label.style.fontSize = fontSize;
+        label.style.color = Color.white;
+        label.style.unityTextAlign = TextAnchor.MiddleCenter;
+        label.style.whiteSpace = WhiteSpace.Normal;
+        label.style.marginBottom = 10;
+        InfoElement.Add(label);
+        return label;
     }
     private static void ShowAudioSettings()
     {
