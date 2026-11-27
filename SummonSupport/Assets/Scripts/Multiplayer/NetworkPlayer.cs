@@ -21,17 +21,30 @@ public class NetworkPlayer : NetworkCombatant
     private float pushTimer;
     private float[] lastAffinities;
     private float[] lastPhysicals;
+    private Vector4? lastResourceProfile;
 
+    // The host's values are the real ones for current hitpoints and power.
+    // Maximums and regeneration rates are the owner's: they come from its own level-ups and upgrades,
+    // so the owner sends them to the host (SubmitResourceProfileServerRpc) instead of taking them from it.
     private readonly NetworkVariable<NetworkVitals> vitals = new();
+    private readonly NetworkVariable<NetworkPower> power = new();
 
     public override void OnNetworkSpawn()
     {
+        base.OnNetworkSpawn();
         vitals.OnValueChanged += OnVitalsChanged;
-        if (!IsServer) ApplyVitals(vitals.Value);
+        power.OnValueChanged += OnPowerChanged;
+        if (!IsServer)
+        {
+            ApplyVitals(vitals.Value);
+            ApplyPower(power.Value);
+        }
 
         if (IsOwner)
         {
             AttachLocalPlayer();
+            // Mods belong to everyone in the game, so a joining player takes the ones made before they joined.
+            if (!IsServer) RequestAllModsServerRpc();
             return;
         }
 
@@ -45,6 +58,7 @@ public class NetworkPlayer : NetworkCombatant
     public override void OnNetworkDespawn()
     {
         vitals.OnValueChanged -= OnVitalsChanged;
+        power.OnValueChanged -= OnPowerChanged;
     }
 
     private void Update()
@@ -58,6 +72,8 @@ public class NetworkPlayer : NetworkCombatant
         pushTimer = CombatProfilePushInterval;
 
         PlayerStats stats = GetComponent<PlayerStats>();
+        if (!IsServer) PushResourceProfile(stats);
+
         float[] affinities = Elements.Select(e => (float)stats.GetAffinity(e)).ToArray();
         float[] physicals = PhysicalTypes.Select(p => stats.PhysicalDict.TryGetValue(p, out var entry) ? entry.Get() : 0f).ToArray();
 
@@ -78,6 +94,14 @@ public class NetworkPlayer : NetworkCombatant
             dead = stats.Dead
         };
         if (!current.SameAs(vitals.Value)) vitals.Value = current;
+
+        NetworkPower currentPower = new NetworkPower
+        {
+            current = stats.GetAttribute(AttributeType.CurrentPower),
+            max = stats.GetAttribute(AttributeType.MaxPower),
+            lastHandledCastSequence = LastHandledCastSequence
+        };
+        if (!currentPower.SameAs(power.Value)) power.Value = currentPower;
     }
 
     private void OnVitalsChanged(NetworkVitals previous, NetworkVitals next)
@@ -88,8 +112,82 @@ public class NetworkPlayer : NetworkCombatant
     private void ApplyVitals(NetworkVitals next)
     {
         PlayerStats stats = GetComponent<PlayerStats>();
-        stats.ApplyReplicatedHitpoints(next.current, next.max);
+        stats.ApplyReplicatedHitpoints(next.current, IsOwner ? (float?)null : next.max);
         if (next.dead && IsOwner && !stats.Dead) stats.Die();
+    }
+
+    private void OnPowerChanged(NetworkPower previous, NetworkPower next)
+    {
+        if (!IsServer) ApplyPower(next);
+    }
+
+    private void ApplyPower(NetworkPower next)
+    {
+        if (next.max <= 0) return; // the host hasn't sent this player's power yet
+        PlayerStats stats = GetComponent<PlayerStats>();
+        if (IsOwner)
+        {
+            // The owner already paid for casts the host hasn't handled yet; keep them paid.
+            stats.ApplyReplicatedPower(next.current - PendingCastCost(next.lastHandledCastSequence), null);
+        }
+        else stats.ApplyReplicatedPower(next.current, next.max);
+    }
+
+    /// <summary>Owner side: sends the owner's maximums and regeneration rates to the host when they change.</summary>
+    private void PushResourceProfile(PlayerStats stats)
+    {
+        Vector4 profile = ReadResourceProfile(stats);
+        if (lastResourceProfile.HasValue && lastResourceProfile.Value == profile) return;
+        lastResourceProfile = profile;
+        SubmitResourceProfileServerRpc(profile);
+    }
+
+    private static Vector4 ReadResourceProfile(PlayerStats stats)
+    {
+        return new Vector4(
+            stats.GetAttribute(AttributeType.MaxHitpoints),
+            stats.GetAttribute(AttributeType.MaxPower),
+            stats.HealthRegeneration,
+            stats.PowerRegeneration);
+    }
+
+    [ServerRpc]
+    private void SubmitResourceProfileServerRpc(Vector4 profile)
+    {
+        ApplyResourceProfile(profile);
+    }
+
+    private void ApplyResourceProfile(Vector4 profile)
+    {
+        PlayerStats stats = GetComponent<PlayerStats>();
+        if (profile.x > 0) stats.SetAttribute(AttributeType.MaxHitpoints, profile.x);
+        if (profile.y > 0) stats.SetAttribute(AttributeType.MaxPower, profile.y);
+
+        // Change the base rates by the difference, so temporary changes on the host (beam drain, heal and damage
+        // over time) stay in the totals.
+        float healthRegenChange = profile.z - stats.HealthRegeneration;
+        if (healthRegenChange != 0) stats.ChangeHealthRegeneration(healthRegenChange);
+        float powerRegenChange = profile.w - stats.PowerRegeneration;
+        if (powerRegenChange != 0) stats.ChangePowerRegeneration(powerRegenChange);
+    }
+
+    /// <summary>
+    /// Owner side: fills hitpoints and power on the host, for example after a level-up. Sends the owner's current
+    /// maximums with it, so the host fills them up to the new values.
+    /// </summary>
+    public void RequestRestoreResources()
+    {
+        if (!IsSpawned || !IsOwner || IsServer) return;
+        PlayerStats stats = GetComponent<PlayerStats>();
+        lastResourceProfile = ReadResourceProfile(stats);
+        RestoreResourcesServerRpc(lastResourceProfile.Value);
+    }
+
+    [ServerRpc]
+    private void RestoreResourcesServerRpc(Vector4 profile)
+    {
+        ApplyResourceProfile(profile);
+        GetComponent<PlayerStats>().RestoreResources();
     }
 
     [ServerRpc]
@@ -145,6 +243,98 @@ public class NetworkPlayer : NetworkCombatant
         StatusEffects effect = AbilityRegistry.StatusEffectAt(effectIndex);
         if (ability == null || effect == null) return;
         AbilityModHandler.Instance.AddStatusEffectToAbility(ability, effect);
+    }
+
+    /// <summary>Owner side: shows this player's dash dust to everyone else.</summary>
+    public void ShareDashDust(Vector3 position, Quaternion rotation)
+    {
+        if (!IsSpawned || !IsOwner) return;
+        if (IsServer) DashDustClientRpc(position, rotation);
+        else DashDustServerRpc(position, rotation);
+    }
+
+    [ServerRpc]
+    private void DashDustServerRpc(Vector3 position, Quaternion rotation)
+    {
+        GetComponent<PlayerMovement>().SpawnDashDust(position, rotation);
+        DashDustClientRpc(position, rotation);
+    }
+
+    [ClientRpc]
+    private void DashDustClientRpc(Vector3 position, Quaternion rotation)
+    {
+        if (IsServer || IsOwner) return;
+        GetComponent<PlayerMovement>().SpawnDashDust(position, rotation);
+    }
+
+    /// <summary>Owner side: asks the host for a dropped loot object this player touched.</summary>
+    public void RequestLoot(uint lootId)
+    {
+        if (!IsSpawned || !IsOwner) return;
+        if (IsServer) HandleLootRequest(lootId);
+        else RequestLootServerRpc(lootId);
+    }
+
+    [ServerRpc]
+    private void RequestLootServerRpc(uint lootId)
+    {
+        HandleLootRequest(lootId);
+    }
+
+    private void HandleLootRequest(uint lootId)
+    {
+        // The first player to ask gets it; later requests for the same loot find it gone.
+        if (LootSpawnHandler.Instance == null || !LootSpawnHandler.Instance.IsLootAvailable(lootId)) return;
+        LootSpawnHandler.Instance.CollectLoot(lootId);
+        LootCollectedClientRpc(lootId);
+    }
+
+    /// <summary>Picked-up loot goes into every player's own inventory.</summary>
+    [ClientRpc]
+    private void LootCollectedClientRpc(uint lootId)
+    {
+        if (IsServer || LootSpawnHandler.Instance == null) return;
+        LootSpawnHandler.Instance.CollectLoot(lootId);
+    }
+
+    [ServerRpc]
+    private void RequestAllModsServerRpc()
+    {
+        if (AbilityModHandler.Instance == null) return;
+        NetworkAbilityMods.CollectAllMods(out AbilityAttributeModData[] attributeMods, out AbilityStatusModData[] statusMods);
+
+        ClientRpcParams toOwner = new ClientRpcParams
+        {
+            Send = new ClientRpcSendParams { TargetClientIds = new[] { OwnerClientId } }
+        };
+        AllModsClientRpc(attributeMods, statusMods, toOwner);
+    }
+
+    [ClientRpc]
+    private void AllModsClientRpc(AbilityAttributeModData[] attributeMods, AbilityStatusModData[] statusMods, ClientRpcParams rpcParams = default)
+    {
+        if (IsServer || !IsOwner || AbilityModHandler.Instance == null) return;
+        NetworkAbilityMods.ApplyAllMods(attributeMods, statusMods);
+    }
+
+    /// <summary>Owner side: asks the host to spawn a minion this player crafted (see AlchemyHandler).</summary>
+    public void RequestCraftMinion(Vector3 spawnPosition, uint requestId)
+    {
+        if (!IsSpawned || !IsOwner) return;
+        if (IsServer) SpawnCraftedMinion(spawnPosition, requestId);
+        else RequestCraftMinionServerRpc(spawnPosition, requestId);
+    }
+
+    [ServerRpc]
+    private void RequestCraftMinionServerRpc(Vector3 spawnPosition, uint requestId)
+    {
+        SpawnCraftedMinion(spawnPosition, requestId);
+    }
+
+    private void SpawnCraftedMinion(Vector3 spawnPosition, uint requestId)
+    {
+        if (AlchemyHandler.Instance == null) return;
+        AlchemyHandler.Instance.SpawnNetworkedMinion(spawnPosition, OwnerClientId, requestId);
     }
 
     public void GrantXp(int amount, ulong clientId)

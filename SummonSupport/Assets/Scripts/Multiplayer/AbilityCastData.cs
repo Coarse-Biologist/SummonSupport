@@ -23,4 +23,6 @@ public struct AbilityCastData : INetworkSerializeByMemcpy
     public Quaternion aimRotation;
     /// <summary>For toggled abilities (beams): whether the ability is on after this cast.</summary>
     public bool toggledOn;
+    /// <summary>Counts up with each cast its owner sends, so the owner can tell which casts the host has handled.</summary>
+    public uint sequence;
 }

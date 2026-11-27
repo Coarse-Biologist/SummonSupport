@@ -46,6 +46,8 @@ public static class CombatStatHandler
     {
         if (caster == null || !target.TryGetComponent(out NetworkEnemy enemy)) return;
         if (caster.TryGetComponent(out NetworkPlayer player) && player.IsSpawned) enemy.RecordAttacker(player.OwnerClientId);
+        // A minion's hits count as its crafter's, so the crafter gets the final-hit XP bonus.
+        else if (caster is MinionStats && caster.TryGetComponent(out NetworkEnemy minion) && minion.IsSpawned) enemy.RecordAttacker(minion.CrafterClientId);
     }
 
     public static void HandleEffectPackage(Ability ability, LivingBeing caster, LivingBeing target, EffectPackage effectPackage)
