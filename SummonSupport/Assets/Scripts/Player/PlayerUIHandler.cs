@@ -105,6 +105,9 @@ public class PlayerUIHandler : MonoBehaviour
         playerUI.style.opacity = 100f;
         craftingUI.style.opacity = 100f;
         playerStats = PlayerStats.Instance;
+
+        // Quests can arrive before this label exists (online, a joining player is sent them as their player spawns).
+        if (QuestHandler.ActiveQuests.Count > 0) ShowQuestInfo(QuestHandler.ActiveQuests[0]);
     }
 
     void UpdateMaxValueResourceBar(LivingBeing creature, AttributeType attributeType)

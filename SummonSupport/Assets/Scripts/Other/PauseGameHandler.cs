@@ -184,6 +184,8 @@ public class PauseGameHandler : MonoBehaviour
 
         ResumeButton.style.display = DisplayStyle.Flex;
         ResumeButton.style.width = StyleKeyword.Auto;
+        // Closing the menu hides the info panel (HidePauseScreen), so show it again here.
+        PlayerOptions.style.display = DisplayStyle.Flex;
         InfoElement.style.display = DisplayStyle.Flex;
         InventoryButton.style.display = DisplayStyle.Flex;
         QuitButton.style.display = DisplayStyle.Flex;
@@ -277,6 +279,9 @@ public class PauseGameHandler : MonoBehaviour
     private static void ShowNextQuestInfo()
     {
         ClearInfoElement();
+        // Other options can leave the panel or its label hidden (e.g. the known abilities list hides the label).
+        PlayerOptions.style.display = DisplayStyle.Flex;
+        InfoElement.style.display = DisplayStyle.Flex;
 
         if (QuestHandler.ActiveQuests.Count == 0)
         {
