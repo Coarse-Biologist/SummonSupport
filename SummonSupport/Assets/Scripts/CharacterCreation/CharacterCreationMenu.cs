@@ -80,6 +80,7 @@ public class CharacterCreationMenu : MonoBehaviour
         input.characterLimit = CharacterCreationData.MaxNameLength;
         // Moving a controller through the field should not start typing in it; Submit (A / Cross) does.
         input.shouldActivateOnSelect = false;
+        input.navigation = Navigation.defaultNavigation; // the template links to the start screen's own buttons
         input.text = text;
         if (input.placeholder is TMP_Text placeholder) placeholder.text = "Character name";
         input.onValueChanged.AddListener(_ => ShowMessage(""));

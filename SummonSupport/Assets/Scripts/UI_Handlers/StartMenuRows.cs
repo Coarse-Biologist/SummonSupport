@@ -57,6 +57,7 @@ public static class StartMenuRows
         button.gameObject.name = text;
         button.gameObject.SetActive(true);
         button.interactable = true;
+        button.navigation = Navigation.defaultNavigation; // the template links to the start screen's own buttons
         button.onClick = new Button.ButtonClickedEvent(); // drop the template's own click calls
         button.onClick.AddListener(() => onClick());
         SetRow(button.gameObject, template, text, width);
