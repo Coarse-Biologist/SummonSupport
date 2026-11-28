@@ -301,10 +301,11 @@ public class AlchemyHandler : MonoBehaviour
         Element strongestElement = stats.GetHighestAffinity(out float value);
         string nameModifier;
         Debug.Log($"Strongest Element : {strongestElement}, Value : {value}");
+
+        bool usesElementalAppearance = ElementalAppearance.TryRefresh(stats);
         if (strongestElement != Element.None && stats.GetAffinity(strongestElement) > ElementThreshhold)
         {
-            Debug.Log($"changing color by {strongestElement} affinity for {stats.Name}");
-            ColorChanger.ChangeAllMatsByAffinity(stats);
+            if (!usesElementalAppearance) ColorChanger.ChangeAllMatsByAffinity(stats);
             nameModifier = strongestElement.ToString();
             stats.SetName(nameModifier + " Elemental");
             EventDeclarer.renameMinion.Invoke(stats);

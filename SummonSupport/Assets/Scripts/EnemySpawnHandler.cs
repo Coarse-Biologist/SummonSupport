@@ -150,7 +150,8 @@ public class EnemySpawnHandler : MonoBehaviour
             originalCreatureStats.ChangeAffinity(element, spawnInfo.CreaturStrengthScalar * level * Affinity_Scalar);
         }
         ModifyCreatureAbilties(level, originalCreatureStats, element, physical);
-        ColorChanger.ChangeElementalIndicatorByAffinity(originalCreatureStats);
+        if (!ElementalAppearance.TryRefresh(originalCreatureStats))
+            ColorChanger.ChangeElementalIndicatorByAffinity(originalCreatureStats);
 
     }
     private Element SelectCreatureElement(SpawnLocationInfo spawnInfo = null)

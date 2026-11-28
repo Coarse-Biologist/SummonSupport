@@ -4,7 +4,7 @@ using Unity.Collections;
 using Unity.Netcode;
 using UnityEngine;
 
-public class AnimationControllerScript : NetworkBehaviour
+public class AnimationControllerScript : NetworkBehaviour, IElementalModelListener
 {
     public Animator anim { get; private set; }
     [field: SerializeField] string AnimatorStringLine;
@@ -41,6 +41,13 @@ public class AnimationControllerScript : NetworkBehaviour
     {
         networkMovement.OnValueChanged -= OnRemoteMovement;
         networkLayer.OnValueChanged -= OnRemoteLayer;
+    }
+
+    public void OnElementalModelChanged(ElementalModel current, bool isBaseModel)
+    {
+        if (current == null || current.Animator == null) return;
+        anim = current.Animator;
+        if (!string.IsNullOrEmpty(currentMovementAnimation)) anim.Play(currentMovementAnimation);
     }
 
     public void SetUpdateMode(AnimatorUpdateMode mode)

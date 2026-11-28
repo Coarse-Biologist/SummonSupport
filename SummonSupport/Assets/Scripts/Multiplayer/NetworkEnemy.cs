@@ -18,6 +18,9 @@ public class NetworkEnemy : NetworkCombatant
     private const float ProfilePushInterval = 0.5f;
 
     private readonly NetworkVariable<NetworkVitals> vitals = new();
+    // The host picks an enemy's element when it spawns; clients need it to show the enemy's elemental look.
+    // (Minions share all their affinities through MinionProfileData instead.)
+    private readonly NetworkVariable<NetworkAffinity> strongestAffinity = new();
 
     // Set by the host before the minion spawns. Minions nobody crafted belong to the host.
     private readonly NetworkVariable<ulong> crafterClientId = new(NetworkManager.ServerClientId);
@@ -61,9 +64,15 @@ public class NetworkEnemy : NetworkCombatant
     {
         base.OnNetworkSpawn();
         vitals.OnValueChanged += OnVitalsChanged;
+        strongestAffinity.OnValueChanged += OnStrongestAffinityChanged;
         crafterClientId.OnValueChanged += OnCrafterChanged;
         craftRequestId.OnValueChanged += OnCraftRequestChanged;
         if (!IsServer) ApplyVitals(vitals.Value);
+
+        if (!IsMinion && IsServer) strongestAffinity.Value = NetworkAffinity.StrongestOf(GetComponent<LivingBeing>());
+        else if (!IsMinion) ApplyStrongestAffinity(strongestAffinity.Value);
+        // Refresh on the host too: colors are seeded from the NetworkObjectId, which exists only from now on.
+        ElementalAppearance.TryRefresh(GetComponent<LivingBeing>());
 
         if (IsMinion)
         {
@@ -90,6 +99,7 @@ public class NetworkEnemy : NetworkCombatant
     public override void OnNetworkDespawn()
     {
         vitals.OnValueChanged -= OnVitalsChanged;
+        strongestAffinity.OnValueChanged -= OnStrongestAffinityChanged;
         crafterClientId.OnValueChanged -= OnCrafterChanged;
         craftRequestId.OnValueChanged -= OnCraftRequestChanged;
         spawnedMinions.Remove(this);
@@ -126,6 +136,19 @@ public class NetworkEnemy : NetworkCombatant
     {
         if (IsServer || LootSpawnHandler.Instance == null) return;
         LootSpawnHandler.Instance.ApplyRemoteDefeatLoot(strongestElement, affinityValue, drops);
+    }
+
+    private void OnStrongestAffinityChanged(NetworkAffinity previous, NetworkAffinity next)
+    {
+        if (!IsServer && !IsMinion) ApplyStrongestAffinity(next);
+    }
+
+    private void ApplyStrongestAffinity(NetworkAffinity next)
+    {
+        if (next.element == Element.None) return;
+        LivingBeing being = GetComponent<LivingBeing>();
+        being.SetAffinity(next.element, next.value);
+        if (!ElementalAppearance.TryRefresh(being)) ColorChanger.ChangeElementalIndicatorByAffinity(being);
     }
 
     private void OnVitalsChanged(NetworkVitals previous, NetworkVitals next)

@@ -76,7 +76,7 @@ public struct MinionProfileData : INetworkSerializable, IEquatable<MinionProfile
 
         if (minionStats.TryGetComponent(out CreatureAbilityHandler creatureAbilityHandler)) creatureAbilityHandler.ReplaceAbilities(known, slotted);
 
-        ColorChanger.ChangeAllMatsByAffinity(minionStats);
+        if (!ElementalAppearance.TryRefresh(minionStats)) ColorChanger.ChangeAllMatsByAffinity(minionStats);
     }
 
     public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
