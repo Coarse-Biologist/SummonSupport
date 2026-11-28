@@ -7,11 +7,21 @@ public class InteractHandler : MonoBehaviour
     // Unity still sends trigger messages and runs Invoke on a disabled component, so each entry point checks enabled.
     private readonly List<I_Interactable> interactablesInRange = new();
 
-    // The one entered last is the one Z uses.
+    // Bound to Z on keyboard and X / Square on gamepad (PlayerInputActions "Interact").
+    private PlayerInputActions inputActions;
+
+    // The one entered last is the one Interact uses.
     private I_Interactable Current => interactablesInRange.Count > 0 ? interactablesInRange[interactablesInRange.Count - 1] : null;
+
+    void OnEnable()
+    {
+        inputActions ??= new PlayerInputActions();
+        inputActions.Player.Interact.Enable();
+    }
 
     void OnDisable()
     {
+        inputActions?.Player.Interact.Disable();
         CancelInvoke(nameof(AttemptInteraction));
         if (IsUsable(Current)) Current.HideInteractionOption();
         interactablesInRange.Clear();
@@ -36,6 +46,11 @@ public class InteractHandler : MonoBehaviour
         else CancelInvoke(nameof(AttemptInteraction));
     }
 
+    void OnDestroy()
+    {
+        inputActions?.Dispose();
+    }
+
     private void AttemptInteraction()
     {
         RemoveDestroyed();
@@ -44,7 +59,7 @@ public class InteractHandler : MonoBehaviour
             CancelInvoke(nameof(AttemptInteraction));
             return;
         }
-        if (Input.GetKey(KeyCode.Z)) Current.Interact(gameObject);
+        if (inputActions.Player.Interact.IsPressed()) Current.Interact(gameObject);
     }
 
     // An interactable can be destroyed or removed while we stand in it (e.g. a resurrected minion's I_InteractResurrect).
