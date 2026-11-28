@@ -54,7 +54,11 @@ public class CharacterCreationMenu : MonoBehaviour
 
         StartMenuRows.AddLabel(transform, template, heading, Width);
         StartMenuRows.AddLabel(transform, template, "Create your character", Width);
-        nameInput = AddNameInput(inputTemplate, previous.PlayerName);
+        // Keep a name the player chose before; otherwise name the character after its element.
+        string playerName = string.IsNullOrEmpty(previous.PlayerName) || CharacterCreationData.IsDefaultName(previous.PlayerName)
+            ? CharacterCreationData.DefaultName(SelectedElement)
+            : previous.PlayerName;
+        nameInput = AddNameInput(inputTemplate, playerName);
         elementLabel = StartMenuRows.AddButton(transform, template, "", ButtonWidth, CycleElement).GetComponentInChildren<TMP_Text>(true);
         messageLabel = StartMenuRows.AddLabel(transform, template, "", Width);
         StartMenuRows.AddButton(transform, template, "Create Character", ButtonWidth, Confirm);
@@ -93,7 +97,12 @@ public class CharacterCreationMenu : MonoBehaviour
         if (elements.Count == 0) return;
         elementIndex = (elementIndex + 1) % elements.Count;
         ShowElement();
+        // A default name follows the element; one the player typed stays.
+        if (nameInput != null && (string.IsNullOrWhiteSpace(nameInput.text) || CharacterCreationData.IsDefaultName(nameInput.text)))
+            nameInput.text = CharacterCreationData.DefaultName(SelectedElement);
     }
+
+    private Element SelectedElement => elements.Count > 0 ? elements[elementIndex] : Element.None;
 
     private void ShowElement()
     {
