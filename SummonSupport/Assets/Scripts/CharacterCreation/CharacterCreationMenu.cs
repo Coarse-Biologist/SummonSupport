@@ -40,6 +40,13 @@ public class CharacterCreationMenu : MonoBehaviour
         return menu;
     }
 
+    void Update()
+    {
+        // Escape while typing the name only leaves the field.
+        if (nameInput != null && nameInput.isFocused) return;
+        if (MenuNavigation.CancelPressedThisFrame()) Back();
+    }
+
     private void Build(string heading, TMP_InputField inputTemplate)
     {
         CharacterCreationData previous = CharacterSelection.Current;
@@ -71,6 +78,8 @@ public class CharacterCreationMenu : MonoBehaviour
         input.onSubmit = new TMP_InputField.SubmitEvent();
         input.contentType = TMP_InputField.ContentType.Standard;
         input.characterLimit = CharacterCreationData.MaxNameLength;
+        // Moving a controller through the field should not start typing in it; Submit (A / Cross) does.
+        input.shouldActivateOnSelect = false;
         input.text = text;
         if (input.placeholder is TMP_Text placeholder) placeholder.text = "Character name";
         input.onValueChanged.AddListener(_ => ShowMessage(""));

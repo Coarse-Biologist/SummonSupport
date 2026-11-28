@@ -154,13 +154,15 @@ public class NPC_UI_Handler : MonoBehaviour, I_Interactable
             TemplateContainer prefabContainer = UIPrefabAssets.Instantiate();
             Button newButton = prefabContainer.Q<Button>("ButtonPrefab");
             newButton.text = label;
-            newButton.RegisterCallback<ClickEvent>(e => OnOptionSelected(label));
+            newButton.clicked += () => OnOptionSelected(label);
             spawnedButtons.Add(newButton);
             playerOptions.Add(newButton);
             newButton.style.width = Length.Percent(30);
             newButton.style.height = Length.Percent(10);
 
         }
+        // The cursor stays locked while talking, so a controller needs a response focused to pick one.
+        MenuNavigation.FocusFirst(playerOptions);
     }
     private void SetButtonSize(Button button, int width = 10, int height = 5)
     {

@@ -61,37 +61,21 @@ public class AnimationControllerScript : NetworkBehaviour
 
     public void ChangeMovementAnimation(float moveInputX, float moveInputY)
     {
-        if (moveInputY == 1 && moveInputX == 0)
+        // Pick the nearest of the eight run directions. Comparing exact values only worked for keys: a stick
+        // pushed forward reads e.g. (0.03, 0.98), which flickered between the two forward-diagonal runs.
+        if (moveInputX * moveInputX + moveInputY * moveInputY < 0.0001f) return;
+        int direction = Mathf.RoundToInt(Mathf.Atan2(moveInputY, moveInputX) * Mathf.Rad2Deg / 45f); // 0 = right, 2 = forward, -2 = back
+        switch (direction)
         {
-            ChangeAnimation("RunForward");
-        }
-        else if (moveInputY == -1 && moveInputX == 0)
-        {
-            ChangeAnimation("RunBackward");
-        }
-        else if (moveInputX == -1 && moveInputY == 0)
-        {
-            ChangeAnimation("StrafeLeft");
-        }
-        else if (moveInputX == 1 && moveInputY == 0)
-        {
-            ChangeAnimation("StrafeRight"); // good
-        }
-        else if (moveInputX > 0 && moveInputY < 0)
-        {
-            ChangeAnimation("RunBackwardRight");
-        }
-        else if (moveInputX < 0 && moveInputY < 0)
-        {
-            ChangeAnimation("RunBackwardLeft");
-        }
-        else if (moveInputX < 0 && moveInputY > 0)
-        {
-            ChangeAnimation("RunRight");
-        }
-        else if (moveInputX > 0 && moveInputY > 0)
-        {
-            ChangeAnimation("RunLeft");
+            case 2: ChangeAnimation("RunForward"); break;
+            case -2: ChangeAnimation("RunBackward"); break;
+            case 4:
+            case -4: ChangeAnimation("StrafeLeft"); break;
+            case 0: ChangeAnimation("StrafeRight"); break;
+            case -1: ChangeAnimation("RunBackwardRight"); break;
+            case -3: ChangeAnimation("RunBackwardLeft"); break;
+            case 3: ChangeAnimation("RunRight"); break; // forward-left
+            case 1: ChangeAnimation("RunLeft"); break; // forward-right
         }
     }
 

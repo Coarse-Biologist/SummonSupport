@@ -161,3 +161,15 @@
 #CraftingUI #BottomLeftPanel .unity-scroll-view__horizontal-scroller {
     opacity: 0;
 }
+
+/* Controller focus: looks like hover. Only while a controller drives the menus (MenuNavigation sets the class). */
+.controller-navigation .button:focus,
+.controller-navigation .buttonPrefab:focus,
+.controller-navigation .toggle:focus {
+    scale: 1.2 1.2;
+    -unity-background-image-tint-color: rgb(184, 177, 177);
+}
+
+.controller-navigation .ElementToggle:focus {
+    scale: 1.2 1.2;
+}

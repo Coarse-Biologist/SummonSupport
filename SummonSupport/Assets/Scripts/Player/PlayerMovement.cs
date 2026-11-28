@@ -94,7 +94,8 @@ public class PlayerMovement : MovementScript
     #region Dash logic
     private void OnUseDash(InputAction.CallbackContext context)
     {
-        if (playerStats.Dead) return;
+        // A / Cross also presses menu buttons; it only dashes when no menu has the controller.
+        if (playerStats.Dead || paused || MenuNavigation.HasMenuFocus()) return;
 
         if (canDash)
         {
@@ -201,7 +202,7 @@ public class PlayerMovement : MovementScript
 
     private void SendMinionCommandContext(InputAction.CallbackContext context)
     {
-        if (playerStats.Dead) return;
+        if (playerStats.Dead || paused) return;
         Vector3 cameraForward = Camera.main.transform.forward;
         Vector3 adjustedForward = new Vector3(cameraForward.x, cameraForward.y + .15f, cameraForward.z);
 

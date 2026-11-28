@@ -36,6 +36,8 @@ public class MultiplayerMenuController : MonoBehaviour
 
     private void Start()
     {
+        // Moving a controller through the join code field should not start typing in it; Submit (A / Cross) does.
+        if (joinCodeInput != null) joinCodeInput.shouldActivateOnSelect = false;
         SetStatus("");
         SetJoinCode("");
         SetBusy(false);
