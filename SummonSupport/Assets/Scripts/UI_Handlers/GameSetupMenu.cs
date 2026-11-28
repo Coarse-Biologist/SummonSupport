@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 /// <summary>
@@ -78,8 +79,15 @@ public class GameSetupMenu : MonoBehaviour
         return slots;
     }
 
+    void Update()
+    {
+        if (MenuNavigation.CancelPressedThisFrame()) Back();
+    }
+
     private void Build()
     {
+        // Rebuilding replaces every row; keep a controller on the row it was on (e.g. while cycling the difficulty).
+        int focusedRow = FocusedRow();
         StartMenuRows.Clear(transform);
 
         AddLabel(heading);
@@ -101,6 +109,24 @@ public class GameSetupMenu : MonoBehaviour
         AddButton("Back", ButtonWidth, Back);
 
         StartMenuRows.FitColumn(transform, template, SlotWidth, Spacing);
+        FocusRow(focusedRow);
+    }
+
+    private int FocusedRow()
+    {
+        GameObject selected = EventSystem.current != null ? EventSystem.current.currentSelectedGameObject : null;
+        return selected != null && selected.transform.parent == transform ? selected.transform.GetSiblingIndex() : -1;
+    }
+
+    // The row at that index, or the nearest button above it if the rows changed (e.g. Erase went away).
+    private void FocusRow(int row)
+    {
+        for (int i = Mathf.Min(row, transform.childCount - 1); i >= 0; i--)
+        {
+            if (!transform.GetChild(i).TryGetComponent(out Button button) || !button.enabled) continue;
+            MenuNavigation.Select(button);
+            return;
+        }
     }
 
     private void SelectSlot(int slot)

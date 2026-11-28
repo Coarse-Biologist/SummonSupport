@@ -108,30 +108,37 @@ public class PauseGameHandler : MonoBehaviour
         #endregion
 
         #region  register buton callbacks
-        QuestsButton.RegisterCallback<ClickEvent>(e => ShowNextQuestInfo());
-        ResumeButton.RegisterCallback<ClickEvent>(e => RequestPauseMenu(false));
+        QuestsButton.clicked += () => ShowNextQuestInfo();
+        ResumeButton.clicked += () => RequestPauseMenu(false);
 
 
-        RestartButton.RegisterCallback<ClickEvent>(e => Restart());
-        SettingsButton.RegisterCallback<ClickEvent>(e => ShowSettingsOptions());
-        HostOptionsButton?.RegisterCallback<ClickEvent>(e => ShowHostOptions());
+        RestartButton.clicked += () => Restart();
+        SettingsButton.clicked += () => ShowSettingsOptions();
+        if (HostOptionsButton != null) HostOptionsButton.clicked += () => ShowHostOptions();
 
 
-        StatsButton.RegisterCallback<ClickEvent>(e => ShowStats());
-        StatsButton.RegisterCallback<ClickEvent>(e => ChangeStatIndex());
+        StatsButton.clicked += () => ShowStats();
+        StatsButton.clicked += () => ChangeStatIndex();
 
 
-        InventoryButton.RegisterCallback<ClickEvent>(e => ShowInventory());
+        InventoryButton.clicked += () => ShowInventory();
 
         // StatsButton.RegisterCallback<ClickEvent>(e => ClearInfoElement());
-        InventoryButton.RegisterCallback<ClickEvent>(e => ClearInfoElement());
-        QuitButton.RegisterCallback<ClickEvent>(e => QuitToMainMenu());
+        InventoryButton.clicked += () => ClearInfoElement();
+        QuitButton.clicked += () => QuitToMainMenu();
 
 
         #endregion
 
         InfoElement.text = "";
 
+    }
+
+    void Update()
+    {
+        // B / Circle (or Escape) closes the pause menu, like Resume. Not on the death screen, which has no Resume.
+        if (PauseMenu == null || !PauseMenu.enabledSelf || ResumeButton.style.display.value == DisplayStyle.None) return;
+        if (MenuNavigation.CancelPressedThisFrame()) RequestPauseMenu(false);
     }
 
     #region Pause and Resume Methods
@@ -191,6 +198,7 @@ public class PauseGameHandler : MonoBehaviour
 
         EaseInOpacity(PauseMenu, 350);
         EaseInOpacity(PlayerOptions, 350);
+        MenuNavigation.FocusFirst(PauseMenu);
     }
     // Online, only the host restarts the game or changes host options.
     private static void ShowHostOnlyButtons()
@@ -329,6 +337,7 @@ public class PauseGameHandler : MonoBehaviour
 
         InfoElement.text = "You have fallen asleep in death \n";
         EaseInOpacity(PauseMenu, 350);
+        MenuNavigation.FocusFirst(PauseMenu);
         ShowGameStats();
 
         Time.timeScale = 0f;
@@ -446,7 +455,7 @@ public class PauseGameHandler : MonoBehaviour
 
             button.text = $"{ability.Name}";
 
-            button.RegisterCallback<ClickEvent>(e => ShowAbilityInfo(ability.DisplayAbilityInfo()));
+            button.clicked += () => ShowAbilityInfo(ability.DisplayAbilityInfo());
 
         }
     }
@@ -495,15 +504,15 @@ public class PauseGameHandler : MonoBehaviour
         ClearInfoElement();
         InfoElement.text = "";
         Button audioSettingsButton = AddButtons("Audio Settings", InfoElement, 50, 25);
-        audioSettingsButton.RegisterCallback<ClickEvent>(e => ShowAudioSettings());
+        audioSettingsButton.clicked += () => ShowAudioSettings();
         // Online, saving belongs to the host. Saves are loaded from the start screen, when a game starts.
         if (!NetworkSession.IsClientOnly)
         {
             Button saveButton = AddButtons("Save Game", InfoElement, 50, 25);
-            saveButton.RegisterCallback<ClickEvent>(e => ShowSaveScreen());
+            saveButton.clicked += () => ShowSaveScreen();
         }
         Button joinCodeButton = AddButtons("Join Code", InfoElement, 50, 25);
-        joinCodeButton.RegisterCallback<ClickEvent>(e => ShowJoinCode());
+        joinCodeButton.clicked += () => ShowJoinCode();
     }
 
     private static void ShowJoinCode()
@@ -527,11 +536,11 @@ public class PauseGameHandler : MonoBehaviour
         AddInfoLabel(isHost ? "Share it so friends can join your game." : "You joined with this code. Share it so others can join too.", 24);
 
         Button copyButton = AddButtons("Copy Code", InfoElement, 50, 25);
-        copyButton.RegisterCallback<ClickEvent>(e =>
+        copyButton.clicked += () =>
         {
             GUIUtility.systemCopyBuffer = joinCode;
             copyButton.text = "Copied!";
-        });
+        };
     }
     private static Label AddInfoLabel(string text, float fontSize)
     {
@@ -553,11 +562,11 @@ public class PauseGameHandler : MonoBehaviour
         Button volumeUpButton = AddButtons("Volume Up", InfoElement, 50, 25);
         Button volumeDownButton = AddButtons("Volume Down", InfoElement, 50, 25);
 
-        volumeDownButton.RegisterCallback<ClickEvent>(e => AudioHandler.Instance.AdjustGeneralGameVolume(false));
-        volumeUpButton.RegisterCallback<ClickEvent>(e => AudioHandler.Instance.AdjustGeneralGameVolume(true));
+        volumeDownButton.clicked += () => AudioHandler.Instance.AdjustGeneralGameVolume(false);
+        volumeUpButton.clicked += () => AudioHandler.Instance.AdjustGeneralGameVolume(true);
 
-        volumeDownButton.RegisterCallback<ClickEvent>(e => DisplayVolume());
-        volumeUpButton.RegisterCallback<ClickEvent>(e => DisplayVolume());
+        volumeDownButton.clicked += () => DisplayVolume();
+        volumeUpButton.clicked += () => DisplayVolume();
 
         DisplayVolume();
 
@@ -582,7 +591,7 @@ public class PauseGameHandler : MonoBehaviour
             Button slotButton = AddButtons(description, InfoElement, 4, 20);
             bool confirming = false;
             bool saving = false;
-            slotButton.RegisterCallback<ClickEvent>(e =>
+            slotButton.clicked += () =>
             {
                 if (saving) return;
                 if (needsConfirm && !confirming)
@@ -595,7 +604,7 @@ public class PauseGameHandler : MonoBehaviour
                 slotButton.text = "Saving...";
                 NetworkPlayer.SaveSession(slotNumber, saved =>
                     ShowSaveScreen(saved ? $"Saved to slot {slotNumber}." : "Could not save; see the console."));
-            });
+            };
         }
     }
     private static void DisplayVolume()
@@ -645,7 +654,7 @@ public class PauseGameHandler : MonoBehaviour
             string playerName = GetPlayerName(client);
             Button removeButton = AddButtons($"Remove {playerName}", InfoElement, 50, 25);
             bool confirming = false;
-            removeButton.RegisterCallback<ClickEvent>(e =>
+            removeButton.clicked += () =>
             {
                 if (!confirming)
                 {
@@ -657,7 +666,7 @@ public class PauseGameHandler : MonoBehaviour
                 removeButton.text = $"Saving and removing {playerName}...";
                 removeButton.SetEnabled(false);
                 NetworkPlayer.RemovePlayerAfterSaving(clientId);
-            });
+            };
         }
         if (!anyGuests) AddInfoLabel("No one else has joined yet.", 20);
     }
