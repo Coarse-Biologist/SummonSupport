@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Ragdoll : MonoBehaviour, I_Destruction
+public class Ragdoll : MonoBehaviour, I_Destruction, IElementalModelListener
 {
     [field: SerializeField] public Animator animator;
     private List<Quaternion> startingRotations = new();
@@ -10,6 +10,42 @@ public class Ragdoll : MonoBehaviour, I_Destruction
     [field: SerializeField] public Collider mainCollider;
     [field: SerializeField] public List<Rigidbody> rigidbodies = new();
     [field: SerializeField] public List<Collider> colliders = new();
+
+    private Animator defaultAnimator;
+    private List<Rigidbody> defaultRigidbodies;
+    private List<Collider> defaultColliders;
+
+    public void OnElementalModelChanged(ElementalModel current, bool isBaseModel)
+    {
+        if (current == null) return;
+        if (defaultRigidbodies == null)
+        {
+            defaultAnimator = animator;
+            defaultRigidbodies = new List<Rigidbody>(rigidbodies);
+            defaultColliders = new List<Collider>(colliders);
+        }
+
+        if (current.RagdollBodies.Count > 0)
+        {
+            animator = current.Animator;
+            rigidbodies = new List<Rigidbody>(current.RagdollBodies);
+            colliders = new List<Collider>(current.RagdollColliders);
+        }
+        else if (isBaseModel)
+        {
+            animator = defaultAnimator;
+            rigidbodies = new List<Rigidbody>(defaultRigidbodies);
+            colliders = new List<Collider>(defaultColliders);
+        }
+        else
+        {
+            animator = current.Animator;
+            rigidbodies.Clear();
+            colliders.Clear();
+        }
+        startingPositions.Clear();
+        startingRotations.Clear();
+    }
 
     public void CauseDestruction(bool SaveTransformData = false)
     {
@@ -52,6 +88,8 @@ public class Ragdoll : MonoBehaviour, I_Destruction
     }
     public void SavePreRagdollTransformData()
     {
+        startingRotations.Clear();
+        startingPositions.Clear();
         for (int i = 0; i < rigidbodies.Count; i++)
         {
             startingRotations.Add(rigidbodies[i].transform.localRotation);

@@ -58,7 +58,6 @@ public class MinionStats : LivingBeing
     IEnumerator LateStart()
     {
         yield return null; // wartet 1 Frame – nach allen Start()-Methoden
-        ColorChanger.ChangeAllMatsByAffinity(this);
 
         // Online, each player only controls (and sees the health bars of) the minions they crafted.
         if (!NetworkEnemy.IsLocalPlayersMinion(this)) yield break;
