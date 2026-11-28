@@ -1,6 +1,7 @@
 
 using UnityEngine;
 using System.Collections.Generic;
+using System.Linq;
 using SummonSupportEvents;
 using UnityEngine.InputSystem.Interactions;
 
@@ -95,7 +96,7 @@ public class PotionHandler : MonoBehaviour
     }
     void OnDisable()
     {
-        EventDeclarer.AbilityUsed?.AddListener(MovePotionToHand);
+        EventDeclarer.AbilityUsed?.RemoveListener(MovePotionToHand);
 
         EventDeclarer.SlotChanged.RemoveListener(SpawnElementalPotionOnBelt);
     }
@@ -111,6 +112,7 @@ public class PotionHandler : MonoBehaviour
 
     public static void SpawnElementalPotionOnBelt(int abilitySlot, Ability ability)
     {
+        ForgetDestroyedPotions();
         RemovePotionFromSlot(abilitySlot);
         RemoveAbilityFromSlot(ability);
 
@@ -134,23 +136,49 @@ public class PotionHandler : MonoBehaviour
             //#TODO find more thorough and thoughtful solution// currently spawn plant potion if  the ability has no element. what should the true fix be later?
         }
     }
+    // Overwrite: the slot's or ability's previous potion was just destroyed, and keeping it would leave a dead reference.
     private static void AddValuesToDict(int abilitySlot, Ability ability, GameObject instance)
     {
-        AbilitySlotToPotion.TryAdd(abilitySlot, instance);
-        AbilityToPotion.TryAdd(ability, instance);
+        AbilitySlotToPotion[abilitySlot] = instance;
+        AbilityToPotion[ability] = instance;
     }
 
     private static void RemovePotionFromSlot(int abilitySlot)
     {
-        if (AbilitySlotToPotion.TryGetValue(abilitySlot, out GameObject PreviouslyEquipped)) Destroy(PreviouslyEquipped);
+        if (AbilitySlotToPotion.TryGetValue(abilitySlot, out GameObject PreviouslyEquipped)) DestroyPotion(PreviouslyEquipped);
     }
     private static void RemoveAbilityFromSlot(Ability ability)
     {
-        if (AbilityToPotion.TryGetValue(ability, out GameObject PreviouslyEquipped)) Destroy(PreviouslyEquipped);
+        if (AbilityToPotion.TryGetValue(ability, out GameObject PreviouslyEquipped)) DestroyPotion(PreviouslyEquipped);
+    }
+
+    // A potion is listed under its slot and its ability; drop both entries along with it.
+    private static void DestroyPotion(GameObject potion)
+    {
+        if (potion != null) Destroy(potion);
+        foreach (int slot in AbilitySlotToPotion.Where(kvp => kvp.Value == potion).Select(kvp => kvp.Key).ToList()) AbilitySlotToPotion.Remove(slot);
+        foreach (Ability ability in AbilityToPotion.Where(kvp => kvp.Value == potion).Select(kvp => kvp.Key).ToList()) AbilityToPotion.Remove(ability);
+        if (PotionInHand == potion) ClearPotionInHand();
+    }
+
+    // The lookups are static, so they outlive the scene: potions from a level that was left (restart, quit, next level) are destroyed.
+    private static void ForgetDestroyedPotions()
+    {
+        foreach (int slot in AbilitySlotToPotion.Where(kvp => kvp.Value == null).Select(kvp => kvp.Key).ToList()) AbilitySlotToPotion.Remove(slot);
+        foreach (Ability ability in AbilityToPotion.Where(kvp => kvp.Value == null).Select(kvp => kvp.Key).ToList()) AbilityToPotion.Remove(ability);
+        if (PotionInHand == null) ClearPotionInHand();
+    }
+
+    private static void ClearPotionInHand()
+    {
+        potionInHand = false;
+        PotionInHand = null;
+        SlotOfPotionInHand = -1;
     }
 
     public static void MovePotionToHand(int abilitySlot)
     {
+        ForgetDestroyedPotions();
         if (potionInHand)
         {
             ReturnPotionToBelt();
@@ -172,6 +200,7 @@ public class PotionHandler : MonoBehaviour
     public static void ReturnPotionToBelt()
     {
         if (SlotOfPotionInHand == -1 || PotionInHand == null) return;
+        if (PlayerStats.Instance == null) return;
         PotionInHand.transform.position = PlayerStats.Instance.AbilityPotionTransformList[SlotOfPotionInHand].position;
         PotionInHand.transform.SetParent(PlayerStats.Instance.AbilityPotionTransformList[SlotOfPotionInHand]);
         potionInHand = false;
