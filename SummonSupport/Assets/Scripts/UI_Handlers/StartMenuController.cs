@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -23,6 +25,23 @@ public class StartMenuController : MonoBehaviour
         if (startButton == null) startButton = FindButton("StartButton");
         if (quitButton == null) quitButton = FindButton("QuitButton");
         if (nameInputTemplate == null) nameInputTemplate = FindComponent<TMP_InputField>("JoinCodeInput");
+        // Gameplay locks the cursor, and a client sent back here when the host leaves arrives with it still locked.
+        UnityEngine.Cursor.lockState = CursorLockMode.None;
+        UnityEngine.Cursor.visible = true;
+        // A controller starts on Start (see MenuNavigation).
+        if (startButton != null && EventSystem.current != null) EventSystem.current.firstSelectedGameObject = startButton.gameObject;
+        LinkMenuButtons();
+    }
+
+    // The main buttons and the host/join column are on two canvases with different render modes, which Unity's
+    // automatic navigation can't move between; link them by where they are on screen instead.
+    private void LinkMenuButtons()
+    {
+        Canvas.ForceUpdateCanvases(); // let the layout groups place the rows first
+        List<Selectable> items = new() { startButton, quitButton };
+        MultiplayerMenuController multiplayerMenu = FindFirstObjectByType<MultiplayerMenuController>();
+        if (multiplayerMenu != null) items.AddRange(multiplayerMenu.MenuItems);
+        MenuNavigation.LinkByScreenPosition(items);
     }
 
     public void StartGame()
@@ -84,6 +103,7 @@ public class StartMenuController : MonoBehaviour
         if (quitButton != null) quitButton.gameObject.SetActive(visible);
         MultiplayerMenuController multiplayerMenu = FindFirstObjectByType<MultiplayerMenuController>();
         if (multiplayerMenu != null) multiplayerMenu.SetPanelVisible(visible);
+        if (visible) LinkMenuButtons();
     }
 
     private static Button FindButton(string objectName) => FindComponent<Button>(objectName);

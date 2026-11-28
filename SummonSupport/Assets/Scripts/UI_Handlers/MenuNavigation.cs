@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -20,7 +21,7 @@ public class MenuNavigation : MonoBehaviour
 
     private static MenuNavigation instance;
 
-    /// <summary>True from the last controller navigation input until the mouse is used again.</summary>
+    /// <summary>True from the last controller (or arrow key) navigation input until the mouse is used again.</summary>
     public static bool UsingController { private set; get; }
 
     private bool stickWasHeld;
@@ -38,6 +39,9 @@ public class MenuNavigation : MonoBehaviour
     {
         if (ControllerNavigatedThisFrame()) UsingController = true;
         else if (PointerUsedThisFrame()) UsingController = false;
+
+        // A clicked start screen button stays selected, which now shows as highlighted; mouse users don't need that.
+        if (!UsingController) DeselectButton();
 
         VisualElement root = GameplayUIRoot();
         root?.EnableInClassList(ControllerNavigationClass, UsingController);
@@ -66,6 +70,55 @@ public class MenuNavigation : MonoBehaviour
     {
         if (!UsingController || selectable == null || EventSystem.current == null) return;
         EventSystem.current.SetSelectedGameObject(selectable.gameObject);
+    }
+
+    /// <summary>
+    /// Links <paramref name="items"/> to each other by where they are on screen. Unity's automatic navigation
+    /// compares world positions, which go wrong across canvases with different render modes (the start screen's
+    /// main buttons and its host/join column).
+    /// </summary>
+    public static void LinkByScreenPosition(IReadOnlyList<UnityEngine.UI.Selectable> items)
+    {
+        foreach (UnityEngine.UI.Selectable item in items)
+        {
+            if (item == null) continue;
+            item.navigation = new UnityEngine.UI.Navigation
+            {
+                mode = UnityEngine.UI.Navigation.Mode.Explicit,
+                selectOnUp = Nearest(item, Vector2.up, items),
+                selectOnDown = Nearest(item, Vector2.down, items),
+                selectOnLeft = Nearest(item, Vector2.left, items),
+                selectOnRight = Nearest(item, Vector2.right, items),
+            };
+        }
+    }
+
+    // Same scoring as Unity's automatic navigation, but in screen space.
+    private static UnityEngine.UI.Selectable Nearest(UnityEngine.UI.Selectable from, Vector2 direction, IReadOnlyList<UnityEngine.UI.Selectable> items)
+    {
+        Vector2 origin = ScreenPosition(from);
+        UnityEngine.UI.Selectable best = null;
+        float bestScore = 0f;
+        foreach (UnityEngine.UI.Selectable item in items)
+        {
+            if (item == null || item == from) continue;
+            Vector2 offset = ScreenPosition(item) - origin;
+            float dot = Vector2.Dot(direction, offset);
+            if (dot <= 0f) continue;
+            float score = dot / offset.sqrMagnitude;
+            if (score <= bestScore) continue;
+            bestScore = score;
+            best = item;
+        }
+        return best;
+    }
+
+    private static Vector2 ScreenPosition(UnityEngine.UI.Selectable selectable)
+    {
+        Canvas canvas = selectable.GetComponentInParent<Canvas>();
+        Camera camera = canvas != null && canvas.rootCanvas.renderMode != RenderMode.ScreenSpaceOverlay ? canvas.rootCanvas.worldCamera : null;
+        RectTransform rect = (RectTransform)selectable.transform;
+        return RectTransformUtility.WorldToScreenPoint(camera, rect.TransformPoint(rect.rect.center));
     }
 
     /// <summary>True on the frame the menu cancel input (B / Circle, Escape) is pressed.</summary>
@@ -100,20 +153,42 @@ public class MenuNavigation : MonoBehaviour
     private static void FocusFirstMenuItem()
     {
         if (FocusFirst(GameplayUIRoot())) return;
-        UnityEngine.UI.Selectable first = TopmostSelectable();
+        UnityEngine.UI.Selectable first = PreferredSelectable() ?? TopmostSelectable();
         if (first != null) Select(first);
     }
 
-    // The start screen columns grow down from the top, so the topmost item is the first one.
+    // The menu can name the item to start on (the start screen names its Start button).
+    private static UnityEngine.UI.Selectable PreferredSelectable()
+    {
+        GameObject preferred = EventSystem.current != null ? EventSystem.current.firstSelectedGameObject : null;
+        return preferred != null && preferred.TryGetComponent(out UnityEngine.UI.Selectable selectable) && IsSelectable(selectable) ? selectable : null;
+    }
+
+    // The start screen panels grow down from the top, so the topmost item is the first one.
     private static UnityEngine.UI.Selectable TopmostSelectable()
     {
         UnityEngine.UI.Selectable best = null;
+        float bestY = float.MinValue;
         foreach (UnityEngine.UI.Selectable selectable in UnityEngine.UI.Selectable.allSelectablesArray)
         {
-            if (!selectable.IsInteractable() || !selectable.isActiveAndEnabled || selectable.navigation.mode == UnityEngine.UI.Navigation.Mode.None) continue;
-            if (best == null || selectable.transform.position.y > best.transform.position.y) best = selectable;
+            if (!IsSelectable(selectable)) continue;
+            float y = ScreenPosition(selectable).y;
+            if (y <= bestY) continue;
+            bestY = y;
+            best = selectable;
         }
         return best;
+    }
+
+    private static bool IsSelectable(UnityEngine.UI.Selectable selectable)
+    {
+        return selectable.IsInteractable() && selectable.isActiveAndEnabled && selectable.navigation.mode != UnityEngine.UI.Navigation.Mode.None;
+    }
+
+    private static void DeselectButton()
+    {
+        GameObject selected = EventSystem.current != null ? EventSystem.current.currentSelectedGameObject : null;
+        if (selected != null && selected.TryGetComponent(out UnityEngine.UI.Button _)) EventSystem.current.SetSelectedGameObject(null);
     }
 
     private static bool IsNavigable(VisualElement element)
@@ -135,6 +210,10 @@ public class MenuNavigation : MonoBehaviour
 
     private bool ControllerNavigatedThisFrame()
     {
+        Keyboard keyboard = Keyboard.current;
+        if (keyboard != null && (keyboard.upArrowKey.wasPressedThisFrame || keyboard.downArrowKey.wasPressedThisFrame
+            || keyboard.leftArrowKey.wasPressedThisFrame || keyboard.rightArrowKey.wasPressedThisFrame)) return true;
+
         Gamepad pad = Gamepad.current;
         if (pad == null) return false;
 

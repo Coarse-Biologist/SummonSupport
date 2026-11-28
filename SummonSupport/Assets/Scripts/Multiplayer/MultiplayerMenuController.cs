@@ -62,6 +62,9 @@ public class MultiplayerMenuController : MonoBehaviour
         StartMenuController.Instance.OpenGameSetup("Host Game (online)", HostSession, null);
     }
 
+    /// <summary>The column's buttons and code field, for controller navigation (see StartMenuController).</summary>
+    public Selectable[] MenuItems => new Selectable[] { hostButton, joinButton, joinCodeInput };
+
     /// <summary>Shows or hides the host/join column, e.g. while the save slot panel is open.</summary>
     public void SetPanelVisible(bool visible)
     {
